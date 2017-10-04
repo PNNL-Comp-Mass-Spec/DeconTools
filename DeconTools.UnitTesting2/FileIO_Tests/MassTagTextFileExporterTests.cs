@@ -9,7 +9,7 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
     public class MassTagTextFileExporterTests
     {
 
-        string testOutput1 = "..\\..\\..\\TestFiles\\FileIOTests\\exportedMassTags.txt";
+        string testOutput1 = @"..\..\..\TestFiles\FileIOTests\exportedMassTags.txt";
 
 
         [Test]
@@ -17,7 +17,7 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
         {
             //first, import some data
             var mtc = new TargetCollection();
-            var massTagTestFile1 = "..\\..\\..\\TestFiles\\FileIOTests\\top40MassTags.txt";
+            var massTagTestFile1 = @"..\..\..\TestFiles\FileIOTests\top40MassTags.txt";
             var massTagImporter = new MassTagFromTextFileImporter(massTagTestFile1);
             mtc = massTagImporter.Import();
 

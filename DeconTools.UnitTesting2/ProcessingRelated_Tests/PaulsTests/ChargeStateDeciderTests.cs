@@ -684,8 +684,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
         [Test]
         public void MediumDecision()
         {
-            var fileName = @"C:\Users\Klin638\Documents\BobsFolder\bob.raw";
-            fileName = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\Orbitrap\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.raw";
+            var fileName = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\Orbitrap\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.raw";
             //Run run = RunUtilities.CreateAndLoadPeaks(fileName);
             var run = new RunFactory().CreateRun(fileName);
             run.CurrentScanSet = new ScanSet(1000);

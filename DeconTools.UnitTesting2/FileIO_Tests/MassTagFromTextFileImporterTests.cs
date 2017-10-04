@@ -9,9 +9,9 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
     public class MassTagFromTextFileImporterTests
     {
 
-        string massTagTestFile1 = "..\\..\\..\\TestFiles\\FileIOTests\\top40MassTags.txt";
-        string massTagTestFile2 = "..\\..\\..\\TestFiles\\FileIOTests\\importedMassTagsFormat2.txt";
-        private string massTagsWithModsFile1 = "..\\..\\..\\TestFiles\\FileIOTests\\massTagsWithModsSample.txt";
+        string massTagTestFile1 = @"..\..\..\TestFiles\FileIOTests\top40MassTags.txt";
+        string massTagTestFile2 = @"..\..\..\TestFiles\FileIOTests\importedMassTagsFormat2.txt";
+        private string massTagsWithModsFile1 = @"..\..\..\TestFiles\FileIOTests\massTagsWithModsSample.txt";
 
         [Test]
         public void test1()
@@ -78,7 +78,7 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
             {
                 Console.WriteLine(peptideTarget);
             }
-            Assert.AreEqual(111, mtc.TargetList.Count);
+            Assert.AreEqual(121, mtc.TargetList.Count);
 
             var testMassTag = (PeptideTarget)mtc.TargetList[0];
             Assert.AreEqual("LFTFHADICTLPDTEK", testMassTag.Code);
@@ -141,7 +141,7 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
             mtc = massTagImporter.Import();
 
             Assert.AreNotEqual(null, mtc.TargetList);
-            Assert.AreEqual(33, mtc.TargetList.Count);
+            Assert.AreEqual(37, mtc.TargetList.Count);
 
             var testMassTag = mtc.TargetList[0] as PeptideTarget;
 
@@ -159,7 +159,7 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
 
 
 
-        
+
 
     }
 }

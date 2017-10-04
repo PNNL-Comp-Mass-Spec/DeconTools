@@ -35,7 +35,10 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
 
             var fi = new FileInfo(exportedFile);
             Assert.IsTrue(fi.Length>200);
-            Console.Write(fi.Length);
+
+            Console.WriteLine("Created " + fi.FullName);
+
+            Console.WriteLine("File length: {0} bytes", fi.Length);
 
         }
 

@@ -80,11 +80,7 @@ namespace DeconTools.UnitTesting2.DeconEngineClasses
 
             var peakResult = new MSPeakResult
             {
-                MSPeak = new MSPeak
-                {
-                    XValue = p.Mz,
-                    Height = intensity
-                },
+                MSPeak = new MSPeak(p.Mz, intensity),
                 Scan_num = p.ScanNum,
                 PeakID = this.m_peakIndex
             };

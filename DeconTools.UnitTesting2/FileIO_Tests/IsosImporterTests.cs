@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using DeconTools.Backend.Data;
 using DeconTools.Backend.Core;
 
@@ -15,19 +16,16 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
 
             var results = importer.Import();
 
-            Assert.AreEqual(1340, results.Count);
+            Assert.AreEqual(2072, results.Count);
 
             var testResult = results[0];
 
             Assert.AreEqual(6005, testResult.ScanSet.PrimaryScanNumber);
             Assert.AreEqual(2, testResult.IsotopicProfile.ChargeState);
-            Assert.AreEqual(13084442, testResult.IntensityAggregate);
-            Assert.AreEqual(481.274108886719m, (decimal)testResult.IsotopicProfile.GetMZ());
-            Assert.AreEqual(0.0101m, (decimal)testResult.IsotopicProfile.Score);
-            Assert.AreEqual(0.10352m, (decimal)testResult.InterferenceScore);
-
-
-
+            Assert.AreEqual(14108864, testResult.IntensityAggregate);
+            Assert.AreEqual(481.27417, testResult.IsotopicProfile.GetMZ(), 0.00001);
+            Assert.AreEqual(0.0056, testResult.IsotopicProfile.Score, 0.0001);
+            Assert.AreEqual(0.0635, testResult.InterferenceScore, 0.0001);
 
         }
 

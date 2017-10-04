@@ -1,4 +1,11 @@
-﻿namespace DeconTools.UnitTesting2.Run_relatedTests
+﻿using System;
+using System.IO;
+using System.Text;
+using DeconTools.Backend.Core;
+using DeconTools.Backend.Runs;
+using NUnit.Framework;
+
+namespace DeconTools.UnitTesting2.Run_relatedTests
 {
 #if !Disable_DeconToolsV2
     [TestFixture]
@@ -24,9 +31,7 @@
             var numscans = run.GetNumMSScans();
             Assert.AreEqual(600, numscans);
 
-            var xvals = new float[1];
-            var yvals = new float[1];
-            xydata.GetXYValuesAsSingles(ref xvals, ref yvals);
+            xydata.GetXYValuesAsSingles(out var xvals, out var yvals);
 
 
             var sb = new StringBuilder();

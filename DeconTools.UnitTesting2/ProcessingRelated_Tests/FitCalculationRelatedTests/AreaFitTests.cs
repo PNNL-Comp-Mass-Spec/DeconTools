@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using DeconTools.Backend;
 using DeconTools.Backend.Core;
@@ -42,6 +44,8 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.FitCalculationRelatedT
             Task decon = new HornDeconvolutor(deconParameters);
             decon.Execute(results);
 
+            if (results.ResultList.Count == 0)
+                Assert.Fail("Result list is empty");
 
             var result1 = results.ResultList[0];
 
@@ -61,12 +65,31 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.FitCalculationRelatedT
             //Console.WriteLine(sb.ToString());
 
             var areafitter = new AreaFitter();
-            var fitval = areafitter.GetFit(theorXYData, run.XYData, 10);
+            var fitValsByShift = new Dictionary<int, double>();
+            var bestFitViaShifting = 1.0;
 
-            Console.WriteLine(result1.IsotopicProfile.Score + "\t" + fitval);
-            Console.WriteLine((result1.IsotopicProfile.Score - fitval) / result1.IsotopicProfile.Score);
+            for (var shift = -4; shift <= 4; shift++)
+            {
+                var offset = -1 * shift * Globals.MASS_DIFF_BETWEEN_ISOTOPICPEAKS / result1.IsotopicProfile.ChargeState;
+                var fitval = areafitter.GetFit(theorXYData, run.XYData, 10, offset);
 
-            Assert.AreEqual(0.0207350903681061m, (decimal)fitval);    //TODO: fix this test... i'm getting 0.0207350903681061m
+                fitValsByShift.Add(shift, fitval);
+
+                if (!double.IsNaN(fitval))
+                    bestFitViaShifting = Math.Min(bestFitViaShifting, fitval);
+            }
+
+            Console.WriteLine("{0,-8}  {1}", "Shift", "Fit");
+            foreach (var item in fitValsByShift)
+            {
+                Console.WriteLine("{0,2}       {1,8:F5}", item.Key, item.Value);
+            }
+
+            Console.WriteLine();
+            Console.WriteLine("{0,12}   {1,8}", "Profile Score", "Best Fit");
+            Console.WriteLine("{0,8:F5}       {1,8:F5}", result1.IsotopicProfile.Score, bestFitViaShifting);
+
+            Assert.AreEqual(0.00926548, bestFitViaShifting, 0.00001);
 
         }
 
@@ -138,7 +161,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.FitCalculationRelatedT
             Task msGen = new GenericMSGenerator(579, 582, isTicRequested);
             msGen.Execute(results);
 
-            Task peakDetector = new DeconToolsPeakDetectorV2(0.5, 3, Globals.PeakFitType.QUADRATIC, false);
+            Task peakDetector = new DeconToolsPeakDetectorV2(0.5, 3);
             peakDetector.Execute(results);
 
 

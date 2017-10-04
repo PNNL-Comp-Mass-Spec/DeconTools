@@ -65,7 +65,7 @@ namespace DeconTools.UnitTesting2.AlgorithmTests
 
             var peak = run.PeakList.First(n => n.XValue > 579.53 && n.XValue < 579.54);
             var chargeState = PattersonChargeStateCalculator.GetChargeState(run.XYData, run.PeakList, peak as MSPeak);
-            Assert.AreEqual(4, chargeState);
+            Assert.AreEqual(2, chargeState);
             Console.WriteLine("charge State: " + chargeState);
             var times = new List<long>();
 

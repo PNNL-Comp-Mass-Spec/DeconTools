@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using DeconTools.Backend;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.ProcessingTasks;
@@ -44,22 +45,26 @@ namespace DeconTools.UnitTesting2
         {
 
             Run run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+            Console.WriteLine("Opening " + run.Filename);
 
             run.ScanSetCollection.Create(run, 6000, 6020, 1, 1, false);
 
             Task msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
             Task peakDetector = new DeconToolsPeakDetectorV2();
-            Task decon = new ThrashDeconvolutorV2();
             Task msScanInfoCreator = new ScanResultUpdater();
             Task flagger = new ResultValidatorTask();
 
             foreach (var scan in run.ScanSetCollection.ScanSetList)
             {
+                Console.WriteLine("Deconvoluting scan " + scan);
+
                 run.CurrentScanSet = scan;
                 msgen.Execute(run.ResultCollection);
                 peakDetector.Execute(run.ResultCollection);
 
+                Task decon = new ThrashDeconvolutorV2();
                 decon.Execute(run.ResultCollection);
+
                 msScanInfoCreator.Execute(run.ResultCollection);
                 flagger.Execute(run.ResultCollection);
             }
