@@ -28,7 +28,7 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
             {
                 File.Delete(testOutput1);
             }
-            
+
             var exporter = new MassTagTextFileExporter(testOutput1);
             exporter.ExportResults(mtc.TargetList);
 

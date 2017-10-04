@@ -29,7 +29,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
             var oldChromPeakDetector = new ChromPeakDetectorOld();
             oldChromPeakDetector.PeakBackgroundRatio = 0.5;
             oldChromPeakDetector.SigNoise = 0.5;
-      
+
             var peaks = peakDetector.FindPeaks(xydata.Xvalues, xydata.Yvalues);
             var peaksFromOld = oldChromPeakDetector.FindPeaks(xydata, 0, 0);
 
@@ -70,7 +70,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
             Assert.AreEqual(2498682m, (decimal)mostAbundantPeak.Height);
             Assert.AreEqual(10065.52418m, (decimal)Math.Round(mostAbundantPeak.XValue,5));
             Assert.AreEqual(92.27364m, (decimal)Math.Round( mostAbundantPeak.Width,5));
-            
+
 
         }
 

@@ -121,7 +121,7 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
                 Console.WriteLine(peptideTarget);
             }
 
-            
+
 
         }
 

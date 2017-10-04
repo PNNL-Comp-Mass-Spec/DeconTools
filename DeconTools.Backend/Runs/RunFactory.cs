@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+#if !Disable_DeconToolsV2
 using System.Text.RegularExpressions;
+#endif
 using DeconTools.Backend.Core;
 using DeconTools.Utilities;
 
@@ -91,10 +93,10 @@ namespace DeconTools.Backend.Runs
                 //     break;
 
                 default:
-                    throw new ApplicationException("File type - "+ extension + " -  is not supported in DeconTools");
+                    throw new ApplicationException("File type - " + extension + " -  is not supported in DeconTools");
             }
 
-            Check.Require(run!=null,"Run failed to be initialized. Run object is empty. I'm guessing the datafile either 1) corrupt or 2) not supported by the installed instrument manufacturer's dlls, or 3) not supported by DeconTools");
+            Check.Require(run != null, "Run failed to be initialized. Run object is empty. I'm guessing the datafile either 1) corrupt or 2) not supported by the installed instrument manufacturer's dlls, or 3) not supported by DeconTools");
             return run;
         }
 
@@ -220,7 +222,7 @@ namespace DeconTools.Backend.Runs
                 var analysisBafFileInfo = findAnalysisBafFile(folderName);
                 var maxAcquisitionFileInfo = findMaxAcquisitionMethodFile(folderName);
 
-                if (analysisBafFileInfo!=null && maxAcquisitionFileInfo!=null)
+                if (analysisBafFileInfo != null && maxAcquisitionFileInfo != null)
                 {
                     run = new BrukerTOF(folderName);
                 }

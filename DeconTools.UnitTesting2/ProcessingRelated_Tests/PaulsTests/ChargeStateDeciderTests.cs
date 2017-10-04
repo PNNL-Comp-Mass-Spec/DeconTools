@@ -447,6 +447,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             Assert.AreEqual(2, result1.IsotopicProfile.ChargeState);
 
         }
+
         [Test]
         public void Stolen_CompareOldAndNewDeconvolutorsOrbitrap()
         {
@@ -679,6 +680,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
 
             potentialFeatures = MakePotentialFeaturesList(iso1, iso2);
         }
+
         [Test]
         public void MediumDecision()
         {
