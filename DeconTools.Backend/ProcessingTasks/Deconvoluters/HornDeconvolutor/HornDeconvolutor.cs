@@ -42,8 +42,8 @@ namespace DeconTools.Backend.ProcessingTasks
 
         public ElementIsotopes ElementalIsotopeComposition
         {
-            get { return _isotopeFitScorer.ElementalIsotopeComposition; }
-            set { _isotopeFitScorer.ElementalIsotopeComposition = value; }
+            get => _isotopeFitScorer.ElementalIsotopeComposition;
+            set => _isotopeFitScorer.ElementalIsotopeComposition = value;
         }
 
         /// <summary>
@@ -55,7 +55,7 @@ namespace DeconTools.Backend.ProcessingTasks
 
         public bool IsMercuryCachingUsed
         {
-            get { return _isMercuryCachingUsed; }
+            get => _isMercuryCachingUsed;
             set
             {
                 if (value != _isMercuryCachingUsed)
@@ -68,7 +68,7 @@ namespace DeconTools.Backend.ProcessingTasks
 
         public bool IsThrashed
         {
-            get { return _isThrashed; }
+            get => _isThrashed;
             set
             {
                 if (value != _isThrashed)
@@ -95,7 +95,7 @@ namespace DeconTools.Backend.ProcessingTasks
 
         public bool IsCompleteFit
         {
-            get { return _isCompleteFit; }
+            get => _isCompleteFit;
             set
             {
                 if (value != _isCompleteFit)
@@ -121,7 +121,7 @@ namespace DeconTools.Backend.ProcessingTasks
         /// </summary>
         public double ChargeCarrierMass
         {
-            get { return _chargeCarrierMass; }
+            get => _chargeCarrierMass;
             set
             {
                 if (!value.Equals(_chargeCarrierMass))
@@ -172,7 +172,7 @@ namespace DeconTools.Backend.ProcessingTasks
 
         public string AveragineFormula
         {
-            get { return _averagineFormula; }
+            get => _averagineFormula;
             set
             {
                 if (value != _averagineFormula)
@@ -185,7 +185,7 @@ namespace DeconTools.Backend.ProcessingTasks
 
         public string TagFormula
         {
-            get { return _tagFormula; }
+            get => _tagFormula;
             set
             {
                 if (value != _tagFormula)
@@ -198,7 +198,7 @@ namespace DeconTools.Backend.ProcessingTasks
 
         public Globals.IsotopicProfileFitType IsotopicProfileFitType
         {
-            get { return _isotopicProfileFitType; }
+            get => _isotopicProfileFitType;
             set
             {
                 if (value != _isotopicProfileFitType)
@@ -359,7 +359,6 @@ namespace DeconTools.Backend.ProcessingTasks
             if (ShowTraceMessages)
                 Console.WriteLine();
 
-            bool processingAborted;
 
             PerformTransform(
                 backgroundIntensity, minPeptideIntensity, MaxProcessingTimeMinutes,
@@ -404,8 +403,7 @@ namespace DeconTools.Backend.ProcessingTasks
             }
 
             //loads 'currentPeak' with the most intense peak within minMZ and maxMZ
-            ThrashV1Peak currentPeak;
-            var found = peakData.GetNextPeak(minMz, maxMz, out currentPeak);
+            var found = peakData.GetNextPeak(minMz, maxMz, out var currentPeak);
             //var fwhm_SN = currentPeak.FWHM;
 
             var transformRecords = new List<HornTransformResults>();
@@ -426,16 +424,14 @@ namespace DeconTools.Backend.ProcessingTasks
                     break;
 
                 //--------------------- Transform performed ------------------------------
-                HornTransformResults transformRecord;
-                var foundTransform = FindTransform(peakData, ref currentPeak, out transformRecord, backgroundIntensity);
+                var foundTransform = FindTransform(peakData, ref currentPeak, out var transformRecord, backgroundIntensity);
                 if (foundTransform && transformRecord.ChargeState <= MaxChargeAllowed)
                 {
                     if (IsActualMonoMZUsed)
                     {
                         //retrieve experimental monoisotopic peak
                         var monoPeakIndex = transformRecord.IsotopePeakIndices[0];
-                        ThrashV1Peak monoPeak;
-                        peakData.GetPeak(monoPeakIndex, out monoPeak);
+                        peakData.GetPeak(monoPeakIndex, out var monoPeak);
 
                         //set threshold at 20% less than the expected 'distance' to the next peak
                         var errorThreshold = 1.003 / transformRecord.ChargeState;
@@ -530,8 +526,7 @@ namespace DeconTools.Backend.ProcessingTasks
                     // move back by 4 Da and see if there is a peak.
                     var minMz = peak.Mz - 4.0 / chargeState - peak.FWHM;
                     var maxMz = peak.Mz - 4.0 / chargeState + peak.FWHM;
-                    ThrashV1Peak o16Peak;
-                    var found = peakData.GetPeak(minMz, maxMz, out o16Peak);
+                    var found = peakData.GetPeak(minMz, maxMz, out var o16Peak);
                     if (found && !o16Peak.Mz.Equals(peak.Mz))
                     {
                         // put back the current into the to be processed list of peaks.
@@ -555,38 +550,25 @@ namespace DeconTools.Backend.ProcessingTasks
             //if (backgroundIntensity ==0 || deleteThreshold > _deleteIntensityThreshold)
             //  deleteThreshold = _deleteIntensityThreshold;
             var deleteThreshold = DeleteIntensityThreshold;
-            int fitCountBasis;
             var bestFit = _isotopeFitScorer.GetFitScore(peakData, chargeState, ref peak, out record, deleteThreshold,
-                MinIntensityForScore, LeftFitStringencyFactor, RightFitStringencyFactor, out fitCountBasis,
+                MinIntensityForScore, LeftFitStringencyFactor, RightFitStringencyFactor, out var _,
                 ShowTraceMessages);
-
-            // When deleting an isotopic profile, this value is set to the first m/z to perform deletion at.
-            double zeroingStartMz;
             // When deleting an isotopic profile, this value is set to the last m/z to perform deletion at.
-            double zeroingStopMz;
-            _isotopeFitScorer.GetZeroingMassRange(out zeroingStartMz, out zeroingStopMz, record.DeltaMz, deleteThreshold,
+            _isotopeFitScorer.GetZeroingMassRange(out var zeroingStartMz, out var zeroingStopMz, record.DeltaMz, deleteThreshold,
                 ShowTraceMessages);
             //bestFit = _isotopeFitter.GetFitScore(peakData, chargeState, peak, record, _deleteIntensityThreshold, _minTheoreticalIntensityForScore, DebugFlag);
             //_isotopeFitter.GetZeroingMassRange(_zeroingStartMz, _zeroingStopMz, record.DeltaMz, _deleteIntensityThreshold, DebugFlag);
 
             if (CheckPatternsAgainstChargeOne && chargeState != 1)
             {
-                HornTransformResults recordCharge1;
-                int fitCountBasisCharge1;
-                var bestFitCharge1 = _isotopeFitScorer.GetFitScore(peakData, 1, ref peakCharge1, out recordCharge1,
+                var bestFitCharge1 = _isotopeFitScorer.GetFitScore(peakData, 1, ref peakCharge1, out var recordCharge1,
                     deleteThreshold, MinIntensityForScore, LeftFitStringencyFactor,
-                    RightFitStringencyFactor, out fitCountBasisCharge1, ShowTraceMessages);
-
-                //double bestFitCharge1 = _isotopeFitter.GetFitScore(peakData, 1, peakCharge1, recordCharge1, _deleteIntensityThreshold, _minTheoreticalIntensityForScore, DebugFlag);
-                //_isotopeFitter.GetZeroingMassRange(_zeroingStartMz, _zeroingStopMz, record.DeltaMz, _deleteIntensityThreshold, DebugFlag);
-                double startMz1 = 0;
-                double stopMz1 = 0;
-                _isotopeFitScorer.GetZeroingMassRange(out startMz1, out stopMz1, record.DeltaMz, deleteThreshold,
+                    RightFitStringencyFactor, out var _, ShowTraceMessages);
+                _isotopeFitScorer.GetZeroingMassRange(out var startMz1, out var stopMz1, record.DeltaMz, deleteThreshold,
                     ShowTraceMessages);
                 if (bestFit > MaxFitAllowed && bestFitCharge1 < MaxFitAllowed)
                 {
                     bestFit = bestFitCharge1;
-                    fitCountBasis = fitCountBasisCharge1;
                     peak = peakCharge1;
                     record = new HornTransformResults(recordCharge1);
                     zeroingStartMz = startMz1;
@@ -605,15 +587,13 @@ namespace DeconTools.Backend.ProcessingTasks
             record.Abundance = peak.Intensity;
             record.ChargeState = chargeState;
 
-            ThrashV1Peak monoPeak;
             var monoMz = record.MonoMw / record.ChargeState + ChargeCarrierMass;
 
             // used when _reportO18Plus2Da is true.
-            ThrashV1Peak m3Peak;
             var monoPlus2Mz = record.MonoMw / record.ChargeState + 2.0 / record.ChargeState + ChargeCarrierMass;
 
-            peakData.FindPeak(monoMz - peak.FWHM, monoMz + peak.FWHM, out monoPeak);
-            peakData.FindPeak(monoPlus2Mz - peak.FWHM, monoPlus2Mz + peak.FWHM, out m3Peak);
+            peakData.FindPeak(monoMz - peak.FWHM, monoMz + peak.FWHM, out var monoPeak);
+            peakData.FindPeak(monoPlus2Mz - peak.FWHM, monoPlus2Mz + peak.FWHM, out var m3Peak);
 
             record.MonoIntensity = (int)monoPeak.Intensity;
             record.MonoPlus2Intensity = (int)m3Peak.Intensity;
@@ -649,8 +629,10 @@ namespace DeconTools.Backend.ProcessingTasks
             double zeroingStopMz, double monoMw, int chargeState, bool clearSpectrum, HornTransformResults record,
             bool debug = false)
         {
-            var peakIndices = new List<int>();
-            peakIndices.Add(peak.PeakIndex);
+            var peakIndices = new List<int> {
+                peak.PeakIndex
+            };
+
             var mzDelta = record.DeltaMz;
 
             if (debug)
@@ -696,8 +678,7 @@ namespace DeconTools.Backend.ProcessingTasks
                     Console.Error.WriteLine("\tFinding next peak top from " + (peakMz - 2 * peak.FWHM) + " to " +
                                             (peakMz + 2 * peak.FWHM) + " pk = " + peakMz + " FWHM = " + peak.FWHM);
                 }
-                ThrashV1Peak nextPeak;
-                peakData.GetPeakFromAll(peakMz - 2 * peak.FWHM, peakMz + 2 * peak.FWHM, out nextPeak);
+                peakData.GetPeakFromAll(peakMz - 2 * peak.FWHM, peakMz + 2 * peak.FWHM, out var nextPeak);
 
                 if (nextPeak.Mz.Equals(0))
                 {
@@ -730,8 +711,7 @@ namespace DeconTools.Backend.ProcessingTasks
                     Console.Error.WriteLine("\tFinding previous peak top from " + (peakMz - 2 * peak.FWHM) + " to " +
                                             (peakMz + 2 * peak.FWHM) + " pk = " + peakMz + " FWHM = " + peak.FWHM);
                 }
-                ThrashV1Peak nextPeak;
-                peakData.GetPeakFromAll(peakMz - 2 * peak.FWHM, peakMz + 2 * peak.FWHM, out nextPeak);
+                peakData.GetPeakFromAll(peakMz - 2 * peak.FWHM, peakMz + 2 * peak.FWHM, out var nextPeak);
                 if (nextPeak.Mz.Equals(0))
                 {
                     if (debug)
