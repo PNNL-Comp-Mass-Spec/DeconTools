@@ -17,7 +17,7 @@ namespace DeconTools.Backend.ProcessingTasks
         #region Member Variables
 
         private const int MaxIsotopes = 16;
-        private ThrashV1Peak[] mSpeakList;
+        private ThrashV1Peak[] mPeakList;
         private HornTransformResults[] mTransformResults;
 
         //gord added
@@ -328,14 +328,15 @@ namespace DeconTools.Backend.ProcessingTasks
 
             resultList.Run.XYData.GetXYValuesAsSingles(out var xvals, out var yvals);
 
-            mSpeakList = resultList.Run.DeconToolsPeakList;
+            mPeakList = resultList.Run.DeconToolsPeakList;
             mTransformResults = new HornTransformResults[0];
 
             if (resultList.Run.PeakList == null || resultList.Run.PeakList.Count == 0)
                 return;
 
-            mSpeakList = resultList.Run.PeakList.Select(x => new ThrashV1Peak(x as MSPeak)).ToArray();
-            //mSpeakList = new ThrashV1Peak[resultList.Run.PeakList.Count];
+            mPeakList = resultList.Run.PeakList.Select(x => new ThrashV1Peak(x as MSPeak)).ToArray();
+
+            //mPeakList = new ThrashV1Peak[resultList.Run.PeakList.Count];
             //
             //for (var index = 0; index < resultList.Run.PeakList.Count; index++)
             //{
@@ -352,7 +353,7 @@ namespace DeconTools.Backend.ProcessingTasks
             //        Mz = peak.XValue
             //    };
             //
-            //    mSpeakList[index] = oldPeak;
+            //    mPeakList[index] = oldPeak;
             //}
 
             if (ShowTraceMessages)
@@ -363,10 +364,10 @@ namespace DeconTools.Backend.ProcessingTasks
             PerformTransform(
                 backgroundIntensity, minPeptideIntensity, MaxProcessingTimeMinutes,
                 ref xvals, ref yvals,
-                ref mSpeakList, ref mTransformResults,
-                out processingAborted);
+                ref mPeakList, ref mTransformResults,
+                out var processingAborted);
 
-            GenerateResults(mTransformResults, mSpeakList, resultList, processingAborted, MaxProcessingTimeMinutes);
+            GenerateResults(mTransformResults, mPeakList, resultList, processingAborted, MaxProcessingTimeMinutes);
 
             //addDataToScanResults(transformResults.Length, resultList.GetCurrentScanResult());
         }
@@ -830,7 +831,7 @@ namespace DeconTools.Backend.ProcessingTasks
 
         private void GenerateResults(
             IEnumerable<HornTransformResults> transformResults,
-            ThrashV1Peak[] mspeakList,
+            ThrashV1Peak[] peakList,
             ResultCollection resultList,
             bool processingWasAborted,
             int maxProcessingTimeMinutes)
@@ -865,7 +866,7 @@ namespace DeconTools.Backend.ProcessingTasks
                     MostAbundantIsotopeMass = hornResult.MostIntenseMw
                 };
 
-                GetIsotopicProfile(hornResult.IsotopePeakIndices, mspeakList, ref profile);
+                GetIsotopicProfile(hornResult.IsotopePeakIndices, peakList, ref profile);
 
                 profile.IntensityMostAbundant = (float)hornResult.Abundance;
                 profile.IntensityMostAbundantTheor = (float)hornResult.Abundance;
