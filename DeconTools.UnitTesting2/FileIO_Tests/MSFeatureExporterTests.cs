@@ -78,6 +78,7 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
 
 
         [Test]
+        [Ignore("Local testing only")]
         public void outputToText_UIMFData_Test1()
         {
             var exportedFile = exportedMSFeaturesToTextFileFromUIMFFile1;
@@ -102,6 +103,7 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
         }
 
         [Test]
+        [Ignore("Local testing only")]
         public void ouputToSQLite_UIMFData_Test1()
         {
             var exportedFile = exportedMSFeaturesToSQLiteFromUIMFFile1;

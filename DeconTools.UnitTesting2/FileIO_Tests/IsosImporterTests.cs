@@ -33,6 +33,7 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
 
 
         [Test]
+        [Ignore("Local files only")]
         public void importUIMFData_test1()
         {
             var testMSFeatureFile = FileRefs.RawDataBasePath + @"\Output\35min_QC_Shew_Formic_4T_1.8_500_20_30ms_fr1950_0000_Frames800_802_isos.csv";
@@ -56,6 +57,7 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
         }
 
         [Test]
+        [Ignore("Local files only")]
         public void importPartialUIMFData_test1()
         {
             var startFrame = 801;

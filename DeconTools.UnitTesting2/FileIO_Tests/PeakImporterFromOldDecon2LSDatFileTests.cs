@@ -8,6 +8,7 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
     public class PeakImporterFromOldDecon2LSDatFileTests
     {
         [Test]
+        [Ignore("Local testing only")]
         public void importDataFromOldDatFileTest1()
         {
             var testFile = FileRefs.PeakDataFiles.OrbitrapOldDecon2LSPeakFile;

@@ -20,6 +20,7 @@ namespace DeconTools.UnitTesting2.Scripts
     public class UIMFChromatogramScripts
     {
         [Test]
+        [Ignore("Local testing only")]
         public void BasePeakChromatogramTests()
         {
             var filename = @"D:\Data\UIMF\Sarc_P13_C10_1186_23Sep11_Cheetah_11-09-06.uimf";
@@ -100,6 +101,7 @@ namespace DeconTools.UnitTesting2.Scripts
 
 
         [Test]
+        [Ignore("Local testing only")]
         public void BPISaturationCorrectedTest1()
         {
 
@@ -277,6 +279,7 @@ namespace DeconTools.UnitTesting2.Scripts
 
 
         [Test]
+        [Ignore("Local testing only")]
         public void Generate3dBpiFromIsosFile1()
         {
             var outputOrigIntensity = false;

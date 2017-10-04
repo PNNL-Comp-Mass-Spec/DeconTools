@@ -79,6 +79,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
 
         [Category("ProblemTesting")]
         [Test]
+        [Ignore("Local testing only")]
         public void ProblemTesting()
         {
             var parameterFile =
@@ -93,6 +94,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
 
         [Category("ProblemTesting")]
         [Test]
+        [Ignore("Local testing only")]
         public void LowIntensityButGoodFeatureTest1()
         {
             var rawDataFile = @"D:\Data\DeconMSn_testing\QC_Shew_13_01_pt5_b_23Jan13_Cougar_12-02-27.raw";
@@ -117,12 +119,8 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             workflow.Execute();
         }
 
-
-
-
-
-        [Ignore("Local testing only")]
         [Test]
+        [Ignore("Local testing only")]
         public void WorkflowTestUsingParameterFile_Sum5_Test1()
         {
             var parameterFile =
@@ -141,9 +139,8 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
 
         }
 
-
-        [Ignore("Local testing only")]
         [Test]
+        [Ignore("Local testing only")]
         public void WorkflowTesting2_SumLC5()
         {
 

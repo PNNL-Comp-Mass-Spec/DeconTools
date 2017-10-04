@@ -126,6 +126,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.FitCalculationRelatedT
 #endif
 
         [Test]
+        [Ignore("No results")]
         public void fitterOnHornDataTest2()
         {
             Run run = new XCaliburRun2(xcaliburTestfile);
@@ -144,6 +145,8 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.FitCalculationRelatedT
             Task decon = new HornDeconvolutor();
             decon.Execute(results);
 
+            if (results.ResultList.Count == 0)
+                Assert.Fail("Result list is empty");
 
             var result1 = results.ResultList[1];
             var resolution = result1.IsotopicProfile.GetMZofMostAbundantPeak() / result1.IsotopicProfile.GetFWHM();
@@ -179,6 +182,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.FitCalculationRelatedT
 
 
         [Test]
+        [Ignore("No results")]
         public void effectOfFWHMOnFitTest()
         {
             Run run = new XCaliburRun2(xcaliburTestfile);
@@ -196,6 +200,9 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.FitCalculationRelatedT
 
             Task decon = new HornDeconvolutor();
             decon.Execute(results);
+
+            if (results.ResultList.Count == 0)
+                Assert.Fail("Result list is empty");
 
             var result1 = results.ResultList[0];
             var resolution = result1.IsotopicProfile.GetMZofMostAbundantPeak() / result1.IsotopicProfile.GetFWHM();

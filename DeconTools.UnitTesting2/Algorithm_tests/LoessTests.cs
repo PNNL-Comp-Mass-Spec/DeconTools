@@ -80,6 +80,7 @@ namespace DeconTools.UnitTesting2.Algorithm_tests
 
 
         [Test]
+        [Ignore("Local testing only")]
         public void LoessOnNETAlignmentData2()
         {
 
