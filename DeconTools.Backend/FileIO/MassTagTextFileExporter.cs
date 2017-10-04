@@ -23,15 +23,15 @@ namespace DeconTools.Backend.FileIO
             var data = new List<string>
             {
                 target.ID.ToString(),
-                DblToString(target.MonoIsotopicMass, 5),
+                DblToString(target.MonoIsotopicMass, 6),
                 target.Code,
                 target.ChargeState.ToString(),
                 target.EmpiricalFormula,
                 target.ModCount.ToString(),
                 target.ModDescription,
                 target.ObsCount.ToString(),
-                DblToString(target.MZ, 5),
-                DblToString(target.NormalizedElutionTime, 4),
+                DblToString(target.MZ, 6),
+                DblToString(target.NormalizedElutionTime, 6),
                 result.RefID.ToString(),
                 result.GeneReference,
                 result.ProteinDescription
