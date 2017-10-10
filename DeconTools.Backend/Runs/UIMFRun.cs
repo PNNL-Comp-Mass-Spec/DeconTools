@@ -164,14 +164,16 @@ namespace DeconTools.Backend.Runs
             return _globalParams.Bins;
         }
 
+        /// <summary>
+        /// Return the total number of scans in this UIMF file (across all frames)
+        /// </summary>
+        /// <returns></returns>
         public override int GetNumMSScans()
         {
-            var numFrames = _globalParams.NumFrames;
 
-            var frameParams = UIMFLibraryAdapter.getInstance(Filename).Datareader.GetFrameParams(1);
-            var numScansPerFrame = frameParams.Scans;
+            var numScansPerFrame = GetNumScansPerFrame();
 
-            return (numScansPerFrame * numFrames);
+            return numScansPerFrame * (MaxLCScan - MinLCScan + 1);
         }
 
         /// <summary>
