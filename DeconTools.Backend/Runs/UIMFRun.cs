@@ -219,7 +219,7 @@ namespace DeconTools.Backend.Runs
 
         public int GetMaxPossibleIMSScanNum()
         {
-            return GetNumScansPerFrame() - 1;
+            return GetNumScansPerFrame();
         }
 
         public override int GetCurrentScanOrFrame()
