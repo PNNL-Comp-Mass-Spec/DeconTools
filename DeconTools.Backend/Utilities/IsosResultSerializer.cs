@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
 using DeconTools.Backend.Core;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -10,13 +7,9 @@ namespace DeconTools.Backend.Data
 {
     public class IsosResultSerializer
     {
-        private FileMode filemode;
-
         public IsosResultSerializer(string outputFilename, FileMode mode, bool deletePrevious)
         {
-            
-            this.outputFilename = outputFilename;
-            this.filemode = mode;
+            OutputFilename = outputFilename;
 
             try
             {
@@ -26,41 +19,31 @@ namespace DeconTools.Backend.Data
                     {
                         File.Delete(outputFilename);
                     }
-                } 
-                stream = File.Open(outputFilename, filemode);
+                }
+                Stream = File.Open(outputFilename, mode);
 
             }
             catch (Exception ex)
             {
-                throw new System.IO.IOException("Could not create temporary binary file for storing results. Details: " + ex.Message);
+                throw new IOException("Could not create temporary binary file for storing results. Details: " + ex.Message);
             }
         }
 
-        private Stream stream;
-        public Stream Stream
-        {
-            get { return stream; }
-            set { stream = value; }
-        }
+        public Stream Stream { get; set; }
 
-        private string outputFilename;
-        public string OutputFilename
-        {
-            get { return outputFilename; }
-            set { outputFilename = value; }
-        }
+        public string OutputFilename { get; set; }
 
         public void Serialize(ResultCollection resultCollection)
         {
             var b = new BinaryFormatter();
-            b.Serialize(stream, resultCollection);
+            b.Serialize(Stream, resultCollection);
         }
 
         public void Close()
         {
-            stream.Close();
+            Stream.Close();
         }
 
-       
+
     }
 }

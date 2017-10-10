@@ -1,25 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using DeconTools.Backend.Core;
 
 namespace DeconTools.Backend.DTO
 {
     public class IsosResultStats
     {
-
-        private List<IsosResult> results;
-
-        public List<IsosResult> Results
-        {
-            get { return results; }
-            set { results = value; }
-        }
+        public List<IsosResult> Results { get; set; }
 
         public IsosResultStats(List<IsosResult>isosResults)
         {
-            results = isosResults;
+            Results = isosResults;
 
         }
 

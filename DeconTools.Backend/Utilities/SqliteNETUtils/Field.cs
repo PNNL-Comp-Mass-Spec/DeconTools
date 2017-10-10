@@ -1,35 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
+﻿
 namespace DeconTools.Utilities.SqliteUtils
 {
     public class Field
     {
 
-
-
         #region Constructors
         public Field(string name, string type)
         {
-            this.Name = name;
-            this.Type = type;
+            Name = name;
+            Type = type;
         }
         #endregion
 
         #region Properties
-        private string name;
-        public string Name
-        {
-            get { return name; }
-            set { name = value; }
-        }
+
+        public string Name { get; set; }
 
         private string type;
         public string Type
         {
-            get { return type.ToUpper(); }
-            set { type = value; }
+            get => type.ToUpper();
+            set => type = value;
         }
 
         #endregion
@@ -37,7 +28,7 @@ namespace DeconTools.Utilities.SqliteUtils
         #region Public Methods
         public override string ToString()
         {
-            return (this.Name + " " + this.Type);
+            return Name + " " + Type;
         }
         #endregion
 

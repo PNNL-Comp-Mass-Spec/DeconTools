@@ -21,13 +21,8 @@ namespace DeconTools.Backend.Data
         private string _comment;
         public string Comment
         {
-            get
-            {
-                return _comment;
-            }
-            set {
-                _comment = value ?? "";
-            }
+            get => _comment;
+            set => _comment = value ?? "";
         }
 
         #endregion

@@ -45,8 +45,8 @@ namespace DeconTools.Backend.Runs
 
         public override XYData XYData
         {
-            get { throw new NotImplementedException(); }
-            set { throw new NotImplementedException(); }
+            get => throw new NotImplementedException();
+            set => throw new NotImplementedException();
         }
 
         public override int GetNumMSScans()

@@ -9,7 +9,7 @@ namespace DeconTools.Backend.Core
             NET = net;
         }
 
-        public double Scan {get;set;}
+        public double Scan { get; set; }
         public double NET { get; set; }
 
 

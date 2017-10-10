@@ -46,12 +46,6 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
 
         }
 
-        public sealed override int TriggerToExport
-        {
-            get => base.TriggerToExport;
-            set => base.TriggerToExport = value;
-        }
-
         #endregion
 
         #region Properties

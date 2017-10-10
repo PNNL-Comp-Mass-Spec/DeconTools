@@ -68,8 +68,9 @@ namespace DeconTools.Backend.Core
             }
             else
             {
-                indexValues = new List<int>();
-                indexValues.Add(frameNumber);
+                indexValues = new List<int> {
+                    frameNumber
+                };
             }
         }
 
@@ -94,14 +95,14 @@ namespace DeconTools.Backend.Core
 
         private List<int> indexValues;
 
-        public virtual List<int> IndexValues
+        public List<int> IndexValues
         {
             get => indexValues;
             set => indexValues = value;
         }
 
 
-        internal virtual int getLowestFrameNumber()
+        internal int getLowestFrameNumber()
         {
             var lowVal = int.MaxValue;
 

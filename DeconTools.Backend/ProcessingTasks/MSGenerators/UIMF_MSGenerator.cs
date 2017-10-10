@@ -18,17 +18,14 @@ namespace DeconTools.Backend.ProcessingTasks
         {
             Check.Require(minMZ <= maxMZ, "MS Generator failed. MinMZ must be less than or equal to maxMZ");
             //Check.Require(minMZ >=10,"MS Generator failed. MinMZ should be equal or greater than 10. This is due to a problem in the UIMFLibrary that sometimes returns m/z values of 0.000. This will be fixed later.");
-            this.MinMZ = minMZ;
-            this.MaxMZ = maxMZ;
+            MinMZ = minMZ;
+            MaxMZ = maxMZ;
         }
 
 
         public override double MinMZ
         {
-            get
-            {
-                return base.MinMZ;
-            }
+            get => base.MinMZ;
             set
             {
                 if (value < 10)
@@ -53,7 +50,7 @@ namespace DeconTools.Backend.ProcessingTasks
             var uimfRun = (UIMFRun)(run);
 
             if (lcscanSet == null || imsScanset == null) return null;
-            
+
             var xydata = uimfRun.GetMassSpectrum(lcscanSet, imsScanset,MinMZ,MaxMZ);
 
             if (xydata.Xvalues == null || xydata.Xvalues.Length == 0)

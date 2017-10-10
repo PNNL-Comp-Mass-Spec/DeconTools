@@ -35,7 +35,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             Smoother = new SavitzkyGolaySmoother(NumPointsInSmoother, SavitzkyGolaySmoothingOrder, false);
         }
 
-        
+
         #endregion
 
         #region Properties
@@ -43,25 +43,25 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
         private double _chromTolerance;
         public double ChromTolerance
         {
-            get { return _chromTolerance; }
+            get => _chromTolerance;
             set
             {
                 _chromTolerance = value;
-                
+
                 if (PeakChromGen!=null)
                 {
                     PeakChromGen = new PeakChromatogramGenerator(ChromTolerance, Globals.ChromatogramGeneratorMode.MOST_ABUNDANT_PEAK,
                                                                  Globals.IsotopicProfileType.UNLABELLED, ChromToleranceUnit);
                 }
-                
-                
+
+
             }
         }
 
         /// <summary>
         /// Tolerence unit for chromatogram. Either PPM (default) or MZ. Can only be set in the class constructor
         /// </summary>
-        public Globals.ToleranceUnit ChromToleranceUnit { get; private set; }
+        public Globals.ToleranceUnit ChromToleranceUnit { get; }
 
 
 
@@ -70,7 +70,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
         private int _numPointsInSmoother;
         public int NumPointsInSmoother
         {
-            get { return _numPointsInSmoother; }
+            get => _numPointsInSmoother;
             set
             {
                 if (_numPointsInSmoother != value)
@@ -91,7 +91,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
         private int _savitzkyGolaySmoothingOrder;
         public int SavitzkyGolaySmoothingOrder
         {
-            get { return _savitzkyGolaySmoothingOrder; }
+            get => _savitzkyGolaySmoothingOrder;
             set
             {
                 if (_savitzkyGolaySmoothingOrder != value)
@@ -100,9 +100,9 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 
                     if (Smoother!=null)
                     {
-                        Smoother = new SavitzkyGolaySmoother(NumPointsInSmoother, _savitzkyGolaySmoothingOrder);    
+                        Smoother = new SavitzkyGolaySmoother(NumPointsInSmoother, _savitzkyGolaySmoothingOrder);
                     }
-                    
+
                 }
 
             }

@@ -17,7 +17,7 @@ namespace DeconTools.Backend.FileIO
         public MSScanInfoToSQLiteExporterBasic(string fileName)
         {
             FileName = fileName;
-            Name = ToString();
+            Name = this.ToString();
 
             InitializeAndBuildTable();
         }
@@ -31,23 +31,9 @@ namespace DeconTools.Backend.FileIO
 
         #region Private Methods
         #endregion
-        public override string TableName
-        {
-            get { return m_TABLENAME; }
-        }
+        public override string TableName => m_TABLENAME;
 
-        public override List<Field> FieldList
-        {
-            get
-            {
-                if (m_fieldList == null)
-                {
-                    m_fieldList = CreateFieldList();
-                }
-
-                return m_fieldList;
-            }
-        }
+        public override List<Field> FieldList => m_fieldList ?? (m_fieldList = CreateFieldList());
 
         protected override List<Field> CreateFieldList()
         {

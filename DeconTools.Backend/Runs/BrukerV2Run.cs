@@ -180,14 +180,8 @@ namespace DeconTools.Backend.Runs
         private XYData xyData;
         public override XYData XYData
         {
-            get
-            {
-                return xyData;
-            }
-            set
-            {
-                xyData = value;
-            }
+            get => xyData;
+            set => xyData = value;
         }
 
         /// <summary>
@@ -199,8 +193,8 @@ namespace DeconTools.Backend.Runs
         private DeconToolsV2.Readers.clsRawData rawData;
         public DeconToolsV2.Readers.clsRawData RawData
         {
-            get { return rawData; }
-            set { rawData = value; }
+            get => rawData;
+            set => rawData = value;
         }
 
         #endregion

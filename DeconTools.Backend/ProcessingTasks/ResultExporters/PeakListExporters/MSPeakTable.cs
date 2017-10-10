@@ -7,10 +7,6 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
 {
     public class MSPeakTable :Table
     {
-        private string name;
-        private List<Field> fieldList;
-
-        
         #region Constructors
         public MSPeakTable(string tableName)
         {
@@ -30,33 +26,14 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
         #endregion
 
         #region Properties
-        public override List<Field> FieldList
-        {
-            get
-            {
-                return fieldList;
-            }
-            set
-            {
-                fieldList = value;
-            }
-        }
+        public override List<Field> FieldList { get; set; }
 
-        public override string Name
-        {
-            get
-            {
-                return name;
-            }
-            set
-            {
-                name = value;
-            }
-        }
+        public override string Name { get; set; }
+
         #endregion
 
         #region Public Methods
-       
+
 
         #endregion
 
@@ -64,9 +41,5 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
         #endregion
 
 
-
-
-     
-     
     }
 }

@@ -10,10 +10,6 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
 {
     public class PeakListTextExporter : IPeakListExporter
     {
-        private char m_delimiter;
-        private Globals.MSFileType m_FileType;
-        private int[] m_msLevelsToExport;
-        private int m_triggerValue;
 
 
         #region Constructors
@@ -69,17 +65,9 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
 
         public string FileName { get; set; }
 
-        public override int[] MSLevelsToExport
-        {
-            get { return m_msLevelsToExport; }
-            set { m_msLevelsToExport = value; }
-        }
+        public override int[] MSLevelsToExport { get; set; }
 
-        public override int TriggerToWriteValue
-        {
-            get { return m_triggerValue; }
-            set { m_triggerValue = value; }
-        }
+        public override int TriggerToWriteValue { get; set; }
 
         #endregion
 

@@ -14,28 +14,9 @@ namespace DeconTools.Backend.Utilities
 
         private static Logger instance;
 
+        public static Logger Instance => instance ?? (instance = new Logger());
 
-        public static Logger Instance
-        {
-            get
-            {
-                if (instance == null) instance = new Logger();
-                return instance;
-            }
-            set
-            {
-                instance = value;
-            }
-
-        }
-
-        private string m_outputFilename;
-
-        public string OutputFilename
-        {
-            get { return m_outputFilename; }
-            set { m_outputFilename = value; }
-        }
+        public string OutputFilename { get; set; }
 
 
         private Logger()

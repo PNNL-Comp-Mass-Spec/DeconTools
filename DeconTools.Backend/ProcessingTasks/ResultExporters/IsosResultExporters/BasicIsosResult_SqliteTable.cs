@@ -8,9 +8,6 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
 {
     public class BasicIsosResult_SqliteTable:Table
     {
-        private string name;
-        private List<Field> fieldList;
-
         #region Constructors
         public BasicIsosResult_SqliteTable(string tableName)
         {
@@ -35,16 +32,10 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
         #endregion
 
         #region Properties
-        public override string Name
-        {
-            get => name;
-            set => name = value;
-        }
-        public override List<Field> FieldList
-        {
-            get => fieldList;
-            set => fieldList = value;
-        }
+        public override string Name { get; set; }
+
+        public override List<Field> FieldList { get; set; }
+
         #endregion
 
         #region Public Methods

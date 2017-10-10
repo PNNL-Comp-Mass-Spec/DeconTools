@@ -110,14 +110,8 @@ namespace DeconTools.Backend.Runs
         private XYData xyData;
         public override XYData XYData
         {
-            get
-            {
-                return xyData;
-            }
-            set
-            {
-                xyData = value;
-            }
+            get => xyData;
+            set => xyData = value;
         }
 
         /// <summary>

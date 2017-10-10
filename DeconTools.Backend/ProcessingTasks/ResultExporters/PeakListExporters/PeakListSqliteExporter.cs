@@ -74,19 +74,11 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
         #endregion
 
         #region Properties
-        private int[] mSLevelsToExport;
-        public override int[] MSLevelsToExport
-        {
-            get { return mSLevelsToExport; }
-            set { mSLevelsToExport = value; }
-        }
 
-        private int triggerValue;
-        public override int TriggerToWriteValue
-        {
-            get { return triggerValue; }
-            set { triggerValue = value; }
-        }
+        public override int[] MSLevelsToExport { get; set; }
+
+        public override int TriggerToWriteValue { get; set; }
+
         #endregion
 
         #region Public Methods

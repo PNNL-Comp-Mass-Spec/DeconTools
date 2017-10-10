@@ -12,36 +12,43 @@ using System.Text;
 namespace DeconTools.Backend.Data.Structures
 {
       public class AVLTreeNode<T> : BinaryTreeNode<T>
-        where T : IComparable
+      where T : IComparable
+    {
+        public AVLTreeNode(T value)
+            : base(value)
         {
-            public AVLTreeNode(T value)
-                : base(value)
-            {
-            }
+        }
 
-            public new AVLTreeNode<T> LeftChild
-            {
-                get
-                {
-                    return (AVLTreeNode<T>)base.LeftChild;
-                }
-                set
-                {
-                    base.LeftChild = value;
-                }
-            }
+        public new AVLTreeNode<T> LeftChild
+        {
+            get => (AVLTreeNode<T>)base.LeftChild;
+            set => base.LeftChild = value;
+        }
 
-            public new AVLTreeNode<T> RightChild
-            {
-                get
-                {
-                    return (AVLTreeNode<T>)base.RightChild;
-                }
-                set
-                {
-                    base.RightChild = value;
-                }
-            }
+        public new AVLTreeNode<T> RightChild
+        {
+            get => (AVLTreeNode<T>)base.RightChild;
+            set => base.RightChild = value;
+        }
+
+        public new AVLTreeNode<T> Parent
+        {
+            get => (AVLTreeNode<T>)base.Parent;
+            set => base.Parent = value;
+        }
+    }
+
+        where T : IComparable
+        /// <summary>
+        /// Returns the AVL Node of the tree
+        /// </summary>
+        public new AVLTreeNode<T> Root
+        {
+            get => (AVLTreeNode<T>)base.Root;
+            set => base.Root = value;
+        }
+
+
 
             public new AVLTreeNode<T> Parent
             {

@@ -176,11 +176,7 @@ namespace DeconTools.Backend.Workflows
 
         internal WorkflowStats WorkflowStats { get; set; }
 
-        public bool CanInitializeWorkflow
-        {
-            get { return (Run != null); }
-
-        }
+        public bool CanInitializeWorkflow => (Run != null);
 
         public string OutputFolderPath { get; set; }
 

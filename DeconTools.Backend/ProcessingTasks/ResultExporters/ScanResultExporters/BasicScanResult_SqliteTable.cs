@@ -8,9 +8,6 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
 {
     public class BasicScanResult_SqliteTable : Table
     {
-        private string name;
-        private List<Field> fieldList;
-
         #region Constructors
 
         public BasicScanResult_SqliteTable(string tableName)
@@ -31,32 +28,11 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
         #endregion
 
         #region Properties
-        public override string Name
-        {
-            get
-            {
-                return name;
-            }
-            set
-            {
-                name = value;
-            }
-        }
-        public override List<Field> FieldList
-        {
-            get
-            {
-                return fieldList;
-            }
-            set
-            {
-                fieldList = value;
-            }
-        }
+        public override string Name { get; set; }
+
+        public override List<Field> FieldList { get; set; }
+
         #endregion
 
-   
-        
-      
     }
 }

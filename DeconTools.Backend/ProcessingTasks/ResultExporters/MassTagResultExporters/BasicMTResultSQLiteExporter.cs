@@ -179,17 +179,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.MassTagResultExport
             resultColl.MassTagResultList.Clear();
         }
 
-        public sealed override int TriggerToExport
-        {
-            get
-            {
-                return triggerValue;
-            }
-            set
-            {
-                triggerValue = value;
-            }
-        }
+        public sealed override int TriggerToExport { get; set; }
 
         public override void Cleanup()
         {

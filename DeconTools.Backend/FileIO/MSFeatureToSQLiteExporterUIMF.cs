@@ -14,30 +14,17 @@ namespace DeconTools.Backend.FileIO
         public MSFeatureToSQLiteExporterUIMF(string fileName)
         {
             FileName = fileName;
-            Name = ToString();
+            Name = this.ToString();
 
             InitializeAndBuildTable();
         }
         #endregion
 
         #region Properties
-        public override string TableName
-        {
-            get { return m_TABLENAME; }
-        }
+        public override string TableName => m_TABLENAME;
 
-        public override List<Field> FieldList
-        {
-            get
-            {
-                if (m_fieldList == null)
-                {
-                    m_fieldList = CreateFieldList();
-                }
+        public override List<Field> FieldList => m_fieldList ?? (m_fieldList = CreateFieldList());
 
-                return m_fieldList;
-            }
-        }
         #endregion
 
         #region Public Methods

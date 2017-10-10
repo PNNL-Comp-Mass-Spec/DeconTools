@@ -27,15 +27,9 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
 
         #region Properties
 
-        public double[] IonProbailities
-        {
-            get { return probabilities; }
-        }
+        public double[] IonProbabilities { get; private set; }
 
-        public bool IsSetToLabeled
-        {
-            get { return isLabeledFlag; }
-        }
+        public bool IsSetToLabeled { get; private set; }
 
         #endregion
 

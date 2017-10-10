@@ -18,13 +18,9 @@ namespace DeconTools.Backend.FileIO
         protected List<string> m_columnHeaders = new List<string>();
 
         /// <summary>
-        /// Name of this class. 
+        /// Name of this class.
         /// </summary>
-        public virtual string Name
-        {
-            get { return ToString(); }
-            set { ;}
-        }
+        public virtual string Name => this.ToString();
 
         #region Public Methods
 

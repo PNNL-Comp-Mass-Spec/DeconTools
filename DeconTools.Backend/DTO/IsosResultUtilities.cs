@@ -21,19 +21,12 @@ namespace DeconTools.Backend.DTO
         }
 
 
-
-        List<IsosResult> results;
-
-        public List<IsosResult> Results
-        {
-            get { return results; }
-            set { results = value; }
-        }
+        public List<IsosResult> Results { get; set; }
 
         public IsosResultUtilities(List<IsosResult> results)
         {
 
-            this.results = results;
+            Results = results;
         }
 
 
@@ -52,16 +45,15 @@ namespace DeconTools.Backend.DTO
             }
             catch (Exception)
             {
-
+                // Ignore exceptions
             }
+
             Check.Require(fileExists, "IsosResultUtilities cannot open input file");
 
-            var isosResults = new List<IsosResult>();
-
             var importer = new IsosImporter(isosTextFile, fileType);
-            isosResults= importer.Import();
+            var isosResults = importer.Import();
 
-            results = isosResults;
+            Results = isosResults;
         }
 
         public void LoadResults(string isosTextFile, Globals.MSFileType fileType, int minVal, int maxVal)
@@ -74,16 +66,15 @@ namespace DeconTools.Backend.DTO
             }
             catch (Exception)
             {
-
+                // Ignore exceptions
             }
+
             Check.Require(fileExists, "IsosResultUtilities cannot open input file");
 
-            var isosResults = new List<IsosResult>();
-
             var importer = new IsosImporter(isosTextFile, fileType, minVal, maxVal);
-            isosResults = importer.Import();
+            var isosResults = importer.Import();
 
-            results = isosResults;
+            Results = isosResults;
         }
 
         public void LoadResults(string uimfIsos1, Globals.MSFileType mSFileType, int frameNum)
@@ -96,80 +87,63 @@ namespace DeconTools.Backend.DTO
         public void FilterAndOutputIsos(string inputIsosFileName, int colIndex, double minVal, double maxVal, string outputIsosFilename)
         {
             using (var sr = new StreamReader(inputIsosFileName))
+            using (var sw = new StreamWriter(outputIsosFilename))
             {
+                if (sr.EndOfStream)
+                    return;
 
-                using (var sw = new StreamWriter(outputIsosFilename))
+                var header = sr.ReadLine();
+                sw.WriteLine(header);
+
+                while (!sr.EndOfStream)
                 {
-                    var header = sr.ReadLine();
-                    sw.WriteLine(header);
+                    var currentLine = sr.ReadLine();
+                    if (string.IsNullOrWhiteSpace(currentLine))
+                        continue;
 
+                    var splitLine = currentLine.Split(',');
 
-                    var msFeatureIndex = 0;
-                    while (!sr.EndOfStream)
+                    var parsedOK = double.TryParse(splitLine[colIndex], out var parsedVal);
+
+                    var writeOutCurrentLine = true;
+
+                    if (parsedOK)
                     {
-                        var currentLine = sr.ReadLine();
-
-                        var splitLine = currentLine.Split(',');
-
-                        var parsedOK = double.TryParse(splitLine[colIndex], out var parsedVal);
-
-                        var writeOutCurrentLine = true;
-
-                        if (parsedOK)
+                        if (Math.Abs(minVal + 1) < float.Epsilon)
                         {
-                            if (Math.Abs(minVal + 1) < float.Epsilon)
-                            {
-                                // minVal is -1
-                                writeOutCurrentLine = (parsedVal <= maxVal);
-                            }
-                            else if (Math.Abs(maxVal + 1) < float.Epsilon)
-                            {
-                                // maxVal is -1
-                                writeOutCurrentLine = (parsedVal >= minVal);
-                            }
-                            else
-                            {
-                                writeOutCurrentLine = (parsedVal >= minVal && parsedVal <= maxVal);
-                            }
+                            // minVal is -1
+                            writeOutCurrentLine = (parsedVal <= maxVal);
                         }
-
-                        if (writeOutCurrentLine)
+                        else if (Math.Abs(maxVal + 1) < float.Epsilon)
                         {
-                            sw.WriteLine(currentLine);
-
+                            // maxVal is -1
+                            writeOutCurrentLine = (parsedVal >= minVal);
                         }
+                        else
+                        {
+                            writeOutCurrentLine = (parsedVal >= minVal && parsedVal <= maxVal);
+                        }
+                    }
 
-                        msFeatureIndex++;
+                    if (writeOutCurrentLine)
+                    {
+                        sw.WriteLine(currentLine);
 
                     }
 
-                    sw.Close();
-                    sr.Close();
-
                 }
-
-
-
-
-
-
-
-
             }
-
 
 
         }
 
 
-
-
         public List<IsosResult> getUIMFResults(string uimfInputFile, int minFrame, int maxFrame)
         {
             var uimfisoUtil = new IsosResultUtilities();
-            uimfisoUtil.LoadResults(uimfInputFile, Globals.MSFileType.PNNL_UIMF,minFrame,maxFrame);
+            uimfisoUtil.LoadResults(uimfInputFile, Globals.MSFileType.PNNL_UIMF, minFrame, maxFrame);
 
-           // List<IsosResult> filteredIsos = new List<IsosResult>();
+            // List<IsosResult> filteredIsos = new List<IsosResult>();
 
 
 
@@ -252,10 +226,12 @@ namespace DeconTools.Backend.DTO
 
             foreach (var result in list)
             {
-                var uimfResult = new UIMFIsosResult();
-                uimfResult.ScanSet = new LCScanSetIMS(currentFrame);
-                uimfResult.IsotopicProfile = result.IsotopicProfile;
-                uimfResult.Run = result.Run;
+                var uimfResult = new UIMFIsosResult
+                {
+                    ScanSet = new LCScanSetIMS(currentFrame),
+                    IsotopicProfile = result.IsotopicProfile,
+                    Run = result.Run
+                };
                 uimfResult.ScanSet = result.ScanSet;
                 returnedResults.Add(uimfResult);
             }
@@ -290,7 +266,7 @@ namespace DeconTools.Backend.DTO
         }
 
 
-        public static List<IsosResult>GetIsosResultsByScan(List<IsosResult>inputList, int scanNum)
+        public static List<IsosResult> GetIsosResultsByScan(List<IsosResult> inputList, int scanNum)
         {
             var results = new List<IsosResult>();
 
@@ -335,20 +311,18 @@ namespace DeconTools.Backend.DTO
 
             var tolerance = 0.005;
 
-            for (var i = 0; i < list1.Count; i++)
+            foreach (var isoResult1 in list1)
             {
-                for (var i2 = 0; i2 < list2.Count ; i2++)
+                foreach (var isoResult2 in list2)
                 {
-                    if (list1[i].ScanSet == list2[i2].ScanSet &&
-                        list1[i].IsotopicProfile.ChargeState == list2[i2].IsotopicProfile.ChargeState &&
-                        Math.Abs(list1[i].IsotopicProfile.MonoIsotopicMass - list2[i2].IsotopicProfile.MonoIsotopicMass) < tolerance)
+                    if (isoResult1.ScanSet == isoResult2.ScanSet &&
+                        isoResult1.IsotopicProfile.ChargeState == isoResult2.IsotopicProfile.ChargeState &&
+                        Math.Abs(isoResult1.IsotopicProfile.MonoIsotopicMass - isoResult2.IsotopicProfile.MonoIsotopicMass) < tolerance)
                     {
-                        intersectedResults.Add(list1[i]);
+                        intersectedResults.Add(isoResult1);
                         break;
                     }
-
                 }
-                
             }
 
 
@@ -453,8 +427,6 @@ namespace DeconTools.Backend.DTO
                             select p;
                     results = query.ToList();
                     break;
-                default:
-                    break;
             }
 
 
@@ -465,6 +437,9 @@ namespace DeconTools.Backend.DTO
         public static double getAverageScore(List<IsosResult> inputList)
         {
             Check.Require(inputList != null, "IsosResult list is null");
+            if (inputList == null)
+                return double.NaN;
+
             if (inputList.Count == 0) return double.NaN;
 
             return inputList.Average(p => p.IsotopicProfile.Score);
@@ -478,6 +453,9 @@ namespace DeconTools.Backend.DTO
         public static int getCount(List<IsosResult> inputList)
         {
             Check.Require(inputList != null, "IsosResult list is null");
+            if (inputList == null)
+                return -1;
+
             if (inputList.Count == 0) return -1;
 
             return inputList.Count;
@@ -489,11 +467,13 @@ namespace DeconTools.Backend.DTO
         public static double getStdDevScore(List<IsosResult> inputList)
         {
             Check.Require(inputList != null, "IsosResult list is null");
+            if (inputList == null)
+                return double.NaN;
 
             if (inputList.Count == 0) return double.NaN;
 
             var query = from p in inputList
-                        //where p.IsotopicProfile.Score >= 0 && p.IsotopicProfile.Score <= 0.3
+                            //where p.IsotopicProfile.Score >= 0 && p.IsotopicProfile.Score <= 0.3
                         select p.IsotopicProfile.Score;
 
 
@@ -576,10 +556,10 @@ namespace DeconTools.Backend.DTO
                 {
                     var uimfResult = result as UIMFIsosResult;
 
-                    sb.Append(  uimfResult.IMSScanSet.PrimaryScanNumber);
+                    sb.Append(uimfResult.IMSScanSet.PrimaryScanNumber);
                     sb.Append("\t");
                 }
-               
+
                 sb.Append(result.IsotopicProfile.ChargeState);
                 sb.Append("\t");
                 sb.Append(result.IsotopicProfile.MonoPeakMZ);
