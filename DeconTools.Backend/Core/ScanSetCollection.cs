@@ -350,9 +350,9 @@ namespace DeconTools.Backend.Core
             var scans = new List<int>();
 
             var scansCounter = 0;
-            var scanUppperLimit = run.GetMaxPossibleLCScanNum();
+            var scanUpperLimit = run.GetMaxPossibleLCScanNum();
 
-            while (currentScan <= scanUppperLimit && numUpperScansToGet > scansCounter)
+            while (currentScan <= scanUpperLimit && numUpperScansToGet > scansCounter)
             {
                 if (run.GetMSLevel(currentScan) == currentMSLevel)
                 {

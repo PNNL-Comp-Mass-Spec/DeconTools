@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace DeconTools.Backend.Algorithms
 {
@@ -15,7 +16,7 @@ namespace DeconTools.Backend.Algorithms
          *
          * A sensible value is usually 0.25 to 0.5.
          */
-        private double bandwidth;
+        private readonly double bandwidth;
 
         /**
          * The number of robustness iterations parameter: this many
@@ -24,12 +25,12 @@ namespace DeconTools.Backend.Algorithms
          * A sensible value is usually 0 (just the initial fit without any
          * robustness iterations) to 4.
          */
-        private int robustnessIters;
+        private readonly int robustnessIters;
 
         public LoessInterpolator()
         {
-            this.bandwidth = DEFAULT_BANDWIDTH;
-            this.robustnessIters = DEFAULT_ROBUSTNESS_ITERS;
+            bandwidth = DEFAULT_BANDWIDTH;
+            robustnessIters = DEFAULT_ROBUSTNESS_ITERS;
         }
 
         public LoessInterpolator(double bandwidth, int robustnessIters)
@@ -77,12 +78,12 @@ namespace DeconTools.Backend.Algorithms
 
             if (n == 1)
             {
-                return new double[] { yval[0] };
+                return new[] { yval[0] };
             }
 
             if (n == 2)
             {
-                return new double[] { yval[0], yval[1] };
+                return new[] { yval[0], yval[1] };
             }
 
             var bandwidthInPoints = (int)(bandwidth * n);
@@ -174,7 +175,7 @@ namespace DeconTools.Backend.Algorithms
                     var meanXSquared = sumXSquared / sumWeights;
 
                     double beta;
-                    if (meanXSquared == meanX * meanX)
+                    if (Math.Abs(meanXSquared - meanX * meanX) < double.Epsilon)
                     {
                         beta = 0;
                     }
@@ -199,14 +200,14 @@ namespace DeconTools.Backend.Algorithms
                 // Recompute the robustness weights.
 
                 // Find the median residual.
-                // An arraycopy and a sort are completely tractable here, 
+                // An arraycopy and a sort are completely tractable here,
                 // because the preceding loop is a lot more expensive
-                System.Array.Copy(residuals, sortedResiduals, n);
+                Array.Copy(residuals, sortedResiduals, n);
                 //System.arraycopy(residuals, 0, sortedResiduals, 0, n);
-                Array.Sort<double>(sortedResiduals);
+                Array.Sort(sortedResiduals);
                 var medianResidual = sortedResiduals[n / 2];
 
-                if (medianResidual == 0)
+                if (Math.Abs(medianResidual) < double.Epsilon)
                 {
                     break;
                 }
@@ -234,13 +235,13 @@ namespace DeconTools.Backend.Algorithms
          * <tt>(right==xval.length-1 or xval[right+1] - xval[i] > xval[i] - xval[left])</tt>.
          * The array will be updated.
          */
-        private static void updateBandwidthInterval(double[] xval, int i, int[] bandwidthInterval)
+        private static void updateBandwidthInterval(IReadOnlyList<double> xval, int i, IList<int> bandwidthInterval)
         {
             var left = bandwidthInterval[0];
             var right = bandwidthInterval[1];
             // The right edge should be adjusted if the next point to the right
             // is closer to xval[i] than the leftmost point of the current interval
-            if (right < xval.Length - 1 &&
+            if (right < xval.Count - 1 &&
                xval[right + 1] - xval[i] < xval[i] - xval[left])
             {
                 bandwidthInterval[0]++;
@@ -270,9 +271,9 @@ namespace DeconTools.Backend.Algorithms
          * @throws MathException if one of the values is not
          *         a finite real number
          */
-        private static void checkAllFiniteReal(double[] values, bool isAbscissae)
+        private static void checkAllFiniteReal(IReadOnlyList<double> values, bool isAbscissae)
         {
-            for (var i = 0; i < values.Length; i++)
+            for (var i = 0; i < values.Count; i++)
             {
                 var x = values[i];
                 if (Double.IsInfinity(x) || Double.IsNaN(x))
@@ -293,9 +294,9 @@ namespace DeconTools.Backend.Algorithms
          * @throws MathException if the abscissae array
          * is not in a strictly increasing order
          */
-        private static void checkStrictlyIncreasing(double[] xval)
+        private static void checkStrictlyIncreasing(IReadOnlyList<double> xval)
         {
-            for (var i = 0; i < xval.Length; ++i)
+            for (var i = 0; i < xval.Count; ++i)
             {
                 if (i >= 1 && xval[i - 1] >= xval[i])
                 {

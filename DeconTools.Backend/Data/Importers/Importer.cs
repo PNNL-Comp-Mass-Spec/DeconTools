@@ -20,33 +20,29 @@ namespace DeconTools.Backend.Data
 
         protected bool parseBoolField(string inputstring)
         {
-            var result = false;
-            if (bool.TryParse(inputstring, out result))
+            if (bool.TryParse(inputstring, out var result))
                 return result;
             return false;     //TODO:  need to figure out the default value
         }
 
         protected short parseShortField(string inputstring)
         {
-            short result = 0;
-            if (Int16.TryParse(inputstring, out result))
+            if (Int16.TryParse(inputstring, out var result))
                 return result;
             return 0;
         }
 
         protected double parseDoubleField(string inputstring)
         {
-        
-            double result = 0;
-            if (double.TryParse(inputstring, out result))
+
+            if (double.TryParse(inputstring, out var result))
                 return result;
             return double.NaN;
         }
 
         protected float parseFloatField(string inputstring)
         {
-            float result = 0;
-            if (float.TryParse(inputstring, out result))
+            if (float.TryParse(inputstring, out var result))
                 return result;
             return float.NaN;
         }
@@ -57,11 +53,11 @@ namespace DeconTools.Backend.Data
 
             if (string.IsNullOrEmpty(inputstring)) return -1;
 
-            var result = 0;
-            if (Int32.TryParse(inputstring, out result))
+            if (int.TryParse(inputstring, out var result))
                 return result;
+
             var secondAttempt = parseDoubleField(inputstring);
-            if (secondAttempt != double.NaN)
+            if (!double.IsNaN(secondAttempt))
             {
                 return Convert.ToInt32(secondAttempt);
             }
@@ -96,7 +92,7 @@ namespace DeconTools.Backend.Data
                     columnHeader = tableHeaders[i];
                 }
 
-                
+
                 if (columnHeader == target)
                 {
                     return i;

@@ -135,31 +135,31 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         /// <summary>
         ///     number of isotope peaks
         /// </summary>
-        public int NumIsotopesObserved
-        {
-            get { return IsotopePeakIndices.Count; }
-        }
+        public int NumIsotopesObserved => IsotopePeakIndices.Count;
 
         public virtual object Clone()
         {
-            var result = new HornTransformResults();
-            result.PeakIndex = PeakIndex;
-            result.ScanNum = ScanNum;
-            result.ChargeState = ChargeState;
-            //result.AbundanceInt = this.AbundanceInt;
-            result.Abundance = Abundance;
-            result.Mz = Mz;
-            result.Fit = Fit;
-            result.FitCountBasis = FitCountBasis;
-            result.AverageMw = AverageMw;
-            result.MonoMw = MonoMw;
-            result.MostIntenseMw = MostIntenseMw;
-            result.FWHM = FWHM;
-            result.SignalToNoise = SignalToNoise;
-            result.MonoIntensity = MonoIntensity;
-            result.MonoPlus2Intensity = MonoPlus2Intensity;
-            result.DeltaMz = DeltaMz;
-            result.IsotopePeakIndices = new List<int>(IsotopePeakIndices);
+            var result = new HornTransformResults
+            {
+                PeakIndex = PeakIndex,
+                ScanNum = ScanNum,
+                ChargeState = ChargeState,
+                //AbundanceInt = AbundanceInt;
+                Abundance = Abundance,
+                Mz = Mz,
+                Fit = Fit,
+                FitCountBasis = FitCountBasis,
+                AverageMw = AverageMw,
+                MonoMw = MonoMw,
+                MostIntenseMw = MostIntenseMw,
+                FWHM = FWHM,
+                SignalToNoise = SignalToNoise,
+                MonoIntensity = MonoIntensity,
+                MonoPlus2Intensity = MonoPlus2Intensity,
+                DeltaMz = DeltaMz,
+                IsotopePeakIndices = new List<int>(IsotopePeakIndices)
+            };
+
             return result;
         }
     }

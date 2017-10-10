@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using DeconTools.Backend.Core;
 using DeconTools.Utilities.SqliteUtils;
-using DeconTools.Utilities;
 using System.Data.Common;
 
 namespace DeconTools.Backend.FileIO
@@ -18,9 +14,8 @@ namespace DeconTools.Backend.FileIO
         #region Constructors
         public MSFeatureToSQLiteExporterBasic(string fileName)
         {
-            Name = ToString();
+            Name = this.ToString();
             FileName = fileName;
-
 
             InitializeAndBuildTable();
         }
@@ -53,31 +48,32 @@ namespace DeconTools.Backend.FileIO
             dbParameters[12].Value = result.IsotopicProfile.GetMonoPlusTwoAbundance();
             dbParameters[13].Value = ProcessingTasks.ResultValidators.ResultValidationUtils.GetStringFlagCode(result.Flags);
         }
-        
-        
+
         protected override List<Field> CreateFieldList()
         {
-            var fieldList = new List<Field>();
-            fieldList.Add(new Field("feature_id", "INTEGER Primary key"));
-            fieldList.Add(new Field("scan_num", "INTEGER"));
-            fieldList.Add(new Field("charge", "BYTE"));
-            fieldList.Add(new Field("abundance", "INTEGER"));
-            fieldList.Add(new Field("mz", "DOUBLE"));
-            fieldList.Add(new Field("fit", "FLOAT"));
-            fieldList.Add(new Field("average_mw", "DOUBLE"));
-            fieldList.Add(new Field("monoisotopic_mw", "DOUBLE"));
-            fieldList.Add(new Field("mostabundant_mw", "DOUBLE"));
-            fieldList.Add(new Field("fwhm", "FLOAT"));
-            fieldList.Add(new Field("signal_noise", "DOUBLE"));
-            fieldList.Add(new Field("mono_abundance", "INTEGER"));
-            fieldList.Add(new Field("mono_plus2_abundance", "INTEGER"));
-            fieldList.Add(new Field("flag", "INTEGER"));
+            var fieldList = new List<Field>
+            {
+                new Field("feature_id", "INTEGER Primary key"),
+                new Field("scan_num", "INTEGER"),
+                new Field("charge", "BYTE"),
+                new Field("abundance", "INTEGER"),
+                new Field("mz", "DOUBLE"),
+                new Field("fit", "FLOAT"),
+                new Field("average_mw", "DOUBLE"),
+                new Field("monoisotopic_mw", "DOUBLE"),
+                new Field("mostabundant_mw", "DOUBLE"),
+                new Field("fwhm", "FLOAT"),
+                new Field("signal_noise", "DOUBLE"),
+                new Field("mono_abundance", "INTEGER"),
+                new Field("mono_plus2_abundance", "INTEGER"),
+                new Field("flag", "INTEGER")
+            };
 
             return fieldList;
 
         }
         #endregion
 
-      
+
     }
 }

@@ -77,14 +77,11 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
             }
             else
             {
-                double ratioContribIso1;
-                double ratioContribIso2;
-                double ratio;
 
 
                 quant.GetRatioBasedOnTopPeaks(iso1, iso2, mt.IsotopicProfile, _N15IsotopicProfileGenerator.GetN15IsotopicProfile(mt, 0.005),
                     currentResult.ScanSet.BackgroundIntensity, NumPeaksUsedInRatioCalc,
-                    out ratio, out ratioContribIso1, out ratioContribIso2);
+                    out var ratio, out var ratioContribIso1, out var ratioContribIso2);
 
                 n14n15Result.RatioN14N15 = ratio;
                 n14n15Result.RatioContributionN14 = ratioContribIso1;

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using DeconTools.Utilities.SqliteUtils;
 
 namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
@@ -11,27 +8,29 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
         #region Constructors
         public MassTagResult_SqliteTable(string tableName)
         {
-            this.Name = tableName;
-            this.FieldList = new List<Field>();
-            this.FieldList.Add(new Field("feature_id", "INTEGER"));
-            this.FieldList.Add(new Field("scan_num", "INTEGER"));
-            this.FieldList.Add(new Field("charge", "BYTE"));
-            this.FieldList.Add(new Field("abundance", "UINT"));
-            this.FieldList.Add(new Field("mz", "DOUBLE"));
-            this.FieldList.Add(new Field("fit", "FLOAT"));
-            this.FieldList.Add(new Field("net", "FLOAT"));
-            this.FieldList.Add(new Field("mass_tag_id", "INTEGER"));
-            this.FieldList.Add(new Field("mass_tag_mz", "DOUBLE"));
-            this.FieldList.Add(new Field("mass_tag_NET", "FLOAT"));
-            this.FieldList.Add(new Field("mass_tag_sequence", "STRING"));
-            this.FieldList.Add(new Field("average_mw", "DOUBLE"));
-            this.FieldList.Add(new Field("monoisotopic_mw", "DOUBLE"));
-            this.FieldList.Add(new Field("mostabundant_mw", "DOUBLE"));
-            this.FieldList.Add(new Field("fwhm", "FLOAT"));
-            this.FieldList.Add(new Field("signal_noise", "DOUBLE"));
-            this.FieldList.Add(new Field("mono_abundance", "UINT"));
-            this.FieldList.Add(new Field("mono_plus2_abundance", "UINT"));
- 
+            Name = tableName;
+            FieldList = new List<Field>
+            {
+                new Field("feature_id", "INTEGER"),
+                new Field("scan_num", "INTEGER"),
+                new Field("charge", "BYTE"),
+                new Field("abundance", "UINT"),
+                new Field("mz", "DOUBLE"),
+                new Field("fit", "FLOAT"),
+                new Field("net", "FLOAT"),
+                new Field("mass_tag_id", "INTEGER"),
+                new Field("mass_tag_mz", "DOUBLE"),
+                new Field("mass_tag_NET", "FLOAT"),
+                new Field("mass_tag_sequence", "STRING"),
+                new Field("average_mw", "DOUBLE"),
+                new Field("monoisotopic_mw", "DOUBLE"),
+                new Field("mostabundant_mw", "DOUBLE"),
+                new Field("fwhm", "FLOAT"),
+                new Field("signal_noise", "DOUBLE"),
+                new Field("mono_abundance", "UINT"),
+                new Field("mono_plus2_abundance", "UINT")
+            };
+
         }
         #endregion
 
@@ -47,7 +46,6 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
 
         #region Private Methods
         #endregion
-
 
     }
 }

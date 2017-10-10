@@ -7,13 +7,13 @@ namespace DeconTools.Backend.Data
 {
     public class UMCFileImporter : Importer<UMCCollection>
     {
-        StreamReader reader;
+        private readonly StreamReader reader;
 
         #region Constructors
-        public UMCFileImporter(string filename, char delimiter)
+        public UMCFileImporter(string filename, char colDelimiter)
         {
-            this.delimiter = delimiter;
-            this.filename = filename;
+            delimiter = colDelimiter;
+            Filename = filename;
 
             try
             {
@@ -28,13 +28,9 @@ namespace DeconTools.Backend.Data
         #endregion
 
         #region Properties
-        private string filename;
 
-        public string Filename
-        {
-            get { return filename; }
-            set { filename = value; }
-        }
+        public string Filename { get; set; }
+
         #endregion
 
         #region Public Methods
@@ -44,9 +40,10 @@ namespace DeconTools.Backend.Data
         #endregion
         public override UMCCollection Import()
         {
-            var umcCollection = new UMCCollection();
+            var umcCollection = new UMCCollection {
+                UMCList = getUMCs()
+            };
 
-            umcCollection.UMCList= getUMCs();
             return umcCollection;
 
         }
@@ -96,55 +93,50 @@ namespace DeconTools.Backend.Data
 
         private UMC convertTextToUMCData(List<string> processedData, List<string> headers)
         {
-            var row = new UMC();
-
-            row.UMCIndex = parseIntField(lookup(processedData, headers, "UMCIndex"));
-            row.ScanStart = parseIntField(lookup(processedData, headers, "ScanStart"));
-            row.ScanEnd = parseIntField(lookup(processedData, headers, "ScanEnd"));
-            row.NETClassRep = parseDoubleField(lookup(processedData, headers, "NETClassRep"));
-            row.UMCMonoMW = parseDoubleField(lookup(processedData, headers, "UMCMonoMW"));
-            row.PairIndex = parseIntField(lookup(processedData, headers, "PairIndex"));
-            row.PairMemberType = parseIntField(lookup(processedData, headers, "PairMemberType"));
-            row.UMCIndex = parseIntField(lookup(processedData, headers, "UMCIndex"));
-            row.ScanClassRep = parseIntField(lookup(processedData, headers, "ScanClassRep"));
-            row.UMCMWStDev = parseDoubleField(lookup(processedData, headers, "UMCMWStDev"));
-            row.UMCMWMin = parseDoubleField(lookup(processedData, headers, "UMCMWMin"));
-            row.UMCMWMax = parseDoubleField(lookup(processedData, headers, "UMCMWMax"));
-            row.UMCAbundance = parseDoubleField(lookup(processedData, headers, "UMCAbundance"));
-            row.ClassStatsChargeBasis = parseShortField(lookup(processedData, headers, "ClassStatsChargeBasis"));
-            row.ChargeStateMin = parseShortField(lookup(processedData, headers, "ChargeStateMin"));
-            row.ChargeStateMax = parseShortField(lookup(processedData, headers, "ChargeStateMax"));
-            row.UMCMZForChargeBasis = parseDoubleField(lookup(processedData, headers, "UMCMZForChargeBasis"));
-            row.UMCMemberCount = parseIntField(lookup(processedData, headers, "UMCMemberCount"));
-            row.UMCMemberCountUsedForAbu = parseIntField(lookup(processedData, headers, "UMCMemberCountUsedForAbu"));
-            row.UMCAverageFit = parseDoubleField(lookup(processedData, headers, "UMCAverageFit"));
-            row.PairIndex = parseIntField(lookup(processedData, headers, "PairIndex"));
-            row.ExpressionRatio = parseDoubleField(lookup(processedData, headers, "ExpressionRatio"));
-            row.ExpressionRatioStDev = parseDoubleField(lookup(processedData, headers, "ExpressionRatioStDev"));
-            row.ExpressionRatioChargeStateBasisCount = parseIntField(lookup(processedData, headers, "ExpressionRatioChargeStateBasisCount"));
-            row.ExpressionRatioMemberBasisCount = parseIntField(lookup(processedData, headers, "ExpressionRatioMemberBasisCount"));
-            row.MultiMassTagHitCount = parseShortField(lookup(processedData, headers, "MultiMassTagHitCount"));
-            row.MassTagID = parseIntField(lookup(processedData, headers, "MassTagID"));
-            row.MassTagMonoMW = parseDoubleField(lookup(processedData, headers, "MassTagMonoMW"));
-            row.MassTagNET = parseDoubleField(lookup(processedData, headers, "MassTagNET"));
-            row.MassTagNETStDev = parseDoubleField(lookup(processedData, headers, "MassTagNETStDev"));
-            row.StacScore = parseDoubleField(lookup(processedData, headers, "STAC Score"));
-            row.StacUniquenessProbability = parseDoubleField(lookup(processedData, headers, "Uniqueness Probability"));
-            row.SLiCScore = parseDoubleField(lookup(processedData, headers, "SLiC Score"));
-            row.DelSLiC = parseDoubleField(lookup(processedData, headers, "DelSLiC"));
-            row.MemberCountMatchingMassTag = parseIntField(lookup(processedData, headers, "MemberCountMatchingMassTag"));
-            row.IsInternalStdMatch = parseBoolField(lookup(processedData, headers, "IsInternalStdMatch"));
-            row.PeptideProphetProbability = parseDoubleField(lookup(processedData, headers, "PeptideProphetProbability"));
-            row.Peptide = lookup(processedData, headers, "Peptide");
-
-
-
-
+            var row = new UMC
+            {
+                UMCIndex = parseIntField(lookup(processedData, headers, "UMCIndex")),
+                ScanStart = parseIntField(lookup(processedData, headers, "ScanStart")),
+                ScanEnd = parseIntField(lookup(processedData, headers, "ScanEnd")),
+                NETClassRep = parseDoubleField(lookup(processedData, headers, "NETClassRep")),
+                UMCMonoMW = parseDoubleField(lookup(processedData, headers, "UMCMonoMW")),
+                PairIndex = parseIntField(lookup(processedData, headers, "PairIndex")),
+                PairMemberType = parseIntField(lookup(processedData, headers, "PairMemberType")),
+                ScanClassRep = parseIntField(lookup(processedData, headers, "ScanClassRep")),
+                UMCMWStDev = parseDoubleField(lookup(processedData, headers, "UMCMWStDev")),
+                UMCMWMin = parseDoubleField(lookup(processedData, headers, "UMCMWMin")),
+                UMCMWMax = parseDoubleField(lookup(processedData, headers, "UMCMWMax")),
+                UMCAbundance = parseDoubleField(lookup(processedData, headers, "UMCAbundance")),
+                ClassStatsChargeBasis = parseShortField(lookup(processedData, headers, "ClassStatsChargeBasis")),
+                ChargeStateMin = parseShortField(lookup(processedData, headers, "ChargeStateMin")),
+                ChargeStateMax = parseShortField(lookup(processedData, headers, "ChargeStateMax")),
+                UMCMZForChargeBasis = parseDoubleField(lookup(processedData, headers, "UMCMZForChargeBasis")),
+                UMCMemberCount = parseIntField(lookup(processedData, headers, "UMCMemberCount")),
+                UMCMemberCountUsedForAbu = parseIntField(lookup(processedData, headers, "UMCMemberCountUsedForAbu")),
+                UMCAverageFit = parseDoubleField(lookup(processedData, headers, "UMCAverageFit")),
+                ExpressionRatio = parseDoubleField(lookup(processedData, headers, "ExpressionRatio")),
+                ExpressionRatioStDev = parseDoubleField(lookup(processedData, headers, "ExpressionRatioStDev")),
+                ExpressionRatioChargeStateBasisCount = parseIntField(lookup(processedData, headers, "ExpressionRatioChargeStateBasisCount")),
+                ExpressionRatioMemberBasisCount = parseIntField(lookup(processedData, headers, "ExpressionRatioMemberBasisCount")),
+                MultiMassTagHitCount = parseShortField(lookup(processedData, headers, "MultiMassTagHitCount")),
+                MassTagID = parseIntField(lookup(processedData, headers, "MassTagID")),
+                MassTagMonoMW = parseDoubleField(lookup(processedData, headers, "MassTagMonoMW")),
+                MassTagNET = parseDoubleField(lookup(processedData, headers, "MassTagNET")),
+                MassTagNETStDev = parseDoubleField(lookup(processedData, headers, "MassTagNETStDev")),
+                StacScore = parseDoubleField(lookup(processedData, headers, "STAC Score")),
+                StacUniquenessProbability = parseDoubleField(lookup(processedData, headers, "Uniqueness Probability")),
+                SLiCScore = parseDoubleField(lookup(processedData, headers, "SLiC Score")),
+                DelSLiC = parseDoubleField(lookup(processedData, headers, "DelSLiC")),
+                MemberCountMatchingMassTag = parseIntField(lookup(processedData, headers, "MemberCountMatchingMassTag")),
+                IsInternalStdMatch = parseBoolField(lookup(processedData, headers, "IsInternalStdMatch")),
+                PeptideProphetProbability = parseDoubleField(lookup(processedData, headers, "PeptideProphetProbability")),
+                Peptide = lookup(processedData, headers, "Peptide")
+            };
 
             return row;
         }
 
-        private bool validateHeaders(List<string> headers)
+        private bool validateHeaders(IReadOnlyList<string> headers)
         {
             if (headers.Count < 10) return false;
             if (headers[0] != "UMCIndex") return false;

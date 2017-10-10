@@ -183,7 +183,7 @@ namespace DeconTools.Backend.Workflows
         public Globals.ExporterType ExporterType { get; set; }
 
         /// <summary>
-        /// Controls whether or not data is exported. This is useful if you want programmatic 
+        /// Controls whether or not data is exported. This is useful if you want programmatic
         /// access to the IsosResults in the RunCollection (Exporters will clear the ResultCollection)
         /// Default = TRUE
         /// </summary>
@@ -197,6 +197,9 @@ namespace DeconTools.Backend.Workflows
         public virtual void InitializeWorkflow()
         {
             Check.Assert(Run != null, "Cannot initialize workflow. Run is null");
+            if (Run == null)
+                return;
+
             Check.Assert(NewDeconToolsParameters != null, "Cannot initialize workflow. Parameters are null");
 
             Run.ResultCollection.ResultType = GetResultType();
@@ -239,7 +242,7 @@ namespace DeconTools.Backend.Workflows
             Deconvolutor = DeconvolutorFactory.CreateDeconvolutor(NewDeconToolsParameters);
 
             //the new iThrash imports the _peaks.txt file
-            if (Deconvolutor is DeconTools.Backend.ProcessingTasks.Deconvoluters.InformedThrashDeconvolutor)
+            if (Deconvolutor is ProcessingTasks.Deconvoluters.InformedThrashDeconvolutor)
             {
                 _deconvolutorRequiresPeaksFile = true;
             }
@@ -270,7 +273,7 @@ namespace DeconTools.Backend.Workflows
         }
 
         /// <summary>
-        /// Defines the scans that will be processed. 
+        /// Defines the scans that will be processed.
         /// </summary>
         protected virtual void CreateTargetMassSpectra()
         {
@@ -435,7 +438,7 @@ namespace DeconTools.Backend.Workflows
         public abstract void ReportProgress();
 
         /// <summary>
-        /// Executes the processing tasks on a given scan (or frame). 
+        /// Executes the processing tasks on a given scan (or frame).
         /// </summary>
         protected virtual void ExecuteProcessingTasks()
         {
@@ -589,11 +592,8 @@ namespace DeconTools.Backend.Workflows
             {
                 return Globals.ResultType.O16O18_TRADITIONAL_RESULT;
             }
-            else
-            {
-                return Globals.ResultType.BASIC_TRADITIONAL_RESULT;
-            }
 
+            return Globals.ResultType.BASIC_TRADITIONAL_RESULT;
         }
 
         protected virtual void WriteProcessingInfoToLog()

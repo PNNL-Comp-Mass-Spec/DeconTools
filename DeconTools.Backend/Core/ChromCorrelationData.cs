@@ -26,7 +26,7 @@ namespace DeconTools.Backend.Core
         {
             get
             {
-                var validItems = CorrelationDataItems.Select(p => p.CorrelationRSquaredVal).Where(n => n.HasValue);
+                var validItems = CorrelationDataItems.Select(p => p.CorrelationRSquaredVal).Where(n => n.HasValue).ToList();
 
                 if (validItems.Any())
                 {
@@ -40,11 +40,11 @@ namespace DeconTools.Backend.Core
         {
             get
             {
-                var validItems = CorrelationDataItems.Select(p => p.CorrelationRSquaredVal).Where(n => n.HasValue);
+                var validItems = CorrelationDataItems.Select(p => p.CorrelationRSquaredVal).Where(n => n.HasValue).ToList();
 
                 if (validItems.Any())
                 {
-                    return validItems.Average(p=>p.Value);
+                    return validItems.Average();
                 }
                 return null;
             }

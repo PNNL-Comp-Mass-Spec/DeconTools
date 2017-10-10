@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
-using DeconTools.Utilities;
 
 namespace DeconTools.Backend.Runs
 {
@@ -10,21 +9,21 @@ namespace DeconTools.Backend.Runs
     {
 
         private char m_delimiter;
-        private int m_xvalsColumnIndex = 0;
-        private int m_yvalsColumnIndex = 1;
+        private readonly int m_xvalsColumnIndex = 0;
+        private readonly int m_yvalsColumnIndex = 1;
 
 
 
         public MSScanFromTextFileRun(string fileName)
         {
-            this.Filename = Path.GetFullPath(fileName);
+            Filename = Path.GetFullPath(fileName);
 
-            this.MSFileType = Globals.MSFileType.Ascii;
-            var baseFilename = Path.GetFileName(this.Filename);
-            this.DatasetName = baseFilename.Substring(0, baseFilename.LastIndexOf('.'));
-            this.DataSetPath = Path.GetDirectoryName(this.Filename);
-            this.XYData = new XYData();
-            this.CurrentScanSet = new DeconTools.Backend.Core.ScanSet(0);    //
+            MSFileType = Globals.MSFileType.Ascii;
+            var baseFilename = Path.GetFileName(Filename);
+            DatasetName = baseFilename.Substring(0, baseFilename.LastIndexOf('.'));
+            DataSetPath = Path.GetDirectoryName(Filename);
+            XYData = new XYData();
+            CurrentScanSet = new Core.ScanSet(0);    //
 
 
         }
@@ -32,7 +31,7 @@ namespace DeconTools.Backend.Runs
             : this(fileName)
         {
 
-            this.m_delimiter = delimiter;
+            m_delimiter = delimiter;
 
         }
 
@@ -41,16 +40,16 @@ namespace DeconTools.Backend.Runs
             int xvalsColumnIndex, int yvalsColumnIndex)
             : this(fileName)
         {
-            this.m_delimiter = delimiter;
-            this.m_xvalsColumnIndex = xvalsColumnIndex;
-            this.m_yvalsColumnIndex = yvalsColumnIndex;
+            m_delimiter = delimiter;
+            m_xvalsColumnIndex = xvalsColumnIndex;
+            m_yvalsColumnIndex = yvalsColumnIndex;
         }
 
         internal XYData loadDataFromFile(string filename)
         {
             if (m_delimiter == 0) m_delimiter = determineDelimiter(filename);
 
-            var sr = new System.IO.StreamReader(filename);
+            var sr = new StreamReader(filename);
 
             var xvals = new List<double>();
             var yvals = new List<double>();
@@ -60,15 +59,15 @@ namespace DeconTools.Backend.Runs
             while (!sr.EndOfStream)
             {
                 var line = sr.ReadLine();
-
-
+                if (string.IsNullOrWhiteSpace(line))
+                    continue;
 
                 if (!foundStartOfXYData)     //contains header, but haven't found start of numerical data
                 {
                     var match = Regex.Match(line, @"^\d+");
                     if (match.Success)
                     {
-                        foundStartOfXYData = true;     //found a line that starts with numbers. 
+                        foundStartOfXYData = true;     //found a line that starts with numbers.
 
                     }
                     else
@@ -78,15 +77,7 @@ namespace DeconTools.Backend.Runs
 
                 }
 
-
-
-                if (line == "")
-                {
-                    break;
-                }
-
                 var vals = processLine(line);
-
 
                 if (m_yvalsColumnIndex >= vals.Count)
                 {
@@ -95,11 +86,10 @@ namespace DeconTools.Backend.Runs
                         try
                         {
                             tempSr.Close();
-
                         }
                         catch (Exception)
                         {
-
+                            // Ignore errors here
                         }
                     }
                     throw new InvalidOperationException("XY importer error. Cannot find y-values in column " + (m_yvalsColumnIndex + 1).ToString());
@@ -110,29 +100,29 @@ namespace DeconTools.Backend.Runs
                 yvals.Add(parseDoubleField(vals[m_yvalsColumnIndex]));
             }
 
-            var xydata = new XYData();
-            xydata.Xvalues = xvals.ToArray();
-            xydata.Yvalues = yvals.ToArray();
+            var xydata = new XYData
+            {
+                Xvalues = xvals.ToArray(),
+                Yvalues = yvals.ToArray()
+            };
 
             return xydata;
 
         }
         private double parseDoubleField(string inputstring)
         {
-            double result = 0;
-            if (double.TryParse(inputstring, out result))
+            if (double.TryParse(inputstring, out var result))
                 return result;
-            else return double.NaN;
 
+            return double.NaN;
         }
 
         private float parseFloatField(string inputstring)
         {
-            float result = 0;
-            if (float.TryParse(inputstring, out result))
+            if (float.TryParse(inputstring, out var result))
                 return result;
-            else return float.NaN;
 
+            return float.NaN;
         }
 
         private List<string> processLine(string inputLine)
@@ -151,11 +141,8 @@ namespace DeconTools.Backend.Runs
         private char determineDelimiter(string fileName)
         {
 
-            using (var sr = new System.IO.StreamReader(fileName))
+            using (var sr = new StreamReader(fileName))
             {
-
-                var xvals = new List<double>();
-                var yvals = new List<double>();
 
                 var foundStartOfXYData = false;
 
@@ -173,7 +160,7 @@ namespace DeconTools.Backend.Runs
                         var match = Regex.Match(line, @"^\d+");
                         if (match.Success)
                         {
-                            foundStartOfXYData = true;     //found a line that starts with numbers. 
+                            foundStartOfXYData = true;     //found a line that starts with numbers.
 
                         }
                         else
@@ -199,7 +186,7 @@ namespace DeconTools.Backend.Runs
                                 delimiterCount.Add(delim, 0);
 
                             }
-                            delimiterCount[delim]++;   //adds one to the count of occurances for this delimiter. 
+                            delimiterCount[delim]++;   //adds one to the count of occurances for this delimiter.
 
                         }
                     }
@@ -226,30 +213,24 @@ namespace DeconTools.Backend.Runs
                 sr.Close();
                 return mostCommonDelimiter;
 
-
-
             }
 
-
-
-
-            throw new NotImplementedException();
         }
 
 
 
-        public override XYData GetMassSpectrum(DeconTools.Backend.Core.ScanSet scanset, double minMZ, double maxMZ)
+        public override XYData GetMassSpectrum(Core.ScanSet scanset, double minMZ, double maxMZ)
         {
-            var xydata = new XYData();
+            XYData xydata;
 
             try
             {
-                xydata = loadDataFromFile(this.Filename);
+                xydata = loadDataFromFile(Filename);
             }
             catch (Exception ex)
             {
 
-                throw new System.IO.IOException("There was an error reading file " + Utilities.DiagnosticUtilities.GetFullPathSafe(this.Filename) + "\n\n" + ex.Message);
+                throw new IOException("There was an error reading file " + Utilities.DiagnosticUtilities.GetFullPathSafe(Filename) + "\n\n" + ex.Message);
             }
 
             xydata = xydata.TrimData(minMZ, maxMZ);

@@ -152,12 +152,10 @@ namespace DeconTools.Backend.Core
                 CurrentTargetedResult = MassTagResultList[target];
                 return CurrentTargetedResult;
             }
-            else
-            {
-                var result = CreateMassTagResult(target);   // this creates the appropriate type and adds it to the MassTagResultList and increments the MSFeatureID number
-                CurrentTargetedResult = result;
-                return result;
-            }
+
+            var result = CreateMassTagResult(target);   // this creates the appropriate type and adds it to the MassTagResultList and increments the MSFeatureID number
+            CurrentTargetedResult = result;
+            return result;
         }
 
         //This is the primary way to add an IsosResult
@@ -246,11 +244,12 @@ namespace DeconTools.Backend.Core
 
             var resultList = MassTagResultList.Values.ToList();
             var massTagIDs = new HashSet<int>();
-            for (var i = 0; i < resultList.Count; i++)
+            foreach (var result in resultList)
             {
-                massTagIDs.Add(resultList[i].Target.ID);
+                massTagIDs.Add(result.Target.ID);
             }
             var filteredResults = new List<TargetedResultBase>(massTagIDs.Count);
+
             foreach (var mtID in massTagIDs)
             {
                 var tempResults = resultList.Where(p => p.Score < 0.15 && p.Target.ID == mtID).ToList();
@@ -269,22 +268,23 @@ namespace DeconTools.Backend.Core
 
         public void FillMSPeakResults()
         {
-            if (Run is UIMFRun)
+            if (Run is UIMFRun uimfRun)
             {
-                var uimfrun = (UIMFRun) Run;
 
-                foreach (MSPeak peak in Run.PeakList)
+                foreach (var item in Run.PeakList)
                 {
+                    var peak = (MSPeak)item;
                     PeakCounter++;
-                    var peakResult = new MSPeakResult(PeakCounter, uimfrun.CurrentScanSet.PrimaryScanNumber, 
-                        uimfrun.CurrentIMSScanSet.PrimaryScanNumber, peak);
+                    var peakResult = new MSPeakResult(PeakCounter, uimfRun.CurrentScanSet.PrimaryScanNumber,
+                                                      uimfRun.CurrentIMSScanSet.PrimaryScanNumber, peak);
                     MSPeakResultList.Add(peakResult);
                 }
             }
             else
             {
-                foreach (MSPeak peak in Run.PeakList)
+                foreach (var item in Run.PeakList)
                 {
+                    var peak = (MSPeak)item;
                     PeakCounter++;
                     var peakResult = new MSPeakResult(PeakCounter, Run.CurrentScanSet.PrimaryScanNumber, peak);
                     MSPeakResultList.Add(peakResult);
@@ -309,7 +309,7 @@ namespace DeconTools.Backend.Core
                 case Globals.ResultType.UIMF_TRADITIONAL_RESULT:
                     Check.Require(Run is UIMFRun, "Tried to create an IMS_TRADITIONAL_RESULT but the Dataset is not a UIMF file.");
                     var uimfRun = (UIMFRun)run;
-                    result = new UIMFIsosResult(Run, uimfRun.CurrentScanSet, uimfRun.CurrentIMSScanSet);  
+                    result = new UIMFIsosResult(Run, uimfRun.CurrentScanSet, uimfRun.CurrentIMSScanSet);
                     break;
                 case Globals.ResultType.O16O18_TRADITIONAL_RESULT:
                     result = new O16O18IsosResult(Run, Run.CurrentScanSet);
@@ -346,7 +346,8 @@ namespace DeconTools.Backend.Core
         {
             Check.Require(results != null, "Can't retrieve IsosResults. Input list is null");
 
-
+            if (results == null)
+                return null;
 
             var queryList = from n in results.ResultList
                             where n.ScanSet == results.Run.CurrentScanSet

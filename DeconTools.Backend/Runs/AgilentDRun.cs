@@ -19,8 +19,8 @@ namespace DeconTools.Backend.Runs
 
         public AgilentDRun()
         {
-            this.MSFileType = Globals.MSFileType.Agilent_D;
-            this.ContainsMSMSData = true;    //not sure if it does, but setting it to 'true' ensures that each scan will be checked. 
+            MSFileType = Globals.MSFileType.Agilent_D;
+            ContainsMSMSData = true;    //not sure if it does, but setting it to 'true' ensures that each scan will be checked.
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace DeconTools.Backend.Runs
         private void OpenDataset()
         {
             m_reader = new MassSpecDataReader();
-            m_reader.OpenDataFile(this.Filename);
+            m_reader.OpenDataFile(Filename);
         }
 
 
@@ -117,26 +117,25 @@ namespace DeconTools.Backend.Runs
 
         public override int GetMSLevelFromRawData(int scanNum)
         {
-            m_spec = m_reader.GetSpectrum(scanNum, null, null);
+            m_spec = m_reader.GetSpectrum(scanNum);
 
             var level = m_spec.MSLevelInfo;
             if (level == MSLevel.MS)
             {
                 return 1;
             }
-            else if (level == MSLevel.MSMS)
+
+            if (level == MSLevel.MSMS)
             {
                 return 2;
             }
-            else
-            {
-                return 1;
-            }
+
+            return 1;
         }
 
         public override PrecursorInfo GetPrecursorInfo(int scanNum)
         {
-            m_spec = m_reader.GetSpectrum(scanNum, null, null);
+            m_spec = m_reader.GetSpectrum(scanNum);
 
             var precursor = new PrecursorInfo();
 
@@ -154,10 +153,9 @@ namespace DeconTools.Backend.Runs
                 precursor.MSLevel = 1;
             }
 
-            int precursorMassCount;
 
             //this returns a list of precursor masses (not sure how there can be more than one)
-            var precursorMZlist = m_spec.GetPrecursorIon(out precursorMassCount);
+            var precursorMZlist = m_spec.GetPrecursorIon(out var precursorMassCount);
 
             //if a mass is returned
             if (precursorMassCount == 1)
@@ -166,13 +164,11 @@ namespace DeconTools.Backend.Runs
                 precursor.PrecursorMZ = precursorMZlist[0];
 
                 //intensity
-                double precursorIntensity;
-                m_spec.GetPrecursorIntensity(out precursorIntensity);
+                m_spec.GetPrecursorIntensity(out var precursorIntensity);
                 precursor.PrecursorIntensity = (float)precursorIntensity;
 
                 //charge
-                int precursorCharge;
-                m_spec.GetPrecursorCharge(out precursorCharge);
+                m_spec.GetPrecursorCharge(out var precursorCharge);
                 precursor.PrecursorCharge = precursorCharge;
 
                 //adjust scan number if needed
@@ -217,10 +213,9 @@ namespace DeconTools.Backend.Runs
                 var xvals = m_spec.XArray;
                 var yvals = m_spec.YArray;
 
-                var filterMassRange = true;
-                FilterMassRange(minMZ, maxMZ, ref xvals, ref yvals, filterMassRange);
+                FilterMassRange(minMZ, maxMZ, ref xvals, ref yvals, filterMassRange: true);
 
-                
+
                 xydata.Xvalues = xvals;
                 xydata.Yvalues = yvals.Select(p=>(double)p).ToArray();
             }
@@ -228,14 +223,13 @@ namespace DeconTools.Backend.Runs
             {
                 //throw new NotImplementedException("Summing isn't supported for Agilent.D files - yet");
 
-                //this is an implementation of Anuj's summing algorithm 4-2-2012.  
+                //this is an implementation of Anuj's summing algorithm 4-2-2012.
                 double[] xvals = null;
                 float[] yvals = null;
-                
+
                 getSummedSpectrum(scanSet, ref xvals, ref yvals, minMZ, maxMZ);
 
-                var filterMassRange = true;
-                FilterMassRange(minMZ, maxMZ, ref xvals, ref yvals, filterMassRange);
+                FilterMassRange(minMZ, maxMZ, ref xvals, ref yvals, filterMassRange: true);
 
                 xydata.Xvalues = xvals;
                 xydata.Yvalues = yvals.Select(p => (double)p).ToArray();
@@ -280,20 +274,20 @@ namespace DeconTools.Backend.Runs
 
                 xydata.Xvalues = m_spec.XArray;
                 xydata.Yvalues = m_spec.YArray.Select(p=>(double)p).ToArray();
-                
+
             }
             else
             {
                 //throw new NotImplementedException("Summing isn't supported for Agilent.D files - yet");
 
-                //this is an implementation of Anuj's summing algorithm 4-2-2012.  
+                //this is an implementation of Anuj's summing algorithm 4-2-2012.
                 double[] xvals = null;
                 float[] yvals = null;
                 double minMZ = 0; double maxMZ = 0;
                 getSummedSpectrum(scanSet, ref xvals, ref yvals, minMZ, maxMZ);
                 xydata.Xvalues = xvals;
                 xydata.Yvalues = yvals.Select(p => (double)p).ToArray();
-                
+
             }
 
             return xydata;
@@ -312,8 +306,8 @@ namespace DeconTools.Backend.Runs
             //
 
             var mz_intensityPair = new SortedDictionary<long, float>();
-            
-            var precision = 1e6;   // if the precision is set too high, can get artifacts in which the intensities for two m/z values should be added but are separately registered. 
+
+            var precision = 1e6;   // if the precision is set too high, can get artifacts in which the intensities for two m/z values should be added but are separately registered.
 
             //long minXLong = (long)(minMZ * precision + 0.5);
             //long maxXLong = (long)(maxMZ * precision + 0.5);
@@ -346,7 +340,7 @@ namespace DeconTools.Backend.Runs
             var summedXVals = mz_intensityPair.Keys.ToList();
             xvals = new double[summedXVals.Count];
             yvals = mz_intensityPair.Values.ToArray();
-           
+
             for (var i = 0; i < summedXVals.Count; i++)
             {
                 xvals[i] = summedXVals[i] / precision;
@@ -379,7 +373,7 @@ namespace DeconTools.Backend.Runs
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("Error occurred when trying to close AgilentD file: " + this.DatasetName + "\nDetails: " + ex.Message);
+                    Console.WriteLine("Error occurred when trying to close AgilentD file: " + DatasetName + "\nDetails: " + ex.Message);
 
                 }
 

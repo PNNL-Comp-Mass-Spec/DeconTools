@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
 using DeconTools.Utilities;
 using DeconTools.Backend.Core;
@@ -12,22 +10,17 @@ namespace DeconTools.Backend.ProcessingTasks.IsosMergerExporters
     {
 
         private int runCounter;
-        private string outputFilename;
         private readonly StreamWriter sw;
         private const char DELIMITER = ',';
 
-        public string OutputFilename
-        {
-            get => outputFilename;
-            set => outputFilename = value;
-        }
+        public string OutputFilename { get; set; }
 
         public BasicScansMergerExporter(string outputFileName)
         {
-            outputFilename = outputFileName;
+            OutputFilename = outputFileName;
             try
             {
-                sw = new StreamWriter(outputFilename);
+                sw = new StreamWriter(OutputFilename);
             }
             catch (Exception ex)
             {
@@ -95,7 +88,7 @@ namespace DeconTools.Backend.ProcessingTasks.IsosMergerExporters
                 }
                 catch (Exception)
                 {
-
+                    // Ignore exceptions
                 }
             }
         }

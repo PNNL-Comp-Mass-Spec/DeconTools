@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using DeconTools.Utilities.SqliteUtils;
 
 namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
@@ -10,17 +8,16 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
         #region Constructors
         public MSPeakTable(string tableName)
         {
-            this.Name = tableName;
-            this.FieldList = new List<Field>();
-            this.FieldList.Add(new Field("peak_id", "INTEGER Primary key"));
-            this.FieldList.Add(new Field("scan_num", "INTEGER"));
-            this.FieldList.Add(new Field("mz", "FLOAT"));
-            this.FieldList.Add(new Field("intensity", "FLOAT"));
-            this.FieldList.Add(new Field("fwhm", "FLOAT"));
-            this.FieldList.Add(new Field("msfeatureID", "FLOAT"));
-         
-            
-
+            Name = tableName;
+            FieldList = new List<Field>
+            {
+                new Field("peak_id", "INTEGER Primary key"),
+                new Field("scan_num", "INTEGER"),
+                new Field("mz", "FLOAT"),
+                new Field("intensity", "FLOAT"),
+                new Field("fwhm", "FLOAT"),
+                new Field("msfeatureID", "FLOAT")
+            };
 
         }
         #endregion

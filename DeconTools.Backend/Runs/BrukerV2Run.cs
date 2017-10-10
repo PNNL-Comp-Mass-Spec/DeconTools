@@ -13,10 +13,6 @@ namespace DeconTools.Backend.Runs
     [Obsolete("No path to access; use BrukerV3Run.", false)]
     public sealed class BrukerV2Run : Run
     {
-        FileInfo m_serFileInfo;
-        FileInfo m_settingsfileInfo;
-        FileInfo m_fidFileInfo;
-
         internal class brukerNameValuePair
         {
             internal string Name { get; set; }
@@ -29,10 +25,10 @@ namespace DeconTools.Backend.Runs
 
         public BrukerV2Run()
         {
-            this.XYData = new XYData();
-            this.MSFileType = Globals.MSFileType.Bruker_V2;
-            this.IsDataThresholded = false;
-            this.ContainsMSMSData = false;
+            XYData = new XYData();
+            MSFileType = Globals.MSFileType.Bruker_V2;
+            IsDataThresholded = false;
+            ContainsMSMSData = false;
 
         }
 
@@ -40,77 +36,77 @@ namespace DeconTools.Backend.Runs
             : this()
         {
             validateSelectionIsFolder(folderName);
-            this.Filename = folderName;
+            Filename = folderName;
 
-            m_serFileInfo = findSerFile();
-            m_fidFileInfo = findFIDFile();
+            var serFileInfo = findSerFile();
+            var fidFileInfo = findFIDFile();
 
-            var filePathForDeconEngine = "";
+            string filePathForDeconEngine;
 
-            if (m_serFileInfo == null && m_fidFileInfo == null)
+            if (serFileInfo == null && fidFileInfo == null)
             {
                 throw new FileNotFoundException("Run initialization problem. Could not find a 'ser' or 'fid' file within the directory structure.");
             }
 
             //if there is a ser file, 'fid' files will be ignored.
-            if (m_serFileInfo != null)
+            if (serFileInfo != null)
             {
-                filePathForDeconEngine = m_serFileInfo.FullName;
+                filePathForDeconEngine = serFileInfo.FullName;
             }
-            else if (m_serFileInfo == null && m_fidFileInfo != null)
+            else if (serFileInfo == null && fidFileInfo != null)
             {
-                filePathForDeconEngine = m_fidFileInfo.FullName;
+                filePathForDeconEngine = fidFileInfo.FullName;
             }
             else
             {
                 throw new FileNotFoundException("Run initialization problem. Could not find a 'ser' or 'fid' file within the directory structure.");
             }
 
-            m_settingsfileInfo = findSettingsFile();
-            if (m_settingsfileInfo == null)
+            var settingsfileInfo = findSettingsFile();
+            if (settingsfileInfo == null)
             {
                 throw new FileNotFoundException("Run initialization problem. Could not find the settings file ('apexAcquisition.method') within the directory structure.");
             }
 
-            this.SettingsFilePath = m_settingsfileInfo.FullName;
+            SettingsFilePath = settingsfileInfo.FullName;
 
-            this.DatasetName = getDatasetName(this.Filename);
-            this.DataSetPath = getDatasetfolderName(this.Filename);
+            DatasetName = getDatasetName(Filename);
+            DataSetPath = getDatasetfolderName(Filename);
 
-            loadSettings(this.SettingsFilePath);
+            loadSettings(SettingsFilePath);
 
             try
             {
-                this.rawData = new DeconToolsV2.Readers.clsRawData();
-                this.rawData.LoadFile(filePathForDeconEngine, DeconToolsV2.Readers.FileType.BRUKER);
+                rawData = new DeconToolsV2.Readers.clsRawData();
+                rawData.LoadFile(filePathForDeconEngine, DeconToolsV2.Readers.FileType.BRUKER);
             }
             catch (Exception ex)
             {
                 throw new Exception("ERROR:  Couldn't open the file.  Details: " + ex.Message);
             }
 
-            Check.Ensure(this.rawData != null, "Run initialization problem. Details:  DeconEngine tried to load the file but failed.");
+            Check.Ensure(rawData != null, "Run initialization problem. Details:  DeconEngine tried to load the file but failed.");
 
             applySettings();
-            Check.Ensure(this.rawData != null, "Run initialization problem. Details:  Run was loaded but after FFT settings were applied, there was a problem.");
+            Check.Ensure(rawData != null, "Run initialization problem. Details:  Run was loaded but after FFT settings were applied, there was a problem.");
 
 
-            this.MinLCScan = GetMinPossibleLCScanNum();        //  remember that DeconEngine is 1-based
-            this.MaxLCScan = GetMaxPossibleLCScanNum();
+            MinLCScan = GetMinPossibleLCScanNum();        //  remember that DeconEngine is 1-based
+            MaxLCScan = GetMaxPossibleLCScanNum();
 
-            Check.Ensure(this.MaxLCScan != 0, "Run initialization problem. Details:  When initializing the run, the run's maxScan was determined to be '0'. Probably a run accessing error.");
+            Check.Ensure(MaxLCScan != 0, "Run initialization problem. Details:  When initializing the run, the run's maxScan was determined to be '0'. Probably a run accessing error.");
         }
 
         public BrukerV2Run(string fileName, int minScan, int maxScan)
             : this(fileName)
         {
-            this.MinLCScan = minScan;
-            this.MaxLCScan = maxScan;
+            MinLCScan = minScan;
+            MaxLCScan = maxScan;
         }
 
         private FileInfo findFIDFile()
         {
-            var fidFiles = Directory.GetFiles(this.Filename, "fid", SearchOption.AllDirectories);
+            var fidFiles = Directory.GetFiles(Filename, "fid", SearchOption.AllDirectories);
 
             if (fidFiles == null || fidFiles.Length == 0)
             {
@@ -128,7 +124,7 @@ namespace DeconTools.Backend.Runs
 
         private FileInfo findSettingsFile()
         {
-            var dotMethodFiles = Directory.GetFiles(this.Filename, "*.method", SearchOption.AllDirectories);
+            var dotMethodFiles = Directory.GetFiles(Filename, "*.method", SearchOption.AllDirectories);
 
             if (dotMethodFiles == null || dotMethodFiles.Length == 0)
             {
@@ -152,6 +148,7 @@ namespace DeconTools.Backend.Runs
 
         private FileInfo findSerFile()
         {
+            var serFiles = Directory.GetFiles(Filename, "ser", SearchOption.AllDirectories);
 
             if (serFiles == null || serFiles.Length == 0)
             {
@@ -174,7 +171,7 @@ namespace DeconTools.Backend.Runs
         /// <summary>
         /// .NET framework Calibration settings
         /// </summary>
-        public DeconTools.Backend.Runs.CalibrationData.BrukerCalibrationData CalibrationData { get; set; }
+        public BrukerCalibrationData CalibrationData { get; set; }
 
         [field: NonSerialized]
         private XYData xyData;
@@ -202,26 +199,26 @@ namespace DeconTools.Backend.Runs
         #region Public Methods
 
         //NOTE: code duplication here... see BrukerRun too
-        public override XYData GetMassSpectrum(DeconTools.Backend.Core.ScanSet scanSet, double minMZ, double maxMZ)
+        public override XYData GetMassSpectrum(ScanSet scanSet, double minMZ, double maxMZ)
         {
             Check.Require(scanSet != null, "Can't get mass spectrum; inputted set of scans is null");
             Check.Require(scanSet.IndexValues.Count > 0, "Can't get mass spectrum; no scan numbers inputted");
 
-            var totScans = this.GetNumMSScans();
+            var totScans = GetNumMSScans();
 
             var xvals = new double[0];
             var yvals = new double[0];
 
             if (scanSet.IndexValues.Count == 1)            //this is the case of only wanting one MS spectrum
             {
-                this.RawData.GetSpectrum(scanSet.IndexValues[0], ref xvals, ref yvals, false);
+                RawData.GetSpectrum(scanSet.IndexValues[0], ref xvals, ref yvals, false);
             }
             else    // need to sum spectra
             {
                 //assume:  each scan has exactly same x values
 
                 //get first spectrum
-                this.RawData.GetSpectrum(scanSet.IndexValues[0], ref xvals, ref yvals, false);
+                RawData.GetSpectrum(scanSet.IndexValues[0], ref xvals, ref yvals, false);
 
                 //
                 var summedYvals = new double[xvals.Length];
@@ -229,7 +226,7 @@ namespace DeconTools.Backend.Runs
 
                 for (var i = 1; i < scanSet.IndexValues.Count; i++)
                 {
-                    this.RawData.GetSpectrum(scanSet.IndexValues[i], ref xvals, ref yvals, false);
+                    RawData.GetSpectrum(scanSet.IndexValues[i], ref xvals, ref yvals, false);
 
                     for (var n = 0; n < xvals.Length; n++)
                     {
@@ -240,9 +237,11 @@ namespace DeconTools.Backend.Runs
                 yvals = summedYvals;
             }
 
-            var xydata=new XYData();
-            xydata.Xvalues = xvals;
-            xydata.Yvalues = yvals;
+            var xydata = new XYData
+            {
+                Xvalues = xvals,
+                Yvalues = yvals
+            };
 
             xydata = xydata.TrimData(minMZ, maxMZ);
 
@@ -251,13 +250,13 @@ namespace DeconTools.Backend.Runs
 
         public override double GetTime(int scanNum)
         {
-            return this.rawData.GetScanTime(scanNum);
+            return rawData.GetScanTime(scanNum);
         }
 
         public override int GetNumMSScans()
         {
             if (rawData == null) return 0;
-            return this.rawData.GetNumScans();
+            return rawData.GetNumScans();
         }
 
         public override int GetMinPossibleLCScanNum()
@@ -273,7 +272,7 @@ namespace DeconTools.Backend.Runs
         public override int GetMSLevelFromRawData(int scanNum)
         {
             if (!ContainsMSMSData) return 1;    // if we know the run doesn't contain MS/MS data, don't waste time checking
-            int mslevel = (byte)this.rawData.GetMSLevel(scanNum);
+            int mslevel = (byte)rawData.GetMSLevel(scanNum);
 
             addToMSLevelData(scanNum, mslevel);
 
@@ -285,8 +284,8 @@ namespace DeconTools.Backend.Runs
         #region Private Methods
         private void applySettings()
         {
-            var deconEngineCalibrationSettings = convertCalibrationSettingsToDeconEngineSettings(this.CalibrationData);
-            this.RawData.SetFFTCalibrationValues(deconEngineCalibrationSettings);
+            var deconEngineCalibrationSettings = convertCalibrationSettingsToDeconEngineSettings(CalibrationData);
+            RawData.SetFFTCalibrationValues(deconEngineCalibrationSettings);
         }
 
         private DeconToolsV2.CalibrationSettings convertCalibrationSettingsToDeconEngineSettings(BrukerCalibrationData brukerCalibrationData)
@@ -295,13 +294,13 @@ namespace DeconTools.Backend.Runs
 
             var deconEngineCalibrationsettings = new DeconToolsV2.CalibrationSettings
             {
-                ByteOrder = this.CalibrationData.ByteOrder,
-                FRLow = this.CalibrationData.FR_Low,
-                ML1 = this.CalibrationData.ML1,
-                ML2 = this.CalibrationData.ML2,
-                NF = this.CalibrationData.NF,
-                SW_h = this.CalibrationData.SampleRate,
-                TD = this.CalibrationData.NumValuesInScan
+                ByteOrder = CalibrationData.ByteOrder,
+                FRLow = CalibrationData.FR_Low,
+                ML1 = CalibrationData.ML1,
+                ML2 = CalibrationData.ML2,
+                NF = CalibrationData.NF,
+                SW_h = CalibrationData.SampleRate,
+                TD = CalibrationData.NumValuesInScan
             };
 
             return deconEngineCalibrationsettings;
@@ -320,7 +319,7 @@ namespace DeconTools.Backend.Runs
             }
             catch (Exception ex)
             {
-                throw new System.IO.IOException("Error when accessing datafile. Details: " + ex.Message);
+                throw new IOException("Error when accessing datafile. Details: " + ex.Message);
             }
 
             Check.Require(!isFile, "Could not initialize Dataset. Looking for a folder path, but user supplied a file path.");
@@ -330,37 +329,35 @@ namespace DeconTools.Backend.Runs
         [Obsolete("Unused")]
         private string validateDataFolderStructureAndFindSettingsFilePath()
         {
-            var settingsFilePath = "";
-
-            var fi = new FileInfo(this.Filename);
+            var fi = new FileInfo(Filename);
             var parentDirInfo = fi.Directory;
 
             var folderList = parentDirInfo.GetDirectories();
 
             if (folderList == null || folderList.Length == 0)
             {
-                throw new System.IO.IOException("Could not initialize dataset. No 'XMASS_Method.m' folder exists within the file structure.");
+                throw new IOException("Could not initialize dataset. No 'XMASS_Method.m' folder exists within the file structure.");
             }
 
             var settingsFolder = folderList.First(p => p.Name.ToLower() == "xmass_method.m");
             if (settingsFolder == null)
             {
-                throw new System.IO.IOException("Could not initialize dataset. No 'XMASS_Method.m' folder exists within the file structure.");
+                throw new IOException("Could not initialize dataset. No 'XMASS_Method.m' folder exists within the file structure.");
             }
 
             var filesWithinSettingsFolder = settingsFolder.GetFiles();
             if (filesWithinSettingsFolder == null || filesWithinSettingsFolder.Length == 0)
             {
-                throw new System.IO.IOException("Could not initialize dataset. No 'apexAcquisition.method' file exists within the file structure.");
+                throw new IOException("Could not initialize dataset. No 'apexAcquisition.method' file exists within the file structure.");
             }
 
             var settingsFile = filesWithinSettingsFolder.First(p => p.Name.ToLower() == "apexacquisition.method");
             if (settingsFile == null)
             {
-                throw new System.IO.IOException("Could not initialize dataset. No 'apexAcquisition.method' file exists within the file structure.");
+                throw new IOException("Could not initialize dataset. No 'apexAcquisition.method' file exists within the file structure.");
             }
 
-            settingsFilePath = settingsFile.FullName;
+            var settingsFilePath = settingsFile.FullName;
 
             return settingsFilePath;
         }
@@ -387,14 +384,16 @@ namespace DeconTools.Backend.Runs
 
             foreach (var node in paramNodes)
             {
-                var nameValuePair = new brukerNameValuePair();
-                nameValuePair.Name = getNameFromNode(node);
-                nameValuePair.Value = getValueFromNode(node);
+                var nameValuePair = new brukerNameValuePair
+                {
+                    Name = getNameFromNode(node),
+                    Value = getValueFromNode(node)
+                };
 
                 paramList.Add(nameValuePair);
             }
 
-            this.CalibrationData = new BrukerCalibrationData
+            CalibrationData = new BrukerCalibrationData
             {
                 ML1 = Convert.ToDouble(paramList.First(p => p.Name == "ML1").Value),
                 ML2 = Convert.ToDouble(paramList.First(p => p.Name == "ML2").Value),
@@ -406,12 +405,12 @@ namespace DeconTools.Backend.Runs
 
             //this.CalibrationData.NF = Convert.ToInt32(paramList.First(p => p.Name == "NF").Value);
 
-            if (this.CalibrationData.SampleRate > this.CalibrationData.FR_Low)
+            if (CalibrationData.SampleRate > CalibrationData.FR_Low)
             {
-                this.CalibrationData.FR_Low = 0;        // from ICR2LS.   Not sure why this is done. It has dramatic effects on BrukerSolerix Data.  TODO: understand and document this parameter
+                CalibrationData.FR_Low = 0;        // from ICR2LS.   Not sure why this is done. It has dramatic effects on BrukerSolerix Data.  TODO: understand and document this parameter
             }
 
-            this.CalibrationData.Display();
+            CalibrationData.Display();
         }
 
         private string getNameFromNode(XElement node)

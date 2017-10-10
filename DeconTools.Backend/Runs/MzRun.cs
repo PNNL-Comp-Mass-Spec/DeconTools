@@ -7,7 +7,7 @@ namespace DeconTools.Backend.Runs
 {
     public class MzRun : Run
     {
-        private MSDataFileReader _reader;
+        private readonly MSDataFileReader _reader;
 
         private double[] _pwizScanTimes;
 
@@ -21,9 +21,9 @@ namespace DeconTools.Backend.Runs
         public MzRun()
             : base()
         {
-            this.IsDataThresholded = true;  //TODO:  this should not be hardcoded, but should be put in parameter file. This property is used by the peak detector
-            this.MSFileType = Globals.MSFileType.Finnigan;
-            this.ContainsMSMSData = true;
+            IsDataThresholded = true;  //TODO:  this should not be hardcoded, but should be put in parameter file. This property is used by the peak detector
+            MSFileType = Globals.MSFileType.Finnigan;
+            ContainsMSMSData = true;
             XYData = new XYData();
         }
 
@@ -92,9 +92,7 @@ namespace DeconTools.Backend.Runs
         {
             if (_pwizScanTimes == null)
             {
-                double[] times;
-                byte[] msLevels;
-                _reader.GetScanTimesAndMsLevels(out times, out msLevels);
+                _reader.GetScanTimesAndMsLevels(out var times, out var msLevels);
 
                 _pwizScanTimes = times;
                 _pwizScanLevels = msLevels;
@@ -114,9 +112,7 @@ namespace DeconTools.Backend.Runs
         {
             if (_pwizScanLevels == null)
             {
-                double[] times;
-                byte[] msLevels;
-                _reader.GetScanTimesAndMsLevels(out times, out msLevels);
+                _reader.GetScanTimesAndMsLevels(out var times, out var msLevels);
 
                 _pwizScanTimes = times;
                 _pwizScanLevels = msLevels;
@@ -131,15 +127,8 @@ namespace DeconTools.Backend.Runs
 
         }
 
-
-
-
         public override XYData GetMassSpectrum(ScanSet scanset)
         {
-            double[] xvals;
-            double[] yvals;
-
-
             if (scanset.PrimaryScanNumber > MaxLCScan)
             {
                 throw new ArgumentOutOfRangeException("Cannot get mass spectrum. Exceeded max scan (which = " + MaxLCScan + ")");
@@ -150,13 +139,9 @@ namespace DeconTools.Backend.Runs
                 throw new ArgumentOutOfRangeException("Cannot get mass spectrum. Exceeded min scan (which = " + MinLCScan + ")");
             }
 
-
-
-            _reader.GetSpectrum(scanset.PrimaryScanNumber, out xvals, out yvals);
+            _reader.GetSpectrum(scanset.PrimaryScanNumber, out var xvals, out var yvals);
             var xydata = new XYData {Xvalues = xvals, Yvalues = yvals};
             return xydata;
-
-
         }
 
         public override XYData GetMassSpectrum(ScanSet scanset, double minMZ, double maxMZ)

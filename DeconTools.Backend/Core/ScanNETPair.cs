@@ -1,4 +1,6 @@
 ﻿
+using System.Globalization;
+
 namespace DeconTools.Backend.Core
 {
     public class ScanNETPair
@@ -15,7 +17,7 @@ namespace DeconTools.Backend.Core
 
         public override string ToString()
         {
-            return (Scan.ToString() + "; " + NET.ToString("0.0000"));
+            return (Scan.ToString(CultureInfo.InvariantCulture) + "; " + NET.ToString("0.0000"));
         }
     }
 }

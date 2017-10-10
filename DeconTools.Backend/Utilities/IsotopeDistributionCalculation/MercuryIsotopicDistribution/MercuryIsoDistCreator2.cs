@@ -57,10 +57,7 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.MercuryIso
 
             var frequencyData = new double[2 * _mercuryArraySize + 1];
 
-            double monoIsotopicMass = 0;
-            double averageMass = 0;
-
-            GetMonoAndAverageMass(_elementTable, out monoIsotopicMass, out averageMass);
+            GetMonoAndAverageMass(_elementTable, out var monoIsotopicMass, out var averageMass);
 
             CalculateFrequencies(_mercuryArraySize, chargeState, ref frequencyData);
 
@@ -333,10 +330,7 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.MercuryIso
             for (var i = 1; i < numPoints / 2; i++)
             {
                 var freq = (i - 1) / _massRange;
-
-                double realVal;
-                double imagVal;
-                GetRealAndImagValues(freq, out realVal, out imagVal, chargeState);
+                GetRealAndImagValues(freq, out var realVal, out var imagVal, chargeState);
 
                 frequencyData[2 * i - 1] = realVal;
                 frequencyData[2 * i] = imagVal;
@@ -345,10 +339,7 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.MercuryIso
             for (var i = numPoints / 2 + 1; i <= numPoints; i++)
             {
                 var freq = (i - numPoints - 1) / _massRange;
-
-                double realVal;
-                double imagVal;
-                GetRealAndImagValues(freq, out realVal, out imagVal, chargeState);
+                GetRealAndImagValues(freq, out var realVal, out var imagVal, chargeState);
                 frequencyData[2 * i - 1] = realVal;
                 frequencyData[2 * i] = imagVal;
             }

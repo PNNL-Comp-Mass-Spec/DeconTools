@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using DeconTools.Utilities.SqliteUtils;
 
 namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
@@ -12,22 +9,24 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
         public BasicIsosResult_SqliteTable(string tableName)
         {
             Name = tableName;
-            FieldList = new List<Field>();
-            FieldList.Add(new Field("feature_id", "INTEGER Primary key"));
-            FieldList.Add(new Field("scan_num", "INTEGER"));
-            FieldList.Add(new Field("charge", "BYTE"));
-            FieldList.Add(new Field("abundance", "INTEGER"));
-            FieldList.Add(new Field("mz", "DOUBLE"));
-            FieldList.Add(new Field("fit", "FLOAT"));
-            FieldList.Add(new Field("average_mw", "DOUBLE"));
-            FieldList.Add(new Field("monoisotopic_mw", "DOUBLE"));
-            FieldList.Add(new Field("mostabundant_mw", "DOUBLE"));
-            FieldList.Add(new Field("fwhm", "FLOAT"));
-            FieldList.Add(new Field("signal_noise", "DOUBLE"));
-            FieldList.Add(new Field("mono_abundance", "INTEGER"));
-            FieldList.Add(new Field("mono_plus2_abundance", "INTEGER"));
-            FieldList.Add(new Field("flag", "INTEGER"));
- 
+            FieldList = new List<Field>
+            {
+                new Field("feature_id", "INTEGER Primary key"),
+                new Field("scan_num", "INTEGER"),
+                new Field("charge", "BYTE"),
+                new Field("abundance", "INTEGER"),
+                new Field("mz", "DOUBLE"),
+                new Field("fit", "FLOAT"),
+                new Field("average_mw", "DOUBLE"),
+                new Field("monoisotopic_mw", "DOUBLE"),
+                new Field("mostabundant_mw", "DOUBLE"),
+                new Field("fwhm", "FLOAT"),
+                new Field("signal_noise", "DOUBLE"),
+                new Field("mono_abundance", "INTEGER"),
+                new Field("mono_plus2_abundance", "INTEGER"),
+                new Field("flag", "INTEGER")
+            };
+
         }
         #endregion
 

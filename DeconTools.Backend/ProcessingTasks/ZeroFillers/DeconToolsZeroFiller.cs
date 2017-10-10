@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using DeconTools.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks.ZeroFillers
@@ -98,7 +97,7 @@ namespace DeconTools.Backend.ProcessingTasks.ZeroFillers
                     if (ShowTraceMessages)
                         Console.Write(index + " ");
 
-                    if (Math.Abs(x[index] - lastX) < float.Epsilon)
+                    if (Math.Abs(x[index] - lastX) < double.Epsilon)
                     {
                         // The two data points have the same X value
                         continue;

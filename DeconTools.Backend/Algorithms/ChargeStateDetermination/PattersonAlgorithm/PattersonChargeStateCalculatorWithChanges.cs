@@ -14,7 +14,8 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
     /// </summary>
     public class PattersonChargeStateCalculatorWithChanges
     {
-        private int _maxCharge;
+        private readonly int _maxCharge;
+
         #region Constructors
 
         public PattersonChargeStateCalculatorWithChanges()
@@ -159,9 +160,11 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
 
             var autoCorrScores = ACss(evenlySpacedXYData.Yvalues);
 
-            var tempXYdata = new XYData();
-            tempXYdata.Xvalues = autoCorrScores;
-            tempXYdata.Yvalues = autoCorrScores;
+            //var tempXYdata = new XYData
+            //{
+            //    Xvalues = autoCorrScores,
+            //    Yvalues = autoCorrScores
+            //};
 
             // DisplayXYVals(tempXYdata);
 
@@ -204,34 +207,29 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
                 if (tempChargeState > 0)
                 {
                     //CHANGE
-                    var anotherPeak = peak.XValue + 1.0 / (double)tempChargeState;//(1.003d / tempChargeState);//paul edit
+                    var anotherPeak = peak.XValue + 1.0 / tempChargeState;  //(1.003d / tempChargeState);//paul edit
 
                     var foundPeak = PeakUtilities.GetPeaksWithinTolerance(peakList, anotherPeak, peak.Width).Count > 0;
                     if (foundPeak)
                     {
-                        returnChargeStateVal = tempChargeState;                       
+                        returnChargeStateVal = tempChargeState;
                         if (peak.XValue * tempChargeState < 3000)
                         {
                             break;
                         }
-                        else
+
+                        //CHANGE
+                        //paul edit. this c# version was just "return tempChargeState;" inside else.
+                        var peakA = peak.XValue - (1.03 / tempChargeState);
+                        foundPeak = PeakUtilities.GetPeaksWithinTolerance(peakList, peakA, peak.Width).Count > 0;
+                        if (foundPeak)
                         {
-                            //CHANGE
-                            //paul edit. this c# version was just "return tempChargeState;" inside else.
-                            var peakA = peak.XValue - (1.03 / (double)tempChargeState);
-                            foundPeak = PeakUtilities.GetPeaksWithinTolerance(peakList, peakA, peak.Width).Count > 0;
-                            if (foundPeak)
-                            {
-                                return tempChargeState;
-                            }
-                            
+                            return tempChargeState;
                         }
-
-
                     }
                     else
                     {
-                        var peakA = peak.XValue - (1.0 / (double)tempChargeState);
+                        var peakA = peak.XValue - (1.0 / tempChargeState);
                         foundPeak = PeakUtilities.GetPeaksWithinTolerance(peakList, peakA, peak.Width).Count > 0;
                         if (foundPeak && PeakUtilities.GetPeaksWithinTolerance(peakList, peakA, peak.Width).First().XValue * tempChargeState < 3000)
                         {
@@ -283,16 +281,15 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
         #region Private Methods
 
 
-        private double[] ACss(double[] inData)
+        private double[] ACss(IReadOnlyList<double> inData)
         {
-            
 
-            var numPoints = inData.Length;
+
+            var numPoints = inData.Count;
             var outData = new double[numPoints];
 
 
             double sum = 0;
-            double average = 0;
 
             for (var i = 0; i < numPoints; i++)
             {
@@ -300,9 +297,8 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
 
             }
 
-            average = sum / numPoints;
+            var average = sum / numPoints;
 
-            sum = 0;
             for (var i = 0; i < numPoints; i++)
             {
                 sum = 0;
@@ -343,42 +339,37 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
             double bestAutoCorrScore,
             ICollection<int> chargeStatesAndScores)
         {
-            var goingUp = false;
             var wasGoingUp = false;
 
-            var chargeState = -1;
-            var numPoints = autoCorrScores.Length;
+            var numPoints = autoCorrScores.Count;
 
             for (var i = startingIndex; i < numPoints; i++)
             {
                 if (i < 2) continue;
 
-                goingUp = autoCorrScores[i] > autoCorrScores[i - 1];
-
-
-
+                var goingUp = autoCorrScores[i] > autoCorrScores[i - 1];
 
                 if (wasGoingUp && !goingUp)
                 {
-                    var currentChargeState = (numPoints / ((maxMZ - minMZ) * (i - 1)) );
+                    var currentChargeState = (numPoints / ((maxMZ - minMZ) * (i - 1)));
 
 
-                    var tempAutocorrScore = autoCorrScores[i];
+                    // var tempAutocorrScore = autoCorrScores[i];
                     var currentAutoCorrScore = autoCorrScores[i - 1];
 
-                    //Console.WriteLine(i+ "\tCurrent charge state=\t" + currentChargeState + "\tcurrent corr score= \t" + 
+                    //Console.WriteLine(i+ "\tCurrent charge state=\t" + currentChargeState + "\tcurrent corr score= \t" +
                     //                  currentAutoCorrScore +"\tComparedCorrScore= \t"+tempAutocorrScore);
 
 
-                    if ((currentAutoCorrScore > bestAutoCorrScore * 0.1) && (currentChargeState < 1.0*_maxCharge))
+                    if ((currentAutoCorrScore > bestAutoCorrScore * 0.1) && (currentChargeState < 1.0 * maxCharge))
                     {
-                        chargeState =(int)( .5 + currentChargeState);//(int) Math.Round(currentChargeState);
+                        var chargeState = (int)(.5 + currentChargeState);
                         chargeStatesAndScores.Add(chargeState);
-                       // Console.WriteLine("charge state added to list: " + chargeState);
+                        // Console.WriteLine("charge state added to list: " + chargeState);
                     }
                 }
                 wasGoingUp = goingUp;
-                
+
             }
 
         }
@@ -393,24 +384,22 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
             ref double bestAutoCorrectionScore,
             ref int bestChargeState)
         {
-            var goingUp = false;
             var wasGoingUp = false;
 
-            var numPoints = autoCorrelationScores.Length;
+            var numPoints = autoCorrelationScores.Count;
 
-            int chargeState;
             for (var i = startingIndex; i < numPoints; i++)
             {
                 if (i < 2) continue;
 
-                goingUp = (autoCorrelationScores[i] - autoCorrelationScores[i - 1]) > 0;
+                var goingUp = (autoCorrelationScores[i] - autoCorrelationScores[i - 1]) > 0;
                 if (wasGoingUp && !goingUp)
                 {
-                    chargeState = (int)(numPoints / ((maxMZ - minMZ) * (i - 1)) + 0.5);
+                    var chargeState = (int)(numPoints / ((maxMZ - minMZ) * (i - 1)) + 0.5);
                     var currentAutoCorrScore = autoCorrelationScores[i - 1];
                     if (Math.Abs(currentAutoCorrScore / autoCorrelationScores[0]) > 0.05 && chargeState <= maxChargeState)
                     {
-                        
+
                         if (Math.Abs(currentAutoCorrScore) > bestAutoCorrectionScore)
                         {
                             bestAutoCorrectionScore = Math.Abs(currentAutoCorrScore);
@@ -421,8 +410,6 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
 
                 wasGoingUp = goingUp;
             }
-
-
 
         }
 

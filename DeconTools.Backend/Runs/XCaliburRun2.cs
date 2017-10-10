@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text.RegularExpressions;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.Utilities;
-using DeconTools.Backend.Workflows;
 using DeconTools.Utilities;
 using PNNLOmics.Data;
 using ThermoRawFileReader;
@@ -37,24 +35,24 @@ namespace DeconTools.Backend.Runs
         {
             Check.Require(File.Exists(filename), "Run not initialized. File not found: " + filename);
 
-            this.Filename = filename;
-            var baseFilename = Path.GetFileName(this.Filename);
-            this.DatasetName = baseFilename.Substring(0, baseFilename.LastIndexOf('.'));
-            this.DataSetPath = Path.GetDirectoryName(filename);
+            Filename = filename;
+            var baseFilename = Path.GetFileName(Filename);
+            DatasetName = baseFilename.Substring(0, baseFilename.LastIndexOf('.'));
+            DataSetPath = Path.GetDirectoryName(filename);
 
             _msfileReader.Open(Filename);
             _msfileReader.SetCurrentController(0, 1);
 
-            this.MinLCScan = 1;
-            this.MaxLCScan = this.GetNumMSScans();
+            MinLCScan = 1;
+            MaxLCScan = GetNumMSScans();
 
         }
 
         public XCaliburRun2(string filename, int minScan, int maxScan)
             : this(filename)
         {
-            this.MinLCScan = minScan;
-            this.MaxLCScan = maxScan;
+            MinLCScan = minScan;
+            MaxLCScan = maxScan;
         }
 
         #endregion
@@ -89,7 +87,7 @@ namespace DeconTools.Backend.Runs
         [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
         public override double GetMS2IsolationWidth(int scanNum)
         {
-            try 
+            try
             {
                 object value = null;
                 _msfileReader.GetTrailerExtraValueForScanNum(scanNum, "MS2 Isolation Width:", ref value);
@@ -125,7 +123,7 @@ namespace DeconTools.Backend.Runs
 
         public override int GetMaxPossibleLCScanNum()
         {
-            var maxpossibleScanIndex = GetNumMSScans();           // RAW files are 1 based, so we don't subtract 1 here. 
+            var maxpossibleScanIndex = GetNumMSScans();           // RAW files are 1 based, so we don't subtract 1 here.
             if (maxpossibleScanIndex < 1) maxpossibleScanIndex = 1;
 
             return maxpossibleScanIndex;
@@ -157,7 +155,7 @@ namespace DeconTools.Backend.Runs
             {
                 msLevel = 1;
             }
-            else if (indexOfMSReference < filter.Length - 2)  // ensure we aren't at the end of the filter string 
+            else if (indexOfMSReference < filter.Length - 2)  // ensure we aren't at the end of the filter string
             {
                 var mslevelFromFilter = filter[indexOfMSReference + 2];
 
@@ -239,23 +237,19 @@ namespace DeconTools.Backend.Runs
                 Console.WriteLine("Warning: Exception calling _msfileReader.GetTuneData: " + ex.Message);
                 return string.Empty;
             }
-            
+
         }
 
         public override PrecursorInfo GetPrecursorInfo(int scanNum)
         {
-            double precursorMz;
-            int msLevel;
-            string fragmentationType;
 
-            var scanInfo = this.GetScanInfo(scanNum);
-            XRawFileIO.ExtractParentIonMZFromFilterText(scanInfo, out precursorMz, out msLevel, out fragmentationType);
+            var scanInfo = GetScanInfo(scanNum);
+            XRawFileIO.ExtractParentIonMZFromFilterText(scanInfo, out var precursorMz, out var msLevel, out var fragmentationType);
             var ionMode = XRawFileIO.DetermineIonizationMode(scanInfo);
 
-            var precursor = new PrecursorInfo();
-
-            //Get MS Level
-            precursor.MSLevel = msLevel;
+            var precursor = new PrecursorInfo {
+                MSLevel = msLevel
+            };
 
             //Get Precursor MZ
             if (scanInfo == null)
@@ -365,20 +359,20 @@ namespace DeconTools.Backend.Runs
                     var arraySize = 0;
 
                     _msfileReader.GetAverageMassList(
-                        ref scanNumFirst, 
-                        ref scanNumLast, 
-                        ref backgroundScan1First, 
-                        ref backgroundScan1Last, 
-                        ref backgroundScan2First, 
+                        ref scanNumFirst,
+                        ref scanNumLast,
+                        ref backgroundScan1First,
+                        ref backgroundScan1Last,
+                        ref backgroundScan2First,
                         ref backgroundScan2Last,
-                        filter, 
-                        intensityCutoffType, 
-                        intensityCutoffValue, 
-                        maxNumberOfPeaks, 
-                        centroidResult, 
+                        filter,
+                        intensityCutoffType,
+                        intensityCutoffValue,
+                        maxNumberOfPeaks,
+                        centroidResult,
                         ref centVal,
-                        ref massList, 
-                        ref peakFlags, 
+                        ref massList,
+                        ref peakFlags,
                         ref arraySize);
 
                     vals = (double[,])massList;
@@ -386,7 +380,7 @@ namespace DeconTools.Backend.Runs
                 else
                 {
                     var scanNum = scanset.PrimaryScanNumber;
-                    string filter = null;
+
                     const int intensityCutoffType = 0;
                     const int intensityCutoffValue = 0;
                     const int maxNumberOfPeaks = 0;
@@ -399,7 +393,7 @@ namespace DeconTools.Backend.Runs
 
                     _msfileReader.GetMassListFromScanNum(
                         ref scanNum,
-                        filter,
+                        null,
                         intensityCutoffType,
                         intensityCutoffValue,
                         maxNumberOfPeaks,
@@ -413,7 +407,7 @@ namespace DeconTools.Backend.Runs
 
                 }
             }
-            catch (System.AccessViolationException)
+            catch (AccessViolationException)
             {
                 var errorMessage = "XCaliburRun2.GetMassSpectrum: Unable to load data for " + scanDescription +
                                       "; possibly a corrupt .Raw file";
@@ -511,7 +505,7 @@ namespace DeconTools.Backend.Runs
             {
                // Ignore errors here
             }
-            
+
             base.Close();
         }
     }

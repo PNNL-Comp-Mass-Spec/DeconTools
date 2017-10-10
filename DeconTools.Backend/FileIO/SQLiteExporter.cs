@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
-using System.Linq;
 using System.Text;
 using DeconTools.Utilities;
 using DeconTools.Utilities.SqliteUtils;
 using System.IO;
 using System.Data.Common;
+using DeconTools.Backend.Utilities;
 
 namespace DeconTools.Backend.FileIO
 {
@@ -20,7 +20,7 @@ namespace DeconTools.Backend.FileIO
 
         #region Properties
         /// <summary>
-        /// Name of the Exporter - e.g. 'ScanResultExporter'; to be used in error reporting, etc. 
+        /// Name of the Exporter - e.g. 'ScanResultExporter'; to be used in error reporting, etc.
         /// </summary>
         public string Name { get; set; }
 
@@ -47,6 +47,9 @@ namespace DeconTools.Backend.FileIO
         {
             Check.Assert(!string.IsNullOrEmpty(FileName), Name + " failed. Illegal filename.");
             Check.Assert(m_dbConnection != null, string.Format("{0} failed. No connection was made to a database", Name));
+            if (m_dbConnection == null)
+                return;
+
             Check.Assert(m_dbConnection.State == System.Data.ConnectionState.Open, string.Format("{0} failed. Connection to database is not open", Name));
 
 
@@ -78,6 +81,10 @@ namespace DeconTools.Backend.FileIO
 
             DbProviderFactory fact = new SQLiteFactory();
             m_dbConnection = fact.CreateConnection();
+
+            if (m_dbConnection == null)
+                return;
+
             m_dbConnection.ConnectionString = "Data Source=" + FileName;
 
             try
@@ -150,6 +157,10 @@ namespace DeconTools.Backend.FileIO
             Check.Assert(!string.IsNullOrEmpty(TableName), string.Format("SQLite TableName has not been declared within {0}.", Name));
             Check.Assert(FieldList != null && FieldList.Count > 0, string.Format("SQLite Table fields have not been declared within {0}.", Name));
 
+            if (FieldList == null)
+                return "";
+
+
             var sb = new StringBuilder();
             sb.Append("CREATE TABLE ");
             sb.Append(TableName);
@@ -157,7 +168,7 @@ namespace DeconTools.Backend.FileIO
 
             foreach (var fieldItem in FieldList)
             {
-                sb.Append(fieldItem.ToString());
+                sb.Append(fieldItem);
                 if (fieldItem == FieldList[FieldList.Count - 1])  //if last one...
                 {
                     sb.Append(");");
@@ -175,7 +186,7 @@ namespace DeconTools.Backend.FileIO
 
         private void createParameterList(DbCommand cmd)
         {
-            foreach (var field in FieldList)
+            foreach (var unused in FieldList)
             {
                 var param = cmd.CreateParameter();
                 cmd.Parameters.Add(param);

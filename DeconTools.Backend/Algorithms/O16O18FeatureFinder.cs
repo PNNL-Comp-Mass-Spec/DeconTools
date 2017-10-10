@@ -101,7 +101,7 @@ namespace DeconTools.Backend.Algorithms
                 var peaksWithinTol = PeakUtilities.GetMSPeaksWithinTolerance(o16o18Profile.Peaklist, currentMZ, toleranceInDa);
                 if (peaksWithinTol.Count == 0)
                 {
-                    o16o18Profile.Peaklist.Insert(i, new MSPeak(currentMZ, 0));
+                    o16o18Profile.Peaklist.Insert(i, new MSPeak(currentMZ));
                 }
             }
 

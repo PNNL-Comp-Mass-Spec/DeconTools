@@ -119,10 +119,7 @@ namespace DeconTools.Workflows.Backend.Core
                 var masterPeakList = getAllPeaksInFrame(uimfRun, NumMSScansToSumWhenBuildingMasterPeakList);
 
                 // sort peaks
-                masterPeakList.Sort(delegate(MSPeakResult peak1, MSPeakResult peak2)
-                {
-                    return peak2.MSPeak.Height.CompareTo(peak1.MSPeak.Height);
-                });
+                masterPeakList.Sort((peak1, peak2) => peak2.MSPeak.Height.CompareTo(peak1.MSPeak.Height));
 
 
                 // for each peak

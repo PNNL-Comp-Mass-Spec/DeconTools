@@ -11,18 +11,18 @@ namespace DeconTools.Backend.Runs
     [Obsolete("Unsupported file format")]
     public sealed class YAFMSRun : Run
     {
-        YafmsReader m_reader;
+        readonly YafmsReader m_reader;
 
         #region Constructors
 
         public YAFMSRun()
         {
-            this.XYData = new XYData();
-            this.MSFileType = Globals.MSFileType.YAFMS;
-            this.ContainsMSMSData = false;
+            XYData = new XYData();
+            MSFileType = Globals.MSFileType.YAFMS;
+            ContainsMSMSData = false;
 
-            //SpectraID is specific to the YAFMS schema. Default is '1'. 
-            this.SpectraID = 1;
+            //SpectraID is specific to the YAFMS schema. Default is '1'.
+            SpectraID = 1;
         }
 
         public YAFMSRun(string filename)
@@ -30,37 +30,37 @@ namespace DeconTools.Backend.Runs
         {
             Check.Require(File.Exists(filename), "Cannot find file - does not exist.");
 
-            this.Filename = filename;
-            var baseFilename = Path.GetFileName(this.Filename);
-            this.DatasetName = baseFilename.Substring(0, baseFilename.LastIndexOf('.'));
-            this.DataSetPath = Path.GetDirectoryName(filename);
+            Filename = filename;
+            var baseFilename = Path.GetFileName(Filename);
+            DatasetName = baseFilename.Substring(0, baseFilename.LastIndexOf('.'));
+            DataSetPath = Path.GetDirectoryName(filename);
 
-            m_reader = new YafmsLibrary.YafmsReader();
+            m_reader = new YafmsReader();
             try
             {
-                m_reader.OpenYafms(this.Filename);
+                m_reader.OpenYafms(Filename);
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
                 Console.ReadKey();
-                throw ex;
+                throw;
             }
 
-            this.MinLCScan = GetMinPossibleLCScanNum();
-            this.MaxLCScan = GetMaxPossibleLCScanNum();
+            MinLCScan = GetMinPossibleLCScanNum();
+            MaxLCScan = GetMaxPossibleLCScanNum();
         }
 
         public YAFMSRun(string fileName, int minScan, int maxScan)
             : this(fileName)
         {
-            //MinScan has been already defined by the alternate constructor. The inputted parameters must be within the base MinScan and MaxScan. 
+            //MinScan has been already defined by the alternate constructor. The inputted parameters must be within the base MinScan and MaxScan.
 
             Check.Require(minScan >= MinLCScan, "Cannot initialize YAFMS run. Inputted minScan is lower than the minimum possible scan number.");
             Check.Require(maxScan <= MaxLCScan, "Cannot initialize YAFMS run. Inputted MaxScan is greater than the maximum possible scan number.");
 
-            this.MinLCScan = minScan;
-            this.MaxLCScan = maxScan;
+            MinLCScan = minScan;
+            MaxLCScan = maxScan;
         }
 
         #endregion
@@ -79,7 +79,7 @@ namespace DeconTools.Backend.Runs
 
         public override int GetMinPossibleLCScanNum()
         {
-            
+
             //TODO: YAFMS is a universal format. So sometimes the ScanNum might be 1-based (e.g. if created from XCalibur data)
             return 0;
         }
@@ -108,23 +108,25 @@ namespace DeconTools.Backend.Runs
 
             if (scanset.IndexValues.Count <= 1)
             {
-                m_reader.GetSpectrum(this.SpectraID, scanset.PrimaryScanNumber, ref xvals, ref yvals);
+                m_reader.GetSpectrum(SpectraID, scanset.PrimaryScanNumber, ref xvals, ref yvals);
             }
             else
             {
                 xvals = new double[0];
                 yvals = new float[0];
 
-                this.getSummedSpectrum(scanset, ref xvals, ref yvals);
+                getSummedSpectrum(scanset, ref xvals, ref yvals);
             }
 
-            var xydata = new XYData();
-            xydata.Xvalues = xvals;
-            xydata.Yvalues = yvals.Select(p=>(double)p).ToArray();
+            var xydata = new XYData
+            {
+                Xvalues = xvals,
+                Yvalues = yvals.Select(p => (double)p).ToArray()
+            };
             return xydata;
         }
 
-        public override XYData GetMassSpectrum(DeconTools.Backend.Core.ScanSet scanset, double minMZ, double maxMZ)
+        public override XYData GetMassSpectrum(ScanSet scanset, double minMZ, double maxMZ)
         {
             //TODO: Update upon error fix....  the YAFMS library is throwing an error if I give an m/z outside it's expected range. So until that is fixed, I'll go get all the m/z values and trim them myself
 
@@ -133,31 +135,33 @@ namespace DeconTools.Backend.Runs
 
             if (scanset.IndexValues.Count <= 1)
             {
-                m_reader.GetSpectrum(this.SpectraID, scanset.PrimaryScanNumber, ref xvals, ref yvals);
+                m_reader.GetSpectrum(SpectraID, scanset.PrimaryScanNumber, ref xvals, ref yvals);
             }
             else
             {
                 xvals = new double[0];
                 yvals = new float[0];
 
-                this.getSummedSpectrum(scanset, ref xvals, ref yvals, minMZ, maxMZ);
+                getSummedSpectrum(scanset, ref xvals, ref yvals, minMZ, maxMZ);
             }
 
-            var xydata = new XYData();
-            xydata.Xvalues = xvals;
-            xydata.Yvalues = yvals.Select(p => (double)p).ToArray();
+            var xydata = new XYData
+            {
+                Xvalues = xvals,
+                Yvalues = yvals.Select(p => (double)p).ToArray()
+            };
             return xydata;
         }
 
         public void getSummedSpectrum(ScanSet scanSet, ref double[] xvals, ref float[] yvals, double minX, double maxX)
         {
-            // [gord] idea borrowed from Anuj! Jan 2010 
+            // [gord] idea borrowed from Anuj! Jan 2010
 
             //the idea is to convert the mz value to a integer. To avoid losing precision, we multiply it by 'precision'
             //the integer is added to a dictionary generic list (sorted)
 
             var mz_intensityPair = new SortedDictionary<long, float>();
-            var precision = 1e6;   // if the precision is set too high, can get artifacts in which the intensities for two m/z values should be added but are separately registered. 
+            var precision = 1e6;   // if the precision is set too high, can get artifacts in which the intensities for two m/z values should be added but are separately registered.
             //double[] tempXvals = new double[0];
             //float[] tempYvals = new float[0];
             double[] tempXvals = null;
@@ -165,10 +169,10 @@ namespace DeconTools.Backend.Runs
 
             var minXLong = (long)(minX * precision + 0.5);
             var maxXLong = (long)(maxX * precision + 0.5);
-            for (var scanCounter = 0; scanCounter < scanSet.IndexValues.Count; scanCounter++)
+            foreach (var scanNum in scanSet.IndexValues)
             {
                 //this.RawData.GetSpectrum(scanSet.IndexValues[scanCounter], ref tempXvals, ref tempYvals);
-                m_reader.GetSpectrum(this.SpectraID, scanSet.IndexValues[scanCounter], ref tempXvals, ref tempYvals);
+                m_reader.GetSpectrum(SpectraID, scanNum, ref tempXvals, ref tempYvals);
 
                 for (var i = 0; i < tempXvals.Length; i++)
                 {
@@ -200,14 +204,14 @@ namespace DeconTools.Backend.Runs
 
         public void getSummedSpectrum(ScanSet scanSet, ref double[] xvals, ref float[] yvals)
         {
-            // [gord] idea borrowed from Anuj! Jan 2010 
+            // [gord] idea borrowed from Anuj! Jan 2010
 
             //the idea is to convert the mz value to a integer. To avoid losing precision, we multiply it by 'precision'
             //the integer is added to a dictionary generic list (sorted)
             //
 
             var mz_intensityPair = new SortedDictionary<long, float>();
-            var precision = 1e6;   // if the precision is set too high, can get artifacts in which the intensities for two m/z values should be added but are separately registered. 
+            var precision = 1e6;   // if the precision is set too high, can get artifacts in which the intensities for two m/z values should be added but are separately registered.
             //double[] tempXvals = new double[0];
             //float[] tempYvals = new float[0];
             double[] tempXvals = null;
@@ -215,10 +219,10 @@ namespace DeconTools.Backend.Runs
 
             //long minXLong = (long)(minX * precision + 0.5);
             //long maxXLong = (long)(maxX * precision + 0.5);
-            for (var scanCounter = 0; scanCounter < scanSet.IndexValues.Count; scanCounter++)
+            foreach (var scanNum in scanSet.IndexValues)
             {
                 //this.RawData.GetSpectrum(scanSet.IndexValues[scanCounter], ref tempXvals, ref tempYvals);
-                m_reader.GetSpectrum(this.SpectraID, scanSet.IndexValues[scanCounter], ref tempXvals, ref tempYvals);
+                m_reader.GetSpectrum(SpectraID, scanNum, ref tempXvals, ref tempYvals);
 
                 for (var i = 0; i < tempXvals.Length; i++)
                 {
@@ -256,28 +260,25 @@ namespace DeconTools.Backend.Runs
 
         public override double GetTime(int scanNum)
         {
-            return m_reader.GetRetentionTime(this.SpectraID, scanNum);
+            return m_reader.GetRetentionTime(SpectraID, scanNum);
         }
 
         public override void Close()
         {
             base.Close();
 
-            if (m_reader != null)
-            {
-                m_reader.CloseYafms();
-            }
+            m_reader?.CloseYafms();
         }
 
         public override int GetMSLevelFromRawData(int scanNum)
         {
 
-            var msLevel = m_reader.GetMSLevel(this.SpectraID, scanNum);
+            var msLevel = m_reader.GetMSLevel(SpectraID, scanNum);
 
             return msLevel;
         }
 
         #endregion
-     
+
     }
 }

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using DeconTools.Backend.DTO;
 using DeconTools.Backend.Utilities;
 using DeconTools.Utilities;
@@ -10,6 +9,8 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
 {
     public sealed class PeakListTextExporter : IPeakListExporter
     {
+        private readonly char m_delimiter;
+        private readonly Globals.MSFileType m_FileType;
 
 
         #region Constructors
@@ -147,7 +148,8 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
 
             return string.Join(m_delimiter.ToString(), data);
         }
-        protected void initializeAndWriteHeader()
+
+        private void initializeAndWriteHeader()
         {
 
             Check.Assert(!string.IsNullOrEmpty(FileName), string.Format("{0} failed. Export file's FileName wasn't declared.", Name));

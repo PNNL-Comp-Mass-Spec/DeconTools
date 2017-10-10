@@ -11,16 +11,14 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
     public sealed class IsotopicDistributionCalculator
     {
         #region Member Variables
-        static IsotopicDistributionCalculator instance = null;
+        static IsotopicDistributionCalculator instance;
         static readonly object padlock = new object();
-        bool isLabeledFlag = false;
         double naturalAbundanceLight = -1;
         double naturalAbundanceHeavy = -1;
         string elementalSymbol = string.Empty;
         int lightIsotopeNum = -1;
         int heavyIsotopeNum = -1;
-        double[] probabilities;
-        private PeptideUtils _peptideUtils = new PeptideUtils();
+        private readonly PeptideUtils _peptideUtils = new PeptideUtils();
 
 
         #endregion
@@ -47,11 +45,7 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
             {
                 lock (padlock)
                 {
-                    if (instance == null)
-                    {
-                        instance = new IsotopicDistributionCalculator();
-                    }
-                    return instance;
+                    return instance ?? (instance = new IsotopicDistributionCalculator());
                 }
             }
         }
@@ -70,17 +64,17 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
             int labeledLightIsoNum, double labeledLightIsoAbundance,
             int labeledHeavyIsoNum, double labeledHeavyIsoAbundance)
         {
-            isLabeledFlag = true;
+            IsSetToLabeled = true;
             elementalSymbol = labeledElmentSymbol;
 
             naturalAbundanceHeavy = Constants.Elements[labeledElmentSymbol].IsotopeDictionary[
                 labeledElmentSymbol + labeledHeavyIsoNum].NaturalAbundance;
             naturalAbundanceLight = Constants.Elements[labeledElmentSymbol].IsotopeDictionary[
                 labeledElmentSymbol + labeledLightIsoNum].NaturalAbundance;
-            
-            
+
+
             //TODO: we should never be messing with the Constants values. We should be only altering our own copy!!
-            
+
             Constants.Elements[labeledElmentSymbol].IsotopeDictionary[labeledElmentSymbol + labeledHeavyIsoNum].NaturalAbundance =
                 labeledHeavyIsoAbundance;
             Constants.Elements[labeledElmentSymbol].IsotopeDictionary[labeledElmentSymbol + labeledLightIsoNum].NaturalAbundance =
@@ -100,7 +94,7 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
                 naturalAbundanceLight;
             Constants.Elements[elementalSymbol].IsotopeDictionary[elementalSymbol + heavyIsotopeNum].NaturalAbundance =
                 naturalAbundanceHeavy;
-            isLabeledFlag = false;
+            IsSetToLabeled = false;
             naturalAbundanceLight = -1;
             naturalAbundanceHeavy = -1;
             elementalSymbol = string.Empty;
@@ -124,7 +118,6 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
         public IsotopicProfile GetIsotopePattern(Dictionary<string, int> formula)
         {
             double smallestProbability = 0.001f; //Smallest probability we care about.
-            double logTotal = 0;
             double logTotalLast = 0;
             var jaggedProbability = new double[formula.Count][];//Store Isotope probability for each element
             var elementCount = 0;
@@ -135,15 +128,15 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
                 if (currentElement.Count > 1)
                 {
                     var isotopeDifference = currentElement[1].IsotopeNumber - currentElement[0].IsotopeNumber;
-                    var logAmtLight = (double)System.Math.Log10((double)currentElement[0].NaturalAbundance);
-                    var logAmtHeavy = (double)System.Math.Log10((double)currentElement[1].NaturalAbundance);
+                    var logAmtLight = Math.Log10(currentElement[0].NaturalAbundance);
+                    var logAmtHeavy = Math.Log10(currentElement[1].NaturalAbundance);
 
                     for (var i = 0; i <= iso.Value; i++)
                     {
 
-                        logTotal = logAmtLight * (iso.Value - i) + logAmtHeavy * i;
-                        logTotal += (double)LogAChooseB(iso.Value, i);
-                        ionProbability.Add((double)(System.Math.Pow(10, logTotal)));
+                        var logTotal = logAmtLight * (iso.Value - i) + logAmtHeavy * i;
+                        logTotal += LogAChooseB(iso.Value, i);
+                        ionProbability.Add(Math.Pow(10, logTotal));
                         for (var k = 1; k < isotopeDifference; k++)
                         {
                             ionProbability.Add(0.0);
@@ -163,32 +156,32 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
                 elementCount++;
             }
             RecursiveCalculator(jaggedProbability);
-            
-            
+
+
             //normalize the probabilities
             var max = 0.0;
-            foreach (var f in probabilities)
+            foreach (var f in IonProbabilities)
             {
                 if (f > max)
                 {
                     max = f;
                 }
             }
-            for (var i = 0; i < probabilities.Length; i++)
+            for (var i = 0; i < IonProbabilities.Length; i++)
             {
-                
-                probabilities[i] = probabilities[i] / max;
+
+                IonProbabilities[i] = IonProbabilities[i] / max;
             }
 
-            
+
             var isoCluster = new IsotopicProfile();
-            for (var l = 0; l < probabilities.Length; l++)
+            foreach (var probability in IonProbabilities)
             {
-                if (probabilities[l] == 0)    // avoid adding all the zero probability peaks
+                if (Math.Abs(probability) < double.Epsilon)    // avoid adding all the zero probability peaks
                 {
                     break;
                 }
-                isoCluster.Peaklist.Add(new MSPeak(0.0f, (float)probabilities[l], 0.0f, 0.0f));
+                isoCluster.Peaklist.Add(new MSPeak(0.0f, (float)probability));
             }
 
 
@@ -262,12 +255,12 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
         {
             var averagineDict = GetAveragineDictionary();
             var averagineUnitMass = GetBasePeakMass(averagineDict);
-            // get closest pattern to mass 
+            // get closest pattern to mass
             var numberOfAveraginesInInput = inputMass / averagineUnitMass;
             var formula = new Dictionary<string, int>();
             foreach (var element in averagineDict.Keys)
             {
-                formula.Add(element, (int)System.Math.Round(averagineDict[element] * numberOfAveraginesInInput));
+                formula.Add(element, (int)Math.Round(averagineDict[element] * numberOfAveraginesInInput));
             }
 
             return formula;
@@ -277,7 +270,7 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
         {
             var averagineDict = GetAveragineDictionary();
             var averagineUnitMass = GetBasePeakMass(averagineDict);
-            // get closest pattern to mass 
+            // get closest pattern to mass
             var numberOfAveraginesInInput = inputMass / averagineUnitMass;
             var formula = new Dictionary<string, double>();
             foreach (var element in averagineDict.Keys)
@@ -291,9 +284,9 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
 
 
 
-        public string GetAveragineFormulaAsString(double inputMass, bool roundToIntegers=true)
+        public string GetAveragineFormulaAsString(double inputMass, bool roundToIntegers = true)
         {
-            
+
             if (roundToIntegers)
             {
                 var formulaTable = GetAveragineFormulaAsTableRoundedToInteger(inputMass);
@@ -305,8 +298,8 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
                 return EmpiricalFormulaUtilities.GetEmpiricalFormulaFromElementTable(formulaTable);
             }
 
-            
-            
+
+
 
         }
 
@@ -400,11 +393,12 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
             if (a == 0) return 0.0f;
             if (b == 0) return 0.0f;
             if (a == b) return 0.0f;
+
             var total = 0.0;
             total += LogFactorial(a);
             total -= LogFactorial(b);
             total -= LogFactorial(a - b);
-            return (double)total;
+            return total;
         }
 
         /// <summary>
@@ -415,9 +409,9 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
         private double LogFactorial(int n)
         {
             //log n! = 0.5log(2.pi) + 0.5logn + nlog(n/e) + log(1 + 1/(12n))
-            return (double)0.5 * (System.Math.Log10(2 * System.Math.PI * n))
-                + n * (System.Math.Log10(n / System.Math.E))
-                + (System.Math.Log10(1.0 + 1.0 / (12 * n)));
+            return 0.5 * Math.Log10(2 * Math.PI * n)
+                + n * Math.Log10(n / Math.E)
+                + Math.Log10(1.0 + 1.0 / (12 * n));
         }
 
         #endregion
@@ -426,11 +420,11 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
 
         /// <summary>
         /// Resets the member variable probabilities to 0.  Begins the isotopic profile recursion
-        /// 
+        /// </summary>
         /// <param name="jaggedProbabilities">probabilities provided by getisotopepattern</param>
         private void RecursiveCalculator(double[][] jaggedProbabilities)
         {
-            probabilities = new double[300];
+            IonProbabilities = new double[300];
             ProbabilityCalculator(jaggedProbabilities, 0, 0, new List<double>());
         }
 
@@ -442,7 +436,7 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
         /// <param name="isotopeNum">the isotope indice to add the current probability</param>
         /// <param name="probabilitySet">list of current values accumulated in the recursion step</param>
         /// <returns></returns>
-        private bool ProbabilityCalculator(double[][] jaggedProbabilities, int level, int isotopeNum, List<double> probabilitySet)
+        private void ProbabilityCalculator(double[][] jaggedProbabilities, int level, int isotopeNum, ICollection<double> probabilitySet)
         {
             var arrayRowCount = jaggedProbabilities.GetLength(0);
             if (level == arrayRowCount)

@@ -22,6 +22,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
         #region Paul Addition
         static bool doPaulMethod = false;
         #endregion
+
         private Run _run;
 
         readonly IsotopicDistributionCalculator _isotopicDistCalculator = IsotopicDistributionCalculator.Instance;
@@ -61,8 +62,15 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
         public override void Deconvolute(ResultCollection resultList)
         {
             Check.Require(resultList.Run != null, "Cannot deconvolute. Run is null");
+            if (resultList.Run == null)
+                return;
+
             Check.Require(resultList.Run.XYData != null, "Cannot deconvolute. No mass spec XY data found.");
             Check.Require(resultList.Run.PeakList != null, "Cannot deconvolute. Mass spec peak list is empty.");
+
+            if (resultList.Run.PeakList == null)
+                return;
+
 
             _run = resultList.Run;
 
@@ -114,8 +122,6 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
             var isotopicProfiles = new List<IsotopicProfile>();
             #region Paul Addition
 
-            var myIsotopicProfiles = new List<IsotopicProfile>();
-            var otherIsotopicProfiles = new List<IsotopicProfile>();
             #endregion
 
             if (Parameters.AreAllTheoreticalProfilesCachedBeforeStarting)
@@ -127,12 +133,11 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
             var minMSFeatureIntensity = backgroundIntensity * minMSFeatureToBackgroundRatio;
 
 
-            var xyData = new XYData();
-            xyData.Xvalues = originalXYData.Xvalues;
-            xyData.Yvalues = originalXYData.Yvalues;
-
-
-            var peaksThatWereProcessedInfo = new Dictionary<Peak, bool>();
+            var xyData = new XYData
+            {
+                Xvalues = originalXYData.Xvalues,
+                Yvalues = originalXYData.Yvalues
+            };
 
             var sortedPeaklist = new List<Peak>(mspeakList).OrderByDescending(p => p.Height).ToList();
             var peaksAlreadyProcessed = new HashSet<Peak>();
@@ -177,12 +182,10 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
                 var ppmTolerance = (msPeak.Width / 2.35) / msPeak.XValue * 1e6;    //   peak's sigma value / mz * 1e6
 
                 HashSet<int> potentialChargeStates;
-                HashSet<int> potentialChargeStatesbyPaul;
                 if (UseAutocorrelationChargeDetermination)
                 {
                     var chargeState = PattersonChargeStateCalculator.GetChargeState(xyData, mspeakList, msPeak as MSPeak);
-                    potentialChargeStates = new HashSet<int>();
-                    potentialChargeStates.Add(chargeState);
+                    potentialChargeStates = new HashSet<int> {chargeState};
                 }
                 else
                 {   //Paul subtraction
@@ -190,7 +193,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
                     potentialChargeStates = GetPotentialChargeStates(indexOfCurrentPeak, mspeakList, ppmTolerance);
                     #region Paul Addition
                     var chargeDecider= new ChromCorrelatingChargeDecider(_run);
-                    potentialChargeStatesbyPaul=chargeDecider.GetPotentialChargeState(indexOfCurrentPeak, mspeakList, ppmTolerance);
+                    chargeDecider.GetPotentialChargeState(indexOfCurrentPeak, mspeakList, ppmTolerance);
 
                     #endregion
                 }
@@ -207,10 +210,9 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
                 {
                     var bestFitVal = 1.0;   // 1.0 is worst fit value. Start with 1.0 and see if we can find better fit value
 
-                    IsotopicProfile theorIso;
 
                     //TODO: there could be a problem here
-                    var msFeature = GetMSFeature(mspeakList, xyData, potentialChargeState, msPeak, ref bestFitVal, out theorIso);
+                    var msFeature = GetMSFeature(mspeakList, xyData, potentialChargeState, msPeak, ref bestFitVal, out var theorIso);
 
                     if (msFeature != null)
                     {
@@ -246,7 +248,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
 
                 }
 
-                IsotopicProfile msfeature = null;//Paul Addition "=null"
+                IsotopicProfile msfeature;
                 if (potentialMSFeaturesForGivenChargeState.Count == 0)
                 {
                     stringBuilder.Append(msPeak.XValue.ToString("0.00000") + "\tNo profile found.\n");
@@ -296,11 +298,8 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
                                 IqLogger.Log.Debug("stopwatch: " + stopwatch.Elapsed);
                             }
                             var brain = new ChromCorrelatingChargeDecider(_run);
-                            msfeature = brain.DetermineCorrectIsotopicProfile(potentialMSFeaturesForGivenChargeState.Where(n => n.Score < .50).ToList());
-                            if (msfeature==null)
-                            {
-                                msfeature = brain.DetermineCorrectIsotopicProfile(potentialMSFeaturesForGivenChargeState);
-                            }
+                            msfeature = brain.DetermineCorrectIsotopicProfile(potentialMSFeaturesForGivenChargeState.Where(n => n.Score < .50).ToList()) ??
+                                        brain.DetermineCorrectIsotopicProfile(potentialMSFeaturesForGivenChargeState);
                             //hitcounter2++;
                         }
                         else//do it the regular way.
@@ -309,13 +308,9 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
                             msfeature = (from n in potentialMSFeaturesForGivenChargeState
                                          where n.Score < 0.15
                                          orderby n.ChargeState descending
-                                         select n).FirstOrDefault();
-                            if (msfeature == null)
-                            {
-                                msfeature = (from n in potentialMSFeaturesForGivenChargeState
-                                             orderby n.Score
-                                             select n).First();
-                            }
+                                         select n).FirstOrDefault() ?? (from n in potentialMSFeaturesForGivenChargeState
+                                                                        orderby n.Score
+                                                                        select n).First();
 
 
                             #region Paul Addition
@@ -609,9 +604,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
 
             double relIntensityUseForFitting = 0;
 
-
-            int ionCountUsed;
-            var fitval = _areafitter.GetFit(theorXYData, xyData, relIntensityUseForFitting, out ionCountUsed);
+            var fitval = _areafitter.GetFit(theorXYData, xyData, relIntensityUseForFitting, out var _);
 
             if (fitval < bestFitVal)
             {
@@ -626,7 +619,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
                 var offsetForTheorProfile = -1 * numPeaksToTheLeft * Globals.MASS_DIFF_BETWEEN_ISOTOPICPEAKS / chargeState;
                 //negative offset
 
-                fitval = _areafitter.GetFit(theorXYData, xyData, relIntensityUseForFitting, out ionCountUsed, offsetForTheorProfile);
+                fitval = _areafitter.GetFit(theorXYData, xyData, relIntensityUseForFitting, out _, offsetForTheorProfile);
 
                 if (fitval > bestFitVal || fitval >= 1 || double.IsNaN(fitval))
                 {
@@ -644,7 +637,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
 
 
 
-                fitval = _areafitter.GetFit(theorXYData, xyData, relIntensityUseForFitting, out ionCountUsed, offsetForTheorProfile);
+                fitval = _areafitter.GetFit(theorXYData, xyData, relIntensityUseForFitting, out _, offsetForTheorProfile);
 
                 if (fitval >= bestFitVal || fitval >= 1 || double.IsNaN(fitval))
                 {
@@ -670,7 +663,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
 
         private void CalculateMassesForIsotopicProfile(IsotopicProfile iso)
         {
-            if (iso == null || iso.Peaklist == null) return;
+            if (iso?.Peaklist == null) return;
 
             //start with most abundant peak.
 

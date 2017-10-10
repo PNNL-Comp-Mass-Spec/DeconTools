@@ -5,7 +5,7 @@ using DeconTools.Backend.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 {
-    public class O16O18IterativeTff:IterativeTFF
+    public class O16O18IterativeTff : IterativeTFF
     {
         readonly IterativeTFF _iterativeTffStandard;
         #region Constructors
@@ -27,10 +27,10 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
         {
             var o16TheorFeature = theorIso;
             var o16Profile = _iterativeTffStandard.IterativelyFindMSFeature(xydata, o16TheorFeature);
-            
+
             var o18TheorProfileSingleLabel = convertO16ProfileToO18(o16TheorFeature, 2);
             var o18SingleLabelProfile = _iterativeTffStandard.IterativelyFindMSFeature(xydata, o18TheorProfileSingleLabel);
-         
+
             var o18TheorProfileDoubleLabel = convertO16ProfileToO18(o16TheorFeature, 4);
             var o18DoubleLabelProfile = _iterativeTffStandard.IterativelyFindMSFeature(xydata, o18TheorProfileDoubleLabel);
 
@@ -42,7 +42,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
                 if (o18DoubleLabelProfile == null)
                 {
                     return null;
-                    
+
                 }
 
                 foundO16O18Profile = o18DoubleLabelProfile.CloneIsotopicProfile();
@@ -91,7 +91,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
         }
         private void AddIsotopePeaks(IsotopicProfile foundO16O18Profile, IsotopicProfile profileToAdd, int numIsotopePeaksToAdd)
         {
-            if (profileToAdd == null || profileToAdd.Peaklist == null || profileToAdd.Peaklist.Count == 0) return;
+            if (profileToAdd?.Peaklist == null || profileToAdd.Peaklist.Count == 0) return;
 
             for (var i = 0; i < numIsotopePeaksToAdd; i++)
             {
@@ -128,8 +128,8 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             const double toleranceInDa = 0.1;
 
 
-            //this will iterate over the first five expected m/z values of a theoretical profile 
-            //and loosely try to the corresponding peak within the observed profile. 
+            //this will iterate over the first five expected m/z values of a theoretical profile
+            //and loosely try to the corresponding peak within the observed profile.
             //If missing, will add one at the expected m/z.  This ensures no missing peaks within the O16O18 profile
             //so that looking up the first peak will always give you the intensity of the O16 peak (even if
             //it never existed in the real data - in this case the intensity is 0);
@@ -138,9 +138,9 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
                 var currentMz = monoMz + mzDistanceBetweenIsotopes * i;
 
                 var peaksWithinTol = PeakUtilities.GetMSPeaksWithinTolerance(o16O18Profile.Peaklist, currentMz, toleranceInDa);
-                if (peaksWithinTol.Count == 0)   // 
+                if (peaksWithinTol.Count == 0)   //
                 {
-                    o16O18Profile.Peaklist.Insert(i, new MSPeak(currentMz, 0, 0, 0));
+                    o16O18Profile.Peaklist.Insert(i, new MSPeak(currentMz));
                 }
             }
 
@@ -149,6 +149,6 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
         #endregion
 
-       
+
     }
 }

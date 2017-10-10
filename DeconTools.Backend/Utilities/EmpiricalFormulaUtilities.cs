@@ -100,10 +100,9 @@ namespace DeconTools.Backend.Utilities
                             var match = Regex.Match(element, regexString);  
                             var elementCountString = match.Groups["num"].Value;
                             var elementSymbol = match.Groups["ele"].Value;
-                            double numAtoms;
-                            Double.TryParse(elementCountString, out numAtoms);
+                        Double.TryParse(elementCountString, out var numAtoms);
 
-                            var formulaContainsDuplicateElements = (parsedFormula.ContainsKey(elementSymbol));
+                        var formulaContainsDuplicateElements = (parsedFormula.ContainsKey(elementSymbol));
                             Check.Require(!formulaContainsDuplicateElements, "Cannot parse formula string. It contains multiple identical elements. Formula= " + empiricalFormula);
 
                             parsedFormula.Add(elementSymbol, numAtoms);

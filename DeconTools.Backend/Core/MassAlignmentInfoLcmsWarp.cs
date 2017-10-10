@@ -7,17 +7,6 @@ namespace DeconTools.Backend.Core
 {
     public class MassAlignmentInfoLcmsWarp:MassAlignmentInfo
     {
-      
-
-        #region Constructors
-
-        public MassAlignmentInfoLcmsWarp()
-        {
-            
-        }
-
-
-        #endregion
 
         #region Properties
         public MultiAlignEngine.Alignment.clsAlignmentFunction AlignmentInfo { get; set; }
@@ -136,7 +125,7 @@ namespace DeconTools.Backend.Core
                 }
                 else
                 {
-                    scanForGettingAlignmentInfo = (float)scan;
+                    scanForGettingAlignmentInfo = scan;
                 }
 
                 var ppmShift = AlignmentInfo.GetPPMShiftFromTimeMZ(scanForGettingAlignmentInfo, mzForGettingAlignmentInfo);

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using DeconTools.Utilities.SqliteUtils;
 
 namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
@@ -12,16 +9,18 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
 
         public BasicScanResult_SqliteTable(string tableName)
         {
-            this.Name = tableName;
-            this.FieldList = new List<Field>();
-            this.FieldList.Add(new Field("scan_num", "INTEGER Primary Key"));
-            this.FieldList.Add(new Field("scan_time", "FLOAT"));
-            this.FieldList.Add(new Field("type", "USHORT"));
-            this.FieldList.Add(new Field("bpi", "FLOAT"));
-            this.FieldList.Add(new Field("bpi_mz", "FLOAT"));
-            this.FieldList.Add(new Field("tic", "FLOAT"));
-            this.FieldList.Add(new Field("num_peaks", "UINT"));
-            this.FieldList.Add(new Field("num_deisotoped", "UINT"));
+            Name = tableName;
+            FieldList = new List<Field>
+            {
+                new Field("scan_num", "INTEGER Primary Key"),
+                new Field("scan_time", "FLOAT"),
+                new Field("type", "USHORT"),
+                new Field("bpi", "FLOAT"),
+                new Field("bpi_mz", "FLOAT"),
+                new Field("tic", "FLOAT"),
+                new Field("num_peaks", "UINT"),
+                new Field("num_deisotoped", "UINT")
+            };
         }
 
 

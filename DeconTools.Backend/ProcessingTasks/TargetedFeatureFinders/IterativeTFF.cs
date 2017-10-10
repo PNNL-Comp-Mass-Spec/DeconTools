@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.ProcessingTasks.PeakDetectors;
@@ -9,22 +8,14 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 {
     public class IterativeTFF : TFFBase
     {
-
-       
-        
-        private bool _peakDetectorIsDataThresholded;
-        private double _peakDetectorSigNoiseRatioThreshold;
-        
-        private Globals.PeakFitType _peakDetectorPeakFitType;
-
         #region Constructors
         public IterativeTFF(IterativeTFFParameters parameters)
         {
             PeakBRStep = parameters.PeakBRStep;
-            _peakDetectorIsDataThresholded = parameters.PeakDetectorIsDataThresholded;
-            _peakDetectorSigNoiseRatioThreshold = parameters.PeakDetectorSigNoiseRatioThreshold;
+            var peakDetectorIsDataThresholded = parameters.PeakDetectorIsDataThresholded;
+            var peakDetectorSigNoiseRatioThreshold = parameters.PeakDetectorSigNoiseRatioThreshold;
             PeakDetectorPeakBR = parameters.PeakDetectorPeakBR;
-            _peakDetectorPeakFitType = parameters.PeakDetectorPeakFitType;
+            var peakDetectorPeakFitType = parameters.PeakDetectorPeakFitType;
             PeakBRMin = parameters.PeakDetectorMinimumPeakBR;
 
             MaxPeaksToInclude = 30;
@@ -40,8 +31,8 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
 
 
-            MSPeakDetector = new DeconToolsPeakDetectorV2(PeakDetectorPeakBR, _peakDetectorSigNoiseRatioThreshold,
-                 _peakDetectorPeakFitType, _peakDetectorIsDataThresholded);
+            MSPeakDetector = new DeconToolsPeakDetectorV2(PeakDetectorPeakBR, peakDetectorSigNoiseRatioThreshold,
+                 peakDetectorPeakFitType, peakDetectorIsDataThresholded);
 
             //this.MSPeakDetector = new DeconToolsPeakDetectorV2();
             //this.MSPeakDetector.PeakToBackgroundRatio = PeakDetectorPeakBR;
@@ -77,7 +68,11 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
         public override void Execute(ResultCollection resultList)
         {
 
-            Check.Require(resultList != null && resultList.Run != null, string.Format("{0} failed. Run is empty.", Name));
+            Check.Require(resultList?.Run != null, string.Format("{0} failed. Run is empty.", Name));
+
+            if (resultList?.Run == null)
+                return;
+
             Check.Require(resultList.Run.CurrentMassTag != null, string.Format("{0} failed. CurrentMassTag hasn't been defined.", Name));
 
             var result = resultList.GetTargetedResult(resultList.Run.CurrentMassTag);
@@ -85,17 +80,15 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             var theorFeature = CreateTargetIso(resultList.Run);
             resultList.IsosResultBin.Clear();
 
+            var iso = IterativelyFindMSFeature(resultList.Run.XYData, theorFeature, out var msPeakList);
 
-            var msPeakList = new List<Peak>();
-            var iso = IterativelyFindMSFeature(resultList.Run.XYData, theorFeature, out msPeakList);
-            
-            result.Run.PeakList = msPeakList;     //this is important for subsequent tasks that use the peaks that were detected here. 
+            result.Run.PeakList = msPeakList;     //this is important for subsequent tasks that use the peaks that were detected here.
 
 
             AddFeatureToResult(result, iso);
 
 
-            var isoIsGood = (iso != null && iso.Peaklist != null && iso.Peaklist.Count > 0);
+            var isoIsGood = (iso?.Peaklist != null && iso.Peaklist.Count > 0);
             if (isoIsGood)
             {
                 //GORD: check here if there is an error in IQ intensities
@@ -142,14 +135,9 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
         public virtual IsotopicProfile IterativelyFindMSFeature(XYData massSpecXyData, IsotopicProfile theorIso)
         {
-
-            var peakList = new List<Peak>();
-            return IterativelyFindMSFeature(massSpecXyData, theorIso, out peakList);
+            return IterativelyFindMSFeature(massSpecXyData, theorIso, out _);
 
         }
-
-
-
 
         public virtual IsotopicProfile IterativelyFindMSFeature(XYData massSpecXyData, IsotopicProfile theorIso, out List<Peak> peakList)
         {
@@ -158,7 +146,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
                 peakList = new List<Peak>();
                 return null;
             }
-                
+
 
             IsotopicProfile iso = null;
 
@@ -166,9 +154,9 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             MSPeakDetector.MaxX = theorIso.MonoPeakMZ + 20;
 
 
-            //start with high PeakBR and rachet it down, so as to detect more peaks with each pass.  Stop when you find the isotopic profile. 
+            //start with high PeakBR and rachet it down, so as to detect more peaks with each pass.  Stop when you find the isotopic profile.
             peakList = new List<Peak>();
-            
+
             for (var d = PeakDetectorPeakBR; d >= PeakBRMin; d = d - PeakBRStep)
             {
                 MSPeakDetector.PeakToBackgroundRatio = d;
@@ -233,7 +221,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
                     break;
             }
 
-            
+
         }
 
         #endregion

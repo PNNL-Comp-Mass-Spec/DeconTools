@@ -149,7 +149,7 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.LabeledIso
         {
             try
             {
-                var element = Constants.Elements[elementSymbol];
+                var unused = Constants.Elements[elementSymbol];
             }
             catch (KeyNotFoundException)
             {

@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using DeconTools.Backend.Core;
 using DeconTools.Backend.DTO;
-using DeconTools.Backend.Runs;
 using System.Data.Common;
 using System.Data.SQLite;
 using DeconTools.Utilities.SqliteUtils;
@@ -53,7 +49,7 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
 
             createMSPeakTable();
 
-            this.TriggerToWriteValue = triggerValue;
+            TriggerToWriteValue = triggerValue;
         }
 
         private void createMSPeakTable()
@@ -93,7 +89,7 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
         /// <param name="peakList">Peak list to write</param>
         public override void WriteOutPeaks(List<MSPeakResult> peakList)
         {
-            WriteOutPeaks(peakList);
+            WriteOutPeaks(null, peakList);
         }
 
         /// <summary>
@@ -134,14 +130,11 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
                         fwhmParam.Value = peak.MSPeak.Width;
                         msfeatureParam.Value = peak.MSPeak.MSFeatureID;
                         mycommand.ExecuteNonQuery();
-                        
+
                     }
 
-
-             
                 }
                 mytransaction.Commit();
-
 
             }
 
@@ -200,15 +193,6 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
 
 
         //}
-
-        public override void Cleanup()
-        {
-   
-
-            base.Cleanup();
-        }
-
-
 
         #region IDisposable Members
 

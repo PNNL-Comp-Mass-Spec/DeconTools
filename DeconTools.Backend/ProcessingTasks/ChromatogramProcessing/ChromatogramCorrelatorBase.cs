@@ -114,8 +114,8 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 
         public void GetElutionCorrelationData(XYData chromData1, XYData chromData2, out double slope, out double intercept, out double rsquaredVal)
         {
-            Check.Require(chromData1 != null && chromData1.Xvalues != null, "Chromatogram1 intensities are null");
-            Check.Require(chromData2 != null && chromData2.Xvalues != null, "Chromatogram2 intensities are null");
+            Check.Require(chromData1?.Xvalues != null, "Chromatogram1 intensities are null");
+            Check.Require(chromData2?.Xvalues != null, "Chromatogram2 intensities are null");
 
             Check.Require(chromData1.Xvalues[0] == chromData2.Xvalues[0], "Correlation failed. Chromatograms being correlated do not have the same scan values!");
 
@@ -140,7 +140,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             catch (Exception ex)
             {
                 IqLogger.Log.Fatal("!! FATAL ERROR in Chrom correlator !! " + ex.Message);
-                
+
             }
         }
 
@@ -153,11 +153,11 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 
         public override void Execute(ResultCollection resultList)
         {
-            Check.Require(resultList.Run.CurrentMassTag != null, this.Name + " failed; CurrentMassTag is empty");
-            Check.Require(resultList.Run.CurrentMassTag.IsotopicProfile != null, this.Name + " failed; Theor isotopic profile is empty. Run a TheorFeatureGenerator");
-            Check.Require(resultList.CurrentTargetedResult != null, this.Name + " failed; CurrentTargetedResult is empty.");
-            Check.Require(resultList.CurrentTargetedResult.ChromPeakSelected != null, this.Name + " failed; ChromPeak was never selected.");
-            Check.Require(resultList.CurrentTargetedResult.IsotopicProfile != null, this.Name + " failed; Isotopic profile is null.");
+            Check.Require(resultList.Run.CurrentMassTag != null, Name + " failed; CurrentMassTag is empty");
+            Check.Require(resultList.Run.CurrentMassTag.IsotopicProfile != null, Name + " failed; Theor isotopic profile is empty. Run a TheorFeatureGenerator");
+            Check.Require(resultList.CurrentTargetedResult != null, Name + " failed; CurrentTargetedResult is empty.");
+            Check.Require(resultList.CurrentTargetedResult.ChromPeakSelected != null, Name + " failed; ChromPeak was never selected.");
+            Check.Require(resultList.CurrentTargetedResult.IsotopicProfile != null, Name + " failed; Isotopic profile is null.");
 
 
             var scan = resultList.CurrentTargetedResult.ScanSet.PrimaryScanNumber;
@@ -185,10 +185,9 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             var indexMostAbundantPeak = iso.GetIndexOfMostIntensePeak();
 
             var baseMZValue = iso.Peaklist[indexMostAbundantPeak].XValue;
-            bool baseChromDataIsOK;
             var basePeakChromXYData = GetBaseChromXYData(run, startScan, stopScan, baseMZValue);
 
-            baseChromDataIsOK = basePeakChromXYData != null && basePeakChromXYData.Xvalues != null; 
+            var baseChromDataIsOK = basePeakChromXYData?.Xvalues != null;
                 //&&basePeakChromXYData.Xvalues.Length > 3;
 
 
@@ -215,22 +214,18 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
                 else if (iso.Peaklist[i].Height >= minIntensity)
                 {
                     var correlatedMZValue = iso.Peaklist[i].XValue;
-                    bool chromDataIsOK;
                     var chromPeakXYData = GetCorrelatedChromPeakXYData(run, startScan, stopScan, basePeakChromXYData, correlatedMZValue);
 
-                    chromDataIsOK = chromPeakXYData != null && chromPeakXYData.Xvalues != null;
+                    var chromDataIsOK = chromPeakXYData?.Xvalues != null;
                         //&&chromPeakXYData.Xvalues.Length > 3;
 
                     if (chromDataIsOK)
                     {
-                        double slope;
-                        double intercept;
-                        double rsquaredVal;
 
                         chromPeakXYData = FillInAnyMissingValuesInChromatogram(basePeakChromXYData, chromPeakXYData);
 
                         GetElutionCorrelationData(basePeakChromXYData, chromPeakXYData,
-                                                                          out slope, out intercept, out rsquaredVal);
+                                                                          out var slope, out var intercept, out var rsquaredVal);
 
                         correlationData.AddCorrelationData(slope, intercept, rsquaredVal);
 
@@ -265,9 +260,11 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             XYData chromPeakXYData;
             if (xydata == null || xydata.Xvalues.Length == 0)
             {
-                chromPeakXYData = new XYData();
-                chromPeakXYData.Xvalues = basePeakChromXYData.Xvalues;
-                chromPeakXYData.Yvalues = new double[basePeakChromXYData.Xvalues.Length];
+                chromPeakXYData = new XYData
+                {
+                    Xvalues = basePeakChromXYData.Xvalues,
+                    Yvalues = new double[basePeakChromXYData.Xvalues.Length]
+                };
             }
             else
             {
@@ -275,8 +272,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             }
 
 
-            var chromDataIsOK = chromPeakXYData != null && chromPeakXYData.Xvalues != null &&
-                                chromPeakXYData.Xvalues.Length > 3;
+            var chromDataIsOK = chromPeakXYData?.Xvalues != null && chromPeakXYData.Xvalues.Length > 3;
 
             if (chromDataIsOK)
             {
@@ -293,8 +289,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 
             var basePeakChromXYData = Smoother.Smooth(xydata);
 
-            var baseChromDataIsOK = basePeakChromXYData != null && basePeakChromXYData.Xvalues != null &&
-                                     basePeakChromXYData.Xvalues.Length > 3;
+            var baseChromDataIsOK = basePeakChromXYData?.Xvalues != null && basePeakChromXYData.Xvalues.Length > 3;
 
             if (baseChromDataIsOK)
             {
@@ -305,7 +300,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 
 
         /// <summary>
-        /// Fills in any missing data in the chrom data being correlated. 
+        /// Fills in any missing data in the chrom data being correlated.
         /// This ensures base chrom data and the correlated chrom data are the same length
         /// </summary>
         /// <param name="basePeakChromXYData"></param>
@@ -313,14 +308,14 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
         /// <returns></returns>
         protected XYData FillInAnyMissingValuesInChromatogram(XYData basePeakChromXYData, XYData chromPeakXYData)
         {
-            if (basePeakChromXYData == null || basePeakChromXYData.Xvalues == null || basePeakChromXYData.Xvalues.Length == 0) return null;
+            if (basePeakChromXYData?.Xvalues == null || basePeakChromXYData.Xvalues.Length == 0) return null;
 
             var filledInData = new SortedDictionary<int, double>();
 
             //first fill with zeros
-            for (var i = 0; i < basePeakChromXYData.Xvalues.Length; i++)
+            foreach (var dataPoint in basePeakChromXYData.Xvalues)
             {
-                filledInData.Add((int)basePeakChromXYData.Xvalues[i], 0);
+                filledInData.Add((int)dataPoint, 0);
             }
 
             //then fill in other values

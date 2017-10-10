@@ -27,13 +27,13 @@ namespace DeconTools.Backend.Algorithms
             double maxIntensity = 0;
             Peak mostIntensePeak = null;
 
-            for (var i = 0; i < peaksWithinTol.Count; i++)
+            foreach (var peak in peaksWithinTol)
             {
-                var obsIntensity = peaksWithinTol[i].Height;
+                var obsIntensity = peak.Height;
                 if (obsIntensity > maxIntensity)
                 {
                     maxIntensity = obsIntensity;
-                    mostIntensePeak = peaksWithinTol[i];
+                    mostIntensePeak = peak;
                 }
             }
             return mostIntensePeak;
@@ -45,17 +45,15 @@ namespace DeconTools.Backend.Algorithms
             var diff = double.MaxValue;
             Peak closestPeak = null;
 
-            for (var i = 0; i < peaksWithinTol.Count; i++)
+            foreach (var peak in peaksWithinTol)
             {
-
-                var obsDiff = Math.Abs(peaksWithinTol[i].XValue - targetVal);
+                var obsDiff = Math.Abs(peak.XValue - targetVal);
 
                 if (obsDiff < diff)
                 {
                     diff = obsDiff;
-                    closestPeak = peaksWithinTol[i];
+                    closestPeak = peak;
                 }
-
             }
 
             return closestPeak;

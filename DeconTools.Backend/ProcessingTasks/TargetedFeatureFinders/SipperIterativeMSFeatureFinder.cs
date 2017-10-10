@@ -35,6 +35,11 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             IsotopicProfile iso;
             Check.Require(run.CurrentMassTag != null, "Run's 'CurrentMassTag' has not been declared");
 
+            if (run.CurrentMassTag?.IsotopicProfile == null)
+                return null;
+
+            if (run.CurrentMassTag.IsotopicProfileLabelled == null)
+                return null;
 
 
             switch (IsotopicProfileType)

@@ -231,16 +231,15 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
         #region Private Methods
 
 
-        private static double[] ACss(double[] inData)
+        private static double[] ACss(IReadOnlyList<double> inData)
         {
-            
 
-            var numPoints = inData.Length;
+
+            var numPoints = inData.Count;
             var outData = new double[numPoints];
 
 
             double sum = 0;
-            double average = 0;
 
             for (var i = 0; i < numPoints; i++)
             {
@@ -248,9 +247,8 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
 
             }
 
-            average = sum / numPoints;
+            var average = sum / numPoints;
 
-            sum = 0;
             for (var i = 0; i < numPoints; i++)
             {
                 sum = 0;
@@ -285,42 +283,36 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
             double bestAutoCorrScore,
             ICollection<int> chargeStatesAndScores)
         {
-            var goingUp = false;
             var wasGoingUp = false;
 
-            var chargeState = -1;
-            var numPoints = autoCorrScores.Length;
+            var numPoints = autoCorrScores.Count;
 
             for (var i = startingIndex; i < numPoints; i++)
             {
                 if (i < 2) continue;
 
-                goingUp = autoCorrScores[i] > autoCorrScores[i - 1];
-
-
-
+                var goingUp = autoCorrScores[i] > autoCorrScores[i - 1];
 
                 if (wasGoingUp && !goingUp)
                 {
                     var currentChargeState = (numPoints / ((maxMZ - minMZ) * (i - 1)) );
 
 
-                    var tempAutocorrScore = autoCorrScores[i];
+                    // var tempAutocorrScore = autoCorrScores[i];
                     var currentAutoCorrScore = autoCorrScores[i - 1];
 
-                    //Console.WriteLine(i+ "\tCurrent charge state=\t" + currentChargeState + "\tcurrent corr score= \t" + 
+                    //Console.WriteLine(i+ "\tCurrent charge state=\t" + currentChargeState + "\tcurrent corr score= \t" +
                     //                  currentAutoCorrScore +"\tComparedCorrScore= \t"+tempAutocorrScore);
 
 
-                    if ((currentAutoCorrScore > bestAutoCorrScore * 0.1) && (currentChargeState < _maxCharge))
+                    if ((currentAutoCorrScore > bestAutoCorrScore * 0.1) && (currentChargeState < maxCharge))
                     {
-                        chargeState = (int) Math.Round(currentChargeState);
+                        var chargeState = (int) Math.Round(currentChargeState);
                         chargeStatesAndScores.Add(chargeState);
-                        
                     }
                 }
                 wasGoingUp = goingUp;
-                
+
             }
 
         }
@@ -335,20 +327,18 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
             ref double bestAutoCorrectionScore,
             ref int bestChargeState)
         {
-            var goingUp = false;
             var wasGoingUp = false;
 
-            var numPoints = autoCorrelationScores.Length;
+            var numPoints = autoCorrelationScores.Count;
 
-            int chargeState;
             for (var i = startingIndex; i < numPoints; i++)
             {
                 if (i < 2) continue;
 
-                goingUp = (autoCorrelationScores[i] - autoCorrelationScores[i - 1]) > 0;
+                var goingUp = (autoCorrelationScores[i] - autoCorrelationScores[i - 1]) > 0;
                 if (wasGoingUp && !goingUp)
                 {
-                    chargeState = (int)(numPoints / ((maxMZ - minMZ) * (i - 1)) + 0.5);
+                    var chargeState = (int)(numPoints / ((maxMZ - minMZ) * (i - 1)) + 0.5);
                     var currentAutoCorrScore = autoCorrelationScores[i - 1];
                     if (Math.Abs(currentAutoCorrScore / autoCorrelationScores[0]) > 0.05 && chargeState <= maxChargeState)
                     {

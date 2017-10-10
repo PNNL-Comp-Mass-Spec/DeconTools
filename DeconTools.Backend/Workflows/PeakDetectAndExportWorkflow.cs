@@ -17,7 +17,6 @@ namespace DeconTools.Backend.Workflows
         DeconToolsPeakDetectorV2 _ms2PeakDetectorForCentroidedData;
         DeconToolsPeakDetectorV2 _ms2PeakDetectorForProfileData;
 
-        PeakDetectAndExportWorkflowParameters _workflowParameters;
         private readonly BackgroundWorker backgroundWorker;
         private readonly PeakProgressInfo peakProgressInfo;
 
@@ -66,14 +65,14 @@ namespace DeconTools.Backend.Workflows
         {
             MSGenerator = MSGeneratorFactory.CreateMSGenerator(Run.MSFileType);
 
-            _ms1PeakDetector = new DeconToolsPeakDetectorV2(_workflowParameters.PeakBR, _workflowParameters.SigNoiseThreshold,
-                _workflowParameters.PeakFitType, _workflowParameters.IsDataThresholded);
+            _ms1PeakDetector = new DeconToolsPeakDetectorV2(WorkflowParameters.PeakBR, WorkflowParameters.SigNoiseThreshold,
+                WorkflowParameters.PeakFitType, WorkflowParameters.IsDataThresholded);
 
 
-            _ms2PeakDetectorForProfileData = new DeconToolsPeakDetectorV2(_workflowParameters.MS2PeakDetectorPeakBR,
-                                                                          _workflowParameters.MS2PeakDetectorSigNoiseThreshold,
-                                                                          _workflowParameters.PeakFitType,
-                                                                          _workflowParameters.MS2PeakDetectorDataIsThresholded);
+            _ms2PeakDetectorForProfileData = new DeconToolsPeakDetectorV2(WorkflowParameters.MS2PeakDetectorPeakBR,
+                                                                          WorkflowParameters.MS2PeakDetectorSigNoiseThreshold,
+                                                                          WorkflowParameters.PeakFitType,
+                                                                          WorkflowParameters.MS2PeakDetectorDataIsThresholded);
 
 
             _ms2PeakDetectorForCentroidedData =
@@ -102,7 +101,7 @@ namespace DeconTools.Backend.Workflows
             LcScanSetCollection = CreateLcScanSetCollection();
 
 
-            PrepareOutputFolder(_workflowParameters.OutputFolder);
+            PrepareOutputFolder(WorkflowParameters.OutputFolder);
 
             var outputPeaksFilePath = getOutputPeaksFilename();
 
@@ -248,13 +247,13 @@ namespace DeconTools.Backend.Workflows
         {
             string expectedPeaksFilename;
 
-            if (string.IsNullOrEmpty(_workflowParameters.OutputFolder))
+            if (string.IsNullOrEmpty(WorkflowParameters.OutputFolder))
             {
                 expectedPeaksFilename = Path.Combine(Run.DataSetPath, Run.DatasetName + "_peaks.txt");
             }
             else
             {
-                expectedPeaksFilename = Path.Combine(_workflowParameters.OutputFolder, Run.DatasetName + "_peaks.txt");
+                expectedPeaksFilename = Path.Combine(WorkflowParameters.OutputFolder, Run.DatasetName + "_peaks.txt");
             }
 
             return expectedPeaksFilename;
@@ -268,7 +267,7 @@ namespace DeconTools.Backend.Workflows
                 int minLCScan;
                 int maxLCScan;
 
-                if (_workflowParameters.LCScanMax == -1 || _workflowParameters.LCScanMin == -1)
+                if (WorkflowParameters.LCScanMax == -1 || WorkflowParameters.LCScanMin == -1)
                 {
                     if (Run is UIMFRun thisUimfRun)
                     {
@@ -286,20 +285,20 @@ namespace DeconTools.Backend.Workflows
                 }
                 else
                 {
-                    minLCScan = _workflowParameters.LCScanMin;
-                    maxLCScan = _workflowParameters.LCScanMax;
+                    minLCScan = WorkflowParameters.LCScanMin;
+                    maxLCScan = WorkflowParameters.LCScanMax;
                 }
 
                 if (Run.MSFileType == Globals.MSFileType.PNNL_UIMF && Run is UIMFRun uimfRun)
                 {
 
                     uimfRun.ScanSetCollection.Create(uimfRun, minLCScan, maxLCScan,
-                                                                       _workflowParameters.Num_LC_TimePointsSummed, 1,
-                                                                       _workflowParameters.ProcessMSMS);
+                                                                       WorkflowParameters.Num_LC_TimePointsSummed, 1,
+                                                                       WorkflowParameters.ProcessMSMS);
 
 
-                    var sumAllIMSScans = _workflowParameters.NumIMSScansSummed == -1 ||
-                                         _workflowParameters.NumIMSScansSummed > uimfRun.MaxLCScan;
+                    var sumAllIMSScans = WorkflowParameters.NumIMSScansSummed == -1 ||
+                                         WorkflowParameters.NumIMSScansSummed > uimfRun.MaxLCScan;
 
                     if (sumAllIMSScans)
                     {
@@ -312,7 +311,7 @@ namespace DeconTools.Backend.Workflows
                     else
                     {
                         uimfRun.IMSScanSetCollection.Create(Run, uimfRun.MinIMSScan, uimfRun.MaxIMSScan,
-                                                                         _workflowParameters.NumIMSScansSummed, 1);
+                                                                         WorkflowParameters.NumIMSScansSummed, 1);
                     }
 
 
@@ -321,7 +320,7 @@ namespace DeconTools.Backend.Workflows
                 else
                 {
                     Run.ScanSetCollection.Create(Run, minLCScan, maxLCScan,
-                   _workflowParameters.Num_LC_TimePointsSummed, 1, _workflowParameters.ProcessMSMS);
+                   WorkflowParameters.Num_LC_TimePointsSummed, 1, WorkflowParameters.ProcessMSMS);
 
                 }
 
@@ -330,14 +329,6 @@ namespace DeconTools.Backend.Workflows
         }
 
 
-        public PeakDetectAndExportWorkflowParameters WorkflowParameters
-        {
-            get => _workflowParameters;
-            set => _workflowParameters = value;
-        }
-
-
-
-
+        public PeakDetectAndExportWorkflowParameters WorkflowParameters { get; set; }
     }
 }

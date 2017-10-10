@@ -12,8 +12,8 @@ namespace DeconTools.Backend.Runs
     {
         public IMFRun()
         {
-            this.XYData = new XYData();
-            this.MSFileType = Globals.MSFileType.PNNL_IMS;
+            XYData = new XYData();
+            MSFileType = Globals.MSFileType.PNNL_IMS;
         }
 
         public IMFRun(string filename)
@@ -35,8 +35,8 @@ namespace DeconTools.Backend.Runs
         public IMFRun(string filename, int minScan, int maxScan)
             : this(filename)
         {
-            this.MinLCScan = minScan;
-            this.MaxLCScan = maxScan;
+            MinLCScan = minScan;
+            MaxLCScan = maxScan;
         }
 
         public override int GetMinPossibleLCScanNum()
@@ -54,7 +54,7 @@ namespace DeconTools.Backend.Runs
             Check.Require(scanSet != null, "Can't get mass spectrum; inputted set of scans is null");
             Check.Require(scanSet.IndexValues.Count > 0, "Can't get mass spectrum; no scan numbers inputted");
 
-            var totScans = this.GetNumMSScans();
+            var totScans = GetNumMSScans();
 
             var xvals = new double[0];
             var yvals = new double[0];
@@ -70,15 +70,18 @@ namespace DeconTools.Backend.Runs
             //    this.rawData.GetSummedSpectra(lowerscan, upperscan, minMZ, maxMZ, ref xvals, ref yvals);
             //}
 
-            var upperscan = Math.Min(scanSet.getHighestScanNumber(), this.GetNumMSScans());
+            var upperscan = Math.Min(scanSet.getHighestScanNumber(), GetNumMSScans());
             var lowerscan = Math.Max(scanSet.getLowestScanNumber(), 1);
 
             //TODO:  Old DeconTools reference!! remove this
-            this.RawData.GetSummedSpectra(lowerscan, upperscan, minMZ, maxMZ, ref xvals, ref yvals);
+            RawData.GetSummedSpectra(lowerscan, upperscan, minMZ, maxMZ, ref xvals, ref yvals);
 
-            var xydata=new XYData();
-            xydata.Xvalues = xvals;
-            xydata.Yvalues = yvals;
+            var xydata = new XYData
+            {
+                Xvalues = xvals,
+                Yvalues = yvals
+            };
+
             return xydata;
         }
     }

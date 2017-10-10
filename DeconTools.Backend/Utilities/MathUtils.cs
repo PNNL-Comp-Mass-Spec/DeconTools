@@ -10,7 +10,7 @@ namespace DeconTools.Backend.Utilities
         public static double getInterpolatedValue(double x1, double x2, double y1, double y2, double targetXvalue)
         {
 
-            if (x1 == x2) return y1;
+            if (Math.Abs(x1 - x2) < double.Epsilon) return y1;
 
             var slope = (y2 - y1) / (x2 - x1);
             var yintercept = y1 - (slope * x1);
@@ -56,7 +56,7 @@ namespace DeconTools.Backend.Utilities
                 sum += ((average - val) * (average - val));
             }
 
-            return System.Math.Sqrt((sum / (values.GetLength(0) - 1)));
+            return Math.Sqrt((sum / (values.GetLength(0) - 1)));
 
         }
 
@@ -91,9 +91,6 @@ namespace DeconTools.Backend.Utilities
 
         }
 
-
-
-
         public static int GetClosest(double[] data, double targetVal, double tolerance = 0.1)
         {
             if (data.Length == 0) return -1;
@@ -123,7 +120,7 @@ namespace DeconTools.Backend.Utilities
                     }
 
 
-                    
+
                 }
             }
             else
@@ -142,7 +139,7 @@ namespace DeconTools.Backend.Utilities
                         break;
                     }
 
-                    
+
                 }
 
 
@@ -212,11 +209,7 @@ namespace DeconTools.Backend.Utilities
 
             var numIndependentVariables = 1;
             var numPoints = yvals.Length;
-
-            alglib.linearmodel linearModel;
-            int info;
-            alglib.lrreport regressionReport;
-            alglib.lrbuild(inputData, numPoints, numIndependentVariables, out info, out linearModel, out regressionReport);
+            alglib.lrbuild(inputData, numPoints, numIndependentVariables, out var _, out var linearModel, out var regressionReport);
 
             double[] regressionLineInfo;
 
@@ -241,7 +234,6 @@ namespace DeconTools.Backend.Utilities
             intercept = regressionLineInfo[1];
 
             var squaredResiduals = new List<double>();
-            var calculatedYVals = new List<double>();
             var squaredMeanResiduals = new List<double>();
 
             var averageY = yvals.Average();
@@ -249,8 +241,8 @@ namespace DeconTools.Backend.Utilities
 
             for (var i = 0; i < xvals.Length; i++)
             {
-                var calcYVal = alglib.lrprocess(linearModel, new double[] { xvals[i] });
-                calculatedYVals.Add(calcYVal);
+                var calcYVal = alglib.lrprocess(linearModel, new[] { xvals[i] });
+                new List<double>().Add(calcYVal);
 
                 var residual = yvals[i] - calcYVal;
                 squaredResiduals.Add(residual * residual);
@@ -260,9 +252,9 @@ namespace DeconTools.Backend.Utilities
             }
 
             var sumSquaredMeanResiduals = squaredMeanResiduals.Sum();
-            
-            //check for sum=0 
-            if (sumSquaredMeanResiduals==0)
+
+            //check for sum=0
+            if (Math.Abs(sumSquaredMeanResiduals) < double.Epsilon)
             {
                 rsquaredVal = 0;
             }
@@ -270,11 +262,11 @@ namespace DeconTools.Backend.Utilities
             {
                 rsquaredVal = 1.0d - (squaredResiduals.Sum() / sumSquaredMeanResiduals);
             }
-            
-            
+
+
         }
 
 
-        
+
     }
 }

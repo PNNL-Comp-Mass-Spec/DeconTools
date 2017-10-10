@@ -13,16 +13,14 @@ namespace DeconTools.Backend.ProcessingTasks
     {
 
         /// <summary>
-        /// User-defined threshold that marks the intensity level above which detector saturation occurs. 
+        /// User-defined threshold that marks the intensity level above which detector saturation occurs.
         /// </summary>
         public double SaturationThreshold { get; set; }
 
 
-
-
-        TomIsotopicPattern _tomIsotopicPatternGenerator = new TomIsotopicPattern();
+        readonly TomIsotopicPattern _tomIsotopicPatternGenerator = new TomIsotopicPattern();
         private double _minRelIntTheorProfile = 0.3;
-        private BasicTFF _basicFeatureFinder = new BasicTFF();
+        private readonly BasicTFF _basicFeatureFinder = new BasicTFF();
 
         private MSGenerator _msGenerator;
 
@@ -42,15 +40,16 @@ namespace DeconTools.Backend.ProcessingTasks
         public void GetUnsummedIntensitiesAndDetectSaturation(Run run, IEnumerable<IsosResult> resultList)
         {
             Check.Require(run != null, "SaturationDetector failed. Run is null");
+            if (run == null)
+                return;
+
             if (_msGenerator == null)
             {
                 _msGenerator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
             }
 
-            if (run is UIMFRun)
+            if (run is UIMFRun uimfRun)
             {
-                var uimfRun = (UIMFRun)run;
-
                 if (uimfRun.CurrentScanSet == null) throw new NullReferenceException("CurrentScanSet is null. You need to set it.");
                 if (uimfRun.CurrentIMSScanSet == null) throw new NullReferenceException("CurrentIMSScanSet is null. You need to set it.");
 
@@ -65,11 +64,12 @@ namespace DeconTools.Backend.ProcessingTasks
                 uimfRun.CurrentScanSet = lcScanSet;
                 uimfRun.CurrentIMSScanSet = imsScanSet;
                 _msGenerator.Execute(run.ResultCollection);
-                
+
             }
             else
             {
-                if (run.CurrentScanSet == null)throw new NullReferenceException("CurrentScanSet is null. You need to set it.");
+                if (run.CurrentScanSet == null)
+                    throw new NullReferenceException("CurrentScanSet is null. You need to set it.");
 
                 //this creates a Scanset containing only the primary scan.  Therefore no summing will occur
                 var scanset = new ScanSet(run.CurrentScanSet.PrimaryScanNumber);
@@ -78,6 +78,7 @@ namespace DeconTools.Backend.ProcessingTasks
 
                 _msGenerator.Execute(run.ResultCollection);
             }
+
             foreach (var result in resultList)
             {
 
@@ -95,19 +96,21 @@ namespace DeconTools.Backend.ProcessingTasks
                     if (result.IsotopicProfile.IsSaturated )
                     {
                         //problem is that with these saturated profiles, they are often trucated because another
-                        //isotopic profile was falsely assigned to the back end of it. So we need to find more peaks that should 
-                        //belong to the saturated profile. 
-                        var theorTarget = new PeptideTarget();
+                        //isotopic profile was falsely assigned to the back end of it. So we need to find more peaks that should
+                        //belong to the saturated profile.
+                        var theorTarget = new PeptideTarget
+                        {
+                            ChargeState = (short)result.IsotopicProfile.ChargeState,
+                            MonoIsotopicMass = result.IsotopicProfile.MonoIsotopicMass
+                        };
 
-                        theorTarget.ChargeState = (short)result.IsotopicProfile.ChargeState;
-                        theorTarget.MonoIsotopicMass = result.IsotopicProfile.MonoIsotopicMass;
                         theorTarget.MZ = (theorTarget.MonoIsotopicMass / theorTarget.ChargeState) + Globals.PROTON_MASS;
 
                         var averagineFormula = _tomIsotopicPatternGenerator.GetClosestAvnFormula(result.IsotopicProfile.MonoIsotopicMass, false);
                         theorTarget.IsotopicProfile  = _tomIsotopicPatternGenerator.GetIsotopePattern(averagineFormula, _tomIsotopicPatternGenerator.aafIsos);
                         theorTarget.EmpiricalFormula = averagineFormula;
                         theorTarget.CalculateMassesForIsotopicProfile(result.IsotopicProfile.ChargeState);
-                       
+
                         AssignMissingPeaksToSaturatedProfile(run.PeakList, result.IsotopicProfile,theorTarget.IsotopicProfile);
 
 
@@ -222,7 +225,7 @@ namespace DeconTools.Backend.ProcessingTasks
 
             var iso = _basicFeatureFinder.FindMSFeature(peakList, theorIsotopicProfile);
 
-            if (iso != null && iso.Peaklist != null && iso.Peaklist.Count > 1)
+            if (iso?.Peaklist != null && iso.Peaklist.Count > 1)
             {
                 //add the newly found peaks to the saturated isotopic profile
                 for (var i = isotopicProfile.Peaklist.Count; i < iso.Peaklist.Count; i++)
@@ -237,7 +240,7 @@ namespace DeconTools.Backend.ProcessingTasks
         private double calcToleranceInPPMFromIsotopicProfile(IsotopicProfile isotopicProfile)
         {
             double toleranceInPPM = 20;
-            if (isotopicProfile == null || isotopicProfile.Peaklist == null || isotopicProfile.Peaklist.Count == 0)
+            if (isotopicProfile?.Peaklist == null || isotopicProfile.Peaklist.Count == 0)
             {
                 return toleranceInPPM;
             }
@@ -253,11 +256,13 @@ namespace DeconTools.Backend.ProcessingTasks
 
 
 
-  
+
 
         public override void Execute(ResultCollection resultList)
         {
             Check.Require(resultList != null, "OriginalIntensitiesExtractor failed. ResultCollection is null");
+            if (resultList == null)
+                return;
 
             GetUnsummedIntensitiesAndDetectSaturation(resultList.Run, resultList.IsosResultBin);
 

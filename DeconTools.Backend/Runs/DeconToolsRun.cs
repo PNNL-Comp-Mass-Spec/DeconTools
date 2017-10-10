@@ -9,7 +9,7 @@ namespace DeconTools.Backend.Runs
     {
         public DeconToolsV2.Readers.clsRawData RawData { get; set; }
 
-        public DeconToolsRun()
+        protected DeconToolsRun()
         {
             XYData = new XYData();
         }
@@ -20,7 +20,7 @@ namespace DeconTools.Backend.Runs
         public override int GetNumMSScans()
         {
             if (RawData == null) return 0;
-            return this.RawData.GetNumScans();
+            return RawData.GetNumScans();
         }
 
         public override string GetScanInfo(int scanNum)
@@ -31,27 +31,27 @@ namespace DeconTools.Backend.Runs
             }
             else
             {
-                return this.RawData.GetScanDescription(scanNum);
+                return RawData.GetScanDescription(scanNum);
             }
         }
 
         public override double GetTime(int scanNum)
         {
-            return this.RawData.GetScanTime(scanNum);
+            return RawData.GetScanTime(scanNum);
         }
 
         public override int GetMSLevelFromRawData(int scanNum)
         {
             try
             {
-                return this.RawData.GetMSLevel(scanNum);
+                return RawData.GetMSLevel(scanNum);
 
             }
             catch (Exception ex)
             {
-                if (scanNum > this.GetMaxPossibleLCScanNum())
+                if (scanNum > GetMaxPossibleLCScanNum())
                 {
-                    throw new ArgumentOutOfRangeException("Failed to get MS level. Input scan was greater than dataset's max scan.");
+                    throw new ArgumentOutOfRangeException(nameof(scanNum), "Failed to get MS level. Input scan was greater than dataset's max scan.");
 
                 }
 

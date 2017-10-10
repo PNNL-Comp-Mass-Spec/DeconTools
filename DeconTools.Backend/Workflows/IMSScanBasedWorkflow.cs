@@ -85,7 +85,7 @@ namespace DeconTools.Backend.Workflows
                 int numIMSScanToSum;
                 if (sumAcrossIMSScans)
                 {
-                    numIMSScanToSum = NewDeconToolsParameters.MSGeneratorParameters.NumImsScansToSum;  
+                    numIMSScanToSum = NewDeconToolsParameters.MSGeneratorParameters.NumImsScansToSum;
                 }
                 else
                 {
@@ -113,8 +113,9 @@ namespace DeconTools.Backend.Workflows
 
             foreach (var frameset in uimfRun.ScanSetCollection.ScanSetList)
             {
-                foreach (IMSScanSet imsScanSet in uimfRun.IMSScanSetCollection.ScanSetList)
+                foreach (var scanSet in uimfRun.IMSScanSetCollection.ScanSetList)
                 {
+                    var imsScanSet = (IMSScanSet)scanSet;
                     uimfRun.CurrentScanSet = frameset;
                     uimfRun.CurrentIMSScanSet = imsScanSet;
                     ReportProgress();
@@ -146,7 +147,7 @@ namespace DeconTools.Backend.Workflows
 
 
 
-            var percentDone = ((double)(framenum) / (double)frameTotal + ((double)scanNum / (double)scanTotal) / (double)frameTotal) * 100;
+            var percentDone = (framenum / (double)frameTotal + (scanNum / (double)scanTotal) / frameTotal) * 100;
             userstate.PercentDone = (float)percentDone;
 
 

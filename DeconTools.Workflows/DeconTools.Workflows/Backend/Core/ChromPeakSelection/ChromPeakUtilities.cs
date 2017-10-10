@@ -7,7 +7,8 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
 {
     public class ChromPeakUtilities
     {
-        ScanSetFactory _scansetFactory = new ScanSetFactory();
+        readonly ScanSetFactory _scansetFactory = new ScanSetFactory();
+
         #region Constructors
         #endregion
 
@@ -33,9 +34,7 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
 
         public ScanSet GetLCScanSetForChromPeak(Peak chromPeak, Run run, int numLCScansToSum)
         {
-            ScanSet scanset;
-
-            if (chromPeak == null || chromPeak.XValue == 0)
+            if (chromPeak == null || Math.Abs(chromPeak.XValue) < double.Epsilon)
             {
                 return null;
                 //throw new NullReferenceException("Trying to use chromPeak to generate mass spectrum, but chrompeak is null");
@@ -44,8 +43,8 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
             var bestScan = (int)chromPeak.XValue;
             bestScan = run.GetClosestMSScan(bestScan, DeconTools.Backend.Globals.ScanSelectionMode.CLOSEST);
 
-                    scanset = _scansetFactory.CreateScanSet(run, bestScan, numLCScansToSum);
-            
+                    var scanset = _scansetFactory.CreateScanSet(run, bestScan, numLCScansToSum);
+
             if (run.MSFileType == DeconTools.Backend.Globals.MSFileType.PNNL_UIMF)
             {
                 // GORD: Update this when fixing CurrentFrameSet
@@ -65,35 +64,33 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
                 //throw new NullReferenceException("Trying to use chromPeak to generate mass spectrum, but chrompeak is null");
             }
 
-            var uimfrun = run as UIMFRun;
+            if (!(run is UIMFRun uimfRun))
+                throw new InvalidCastException("run is not of type UIMFRun; actually type " + run.GetType());
 
             var chromPeakScan = (int)Math.Round(chromPeak.XValue);
-            var bestLCScan = uimfrun.GetClosestMS1Frame(chromPeakScan);
+            var bestLCScan = uimfRun.GetClosestMS1Frame(chromPeakScan);
 
             if (numLCScansToSum > 1)
             {
                 throw new NotSupportedException("SmartChrompeakSelector is trying to set which frames are summed. But summing across frames isn't supported yet. Someone needs to add the code");
             }
+
+            ScanSet lcscanset;
+            if (run.CurrentMassTag.MsLevel == 1)
+            {
+                lcscanset = new ScanSet(bestLCScan);
+            }
             else
             {
-                ScanSet lcscanset;
-                if (run.CurrentMassTag.MsLevel == 1)
-                {
-                    lcscanset = new ScanSet(bestLCScan);
-                }
-                else
-                {
-                    // TODO: This is hard-coded to work with the "sum all consecutive MS2 frames mode" but we should really look these up by going through the IMSScanCollection
-                    lcscanset = new ScanSet(bestLCScan + 1, bestLCScan + 1, bestLCScan + uimfrun.GetNumberOfConsecutiveMs2Frames(bestLCScan));
-                }
-
-                return lcscanset;
-
-                // TODO: Hard coded to sum across all IMS Scans.
-                var centerScan = (uimfrun.MinIMSScan + uimfrun.MaxIMSScan + 1) / 2;
-                uimfrun.CurrentIMSScanSet = new IMSScanSet(centerScan, uimfrun.MinIMSScan, uimfrun.MaxIMSScan);
+                // TODO: This is hard-coded to work with the "sum all consecutive MS2 frames mode" but we should really look these up by going through the IMSScanCollection
+                lcscanset = new ScanSet(bestLCScan + 1, bestLCScan + 1, bestLCScan + uimfRun.GetNumberOfConsecutiveMs2Frames(bestLCScan));
             }
 
+            return lcscanset;
+
+            // TODO: Hard coded to sum across all IMS Scans.
+            //var centerScan = (uimfRun.MinIMSScan + uimfRun.MaxIMSScan + 1) / 2;
+            //uimfRun.CurrentIMSScanSet = new IMSScanSet(centerScan, uimfRun.MinIMSScan, uimfRun.MaxIMSScan);
         }
 
 
@@ -101,7 +98,7 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
 
 
         /// <summary>
-        /// Gets the LC Scanset used in generating a mass spectrum, based on the width of the Chrom peak. 
+        /// Gets the LC Scanset used in generating a mass spectrum, based on the width of the Chrom peak.
         /// </summary>
         /// <param name="chromPeak"></param>
         /// <param name="run"></param>
@@ -111,9 +108,7 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
         /// <returns></returns>
         public ScanSet GetLCScanSetForChromPeakBasedOnPeakWidth(Peak chromPeak, Run run, double peakWidthInSigma = 2, int maxScansToSum = 100)
         {
-            ScanSet scanset;
-
-            if (chromPeak == null || chromPeak.XValue == 0)
+            if (chromPeak == null || Math.Abs(chromPeak.XValue) < double.Epsilon)
             {
                 return null;
                 //throw new NullReferenceException("Trying to use chromPeak to generate mass spectrum, but chrompeak is null");
@@ -123,14 +118,14 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
             bestScan = run.GetClosestMSScan(bestScan, DeconTools.Backend.Globals.ScanSelectionMode.CLOSEST);
 
             var sigma = chromPeak.Width / 2.35;
-            
+
             var lowerScan = (int)Math.Round(chromPeak.XValue - (peakWidthInSigma * sigma / 2));
             var closestLowerScan = run.GetClosestMSScan(lowerScan, DeconTools.Backend.Globals.ScanSelectionMode.CLOSEST);
 
             var upperScan = (int)Math.Round(chromPeak.XValue + (peakWidthInSigma * sigma / 2));
             var closestUpperScan = run.GetClosestMSScan(upperScan, DeconTools.Backend.Globals.ScanSelectionMode.CLOSEST);
 
-            scanset = _scansetFactory.CreateScanSet(run, bestScan, closestLowerScan, closestUpperScan);
+            var scanset = _scansetFactory.CreateScanSet(run, bestScan, closestLowerScan, closestUpperScan);
             _scansetFactory.TrimScans(scanset, maxScansToSum);
 
 

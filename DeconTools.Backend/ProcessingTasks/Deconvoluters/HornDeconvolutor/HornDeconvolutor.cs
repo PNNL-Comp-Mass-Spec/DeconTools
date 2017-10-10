@@ -656,7 +656,7 @@ namespace DeconTools.Backend.ProcessingTasks
             {
                 if (debug)
                     Console.Error.WriteLine("Deleting main peak :" + peak.Mz);
-                SetPeakToZero(peak.DataIndex, ref peakData.IntensityList, ref peakData.MzList, debug);
+                SetPeakToZero(peak.DataIndex, ref peakData.IntensityList, debug);
             }
 
             peakData.RemovePeaks(peak.Mz - peak.FWHM, peak.Mz + peak.FWHM, debug);
@@ -694,7 +694,7 @@ namespace DeconTools.Backend.ProcessingTasks
                 // Before assuming that the next peak is indeed an isotope, we must check for the height of this
                 // isotope. If the height is greater than expected by a factor of 3, lets not delete it.
                 peakIndices.Add(nextPeak.PeakIndex);
-                SetPeakToZero(nextPeak.DataIndex, ref peakData.IntensityList, ref peakData.MzList, debug);
+                SetPeakToZero(nextPeak.DataIndex, ref peakData.IntensityList, debug);
 
                 peakData.RemovePeaks(nextPeak.Mz - peak.FWHM, nextPeak.Mz + peak.FWHM, debug);
                 peakMz = nextPeak.Mz;
@@ -723,7 +723,7 @@ namespace DeconTools.Backend.ProcessingTasks
                     Console.Error.WriteLine("\t\tFound peak to delete =" + nextPeak.Mz);
                 }
                 peakIndices.Add(nextPeak.PeakIndex);
-                SetPeakToZero(nextPeak.DataIndex, ref peakData.IntensityList, ref peakData.MzList, debug);
+                SetPeakToZero(nextPeak.DataIndex, ref peakData.IntensityList, debug);
                 peakData.RemovePeaks(nextPeak.Mz - peak.FWHM, nextPeak.Mz + peak.FWHM, debug);
                 peakMz = nextPeak.Mz;
             }
@@ -765,7 +765,7 @@ namespace DeconTools.Backend.ProcessingTasks
             }
         }
 
-        private void SetPeakToZero(int index, ref List<double> intensities, ref List<double> mzs, bool debug = false)
+        private void SetPeakToZero(int index, ref List<double> intensities, bool debug = false)
         {
             var lastIntensity = intensities[index];
             var count = -1;
@@ -811,7 +811,7 @@ namespace DeconTools.Backend.ProcessingTasks
 
         private void GenerateResults(
             IEnumerable<HornTransformResults> transformResults,
-            ThrashV1Peak[] peakList,
+            IReadOnlyList<ThrashV1Peak> peakList,
             ResultCollection resultList,
             bool processingWasAborted,
             int maxProcessingTimeMinutes)
@@ -865,7 +865,7 @@ namespace DeconTools.Backend.ProcessingTasks
 
                 result.IsotopicProfile = profile;
 
-                AddDeconResult(resultList, result, DeconResultComboMode.simplyAddIt);
+                AddDeconResult(resultList, result);
                 //resultList.ResultList.Add(result);
                 currentScanset.NumIsotopicProfiles++;
             }
@@ -941,7 +941,7 @@ namespace DeconTools.Backend.ProcessingTasks
             return summedIntensities;
         }
 
-        private void GetIsotopicProfile(List<int> peakIndexList, ThrashV1Peak[] peakdata, ref IsotopicProfile profile)
+        private void GetIsotopicProfile(IReadOnlyList<int> peakIndexList, IReadOnlyList<ThrashV1Peak> peakdata, ref IsotopicProfile profile)
         {
             if (peakIndexList == null || peakIndexList.Count == 0)
                 return;

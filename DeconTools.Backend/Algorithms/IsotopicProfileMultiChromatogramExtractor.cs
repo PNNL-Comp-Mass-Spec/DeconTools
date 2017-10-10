@@ -8,22 +8,20 @@ namespace DeconTools.Backend.Algorithms
 {
     public class IsotopicProfileMultiChromatogramExtractor
     {
-        int m_numPeaks;
-        double m_toleranceInPPM;
-        
+        readonly int m_numPeaks;
+        readonly double m_toleranceInPPM;
 
         #region Constructors
 
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="peakList">List of peaks from which chromatogram is constructed</param>
-        /// <param name="theorIso">Theoretical isotopic profile, whose peaks are used as the target m/z values for generating the chromatogram</param>
         /// <param name="numPeaks">The number of peaks from the theoretical isotopic profile.  i.e. three numPeaks means that three chromatograms are generated for the top three most intense peaks of the theor isotopic profile </param>
+        /// <param name="toleranceInPPM">Tolerance, in ppm</param>
         public IsotopicProfileMultiChromatogramExtractor(int numPeaks, double toleranceInPPM)
         {
-            this.m_numPeaks = numPeaks;
-            this.m_toleranceInPPM = toleranceInPPM;
+            m_numPeaks = numPeaks;
+            m_toleranceInPPM = toleranceInPPM;
         }
 
         #endregion
@@ -92,9 +90,6 @@ namespace DeconTools.Backend.Algorithms
         #region Private Methods
         private IList<Peak> getTopPeaks(IsotopicProfile theorIso1, int numPeaks)
         {
-
-            Peak peak = theorIso1.Peaklist[0];
-
             IList<Peak> sortedList = new List<Peak>();
             sortedList.Add(theorIso1.Peaklist[0]);
 

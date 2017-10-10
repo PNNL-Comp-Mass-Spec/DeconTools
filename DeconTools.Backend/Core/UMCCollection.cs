@@ -45,8 +45,8 @@ namespace DeconTools.Backend.Core
         {
             double netVal = -1;
             Check.Require(UMCList != null && UMCList.Count > 0, "Cannot retrieve NET value info. UMCs not loaded yet.");
-
-
+            if (UMCList == null)
+                return Double.NaN;
 
             var distinctItems = UMCList.GroupBy(p => p.ScanClassRep).Select(p => p.First());
             var tempUMCs = distinctItems.ToList();
@@ -59,10 +59,7 @@ namespace DeconTools.Backend.Core
                 return umcWithSameScanNum.NETClassRep;
             }
 
-            tempUMCs.Sort(delegate (UMC umc1, UMC umc2)
-            {
-                return umc1.ScanClassRep.CompareTo(umc2.ScanClassRep);
-            });
+            tempUMCs.Sort((umc1, umc2) => umc1.ScanClassRep.CompareTo(umc2.ScanClassRep));
 
             return netVal;
 

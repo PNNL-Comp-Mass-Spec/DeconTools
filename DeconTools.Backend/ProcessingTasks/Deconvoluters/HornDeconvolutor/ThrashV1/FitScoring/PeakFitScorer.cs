@@ -117,8 +117,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                 // observed intensities have to be normalized so that the maximum intensity is 100,
                 if (theoreticalIntensity >= minIntensityForScore && diff >= 0 && theoreticalIntensity < lastYVal)
                 {
-                    ThrashV1Peak foundPeak;
-                    var found = peakData.GetPeak(mz - 0.1, mz + 0.1, out foundPeak);
+                    var found = peakData.GetPeak(mz - 0.1, mz + 0.1, out var foundPeak);
                     if (found)
                     {
                         var observedIntensity = 100 * foundPeak.Intensity / intensityNormalizer;

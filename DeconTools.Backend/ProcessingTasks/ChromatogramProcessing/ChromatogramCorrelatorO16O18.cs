@@ -89,13 +89,10 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             ChromCorrelationDataItem dataItem;
             if (chromDataIsOK)
             {
-                double slope;
-                double intercept;
-                double rsquaredVal;
 
                 chromPeakXYData = FillInAnyMissingValuesInChromatogram(baseXYData, chromPeakXYData);
 
-                GetElutionCorrelationData(baseXYData, chromPeakXYData, out slope, out intercept, out rsquaredVal);
+                GetElutionCorrelationData(baseXYData, chromPeakXYData, out var slope, out var intercept, out var rsquaredVal);
 
                 dataItem = new ChromCorrelationDataItem(slope, intercept, rsquaredVal);
 

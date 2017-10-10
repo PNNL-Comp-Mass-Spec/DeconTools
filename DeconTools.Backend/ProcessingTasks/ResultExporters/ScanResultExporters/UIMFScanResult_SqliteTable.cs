@@ -8,18 +8,20 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
         #region Constructors
         public UIMFScanResult_SqliteTable(string tableName)
         {
-            this.Name = tableName;
-            this.FieldList = new List<Field>();
-            this.FieldList.Add(new Field("frame_num", "INTEGER Primary Key"));
-            this.FieldList.Add(new Field("frame_time", "FLOAT"));
-            this.FieldList.Add(new Field("type", "USHORT"));
-            this.FieldList.Add(new Field("bpi", "FLOAT"));
-            this.FieldList.Add(new Field("bpi_mz", "FLOAT"));
-            this.FieldList.Add(new Field("tic", "FLOAT"));
-            this.FieldList.Add(new Field("num_peaks", "UINT"));
-            this.FieldList.Add(new Field("num_deisotoped", "UINT"));
-            this.FieldList.Add(new Field("frame_pressure_unsmoothed", "FLOAT"));
-            this.FieldList.Add(new Field("frame_pressure_smoothed", "FLOAT"));
+            Name = tableName;
+            FieldList = new List<Field>
+            {
+                new Field("frame_num", "INTEGER Primary Key"),
+                new Field("frame_time", "FLOAT"),
+                new Field("type", "USHORT"),
+                new Field("bpi", "FLOAT"),
+                new Field("bpi_mz", "FLOAT"),
+                new Field("tic", "FLOAT"),
+                new Field("num_peaks", "UINT"),
+                new Field("num_deisotoped", "UINT"),
+                new Field("frame_pressure_unsmoothed", "FLOAT"),
+                new Field("frame_pressure_smoothed", "FLOAT")
+            };
 
         }
         #endregion

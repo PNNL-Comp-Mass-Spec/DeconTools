@@ -43,7 +43,7 @@ namespace DeconTools.Backend.Core
             foreach (var mtCurrent in TargetList)
             {
                 var current = mtCurrent;
-                if (massTagsNonRedundant.Where(p => p.ID == current.ID && p.ChargeState == current.ChargeState).Count() == 0)
+                if (!massTagsNonRedundant.Any(p => p.ID == current.ID && p.ChargeState == current.ChargeState))
                 {
                     massTagsNonRedundant.Add(mtCurrent);
                 }
@@ -119,16 +119,17 @@ namespace DeconTools.Backend.Core
         public static void UpdateTargetsWithMassTagInfo(IEnumerable<TargetBase>targets, List<TargetBase>sourceList)
         {
 
-            foreach (LcmsFeatureTarget lcmsFeatureTarget in targets)
+            foreach (var targetBase in targets)
             {
-                var mt = sourceList.Where(p => p.ID == lcmsFeatureTarget.FeatureToMassTagID).FirstOrDefault();
+                var lcmsFeatureTarget = (LcmsFeatureTarget)targetBase;
+                var mt = sourceList.FirstOrDefault(p => p.ID == lcmsFeatureTarget.FeatureToMassTagID);
 
                 if (mt!=null)
                 {
                     lcmsFeatureTarget.Code = mt.Code;
                     lcmsFeatureTarget.EmpiricalFormula = mt.EmpiricalFormula;
                 }
-             
+
             }
 
 

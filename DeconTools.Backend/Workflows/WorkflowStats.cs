@@ -9,7 +9,7 @@ namespace DeconTools.Backend.Workflows
         public DateTime TimeStarted;
         public DateTime TimeFinished;
 
-        public TimeSpan ElapsedTime { get { return TimeFinished - TimeStarted; } }
-        public int ElapsedSeconds { get { return (int)ElapsedTime.TotalSeconds; } }
+        public TimeSpan ElapsedTime => TimeFinished - TimeStarted;
+        public int ElapsedSeconds => (int)ElapsedTime.TotalSeconds;
     }
 }

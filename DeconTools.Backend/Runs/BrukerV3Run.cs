@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using BrukerDataReader;
@@ -13,7 +12,7 @@ namespace DeconTools.Backend.Runs
         readonly FileInfo m_serFileInfo;
         readonly FileInfo m_fidFileInfo;
 
-        readonly BrukerDataReader.DataReader m_rawDataReader;
+        readonly DataReader m_rawDataReader;
 
         internal class brukerNameValuePair
         {
@@ -35,7 +34,7 @@ namespace DeconTools.Backend.Runs
             : this()
         {
             validateSelectionIsFolder(folderName);
-            this.Filename = folderName;
+            Filename = folderName;
 
             m_serFileInfo = findSerFile();
             m_fidFileInfo = findFIDFile();
@@ -69,19 +68,19 @@ namespace DeconTools.Backend.Runs
                 {
                     throw new FileNotFoundException("Run initialization problem. Could not find the settings file ('apexAcquisition.method') within the directory structure.");
                 }
-                
-                this.SettingsFilePath = fiAcqusFile.FullName;
+
+                SettingsFilePath = fiAcqusFile.FullName;
             }
             else
             {
-                this.SettingsFilePath = fiSettingsFile.FullName;
+                SettingsFilePath = fiSettingsFile.FullName;
             }
 
             // Intantiate the BrukerDataReader
             // It will read the settings file and define the parameters
             // Parameters are: CalA, CalB, sampleRate, numValueInScan
 
-            m_rawDataReader = new DataReader(filePathForRawDataReader, this.SettingsFilePath);
+            m_rawDataReader = new DataReader(filePathForRawDataReader, SettingsFilePath);
 
             m_rawDataReader.Parameters.Display();
 
@@ -97,8 +96,8 @@ namespace DeconTools.Backend.Runs
         public BrukerV3Run(string fileName, int minScan, int maxScan)
             : this(fileName)
         {
-            this.MinLCScan = minScan;
-            this.MaxLCScan = maxScan;
+            MinLCScan = minScan;
+            MaxLCScan = maxScan;
         }
 
 
@@ -155,8 +154,6 @@ namespace DeconTools.Backend.Runs
 
         public override XYData GetMassSpectrum(ScanSet scanset, double minMZ, double maxMZ)
         {
-            float[] xvals;
-            float[] yvals;
 
             var scanValues = scanset.IndexValues.ToArray();
 
@@ -167,32 +164,30 @@ namespace DeconTools.Backend.Runs
                 maximumMzToUse = m_rawDataReader.Parameters.AcquiredMZMaximum;
             }
 
-            m_rawDataReader.GetMassSpectrum(scanValues, (float)minMZ, (float)maximumMzToUse, out xvals, out yvals);
+            m_rawDataReader.GetMassSpectrum(scanValues, (float)minMZ, (float)maximumMzToUse, out var xvals, out var yvals);
 
             var xydata = new XYData
             {
                 Yvalues = yvals.Select(p => (double)p).ToArray(),
                 Xvalues = xvals.Select(p => (double)p).ToArray()
             };
-            
+
             return xydata;
 
         }
 
         public override XYData GetMassSpectrum(ScanSet scanset)
         {
-            float[] xvals;
-            float[] yvals;
 
             var scanValues = scanset.IndexValues.ToArray();
 
-            m_rawDataReader.GetMassSpectrum(scanValues, out xvals, out yvals);
+            m_rawDataReader.GetMassSpectrum(scanValues, out var xvals, out var yvals);
             var xydata = new XYData
             {
                 Yvalues = yvals.Select(p => (double)p).ToArray(),
                 Xvalues = xvals.Select(p => (double)p).ToArray()
             };
-            ;
+
             return xydata;
 
         }
@@ -210,11 +205,8 @@ namespace DeconTools.Backend.Runs
             {
                 return dirInfo.Name.Substring(0, dirInfo.Name.Length - ".d".Length);
             }
-            else
-            {
-                return dirInfo.Name;
-            }
 
+            return dirInfo.Name;
         }
 
         private string getDatasetfolderName(string fullFolderPath)
@@ -235,7 +227,7 @@ namespace DeconTools.Backend.Runs
             }
             catch (Exception ex)
             {
-                throw new System.IO.IOException("Error when accessing datafile. Details: " + ex.Message);
+                throw new IOException("Error when accessing datafile. Details: " + ex.Message);
             }
 
             Check.Require(!isFile, "Could not initialize Dataset. Looking for a folder path, but user supplied a file path.");
@@ -244,13 +236,14 @@ namespace DeconTools.Backend.Runs
         }
         private FileInfo findFIDFile()
         {
-            var fidFiles = Directory.GetFiles(this.Filename, "fid", SearchOption.AllDirectories);
+            var fidFiles = Directory.GetFiles(Filename, "fid", SearchOption.AllDirectories);
 
             if (fidFiles == null || fidFiles.Length == 0)
             {
                 return null;
             }
-            else if (fidFiles.Length == 1)
+
+            if (fidFiles.Length == 1)
             {
                 var fidFileInfo = new FileInfo(fidFiles[0]);
                 return fidFileInfo;
@@ -260,7 +253,7 @@ namespace DeconTools.Backend.Runs
         }
         private FileInfo findSerFile()
         {
-            var serFiles = Directory.GetFiles(this.Filename, "ser", SearchOption.AllDirectories);
+            var serFiles = Directory.GetFiles(Filename, "ser", SearchOption.AllDirectories);
 
             if (serFiles == null || serFiles.Length == 0)
             {
@@ -290,7 +283,7 @@ namespace DeconTools.Backend.Runs
 
         private FileInfo findSettingsFile()
         {
-            var dotMethodFiles = Directory.GetFiles(this.Filename, "*.method", SearchOption.AllDirectories);
+            var dotMethodFiles = Directory.GetFiles(Filename, "*.method", SearchOption.AllDirectories);
 
             if (dotMethodFiles == null || dotMethodFiles.Length == 0)
             {
@@ -314,7 +307,7 @@ namespace DeconTools.Backend.Runs
 
         private FileInfo findAcqusFile()
         {
-            var acqusFiles = Directory.GetFiles(this.Filename, "acqus", SearchOption.AllDirectories);
+            var acqusFiles = Directory.GetFiles(Filename, "acqus", SearchOption.AllDirectories);
 
             if (acqusFiles == null || acqusFiles.Length == 0)
             {
@@ -327,7 +320,7 @@ namespace DeconTools.Backend.Runs
                 return acqusFileInfo;
             }
 
-            // Often the Bruker file structures contain multiple Acqus files. I will select 
+            // Often the Bruker file structures contain multiple Acqus files. I will select
             // the one that is in the same folder as the 'ser' file and if that isn't present,
             // the same folder as the 'fid' file. Otherwise, throw errors
 

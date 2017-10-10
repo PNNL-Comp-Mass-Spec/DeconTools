@@ -68,8 +68,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             //        return elementNum;
             //    }
             //}
-            int index;
-            if (_elementIndexDict.TryGetValue(symbol, out index))
+            if (_elementIndexDict.TryGetValue(symbol, out var index))
             {
                 return index;
             }

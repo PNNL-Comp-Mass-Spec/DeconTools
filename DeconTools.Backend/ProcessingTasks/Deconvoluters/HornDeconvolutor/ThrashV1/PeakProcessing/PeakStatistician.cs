@@ -140,10 +140,8 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                             for (j = 0; j < points && intensityTempList[0].Equals(intensityTempList[j]); j++) ;
                             if (j == points)
                                 return 0.0;
-
-                            double mse;
-                            double[] coe; // coe is coefficients found by curve regression.
-                            var iStat = CurvReg(intensityTempList, mzTempList, points, out coe, 1, out mse);
+                            // coe is coefficients found by curve regression.
+                            var iStat = CurvReg(intensityTempList, mzTempList, points, out var coe, 1, out var mse);
                             // only if successful calculation of peak was done, should we change upper.
                             if (iStat != -1)
                                 upper = coe[1] * peakHalf + coe[0];
@@ -192,10 +190,8 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                             for (j = 0; j < points && intensityTempList[0].Equals(intensityTempList[j]); j++) ;
                             if (j == points)
                                 return 0.0;
-
-                            double mse;
-                            double[] coe; // coe is coefficients found by curve regression.
-                            var iStat = CurvReg(intensityTempList, mzTempList, points, out coe, 1, out mse);
+                            // coe is coefficients found by curve regression.
+                            var iStat = CurvReg(intensityTempList, mzTempList, points, out var coe, 1, out var mse);
                             // only if successful calculation of peak was done, should we change lower.
                             if (iStat != -1)
                                 lower = coe[1] * peakHalf + coe[0];

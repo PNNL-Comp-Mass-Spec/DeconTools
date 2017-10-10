@@ -83,7 +83,7 @@ namespace DeconTools.Backend.ProcessingTasks
             }
         }
 
-        private List<DeconTools.Backend.Core.Peak> ConvertDeconEnginePeakList(List<ThrashV1Peak> peakList)
+        private List<Peak> ConvertDeconEnginePeakList(List<ThrashV1Peak> peakList)
         {
             var returnedList = new List<Peak>();
 
@@ -128,7 +128,7 @@ namespace DeconTools.Backend.ProcessingTasks
             peakProcessor.SetOptions(SignalToNoiseThreshold, BackgroundIntensity * PeakToBackgroundRatio, IsDataThresholded, GetDeconPeakFitType(PeakFitType));
 
             //Find peaks using DeconEngine
-            if (minX == 0 && maxX == 0)
+            if (Math.Abs(minX) < float.Epsilon && Math.Abs(maxX) < float.Epsilon)
             {
                 minX = xydata.Xvalues.First();
                 maxX = xydata.Xvalues.Last();

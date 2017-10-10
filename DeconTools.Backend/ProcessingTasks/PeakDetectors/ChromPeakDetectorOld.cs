@@ -13,22 +13,25 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
 
         List<ThrashV1Peak> _oldDeconEnginePeaklist;
 
-        private DeconToolsPeakDetectorV2 _peakDetectorV2;
+        private readonly DeconToolsPeakDetectorV2 _peakDetectorV2;
 
         #region Constructors
 
-        public ChromPeakDetectorOld():base() { }
+        public ChromPeakDetectorOld()
+        { }
 
         public ChromPeakDetectorOld(double peakBackgroundRatio, double sigNoise)
         {
-            this.PeakBackgroundRatio = peakBackgroundRatio;
-            this.SigNoise = sigNoise;
+            PeakBackgroundRatio = peakBackgroundRatio;
+            SigNoise = sigNoise;
 
-            _peakDetectorV2 = new DeconToolsPeakDetectorV2();
-            _peakDetectorV2.PeakToBackgroundRatio = peakBackgroundRatio;
-            _peakDetectorV2.SignalToNoiseThreshold = sigNoise;
-            _peakDetectorV2.PeakFitType = Globals.PeakFitType.QUADRATIC;
-            _peakDetectorV2.IsDataThresholded = false;
+            _peakDetectorV2 = new DeconToolsPeakDetectorV2
+            {
+                PeakToBackgroundRatio = peakBackgroundRatio,
+                SignalToNoiseThreshold = sigNoise,
+                PeakFitType = Globals.PeakFitType.QUADRATIC,
+                IsDataThresholded = false
+            };
         }
 
         #endregion
@@ -87,11 +90,13 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
                 _oldDeconEnginePeaklist = _oldPeakProcessor.PeakData.PeakTops;
                 foreach (var peak in _oldDeconEnginePeaklist)
                 {
-                    var chromPeak = new ChromPeak();
-                    chromPeak.XValue = peak.Mz;          // here,  mz is actually the scan / or NET
-                    chromPeak.Height = (float)peak.Intensity;
-                    chromPeak.SignalToNoise = (float)peak.SignalToNoise;
-                    chromPeak.Width = (float)peak.FWHM;
+                    var chromPeak = new ChromPeak
+                    {
+                        XValue = peak.Mz,      // here,  mz is actually the scan / or NET
+                        Height = (float)peak.Intensity,
+                        SignalToNoise = peak.SignalToNoise,
+                        Width = (float)peak.FWHM
+                    };
 
                     peakList.Add(chromPeak);
 
@@ -107,8 +112,9 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
         {
             base.Execute(resultList);
 
-            foreach (ChromPeak peak in resultList.Run.PeakList)
+            foreach (var item in resultList.Run.PeakList)
             {
+                var peak = (ChromPeak)item;
                 peak.NETValue = resultList.Run.NetAlignmentInfo.GetNETValueForScan((int)peak.XValue);
             }
         }

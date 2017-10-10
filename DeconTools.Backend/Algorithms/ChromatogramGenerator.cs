@@ -160,6 +160,8 @@ namespace DeconTools.Backend.Algorithms
         public XYData GenerateChromatogram(List<MSPeakResult> msPeakList, int minScan, int maxScan, List<double> targetMZList, double tolerance, int chromIDToAssign, Globals.ToleranceUnit toleranceUnit = Globals.ToleranceUnit.PPM)
         {
             Check.Require(msPeakList != null && msPeakList.Count > 0, "Cannot generate chromatogram. Source msPeakList is empty or hasn't been defined.");
+            if (msPeakList == null)
+                return null;
 
             var scanTolerance = 5;     // TODO:   keep an eye on this
 
@@ -326,10 +328,7 @@ namespace DeconTools.Backend.Algorithms
 
             if (counter > 1) // if the list contains multiple peak chromatograms, then need to sort.  Otherwise, don't need to sort.
             {
-                compiledChromPeakList.Sort(delegate(MSPeakResult peak1, MSPeakResult peak2)
-                {
-                    return peak2.Scan_num.CompareTo(peak1.Scan_num);
-                });
+                compiledChromPeakList.Sort((peak1, peak2) => peak2.Scan_num.CompareTo(peak1.Scan_num));
             }
 
             return compiledChromPeakList;

@@ -82,10 +82,8 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
                     mycommand.Parameters.Add(num_deisotopedParam);
 
 
-                    for (var n = 0; n < rc.ScanResultList.Count; n++)
+                    foreach (var item in rc.ScanResultList)
                     {
-                        var item = rc.ScanResultList[n];
-
                         scanNumParam.Value = item.ScanSet.PrimaryScanNumber;
                         scanTimeParam.Value = item.ScanTime;
                         typeParam.Value = item.SpectrumType;

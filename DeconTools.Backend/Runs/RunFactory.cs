@@ -174,14 +174,14 @@ namespace DeconTools.Backend.Runs
 
         private string getFullPath(string filename)
         {
-            var fullfileName = filename.Trim(new char[] { ' ', '"' });
+            var fullfileName = filename.Trim(' ', '"');
 
             var dirInfo = new DirectoryInfo(fullfileName);
             var fileInfo = new FileInfo(fullfileName);
 
             if (!dirInfo.Exists && !fileInfo.Exists)
             {
-                throw new System.ApplicationException("Cannot create Run. File/Folder not found: " + filename);
+                throw new ApplicationException("Cannot create Run. File/Folder not found: " + filename);
             }
 
             if (dirInfo.Exists)
@@ -236,7 +236,7 @@ namespace DeconTools.Backend.Runs
         {
             var dotMethodFiles = Directory.GetFiles(folderName, "*.method", SearchOption.AllDirectories);
 
-            if (dotMethodFiles == null || dotMethodFiles.Length == 0)
+            if (dotMethodFiles.Length == 0)
             {
                 return null;
             }
@@ -278,7 +278,7 @@ namespace DeconTools.Backend.Runs
         {
             var fidFiles = Directory.GetFiles(folderName, "fid", SearchOption.AllDirectories);
 
-            if (fidFiles == null || fidFiles.Length == 0)
+            if (fidFiles.Length == 0)
             {
                 return null;
             }
@@ -298,7 +298,7 @@ namespace DeconTools.Backend.Runs
 
             var acqusFileInfoList = new List<FileInfo>();
 
-            if (acqusFiles == null || acqusFiles.Length == 0)
+            if (acqusFiles.Length == 0)
             {
                 return null;
             }
@@ -316,7 +316,7 @@ namespace DeconTools.Backend.Runs
         {
             var dotMethodFiles = Directory.GetFiles(folderName, "*.method", SearchOption.AllDirectories);
 
-            if (dotMethodFiles == null || dotMethodFiles.Length == 0)
+            if (dotMethodFiles.Length == 0)
             {
                 return null;
             }

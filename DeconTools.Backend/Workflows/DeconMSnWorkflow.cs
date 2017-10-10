@@ -22,8 +22,6 @@ namespace DeconTools.Backend.Workflows
 {
     public class DeconMSnWorkflow : ScanBasedWorkflow
     {
-        private List<IsosResult> _currentMSFeatures = new List<IsosResult>();
-
         private DeconToolsPeakDetectorV2 _moreSensitiveMS1PeakDetector;
         private DeconToolsPeakDetectorV2 _superSensitiveMS1PeakDetector;
 
@@ -153,16 +151,17 @@ namespace DeconTools.Backend.Workflows
                 if (currentMSLevel == 1)
                 {
 
-                    _currentMSFeatures.Clear();
                     Run.ResultCollection.IsosResultBin.Clear();
 
                     Run.CurrentScanSet = scanSet;
 
                     MSGenerator.Execute(Run.ResultCollection);
 
-                    _currentMS1XYValues = new XYData();
-                    _currentMS1XYValues.Xvalues = Run.XYData.Xvalues;
-                    _currentMS1XYValues.Yvalues = Run.XYData.Yvalues;
+                    _currentMS1XYValues = new XYData
+                    {
+                        Xvalues = Run.XYData.Xvalues,
+                        Yvalues = Run.XYData.Yvalues
+                    };
 
                     _currentMS1TICIntensity = Run.GetTICFromInstrumentInfo(scanSet.PrimaryScanNumber);
 
@@ -184,8 +183,7 @@ namespace DeconTools.Backend.Workflows
                     var inaccurateParentMZ = precursorInfo.PrecursorMZ;
 
                     resultCounter++;
-                    var deconMSnResult = new DeconMSnResult();
-                    deconMSnResult.ParentScan = Run.GetParentScan(scanSet.PrimaryScanNumber);
+                    var deconMSnResult = new DeconMSnResult {ParentScan = Run.GetParentScan(scanSet.PrimaryScanNumber)};
                     deconMSnResult.IonInjectionTime = Run.GetIonInjectionTimeInMilliseconds(deconMSnResult.ParentScan);
                     deconMSnResult.ScanNum = scanSet.PrimaryScanNumber;
                     deconMSnResult.OriginalMZTarget = inaccurateParentMZ;
@@ -395,18 +393,15 @@ namespace DeconTools.Backend.Workflows
         {
             if (Run.ScanSetCollection == null || Run.ScanSetCollection.ScanSetList.Count == 0) return;
 
-            var userstate = new ScanBasedProgressInfo(Run, Run.CurrentScanSet, null);
+            var userstate = new ScanBasedProgressInfo(Run, Run.CurrentScanSet);
 
-            var percentDone = (float)(_scanCounter) / (float)(Run.ScanSetCollection.ScanSetList.Count) * 100;
+            var percentDone = _scanCounter / (float)(Run.ScanSetCollection.ScanSetList.Count) * 100;
             userstate.PercentDone = percentDone;
 
             var logText = "Scan= " + Run.GetCurrentScanOrFrame() + "; PercentComplete= " +
                              percentDone.ToString("0.0");
 
-            if (BackgroundWorker != null)
-            {
-                BackgroundWorker.ReportProgress((int)percentDone, userstate);
-            }
+            BackgroundWorker?.ReportProgress((int)percentDone, userstate);
 
             if (_scanCounter % NumScansBetweenProgress == 0)
             {

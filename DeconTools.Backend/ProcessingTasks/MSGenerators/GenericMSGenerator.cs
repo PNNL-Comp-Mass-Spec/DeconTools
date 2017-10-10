@@ -14,10 +14,10 @@ namespace DeconTools.Backend.ProcessingTasks.MSGenerators
 
         public GenericMSGenerator(double minMZ, double maxMZ, bool isTicRequested)
         {
-            this.MinMZ = minMZ;
-            this.MaxMZ = maxMZ;
+            MinMZ = minMZ;
+            MaxMZ = maxMZ;
 
-            this.IsTICRequested = isTicRequested;
+            IsTICRequested = isTicRequested;
         }
 
         public override XYData GenerateMS(Run run, ScanSet lcScanset, ScanSet imsscanset = null)
@@ -35,7 +35,7 @@ namespace DeconTools.Backend.ProcessingTasks.MSGenerators
             //TODO: this doesn't really belong here!
             if (IsTICRequested)
             {
-                lcScanset.TICValue = GetTIC(xydata, this.MinMZ, this.MaxMZ);
+                lcScanset.TICValue = GetTIC(xydata, MinMZ, MaxMZ);
             }
 
             return xydata;

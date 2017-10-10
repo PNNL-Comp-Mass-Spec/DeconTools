@@ -64,8 +64,14 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters
         public override void Deconvolute(ResultCollection resultList)
         {
             Check.Require(resultList.Run != null, "Cannot deconvolute. Run is null");
+            if (resultList.Run == null)
+                return;
+
             Check.Require(resultList.Run.XYData != null, "Cannot deconvolute. No mass spec XY data found.");
             Check.Require(resultList.Run.PeakList != null, "Cannot deconvolute. Mass spec peak list is empty.");
+
+            if (resultList.Run.PeakList == null)
+                return;
 
             _run = resultList.Run;
 
@@ -116,9 +122,8 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters
 
             var isotopicProfiles = new List<IsotopicProfile>();
             #region Paul Addition
-
-            var myIsotopicProfiles = new List<IsotopicProfile>();
-            var otherIsotopicProfiles = new List<IsotopicProfile>();
+            //var myIsotopicProfiles = new List<IsotopicProfile>();
+            //var otherIsotopicProfiles = new List<IsotopicProfile>();
             #endregion
 
             if (Parameters.AreAllTheoreticalProfilesCachedBeforeStarting)
@@ -183,8 +188,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters
                 if (UseAutocorrelationChargeDetermination && false)
                 {
                     var chargeState = PattersonChargeStateCalculator.GetChargeState(xyData, mspeakList, msPeak as MSPeak);
-                    potentialChargeStates = new HashSet<int>();
-                    potentialChargeStates.Add(chargeState);
+                    potentialChargeStates = new HashSet<int> {chargeState};
                 }
                 else
                 {   //Paul subtraction
@@ -616,8 +620,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters
 
             double relIntensityUseForFitting = 0;
 
-            int ionCountUsed;
-            var fitval = _areafitter.GetFit(theorXYData, xyData, relIntensityUseForFitting, out ionCountUsed);
+            var fitval = _areafitter.GetFit(theorXYData, xyData, relIntensityUseForFitting, out var ionCountUsed);
 
             if (fitval < bestFitVal)
             {

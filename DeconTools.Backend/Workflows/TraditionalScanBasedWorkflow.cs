@@ -100,17 +100,14 @@ namespace DeconTools.Backend.Workflows
         {
             if (Run.ScanSetCollection == null || Run.ScanSetCollection.ScanSetList.Count == 0) return;
 
-            var userstate = new ScanBasedProgressInfo(Run, Run.CurrentScanSet, null);
+            var userstate = new ScanBasedProgressInfo(Run, Run.CurrentScanSet);
 
-            var percentDone = (float)(_scanCounter) / (float)(Run.ScanSetCollection.ScanSetList.Count) * 100;
+            var percentDone = _scanCounter / (float)(Run.ScanSetCollection.ScanSetList.Count) * 100;
             userstate.PercentDone = percentDone;
 
             var logText = "Scan/Frame= " + Run.GetCurrentScanOrFrame() + "; PercentComplete= " + percentDone.ToString("0.0") + "; AccumlatedFeatures= " + Run.ResultCollection.getTotalIsotopicProfiles();
 
-            if (BackgroundWorker != null)
-            {
-                BackgroundWorker.ReportProgress((int)percentDone, userstate);
-            }
+            BackgroundWorker?.ReportProgress((int)percentDone, userstate);
 
             if (_scanCounter % NumScansBetweenProgress == 0 || mShowTraceMessages)
             {

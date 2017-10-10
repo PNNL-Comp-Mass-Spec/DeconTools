@@ -9,8 +9,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 {
     public class O16O18TargetedIterativeFeatureFinder : IterativeTFF
     {
-
-        IterativeTFF _iterativeTFFStandard;
+        readonly IterativeTFF _iterativeTFFStandard;
 
         public O16O18TargetedIterativeFeatureFinder(IterativeTFFParameters parameters) : base(parameters)
         {
@@ -23,32 +22,34 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
         public override void Execute(ResultCollection resultList)
         {
-            Check.Require(resultList != null && resultList.Run != null, string.Format("{0} failed. Run is empty.", Name));
+            Check.Require(resultList?.Run != null, string.Format("{0} failed. Run is empty.", Name));
+            if (resultList?.Run == null)
+                return;
+
             Check.Require(resultList.Run.CurrentMassTag != null, string.Format("{0} failed. CurrentMassTag hasn't been defined.", Name));
+
+            if (resultList.Run.CurrentMassTag == null)
+                return;
+
             var result = resultList.CurrentTargetedResult;
 
 
-            if (resultList.Run.XYData == null || resultList.Run.XYData.Xvalues == null || resultList.Run.XYData.Xvalues.Length < 4)
+            if (resultList.Run.XYData?.Xvalues == null || resultList.Run.XYData.Xvalues.Length < 4)
             {
                 result.IsotopicProfile = null;
                 return;
             }
 
-            //TODO: decide whether not to trim or not. Trimming XYData may help with speed. 
+            //TODO: decide whether not to trim or not. Trimming XYData may help with speed.
             double mzwindowForPeakDetection = 20;
             resultList.Run.XYData = resultList.Run.XYData.TrimData(resultList.Run.CurrentMassTag.MZ - mzwindowForPeakDetection / 2, resultList.Run.CurrentMassTag.MZ + mzwindowForPeakDetection / 2);
 
             resultList.IsosResultBin.Clear();
 
-            var peakList = new List<Peak>();
-
-            var peakListToUseLater = new List<Peak>();     //
-
-
             var o16TheorFeature = resultList.Run.CurrentMassTag.IsotopicProfile;
-            var o16profile = _iterativeTFFStandard.IterativelyFindMSFeature(resultList.Run.XYData, o16TheorFeature, out peakList);
+            var o16profile = _iterativeTFFStandard.IterativelyFindMSFeature(resultList.Run.XYData, o16TheorFeature, out var peakList);
 
-            peakListToUseLater = new List<Peak>(peakList);
+            var peakListToUseLater = new List<Peak>(peakList);
 
             var o18TheorProfileSingleLabel = convertO16ProfileToO18(o16TheorFeature, 2);
             var o18SingleLabelProfile = _iterativeTFFStandard.IterativelyFindMSFeature(resultList.Run.XYData, o18TheorProfileSingleLabel, out peakList);
@@ -82,7 +83,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
                     result.FailureType = Globals.TargetedResultFailureType.MsfeatureNotFound;
                     return;
                 }
-                
+
                 foundO16O18Profile = o18DoubleLabelProfile.CloneIsotopicProfile();
                 //lookForMissingPeaksAndInsertZeroIntensityPeaksWhenMissing(foundO16O18Profile, o16TheorFeature);
                 foundO16O18Profile.MonoIsotopicMass = o18DoubleLabelProfile.MonoIsotopicMass -
@@ -119,13 +120,11 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
             var monoMZ = theorFeature.getMonoPeak().XValue;
 
-            var indexOfLastPeak = o16o18Profile.Peaklist.Count - 1;
-
             var toleranceInDa = 0.1;
 
 
-            //this will iterate over the first five expected m/z values of a theoretical profile 
-            //and loosely try to the corresponding peak within the observed profile. 
+            //this will iterate over the first five expected m/z values of a theoretical profile
+            //and loosely try to the corresponding peak within the observed profile.
             //If missing, will add one at the expected m/z.  This ensures no missing peaks within the O16O18 profile
             //so that looking up the first peak will always give you the intensity of the O16 peak (even if
             //it never existed in the real data - in this case the intensity is 0);
@@ -134,9 +133,9 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
                 var currentMZ = monoMZ + mzDistanceBetweenIsotopes * i;
 
                 var peaksWithinTol = PeakUtilities.GetMSPeaksWithinTolerance(o16o18Profile.Peaklist, currentMZ, toleranceInDa);
-                if (peaksWithinTol.Count == 0)   // 
+                if (peaksWithinTol.Count == 0)   //
                 {
-                    o16o18Profile.Peaklist.Insert(i, new MSPeak(currentMZ, 0, 0, 0));
+                    o16o18Profile.Peaklist.Insert(i, new MSPeak(currentMZ));
                 }
             }
 
@@ -147,7 +146,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
         private void addIsotopePeaks(IsotopicProfile foundO16O18Profile, IsotopicProfile profileToAdd, int numIsotopePeaksToAdd)
         {
-            if (profileToAdd == null || profileToAdd.Peaklist == null || profileToAdd.Peaklist.Count == 0) return;
+            if (profileToAdd?.Peaklist == null || profileToAdd.Peaklist.Count == 0) return;
 
             for (var i = 0; i < numIsotopePeaksToAdd; i++)
             {
@@ -177,10 +176,12 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
         private IsotopicProfile convertO16ProfileToO18(IsotopicProfile theorFeature, int numPeaksToShift)
         {
-            var o18Iso = new IsotopicProfile();
-            o18Iso.ChargeState = theorFeature.ChargeState;
+            var o18Iso = new IsotopicProfile
+            {
+                ChargeState = theorFeature.ChargeState,
+                Peaklist = new List<MSPeak>()
+            };
 
-            o18Iso.Peaklist = new List<MSPeak>();
 
 
             var mzBetweenIsotopes = 1.003 / theorFeature.ChargeState;

@@ -27,7 +27,7 @@ namespace DeconTools.Backend.Algorithms.Quantifiers
             intensityI2 = getI2Intensity(iso);
             intensityI4 = GetI4Intensity(iso);
 
-            if (intensityI4 == 0) intensityI4 = double.Epsilon;
+            if (Math.Abs(intensityI4) < double.Epsilon) intensityI4 = double.Epsilon;
 
             return intensityI0 / intensityI4;
         }
@@ -58,9 +58,8 @@ namespace DeconTools.Backend.Algorithms.Quantifiers
             intensityTheorI4 = GetI4Intensity(theorIso);
 
 
-            double adjI4Intensity;
-            var ratio= CalculateRatio(intensityTheorI0, intensityTheorI2, intensityTheorI4, intensityI0, intensityI2, intensityI4,
-                                  out adjI4Intensity);
+            var ratio = CalculateRatio(intensityTheorI0, intensityTheorI2, intensityTheorI4, intensityI0, intensityI2, intensityI4,
+                                  out var adjI4Intensity);
 
             adjustedI4Intensity = adjI4Intensity;
 
@@ -118,9 +117,8 @@ namespace DeconTools.Backend.Algorithms.Quantifiers
 
                 var ratioDoubleO18ToO16 = o16O18TargetedResultObject.ChromCorrelationData.CorrelationDataItems[1].CorrelationSlope ?? 0d;
 
-                double adjRatioI0I4;
                 var tempIntensity = CalculateRatio(intensityTheorI0, intensityTheorI2, intensityTheorI4, 1.0, ratioSingleO18ToO16,
-                                                      ratioDoubleO18ToO16, out adjRatioI0I4);
+                                                      ratioDoubleO18ToO16, out var adjRatioI0I4);
 
                 ratio = 1/adjRatioI0I4;   //report the o16/o18 ratio
 
@@ -134,9 +132,7 @@ namespace DeconTools.Backend.Algorithms.Quantifiers
 
         public double CalculateRatio(double theorI0, double theorI2, double theorI4, double i0, double i2, double i4, out double adjustedI4)
         {
-            double ratio;
-            
-            if (intensityI4 == 0)
+            if (Math.Abs(intensityI4) < double.Epsilon)
             {
                 adjustedI4 = i4;
             }
@@ -159,7 +155,7 @@ namespace DeconTools.Backend.Algorithms.Quantifiers
             if (adjustedI4 <= 0) adjustedI4 = double.Epsilon;
 
 
-            ratio = intensityI0 / adjustedI4;
+            var ratio = intensityI0 / adjustedI4;
             return ratio;
         }
 
@@ -168,7 +164,7 @@ namespace DeconTools.Backend.Algorithms.Quantifiers
 
         private double GetI4Intensity(IsotopicProfile iso)
         {
-            if (iso == null || iso.Peaklist == null || iso.Peaklist.Count < 5)
+            if (iso?.Peaklist == null || iso.Peaklist.Count < 5)
             {
                 return 0;
             }
@@ -179,7 +175,7 @@ namespace DeconTools.Backend.Algorithms.Quantifiers
 
         private double getI2Intensity(IsotopicProfile iso)
         {
-            if (iso == null || iso.Peaklist == null || iso.Peaklist.Count < 3)
+            if (iso?.Peaklist == null || iso.Peaklist.Count < 3)
             {
                 return 0;
             }
@@ -191,13 +187,13 @@ namespace DeconTools.Backend.Algorithms.Quantifiers
 
         private double getI0Intensity(IsotopicProfile iso)
         {
-            if (iso == null || iso.Peaklist == null || iso.Peaklist.Count < 1)
+            if (iso?.Peaklist == null || iso.Peaklist.Count < 1)
             {
                 return 0;
             }
 
             double intensity = iso.Peaklist[0].Height;
-            if (intensity == 0) intensity = 0;
+            if (Math.Abs(intensity) < Double.Epsilon) intensity = 0;
 
             return intensity;
         }

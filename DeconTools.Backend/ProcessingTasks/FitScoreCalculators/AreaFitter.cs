@@ -16,8 +16,7 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
 
         public double GetFit(XYData theorXYData, XYData observedXYData, double minIntensityForScore, double offset = 0)
         {
-            int ionCountUsed;
-            return GetFit(theorXYData, observedXYData, minIntensityForScore, out ionCountUsed, offset);
+            return GetFit(theorXYData, observedXYData, minIntensityForScore, out var ionCountUsed, offset);
         }
 
         public double GetFit(XYData theorXYData, XYData observedXYData, double minIntensityForScore, out int ionCountUsed, double offset = 0)

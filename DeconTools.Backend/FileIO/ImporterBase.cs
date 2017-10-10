@@ -128,10 +128,10 @@ namespace DeconTools.Backend.FileIO
 
         protected bool ParseBoolField(string inputstring)
         {
-            var result = false;
-            if (bool.TryParse(inputstring, out result))
+            if (bool.TryParse(inputstring, out var result))
                 return result;
-            else return false;
+
+            return false;
         }
 
         protected bool ParseBoolField(List<string>rowData, string[]headers, bool defaultVal = false)
@@ -161,10 +161,10 @@ namespace DeconTools.Backend.FileIO
 
         protected short ParseShortField(string inputstring)
         {
-            short result = 0;
-            if (Int16.TryParse(inputstring, out result))
+            if (Int16.TryParse(inputstring, out var result))
                 return result;
-            else return 0;
+
+            return 0;
         }
 
 
@@ -178,8 +178,7 @@ namespace DeconTools.Backend.FileIO
             }
 
 
-            short result;
-            if (Int16.TryParse(rowValueString, out result))
+            if (Int16.TryParse(rowValueString, out var result))
             {
                 return result;
             }
@@ -193,13 +192,10 @@ namespace DeconTools.Backend.FileIO
 
         protected double ParseDoubleField(string inputstring)
         {
-            double result = 0;
-            if (double.TryParse(inputstring, out result))
+            if (double.TryParse(inputstring, out var result))
                 return result;
-            else
-            {
-                return double.NaN;
-            }
+
+            return double.NaN;
         }
 
         protected double ParseDoubleField(List<string>rowData, string[]headers, double defaultVal = double.NaN)
@@ -211,8 +207,7 @@ namespace DeconTools.Backend.FileIO
                 return defaultVal;
             }
 
-            double result;
-            if (double.TryParse(rowValueString, out result))
+            if (double.TryParse(rowValueString, out var result))
             {
                 return result;
             }
@@ -225,11 +220,10 @@ namespace DeconTools.Backend.FileIO
 
         protected float ParseFloatField(string inputstring)
         {
-            float result = 0;
-            if (float.TryParse(inputstring, out result))
+            if (float.TryParse(inputstring, out var result))
                 return result;
-            else return float.NaN;
 
+            return float.NaN;
         }
 
         protected float ParseFloatField(List<string> rowData, string[] headers, float defaultVal = float.NaN)
@@ -241,8 +235,7 @@ namespace DeconTools.Backend.FileIO
                 return defaultVal;
             }
 
-            float result;
-            if (float.TryParse(rowValueString, out result))
+            if (float.TryParse(rowValueString, out var result))
             {
                 return result;
             }
@@ -256,21 +249,16 @@ namespace DeconTools.Backend.FileIO
 
         protected int ParseIntField(string inputstring)
         {
-            var result = 0;
-            if (Int32.TryParse(inputstring, out result))
+            if (Int32.TryParse(inputstring, out var result))
                 return result;
-            else
+
+            var secondAttempt = ParseDoubleField(inputstring);
+            if (secondAttempt != double.NaN)
             {
-                var secondAttempt = ParseDoubleField(inputstring);
-                if (secondAttempt != double.NaN)
-                {
-                    return Convert.ToInt32(secondAttempt);
-                }
-                else
-                {
-                    return -1;
-                }
+                return Convert.ToInt32(secondAttempt);
             }
+
+            return -1;
         }
 
         protected int ParseIntField(List<string> rowData, string[] headers, int defaultVal = -1)
@@ -282,8 +270,7 @@ namespace DeconTools.Backend.FileIO
                 return defaultVal;
             }
 
-            int result;
-            if (Int32.TryParse(rowValueString, out result))
+            if (Int32.TryParse(rowValueString, out var result))
             {
                 return result;
             }
@@ -294,13 +281,10 @@ namespace DeconTools.Backend.FileIO
 
         protected long ParseLongField(string inputstring)
         {
-            long result = -1;
-            if (Int64.TryParse(inputstring, out result))
+            if (Int64.TryParse(inputstring, out var result))
                 return result;
-            else
-            {
-                return -1;
-            }
+
+            return -1;
         }
 
 
@@ -313,8 +297,7 @@ namespace DeconTools.Backend.FileIO
                 return defaultVal;
             }
 
-            long result;
-            if (Int64.TryParse(rowValueString, out result))
+            if (Int64.TryParse(rowValueString, out var result))
             {
                 return result;
             }
@@ -355,12 +338,7 @@ namespace DeconTools.Backend.FileIO
             {
                 return columnIndexTable[t];
             }
-            else
-            {
-                return -1;
-            }
-
-
+            return -1;
         }
 
         #endregion

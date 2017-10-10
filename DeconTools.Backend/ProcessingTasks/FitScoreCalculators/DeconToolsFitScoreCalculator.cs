@@ -1,33 +1,26 @@
 ﻿using System.Collections.Generic;
 using DeconTools.Backend.Core;
-using DeconTools.Backend.Utilities;
-using DeconTools.Backend.Utilities.IsotopeDistributionCalculation;
 using DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopicDistribution;
-
-
 
 namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
 {
     public class DeconToolsFitScoreCalculator : IFitScoreCalculator
     {
+        readonly TomIsotopicPattern _tomIsotopicPatternGenerator = new TomIsotopicPattern();
 
-        TomIsotopicPattern _tomIsotopicPatternGenerator = new TomIsotopicPattern();
-
-
-        PeakUtilities peakUtil = new PeakUtilities();
 
         public double MZVar { get; set; }
         public IsotopicProfile TheorIsotopicProfile { get; set; }
 
         public DeconToolsFitScoreCalculator()
         {
-           
+
         }
 
         public DeconToolsFitScoreCalculator(double mzVar)
             : this()
         {
-            this.MZVar = mzVar;
+            MZVar = mzVar;
         }
 
 
@@ -36,18 +29,20 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
 
             foreach (var result in isosResults)
             {
-                //create a temporary mass tag, as a data object for storing relevent info, and using the CalculateMassesForIsotopicProfile() method. 
-                var mt = new PeptideTarget();
+                //create a temporary mass tag, as a data object for storing relevent info, and using the CalculateMassesForIsotopicProfile() method.
+                var mt = new PeptideTarget
+                {
+                    ChargeState = (short)result.IsotopicProfile.ChargeState,
+                    MonoIsotopicMass = result.IsotopicProfile.MonoIsotopicMass
+                };
 
-                mt.ChargeState = (short)result.IsotopicProfile.ChargeState;
-                mt.MonoIsotopicMass = result.IsotopicProfile.MonoIsotopicMass;
                 mt.MZ = (mt.MonoIsotopicMass / mt.ChargeState) + Globals.PROTON_MASS;
 
                 //TODO: use Josh's isotopicDistribution calculator after confirming averagine formula
                 mt.EmpiricalFormula = _tomIsotopicPatternGenerator.GetClosestAvnFormula(result.IsotopicProfile.MonoIsotopicMass, false);
 
                 mt.IsotopicProfile = _tomIsotopicPatternGenerator.GetIsotopePattern(mt.EmpiricalFormula, _tomIsotopicPatternGenerator.aafIsos);
-                this.TheorIsotopicProfile = mt.IsotopicProfile;
+                TheorIsotopicProfile = mt.IsotopicProfile;
 
                 mt.CalculateMassesForIsotopicProfile(mt.ChargeState);
 
@@ -63,8 +58,7 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
                 //XYData theorXYData = distributionCreator.Data;
 
                 var areafitter = new AreaFitter();
-                int ionCountUsed;
-                var fitval = areafitter.GetFit(theorXYData, result.Run.XYData, 0.1, out ionCountUsed);
+                var fitval = areafitter.GetFit(theorXYData, result.Run.XYData, 0.1, out var _);
 
                 if (double.IsNaN(fitval) || fitval > 1) fitval = 1;
 
@@ -76,8 +70,8 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
 
         private void offsetDistribution(XYData theorXYData, IsotopicProfile theorIsotopicProfile, IsotopicProfile observedIsotopicProfile)
         {
-            double offset = 0;
-            if (theorIsotopicProfile == null || theorIsotopicProfile.Peaklist == null || theorIsotopicProfile.Peaklist.Count == 0) return;
+            double offset;
+            if (theorIsotopicProfile?.Peaklist == null || theorIsotopicProfile.Peaklist.Count == 0) return;
 
             var mostIntensePeak = theorIsotopicProfile.getMostIntensePeak();
             var indexOfMostIntensePeak = theorIsotopicProfile.Peaklist.IndexOf(mostIntensePeak);
@@ -106,18 +100,11 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
             foreach (var peak in theorIsotopicProfile.Peaklist)
             {
                 peak.XValue = peak.XValue + offset;
-                
+
             }
 
 
         }
-
-        public override void Cleanup()
-        {
-            base.Cleanup();
-
-        }
-
 
 
     }

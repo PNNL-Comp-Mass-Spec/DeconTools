@@ -56,7 +56,7 @@ namespace DeconTools.Backend.Core
 
         public void CalculateMassesForIsotopicProfile(int chargeState)
         {
-            if (IsotopicProfile == null || IsotopicProfile.Peaklist == null) return;
+            if (IsotopicProfile?.Peaklist == null) return;
 
             for (var i = 0; i < IsotopicProfile.Peaklist.Count; i++)
             {

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using DeconTools.Backend.Core;
 using DeconTools.Utilities.SqliteUtils;
 
@@ -37,15 +34,17 @@ namespace DeconTools.Backend.FileIO
 
         protected override List<Field> CreateFieldList()
         {
-            var fieldList = new List<Field>();
-            fieldList.Add(new Field("scan_num", "INTEGER Primary Key"));
-            fieldList.Add(new Field("scan_time", "FLOAT"));
-            fieldList.Add(new Field("type", "USHORT"));
-            fieldList.Add(new Field("bpi", "FLOAT"));
-            fieldList.Add(new Field("bpi_mz", "FLOAT"));
-            fieldList.Add(new Field("tic", "FLOAT"));
-            fieldList.Add(new Field("num_peaks", "UINT"));
-            fieldList.Add(new Field("num_deisotoped", "UINT"));
+            var fieldList = new List<Field>
+            {
+                new Field("scan_num", "INTEGER Primary Key"),
+                new Field("scan_time", "FLOAT"),
+                new Field("type", "USHORT"),
+                new Field("bpi", "FLOAT"),
+                new Field("bpi_mz", "FLOAT"),
+                new Field("tic", "FLOAT"),
+                new Field("num_peaks", "UINT"),
+                new Field("num_deisotoped", "UINT")
+            };
 
             return fieldList;
         }

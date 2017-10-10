@@ -7,8 +7,8 @@ namespace DeconTools.Backend.Runs
 {
     public class BrukerTOF : Run
     {
-        
-        private EDAL.IMSAnalysis _msAnalysis;
+
+        private readonly IMSAnalysis _msAnalysis;
         private readonly MSSpectrumCollection _spectrumCollection;
 
         public BrukerTOF()
@@ -35,8 +35,7 @@ namespace DeconTools.Backend.Runs
 
             try
             {
-                isDir = (File.GetAttributes(folderName) & FileAttributes.Directory)
-                 == FileAttributes.Directory;
+                isDir = (File.GetAttributes(folderName) & FileAttributes.Directory) == FileAttributes.Directory;
 
             }
             catch (Exception exception)
@@ -46,7 +45,7 @@ namespace DeconTools.Backend.Runs
 
             }
 
-            
+
             _msAnalysis = new MSAnalysis();
             _msAnalysis.Open(folderName);
 
@@ -93,10 +92,7 @@ namespace DeconTools.Backend.Runs
             var spectrum = _spectrumCollection[scanNum];
 
             return spectrum.MSMSStage;
-            
 
-            
-           
         }
 
         public override XYData GetMassSpectrum(ScanSet scanset, double minMZ, double maxMZ)
@@ -106,18 +102,18 @@ namespace DeconTools.Backend.Runs
 
         public override XYData GetMassSpectrum(ScanSet scanset)
         {
-            object mzVals;
-            object intensityVals;
 
             var spectrum = _spectrumCollection[scanset.PrimaryScanNumber];
 
 
-            spectrum.GetMassIntensityValues(SpectrumTypes.SpectrumType_Profile, out mzVals, out intensityVals);
-            var xydata = new XYData();
-            xydata.Xvalues = (double[]) mzVals;
-            xydata.Yvalues = (double[]) intensityVals;
-            return xydata;
+            spectrum.GetMassIntensityValues(SpectrumTypes.SpectrumType_Profile, out var mzVals, out var intensityVals);
+            var xydata = new XYData
+            {
+                Xvalues = (double[])mzVals,
+                Yvalues = (double[])intensityVals
+            };
 
+            return xydata;
 
         }
 

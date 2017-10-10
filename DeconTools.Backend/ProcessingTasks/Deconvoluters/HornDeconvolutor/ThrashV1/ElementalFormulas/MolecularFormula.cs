@@ -36,18 +36,15 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
 
         public string Formula { get; private set; }
 
-        public int NumElements
-        {
-            get { return ElementalComposition.Count; }
-        }
+        public int NumElements => ElementalComposition.Count;
 
         public override string ToString()
         {
             var data = " monomw =" + MonoisotopicMass + " averagemw=" + AverageMass + "\n";
-            for (var elementNum = 0; elementNum < ElementalComposition.Count; elementNum++)
+            foreach (var atomicCount in ElementalComposition)
             {
-                data += ElementalComposition[elementNum].Index + " Num Atoms = " +
-                        ElementalComposition[elementNum].NumCopies + "\n";
+                data += atomicCount.Index + " Num Atoms = " +
+                        atomicCount.NumCopies + "\n";
             }
             return data;
         }
@@ -69,7 +66,6 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         public void SetMolecularFormula(string molFormula, ElementIsotopes atomicInformation)
         {
             Formula = molFormula;
-            var formula = molFormula;
             TotalAtomCount = 0;
             MonoisotopicMass = 0;
 

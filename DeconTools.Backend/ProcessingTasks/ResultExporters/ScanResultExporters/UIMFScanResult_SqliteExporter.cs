@@ -54,7 +54,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
             command.ExecuteNonQuery();
         }
 
-        protected override void addScanResults(DeconTools.Backend.Core.ResultCollection rc)
+        protected override void addScanResults(ResultCollection rc)
         {
             var myconnection = (SQLiteConnection)cnn;
 

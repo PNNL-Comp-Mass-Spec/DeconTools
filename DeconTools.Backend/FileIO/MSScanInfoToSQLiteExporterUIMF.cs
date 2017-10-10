@@ -29,18 +29,20 @@ namespace DeconTools.Backend.FileIO
         #region Private Methods
         protected override List<Field> CreateFieldList()
         {
-            var fieldList = new List<Field>();
+            var fieldList = new List<Field>
+            {
+                new Field("frame_num", "INTEGER Primary Key"),
+                new Field("frame_time", "FLOAT"),
+                new Field("type", "USHORT"),
+                new Field("bpi", "FLOAT"),
+                new Field("bpi_mz", "FLOAT"),
+                new Field("tic", "FLOAT"),
+                new Field("num_peaks", "UINT"),
+                new Field("num_deisotoped", "UINT"),
+                new Field("frame_pressure_unsmoothed", "FLOAT"),
+                new Field("frame_pressure_smoothed", "FLOAT")
+            };
 
-            fieldList.Add(new Field("frame_num", "INTEGER Primary Key"));
-            fieldList.Add(new Field("frame_time", "FLOAT"));
-            fieldList.Add(new Field("type", "USHORT"));
-            fieldList.Add(new Field("bpi", "FLOAT"));
-            fieldList.Add(new Field("bpi_mz", "FLOAT"));
-            fieldList.Add(new Field("tic", "FLOAT"));
-            fieldList.Add(new Field("num_peaks", "UINT"));
-            fieldList.Add(new Field("num_deisotoped", "UINT"));
-            fieldList.Add(new Field("frame_pressure_unsmoothed", "FLOAT"));
-            fieldList.Add(new Field("frame_pressure_smoothed", "FLOAT"));
 
             return fieldList;
         }
@@ -59,8 +61,8 @@ namespace DeconTools.Backend.FileIO
             dbParameters[9].Value = ((UimfScanResult)result).FramePressureSmoothed;
         }
         #endregion
-   
 
-     
+
+
     }
 }

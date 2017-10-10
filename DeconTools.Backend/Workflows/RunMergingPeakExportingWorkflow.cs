@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using DeconTools.Backend.Core;
 using DeconTools.Backend.Parameters;
 using DeconTools.Backend.Runs;
 using DeconTools.Backend.Utilities;
@@ -12,7 +11,7 @@ namespace DeconTools.Backend.Workflows
 {
     public class RunMergingPeakExportingWorkflow : ScanBasedWorkflow
     {
-      
+
         private int _datasetCounter;
         private int _peaksProcessedInLastDataset;
         private int _totalPeaksProcessed;
@@ -25,7 +24,7 @@ namespace DeconTools.Backend.Workflows
 
 
         public RunMergingPeakExportingWorkflow(DeconToolsParameters parameters, IEnumerable<string> datasetFileNameList, string outputFolderPath = null, BackgroundWorker backgroundWorker = null)
-            : base(null, null, null, null)
+            : base(null, null)
         {
             NewDeconToolsParameters = parameters;
             NewDeconToolsParameters.ScanBasedWorkflowParameters.ExportPeakData = true;
@@ -47,12 +46,12 @@ namespace DeconTools.Backend.Workflows
         {
             Check.Assert(NewDeconToolsParameters != null, "Cannot initialize workflow. Parameters are null");
 
-         
+
             ExportData = true;
 
             InitializeParameters();
 
-      
+
             if (Run != null)
             {
                 CreateOutputFileNames();
@@ -79,8 +78,7 @@ namespace DeconTools.Backend.Workflows
             _peaksProcessedInLastDataset = 0;
             _totalPeaksProcessed = 0;
 
-            WorkflowStats = new WorkflowStats();
-            WorkflowStats.TimeStarted = DateTime.Now;
+            WorkflowStats = new WorkflowStats {TimeStarted = DateTime.Now};
 
             foreach (var datasetFileName in DatasetFileNameList)
             {
@@ -100,7 +98,7 @@ namespace DeconTools.Backend.Workflows
                 IterateOverScans();
 
                 _totalPeaksProcessed += _peaksProcessedInLastDataset;
-                
+
 
                 _datasetCounter++;
 
@@ -168,9 +166,9 @@ namespace DeconTools.Backend.Workflows
 
         protected override void ExecuteProcessingTasks()
         {
-           
 
-            
+
+
             ExecuteTask(MSGenerator);
             if (NewDeconToolsParameters.MiscMSProcessingParameters.UseZeroFilling)
             {
@@ -181,7 +179,7 @@ namespace DeconTools.Backend.Workflows
             {
                 ExecuteTask(Smoother);
             }
-          
+
 
             ExecuteTask(PeakDetector);
 
@@ -197,23 +195,20 @@ namespace DeconTools.Backend.Workflows
 
 
 
-      
+
 
         public override void ReportProgress()
         {
             if (Run.ScanSetCollection == null || Run.ScanSetCollection.ScanSetList.Count == 0) return;
 
-            var userstate = new ScanBasedProgressInfo(Run, Run.CurrentScanSet, null);
+            var userstate = new ScanBasedProgressInfo(Run, Run.CurrentScanSet);
 
             var percentDone = (_datasetCounter+1) / (float)(DatasetFileNameList.Count()) * 100;
             userstate.PercentDone = percentDone;
 
             var logText = "Dataset= \t" + Run.DatasetName + "; PercentComplete= \t" + percentDone.ToString("0.0") + "; Total peaks= \t" + _peaksProcessedInLastDataset;
 
-            if (BackgroundWorker != null)
-            {
-                BackgroundWorker.ReportProgress((int)percentDone, userstate);
-            }
+            BackgroundWorker?.ReportProgress((int)percentDone, userstate);
 
             if (_datasetCounter % NumScansBetweenProgress == 0)
             {

@@ -1,16 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Data.Common;
-using System.Data.SQLite;
+using System.Globalization;
 
 namespace DeconTools.Backend.Utilities
 {
     public class UIMFCalibrationConstantUpdater
     {
 
-  
+
         #region Public Methods
 
 
@@ -30,7 +27,7 @@ namespace DeconTools.Backend.Utilities
             }
             catch (Exception ex)
             {
-                Logger.Instance.AddEntry("SqlitePeakListExporter failed. Details: " + ex.Message, Logger.Instance.OutputFilename);
+                Logger.Instance.AddEntry("SqlitePeakListExporter failed. Details: " + ex.Message, true);
                 throw;
             }
 
@@ -53,7 +50,7 @@ namespace DeconTools.Backend.Utilities
             {
                 using (var cmd = cnn.CreateCommand())
                 {
-                    cmd.CommandText = "UPDATE Global_Parameters SET TOFCorrectionTime = " + tofCorrectionTime.ToString() + ";";
+                    cmd.CommandText = "UPDATE Global_Parameters SET TOFCorrectionTime = " + tofCorrectionTime.ToString(CultureInfo.InvariantCulture) + ";";
                     cmd.ExecuteNonQuery();
                 }
 
@@ -92,7 +89,7 @@ namespace DeconTools.Backend.Utilities
             }
             catch (Exception ex)
             {
-                Logger.Instance.AddEntry("SqlitePeakListExporter failed. Details: " + ex.Message, Logger.Instance.OutputFilename);
+                Logger.Instance.AddEntry("SqlitePeakListExporter failed. Details: " + ex.Message, true);
                 throw;
             }
 
@@ -113,22 +110,22 @@ namespace DeconTools.Backend.Utilities
             {
                 using (var cmd = cnn.CreateCommand())
                 {
-                    cmd.CommandText = "UPDATE Frame_Parameters SET a2 = " + a2.ToString() + ";";
+                    cmd.CommandText = "UPDATE Frame_Parameters SET a2 = " + a2.ToString(CultureInfo.InvariantCulture) + ";";
                     cmd.ExecuteNonQuery();
 
-                    cmd.CommandText = "UPDATE Frame_Parameters SET b2 = " + b2.ToString() + ";";
+                    cmd.CommandText = "UPDATE Frame_Parameters SET b2 = " + b2.ToString(CultureInfo.InvariantCulture) + ";";
                     cmd.ExecuteNonQuery();
 
-                    cmd.CommandText = "UPDATE Frame_Parameters SET c2 = " + c2.ToString() + ";";
+                    cmd.CommandText = "UPDATE Frame_Parameters SET c2 = " + c2.ToString(CultureInfo.InvariantCulture) + ";";
                     cmd.ExecuteNonQuery();
 
-                    cmd.CommandText = "UPDATE Frame_Parameters SET d2 = " + d2.ToString() + ";";
-                    cmd.ExecuteNonQuery();
-                    
-                    cmd.CommandText = "UPDATE Frame_Parameters SET e2 = " + e2.ToString() + ";";
+                    cmd.CommandText = "UPDATE Frame_Parameters SET d2 = " + d2.ToString(CultureInfo.InvariantCulture) + ";";
                     cmd.ExecuteNonQuery();
 
-                    cmd.CommandText = "UPDATE Frame_Parameters SET f2 = " + f2.ToString() + ";";
+                    cmd.CommandText = "UPDATE Frame_Parameters SET e2 = " + e2.ToString(CultureInfo.InvariantCulture) + ";";
+                    cmd.ExecuteNonQuery();
+
+                    cmd.CommandText = "UPDATE Frame_Parameters SET f2 = " + f2.ToString(CultureInfo.InvariantCulture) + ";";
                     cmd.ExecuteNonQuery();
 
                 }
@@ -139,23 +136,23 @@ namespace DeconTools.Backend.Utilities
 
         private static void modifySlopeAndIntercept(DbConnection cnn, double calSlope, double calIntercept)
         {
-           
+
             using (var mytransaction = cnn.BeginTransaction())
             {
                 using (var cmd = cnn.CreateCommand())
                 {
-                    cmd.CommandText = "UPDATE Frame_Parameters SET CalibrationSlope = " + calSlope.ToString() + ";";
+                    cmd.CommandText = "UPDATE Frame_Parameters SET CalibrationSlope = " + calSlope.ToString(CultureInfo.InvariantCulture) + ";";
                     cmd.ExecuteNonQuery();
 
-                    cmd.CommandText = "UPDATE Frame_Parameters SET CalibrationIntercept = " + calIntercept.ToString() + ";";
+                    cmd.CommandText = "UPDATE Frame_Parameters SET CalibrationIntercept = " + calIntercept.ToString(CultureInfo.InvariantCulture) + ";";
                     cmd.ExecuteNonQuery();
 
                 }
 
                 mytransaction.Commit();
             }
-            
-    
+
+
         }
 
         private static void add_a2b2c2d2e2f2ColumnsIfAbsent(DbConnection cnn)
@@ -170,7 +167,7 @@ namespace DeconTools.Backend.Utilities
                 {
                     addNewColumn(cnn, "Frame_Parameters", col, "double");
                 }
-               
+
             }
 
 

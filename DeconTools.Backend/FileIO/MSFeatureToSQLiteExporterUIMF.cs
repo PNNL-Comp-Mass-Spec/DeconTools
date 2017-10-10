@@ -32,7 +32,7 @@ namespace DeconTools.Backend.FileIO
 
         #region Private Methods
         #endregion
-     
+
 
         protected override void AddResults(System.Data.Common.DbParameterCollection dbParameters, IsosResult result)
         {
@@ -59,27 +59,29 @@ namespace DeconTools.Backend.FileIO
 
         protected override List<Field> CreateFieldList()
         {
-            var fieldList = new List<Field>();
+            var fieldList = new List<Field>
+            {
+                new Field("feature_id", "INTEGER Primary key"),
+                new Field("frame_num", "INTEGER"),
+                new Field("ims_scan_num", "INTEGER"),
+                new Field("charge", "BYTE"),
+                new Field("abundance", "INTEGER"),
+                new Field("mz", "DOUBLE"),
+                new Field("fit", "FLOAT"),
+                new Field("average_mw", "DOUBLE"),
+                new Field("monoisotopic_mw", "DOUBLE"),
+                new Field("mostabundant_mw", "DOUBLE"),
+                new Field("fwhm", "FLOAT"),
+                new Field("signal_noise", "DOUBLE"),
+                new Field("mono_abundance", "INTEGER"),
+                new Field("mono_plus2_abundance", "INTEGER"),
+                new Field("ims_drift_time", "FLOAT"),
+                new Field("orig_intensity", "FLOAT"),
+                new Field("TIA_orig_intensity", "FLOAT"),
+                new Field("flag", "INTEGER"),
+                new Field("interference_score", "float")
+            };
 
-            fieldList.Add(new Field("feature_id", "INTEGER Primary key"));
-            fieldList.Add(new Field("frame_num", "INTEGER"));
-            fieldList.Add(new Field("ims_scan_num", "INTEGER"));
-            fieldList.Add(new Field("charge", "BYTE"));
-            fieldList.Add(new Field("abundance", "INTEGER"));
-            fieldList.Add(new Field("mz", "DOUBLE"));
-            fieldList.Add(new Field("fit", "FLOAT"));
-            fieldList.Add(new Field("average_mw", "DOUBLE"));
-            fieldList.Add(new Field("monoisotopic_mw", "DOUBLE"));
-            fieldList.Add(new Field("mostabundant_mw", "DOUBLE"));
-            fieldList.Add(new Field("fwhm", "FLOAT"));
-            fieldList.Add(new Field("signal_noise", "DOUBLE"));
-            fieldList.Add(new Field("mono_abundance", "INTEGER"));
-            fieldList.Add(new Field("mono_plus2_abundance", "INTEGER"));
-            fieldList.Add(new Field("ims_drift_time", "FLOAT"));
-            fieldList.Add(new Field("orig_intensity", "FLOAT"));
-            fieldList.Add(new Field("TIA_orig_intensity", "FLOAT"));
-            fieldList.Add(new Field("flag", "INTEGER"));
-            fieldList.Add(new Field("interference_score", "float"));
 
             return fieldList;
         }

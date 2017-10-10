@@ -357,7 +357,7 @@ namespace DeconTools.Workflows.Backend.Core
             var lastPeakResult = sortedMSPeakResultList.Last();
 
             var chromPeaksCounter = 0;
-            
+
 
             foreach (var peakResult in sortedMSPeakResultList)
             {
@@ -569,7 +569,7 @@ namespace DeconTools.Workflows.Backend.Core
             }
 
 
-            //needs clean up....   sometimes there might be a case where the above loop is broken and we need the last few results written out. 
+            //needs clean up....   sometimes there might be a case where the above loop is broken and we need the last few results written out.
             isosExporter.ExportResults(run.ResultCollection.ResultList);
             run.ResultCollection.ResultList.Clear();
 
@@ -742,7 +742,7 @@ namespace DeconTools.Workflows.Backend.Core
             var toleranceInMZ = toleranceInPPM / 1e6 * peakResult.MSPeak.XValue;
             var foundPeakWithinMSFeature = false;
 
-            var msFeatureList = run.ResultCollection.IsosResultBin;    //this is the small list if features found within a small m/z range, based on the targeted peak. 
+            var msFeatureList = run.ResultCollection.IsosResultBin;    //this is the small list if features found within a small m/z range, based on the targeted peak.
 
 
             for (var i = 0; i < msFeatureList.Count; i++)
@@ -767,7 +767,7 @@ namespace DeconTools.Workflows.Backend.Core
                         m_msFeatureCounter++;
                     }
 
-                    chromPeakBasedMSFeatures.Add(msfeature);       //also add it to a temporary list.  This list is much smaller and can be searched more quickly. 
+                    chromPeakBasedMSFeatures.Add(msfeature);       //also add it to a temporary list.  This list is much smaller and can be searched more quickly.
 
 
                 }

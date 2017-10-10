@@ -137,7 +137,7 @@ namespace DeconTools.Backend.Algorithms
 
         }
 
-        private Matrix buildMatrix(List<double> intensityVals, int matrixLength, int degreesFreedom)
+        private Matrix buildMatrix(IReadOnlyCollection<double> intensityVals, int matrixLength, int degreesFreedom)
         {
             Check.Require(degreesFreedom > 0, "Degrees of freedom too low. Matrix width cannot be less than 1");
             var matrix = new Matrix(matrixLength, degreesFreedom);
@@ -160,7 +160,7 @@ namespace DeconTools.Backend.Algorithms
 
         }
 
-        private List<double> truncateList(List<double> intensityVals, bool useRelIntensity, double intensityThresh, int numPeaksForAbsoluteTrucation)
+        private List<double> truncateList(IReadOnlyList<double> intensityVals, bool useRelIntensity, double intensityThresh, int numPeaksForAbsoluteTrucation)
         {
             var truncatedVals = new List<double>();
 

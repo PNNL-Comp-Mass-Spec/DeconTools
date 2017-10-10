@@ -8,48 +8,46 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 {
     public abstract class TFFBase : Task
     {
-
-
-
-
-        public TFFBase(double toleranceInPPM = 20, bool needMonoIsotopicPeak = false)
+        protected TFFBase(double toleranceInPPM = 20, bool needMonoIsotopicPeak = false)
 
         {
             ToleranceInPPM = toleranceInPPM;
             NeedMonoIsotopicPeak = needMonoIsotopicPeak;
-
-
         }
 
 
         #region Properties
 
-        public virtual double ToleranceInPPM { get; set; }
+        public double ToleranceInPPM { get; set; }
 
         /// <summary>
         /// If true, then FeatureFinder must find the monoIsotopic peak or no feature is reported. (Useful for most peptides or small MassTags)
         /// </summary>
-        public virtual bool NeedMonoIsotopicPeak { get; set; }
+        public bool NeedMonoIsotopicPeak { get; set; }
 
         /// <summary>
-        /// Each MassTag has two possible isotopic profiles (unlabelled and labelled). 
-        /// This property specifies which of the two are to be targeted in the real data. 
-        /// This property is mainly used in workflows that follow a Task-based implementation. 
+        /// Each MassTag has two possible isotopic profiles (unlabelled and labelled).
+        /// This property specifies which of the two are to be targeted in the real data.
+        /// This property is mainly used in workflows that follow a Task-based implementation.
         /// </summary>
         public Globals.IsotopicProfileType IsotopicProfileType { get; set; }
-        
+
         public int NumPeaksUsedInAbundance { get; set; }
-        
+
         #endregion
 
         #region Public Methods
         public virtual IsotopicProfile FindMSFeature(List<Peak> peakList, IsotopicProfile theorFeature)
         {
             Check.Require(theorFeature != null, "Theoretical feature hasn't been defined.");
+            if (theorFeature == null)
+                return null;
+
             Check.Require(theorFeature.Peaklist != null && theorFeature.Peaklist.Count > 0, "Theoretical feature hasn't been defined.");
 
-            var outFeature = new IsotopicProfile();
-            outFeature.ChargeState = theorFeature.ChargeState;
+            var outFeature = new IsotopicProfile {
+                ChargeState = theorFeature.ChargeState
+            };
 
             var indexOfMaxTheorPeak = theorFeature.GetIndexOfMostIntensePeak();
 
@@ -109,7 +107,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
                     MSPeak bestPeak;
                     if (i == indexOfMaxTheorPeak)   //when matching to most intense peak, we will use the most intense peak
                     {
-                        bestPeak = (MSPeak)findMostIntensePeak(peaksWithinTol, theorFeature.Peaklist[i].XValue);
+                        bestPeak = (MSPeak)findMostIntensePeak(peaksWithinTol);
                     }
                     else
                     {
@@ -126,9 +124,6 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
                     }
                 }
-
-
-
 
 
                 if (i == indexOfMaxTheorPeak)   //when matching to most intense peak, we will get the mass defect using the most intense peak
@@ -198,7 +193,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
                 monopeakMZ = monoPeak.XValue;
                 monoIsotopicMass = (monoPeak.XValue - Globals.PROTON_MASS) * outFeature.ChargeState;
-               
+
 
             }
             else
@@ -243,19 +238,20 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
         public override void Execute(ResultCollection resultList)
         {
-            Check.Require(resultList != null && resultList.Run != null, string.Format("{0} failed. Run is empty.", Name));
+            Check.Require(resultList?.Run != null, string.Format("{0} failed. Run is empty.", Name));
+            if (resultList?.Run == null)
+                return;
+
             Check.Require(resultList.Run.CurrentMassTag != null, string.Format("{0} failed. CurrentMassTag hasn't been defined.", Name));
 
             var result = resultList.CurrentTargetedResult;
-
-            IsotopicProfile iso;
 
             resultList.IsosResultBin.Clear();
 
             RunIsAligned = resultList.Run.MassIsAligned;
 
             var targetedIso = CreateTargetIso(resultList.Run);
-            iso = FindMSFeature(resultList.Run.PeakList, targetedIso);
+            var iso = FindMSFeature(resultList.Run.PeakList, targetedIso);
 
 
 
@@ -272,15 +268,15 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
                     break;
             }
 
-            var isoIsGood = (iso != null && iso.Peaklist != null && iso.Peaklist.Count > 0);
+            var isoIsGood = (iso?.Peaklist != null && iso.Peaklist.Count > 0);
             if (isoIsGood)
             {
                 //GORD: check this later
-                result.IntensityAggregate = sumPeaks(iso, NumPeaksUsedInAbundance, 0);             
+                result.IntensityAggregate = sumPeaks(iso, NumPeaksUsedInAbundance, 0);
             }
             else
             {
-                result.FailedResult = true;     //note: for labelled isotopic profiles, this error will be assigned to the result if one of the two isotopic profiles is missing 
+                result.FailedResult = true;     //note: for labelled isotopic profiles, this error will be assigned to the result if one of the two isotopic profiles is missing
                 result.FailureType = Globals.TargetedResultFailureType.MsfeatureNotFound;
             }
 
@@ -291,9 +287,19 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
         protected virtual IsotopicProfile CreateTargetIso(Run run)
         {
             IsotopicProfile iso;
-            Check.Require(run.CurrentMassTag!=null,"Run's 'CurrentMassTag' has not been declared");
-           
+            Check.Require(run.CurrentMassTag != null,"Run's 'CurrentMassTag' has not been declared");
 
+            if (run.CurrentMassTag == null)
+                return null;
+
+            Check.Require(run.CurrentMassTag.IsotopicProfile != null, "Run's 'CurrentMassTag' has not been declared");
+            Check.Require(run.CurrentMassTag.IsotopicProfileLabelled != null, "Run's 'CurrentMassTag' has not been declared");
+
+            if (run.CurrentMassTag?.IsotopicProfile == null)
+                return null;
+
+            if (run.CurrentMassTag?.IsotopicProfileLabelled == null)
+                return null;
 
             switch (IsotopicProfileType)
             {
@@ -313,13 +319,10 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             //adjust the target m/z based on the alignment information
             if (run.MassIsAligned)
             {
-                for (var i = 0; i < iso.Peaklist.Count; i++)
+                foreach (var peak in iso.Peaklist)
                 {
-                    iso.Peaklist[i].XValue = run.GetTargetMZAligned(iso.Peaklist[i].XValue);
-
-                    
+                    peak.XValue = run.GetTargetMZAligned(peak.XValue);
                 }
-
             }
 
 
@@ -329,54 +332,54 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
         #endregion
 
         #region Private Methods
-        private void addInfoToResult(IsotopicProfile iso, PeptideTarget mt)
-        {
-            if (iso != null)
-            {
-                iso.ChargeState = mt.ChargeState;
-                iso.MonoIsotopicMass = (iso.GetMZ() - Globals.PROTON_MASS) * mt.ChargeState;
-                iso.IntensityMostAbundant = iso.getMostIntensePeak().Height;     // may need to change this to sum the top n peaks. 
-            }
-        }
-        private Peak findMostIntensePeak(List<Peak> peaksWithinTol, double targetMZ)
+
+        //private void addInfoToResult(IsotopicProfile iso, TargetBase mt)
+        //{
+        //    if (iso != null)
+        //    {
+        //        iso.ChargeState = mt.ChargeState;
+        //        iso.MonoIsotopicMass = (iso.GetMZ() - Globals.PROTON_MASS) * mt.ChargeState;
+        //        iso.IntensityMostAbundant = iso.getMostIntensePeak().Height;     // may need to change this to sum the top n peaks.
+        //    }
+        //}
+
+        private Peak findMostIntensePeak(IReadOnlyList<Peak> peaksWithinTol)
         {
             double maxIntensity = 0;
             Peak mostIntensePeak = null;
 
-            for (var i = 0; i < peaksWithinTol.Count; i++)
+            foreach (var peak in peaksWithinTol)
             {
-                var obsIntensity = peaksWithinTol[i].Height;
+                var obsIntensity = peak.Height;
                 if (obsIntensity > maxIntensity)
                 {
                     maxIntensity = obsIntensity;
-                    mostIntensePeak = peaksWithinTol[i];
+                    mostIntensePeak = peak;
                 }
             }
             return mostIntensePeak;
         }
 
 
-        private MSPeak findClosestToXValue(List<MSPeak> list, double p)
-        {
-            throw new NotImplementedException();
-        }
+        //private MSPeak findClosestToXValue(List<MSPeak> list, double p)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
-        private Peak findClosestToXValue(List<Peak> peaksWithinTol, double targetVal)
+        private Peak findClosestToXValue(IReadOnlyList<Peak> peaksWithinTol, double targetVal)
         {
             var diff = double.MaxValue;
             Peak closestPeak = null;
 
-            for (var i = 0; i < peaksWithinTol.Count; i++)
+            foreach (var peak in peaksWithinTol)
             {
-
-                var obsDiff = Math.Abs(peaksWithinTol[i].XValue - targetVal);
+                var obsDiff = Math.Abs(peak.XValue - targetVal);
 
                 if (obsDiff < diff)
                 {
                     diff = obsDiff;
-                    closestPeak = peaksWithinTol[i];
+                    closestPeak = peak;
                 }
-
             }
 
             return closestPeak;

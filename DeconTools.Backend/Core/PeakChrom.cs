@@ -62,30 +62,30 @@ namespace DeconTools.Backend.Core
             if (!msPeakDataIsEmpty)
             {
                 //iterate over the peaklist, assign chromID,  and extract intensity values
-                for (var i = 0; i < ChromSourceData.Count; i++)
+                foreach (var peak in ChromSourceData)
                 {
-                    var p = ChromSourceData[i];
-                    double intensity = p.MSPeak.Height;
+                    double intensity = peak.MSPeak.Height;
 
                     //because we have tolerances to filter the peaks, more than one m/z peak may occur for a given scan. So will take the most abundant...
 
-                    if (xyValues.ContainsKey(p.Scan_num))
+                    if (xyValues.ContainsKey(peak.Scan_num))
                     {
 
-                        if (intensity > xyValues[p.Scan_num])
+                        if (intensity > xyValues[peak.Scan_num])
                         {
-                            xyValues[p.Scan_num] = intensity;
+                            xyValues[peak.Scan_num] = intensity;
                         }
                     }
-
                 }
             }
 
 
-            var outputXYData = new XYData();
+            var outputXYData = new XYData
+            {
+                Xvalues = XYData.ConvertIntsToDouble(xyValues.Keys.ToArray()),
+                Yvalues = xyValues.Values.ToArray()
+            };
 
-            outputXYData.Xvalues = XYData.ConvertIntsToDouble(xyValues.Keys.ToArray());
-            outputXYData.Yvalues = xyValues.Values.ToArray();
 
             return outputXYData;
 
@@ -157,17 +157,16 @@ namespace DeconTools.Backend.Core
 
             if (PeakDataIsNullOrEmpty) return null;
 
-      
-            var peakQuery = (from n in PeakList where Math.Abs(n.XValue - peakResult.Scan_num) <= scanTolerance select n);
+            var peakQuery = (from n in PeakList where Math.Abs(n.XValue - peakResult.Scan_num) <= scanTolerance select n).ToList();
 
-            var peaksWithinTol = peakQuery.Count();
+            var peaksWithinTol = peakQuery.Count;
             if (peaksWithinTol == 0)
             {
                 return null;
             }
 
-            peakQuery = peakQuery.OrderByDescending(p => p.Height);
-            return peakQuery.First();
+            var sortedPeaks = peakQuery.OrderByDescending(p => p.Height);
+            return sortedPeaks.First();
 
 
 

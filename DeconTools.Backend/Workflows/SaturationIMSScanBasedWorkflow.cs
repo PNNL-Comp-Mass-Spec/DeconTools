@@ -476,9 +476,6 @@ namespace DeconTools.Backend.Workflows
 
         private void UpdateReportedSummedPeakIntensities(IsosResult profile, ScanSet lcScanSet, ScanSet imsScanSet)
         {
-
-            var uimfIsosResult = (UIMFIsosResult)profile;
-
             var minFrame = lcScanSet.getLowestScanNumber();
             var maxFrame = lcScanSet.getHighestScanNumber();
 
@@ -541,9 +538,7 @@ namespace DeconTools.Backend.Workflows
 
 
 
-            profile.IsotopicProfile.OriginalIntensity = unsummedAdjustedMSFeature == null
-                                                            ? 0
-                                                            : unsummedAdjustedMSFeature.IntensityAggregate;
+            profile.IsotopicProfile.OriginalIntensity = unsummedAdjustedMSFeature?.IntensityAggregate ?? 0;
 
 
 
@@ -746,7 +741,7 @@ namespace DeconTools.Backend.Workflows
 
                     if (avgIntensityObsPointsToLeft > monoPeak.Height * 0.75 && Math.Abs(obsMZ - targetMZ) <= toleranceMZ)
                     {
-                        peakToTheLeft = new MSPeak(obsMZ, (float)avgIntensityObsPointsToLeft, monoPeak.Width, 0);
+                        peakToTheLeft = new MSPeak(obsMZ, (float)avgIntensityObsPointsToLeft, monoPeak.Width);
                     }
 
                 }
@@ -793,7 +788,7 @@ namespace DeconTools.Backend.Workflows
 
             var iso = _basicFeatureFinder.FindMSFeature(peakList, theorIsotopicProfile);
 
-            if (iso == null || iso.Peaklist == null || iso.Peaklist.Count <= 1)
+            if (iso?.Peaklist == null || iso.Peaklist.Count <= 1)
             {
                 return;
             }
@@ -808,7 +803,7 @@ namespace DeconTools.Backend.Workflows
         private double calcToleranceInPPMFromIsotopicProfile(IsotopicProfile isotopicProfile)
         {
             double toleranceInPPM = 20;
-            if (isotopicProfile == null || isotopicProfile.Peaklist == null || isotopicProfile.Peaklist.Count == 0)
+            if (isotopicProfile?.Peaklist == null || isotopicProfile.Peaklist.Count == 0)
             {
                 return toleranceInPPM;
             }
@@ -873,13 +868,12 @@ namespace DeconTools.Backend.Workflows
                 }
             }
 
-            if (peakToTheLeft == null) return null;  // no peak found... so no problem.
-
             //peak to the left height must be greater than half the mono peak
-            if (peakToTheLeft.Height > monoPeak.Height * 0.5)    //if peak-to-the-left exceeds min Ratio, then consider it
+            if (peakToTheLeft?.Height > monoPeak.Height * 0.5)    //if peak-to-the-left exceeds min Ratio, then consider it
             {
                 return peakToTheLeft;
             }
+
             return null;
         }
 

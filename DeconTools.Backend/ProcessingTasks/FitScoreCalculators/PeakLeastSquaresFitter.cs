@@ -23,16 +23,15 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
         public double GetFit(List<Peak> theorPeakList, List<Peak> observedPeakList, double minIntensityForScore, double toleranceInPPM)
         {
             const int numPeaksToTheLeftForScoring = 0;
-            int ionCountUsed;
-            return GetFit(theorPeakList, observedPeakList, minIntensityForScore, toleranceInPPM, numPeaksToTheLeftForScoring, out ionCountUsed);
+            return GetFit(theorPeakList, observedPeakList, minIntensityForScore, toleranceInPPM, numPeaksToTheLeftForScoring, out var _);
         }
 
         public double GetFit(
-            List<Peak> theorPeakList, 
-            List<Peak> observedPeakList, 
-            double minIntensityForScore, 
-            double toleranceInPPM, 
-            int numPeaksToTheLeftForScoring, 
+            List<Peak> theorPeakList,
+            List<Peak> observedPeakList,
+            double minIntensityForScore,
+            double toleranceInPPM,
+            int numPeaksToTheLeftForScoring,
             out int ionCountUsed)
         {
             Utilities.IqLogger.IqLogger.SamPayneLog("Min Intensity For Scoring: " + minIntensityForScore);
@@ -41,15 +40,15 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
             ionCountUsed = 0;
             var theorIntensitiesUsedInCalc = new List<double>();
             var observedIntensitiesUsedInCalc = new List<double>();
-           
+
             //first gather all the intensities from theor and obs peaks
 
             var maxTheorIntensity = double.MinValue;
-            for (var i = 0; i < theorPeakList.Count; i++)
+            foreach (var peak in theorPeakList)
             {
-                if (theorPeakList[i].Height > maxTheorIntensity)
+                if (peak.Height > maxTheorIntensity)
                 {
-                    maxTheorIntensity = theorPeakList[i].Height;
+                    maxTheorIntensity = peak.Height;
                 }
             }
 
@@ -103,7 +102,7 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
             }
 
             var maxObs = observedIntensitiesUsedInCalc.Max();
-            if (Math.Abs(maxObs - 0) < float.Epsilon) maxObs = double.PositiveInfinity;
+            if (Math.Abs(maxObs) < float.Epsilon) maxObs = double.PositiveInfinity;
             Utilities.IqLogger.IqLogger.SamPayneLog("Max Observed Intensity: " + maxObs);
 
             var normalizedObs = observedIntensitiesUsedInCalc.Select(p => p / maxObs).ToList();
