@@ -78,8 +78,9 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
 
 
 
-            foreach (ChromPeak peak in chromPeakList)
+            foreach (var item in chromPeakList)
             {
+                var peak = (ChromPeak)item;
                 if (Math.Abs(peak.NETValue - targetNET) <= netTolerance)     //peak.NETValue was determined by the ChromPeakDetector or a future ChromAligner Task
                 {
                     peaksWithinTol.Add(peak);
@@ -96,27 +97,27 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
                 case DeconTools.Backend.Globals.PeakSelectorMode.ClosestToTarget:
                     var diff = double.MaxValue;
 
-                    for (var i = 0; i < peaksWithinTol.Count; i++)
+                    foreach (var peak in peaksWithinTol)
                     {
-                        var currentDiff = Math.Abs(peaksWithinTol[i].NETValue - targetNET);
+                        var currentDiff = Math.Abs(peak.NETValue - targetNET);
 
                         if (currentDiff < diff)
                         {
                             diff = currentDiff;
-                            bestPeak = peaksWithinTol[i];
+                            bestPeak = peak;
                         }
                     }
                     break;
                 case DeconTools.Backend.Globals.PeakSelectorMode.MostIntense:
                     double max = -1;
-                    for (var i = 0; i < peaksWithinTol.Count; i++)
+                    foreach (var peak in peaksWithinTol)
                     {
-                        double currentIntensity = peaksWithinTol[i].Height;
+                        double currentIntensity = peak.Height;
 
                         if (currentIntensity > max)
                         {
                             max = currentIntensity;
-                            bestPeak = peaksWithinTol[i];
+                            bestPeak = peak;
                         }
                     }
                     break;
@@ -124,14 +125,14 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
                     diff = double.MaxValue;
 
 
-                    for (var i = 0; i < peaksWithinTol.Count; i++)
+                    foreach (var peak in peaksWithinTol)
                     {
-                        var currentDiff = Math.Abs(peaksWithinTol[i].NETValue - ReferenceNETValueForReferenceMode);
+                        var currentDiff = Math.Abs(peak.NETValue - ReferenceNETValueForReferenceMode);
 
                         if (currentDiff < diff)
                         {
                             diff = currentDiff;
-                            bestPeak = peaksWithinTol[i];
+                            bestPeak = peak;
                         }
                     }
 
@@ -144,8 +145,9 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
 
                     peaksWithinTol.Clear();
 
-                    foreach (ChromPeak peak in chromPeakList)
+                    foreach (var item in chromPeakList)
                     {
+                        var peak = (ChromPeak)item;
 
                         var currentDiff = ReferenceNETValueForReferenceMode - peak.NETValue;
 
@@ -165,10 +167,6 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
 
 
                     break;
-                default:
-                    break;
-
-
             }
 
             return bestPeak;
