@@ -1,5 +1,9 @@
 DeconTools DeconConsole / AutoProcessor Revision History
 
+Version 1.1.6491; October 9, 2017 mem
+	- Fix bug determining the number of scans per frame
+	- Obtain log4net from NuGet
+
 Version 1.1.6395; July 5, 2017 bcg
 	- Update the ProteowizardWrapper and fix the usages of the DependencyLoader
 	- Fix the 64-bit installer directory
