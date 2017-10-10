@@ -88,9 +88,6 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
       <HintPath>..\Library\pwiz\Interop.EDAL.dll</HintPath>
     </Reference>
-    <Reference Include="log4net">
-      <HintPath>..\Library\log4net.dll</HintPath>
-    </Reference>
     <Reference Include="Mapack">
       <HintPath>..\Library\Mapack.dll</HintPath>
     </Reference>
@@ -529,6 +526,9 @@
     <Content Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\ThrashV1\ThrashV1_Readme.txt" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="log4net">
+      <Version>2.0.8</Version>
+    </PackageReference>
     <PackageReference Include="MathNet.Numerics">
       <Version>3.20.0</Version>
     </PackageReference>
