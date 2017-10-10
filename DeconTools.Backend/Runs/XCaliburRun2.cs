@@ -146,14 +146,14 @@ namespace DeconTools.Backend.Runs
             string filter = null;
             _msfileReader.GetFilterForScanNum(scanNum, ref filter);
 
-            var msLevel = 1;
+            int msLevel;
 
             if (filter == null)
             {
                 return 1;
             }
 
-            var indexOfMSReference = filter.IndexOf("ms");
+            var indexOfMSReference = filter.IndexOf("ms", StringComparison.OrdinalIgnoreCase);
             if (indexOfMSReference == -1)
             {
                 msLevel = 1;
