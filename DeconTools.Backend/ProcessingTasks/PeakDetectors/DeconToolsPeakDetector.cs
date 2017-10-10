@@ -140,7 +140,7 @@ namespace DeconTools.Backend.ProcessingTasks
             }
             catch (Exception ex)
             {
-                Logger.Instance.AddEntry("DeconToolsPeakDetector.FindPeaks exception: " + ex.Message, Logger.Instance.OutputFilename);
+                Logger.Instance.AddEntry("DeconToolsPeakDetector.FindPeaks exception: " + ex.Message, true);
                 throw;
             }
 

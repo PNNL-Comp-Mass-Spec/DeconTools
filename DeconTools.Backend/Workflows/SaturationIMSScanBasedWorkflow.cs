@@ -687,8 +687,7 @@ namespace DeconTools.Backend.Workflows
                 sb.Append(Environment.NewLine);
             }
 
-
-            Logger.Instance.AddEntry(sb.ToString(), Logger.Instance.OutputFilename);
+            Logger.Instance.AddEntry(sb.ToString(), true);
         }
 
 

@@ -117,15 +117,14 @@ namespace DeconTools.Backend.Workflows
 
         protected override void WriteOutSummaryToLogfile()
         {
-            Logger.Instance.AddEntry("Finished file processing", Logger.Instance.OutputFilename);
+            Logger.Instance.AddEntry("Finished file processing", true);
 
             var formattedOverallprocessingTime = string.Format("{0:00}:{1:00}:{2:00}",
                 WorkflowStats.ElapsedTime.Hours, WorkflowStats.ElapsedTime.Minutes, WorkflowStats.ElapsedTime.Seconds);
 
             Logger.Instance.AddEntry("total processing time = " + formattedOverallprocessingTime);
             Logger.Instance.AddEntry("total features = " + WorkflowStats.NumFeatures);
-            Logger.Instance.AddEntry("Peak data written to: " + PeakListOutputFileName);
-            Logger.Instance.WriteToFile(Logger.Instance.OutputFilename);
+            Logger.Instance.AddEntry("Peak data written to: " + PeakListOutputFileName, true);
             Logger.Instance.Close();
         }
 
@@ -218,7 +217,7 @@ namespace DeconTools.Backend.Workflows
 
             if (_datasetCounter % NumScansBetweenProgress == 0)
             {
-                Logger.Instance.AddEntry(logText, Logger.Instance.OutputFilename);
+                Logger.Instance.AddEntry(logText, true);
 
                 if (BackgroundWorker == null)
                 {

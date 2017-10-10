@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 
 namespace DeconTools.Backend.Utilities
 {
     public class Logger
     {
-        StreamWriter sw;
+        public List<LogEntry> LogEntryBuffer { get; set; }     //this contains unwritten logEntries  (i.e. once entries are written to disk, they are flushed)
 
-        public List<LogEntry> LogEntryBuffer { get; set; }     //this contains unwritten logEngties  (i.e. once entries are written to disk, they are flushed)
-
-        private List<LogEntry> logEntries;    //this contains all the logEntries made during this logging session
+        private readonly List<LogEntry> LogEntries;    //this contains all the logEntries made during this logging session
 
         private static Logger instance;
 
@@ -22,19 +21,23 @@ namespace DeconTools.Backend.Utilities
         private Logger()
         {
             LogEntryBuffer = new List<LogEntry>();
-            logEntries = new List<LogEntry>();
+            LogEntries = new List<LogEntry>();
         }
 
         public struct LogEntry
         {
             public DateTime LogTime;
             public string LogDescription;
+
+            public override string ToString()
+            {
+                return LogDescription;
+            }
         }
 
         public DateTime TimeOfLastUpdate { get; set; }
 
-
-        public void AddEntry(string desc)
+        public void AddEntry(string desc, bool writeCachedEntriesToDisk = false)
         {
             var entry = new LogEntry
             {
@@ -42,33 +45,37 @@ namespace DeconTools.Backend.Utilities
                 LogDescription = desc
             };
 
-            this.LogEntryBuffer.Add(entry);
-            this.logEntries.Add(entry);
+            LogEntryBuffer.Add(entry);
+            LogEntries.Add(entry);
             TimeOfLastUpdate = DateTime.Now;
 
+            if (!writeCachedEntriesToDisk)
+                return;
+
+            // Flush entries in LogEntryBuffer to disk
+            WriteToFile(Instance.OutputFilename);
+            LogEntryBuffer.Clear();
         }
 
+        [Obsolete("Use the version of AddEntry that takes a bool")]
         public void AddEntry(string desc, string outputFilename)
         {
-            this.AddEntry(desc);
+            AddEntry(desc);
+
+            // Flush entries in LogEntryBuffer to disk
             WriteToFile(outputFilename);
-            this.LogEntryBuffer.Clear();         // since they were already written out to file. will clear them
+            LogEntryBuffer.Clear();
         }
 
         public void Close()
         {
-            if (sw == null) return;
-            sw.Close();
             instance = null;
-            sw = null;
         }
-
-
 
         public TimeSpan GetTimeDifference(string string1, string string2)
         {
-            var logentry1 = logEntries.Find(delegate(LogEntry entry) { return entry.LogDescription == string1; });
-            var logentry2 = logEntries.Find(delegate(LogEntry entry) { return entry.LogDescription == string2; });
+            var logentry1 = LogEntries.Find(entry => entry.LogDescription == string1);
+            var logentry2 = LogEntries.Find(entry => entry.LogDescription == string2);
 
             if (logentry1.LogDescription == null || logentry2.LogDescription == null)
             {
@@ -86,35 +93,21 @@ namespace DeconTools.Backend.Utilities
         {
             foreach (var entry in LogEntryBuffer)
             {
-                Console.WriteLine(entry.LogTime.ToString() + "\t" + entry.LogDescription);
-
+                Console.WriteLine(entry.LogTime.ToString(CultureInfo.InvariantCulture) + "\t" + entry.LogDescription);
             }
         }
-
-
 
         public void WriteToFile(string outputfilename)
         {
-            using (var sw = new StreamWriter(new System.IO.FileStream(outputfilename, System.IO.FileMode.Append,
-                          System.IO.FileAccess.Write, System.IO.FileShare.Read)))
+            using (var sw = new StreamWriter(new FileStream(outputfilename, FileMode.Append, FileAccess.Write, FileShare.Read)))
             {
-                sw.AutoFlush = true;
-
                 foreach (var entry in LogEntryBuffer)
                 {
-                    sw.WriteLine(entry.LogTime.ToString() + "\t" + entry.LogDescription);
-
+                    sw.WriteLine(entry.LogTime.ToString(CultureInfo.InvariantCulture) + "\t" + entry.LogDescription);
                 }
-                
-                sw.Flush();
-
             }
 
-
         }
-
-
-
 
     }
 }

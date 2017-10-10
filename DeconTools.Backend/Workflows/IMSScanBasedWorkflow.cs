@@ -157,7 +157,7 @@ namespace DeconTools.Backend.Workflows
             var imsScanIsLastInFrame = uimfRun.IMSScanSetCollection.GetLastScanSet() == uimfRun.CurrentIMSScanSet.PrimaryScanNumber;
             if (imsScanIsLastInFrame)
             {
-                Logger.Instance.AddEntry(logText, Logger.Instance.OutputFilename);
+                Logger.Instance.AddEntry(logText, true);
                 Console.WriteLine(DateTime.Now + "\t" + logText);
             }
 

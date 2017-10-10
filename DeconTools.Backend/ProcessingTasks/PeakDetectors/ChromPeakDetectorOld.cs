@@ -80,8 +80,8 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
                 }
                 catch (Exception ex)
                 {
-                    Logger.Instance.AddEntry("ChromPeakDetector failed.", Logger.Instance.OutputFilename);
-                    throw ex;
+                    Logger.Instance.AddEntry("ChromPeakDetector failed: " + ex.Message, true);
+                    throw;
                 }
 
                 _oldDeconEnginePeaklist = _oldPeakProcessor.PeakData.PeakTops;

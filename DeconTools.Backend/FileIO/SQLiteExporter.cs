@@ -86,8 +86,8 @@ namespace DeconTools.Backend.FileIO
             }
             catch (Exception ex)
             {
-                //Logger.Instance.AddEntry("SqlitePeakListExporter failed. Details: " + ex.Message, Logger.Instance.OutputFilename);
-                throw ex;
+                Logger.Instance.AddEntry("SqlitePeakListExporter failed. Details: " + ex.Message, true);
+                throw;
             }
 
             buildTable();

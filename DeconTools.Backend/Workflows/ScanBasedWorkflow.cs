@@ -87,10 +87,10 @@ namespace DeconTools.Backend.Workflows
             {
                 Logger.Instance.OutputFilename = datasetFileName + "_BAD_ERROR_log.txt";
                 Logger.Instance.AddEntry("DeconTools.Backend.dll version = " + AssemblyInfoRetriever.GetVersion(typeof(ScanBasedWorkflow)));
-                Logger.Instance.AddEntry("UIMFLibrary version = " + AssemblyInfoRetriever.GetVersion(typeof(UIMFLibrary.DataReader)), Logger.Instance.OutputFilename);   //forces it to write out immediately and clear buffer
-                Logger.Instance.AddEntry("ERROR message= " + ex.Message, Logger.Instance.OutputFilename);
-                Logger.Instance.AddEntry("ERROR type= " + ex, Logger.Instance.OutputFilename);
-                Logger.Instance.AddEntry("STACKTRACE = " + PRISM.clsStackTraceFormatter.GetExceptionStackTraceMultiLine(ex), Logger.Instance.OutputFilename);
+                Logger.Instance.AddEntry("UIMFLibrary version = " + AssemblyInfoRetriever.GetVersion(typeof(UIMFLibrary.DataReader)), true);
+                Logger.Instance.AddEntry("ERROR message= " + ex.Message);
+                Logger.Instance.AddEntry("ERROR type= " + ex);
+                Logger.Instance.AddEntry("STACKTRACE = " + PRISM.clsStackTraceFormatter.GetExceptionStackTraceMultiLine(ex), true);
 
                 throw new ApplicationException(
                     "A fatal error occured when connecting to the instrument data file. Could not create the Run object. Internal error message: " +
@@ -360,8 +360,8 @@ namespace DeconTools.Backend.Workflows
 
         private void LogError(Exception ex, string simpleErrorMessage)
         {
-            Logger.Instance.AddEntry(simpleErrorMessage, Logger.Instance.OutputFilename);
-            Logger.Instance.AddEntry(PRISM.clsStackTraceFormatter.GetExceptionStackTraceMultiLine(ex), Logger.Instance.OutputFilename);
+            Logger.Instance.AddEntry(simpleErrorMessage);
+            Logger.Instance.AddEntry(PRISM.clsStackTraceFormatter.GetExceptionStackTraceMultiLine(ex), true);
         }
 
         private void LoadPeaks(string userProvidedOutputFolderPath = null)
@@ -419,14 +419,13 @@ namespace DeconTools.Backend.Workflows
 
         protected virtual void WriteOutSummaryToLogfile()
         {
-            Logger.Instance.AddEntry("Finished file processing", Logger.Instance.OutputFilename);
+            Logger.Instance.AddEntry("Finished file processing", true);
 
             var formattedOverallprocessingTime = string.Format("{0:00}:{1:00}:{2:00}",
                 WorkflowStats.ElapsedTime.Hours, WorkflowStats.ElapsedTime.Minutes, WorkflowStats.ElapsedTime.Seconds);
 
             Logger.Instance.AddEntry("total processing time = " + formattedOverallprocessingTime);
-            Logger.Instance.AddEntry("total features = " + WorkflowStats.NumFeatures);
-            Logger.Instance.WriteToFile(Logger.Instance.OutputFilename);
+            Logger.Instance.AddEntry("total features = " + WorkflowStats.NumFeatures, true);
             Logger.Instance.Close();
         }
 
@@ -518,7 +517,7 @@ namespace DeconTools.Backend.Workflows
             catch (Exception ex)
             {
                 var errorInfo = GetErrorInfo(Run, processingTask, ex);
-                Logger.Instance.AddEntry(errorInfo, Logger.Instance.OutputFilename);
+                Logger.Instance.AddEntry(errorInfo, true);
 
                 throw;
 
@@ -602,7 +601,7 @@ namespace DeconTools.Backend.Workflows
             Logger.Instance.AddEntry("DeconTools.Backend.dll version = " + AssemblyInfoRetriever.GetVersion(typeof(ScanBasedWorkflow)));
             Logger.Instance.AddEntry("ParameterFile = " + (NewDeconToolsParameters.ParameterFilename == null ? "[NONE]" :
                 Path.GetFileName(NewDeconToolsParameters.ParameterFilename)));
-            Logger.Instance.AddEntry("UIMFLibrary version = " + AssemblyInfoRetriever.GetVersion(typeof(UIMFLibrary.DataReader)), Logger.Instance.OutputFilename);   //forces it to write out immediately and clear buffer
+            Logger.Instance.AddEntry("UIMFLibrary version = " + AssemblyInfoRetriever.GetVersion(typeof(UIMFLibrary.DataReader)), true);
         }
 
         protected virtual void CreateOutputFileNames()
@@ -653,8 +652,8 @@ namespace DeconTools.Backend.Workflows
                 var errorMessage =
                     "Output folder does not exist. When we tried to create it there was an error: " + ex.Message;
 
-                Logger.Instance.AddEntry(errorMessage, Logger.Instance.OutputFilename);
-                Logger.Instance.AddEntry(errorMessage, PRISM.clsStackTraceFormatter.GetExceptionStackTraceMultiLine(ex));
+                Logger.Instance.AddEntry(errorMessage);
+                Logger.Instance.AddEntry(PRISM.clsStackTraceFormatter.GetExceptionStackTraceMultiLine(ex), true);
 
                 throw new DirectoryNotFoundException(
                     "Output folder does not exist. When we tried to create it there was an error: " + ex.Message,

@@ -114,7 +114,7 @@ namespace DeconTools.Backend.Workflows
 
             if (_scanCounter % NumScansBetweenProgress == 0 || mShowTraceMessages)
             {
-                Logger.Instance.AddEntry(logText, Logger.Instance.OutputFilename);
+                Logger.Instance.AddEntry(logText, true);
 
                 if (BackgroundWorker == null)
                 {

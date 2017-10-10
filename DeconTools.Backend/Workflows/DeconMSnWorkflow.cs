@@ -410,7 +410,7 @@ namespace DeconTools.Backend.Workflows
 
             if (_scanCounter % NumScansBetweenProgress == 0)
             {
-                Logger.Instance.AddEntry(logText, Logger.Instance.OutputFilename);
+                Logger.Instance.AddEntry(logText, true);
 
                 if (BackgroundWorker == null)
                 {
@@ -527,7 +527,7 @@ namespace DeconTools.Backend.Workflows
         {
             Logger.Instance.AddEntry("DeconTools.Backend.dll version = " + AssemblyInfoRetriever.GetVersion(typeof(ScanBasedWorkflow)));
             Logger.Instance.AddEntry("ParameterFile = " + (NewDeconToolsParameters.ParameterFilename == null ? "[NONE]" :
-                Path.GetFileName(NewDeconToolsParameters.ParameterFilename)), Logger.Instance.OutputFilename);
+                Path.GetFileName(NewDeconToolsParameters.ParameterFilename)), true);
         }
 
         private void WriteOutMainData(string outputString)
@@ -561,13 +561,12 @@ namespace DeconTools.Backend.Workflows
 
         protected override void WriteOutSummaryToLogfile()
         {
-            Logger.Instance.AddEntry("Finished file processing", Logger.Instance.OutputFilename);
+            Logger.Instance.AddEntry("Finished file processing", true);
 
             var formattedOverallprocessingTime = string.Format("{0:00}:{1:00}:{2:00}",
                 WorkflowStats.ElapsedTime.Hours, WorkflowStats.ElapsedTime.Minutes, WorkflowStats.ElapsedTime.Seconds);
 
-            Logger.Instance.AddEntry("total processing time = " + formattedOverallprocessingTime);
-            Logger.Instance.WriteToFile(Logger.Instance.OutputFilename);
+            Logger.Instance.AddEntry("total processing time = " + formattedOverallprocessingTime, true);
             Logger.Instance.Close();
         }
 

@@ -35,7 +35,7 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
             }
             catch (Exception ex)
             {
-                Logger.Instance.AddEntry("PeakExporter failed. Details: " + ex.Message, Logger.Instance.OutputFilename);
+                Logger.Instance.AddEntry("PeakExporter failed. Details: " + ex.Message, true);
                 throw new Exception("Peak exporter failed.  Check to see if output file is already open.");
             }
 
@@ -48,7 +48,7 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
                 }
                 catch (Exception ex)
                 {
-                    Logger.Instance.AddEntry("PeakExporter failed. Details: " + ex.Message, Logger.Instance.OutputFilename);
+                    Logger.Instance.AddEntry("PeakExporter failed. Details: " + ex.Message, true);
                     throw new Exception("Peak exporter failed.  Check to see if output file is already open.");
 
                 }
@@ -163,7 +163,7 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
             catch (Exception ex)
             {
                 Logger.Instance.AddEntry(string.Format("{0} failed. Details: " + ex.Message +
-                    "; STACKTRACE = " + PRISM.clsStackTraceFormatter.GetExceptionStackTraceMultiLine(ex), Name), Logger.Instance.OutputFilename);
+                    "; STACKTRACE = " + PRISM.clsStackTraceFormatter.GetExceptionStackTraceMultiLine(ex), Name), true);
                 throw;
             }
 

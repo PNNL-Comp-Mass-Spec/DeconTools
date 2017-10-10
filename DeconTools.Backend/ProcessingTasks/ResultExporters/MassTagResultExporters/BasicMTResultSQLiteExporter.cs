@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Data.Common;
 using System.IO;
 using DeconTools.Backend.Utilities;
@@ -13,7 +10,6 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.MassTagResultExport
 {
     public class BasicMTResultSQLiteExporter : IMassTagResultExporter
     {
-        private int triggerValue;
         protected DbConnection cnn;
 
         #region Constructors
@@ -45,7 +41,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.MassTagResultExport
             }
             catch (Exception ex)
             {
-                Logger.Instance.AddEntry("SqlitePeakListExporter failed. Details: " + ex.Message, Logger.Instance.OutputFilename);
+                Logger.Instance.AddEntry("SqlitePeakListExporter failed. Details: " + ex.Message, true);
                 throw;
             }
 
@@ -193,15 +189,12 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.MassTagResultExport
                         {
                             tempConn.Close();
                         }
-
-
-
                     }
 
                 }
                 catch (Exception)
                 {
-
+                    // Ignore exceptions
                 }
             }
 
