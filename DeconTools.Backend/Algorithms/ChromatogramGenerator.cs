@@ -281,7 +281,6 @@ namespace DeconTools.Backend.Algorithms
             {
                 if (xydata.Xvalues[i] >= lowerMZ)
                 {
-
                     if (xydata.Xvalues[i] > upperMZ)
                     {
                         break;

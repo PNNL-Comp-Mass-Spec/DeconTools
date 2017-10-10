@@ -91,9 +91,9 @@ namespace DeconTools.Backend.Core
 
 
         }
-        
-        
-        
+
+
+
         #endregion
 
         #region Private Methods
@@ -112,7 +112,7 @@ namespace DeconTools.Backend.Core
 
 
         /// <summary>
-        /// This updates LCMS targets with information from the source list. I.e. we use 
+        /// This updates LCMS targets with information from the source list. I.e. we use
         /// </summary>
         /// <param name="targets"></param>
         /// <param name="sourceList"></param>

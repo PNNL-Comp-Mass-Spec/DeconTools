@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using DeconTools.Backend.Core;
 
 namespace DeconTools.Backend.Algorithms.Quantifiers
@@ -65,7 +66,7 @@ namespace DeconTools.Backend.Algorithms.Quantifiers
 
 
             return ratio;
-            
+
             //if (intensityI4 == 0)
             //{
             //    adjustedI4Intensity = intensityI4;
@@ -81,9 +82,9 @@ namespace DeconTools.Backend.Algorithms.Quantifiers
             //    }
             //    else
             //    {
-            //        //TODO:  if there is an intensity at I4, there should be something at I2. 
+            //        //TODO:  if there is an intensity at I4, there should be something at I2.
             //    }
-  
+
             //}
 
             //if (adjustedI4Intensity <= 0) adjustedI4Intensity = double.Epsilon;
@@ -150,7 +151,7 @@ namespace DeconTools.Backend.Algorithms.Quantifiers
                 }
                 else
                 {
-                    //TODO:  if there is an intensity at I4, there should be something at I2. 
+                    //TODO:  if there is an intensity at I4, there should be something at I2.
                 }
 
             }
@@ -224,6 +225,6 @@ namespace DeconTools.Backend.Algorithms.Quantifiers
 
         public double adjustedI4Intensity { get; set; }
 
-       
+
     }
 }

@@ -8,7 +8,7 @@ namespace DeconTools.Backend.Algorithms
 {
 
     /// <summary>
-    /// Calculates the distribution of labeled atoms. i.e fraction of species that have 0 label, 1 label, 2 label, etc. 
+    /// Calculates the distribution of labeled atoms. i.e fraction of species that have 0 label, 1 label, 2 label, etc.
     /// Based on work by Chik et al, 2006.  http://pubs.acs.org/doi/abs/10.1021/ac050988l
     /// </summary>
     public class LabelingDistributionCalculator
@@ -55,9 +55,9 @@ namespace DeconTools.Backend.Algorithms
 
 
             double[] xvals;
-            
+
             double[] yvals;
-           
+
 
             if (degreesFreedom>1)
             {
@@ -78,7 +78,7 @@ namespace DeconTools.Backend.Algorithms
                     yvals[i] = solvedMatrix[i, 0];
                 }
 
-                
+
             }
             else
             {
@@ -86,7 +86,7 @@ namespace DeconTools.Backend.Algorithms
                 yvals = new double[1];
 
                 xvals[0] = 0;
-                yvals[0] = 1;      
+                yvals[0] = 1;
             }
 
 
@@ -101,7 +101,7 @@ namespace DeconTools.Backend.Algorithms
         {
 
             Check.Require(distributionData != null && distributionData.Count > 0, "distributionData is empty in call to OutputLabelingInfo");
-           
+
             var dotProducts = new List<double>();
 
 
@@ -133,7 +133,7 @@ namespace DeconTools.Backend.Algorithms
                 averageLabelsIncorporated = 0;
             }
 
-            
+
 
         }
 
@@ -182,7 +182,7 @@ namespace DeconTools.Backend.Algorithms
                     }
 
                     //once a value above theshold is found, we will keep adding values until a value is found that is below threshold.
-                    //This will truncate the right side of an isotopic profile. 
+                    //This will truncate the right side of an isotopic profile.
                     if (foundPeakAboveThreshold)
                     {
                         if (currentValIsAboveTheshold)
@@ -191,7 +191,7 @@ namespace DeconTools.Backend.Algorithms
                         }
                         else
                         {
-                            break;     //found a value below threshold, after finding a previous value that exceeded the threshold. Truncate here. 
+                            break;     //found a value below threshold, after finding a previous value that exceeded the threshold. Truncate here.
                         }
                     }
                     else

@@ -37,8 +37,6 @@ namespace DeconTools.Backend.Core
 
         #region Public Methods
 
-
-
         public virtual double GetNETValueForScan(int scanNum)
         {
             if (ScanToNETAlignmentData == null || ScanToNETAlignmentData.Count == 0)
@@ -51,12 +49,12 @@ namespace DeconTools.Backend.Core
                     throw new ArgumentException("Scan-to-NET table is empty. Tried to create it from Dataset but failed.");
                 }
             }
-            
+
             if (ScanToNETAlignmentData.ContainsKey(scanNum))
             {
                 return ScanToNETAlignmentData[scanNum];
             }
-            
+
             return GetInterpolatedNet(scanNum);
         }
 
@@ -173,7 +171,7 @@ namespace DeconTools.Backend.Core
             }
 
             SetScanToNETAlignmentData(scanNETList);
-           
+
 
         }
 
@@ -206,7 +204,7 @@ namespace DeconTools.Backend.Core
         }
 
 
-      
+
 
         private double GetInterpolatedNet(int scanNum)
         {

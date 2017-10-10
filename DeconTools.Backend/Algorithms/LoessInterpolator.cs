@@ -12,7 +12,7 @@ namespace DeconTools.Backend.Algorithms
          * a particular point, this fraction of source points closest
          * to the current point is taken into account for computing
          * a least-squares regression.
-         * 
+         *
          * A sensible value is usually 0.25 to 0.5.
          */
         private double bandwidth;
@@ -20,7 +20,7 @@ namespace DeconTools.Backend.Algorithms
         /**
          * The number of robustness iterations parameter: this many
          * robustness iterations are done.
-         * 
+         *
          * A sensible value is usually 0 (just the initial fit without any
          * robustness iterations) to 4.
          */
@@ -249,7 +249,7 @@ namespace DeconTools.Backend.Algorithms
         }
 
         /**
-         * Compute the 
+         * Compute the
          * <a href="http://en.wikipedia.org/wiki/Local_regression#Weight_function">tricube</a>
          * weight function
          *

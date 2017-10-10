@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using DeconTools.Backend.DTO;
 
 namespace DeconTools.Backend.Core
@@ -50,7 +49,7 @@ namespace DeconTools.Backend.Core
 
         public XYData GetXYDataFromChromPeakData(int minScan, int maxScan)
         {
-        
+
             //populate array with zero intensities.
             var xyValues = new SortedDictionary<int, double>();
             for (var i = minScan; i <= maxScan; i++)

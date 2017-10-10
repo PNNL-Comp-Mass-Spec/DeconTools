@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using DeconTools.Backend.Core;
-using DeconTools.Backend.Utilities;
-using DeconTools.Utilities;
 
 namespace DeconTools.Backend.Algorithms
 {

@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
 
 namespace DeconTools.Utilities
@@ -43,7 +41,7 @@ namespace DeconTools.Utilities
         /// <summary>
         /// Precondition check - should run regardless of preprocessor directives.
         /// </summary>
-        [Obsolete("Call the Require() overload that accepts a message")] 
+        [Obsolete("Call the Require() overload that accepts a message")]
         public static void Require(bool assertion)
         {
             if (UseExceptions)
@@ -89,7 +87,7 @@ namespace DeconTools.Utilities
         /// <summary>
         /// Postcondition check.
         /// </summary>
-        [Obsolete("Call the Ensure() overload that accepts a message")] 
+        [Obsolete("Call the Ensure() overload that accepts a message")]
         public static void Ensure(bool assertion)
         {
             if (UseExceptions)
@@ -135,7 +133,7 @@ namespace DeconTools.Utilities
         /// <summary>
         /// Invariant check.
         /// </summary>
-        [Obsolete("Call the Invariant() overload that accepts a message")] 
+        [Obsolete("Call the Invariant() overload that accepts a message")]
         public static void Invariant(bool assertion)
         {
             if (UseExceptions)
@@ -181,7 +179,7 @@ namespace DeconTools.Utilities
         /// <summary>
         /// Assertion check.
         /// </summary>
-        [Obsolete("Call the Assert() overload that accepts a message")] 
+        [Obsolete("Call the Assert() overload that accepts a message")]
         public static void Assert(bool assertion)
         {
             if (UseExceptions)
@@ -195,21 +193,11 @@ namespace DeconTools.Utilities
         }
 
         /// <summary>
-        /// Set this if you wish to use Trace Assert statements 
-        /// instead of exception handling. 
+        /// Set this if you wish to use Trace Assert statements
+        /// instead of exception handling.
         /// (The Check class uses exception handling by default.)
         /// </summary>
-        public static bool UseAssertions
-        {
-            get
-            {
-                return useAssertions;
-            }
-            set
-            {
-                useAssertions = value;
-            }
-        }
+        public static bool UseAssertions { get; set; } = false;
 
         #endregion // Interface
 
@@ -218,17 +206,10 @@ namespace DeconTools.Utilities
         /// <summary>
         /// Is exception handling being used?
         /// </summary>
-        private static bool UseExceptions
-        {
-            get
-            {
-                return !useAssertions;
-            }
-        }
+        private static bool UseExceptions => !UseAssertions;
 
-        // Are trace assertion statements being used? 
+        // Are trace assertion statements being used?
         // Default is to use exception handling.
-        private static bool useAssertions = false;
 
         #endregion // Implementation
 
@@ -238,9 +219,9 @@ namespace DeconTools.Utilities
 
     /// <summary>
     /// Exception raised when a contract is broken.
-    /// Catch this exception type if you wish to differentiate between 
+    /// Catch this exception type if you wish to differentiate between
     /// any DesignByContract exception and other runtime exceptions.
-    ///  
+    ///
     /// </summary>
     [Serializable]
     public class DesignByContractException : ApplicationException

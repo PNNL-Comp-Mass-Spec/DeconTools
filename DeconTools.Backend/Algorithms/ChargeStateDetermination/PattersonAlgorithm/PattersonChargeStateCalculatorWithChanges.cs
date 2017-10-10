@@ -2,17 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.Utilities;
-using Task = DeconTools.Backend.Core.Task;
 
 namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgorithm
 {
 
     /// <summary>
     /// This class is very similar to the PattersonChargeStateCalculator. Paul Kline (SULI intern) made some changes (Aug 2013) and wanted to
-    /// temporarily store them here until they are tested and incorporated in the official version. 
+    /// temporarily store them here until they are tested and incorporated in the official version.
     /// </summary>
     public class PattersonChargeStateCalculatorWithChanges
     {
@@ -27,7 +25,7 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
         #endregion
 
         #region Properties
-       
+
         #endregion
 
         #region Public Methods
@@ -43,8 +41,8 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
 
             var leftIndex = MathUtils.GetClosest(rawData.Xvalues, peak.XValue - fwhm - minus);
             var rightIndex = MathUtils.GetClosest(rawData.Xvalues, peak.XValue + fwhm + plus);
-         
-           
+
+
 
             var filteredXYData = getFilteredXYData(rawData, leftIndex, rightIndex);
             var minMZ = filteredXYData.Xvalues[0];
@@ -53,22 +51,22 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
             //paul edit
             var numPoints = rightIndex - leftIndex;
             var numL = numPoints;
-            if (numPoints<5)
+            if (numPoints < 5)
             {
                 return -1;
             }
-            if (numPoints<256)
+            if (numPoints < 256)
             {
                 numL = 10 * numPoints;
             }
             //double sumOfDiffsBetweenValues = 0;
             //double pointCounter = 0;
-            
+
             //for (int i = 0; i < filteredXYData.Xvalues.Length-1; i++)
             //{
             //    var y1 = filteredXYData.Yvalues[i];
             //    var y2 = filteredXYData.Yvalues[i + 1];
-                
+
             //    if ( y1>0 && y2>0)
             //    {
             //        var x1 = filteredXYData.Xvalues[i];
@@ -80,7 +78,7 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
             //}
 
 
-            
+
 
             //int numL;
             //if (pointCounter>5)
@@ -103,7 +101,7 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
             //    if (numPoints < 5)
             //        return -1;
 
-                
+
             //    if (numPoints < desiredNumPoints)
             //    {
             //        pointMultiplier = Math.Max(5, pointMultiplier);
@@ -115,13 +113,13 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
             //    }
 
 
-                
-           // }
 
-             //Console.WriteLine("Number of points in interpolated data= " + numL);
+            // }
+
+            //Console.WriteLine("Number of points in interpolated data= " + numL);
 
 
-            
+
 
             var interpolant = new alglib.spline1d.spline1dinterpolant();
 
@@ -133,13 +131,15 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
             sw.Stop();
             //Console.WriteLine("spline time = " + sw.ElapsedMilliseconds);
 
-            
 
-           // DisplayXYVals(filteredXYData);
 
-            var evenlySpacedXYData = new XYData();
-            evenlySpacedXYData.Xvalues = new double[numL];
-            evenlySpacedXYData.Yvalues = new double[numL];
+            // DisplayXYVals(filteredXYData);
+
+            var evenlySpacedXYData = new XYData
+            {
+                Xvalues = new double[numL],
+                Yvalues = new double[numL]
+            };
 
             for (var i = 0; i < numL; i++)
             {
@@ -151,7 +151,7 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
             }
 
 
-            
+
 
             //Console.WriteLine();
             //DisplayXYVals(evenlySpacedXYData);
@@ -163,7 +163,7 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
             tempXYdata.Xvalues = autoCorrScores;
             tempXYdata.Yvalues = autoCorrScores;
 
-           // DisplayXYVals(tempXYdata);
+            // DisplayXYVals(tempXYdata);
 
 
             var startingIndex = 0;
@@ -233,10 +233,10 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
                     {
                         var peakA = peak.XValue - (1.0 / (double)tempChargeState);
                         foundPeak = PeakUtilities.GetPeaksWithinTolerance(peakList, peakA, peak.Width).Count > 0;
-                        if (foundPeak && PeakUtilities.GetPeaksWithinTolerance(peakList, peakA, peak.Width).First().XValue*((double)tempChargeState)<3000)
+                        if (foundPeak && PeakUtilities.GetPeaksWithinTolerance(peakList, peakA, peak.Width).First().XValue * tempChargeState < 3000)
                         {
                             return tempChargeState;
-                        }    
+                        }
 
 
                     }
@@ -275,7 +275,7 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
             //then extract Autocorrelation scores (ACss)
 
             //determine highest charge state peak (?)
-            
+
         }
 
         #endregion
@@ -312,7 +312,7 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
                 int j;
                 for (j = 0; j < (numPoints - i - 1); j++)
                 {
-                    //CHANGE POSSIBLY IMPORTANT CHANGE. cpp version uses inData[j] instead of inData[i]. 
+                    //CHANGE POSSIBLY IMPORTANT CHANGE. cpp version uses inData[j] instead of inData[i].
                     //sum += (currentValue) * (inData[i + j] - average);
                     sum += (inData[j] - average) * (inData[i + j] - average);
                 }
@@ -321,21 +321,27 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
                 {
                     outData[i] = (sum / numPoints);
                 }
-                
+
 
 
             }
             //for (int i = 0; i < outData.Length; i++)
             //{
             //    Console.WriteLine(outData[i]);
-                
+
             //}
             return outData;
 
         }
 
-    
-        private void GenerateChargeStateData(double minMZ, double maxMZ, int startingIndex, double[] autoCorrScores, int _maxCharge, double bestAutoCorrScore, List<int> chargeStatesAndScores)
+
+        private void GenerateChargeStateData(
+            double minMZ, double maxMZ,
+            int startingIndex,
+            IReadOnlyList<double> autoCorrScores,
+            int maxCharge,
+            double bestAutoCorrScore,
+            ICollection<int> chargeStatesAndScores)
         {
             var goingUp = false;
             var wasGoingUp = false;
@@ -379,7 +385,13 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
 
 
 
-        private void GetHighestChargeStatePeak(double minMZ, double maxMZ, int startingIndex, double[] autoCorrelationScores, int maxChargeState, ref double bestAutoCorrectionScore, ref int bestChargeState)
+        private void GetHighestChargeStatePeak
+            (double minMZ, double maxMZ,
+            int startingIndex,
+            IReadOnlyList<double> autoCorrelationScores,
+            int maxChargeState,
+            ref double bestAutoCorrectionScore,
+            ref int bestChargeState)
         {
             var goingUp = false;
             var wasGoingUp = false;
@@ -432,11 +444,11 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
         {
             var numPoints = rightIndex - leftIndex + 1;
 
-            var outputXYData = new XYData();
-
-
-            outputXYData.Xvalues = new double[numPoints];
-            outputXYData.Yvalues = new double[numPoints];
+            var outputXYData = new XYData
+            {
+                Xvalues = new double[numPoints],
+                Yvalues = new double[numPoints]
+            };
 
             for (var i = 0; i < numPoints; i++)
             {

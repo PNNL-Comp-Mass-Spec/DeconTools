@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.DTO;
 using DeconTools.Backend.ProcessingTasks.Smoothers;
@@ -16,10 +14,8 @@ namespace DeconTools.Backend.Algorithms
 
         #region Constructors
 
-
-
         /// <summary>
-        /// 
+        /// Constructor
         /// </summary>
         /// <param name="peakList">List of peaks from which chromatogram is constructed</param>
         /// <param name="theorIso">Theoretical isotopic profile, whose peaks are used as the target m/z values for generating the chromatogram</param>
@@ -71,7 +67,7 @@ namespace DeconTools.Backend.Algorithms
                     xydata.Yvalues = filteredChromVals.Values.ToArray();
                 }
 
-                
+
                 chromatogramsForIsotopicProfiles.Add((MSPeak)peak, xydata);
             }
 

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using DeconTools.Backend.Utilities;
 using DeconTools.Backend.Core;
 
@@ -54,8 +53,6 @@ namespace DeconTools.Backend.Algorithms.Quantifiers
             double returnVal = -1;
             returnVal = GetRatioBasedOnAreaUnderPeaks(xvals, yvals, iso1, iso2, backgroundIntensity);
             return returnVal;
-
-
         }
 
 
@@ -119,7 +116,7 @@ namespace DeconTools.Backend.Algorithms.Quantifiers
                     break;
             }
 
-            
+
             ratioContribForIso1 = summedTopIso1PeakIntensities / summedAllIsos1PeakIntensities * 1 / fractionTheor1;   //we expect a value of '1'
             ratioContribForIso2 = summedTopIso2PeakIntensities / summedAllIsos2PeakIntensities * 1 / fractionTheor2;
 
@@ -210,11 +207,6 @@ namespace DeconTools.Backend.Algorithms.Quantifiers
                 {
                     topPeaks.Add(isoPeak);
                 }
-                else
-                {
-
-                }
-
             }
 
             return topPeaks;

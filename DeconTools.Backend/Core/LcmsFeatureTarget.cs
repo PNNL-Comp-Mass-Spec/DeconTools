@@ -12,7 +12,7 @@ namespace DeconTools.Backend.Core
 
         public LcmsFeatureTarget()
         {
-            
+
         }
 
         /// <summary>

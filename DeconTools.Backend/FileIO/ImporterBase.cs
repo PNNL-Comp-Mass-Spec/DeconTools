@@ -32,7 +32,7 @@ namespace DeconTools.Backend.FileIO
 
 
         /// <summary>
-        /// This method retrieves a single cell of data (row, column) in the form of a string.  
+        /// This method retrieves a single cell of data (row, column) in the form of a string.
         /// </summary>
         /// <param name="row">Single row of data </param>
         /// <param name="targetColumn">Column header name</param>
@@ -45,7 +45,7 @@ namespace DeconTools.Backend.FileIO
 
         protected string LookupData(List<string> row, string[] possibleColumnHeaders)
         {
-         
+
             foreach (var possibleHeader in possibleColumnHeaders)
             {
                 var columnIndex = GetColumnIndexForHeader(possibleHeader);
@@ -63,7 +63,7 @@ namespace DeconTools.Backend.FileIO
 
         protected string LookupData(List<string> row, string[] possibleColumnHeaders, string defaultValue)
         {
-          
+
             foreach (var possibleHeader in possibleColumnHeaders)
             {
                 var columnIndex = GetColumnIndexForHeader(possibleHeader);
@@ -82,15 +82,12 @@ namespace DeconTools.Backend.FileIO
 
 
             var columnIndex = GetColumnIndexForHeader(targetColumn);
-            if (columnIndex == -1) 
+            if (columnIndex == -1)
             {
               return DEFAULT_RETURN_STRING;
             }
-            else
-            {
-               return row[columnIndex];
-            }
-            
+
+            return row[columnIndex];
         }
 
 
@@ -145,13 +142,13 @@ namespace DeconTools.Backend.FileIO
             {
                 return defaultVal;
             }
-            
+
             if (rowValueString=="1" || rowValueString=="true")
             {
                 return true;
 
             }
-            
+
             if (rowValueString=="0"|| rowValueString=="false")
             {
                 return false;

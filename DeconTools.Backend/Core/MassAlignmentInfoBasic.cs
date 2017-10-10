@@ -4,7 +4,7 @@ namespace DeconTools.Backend.Core
 {
     public class MassAlignmentInfoBasic:MassAlignmentInfo
     {
-        
+
         public override double GetPpmShift(double mz, int scan=-1)
         {
             if (scan == -1) return AveragePpmShift;
@@ -14,6 +14,6 @@ namespace DeconTools.Backend.Core
 
         }
 
-      
+
     }
 }
