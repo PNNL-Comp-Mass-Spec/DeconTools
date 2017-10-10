@@ -40,7 +40,7 @@ namespace DeconTools.Backend.ProcessingTasks
                     throw new NotSupportedException("Support for Rapid is not included in this version of the DLL");
 #endif
                     default:
-                    throw new ArgumentOutOfRangeException("parameters",
+                    throw new ArgumentOutOfRangeException(nameof(parameters),
                                                           "Trying to create the deconvolutor, but an incorrect Deconvolutor type was given. Good example: 'ThrashV1'");
             }
 

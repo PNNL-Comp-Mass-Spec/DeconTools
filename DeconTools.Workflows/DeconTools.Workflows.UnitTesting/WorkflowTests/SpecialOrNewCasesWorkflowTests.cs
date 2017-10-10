@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using DeconTools.UnitTesting2;
 using DeconTools.Workflows.Backend.Core;
 using NUnit.Framework;
 
@@ -13,14 +12,17 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         [Test]
         public void GlycanProcessingTest1()
         {
-            var executorParameters = new BasicTargetedWorkflowExecutorParameters();
-            executorParameters.WorkflowParameterFile = @"D:\Data\From_Scott\BasicTargetedWorkflowParameters1.xml";
-            executorParameters.TargetsFilePath = @"D:\Data\From_Scott\Glycan_targets.txt";
+            var executorParameters =
+                new BasicTargetedWorkflowExecutorParameters
+                {
+                    WorkflowParameterFile = @"D:\Data\From_Scott\BasicTargetedWorkflowParameters1.xml",
+                    TargetsFilePath = @"D:\Data\From_Scott\Glycan_targets.txt"
+                };
             //executorParameters.TargetType = Globals.TargetType.LcmsFeature;
-            
+
 
             var testDatasetPath = @"D:\Data\From_Scott\Gly08_Velos4_Jaguar_200nL_Sp01_3X_7uL_1000A_31Aug12.raw";
-            
+
 
 
             TargetedWorkflowExecutor executor = new BasicTargetedWorkflowExecutor(executorParameters, testDatasetPath);
@@ -34,37 +36,28 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         [Test]
         public void HemePeptidesProcessingTest1()
         {
-            var executorParameters = new BasicTargetedWorkflowExecutorParameters();
-             executorParameters.TargetsFilePath =
-                @"\\protoapps\DataPkgs\Public\2013\686_IQ_analysis_of_heme_peptides\Targets\SL-MtoA_peptides_formulas.txt";
+            var executorParameters = new BasicTargetedWorkflowExecutorParameters
+            {
+                TargetsFilePath = @"\\protoapps\DataPkgs\Public\2013\686_IQ_analysis_of_heme_peptides\Targets\SL-MtoA_peptides_formulas.txt"
+            };
 
-            
+
             var testDatasetPath = @"D:\Data\From_EricMerkley\HisHemeSL-MtrA_002_2Feb11_Sphinx_10-12-01.RAW";
 
 
 
-            var workflowParameters = new BasicTargetedWorkflowParameters();
-            workflowParameters.ChromNETTolerance = 0.5;
-            workflowParameters.ChromSmootherNumPointsInSmooth = 9;
+            var workflowParameters = new BasicTargetedWorkflowParameters
+            {
+                ChromNETTolerance = 0.5,
+                ChromSmootherNumPointsInSmooth = 9
+            };
 
             var workflow = new BasicTargetedWorkflow(workflowParameters);
 
-            
-            
             TargetedWorkflowExecutor executor = new BasicTargetedWorkflowExecutor(executorParameters,workflow, testDatasetPath);
 
-
-            var testTargetID = 1950;
-            var testTargetZ = 3;
-
-            testTargetID = 240;
-            testTargetZ = 4;
-
-            testTargetID = 359;
-            testTargetZ = 3;
-
-            testTargetID = 750;
-            testTargetZ = 5;
+            var testTargetID = 750;
+            var testTargetZ = 5;
 
 
             executor.Targets.TargetList = executor.Targets.TargetList.Where(p => p.ID == testTargetID
@@ -80,12 +73,14 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             foreach (var value in chromParamValues)
             {
-                var parameters = executor.TargetedWorkflow.WorkflowParameters as BasicTargetedWorkflowParameters;
-                parameters.ChromPeakDetectorPeakBR = 5;
-                parameters.ChromPeakDetectorSigNoise = value;
+                if (executor.TargetedWorkflow.WorkflowParameters is BasicTargetedWorkflowParameters parameters)
+                {
+                    parameters.ChromPeakDetectorPeakBR = 5;
+                    parameters.ChromPeakDetectorSigNoise = value;
 
-                executor.TargetedWorkflow = new BasicTargetedWorkflow(executor.Run, parameters);
-               
+                    executor.TargetedWorkflow = new BasicTargetedWorkflow(executor.Run, parameters);
+                }
+
                 executor.TargetedWorkflow.Execute();
 
                 Console.WriteLine("PeakBR=" + value + " num chrom peaks= " +   executor.TargetedWorkflow.ChromPeaksDetected.Count);
@@ -96,7 +91,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             }
 
-            
+
 
 
 
@@ -123,9 +118,10 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             var parameterFileName = @"C:\Users\d3x720\Documents\Data\QCShew\IQ\IQExecutorParameterFile1.xml";
 
-            var executorParameters = new BasicTargetedWorkflowExecutorParameters();
-            executorParameters.TargetsFilePath =
-                @"C:\Users\d3x720\Documents\Data\QCShew\IQ\QCShew_Formic_MassTags_Bin10_first10.txt";
+            var executorParameters = new BasicTargetedWorkflowExecutorParameters
+            {
+                TargetsFilePath = @"C:\Users\d3x720\Documents\Data\QCShew\IQ\QCShew_Formic_MassTags_Bin10_first10.txt"
+            };
 
             executorParameters.SaveParametersToXML(parameterFileName);
 
@@ -148,7 +144,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
                 && p.ChargeState == testTargetZ).ToList();
 
             executor.Execute();
-            
+
 
             //TestUtilities.DisplayXYValues(executor.TargetedWorkflow.ChromatogramXYData);
 

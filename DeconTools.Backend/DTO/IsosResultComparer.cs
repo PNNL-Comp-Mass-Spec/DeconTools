@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using DeconTools.Backend.Core;
 using DeconTools.Utilities;
 
@@ -9,12 +8,6 @@ namespace DeconTools.Backend.DTO
 {
     public class IsosResultComparer : IEqualityComparer<IsosResult>
     {
-
-       
-        public IsosResultComparer()
-        {
-
-        }
 
         /// <summary>
         /// this is slow but sure!

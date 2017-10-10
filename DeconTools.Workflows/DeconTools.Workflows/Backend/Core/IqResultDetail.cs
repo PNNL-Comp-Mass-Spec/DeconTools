@@ -15,7 +15,9 @@ namespace DeconTools.Workflows.Backend.Core
         /// <summary>
         /// Not used by new workflows. Remove When Ready
         /// </summary>
+#pragma warning disable 612
         public List<ChromPeakQualityData> ChromPeakQualityData { get; set; }
+#pragma warning restore 612
 
         #endregion
 

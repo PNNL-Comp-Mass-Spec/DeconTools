@@ -5,7 +5,6 @@ using System.Reflection;
 using log4net;
 using log4net.Appender;
 using log4net.Core;
-using log4net.Repository;
 
 
 namespace DeconTools.Backend.Utilities.IqLogger
@@ -44,7 +43,7 @@ namespace DeconTools.Backend.Utilities.IqLogger
             }
 
 
-        
+
         }
 
         public static readonly ILog Log;

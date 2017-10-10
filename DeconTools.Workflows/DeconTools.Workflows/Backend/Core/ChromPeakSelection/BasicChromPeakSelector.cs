@@ -36,9 +36,6 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
 
         #endregion
 
-       
-        
-
         public override void Execute(ResultCollection resultList)
         {
             Check.Require(resultList.Run.CurrentMassTag != null, "ChromPeakSelector failed. Mass Tag must be defined but it isn't.");
@@ -61,10 +58,9 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
             }
 
 
-            var numPeaksWithinTolerance = 0;
             var bestPeak = (ChromPeak)selectBestPeak(Parameters.PeakSelectorMode,
                 resultList.Run.PeakList, normalizedElutionTime,
-                Parameters.NETTolerance, out numPeaksWithinTolerance);
+                Parameters.NETTolerance, out var numPeaksWithinTolerance);
 
             result.AddNumChromPeaksWithinTolerance(numPeaksWithinTolerance);
 
@@ -144,7 +140,7 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
                 case DeconTools.Backend.Globals.PeakSelectorMode.N15IntelligentMode:
                     diff = double.MaxValue;
 
-                    //want to only consider peaks that are less than the target NET.  (N15 peptides elutes at the same NET or earlier). 
+                    //want to only consider peaks that are less than the target NET.  (N15 peptides elutes at the same NET or earlier).
 
                     peaksWithinTol.Clear();
 

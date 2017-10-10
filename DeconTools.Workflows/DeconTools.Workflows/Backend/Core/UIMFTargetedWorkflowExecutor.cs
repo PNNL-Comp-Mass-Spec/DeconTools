@@ -14,7 +14,7 @@ namespace DeconTools.Workflows.Backend.Core
 
             MassTagsForTargetedAlignment = GetMassTagTargets(GetTargetFilePathForIqAlignment());
 
-            var targetsFilePathIsEmpty = (string.IsNullOrEmpty(ExecutorParameters.TargetsFilePath));
+            var targetsFilePathIsEmpty = string.IsNullOrEmpty(ExecutorParameters.TargetsFilePath);
 
             var currentTargetsFilePath = targetsFilePathIsEmpty ? TryFindTargetsForCurrentDataset() : ExecutorParameters.TargetsFilePath;
 
@@ -76,16 +76,12 @@ namespace DeconTools.Workflows.Backend.Core
 
         protected override void ExecutePreProcessingHook()
         {
-            var uimfTargetedMsmsWorkflowCollapseIMS = TargetedWorkflow as UIMFTargetedMSMSWorkflowCollapseIMS;
-            if (uimfTargetedMsmsWorkflowCollapseIMS != null)
-            {
-                if (uimfTargetedMsmsWorkflowCollapseIMS.Run != null && uimfTargetedMsmsWorkflowCollapseIMS.Run.ResultCollection != null)
-                {
-                    uimfTargetedMsmsWorkflowCollapseIMS.Run.ResultCollection.MassTagResultList.Clear();	
-                }
-                
-                uimfTargetedMsmsWorkflowCollapseIMS.ChromPeakToXYDataMap.Clear();
-            }
+            if (!(TargetedWorkflow is UIMFTargetedMSMSWorkflowCollapseIMS uimfTargetedMsmsWorkflowCollapseIMS))
+                return;
+
+            uimfTargetedMsmsWorkflowCollapseIMS.Run?.ResultCollection?.MassTagResultList.Clear();
+
+            uimfTargetedMsmsWorkflowCollapseIMS.ChromPeakToXYDataMap?.Clear();
         }
     }
 }

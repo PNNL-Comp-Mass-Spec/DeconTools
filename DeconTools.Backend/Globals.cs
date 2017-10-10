@@ -14,10 +14,6 @@ namespace DeconTools.Backend
         public const double Hydrogen_MASS = 1.00782503196;    // IUPAC, 2007
         public const double Deuterium_MASS = 2.01410177796;   // IUPAC, 2007
 
-
-
-
-          
         public enum MSFileType
         {
             Undefined,
@@ -73,11 +69,11 @@ namespace DeconTools.Backend
 
         public enum DeconvolutionType
         {
-            None, 
+            None,
             ThrashV1,
             ThrashV2,
             Rapid
-            
+
         }
 
 
@@ -146,7 +142,7 @@ namespace DeconTools.Backend
 
         public enum ProjectControllerType
         {
-            UNDEFINED, 
+            UNDEFINED,
             STANDARD,
             BONES_CONTROLLER,
             RUN_MERGER_CONTROLLER,

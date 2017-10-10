@@ -50,7 +50,7 @@ namespace DeconTools.Backend.Parameters
             SignalToNoiseThreshold = GetDoubleValue(xElement, "SignalToNoiseThreshold", SignalToNoiseThreshold);
             IsDataThresholded = GetBoolVal(xElement, "IsDataThresholded", IsDataThresholded);
             PeakFitType = (Globals.PeakFitType) GetEnum(xElement, "PeakFitType", PeakFitType.GetType(),PeakFitType);
-            
+
             //TODO: move this parameter
             PeaksAreStored = GetBoolVal(xElement, "WritePeaksToTextFile", PeaksAreStored);
         }

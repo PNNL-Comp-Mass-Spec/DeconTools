@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 using DeconTools.Backend;
 using System.IO;
@@ -31,10 +26,10 @@ namespace DeconToolsAutoProcessV1
         public MSFileTypeSelectorForm(string filename)
         {
             InitializeComponent();
-            this.listBox1.DataSource = System.Enum.GetValues(typeof(Globals.MSFileType));
+            listBox1.DataSource = Enum.GetValues(typeof(Globals.MSFileType));
 
             Globals.MSFileType guessedFileType= guessFileTypeFromFileName(filename);
-            this.listBox1.SelectedItem = guessedFileType;
+            listBox1.SelectedItem = guessedFileType;
         }
 
         private Globals.MSFileType guessFileTypeFromFileName(string filename)
@@ -46,7 +41,7 @@ namespace DeconToolsAutoProcessV1
 
             if (run != null)
             {
-                DeconTools.Backend.Globals.MSFileType filetype = run.MSFileType;
+                Globals.MSFileType filetype = run.MSFileType;
                 run.Dispose();
                 return filetype;
             }
@@ -111,15 +106,15 @@ namespace DeconToolsAutoProcessV1
 
         private void btnOK_Click(object sender, EventArgs e)
         {
-            this.DialogResult = DialogResult.OK;
-            this.selectedFiletype = (Globals.MSFileType)listBox1.SelectedItem;
-            this.Close();
+            DialogResult = DialogResult.OK;
+            selectedFiletype = (Globals.MSFileType)listBox1.SelectedItem;
+            Close();
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            this.DialogResult = DialogResult.Cancel;
-            this.Close();
+            DialogResult = DialogResult.Cancel;
+            Close();
         }
     }
 }

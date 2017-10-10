@@ -17,7 +17,7 @@ namespace DeconTools.Backend.ProcessingTasks
 {
     // To include support for Rapid, you must add a reference to DeconEngine.dll, which was compiled with Visual Studio 2003 and uses MSVCP71.dll
     // Note that DeconEngine.dll also depends on xerces-c_2_7.dll while DeconEngineV2.dll depends on xerces-c_2_8.dll
-#if INCLUDE_RAPID	
+#if INCLUDE_RAPID
 
     /// <summary>
     /// This class uses the Rapid method for deconvoluting peaks
@@ -37,8 +37,8 @@ namespace DeconTools.Backend.ProcessingTasks
         TomIsotopicPattern _TomIsotopicPatternCreator = new TomIsotopicPattern();
 
 
-        //The BasicTFF is used to re-find the peaks of the isotopic profile, once Rapid returns the monoIsotopic mass and charge state.  
-        //We have to do this since RAPID doesn't return the list of peaks within the MSFeature. 
+        //The BasicTFF is used to re-find the peaks of the isotopic profile, once Rapid returns the monoIsotopic mass and charge state.
+        //We have to do this since RAPID doesn't return the list of peaks within the MSFeature.
         BasicTFF targetedFeatureFinder;
 
 
@@ -146,7 +146,7 @@ namespace DeconTools.Backend.ProcessingTasks
                 //the results and 1) get the peaks of the isotopic profile  and  2) get a least-squares fit of the isotopic profile.
                 foreach (IsosResult result in resultList.IsosResultBin)
                 {
-                    //create a temporary mass tag, as a data object for storing relevent info, and using the CalculateMassesForIsotopicProfile() method. 
+                    //create a temporary mass tag, as a data object for storing relevent info, and using the CalculateMassesForIsotopicProfile() method.
                     PeptideTarget mt = new PeptideTarget();
 
                     mt.ChargeState = (short)result.IsotopicProfile.ChargeState;
@@ -288,7 +288,7 @@ namespace DeconTools.Backend.ProcessingTasks
                 if (chargeResults[i] == 0) continue;
 
                 double rapidScore = scoreResults[i];
-                if ((float)rapidScore == 0.9999999999999f) continue;   // this is an oddity about the Rapid results. For very poor or immeasurable scores, it will give a score of 1.000000000; 
+                if ((float)rapidScore == 0.9999999999999f) continue;   // this is an oddity about the Rapid results. For very poor or immeasurable scores, it will give a score of 1.000000000;
 
                 IsosResult result = resultList.CreateIsosResult();
                 result.IntensityAggregate = intensityResults[i];
@@ -301,7 +301,7 @@ namespace DeconTools.Backend.ProcessingTasks
 
 
 
-                //TODO:  make it so that the entire isotopic profile peak list is populated. Right now, just the monoisotopic peak is found. 
+                //TODO:  make it so that the entire isotopic profile peak list is populated. Right now, just the monoisotopic peak is found.
                 GetIsotopicProfilePeaks(resultList.Run.PeakList, profile.ChargeState, monoPeak.XValue, ref profile);
 
                 if (profile.Peaklist.Count == 0)    // couldn't find original monoIsotopicPeak in the peaklist
@@ -419,20 +419,20 @@ namespace DeconTools.Backend.ProcessingTasks
                 }
                 else
                 {
-                    peak.Height = 0;    
+                    peak.Height = 0;
                 }
-                
+
 
                 theorProfile.Peaklist.Add(peak);
             }
-            
+
             var foundIso = tff.FindMSFeature(peakList, theorProfile);
 
             if (foundIso==null)
             {
                 var monoPeak = PeakUtilities.GetPeaksWithinTolerance(peakList, monoPeakMZ, toleranceInPPM).OrderByDescending(p => p.Height).FirstOrDefault();
 
-                
+
                 if (monoPeak!=null)
                 {
                     inputProfile.Peaklist.Add((MSPeak) monoPeak);
@@ -446,7 +446,7 @@ namespace DeconTools.Backend.ProcessingTasks
                 inputProfile.Peaklist = new List<MSPeak>(foundIso.Peaklist);
             }
 
-            
+
 
         }
 

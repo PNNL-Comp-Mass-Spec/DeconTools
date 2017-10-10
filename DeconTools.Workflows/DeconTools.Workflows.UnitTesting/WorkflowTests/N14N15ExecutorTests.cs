@@ -1,5 +1,4 @@
 ﻿using System;
-using DeconTools.UnitTesting2;
 using DeconTools.Workflows.Backend;
 using DeconTools.Workflows.Backend.Core;
 using NUnit.Framework;

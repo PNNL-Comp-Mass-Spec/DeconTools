@@ -9,7 +9,7 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
             CorrelationData = new List<ChargeCorrelationItem>();
         }
 
-        public List<ChargeCorrelationItem> CorrelationData { get; set; } 
+        public List<ChargeCorrelationItem> CorrelationData { get; set; }
 
     }
 }

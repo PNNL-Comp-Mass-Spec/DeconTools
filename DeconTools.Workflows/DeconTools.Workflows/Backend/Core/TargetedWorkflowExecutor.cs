@@ -39,7 +39,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         #region Constructors
 
-        protected TargetedWorkflowExecutor(WorkflowExecutorBaseParameters parameters, string datasetPath, BackgroundWorker backgroundWorker = null)
+        protected TargetedWorkflowExecutor(WorkflowParameters parameters, string datasetPath, BackgroundWorker backgroundWorker = null)
         {
             DatasetPath = datasetPath;
             RunIsDisposed = true;
@@ -54,7 +54,7 @@ namespace DeconTools.Workflows.Backend.Core
             InitializeWorkflow();
         }
 
-        protected TargetedWorkflowExecutor(WorkflowExecutorBaseParameters parameters, TargetedWorkflow targetedWorkflow, string datasetPath, BackgroundWorker backgroundWorker = null)
+        protected TargetedWorkflowExecutor(WorkflowParameters parameters, TargetedWorkflow targetedWorkflow, string datasetPath, BackgroundWorker backgroundWorker = null)
         {
             DatasetPath = datasetPath;
             RunIsDisposed = true;
@@ -70,7 +70,7 @@ namespace DeconTools.Workflows.Backend.Core
         }
 
 
-        protected TargetedWorkflowExecutor(WorkflowExecutorBaseParameters parameters, WorkflowParameters workflowParameters, string datasetPath, BackgroundWorker backgroundWorker = null)
+        protected TargetedWorkflowExecutor(WorkflowParameters parameters, WorkflowParameters workflowParameters, string datasetPath, BackgroundWorker backgroundWorker = null)
         {
             DatasetPath = datasetPath;
             RunIsDisposed = true;
@@ -84,12 +84,12 @@ namespace DeconTools.Workflows.Backend.Core
             InitializeWorkflow();
         }
 
-        protected TargetedWorkflowExecutor(WorkflowExecutorBaseParameters parameters, Run run, BackgroundWorker backgroundWorker = null)
+        protected TargetedWorkflowExecutor(WorkflowParameters parameters, Run run, BackgroundWorker backgroundWorker = null)
         {
             Run = run;
             RunIsDisposed = true;
 
-            if (Run != null) 
+            if (Run != null)
                 DatasetPath = Run.DataSetPath;
 
             _backgroundWorker = backgroundWorker;
@@ -137,6 +137,9 @@ namespace DeconTools.Workflows.Backend.Core
 
             Check.Ensure(Targets != null && Targets.TargetList.Count > 0,
                          "Target massTags is empty (or all peptides contain unknown modifications). Check the path to the massTag data file.");
+
+            if (Targets == null)
+                return;
 
             IqLogger.Log.Info("Total targets loaded= " + Targets.TargetList.Count);
 
@@ -235,10 +238,10 @@ namespace DeconTools.Workflows.Backend.Core
             }
 
 
-
-
-            foreach (LcmsFeatureTarget target in Targets.TargetList)
+            foreach (var targetBase in Targets.TargetList)
             {
+                var target = (LcmsFeatureTarget)targetBase;
+
                 var isMissingMonoMass = target.MonoIsotopicMass <= 0;
 
                 if (string.IsNullOrEmpty(target.EmpiricalFormula))
@@ -391,7 +394,7 @@ namespace DeconTools.Workflows.Backend.Core
                 {
                     FinalizeRun();
                 }
-                
+
             }
             catch (Exception ex)
             {
@@ -402,10 +405,10 @@ namespace DeconTools.Workflows.Backend.Core
                 try
                 {
                     FinalizeRun();
-
                 }
                 catch
                 {
+                    // Ignore errors
                 }
 
                 ReportGeneralProgress(ex.Message);
@@ -450,7 +453,7 @@ namespace DeconTools.Workflows.Backend.Core
             if (string.IsNullOrEmpty(_alignmentFolder))
             {
                 SetupAlignment();
-               
+
             }
 
             //first look for _fht.txt file (MSGF output)
@@ -579,7 +582,7 @@ namespace DeconTools.Workflows.Backend.Core
             var mtCounter = 0;
             var totalTargets = Targets.TargetList.Count;
 
-            ReportGeneralProgress("Processing...", 0);
+            ReportGeneralProgress("Processing...");
 
             foreach (var massTag in Targets.TargetList)
             {
@@ -768,7 +771,7 @@ namespace DeconTools.Workflows.Backend.Core
             var logfilename = Path.Combine(logfolderPath.FullName,
                                            "logfile_" +
                                            DateTime.Now.ToString("yyyy-MM-dd") + "_" +
-                                           DateTime.Now.Subtract(DateTime.Today).TotalMilliseconds.ToString("0") + 
+                                           DateTime.Now.Subtract(DateTime.Today).TotalMilliseconds.ToString("0") +
                                            ".txt");
 
             return logfilename;
@@ -841,13 +844,17 @@ namespace DeconTools.Workflows.Backend.Core
                 _progressInfo.Result = TargetedWorkflow.Result;
                 _progressInfo.Time = DateTime.Now;
 
-                _progressInfo.ChromatogramXYData = new XYData();
-                _progressInfo.ChromatogramXYData.Xvalues = TargetedWorkflow.ChromatogramXYData.Xvalues;
-                _progressInfo.ChromatogramXYData.Yvalues = TargetedWorkflow.ChromatogramXYData.Yvalues;
+                _progressInfo.ChromatogramXYData = new XYData
+                {
+                    Xvalues = TargetedWorkflow.ChromatogramXYData.Xvalues,
+                    Yvalues = TargetedWorkflow.ChromatogramXYData.Yvalues
+                };
 
-                _progressInfo.MassSpectrumXYData = new XYData();
-                _progressInfo.MassSpectrumXYData.Xvalues = TargetedWorkflow.MassSpectrumXYData.Xvalues;
-                _progressInfo.MassSpectrumXYData.Yvalues = TargetedWorkflow.MassSpectrumXYData.Yvalues;
+                _progressInfo.MassSpectrumXYData = new XYData
+                {
+                    Xvalues = TargetedWorkflow.MassSpectrumXYData.Xvalues,
+                    Yvalues = TargetedWorkflow.MassSpectrumXYData.Yvalues
+                };
 
                 _backgroundWorker.ReportProgress(progressPercent, _progressInfo);
             }
@@ -903,19 +910,17 @@ namespace DeconTools.Workflows.Backend.Core
             {
                 if (file.Name.Contains("_alignedFeatures") || file.Name.Contains("_MZAlignment") || file.Name.Contains("_NETAlignment"))
                 {
-                    var allowOverwrite = false;
-
                     var targetCopiedFilename = Path.Combine(_alignmentFolder, file.Name);
 
                     //upload alignment data only if it doesn't already exist
                     if (!File.Exists(targetCopiedFilename))
                     {
-                        file.CopyTo(Path.Combine(_alignmentFolder, file.Name), allowOverwrite);
+                        file.CopyTo(Path.Combine(_alignmentFolder, file.Name), overwrite: false);
                     }
 
                     if (ExecutorParameters.CopyRawFileLocal)
                     {
-                        file.Delete();       //if things were copied locally, we are going to delete anything created. 
+                        file.Delete();       //if things were copied locally, we are going to delete anything created.
                     }
 
                 }
@@ -936,11 +941,10 @@ namespace DeconTools.Workflows.Backend.Core
 
                 var attr = File.GetAttributes(dataset);
 
-                DirectoryInfo sourceDirInfo;
                 DirectoryInfo targetDirInfo;
                 if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
                 {
-                    sourceDirInfo = new DirectoryInfo(dataset);
+                    var sourceDirInfo = new DirectoryInfo(dataset);
                     runFilename = Path.Combine(ExecutorParameters.FolderPathForCopiedRawDataset, sourceDirInfo.Name);
                     targetDirInfo = new DirectoryInfo(runFilename);
                     FileUtilities.CopyAll(sourceDirInfo, targetDirInfo);
@@ -949,7 +953,6 @@ namespace DeconTools.Workflows.Backend.Core
                 else
                 {
                     var fileinfo = new FileInfo(dataset);
-                    sourceDirInfo = fileinfo.Directory;
                     runFilename = Path.Combine(ExecutorParameters.FolderPathForCopiedRawDataset, Path.GetFileName(dataset));
 
                     targetDirInfo = new DirectoryInfo(ExecutorParameters.FolderPathForCopiedRawDataset);
@@ -983,10 +986,8 @@ namespace DeconTools.Workflows.Backend.Core
                 ReportGeneralProgress("Run initialization FAILED. Likely a filename problem. Or missing manufacturer .dlls");
                 return;
             }
-            else
-            {
-                ReportGeneralProgress("Run initialized successfully.");
-            }
+
+            ReportGeneralProgress("Run initialized successfully.");
 
 
             //Retrieve alignment data if it exists
@@ -1042,7 +1043,6 @@ namespace DeconTools.Workflows.Backend.Core
             }
 
             ReportGeneralProgress("Peak Loading complete.");
-            return;
         }
 
         private void CopyAlignmentInfoIfExists()
@@ -1124,10 +1124,8 @@ namespace DeconTools.Workflows.Backend.Core
             {
                 return true;
             }
-            else
-            {
-                return false;
-            }
+
+            return false;
         }
 
         protected TargetCollection CreateTargets(Globals.TargetType targetType, string targetFilePath)
@@ -1143,7 +1141,7 @@ namespace DeconTools.Workflows.Backend.Core
                     return GetMassTagTargets(targetFilePath);
 
                 default:
-                    throw new ArgumentOutOfRangeException("targetType");
+                    throw new ArgumentOutOfRangeException(nameof(targetType));
             }
         }
 
@@ -1156,8 +1154,7 @@ namespace DeconTools.Workflows.Backend.Core
                 var iqTargets = iqTargetImporter.Import();
 
                 var targetUtilities = new IqTargetUtilities();
-                var targetCollection = new TargetCollection();
-                targetCollection.TargetList = new List<TargetBase>();
+                var targetCollection = new TargetCollection {TargetList = new List<TargetBase>()};
 
                 foreach (var iqTarget in iqTargets)
                 {
@@ -1193,11 +1190,6 @@ namespace DeconTools.Workflows.Backend.Core
             throw new NotImplementedException();
         }
 
-
-        private void cleanUpLocalFiles()
-        {
-            throw new NotImplementedException();
-        }
 
         protected void FinalizeRun()
         {
@@ -1237,7 +1229,7 @@ namespace DeconTools.Workflows.Backend.Core
                 }
 
                 var allRawDataFiles = dirInfo.GetFiles("*" + fileSuffix);
-                if (allRawDataFiles.Count() <= 35)
+                if (allRawDataFiles.Length <= 35)
                 {
                     return;
                 }

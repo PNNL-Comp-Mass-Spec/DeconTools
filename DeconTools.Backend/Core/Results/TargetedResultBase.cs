@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 using DeconTools.Backend.Utilities;
 
@@ -70,7 +71,7 @@ namespace DeconTools.Backend.Core
             var sb = new StringBuilder();
             sb.Append("****** Match ******\n");
             sb.Append("NET = \t" + Target.NormalizedElutionTime.ToString("0.000") + "\n");
-            sb.Append("ChromPeak ScanNum = " + ChromPeakSelected.XValue.ToString() + "\n");
+            sb.Append("ChromPeak ScanNum = " + ChromPeakSelected.XValue.ToString(CultureInfo.InvariantCulture) + "\n");
             sb.Append("ChromPeak NETVal = " + ChromPeakSelected.NETValue.ToString("0.000") + "\n");
             sb.Append("ScanSet = { ");
             foreach (var scanNum in ScanSet.IndexValues)
@@ -80,7 +81,7 @@ namespace DeconTools.Backend.Core
 
             }
             sb.Append("} \n");
-            if (IsotopicProfile != null && IsotopicProfile.Peaklist != null && IsotopicProfile.Peaklist.Count > 0)
+            if (IsotopicProfile?.Peaklist != null && IsotopicProfile.Peaklist.Count > 0)
             {
                 sb.Append("Observed MZ and intensity = " + IsotopicProfile.getMonoPeak().XValue + "\t" + IsotopicProfile.getMonoPeak().Height + "\n");
             }
@@ -102,24 +103,22 @@ namespace DeconTools.Backend.Core
             {
                 return Target.ScanLCTarget;
             }
-            else
-            {
-                return ScanSet.PrimaryScanNumber;
-            }
+
+            return ScanSet.PrimaryScanNumber;
         }
 
 
         public double GetNET()
         {
-            if (ChromPeakSelected == null) return -1;
-            else
+            if (ChromPeakSelected == null)
             {
-                return ChromPeakSelected.NETValue;
+                return -1;
             }
 
+            return ChromPeakSelected.NETValue;
         }
 
-       
+
         public virtual double GetNETAlignmentError()
         {
             double theorNET = Target.NormalizedElutionTime;
@@ -134,24 +133,23 @@ namespace DeconTools.Backend.Core
         {
             var theorMZ = GetMZOfMostIntenseTheorIsotopicPeak();
             var observedMZ = GetMZOfObservedPeakClosestToTargetVal(theorMZ);
-            
+
             var massErrorInPPM = (observedMZ - theorMZ) / theorMZ * 1e6;
             return massErrorInPPM;
-            
+
         }
 
 
         public double GetMassErrorAfterAlignmentInPPM()
         {
-            double massErrorInPPM = 0;
             var theorMZ = GetMZOfMostIntenseTheorIsotopicPeak();
             var observedMZ = GetMZOfObservedPeakClosestToTargetVal(theorMZ);
 
             var scan = GetScanNum();
-            
+
             var alignedMZ = Run.GetAlignedMZ(observedMZ, scan);
-            massErrorInPPM = (alignedMZ - theorMZ) / theorMZ * 1e6;
-            
+            var massErrorInPPM = (alignedMZ - theorMZ) / theorMZ * 1e6;
+
             return massErrorInPPM;
         }
 
@@ -161,14 +159,14 @@ namespace DeconTools.Backend.Core
         /// <returns></returns>
         public virtual double GetCalibratedMonoisotopicMass()
         {
-           var monoMass = IsotopicProfile == null ? 0 : IsotopicProfile.MonoIsotopicMass;
+           var monoMass = IsotopicProfile?.MonoIsotopicMass ?? 0;
 
             if (Run.MassIsAligned)
             {
                 var theorMZ = GetMZOfMostIntenseTheorIsotopicPeak();
                 var scan = GetScanNum();
                 var ppmShift = Run.MassAlignmentInfo.GetPpmShift(theorMZ, scan);
-                
+
                 var alignedMono = monoMass - (ppmShift * monoMass / 1e6);
                 return alignedMono;
             }
@@ -182,36 +180,29 @@ namespace DeconTools.Backend.Core
 
         public double GetMZOfMostIntenseTheorIsotopicPeak()
         {
-            if (Target == null || Target.IsotopicProfile == null)
+            if (Target?.IsotopicProfile == null)
             {
                 return 0;
             }
-            else
-            {
-                return Target.IsotopicProfile.getMostIntensePeak().XValue;
-            }
 
+            return Target.IsotopicProfile.getMostIntensePeak().XValue;
         }
 
 
         public double GetMZOfObservedPeakClosestToTargetVal(double targetMZ)
         {
-            if (IsotopicProfile == null || IsotopicProfile.Peaklist == null)
+            if (IsotopicProfile?.Peaklist == null)
             {
                 return 0;
             }
-            else
+
+            var indexOfTargetPeak = PeakUtilities.getIndexOfClosestValue(IsotopicProfile.Peaklist, targetMZ, 0, IsotopicProfile.Peaklist.Count - 1, 0.1);
+            if (indexOfTargetPeak != -1)
             {
-                var indexOfTargetPeak = PeakUtilities.getIndexOfClosestValue(IsotopicProfile.Peaklist, targetMZ, 0, IsotopicProfile.Peaklist.Count - 1, 0.1);
-                if (indexOfTargetPeak != -1)
-                {
-                    return IsotopicProfile.Peaklist[indexOfTargetPeak].XValue;
-                }
-                else
-                {
-                    return 0;
-                }
+                return IsotopicProfile.Peaklist[indexOfTargetPeak].XValue;
             }
+
+            return 0;
         }
 
 
@@ -231,7 +222,7 @@ namespace DeconTools.Backend.Core
 
         public virtual void AddSelectedChromPeakAndScanSet(ChromPeak bestPeak, ScanSet scanset, Globals.IsotopicProfileType isotopicProfileType = Globals.IsotopicProfileType.UNLABELLED)
         {
-            
+
             if (isotopicProfileType== Globals.IsotopicProfileType.UNLABELLED)
             {
 
@@ -240,13 +231,13 @@ namespace DeconTools.Backend.Core
 
                 if (ScanSet!=null)
                 {
-                    NumMSScansSummed = ScanSet.IndexValues.Count;    
+                    NumMSScansSummed = ScanSet.IndexValues.Count;
                 }
 
-                
-                
 
-                var failedChromPeakSelection = (ChromPeakSelected == null || ChromPeakSelected.XValue == 0);
+
+
+                var failedChromPeakSelection = (ChromPeakSelected == null || Math.Abs(ChromPeakSelected.XValue) < double.Epsilon);
                 if (failedChromPeakSelection)
                 {
                     FailedResult = true;
@@ -263,7 +254,7 @@ namespace DeconTools.Backend.Core
             {
                 throw new NotSupportedException("Cannot add data for a labeled result in this base class");
             }
-            
+
 
 
         }
