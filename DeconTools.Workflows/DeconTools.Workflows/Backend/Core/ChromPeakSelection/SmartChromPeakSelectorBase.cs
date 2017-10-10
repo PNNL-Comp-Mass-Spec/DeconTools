@@ -25,15 +25,6 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
 
         //public DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders.BasicTFF TargetedMSFeatureFinder { get; set; }
 
-        #region Constructors
-
-        public SmartChromPeakSelectorBase():base()
-        {
-
-        }
-
-        #endregion
-
         #region Properties
 
 
@@ -256,18 +247,16 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
                 pq.IsotopicProfileFound = false;
                 return;
             }
-            else
-            {
-                pq.IsotopicProfileFound = true;
-                pq.Abundance = currentResult.IntensityAggregate;
-                pq.FitScore = currentResult.Score;
-                pq.InterferenceScore = currentResult.InterferenceScore;
-                pq.IsotopicProfile = currentResult.IsotopicProfile;
-                var resultHasFlags = (currentResult.Flags != null && currentResult.Flags.Count > 0);
-                pq.IsIsotopicProfileFlagged = resultHasFlags;
 
-                pq.ScanLc = currentResult.Run.CurrentScanSet.PrimaryScanNumber;
-            }
+            pq.IsotopicProfileFound = true;
+            pq.Abundance = currentResult.IntensityAggregate;
+            pq.FitScore = currentResult.Score;
+            pq.InterferenceScore = currentResult.InterferenceScore;
+            pq.IsotopicProfile = currentResult.IsotopicProfile;
+            var resultHasFlags = (currentResult.Flags != null && currentResult.Flags.Count > 0);
+            pq.IsIsotopicProfileFlagged = resultHasFlags;
+
+            pq.ScanLc = currentResult.Run.CurrentScanSet.PrimaryScanNumber;
         }
 
         //TODO: delete this if unused

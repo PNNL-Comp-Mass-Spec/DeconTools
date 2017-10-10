@@ -63,8 +63,9 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
             //collect Chrom peaks that fall within the NET tolerance
             var peaksWithinTol = new List<ChromPeak>(); //
 
-            foreach (ChromPeak peak in resultList.Run.PeakList)
+            foreach (var item in resultList.Run.PeakList)
             {
+                var peak = (ChromPeak)item;
                 if (Math.Abs(peak.NETValue - normalizedElutionTime) <= Parameters.NETTolerance)     //peak.NETValue was determined by the ChromPeakDetector or a future ChromAligner Task
                 {
                     peaksWithinTol.Add(peak);
@@ -142,7 +143,7 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
         protected new virtual ChromPeak determineBestChromPeak(List<ChromPeakQualityData> peakQualityList, TargetedResultBase currentResult)
         {
             var filteredList1 = (from n in peakQualityList
-                                 where n.IsotopicProfileFound == true &&
+                                 where n.IsotopicProfileFound &&
                                  n.FitScore < 1 && n.InterferenceScore < 1
                                  select n).ToList();
 

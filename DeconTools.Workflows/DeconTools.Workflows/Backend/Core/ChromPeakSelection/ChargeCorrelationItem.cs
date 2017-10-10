@@ -32,7 +32,7 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
 
             foreach (var entry in PeakCorrelationData)
             {
-                var eMedian = (entry.Value.RSquaredValsMedian.HasValue) ? entry.Value.RSquaredValsMedian.Value : 0;
+                var eMedian = entry.Value.RSquaredValsMedian ?? 0;
                 corrList.Add(eMedian);
             }
 
