@@ -4,7 +4,7 @@ using DeconTools.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks.MSGenerators
 {
-    public class GenericMSGenerator : MSGenerator
+    public sealed class GenericMSGenerator : MSGenerator
     {
         public GenericMSGenerator()
             : this(0, 5000, true)

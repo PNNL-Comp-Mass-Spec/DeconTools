@@ -4,7 +4,7 @@ using DeconTools.Utilities.SqliteUtils;
 
 namespace DeconTools.Backend.FileIO
 {
-    public class MSFeatureToSQLiteExporterUIMF : SQLiteExporter<IsosResult>
+    public sealed class MSFeatureToSQLiteExporterUIMF : SQLiteExporter<IsosResult>
     {
         const string m_TABLENAME = "T_MSFeatures";
         List<Field> m_fieldList;

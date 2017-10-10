@@ -9,7 +9,7 @@ using System.Data.Common;
 
 namespace DeconTools.Backend.FileIO
 {
-    public class MSFeatureToSQLiteExporterBasic:SQLiteExporter<IsosResult>
+    public sealed class MSFeatureToSQLiteExporterBasic:SQLiteExporter<IsosResult>
     {
         const string m_TABLENAME = "T_MSFeatures";
         List<Field> m_fieldList;

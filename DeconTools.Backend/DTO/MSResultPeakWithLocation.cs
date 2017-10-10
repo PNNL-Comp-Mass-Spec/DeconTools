@@ -5,7 +5,7 @@ using DeconTools.Backend.Core;
 
 namespace DeconTools.Backend.DTO
 {
-    public class MSResultPeakWithLocation : Peak
+    public sealed class MSResultPeakWithLocation : Peak
     {
 
         private readonly ushort frameNumber;

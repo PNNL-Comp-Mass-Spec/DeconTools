@@ -5,7 +5,7 @@ using System.Text;
 
 namespace DeconTools.Backend.Runs
 {
-    public class ConcreteXYDataRun:XYDataRun
+    public sealed class ConcreteXYDataRun:XYDataRun
     {
 
         public ConcreteXYDataRun(double[]xvals, double[] yvals)

@@ -6,7 +6,7 @@ using DeconTools.Utilities.SqliteUtils;
 
 namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
 {
-    public class MassTagResult_SqliteTable:Table
+    public sealed class MassTagResult_SqliteTable:Table
     {
         #region Constructors
         public MassTagResult_SqliteTable(string tableName)

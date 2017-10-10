@@ -3,7 +3,7 @@ using DeconTools.Utilities.SqliteUtils;
 
 namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
 {
-    public class UIMFScanResult_SqliteTable:Table
+    public sealed class UIMFScanResult_SqliteTable:Table
     {
         #region Constructors
         public UIMFScanResult_SqliteTable(string tableName)

@@ -7,7 +7,7 @@ using DeconTools.Utilities.SqliteUtils;
 
 namespace DeconTools.Backend.FileIO
 {
-    public class MSScanInfoToSQLiteExporterBasic:SQLiteExporter<ScanResult>
+    public sealed class MSScanInfoToSQLiteExporterBasic : SQLiteExporter<ScanResult>
     {
         const string m_TABLENAME = "T_MS_ScanSummary";
         List<Field> m_fieldList;

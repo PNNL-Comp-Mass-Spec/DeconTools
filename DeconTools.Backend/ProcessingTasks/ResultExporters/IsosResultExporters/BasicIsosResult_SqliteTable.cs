@@ -6,7 +6,7 @@ using DeconTools.Utilities.SqliteUtils;
 
 namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
 {
-    public class BasicIsosResult_SqliteTable:Table
+    public sealed class BasicIsosResult_SqliteTable:Table
     {
         #region Constructors
         public BasicIsosResult_SqliteTable(string tableName)

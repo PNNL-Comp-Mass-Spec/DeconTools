@@ -7,7 +7,7 @@ using DeconTools.Utilities.SqliteUtils;
 
 namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
 {
-    public class BasicScanResult_SqliteExporter:ScanResult_SqliteExporter
+    public sealed class BasicScanResult_SqliteExporter : ScanResult_SqliteExporter
     {
 
         #region Constructors

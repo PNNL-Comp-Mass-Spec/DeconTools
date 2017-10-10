@@ -5,7 +5,7 @@ using DeconTools.Utilities.SqliteUtils;
 
 namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
 {
-    public class MSPeakTable :Table
+    public sealed class MSPeakTable :Table
     {
         #region Constructors
         public MSPeakTable(string tableName)

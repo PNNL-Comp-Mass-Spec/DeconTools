@@ -8,7 +8,7 @@ using DeconTools.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
 {
-    public class PeakListTextExporter : IPeakListExporter
+    public sealed class PeakListTextExporter : IPeakListExporter
     {
 
 

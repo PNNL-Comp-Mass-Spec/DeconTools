@@ -6,7 +6,7 @@ using DeconTools.Utilities;
 namespace DeconTools.Backend.Core
 {
     [Serializable]
-    public class FrameSet
+    public sealed class FrameSet
     {
 
         public FrameSet()

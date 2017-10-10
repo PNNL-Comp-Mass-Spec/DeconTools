@@ -13,7 +13,7 @@ using System.IO;
 
 namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
 {
-    public class PeakListSQLiteExporter : IPeakListExporter, IDisposable
+    public sealed class PeakListSQLiteExporter : IPeakListExporter, IDisposable
     {
 
         private readonly DbConnection cnn;

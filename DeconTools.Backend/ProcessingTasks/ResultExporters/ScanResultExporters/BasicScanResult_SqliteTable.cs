@@ -6,7 +6,7 @@ using DeconTools.Utilities.SqliteUtils;
 
 namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
 {
-    public class BasicScanResult_SqliteTable : Table
+    public sealed class BasicScanResult_SqliteTable : Table
     {
         #region Constructors
 
