@@ -12,8 +12,11 @@ namespace DeconTools.Backend.ProcessingTasks
     public class PeakChromatogramGenerator : Task
     {
         int maxZerosToAdd = 2;
-        List<int> msScanList = new List<int>();
-        private ChromatogramGenerator _chromGen;
+
+        [Obsolete("Unused")]
+        readonly List<int> msScanList = new List<int>();
+
+        private readonly ChromatogramGenerator _chromGen;
 
         #region Constructors
         public PeakChromatogramGenerator()
@@ -37,13 +40,13 @@ namespace DeconTools.Backend.ProcessingTasks
         public PeakChromatogramGenerator(double tolerance, Globals.ChromatogramGeneratorMode chromMode,
             Globals.IsotopicProfileType isotopicProfileTarget, Globals.ToleranceUnit toleranceUnit = Globals.ToleranceUnit.PPM)
         {
-            this.Tolerance = tolerance;
-            this.ChromatogramGeneratorMode = chromMode;
-            this.IsotopicProfileTarget = isotopicProfileTarget;
+            Tolerance = tolerance;
+            ChromatogramGeneratorMode = chromMode;
+            IsotopicProfileTarget = isotopicProfileTarget;
 
-            this.TopNPeaksLowerCutOff = 0.3;
-            this.ChromWindowWidthForNonAlignedData = 0.4f;
-            this.ChromWindowWidthForAlignedData = 0.1f;
+            TopNPeaksLowerCutOff = 0.3;
+            ChromWindowWidthForNonAlignedData = 0.4f;
+            ChromWindowWidthForAlignedData = 0.1f;
 
             ToleranceUnit = toleranceUnit;
 
@@ -131,8 +134,6 @@ namespace DeconTools.Backend.ProcessingTasks
             var upperScan = (int) Math.Ceiling(resultList.Run.NetAlignmentInfo.GetScanForNet(maxNetVal));
             if (upperScan == -1) upperScan = resultList.Run.MaxLCScan;
 
-            XYData chromValues;
-
             List<double> targetMZList;
 
             if (ChromatogramGeneratorMode == Globals.ChromatogramGeneratorMode.MZ_BASED)
@@ -157,7 +158,7 @@ namespace DeconTools.Backend.ProcessingTasks
                 }
             }
 
-            chromValues = _chromGen.GenerateChromatogram(resultList.MSPeakResultList, lowerScan, upperScan, targetMZList, Tolerance, ToleranceUnit);
+            var chromValues = _chromGen.GenerateChromatogram(resultList.MSPeakResultList, lowerScan, upperScan, targetMZList, Tolerance, ToleranceUnit);
 
             var result = resultList.GetTargetedResult(resultList.Run.CurrentMassTag);
             //result.WasPreviouslyProcessed = true;     // set an indicator that the mass tag has been processed at least once. This indicator is used when the mass tag is processed again (i.e. for labelled data)
@@ -318,12 +319,11 @@ namespace DeconTools.Backend.ProcessingTasks
 
         public XYData GenerateChromatogram(Run run, IsotopicProfile theorProfile, int lowerScan, int upperScan, double tolerance, Globals.ToleranceUnit toleranceUnit = Globals.ToleranceUnit.PPM)
         {
-            List<double> targetMZList;
             if (ChromatogramGeneratorMode == Globals.ChromatogramGeneratorMode.MZ_BASED)
             {
                 throw new NotSupportedException("Don't use this method for MZ_BASED chromatogram generation. Use a different overload");
             }
-            targetMZList = GetTargetMzList(theorProfile);
+            var targetMZList = GetTargetMzList(theorProfile);
 
             return GenerateChromatogram(run, targetMZList, lowerScan, upperScan, tolerance, toleranceUnit);
 
@@ -337,12 +337,11 @@ namespace DeconTools.Backend.ProcessingTasks
 
         public XYData GenerateChromatogram(Run run, IsotopicProfile theorProfile, double elutionTimeCenter = 0.5, Globals.ElutionTimeUnit elutionTimeUnit = Globals.ElutionTimeUnit.NormalizedElutionTime)
         {
-            List<double> targetMZList;
             if (ChromatogramGeneratorMode == Globals.ChromatogramGeneratorMode.MZ_BASED)
             {
                 throw new NotSupportedException("Don't use this method for MZ_BASED chromatogram generation. Use a different overload");
             }
-            targetMZList = GetTargetMzList(theorProfile);
+            var targetMZList = GetTargetMzList(theorProfile);
 
             return GenerateChromatogram(run, targetMZList, elutionTimeCenter, elutionTimeUnit);
 
@@ -356,9 +355,11 @@ namespace DeconTools.Backend.ProcessingTasks
         {
             if (xyData == null || xyData.Xvalues.Length == 0) return xyData;
 
-            var filteredXyData = new XYData();
-            filteredXyData.Xvalues = xyData.Xvalues;
-            filteredXyData.Yvalues = xyData.Yvalues;
+            var filteredXyData = new XYData
+            {
+                Xvalues = xyData.Xvalues,
+                Yvalues = xyData.Yvalues
+            };
 
             if (run.ContainsMSMSData)
             {
@@ -409,10 +410,8 @@ namespace DeconTools.Backend.ProcessingTasks
             {
                 return run.GetTargetMZAligned(targetMZ, lcScan);
             }
-            else
-            {
-                return targetMZ;
-            }
+
+            return targetMZ;
         }
 
         private List<double> getTargetMZListForO16O18ThreeMonoPeaks(IsotopicProfile iso)
@@ -439,7 +438,7 @@ namespace DeconTools.Backend.ProcessingTasks
 
         private List<double> getTargetMZListForTopNPeaks(IsotopicProfile iso)
         {
-            var msPeakListAboveThreshold = IsotopicProfileUtilities.GetTopMSPeaks(iso.Peaklist, this.TopNPeaksLowerCutOff);
+            var msPeakListAboveThreshold = IsotopicProfileUtilities.GetTopMSPeaks(iso.Peaklist, TopNPeaksLowerCutOff);
 
             Check.Require(msPeakListAboveThreshold != null && msPeakListAboveThreshold.Count > 0, "PeakChromatogramGenerator failed. Attempted to generate chromatogram on unlabelled isotopic profile, but profile was never defined.");
 
@@ -448,7 +447,7 @@ namespace DeconTools.Backend.ProcessingTasks
         }
 
 
-
+        [Obsolete("Unused")]
         private XYData getChromValues(List<MSPeakResult> filteredPeakList, Run run)
         {
             var data = new XYData();
@@ -538,8 +537,8 @@ namespace DeconTools.Backend.ProcessingTasks
             return data;
         }
 
-
-        public XYData getChromValues2(List<MSPeakResult> filteredPeakList, Run run)
+        [Obsolete("Unused")]
+        private XYData getChromValues2(IReadOnlyList<MSPeakResult> filteredPeakList, Run run)
         {
             var xydata = new XYData();
 
@@ -580,16 +579,15 @@ namespace DeconTools.Backend.ProcessingTasks
             //    }
             //}
 
-            for (var i = 0; i < filteredPeakList.Count; i++)
+            foreach (var peak in filteredPeakList)
             {
-                double intensity = filteredPeakList[i].MSPeak.Height;
+                double intensity = peak.MSPeak.Height;
 
                 //because we have tolerances to filter the peaks, more than one m/z peak may occur for a given scan. So will take the most abundant...
-                if (intensity > xyValues[filteredPeakList[i].Scan_num])
+                if (intensity > xyValues[peak.Scan_num])
                 {
-                    xyValues[filteredPeakList[i].Scan_num] = intensity;
+                    xyValues[peak.Scan_num] = intensity;
                 }
-
             }
 
             xydata.Xvalues = XYData.ConvertIntsToDouble(xyValues.Keys.ToArray());
@@ -661,11 +659,7 @@ namespace DeconTools.Backend.ProcessingTasks
         //    return data;
 
         //}
-
-        private void addZeroIntensityValues(int p)
-        {
-            throw new NotImplementedException();
-        }
+        
         #endregion
 
     }
