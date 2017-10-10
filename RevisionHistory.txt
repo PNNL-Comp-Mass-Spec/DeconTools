@@ -1,5 +1,8 @@
 DeconTools DeconConsole / AutoProcessor Revision History
 
+Version 1.1.6492; October 10, 2017 mem
+	- Additional scan number logic fixes for UIMF files
+
 Version 1.1.6491; October 9, 2017 mem
 	- Fix bug determining the number of scans per frame
 	- Obtain log4net from NuGet
