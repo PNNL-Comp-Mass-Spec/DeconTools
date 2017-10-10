@@ -199,8 +199,8 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             return o18Iso;
         }
 
-
-        private IsotopicProfile getTheorProfile(PeptideTarget massTag, Globals.IsotopicProfileType isotopicProfileType)
+        [Obsolete("Unused")]
+        private IsotopicProfile getTheorProfile(TargetBase massTag, Globals.IsotopicProfileType isotopicProfileType)
         {
 
             switch (isotopicProfileType)

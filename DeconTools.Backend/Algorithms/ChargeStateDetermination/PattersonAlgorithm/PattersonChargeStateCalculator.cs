@@ -358,6 +358,7 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
             }
         }
 
+        [Obsolete("Unused")]
         private static void DisplayXYVals(XYData xydata)
         {
             var sb = new StringBuilder();

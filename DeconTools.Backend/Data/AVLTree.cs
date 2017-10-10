@@ -11,7 +11,8 @@ using System.Text;
 
 namespace DeconTools.Backend.Data.Structures
 {
-      public class AVLTreeNode<T> : BinaryTreeNode<T>
+    [Obsolete("Unused")]
+    public class AVLTreeNode<T> : BinaryTreeNode<T>
       where T : IComparable
     {
         public AVLTreeNode(T value)

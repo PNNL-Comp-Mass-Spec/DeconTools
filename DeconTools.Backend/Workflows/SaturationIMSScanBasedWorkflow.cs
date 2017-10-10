@@ -447,6 +447,7 @@ namespace DeconTools.Backend.Workflows
             //isosResult.IsotopicProfile.Score = fitval;
         }
 
+        [Obsolete("Unused")]
         private void DisplayMSPeakResults(List<MSPeakResult> list)
         {
 
@@ -666,8 +667,7 @@ namespace DeconTools.Backend.Workflows
 
         }
 
-
-
+        [Obsolete("Unused")]
         private void DisplayIsotopicProfile(IsosResult saturatedFeature)
         {
             var uimfFeature = (UIMFIsosResult)saturatedFeature;

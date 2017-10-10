@@ -141,6 +141,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChargeStateDeciders
 
         }
 
+        [Obsolete("Unused")]
         private void ConvertToNewChargeState(IsotopicProfile pretendProfile, int chargeState)
         {
             for (var i = 0; i < pretendProfile.Peaklist.Count; i++)
@@ -455,7 +456,8 @@ namespace DeconTools.Backend.ProcessingTasks.ChargeStateDeciders
             IqLogger.Log.Debug(reportString521 + "\n");
             return chargeStates;
         }
-  
+
+        [Obsolete("Unused")]
         private void CreatePeaksFile()
         {
             _run.ScanSetCollection.Create(_run, 1, 1, false);
@@ -467,6 +469,8 @@ namespace DeconTools.Backend.ProcessingTasks.ChargeStateDeciders
             //PeakDetectAndExportWorkflow workflow = new PeakDetectAndExportWorkflow(run, parameters);
             //workflow.Execute();
         }
+
+        [Obsolete("Unused")]
         private void ExportPeaks_copied(string peaksfile)
         {
             DeconToolsPeakDetectorV2 _ms1PeakDetector;

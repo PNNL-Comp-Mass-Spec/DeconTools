@@ -327,6 +327,7 @@ namespace DeconTools.Backend.Runs
             Check.Require(isDirectory, "Could not initialize Dataset. Target dataset folder not found.");
         }
 
+        [Obsolete("Unused")]
         private string validateDataFolderStructureAndFindSettingsFilePath()
         {
             var settingsFilePath = "";

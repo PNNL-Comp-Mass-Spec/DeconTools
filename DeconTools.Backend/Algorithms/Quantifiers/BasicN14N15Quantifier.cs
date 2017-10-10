@@ -249,7 +249,8 @@ namespace DeconTools.Backend.Algorithms.Quantifiers
 
         }
 
-        private double getSummedIntensitiesForPeakIndices(IsotopicProfile iso, List<int> sortedIndexes, int numPeaks)
+        [Obsolete("Unused")]
+        private double getSummedIntensitiesForPeakIndices(IsotopicProfile iso, IReadOnlyList<int> sortedIndexes, int numPeaks)
         {
             double summedIntensities = 0;
 
@@ -264,6 +265,7 @@ namespace DeconTools.Backend.Algorithms.Quantifiers
             return summedIntensities;
         }
 
+        [Obsolete("Unused")]
         private List<int> getIndexValsOfTopPeaks(IsotopicProfile theorIso1)
         {
             var indexValsOfTopPeaks = new List<int>();
