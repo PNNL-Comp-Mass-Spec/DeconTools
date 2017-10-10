@@ -333,31 +333,22 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
                 {
                     return 0;
                 }
-                else
-                {
-                    return -1;
-                }
+                return -1;
             }
-            else
-            {
-                if (y == null)
-                {
-                    return 1;
-                }
-                else
-                {
-                    var retval = y.NaturalAbundance.CompareTo(x.NaturalAbundance);
 
-                    if (retval != 0)
-                    {
-                        return retval;
-                    }
-                    else
-                    {
-                        return y.Mass.CompareTo(x.Mass);
-                    }
-                }
+            if (y == null)
+            {
+                return 1;
             }
+
+            var retval = y.NaturalAbundance.CompareTo(x.NaturalAbundance);
+
+            if (retval != 0)
+            {
+                return retval;
+            }
+
+            return y.Mass.CompareTo(x.Mass);
         }
 
         /// <summary>
@@ -374,22 +365,15 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
                 {
                     return 0;
                 }
-                else
-                {
-                    return -1;
-                }
+                return -1;
             }
-            else
+
+            if (y == null)
             {
-                if (y == null)
-                {
-                    return 1;
-                }
-                else
-                {
-                    return x.IsotopeNumber.CompareTo(y.IsotopeNumber);
-                }
+                return 1;
             }
+
+            return x.IsotopeNumber.CompareTo(y.IsotopeNumber);
         }
 
         /// <summary>
@@ -474,27 +458,20 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
                 {
                     product *= prob;
                 }
-                probabilities[isotopeNum] += product;
-                return false;
+                IonProbabilities[isotopeNum] += product;
+                return;
             }
-            else
+
+            for (var j = 0; j < jaggedProbabilities[level].Length; j++)
             {
-                for (var j = 0; j < jaggedProbabilities[level].Length; j++)
-                {
-                    probabilitySet.Add(jaggedProbabilities[level][j]);
-                    ProbabilityCalculator(jaggedProbabilities, level + 1, isotopeNum + j, probabilitySet);
-                    probabilitySet.Remove(jaggedProbabilities[level][j]);
-                }
+                probabilitySet.Add(jaggedProbabilities[level][j]);
+                ProbabilityCalculator(jaggedProbabilities, level + 1, isotopeNum + j, probabilitySet);
+                probabilitySet.Remove(jaggedProbabilities[level][j]);
             }
-            return false;
+
         }
 
-
         #endregion
-
-
-
-
 
     }
 }

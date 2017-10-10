@@ -75,7 +75,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
                     foundMatchingMaxPeak = peaksWithinTol.Count > 0;
                 }
 
-                if (!foundMatchingMaxPeak)   // can't even find the observed peak that matches the most intense theor peak. 
+                if (!foundMatchingMaxPeak)   // can't even find the observed peak that matches the most intense theor peak.
                 {
                     failedResult = true;
                     break;
@@ -87,15 +87,11 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
                     {
                         //here, we are looking to the left of most intense theor peak.  If we have the prerequisite of finding the monoIsotopic peak and fail here, we'll return a failed result
                         failedResult = true;
-                        break;
-
                     }
-                    else
-                    {
-                        break;  // stop looking to the left of the most intense peak. 
-                    }
+                    break;  // stop looking to the left of the most intense peak.
                 }
-                else if (peaksWithinTol.Count == 1)
+
+                if (peaksWithinTol.Count == 1)
                 {
                     if (outFeature.Peaklist.Count == 0)
                     {
@@ -107,7 +103,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
                     }
                 }
 
-                else    // when we have several peaks within tolerance, we'll need to decide what to do 
+                else    // when we have several peaks within tolerance, we'll need to decide what to do
                 {
 
                     MSPeak bestPeak;
@@ -152,16 +148,16 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
                     if (i == indexOfMaxTheorPeak + 1)  // first peak to the right of the max peak.  We need this one or we declare it to be a failure (= null)
                     {
                         failedResult = true;
-                        break;
                     }
-                    break;    // finished.  Exit loop. 
+                    break;    // finished.  Exit loop.
                 }
-                else if (peaksWithinTol.Count == 1)
+
+                if (peaksWithinTol.Count == 1)
                 {
 
                     outFeature.Peaklist.Add((MSPeak)peaksWithinTol[0]);   //here, we tack peaks onto the profile
                 }
-                else    //two or more peaks are within tolerance. Need to get the best one, which is based on the distance from the 
+                else    //two or more peaks are within tolerance. Need to get the best one, which is based on the distance from the
                 {
                     outFeature.Peaklist.Add((MSPeak)findClosestToXValue(peaksWithinTol, theorFeature.Peaklist[i].XValue - massDefect));
                 }
@@ -182,12 +178,9 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             {
                 return null;   // return a null Isotopic profile, indicating a failed result
             }
-            else
-            {
-                addMassInfoToIsotopicProfile(theorFeature, outFeature);
-                return outFeature;
-            }
 
+            addMassInfoToIsotopicProfile(theorFeature, outFeature);
+            return outFeature;
         }
 
         private void addMassInfoToIsotopicProfile(IsotopicProfile theorFeature, IsotopicProfile outFeature)

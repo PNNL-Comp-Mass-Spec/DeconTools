@@ -155,11 +155,8 @@ namespace DeconTools.Backend.Runs
             {
                 throw new NotImplementedException("Cannot get MSLevel from BrukerData yet.");
             }
-            else
-            {
-                return 1;
-            }
 
+            return 1;
         }
 
         public override XYData GetMassSpectrum(ScanSet scanset, double minMZ, double maxMZ)
@@ -264,10 +261,8 @@ namespace DeconTools.Backend.Runs
                 var fidFileInfo = new FileInfo(fidFiles[0]);
                 return fidFileInfo;
             }
-            else
-            {
-                throw new NotSupportedException("Multiple fid files were found within the dataset folder structure. This is not yet supported.");
-            }
+
+            throw new NotSupportedException("Multiple fid files were found within the dataset folder structure. This is not yet supported.");
         }
         private FileInfo findSerFile()
         {
@@ -277,28 +272,25 @@ namespace DeconTools.Backend.Runs
             {
                 return null;
             }
-            else if (serFiles.Length == 1)
+
+            if (serFiles.Length == 1)
             {
                 var serFileInfo = new FileInfo(serFiles[0]);
                 return serFileInfo;
             }
-            else
+
+            foreach (var serFile in serFiles)
             {
-                foreach (var serFile in serFiles)
+                var fi = new FileInfo(serFile);
+
+                if (fi.Directory.Name == "0.ser")
                 {
-                    var fi = new FileInfo(serFile);
-
-                    if (fi.Directory.Name == "0.ser")
-                    {
-                        return fi;
-                    }
-
+                    return fi;
                 }
 
-                throw new NotSupportedException("Multiple ser files were found within the dataset folder structure. This is not yet supported.");
             }
 
-
+            throw new NotSupportedException("Multiple ser files were found within the dataset folder structure. This is not yet supported.");
         }
 
 
@@ -317,16 +309,13 @@ namespace DeconTools.Backend.Runs
             {
                 return null;
             }
-            else if (acquistionMethodFiles.Count == 1)
+
+            if (acquistionMethodFiles.Count == 1)
             {
                 return new FileInfo(acquistionMethodFiles[0]);
             }
-            else
-            {
-                throw new NotImplementedException("Run initialization failed. Multiple 'apexAcquisition.method' files were found within the dataset folder structure. \nNot sure which one to pick for the settings file.");
-            }
 
-
+            throw new NotImplementedException("Run initialization failed. Multiple 'apexAcquisition.method' files were found within the dataset folder structure. \nNot sure which one to pick for the settings file.");
         }
 
         private FileInfo findAcqusFile()

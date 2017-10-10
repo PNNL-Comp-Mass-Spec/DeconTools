@@ -116,15 +116,14 @@ namespace DeconTools.Backend.Runs
             {
                 return null;
             }
-            else if (fidFiles.Length == 1)
+
+            if (fidFiles.Length == 1)
             {
                 var fidFileInfo = new FileInfo(fidFiles[0]);
                 return fidFileInfo;
             }
-            else
-            {
-                throw new NotSupportedException("Multiple fid files were found within the dataset folder structure. This is not yet supported.");
-            }
+
+            throw new NotSupportedException("Multiple fid files were found within the dataset folder structure. This is not yet supported.");
         }
 
         private FileInfo findSettingsFile()
@@ -142,35 +141,30 @@ namespace DeconTools.Backend.Runs
             {
                 return null;
             }
-            else if (acquistionMethodFiles.Count == 1)
+
+            if (acquistionMethodFiles.Count == 1)
             {
                 return new FileInfo(acquistionMethodFiles[0]);
             }
-            else
-            {
-                throw new NotImplementedException("Run initialization failed. Multiple 'apexAcquisition.method' files were found within the dataset folder structure. \nNot sure which one to pick for the settings file.");
-            }
+
+            throw new NotImplementedException("Run initialization failed. Multiple 'apexAcquisition.method' files were found within the dataset folder structure. \nNot sure which one to pick for the settings file.");
         }
 
         private FileInfo findSerFile()
         {
-            var serFiles = Directory.GetFiles(this.Filename, "ser", SearchOption.AllDirectories);
 
             if (serFiles == null || serFiles.Length == 0)
             {
                 return null;
             }
-            else if (serFiles.Length == 1)
+
+            if (serFiles.Length == 1)
             {
                 var serFileInfo = new FileInfo(serFiles[0]);
                 return serFileInfo;
             }
-            else
-            {
-                throw new NotSupportedException("Multiple ser files were found within the dataset folder structure. This is not yet supported.");
-            }
 
-
+            throw new NotSupportedException("Multiple ser files were found within the dataset folder structure. This is not yet supported.");
         }
 
         #endregion

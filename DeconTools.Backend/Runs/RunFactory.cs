@@ -247,14 +247,13 @@ namespace DeconTools.Backend.Runs
             {
                 return null;
             }
-            else if (acquistionMethodFiles.Count == 1)
+
+            if (acquistionMethodFiles.Count == 1)
             {
                 return new FileInfo(acquistionMethodFiles[0]);
             }
-            else
-            {
-                throw new NotImplementedException("Run initialization failed. Multiple 'Acquisition.method' files were found within the dataset folder structure. \nNot sure which one to pick for the settings file.");
-            }
+
+            throw new NotImplementedException("Run initialization failed. Multiple 'Acquisition.method' files were found within the dataset folder structure. \nNot sure which one to pick for the settings file.");
         }
 
         private FileInfo findAnalysisBafFile(string folderName)
@@ -265,15 +264,14 @@ namespace DeconTools.Backend.Runs
             {
                 return null;
             }
-            else if (analysisBafFiles.Length == 1)
+
+            if (analysisBafFiles.Length == 1)
             {
                 var fileInfo = new FileInfo(analysisBafFiles[0]);
                 return fileInfo;
             }
-            else
-            {
-                throw new NotSupportedException("Multiple analysis.baf files were found within the dataset folder structure. This is not yet supported.");
-            }
+
+            throw new NotSupportedException("Multiple analysis.baf files were found within the dataset folder structure. This is not yet supported.");
         }
 
         private FileInfo findFIDFile(string folderName)
@@ -284,15 +282,14 @@ namespace DeconTools.Backend.Runs
             {
                 return null;
             }
-            else if (fidFiles.Length == 1)
+
+            if (fidFiles.Length == 1)
             {
                 var fidFileInfo = new FileInfo(fidFiles[0]);
                 return fidFileInfo;
             }
-            else
-            {
-                throw new NotSupportedException("Multiple fid files were found within the dataset folder structure. This is not yet supported.");
-            }
+
+            throw new NotSupportedException("Multiple fid files were found within the dataset folder structure. This is not yet supported.");
         }
 
         private List<FileInfo> findAcqusFile(string folderName)
@@ -305,13 +302,11 @@ namespace DeconTools.Backend.Runs
             {
                 return null;
             }
-            else
+
+            foreach (var file in acqusFiles)
             {
-                foreach (var file in acqusFiles)
-                {
-                    var fi = new FileInfo(file);
-                    acqusFileInfoList.Add(fi);
-                }
+                var fi = new FileInfo(file);
+                acqusFileInfoList.Add(fi);
             }
 
             return acqusFileInfoList;
@@ -332,45 +327,40 @@ namespace DeconTools.Backend.Runs
             {
                 return null;
             }
-            else if (acquistionMethodFiles.Count == 1)
+
+            if (acquistionMethodFiles.Count == 1)
             {
                 return new FileInfo(acquistionMethodFiles[0]);
             }
-            else
-            {
-                throw new NotImplementedException("Run initialization failed. Multiple 'apexAcquisition.method' files were found within the dataset folder structure. \nNot sure which one to pick for the settings file.");
-            }
+
+            throw new NotImplementedException("Run initialization failed. Multiple 'apexAcquisition.method' files were found within the dataset folder structure. \nNot sure which one to pick for the settings file.");
         }
 
         private FileInfo findSerFile(string folderName)
         {
             var serFiles = Directory.GetFiles(folderName, "ser", SearchOption.AllDirectories);
 
-            if (serFiles == null || serFiles.Length == 0)
+            if (serFiles.Length == 0)
             {
                 return null;
             }
-            else if (serFiles.Length == 1)
+
+            if (serFiles.Length == 1)
             {
                 var serFileInfo = new FileInfo(serFiles[0]);
                 return serFileInfo;
             }
-            else
+
+            foreach (var file in serFiles)
             {
-
-                foreach (var file in serFiles)
+                var serFileInfo = new FileInfo(file);
+                if (serFileInfo.Directory.Name.ToLower() == "0.ser")
                 {
-                    var serFileInfo = new FileInfo(file);
-                    if (serFileInfo.Directory.Name.ToLower() == "0.ser")
-                    {
-                        return serFileInfo;
-                    }
-
-
+                    return serFileInfo;
                 }
-
-                throw new NotSupportedException("Multiple ser files were found within the dataset folder structure. This is not yet supported.");
             }
+
+            throw new NotSupportedException("Multiple ser files were found within the dataset folder structure. This is not yet supported.");
         }
     }
 }

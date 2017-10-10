@@ -162,17 +162,16 @@ namespace DeconTools.Backend.Utilities
                 {
                     return middle;
                 }
-                else if (targetVal < data[middle])
+
+                if (targetVal < data[middle])
                 {
                     return BinarySearchWithTolerance(data, targetVal, leftIndex, middle - 1, tolerance);
                 }
-                else
-                {
-                    return BinarySearchWithTolerance(data, targetVal, middle + 1, rightIndex, tolerance);
-                }
-            }
-            return -1;
 
+                return BinarySearchWithTolerance(data, targetVal, middle + 1, rightIndex, tolerance);
+            }
+
+            return -1;
 
         }
 
@@ -186,15 +185,15 @@ namespace DeconTools.Backend.Utilities
                 {
                     return middle;
                 }
-                else if (targetVal < data[middle])
+
+                if (targetVal < data[middle])
                 {
                     return BinarySearch(data, targetVal, leftIndex, middle - 1);
                 }
-                else
-                {
-                    return BinarySearch(data, targetVal, middle + 1, rightIndex);
-                }
+
+                return BinarySearch(data, targetVal, middle + 1, rightIndex);
             }
+
             return -1;
 
 

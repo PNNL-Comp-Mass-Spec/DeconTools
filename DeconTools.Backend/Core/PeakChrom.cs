@@ -27,11 +27,8 @@ namespace DeconTools.Backend.Core
                 {
                     return true;
                 }
-                else
-                {
-                    return false;
-                }
 
+                return false;
             }
 
         }
@@ -44,11 +41,8 @@ namespace DeconTools.Backend.Core
                 {
                     return true;
                 }
-                else
-                {
-                    return false;
 
-                }
+                return false;
             }
         }
 

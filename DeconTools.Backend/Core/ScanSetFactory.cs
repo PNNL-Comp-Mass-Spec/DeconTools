@@ -15,19 +15,14 @@ namespace DeconTools.Backend.Core
 
         #region Public Methods
 
-
-
-
         public ScanSet CreateScanSet(Run run, int primaryScan, IEnumerable<int> scansToSum)
         {
             if (run is UIMFRun)
             {
                 return new LCScanSetIMS(primaryScan, scansToSum);
             }
-            else
-            {
-                return new ScanSet(primaryScan, scansToSum);
-            }
+
+            return new ScanSet(primaryScan, scansToSum);
         }
 
 

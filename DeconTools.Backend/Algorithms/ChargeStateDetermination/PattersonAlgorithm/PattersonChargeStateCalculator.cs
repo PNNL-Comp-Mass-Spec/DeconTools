@@ -190,19 +190,9 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
                         {
                             break;
                         }
-                        else
-                        {
-                            return tempChargeState;
-                        }
 
-
+                        return tempChargeState;
                     }
-                    else
-                    {
-
-
-                    }
-
 
                 }
 

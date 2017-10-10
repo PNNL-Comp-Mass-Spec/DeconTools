@@ -54,10 +54,8 @@ namespace DeconTools.Backend.Runs
                     throw new ArgumentOutOfRangeException("Failed to get MS level. Input scan was greater than dataset's max scan.");
 
                 }
-                else
-                {
-                    throw ex;
-                }
+
+                throw;
             }
         }
 

@@ -141,11 +141,8 @@ namespace DeconTools.Backend.Runs
             {
                 return dirInfo.Name.Substring(0, dirInfo.Name.Length - ".d".Length);
             }
-            else
-            {
-                return dirInfo.Name;
-            }
 
+            return dirInfo.Name;
         }
 
         private string getDatasetfolderName(string fullFolderPath)

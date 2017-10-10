@@ -286,10 +286,7 @@ namespace DeconTools.Backend.Algorithms
                     {
                         break;
                     }
-                    else
-                    {
-                        intensitySum = +xydata.Yvalues[i];
-                    }
+                    intensitySum = +xydata.Yvalues[i];
                 }
             }
 

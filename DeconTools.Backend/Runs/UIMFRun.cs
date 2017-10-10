@@ -477,10 +477,8 @@ namespace DeconTools.Backend.Runs
             {
                 return framePressures.Average();
             }
-            else
-            {
-                return 0;
-            }
+
+            return 0;
         }
 
         public void GetFrameDataAllFrameSets()

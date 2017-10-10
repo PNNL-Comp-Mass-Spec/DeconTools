@@ -88,9 +88,10 @@ namespace DeconConsole
                 var errorCode = ex.Message.GetHashCode();
                 if (errorCode != 0)
                     return errorCode;
-                else
-                    return -1;
+
+                return -1;
             }
+
             Console.WriteLine();
             Console.WriteLine();
             Console.WriteLine("****************************************");
