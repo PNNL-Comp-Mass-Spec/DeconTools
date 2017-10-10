@@ -18,10 +18,10 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
             {
                 File.Delete(exporterFactoryUIMFTextFile1);
             }
-            
-            var exporter =
-                    MSFeatureExporterFactory.CreateMSFeatureExporter(DeconTools.Backend.Globals.ExporterType.Text,
-                    DeconTools.Backend.Globals.MSFileType.PNNL_UIMF, exporterFactoryUIMFTextFile1);
+
+            var exporter = MSFeatureExporterFactory.CreateMSFeatureExporter(
+                Backend.Globals.ExporterType.Text,
+                Backend.Globals.MSFileType.PNNL_UIMF, exporterFactoryUIMFTextFile1);
 
             Assert.AreEqual(typeof(MSFeatureToTextFileExporterUIMF), exporter.GetType());
 
@@ -40,9 +40,9 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
                 File.Delete(x);
             }
 
-            var exporter = 
-                MSFeatureExporterFactory.CreateMSFeatureExporter(DeconTools.Backend.Globals.ExporterType.Text,
-                DeconTools.Backend.Globals.MSFileType.PNNL_IMS, x);
+            var exporter = MSFeatureExporterFactory.CreateMSFeatureExporter(
+                Backend.Globals.ExporterType.Text,
+                Backend.Globals.MSFileType.PNNL_IMS, x);
 
             Assert.AreEqual(typeof(MSFeatureToTextFileExporterIMF), exporter.GetType());
 
@@ -60,9 +60,9 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
                 File.Delete(x);
             }
 
-            var exporter =
-                MSFeatureExporterFactory.CreateMSFeatureExporter(DeconTools.Backend.Globals.ExporterType.Text,
-                DeconTools.Backend.Globals.MSFileType.Finnigan, x);
+            var exporter = MSFeatureExporterFactory.CreateMSFeatureExporter(
+                Backend.Globals.ExporterType.Text,
+                Backend.Globals.MSFileType.Finnigan, x);
 
             Assert.AreEqual(typeof(MSFeatureToTextFileExporterBasic), exporter.GetType());
 

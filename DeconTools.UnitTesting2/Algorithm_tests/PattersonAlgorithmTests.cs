@@ -12,12 +12,10 @@ using NUnit.Framework;
 namespace DeconTools.UnitTesting2.AlgorithmTests
 {
 
-
-
     [TestFixture]
     public class PattersonAlgorithmTests
     {
-        private string xcaliburTestfile = FileRefs.RawDataMSFiles.OrbitrapStdFile1;
+        private readonly string xcaliburTestfile = FileRefs.RawDataMSFiles.OrbitrapStdFile1;
 
         [Test]
         public void EasyCase1()
@@ -28,8 +26,7 @@ namespace DeconTools.UnitTesting2.AlgorithmTests
             Run run = new XCaliburRun2(xcaliburTestfile);
 
             var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
-            var peakDetector = new DeconToolsPeakDetectorV2();
-            peakDetector.PeakToBackgroundRatio = 1.3;
+            var peakDetector = new DeconToolsPeakDetectorV2 {PeakToBackgroundRatio = 1.3};
 
             run.CurrentScanSet = new ScanSet(6005);
 
@@ -51,15 +48,14 @@ namespace DeconTools.UnitTesting2.AlgorithmTests
             Run run = new XCaliburRun2(xcaliburTestfile);
 
             var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
-            var peakDetector = new DeconToolsPeakDetectorV2();
-            peakDetector.PeakToBackgroundRatio = 1.3;
+            var peakDetector = new DeconToolsPeakDetectorV2 {PeakToBackgroundRatio = 1.3};
 
             run.CurrentScanSet = new ScanSet(6005);
 
             msgen.Execute(run.ResultCollection);
             peakDetector.Execute(run.ResultCollection);
 
-           
+
             //579.535
             //TestUtilities.DisplayPeaks(run.PeakList);
 
@@ -74,7 +70,10 @@ namespace DeconTools.UnitTesting2.AlgorithmTests
             {
                 var sw = new Stopwatch();
                 sw.Start();
-                chargeState = PattersonChargeStateCalculator.GetChargeState(run.XYData, run.PeakList, peak as MSPeak);
+
+                // ReSharper disable once UnusedVariable
+                var chargeState2 = PattersonChargeStateCalculator.GetChargeState(run.XYData, run.PeakList, peak as MSPeak);
+
                 sw.Stop();
                 times.Add(sw.ElapsedMilliseconds);
             }

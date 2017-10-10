@@ -27,7 +27,7 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
 
             //create run and get some results
 
-            ExporterBase<ScanResult> exporter = new DeconTools.Backend.FileIO.MSScanInfoToTextFileExporterBasic(exportedFile);
+            ExporterBase<ScanResult> exporter = new MSScanInfoToTextFileExporterBasic(exportedFile);
             var run = TestDataCreationUtilities.CreateResultsFromThreeScansOfStandardOrbitrapData();
 
             exporter.ExportResults(run.ResultCollection.ScanResultList);
@@ -83,7 +83,7 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
             //create run and get some results
             var run = TestDataCreationUtilities.CreateResultsFromTwoFramesOfStandardUIMFData();
 
-            ExporterBase<ScanResult> exporter = new DeconTools.Backend.FileIO.MSScanInfoToTextFileExporterUIMF(exportedFile);
+            ExporterBase<ScanResult> exporter = new MSScanInfoToTextFileExporterUIMF(exportedFile);
             exporter.ExportResults(run.ResultCollection.ScanResultList);
 
             Assert.AreEqual(true, File.Exists(exportedFile));

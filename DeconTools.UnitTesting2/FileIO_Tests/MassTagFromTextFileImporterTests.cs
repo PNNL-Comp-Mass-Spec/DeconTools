@@ -8,18 +8,15 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
     [TestFixture]
     public class MassTagFromTextFileImporterTests
     {
-
-        string massTagTestFile1 = @"..\..\..\TestFiles\FileIOTests\top40MassTags.txt";
-        string massTagTestFile2 = @"..\..\..\TestFiles\FileIOTests\importedMassTagsFormat2.txt";
-        private string massTagsWithModsFile1 = @"..\..\..\TestFiles\FileIOTests\massTagsWithModsSample.txt";
+        readonly string massTagTestFile1 = @"..\..\..\TestFiles\FileIOTests\top40MassTags.txt";
+        readonly string massTagTestFile2 = @"..\..\..\TestFiles\FileIOTests\importedMassTagsFormat2.txt";
+        private readonly string massTagsWithModsFile1 = @"..\..\..\TestFiles\FileIOTests\massTagsWithModsSample.txt";
 
         [Test]
         public void test1()
         {
-            var mtc = new TargetCollection();
-
             var massTagImporter = new MassTagFromTextFileImporter(massTagTestFile1);
-            mtc = massTagImporter.Import();
+            var mtc = massTagImporter.Import();
 
             Assert.AreNotEqual(null, mtc.TargetList);
             Assert.AreEqual(101, mtc.TargetList.Count);
@@ -44,10 +41,8 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
         [Test]
         public void ImportPeptidesWithModsTest1()
         {
-            var mtc = new TargetCollection();
-
             var massTagImporter = new MassTagFromTextFileImporter(massTagsWithModsFile1);
-            mtc = massTagImporter.Import();
+            var mtc = massTagImporter.Import();
 
             Assert.AreNotEqual(null, mtc.TargetList);
             Assert.AreEqual(1868, mtc.TargetList.Count);
@@ -68,14 +63,13 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
         {
             var testfile = @"..\\..\\..\\TestFiles\\FileIOTests\\BSAmassTags_MinimalInfo1.txt";
 
-            var mtc = new TargetCollection();
-
             var massTagImporter = new MassTagFromTextFileImporter(testfile);
-            mtc = massTagImporter.Import();
+            var mtc = massTagImporter.Import();
 
             Assert.AreNotEqual(null, mtc.TargetList);
-            foreach (PeptideTarget peptideTarget in mtc.TargetList)
+            foreach (var targetBase in mtc.TargetList)
             {
+                var peptideTarget = (PeptideTarget)targetBase;
                 Console.WriteLine(peptideTarget);
             }
             Assert.AreEqual(121, mtc.TargetList.Count);
@@ -92,14 +86,13 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
         {
             var testfile = @"..\\..\\..\\TestFiles\\FileIOTests\\QCShew_Bin10_Top10_empiricalFormula_NET_only.txt";
 
-            var mtc = new TargetCollection();
-
             var massTagImporter = new MassTagFromTextFileImporter(testfile);
-            mtc = massTagImporter.Import();
+            var mtc = massTagImporter.Import();
 
             Assert.AreNotEqual(null, mtc.TargetList);
-            foreach (PeptideTarget peptideTarget in mtc.TargetList)
+            foreach (var targetBase in mtc.TargetList)
             {
+                var peptideTarget = (PeptideTarget)targetBase;
                 Console.WriteLine(peptideTarget);
             }
 
@@ -110,14 +103,14 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
         {
 
             var testfile = @"..\\..\\..\\TestFiles\\FileIOTests\\BSAmassTags_EmpiricalFormula_and_scans.txt";
-            var mtc = new TargetCollection();
 
             var massTagImporter = new MassTagFromTextFileImporter(testfile);
-            mtc = massTagImporter.Import();
+            var mtc = massTagImporter.Import();
 
             Assert.AreNotEqual(null, mtc.TargetList);
-            foreach (PeptideTarget peptideTarget in mtc.TargetList)
+            foreach (var targetBase in mtc.TargetList)
             {
+                var peptideTarget = (PeptideTarget)targetBase;
                 Console.WriteLine(peptideTarget);
             }
 
@@ -135,16 +128,15 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
         [Test]
         public void importFromSQLManagmentStyleTextFile_test1()
         {
-            var mtc = new TargetCollection();
-
             var massTagImporter = new MassTagFromTextFileImporter(massTagTestFile2);
-            mtc = massTagImporter.Import();
+            var mtc = massTagImporter.Import();
 
             Assert.AreNotEqual(null, mtc.TargetList);
             Assert.AreEqual(37, mtc.TargetList.Count);
 
             var testMassTag = mtc.TargetList[0] as PeptideTarget;
 
+            Assert.NotNull(testMassTag, "Could not cast mtc.TargetList[0] as PeptideTarget");
 
             Assert.AreEqual("AVTTADQVQQEVER", testMassTag.Code);
             Assert.AreEqual(2, testMassTag.ChargeState);

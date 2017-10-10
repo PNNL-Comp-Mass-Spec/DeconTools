@@ -1,5 +1,4 @@
-﻿using System;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using DeconTools.Backend.Data;
 using DeconTools.Backend.Core;
 

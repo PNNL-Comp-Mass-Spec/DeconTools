@@ -14,12 +14,12 @@ namespace DeconTools.UnitTesting2.DeconEngineClasses
     {
         public OldDecon2LSParameters()
         {
-            this.HornTransformParameters = new DeconToolsV2.HornTransform.clsHornTransformParameters();
-            this.PeakProcessorParameters = new DeconToolsV2.Peaks.clsPeakProcessorParameters();
-            this.DTAGenerationParameters = new DeconToolsV2.DTAGeneration.clsDTAGenerationParameters();
-            this.FTICRPreProcessParameters = new DeconToolsV2.Readers.clsRawDataPreprocessOptions();
+            HornTransformParameters = new clsHornTransformParameters();
+            PeakProcessorParameters = new clsPeakProcessorParameters();
+            DTAGenerationParameters = new clsDTAGenerationParameters();
+            FTICRPreProcessParameters = new clsRawDataPreprocessOptions();
 
-            this.HornTransformParameters.NumScansToAdvance = 1;    //this needs to be changed in DeconEngine
+            HornTransformParameters.NumScansToAdvance = 1;    //this needs to be changed in DeconEngine
         }
 
         public clsHornTransformParameters HornTransformParameters { get; set; }
@@ -34,7 +34,7 @@ namespace DeconTools.UnitTesting2.DeconEngineClasses
 
         public void Load(string xmlFileName)
         {
-            this.ParameterFilename = xmlFileName;
+            ParameterFilename = xmlFileName;
 
             var rdr = new XmlTextReader(xmlFileName);
 
@@ -60,7 +60,9 @@ namespace DeconTools.UnitTesting2.DeconEngineClasses
                         }
                         else if (rdr.Name == "Miscellaneous")
                         {
+#pragma warning disable 618
                             HornTransformParameters.LoadV1MiscellaneousParameters(rdr);
+#pragma warning restore 618
                         }
                         else if (rdr.Name == "FTICRRawPreProcessingOptions")
                         {
@@ -68,14 +70,14 @@ namespace DeconTools.UnitTesting2.DeconEngineClasses
                         }
                         else if (rdr.Name == "ElementIsotopes")
                         {
+#pragma warning disable 618
                             HornTransformParameters.ElementIsotopeComposition.LoadV1ElementIsotopes(rdr);
+#pragma warning restore 618
                         }
                         else if (rdr.Name == "DTAGenerationParameters")
                         {
                             DTAGenerationParameters.LoadV1DTAGenerationParameters(rdr);
                         }
-                        break;
-                    default:
                         break;
                 }
             }
@@ -87,11 +89,12 @@ namespace DeconTools.UnitTesting2.DeconEngineClasses
             try
             {
                 //Create a new XmlTextWriter.
-                //				XmlTextWriter xwriter = new XmlTextWriter(Console.Out);
-                var xwriter = new XmlTextWriter(fileName, System.Text.Encoding.UTF8);
-                xwriter.Formatting = Formatting.None;
-                xwriter.IndentChar = '\t';
-                xwriter.Indentation = 1;
+                var xwriter = new XmlTextWriter(fileName, System.Text.Encoding.UTF8)
+                {
+                    Formatting = Formatting.None,
+                    IndentChar = '\t',
+                    Indentation = 1
+                };
 
                 //Write the beginning of the document including the
                 //document declaration. Standalone is true.
@@ -107,15 +110,18 @@ namespace DeconTools.UnitTesting2.DeconEngineClasses
                 xwriter.WriteElementString("version", "1.0");
                 xwriter.WriteWhitespace("\n\t");
 
-                this.PeakProcessorParameters.SaveV1PeakParameters(xwriter);
-                this.DTAGenerationParameters.SaveV1DTAGenerationParameters(xwriter);
-                this.HornTransformParameters.SaveV1HornTransformParameters(xwriter);
-                this.HornTransformParameters.SaveV1MiscellaneousParameters(xwriter);
+#pragma warning disable 618
+                PeakProcessorParameters.SaveV1PeakParameters(xwriter);
+                DTAGenerationParameters.SaveV1DTAGenerationParameters(xwriter);
+                HornTransformParameters.SaveV1HornTransformParameters(xwriter);
+                HornTransformParameters.SaveV1MiscellaneousParameters(xwriter);
+
                 if (FTICRPreProcessParameters.IsToBePreprocessed)
                     FTICRPreProcessParameters.SaveV1FTICRPreProcessOptions(xwriter);
 
                 // And the isotope abundances.
                 HornTransformParameters.ElementIsotopeComposition.SaveV1ElementIsotopes(xwriter);
+#pragma warning restore 618
 
                 xwriter.WriteEndElement();
 
@@ -138,17 +144,23 @@ namespace DeconTools.UnitTesting2.DeconEngineClasses
 
         public DeconToolsParameters GetDeconToolsParameters()
         {
-            var deconToolsParameters = new DeconToolsParameters();
+            var deconToolsParameters =
+                new DeconToolsParameters
+                {
+                    ThrashParameters =
+                    {
+                        AbsolutePeptideIntensity = HornTransformParameters.AbsolutePeptideIntensity,
+                        AveragineFormula = HornTransformParameters.AveragineFormula,
+                        ChargeCarrierMass = HornTransformParameters.CCMass,
+                        CheckAllPatternsAgainstChargeState1 = HornTransformParameters.CheckAllPatternsAgainstCharge1,
+                        MinIntensityForDeletion = HornTransformParameters.DeleteIntensityThreshold,
+                        UseAbsoluteIntensity = HornTransformParameters.UseAbsolutePeptideIntensity,
+                        CompleteFit = HornTransformParameters.CompleteFit
+                    },
+                    ScanBasedWorkflowParameters = {ProcessMS2 = HornTransformParameters.ProcessMSMS},
+                    MSGeneratorParameters = {UseMZRange = HornTransformParameters.UseMZRange}
+                };
 
-            deconToolsParameters.ThrashParameters.AbsolutePeptideIntensity = HornTransformParameters.AbsolutePeptideIntensity;
-            deconToolsParameters.ThrashParameters.AveragineFormula = HornTransformParameters.AveragineFormula;
-            deconToolsParameters.ThrashParameters.ChargeCarrierMass = HornTransformParameters.CCMass;
-            deconToolsParameters.ThrashParameters.CheckAllPatternsAgainstChargeState1 = HornTransformParameters.CheckAllPatternsAgainstCharge1;
-            deconToolsParameters.ThrashParameters.MinIntensityForDeletion = HornTransformParameters.DeleteIntensityThreshold;
-            deconToolsParameters.ThrashParameters.UseAbsoluteIntensity = HornTransformParameters.UseAbsolutePeptideIntensity;
-            deconToolsParameters.ThrashParameters.CompleteFit = HornTransformParameters.CompleteFit;
-            deconToolsParameters.ScanBasedWorkflowParameters.ProcessMS2 = HornTransformParameters.ProcessMSMS;
-            deconToolsParameters.MSGeneratorParameters.UseMZRange = HornTransformParameters.UseMZRange;
             deconToolsParameters.ThrashParameters.IsO16O18Data = HornTransformParameters.O16O18Media;
             switch (HornTransformParameters.IsotopeFitType)
             {

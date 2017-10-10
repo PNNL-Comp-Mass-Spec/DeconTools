@@ -30,7 +30,7 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
             //create run and get some results
             var run = TestDataCreationUtilities.CreateResultsFromThreeScansOfStandardOrbitrapData();
 
-            var isosExporter = new DeconTools.Backend.FileIO.MSFeatureToTextFileExporterBasic(exportedFile);
+            var isosExporter = new MSFeatureToTextFileExporterBasic(exportedFile);
             isosExporter.ExportResults(run.ResultCollection.ResultList);
 
             Assert.AreEqual(true, File.Exists(exportedFile));
@@ -44,10 +44,10 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
             //TODO: need to check if '388' is good or not
             //Assert.AreEqual(388, results.Count);
 
-           
+
         }
 
-        
+
         /// <summary>
         /// Note:  this test fails if Configuration is set to 'x86'
         /// </summary>
@@ -92,7 +92,7 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
             //create run and get some results
             var run = TestDataCreationUtilities.CreateResultsFromTwoFramesOfStandardUIMFData();
 
-            ExporterBase<IsosResult> isosExporter = new DeconTools.Backend.FileIO.MSFeatureToTextFileExporterUIMF(exportedFile);
+            ExporterBase<IsosResult> isosExporter = new MSFeatureToTextFileExporterUIMF(exportedFile);
             isosExporter.ExportResults(run.ResultCollection.ResultList);
 
             Assert.AreEqual(true, File.Exists(exportedFile));

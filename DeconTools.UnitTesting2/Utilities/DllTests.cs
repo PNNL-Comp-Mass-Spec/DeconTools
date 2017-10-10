@@ -33,17 +33,20 @@ namespace DeconTools.UnitTesting2.Utilities
                     Console.WriteLine();
                     Console.WriteLine("Opening file " + file.FullName);
 
-                    var xDocument = new XDocument();
                     var xml = XDocument.Load(File.OpenRead(file.FullName));
 
                     //if (!file.Name.Contains("Backend.csproj")) continue;
 
                     XNamespace msbuild = "http://schemas.microsoft.com/developer/msbuild/2003";
 
+                    var buildNode = xml.Element(msbuild + "Project");
 
+                    Assert.NotNull(buildNode, "Could not get node '" + msbuild + "Project' in the XML");
 
-                    var itemGroup = xml.Element(msbuild + "Project")
-                        .Elements(msbuild + "ItemGroup").FirstOrDefault(x => x.Descendants().Any(y => y.Name == msbuild + "Reference"));
+                    var itemGroup = buildNode.Elements(msbuild + "ItemGroup").
+                        FirstOrDefault(x => x.Descendants().Any(y => y.Name == msbuild + "Reference"));
+
+                    Assert.NotNull(itemGroup, "Could not find a match to '" + msbuild + "Reference'");
 
                     var referenceItems = itemGroup.Descendants().Where(y => y.Name == msbuild + "Reference");
 

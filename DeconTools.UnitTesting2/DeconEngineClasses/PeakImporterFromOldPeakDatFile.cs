@@ -11,7 +11,7 @@ namespace DeconTools.UnitTesting2.DeconEngineClasses
 {
     public class PeakImporterFromOldPeakDatFile : IPeakImporter
     {
-        private string m_filename;
+        private readonly string m_filename;
         private int m_peakIndex;   //each imported peak is given an index
 
         #region Constructors
@@ -23,52 +23,50 @@ namespace DeconTools.UnitTesting2.DeconEngineClasses
 
         public PeakImporterFromOldPeakDatFile(string filename, BackgroundWorker bw)
         {
-            if (!File.Exists(filename)) throw new System.IO.IOException("PeakImporter failed. File doesn't exist: " + Backend.Utilities.DiagnosticUtilities.GetFullPathSafe(filename));
+            if (!File.Exists(filename)) throw new IOException("PeakImporter failed. File doesn't exist: " + Backend.Utilities.DiagnosticUtilities.GetFullPathSafe(filename));
 
             var fi = new FileInfo(filename);
-            this.numRecords = (int)(fi.Length / 1000 * 26);   // a way of approximating how many peaks there are... only for use with the backgroundWorker
+            numRecords = (int)(fi.Length / 1000 * 26);   // a way of approximating how many peaks there are... only for use with the backgroundWorker
 
-            this.m_filename = filename;
-            this.backgroundWorker = bw;
+            m_filename = filename;
+            backgroundWorker = bw;
         }
 
         #endregion
 
         #region Public Methods
-        public override void ImportPeaks(List<DeconTools.Backend.DTO.MSPeakResult> peakList)
+        public override void ImportPeaks(List<MSPeakResult> peakList)
         {
-             this.m_peakIndex = 0;
+            m_peakIndex = 0;
 
-             var oldPeakResults = new DeconToolsV2.Results.clsTransformResults();
-            Engine.Results.LcmsPeak[] importedPeaks = null;
+            var oldPeakResults = new DeconToolsV2.Results.clsTransformResults();
+            Engine.Results.LcmsPeak[] importedPeaks;
 
-             try
-             {
-                 oldPeakResults.ReadResults(this.m_filename);
-                 oldPeakResults.GetRawData(out importedPeaks);
-             }
-             catch (Exception ex)
-             {
-                 throw ex;
-             }
+            try
+            {
+#pragma warning disable CS0618 // Type or member is obsolete
+                oldPeakResults.ReadResults(m_filename);
+#pragma warning restore CS0618 // Type or member is obsolete
+                oldPeakResults.GetRawData(out importedPeaks);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw;
+            }
 
-             foreach (var p in importedPeaks)
-             {
-                 var peak = ConvertDecon2LSPeakToPeakResult(p);
-                 m_peakIndex++;
+            foreach (var p in importedPeaks)
+            {
+                var peak = ConvertDecon2LSPeakToPeakResult(p);
+                m_peakIndex++;
 
-                 peakList.Add(peak);
-             }
+                peakList.Add(peak);
+            }
         }
 
         #endregion
 
         #region Private Methods
-
-        protected override void reportProgress(int progressCounter)
-        {
-            base.reportProgress(progressCounter);
-        }
 
         private MSPeakResult ConvertDecon2LSPeakToPeakResult(Engine.Results.LcmsPeak p)
         {
@@ -82,7 +80,7 @@ namespace DeconTools.UnitTesting2.DeconEngineClasses
             {
                 MSPeak = new MSPeak(p.Mz, intensity),
                 Scan_num = p.ScanNum,
-                PeakID = this.m_peakIndex
+                PeakID = m_peakIndex
             };
 
             return peakResult;

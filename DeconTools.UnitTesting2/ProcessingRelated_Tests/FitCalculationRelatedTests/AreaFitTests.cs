@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using DeconTools.Backend;
 using DeconTools.Backend.Core;
@@ -19,7 +18,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.FitCalculationRelatedT
     [TestFixture]
     public class AreaFitTests
     {
-        private string xcaliburTestfile = FileRefs.RawDataMSFiles.OrbitrapStdFile1;
+        private readonly string xcaliburTestfile = FileRefs.RawDataMSFiles.OrbitrapStdFile1;
 
 
 
@@ -31,15 +30,16 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.FitCalculationRelatedT
             var results = new ResultCollection(run);
             run.CurrentScanSet = new ScanSet(6067);
 
-            var isTicRequested = false;
-            Task msGen = new GenericMSGenerator(1154, 1158, isTicRequested);
+            Task msGen = new GenericMSGenerator(1154, 1158, isTicRequested: false);
             msGen.Execute(results);
 
-            Task peakDetector = new DeconToolsPeakDetectorV2(0.5, 3, Globals.PeakFitType.QUADRATIC, false);
+            Task peakDetector = new DeconToolsPeakDetectorV2(0.5, 3);
             peakDetector.Execute(results);
 
-            var deconParameters = new DeconToolsParameters();
-            deconParameters.ThrashParameters.MinMSFeatureToBackgroundRatio = 2;     // PeptideMinBackgroundRatio
+            var deconParameters = new DeconToolsParameters {ThrashParameters = {
+                    MinMSFeatureToBackgroundRatio = 2            // PeptideMinBackgroundRatio
+                }
+            };
 
             Task decon = new HornDeconvolutor(deconParameters);
             decon.Execute(results);
@@ -157,8 +157,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.FitCalculationRelatedT
             var results = new ResultCollection(run);
             run.CurrentScanSet = new ScanSet(6005);
 
-            var isTicRequested = false;
-            Task msGen = new GenericMSGenerator(579, 582, isTicRequested);
+            Task msGen = new GenericMSGenerator(579, 582, isTicRequested: false);
             msGen.Execute(results);
 
             Task peakDetector = new DeconToolsPeakDetectorV2(0.5, 3);
@@ -213,11 +212,10 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.FitCalculationRelatedT
             var results = new ResultCollection(run);
             run.CurrentScanSet = new ScanSet(6005);
 
-            var isTicRequested = false;
-            Task msGen = new GenericMSGenerator(1154, 1160, isTicRequested);
+            Task msGen = new GenericMSGenerator(1154, 1160, isTicRequested: false);
             msGen.Execute(results);
 
-            Task peakDetector = new DeconToolsPeakDetectorV2(0.5, 3, Globals.PeakFitType.QUADRATIC, false);
+            Task peakDetector = new DeconToolsPeakDetectorV2(0.5, 3);
             peakDetector.Execute(results);
 
 
