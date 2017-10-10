@@ -176,11 +176,22 @@ namespace DeconTools.Backend.Runs
 
         internal int GetNumScansPerFrame()
         {
-            //TODO:  check this and make sure it is correct
             var minFrame = MinLCScan;
+            var maxFrame = MaxLCScan;
 
-            var numScansPerFrame = UIMFLibraryAdapter.getInstance(Filename).Datareader.GetFrameParams(minFrame).Scans;
-            return numScansPerFrame;
+            // Keys in this dictionary are frame number; values are number of scans in that frame
+            // Nominally all frames have the same number of scans, but this is not always the case
+            var scanCountsByFrame = new Dictionary<int, int>();
+
+            for (var frame = minFrame; frame <= maxFrame; frame++)
+            {
+                var scansPerFrame = UIMFLibraryAdapter.getInstance(Filename).Datareader.GetFrameParams(frame).Scans;
+                scanCountsByFrame.Add(frame, scansPerFrame);
+            }
+
+            var maxScansPerFrame = scanCountsByFrame.Values.Max();
+
+            return maxScansPerFrame;
 
         }
 
