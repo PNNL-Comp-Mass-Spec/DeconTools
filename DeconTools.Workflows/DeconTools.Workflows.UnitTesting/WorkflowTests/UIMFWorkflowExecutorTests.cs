@@ -115,34 +115,41 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             var datasetPath = uimfMsMsFile;
 
-            var executorParameters = new BasicTargetedWorkflowExecutorParameters();
-            executorParameters.CopyRawFileLocal = false;
-            executorParameters.DeleteLocalDatasetAfterProcessing = false;
-            executorParameters.TargetsFilePath = @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\UIMF_Targeted_MSMS_Testing\Targets\ConfidentTargets.txt";
-            executorParameters.TargetedAlignmentIsPerformed = false;
+            var executorParameters = new BasicTargetedWorkflowExecutorParameters
+            {
+                CopyRawFileLocal = false,
+                DeleteLocalDatasetAfterProcessing = false,
+                TargetsFilePath =
+                    @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\UIMF_Targeted_MSMS_Testing\Targets\ConfidentTargets.txt",
+#pragma warning disable 618
+                TargetedAlignmentIsPerformed = false
+#pragma warning restore 618
+            };
 
-            var workflowParameters = new UIMFTargetedMSMSWorkflowCollapseIMSParameters();
-            workflowParameters.AreaOfPeakToSumInDynamicSumming = 2;
-            workflowParameters.ChromatogramCorrelationIsPerformed = false;
-            workflowParameters.ChromGeneratorMode = Globals.ChromatogramGeneratorMode.MOST_ABUNDANT_PEAK;
-            workflowParameters.ChromGenSourceDataPeakBR = 2;
-            workflowParameters.ChromGenSourceDataSigNoise = 3;
-            workflowParameters.ChromNETTolerance = 0.1;
-            workflowParameters.ChromPeakDetectorPeakBR = 1;
-            workflowParameters.ChromPeakDetectorSigNoise = 1;
-            workflowParameters.ChromPeakSelectorMode = Globals.PeakSelectorMode.SmartUIMF;
-            workflowParameters.ChromSmootherNumPointsInSmooth = 9;
-            workflowParameters.ChromGenTolerance = 25;
-            workflowParameters.MaxScansSummedInDynamicSumming = 100;
-            workflowParameters.MSPeakDetectorPeakBR = 1.3;
-            workflowParameters.MSPeakDetectorSigNoise = 3;
-            workflowParameters.MSToleranceInPPM = 25;
-            workflowParameters.MultipleHighQualityMatchesAreAllowed = true;
-            workflowParameters.NumMSScansToSum = 1;
-            workflowParameters.NumChromPeaksAllowedDuringSelection = int.MaxValue;
-            workflowParameters.ProcessMsMs = true;
-            workflowParameters.ResultType = Globals.ResultType.BASIC_TARGETED_RESULT;
-            workflowParameters.SummingMode = SummingModeEnum.SUMMINGMODE_STATIC;
+            var workflowParameters = new UIMFTargetedMSMSWorkflowCollapseIMSParameters
+            {
+                AreaOfPeakToSumInDynamicSumming = 2,
+                ChromatogramCorrelationIsPerformed = false,
+                ChromGeneratorMode = Globals.ChromatogramGeneratorMode.MOST_ABUNDANT_PEAK,
+                ChromGenSourceDataPeakBR = 2,
+                ChromGenSourceDataSigNoise = 3,
+                ChromNETTolerance = 0.1,
+                ChromPeakDetectorPeakBR = 1,
+                ChromPeakDetectorSigNoise = 1,
+                ChromPeakSelectorMode = Globals.PeakSelectorMode.SmartUIMF,
+                ChromSmootherNumPointsInSmooth = 9,
+                ChromGenTolerance = 25,
+                MaxScansSummedInDynamicSumming = 100,
+                MSPeakDetectorPeakBR = 1.3,
+                MSPeakDetectorSigNoise = 3,
+                MSToleranceInPPM = 25,
+                MultipleHighQualityMatchesAreAllowed = true,
+                NumMSScansToSum = 1,
+                NumChromPeaksAllowedDuringSelection = int.MaxValue,
+                ProcessMsMs = true,
+                ResultType = Globals.ResultType.BASIC_TARGETED_RESULT,
+                SummingMode = SummingModeEnum.SUMMINGMODE_STATIC
+            };
 
             var executor = new UIMFTargetedWorkflowExecutor(executorParameters, workflowParameters, datasetPath);
             executor.Execute();

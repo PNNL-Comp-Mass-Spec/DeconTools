@@ -112,7 +112,9 @@ namespace DeconTools.Workflows.Backend.Core
                 _resultsFolder = GetResultsFolder(ExecutorParameters.OutputFolderBase);
             }
 
+#pragma warning disable 618
             if (ExecutorParameters.TargetedAlignmentIsPerformed)
+#pragma warning restore 618
             {
                 MassTagsForTargetedAlignment = GetMassTagTargets(GetTargetFilePathForIqAlignment());
             }
@@ -158,7 +160,9 @@ namespace DeconTools.Workflows.Backend.Core
                 _workflowParameters = TargetedWorkflow.WorkflowParameters;
             }
 
+#pragma warning disable 618
             if (ExecutorParameters.TargetedAlignmentIsPerformed)
+#pragma warning restore 618
             {
                 if (string.IsNullOrEmpty(ExecutorParameters.TargetedAlignmentWorkflowParameterFile))
                 {
@@ -531,7 +535,9 @@ namespace DeconTools.Workflows.Backend.Core
             var runIsNotAligned = (!Run.MassIsAligned && !Run.NETIsAligned);     //if one of these two is aligned, the run is considered to be aligned
 
             //Perform targeted alignment if 1) run is not aligned  2) parameters permit it
+#pragma warning disable 618
             if (runIsNotAligned && ExecutorParameters.TargetedAlignmentIsPerformed)
+#pragma warning restore 618
             {
                 Check.Ensure(MassTagsForTargetedAlignment != null && MassTagsForTargetedAlignment.TargetList.Count > 0, "MassTags for targeted alignment have not been defined. Check path within parameter file.");
 

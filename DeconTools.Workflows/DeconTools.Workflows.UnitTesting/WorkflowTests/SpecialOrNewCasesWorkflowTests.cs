@@ -175,7 +175,9 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             var parameters = new BasicTargetedWorkflowExecutorParameters();
             parameters.LoadParameters(executorParameters);
 
+#pragma warning disable 618
             parameters.TargetedAlignmentIsPerformed = true;
+#pragma warning restore 618
 
             var targetedAlignerWorkflowParameters = new TargetedAlignerWorkflowParameters();
             targetedAlignerWorkflowParameters.LoadParameters(alignmentParametersFile);

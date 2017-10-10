@@ -8,11 +8,14 @@ namespace DeconTools.Workflows.Backend.Core
 
 
         #region Constructors
-        public WorkflowExecutorBaseParameters()
+
+        protected WorkflowExecutorBaseParameters()
         {
             CopyRawFileLocal = false;
             DeleteLocalDatasetAfterProcessing = false;
+#pragma warning disable 618
             TargetedAlignmentIsPerformed = false;
+#pragma warning restore 618
             IsMassAlignmentPerformed = false;
             IsNetAlignmentPerformed = false;
 

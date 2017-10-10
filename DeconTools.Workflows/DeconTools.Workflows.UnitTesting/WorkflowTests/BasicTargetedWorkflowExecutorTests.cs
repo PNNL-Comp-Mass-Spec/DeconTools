@@ -19,19 +19,22 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         public void ParameterTest1()
         {
             var outputFileName = @"\\protoapps\UserData\Slysz\IQDemo\Parameters" + @"\IQExecutorParameters.xml";
-            var executorParameters = new BasicTargetedWorkflowExecutorParameters();
-            executorParameters.CopyRawFileLocal = false;
-            executorParameters.DeleteLocalDatasetAfterProcessing = true;
-            executorParameters.FolderPathForCopiedRawDataset = @"\\protoapps\UserData\Slysz\IQ_Demo\RawData";
-            executorParameters.TargetType = Globals.TargetType.DatabaseTarget;
-            executorParameters.TargetsBaseFolder = "";
-            executorParameters.TargetedAlignmentIsPerformed = false;
-            executorParameters.TargetedAlignmentWorkflowParameterFile =
-                @"\\protoapps\UserData\Slysz\IQ_Demo\Parameters\TargetedAlignmentWorkflowParameters1.xml";
-            executorParameters.TargetsFilePath =
-                @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Unlabelled\Targets\QCShew_Formic_MassTags_Bin10_first10.txt";
+            var executorParameters = new BasicTargetedWorkflowExecutorParameters
+            {
+                CopyRawFileLocal = false,
+                DeleteLocalDatasetAfterProcessing = true,
+                FolderPathForCopiedRawDataset = @"\\protoapps\UserData\Slysz\IQ_Demo\RawData",
+                TargetType = Globals.TargetType.DatabaseTarget,
+                TargetsBaseFolder = "",
+#pragma warning disable 618
+                TargetedAlignmentIsPerformed = false,
+#pragma warning restore 618
+                TargetedAlignmentWorkflowParameterFile = @"\\protoapps\UserData\Slysz\IQ_Demo\Parameters\TargetedAlignmentWorkflowParameters1.xml",
+                TargetsFilePath =
+                    @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Unlabelled\Targets\QCShew_Formic_MassTags_Bin10_first10.txt",
+                WorkflowParameterFile = @"\\protoapps\UserData\Slysz\IQ_Demo\Parameters\IQParameters1.xml"
+            };
 
-            executorParameters.WorkflowParameterFile = @"\\protoapps\UserData\Slysz\IQ_Demo\Parameters\IQParameters1.xml";
             executorParameters.SaveParametersToXML(outputFileName);
         }
 
@@ -57,7 +60,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
         }
 
-        
+
 
 
 
@@ -68,20 +71,25 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         {
             // https://jira.pnnl.gov/jira/browse/OMCS-714
 
-            var executorParameters = new BasicTargetedWorkflowExecutorParameters();
-            executorParameters.TargetsFilePath =
-                baseFolder + @"\Targets\QCShew_Formic_MassTags_Bin10_MT24702_Z3.txt";
-            executorParameters.TargetedAlignmentIsPerformed = true;
-            executorParameters.TargetedAlignmentWorkflowParameterFile =
-                baseFolder + @"\Parameters\TargetedAlignmentWorkflowParameters1.xml";
+            var executorParameters =
+                new BasicTargetedWorkflowExecutorParameters
+                {
+                    TargetsFilePath = baseFolder + @"\Targets\QCShew_Formic_MassTags_Bin10_MT24702_Z3.txt",
+#pragma warning disable 618
+                    TargetedAlignmentIsPerformed = true,
+#pragma warning restore 618
+                    TargetedAlignmentWorkflowParameterFile = baseFolder + @"\Parameters\TargetedAlignmentWorkflowParameters1.xml"
+                };
 
-            var workflowParameters = new BasicTargetedWorkflowParameters();
-            workflowParameters.ChromSmootherNumPointsInSmooth = 9;
-            workflowParameters.ChromPeakDetectorPeakBR = 1;
-            workflowParameters.ChromPeakDetectorSigNoise = 3;
-            workflowParameters.ChromGenTolerance = 20;
-            workflowParameters.ChromNETTolerance = 0.025;
-            workflowParameters.MSToleranceInPPM = 20;
+            var workflowParameters = new BasicTargetedWorkflowParameters
+            {
+                ChromSmootherNumPointsInSmooth = 9,
+                ChromPeakDetectorPeakBR = 1,
+                ChromPeakDetectorSigNoise = 3,
+                ChromGenTolerance = 20,
+                ChromNETTolerance = 0.025,
+                MSToleranceInPPM = 20
+            };
 
             var workflow = new BasicTargetedWorkflow(workflowParameters);
 
@@ -101,12 +109,12 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             Assert.IsNotNull(result.ChromPeakSelected);
 
             Assert.IsTrue(result.Score < 0.1);
-            
-            
-            
+
+
+
             Assert.AreEqual(3, result.NumChromPeaksWithinTolerance);
             Assert.AreEqual(8627, (decimal)Math.Round(result.ChromPeakSelected.XValue, 0));
-            
+
             //non-calibrated mass directly from mass spectrum
             Assert.AreEqual(2920.49120m, (decimal) Math.Round(result.IsotopicProfile.MonoIsotopicMass,5));
 
@@ -116,18 +124,18 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             Console.WriteLine("theor monomass= \t" + result.Target.MonoIsotopicMass);
             Console.WriteLine("monomass= \t" + result.IsotopicProfile.MonoIsotopicMass);
             Console.WriteLine("calibrated monomass= \t" + result.MonoIsotopicMassCalibrated);
-            
+
             Console.WriteLine("ppmError before= \t" + result.MassErrorBeforeAlignment);
             Console.WriteLine("ppmError after= \t" + result.MassErrorAfterAlignment);
-            
-           
+
+
             Console.WriteLine("Database NET= " + result.Target.NormalizedElutionTime);
             Console.WriteLine("Result NET= " + result.GetNET());
             Console.WriteLine("Result NET Error= " + result.GetNETAlignmentError());
             Console.WriteLine("NumChromPeaksWithinTol= " + result.NumChromPeaksWithinTolerance);
 
         //Dataset	TargetID	Code	EmpiricalFormula	ChargeState	Scan	ScanStart	ScanEnd	NumMSSummed	NET	NETError	NumChromPeaksWithinTol	NumQualityChromPeaksWithinTol	MonoisotopicMass	MonoisotopicMassCalibrated	MassErrorInPPM	MonoMZ	IntensityRep	FitScore	IScore	FailureType	ErrorDescription
-        //QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18	24702	LLKEEGYIADYAVADEAKPELEITLK	C133H213N29O44	3	8624	8596	8659	0	0.42916	-0.009395	3	1	2920.49120	2920.50018	13.96	974.50434	7529645	0.0193	0.0000		
+        //QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18	24702	LLKEEGYIADYAVADEAKPELEITLK	C133H213N29O44	3	8624	8596	8659	0	0.42916	-0.009395	3	1	2920.49120	2920.50018	13.96	974.50434	7529645	0.0193	0.0000
         }
 
 
@@ -139,20 +147,25 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         {
             // https://jira.pnnl.gov/jira/browse/OMCS-854
 
-            var executorParameters = new BasicTargetedWorkflowExecutorParameters();
-            executorParameters.TargetsFilePath =
-                baseFolder + @"\Targets\QCShew_Formic_MassTags_Bin10_MT24702_Z3.txt";
-            executorParameters.TargetedAlignmentIsPerformed = true;
-           executorParameters.TargetedAlignmentWorkflowParameterFile =
-                baseFolder + @"\Parameters\TargetedAlignmentWorkflowParameters1.xml";
+            var executorParameters =
+                new BasicTargetedWorkflowExecutorParameters
+                {
+                    TargetsFilePath = baseFolder + @"\Targets\QCShew_Formic_MassTags_Bin10_MT24702_Z3.txt",
+#pragma warning disable 618
+                    TargetedAlignmentIsPerformed = true,
+#pragma warning restore 618
+                    TargetedAlignmentWorkflowParameterFile = baseFolder + @"\Parameters\TargetedAlignmentWorkflowParameters1.xml"
+                };
 
-            var workflowParameters = new BasicTargetedWorkflowParameters();
-            workflowParameters.ChromSmootherNumPointsInSmooth = 9;
-            workflowParameters.ChromPeakDetectorPeakBR = 1;
-            workflowParameters.ChromPeakDetectorSigNoise = 3;
-            workflowParameters.ChromGenTolerance = 20;
-            workflowParameters.ChromNETTolerance = 0.025;
-            workflowParameters.MSToleranceInPPM = 20;
+            var workflowParameters = new BasicTargetedWorkflowParameters
+            {
+                ChromSmootherNumPointsInSmooth = 9,
+                ChromPeakDetectorPeakBR = 1,
+                ChromPeakDetectorSigNoise = 3,
+                ChromGenTolerance = 20,
+                ChromNETTolerance = 0.025,
+                MSToleranceInPPM = 20
+            };
 
             var workflow = new BasicTargetedWorkflow(workflowParameters);
 
@@ -190,38 +203,40 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             //calibrated mass
             //Assert.AreEqual(2920.50018m, (decimal)Math.Round(result.GetCalibratedMonoisotopicMass(), 5));
-           
+
             Console.WriteLine("Database NET= " + result.Target.NormalizedElutionTime);
             Console.WriteLine("Result NET= " + result.GetNET());
             Console.WriteLine("Result NET Error= " + result.GetNETAlignmentError());
             Console.WriteLine("NumChromPeaksWithinTol= " + result.NumChromPeaksWithinTolerance);
 
             //Dataset	TargetID	Code	EmpiricalFormula	ChargeState	Scan	ScanStart	ScanEnd	NumMSSummed	NET	NETError	NumChromPeaksWithinTol	NumQualityChromPeaksWithinTol	MonoisotopicMass	MonoisotopicMassCalibrated	MassErrorInPPM	MonoMZ	IntensityRep	FitScore	IScore	FailureType	ErrorDescription
-            //QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18	24702	LLKEEGYIADYAVADEAKPELEITLK	C133H213N29O44	3	8624	8596	8659	0	0.42916	-0.009395	3	1	2920.49120	2920.50018	13.96	974.50434	7529645	0.0193	0.0000		
+            //QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18	24702	LLKEEGYIADYAVADEAKPELEITLK	C133H213N29O44	3	8624	8596	8659	0	0.42916	-0.009395	3	1	2920.49120	2920.50018	13.96	974.50434	7529645	0.0193	0.0000
         }
 
 
         public void TargetedWorkflowUsingMsgfInputsTest1()
         {
-            var executorParameters = new BasicTargetedWorkflowExecutorParameters();
-            executorParameters.TargetsFilePath =
-                @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Unlabelled\Targets\Yellow_C13_070_23Mar10_Griffin_10-01-28_msgfplus.tsv";
-
-            executorParameters.TargetedAlignmentIsPerformed = false;
-
+            var executorParameters = new BasicTargetedWorkflowExecutorParameters
+            {
+                TargetsFilePath =
+                    @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Unlabelled\Targets\Yellow_C13_070_23Mar10_Griffin_10-01-28_msgfplus.tsv",
+#pragma warning disable 618
+                TargetedAlignmentIsPerformed = false
+#pragma warning restore 618
+            };
 
             executorParameters.SaveParametersToXML(
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\IQConsoleDemo\IqExecutorParameters.xml");
-           
 
-         
-            var workflowParameters = new BasicTargetedWorkflowParameters();
-            workflowParameters.ChromSmootherNumPointsInSmooth = 9;
-            workflowParameters.ChromPeakDetectorPeakBR = 1;
-            workflowParameters.ChromPeakDetectorSigNoise = 3;
-            workflowParameters.ChromGenTolerance = 20;
-            workflowParameters.ChromNETTolerance = 0.025;
-            workflowParameters.MSToleranceInPPM = 20;
+            var workflowParameters = new BasicTargetedWorkflowParameters
+            {
+                ChromSmootherNumPointsInSmooth = 9,
+                ChromPeakDetectorPeakBR = 1,
+                ChromPeakDetectorSigNoise = 3,
+                ChromGenTolerance = 20,
+                ChromNETTolerance = 0.025,
+                MSToleranceInPPM = 20
+            };
 
             workflowParameters.SaveParametersToXML(
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\IQConsoleDemo\IqWorkflowParameters.xml");
@@ -288,18 +303,23 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         {
             //TODO: figure out result is correct
             //TODO: get MS and Chrom in Jira
-            var executorParameters = new BasicTargetedWorkflowExecutorParameters();
-            executorParameters.TargetsFilePath =
-                @"C:\Users\d3x720\Documents\Data\QCShew\IQ\QCShew_Formic_MassTags_Bin10_MT24702_Z3.txt";
-            executorParameters.TargetedAlignmentIsPerformed = true;
-            
-            var workflowParameters = new BasicTargetedWorkflowParameters();
-            workflowParameters.ChromSmootherNumPointsInSmooth = 9;
-            workflowParameters.ChromPeakDetectorPeakBR = 1;
-            workflowParameters.ChromPeakDetectorSigNoise = 1;
-            workflowParameters.ChromGenTolerance = 20;
-            workflowParameters.ChromNETTolerance = 0.025;
-            workflowParameters.MSToleranceInPPM = 20;
+            var executorParameters = new BasicTargetedWorkflowExecutorParameters
+            {
+                TargetsFilePath = @"C:\Users\d3x720\Documents\Data\QCShew\IQ\QCShew_Formic_MassTags_Bin10_MT24702_Z3.txt",
+#pragma warning disable 618
+                TargetedAlignmentIsPerformed = true
+#pragma warning restore 618
+            };
+
+            var workflowParameters = new BasicTargetedWorkflowParameters
+            {
+                ChromSmootherNumPointsInSmooth = 9,
+                ChromPeakDetectorPeakBR = 1,
+                ChromPeakDetectorSigNoise = 1,
+                ChromGenTolerance = 20,
+                ChromNETTolerance = 0.025,
+                MSToleranceInPPM = 20
+            };
 
             var workflow = new BasicTargetedWorkflow(workflowParameters);
 
@@ -327,7 +347,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             //Dataset	MassTagID	ChargeState	Scan	ScanStart	ScanEnd	NET	NumChromPeaksWithinTol	NumQualityChromPeaksWithinTol	MonoisotopicMass	MonoMZ	IntensityRep	FitScore	IScore	FailureType
 
-            //QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18	24702	3	8119	8112	8124	0.4172	2	1	2920.53082	974.51755	1379489	0.1136	0.0000	
+            //QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18	24702	3	8119	8112	8124	0.4172	2	1	2920.53082	974.51755	1379489	0.1136	0.0000
 
         }
 
@@ -356,7 +376,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
 
             var rawFileInfo = new FileInfo(testDatasetPath);
-          
+
 
             //delete alignment files
             var mzalignmentFile = Path.Combine(rawFileInfo.DirectoryName, testDatasetName + "_mzAlignment.txt");
@@ -365,7 +385,9 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             if (File.Exists(netAlignmentFile)) File.Delete(netAlignmentFile);
 
 
+#pragma warning disable 618
             executorParameters.TargetedAlignmentIsPerformed = false;    //no targeted alignment
+#pragma warning restore 618
 
             TargetedWorkflowExecutor executor = new BasicTargetedWorkflowExecutor(executorParameters, testDatasetPath);
             executor.Execute();
@@ -474,7 +496,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             //Dataset	MassTagID	ChargeState	Scan	ScanStart	ScanEnd	NET	NumChromPeaksWithinTol	NumQualityChromPeaksWithinTol	MonoisotopicMass	MonoMZ	IntensityRep	FitScore	IScore	FailureType
 
-            //QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18	24702	3	8119	8112	8124	0.4172	2	1	2920.53082	974.51755	1379489	0.1136	0.0000	
+            //QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18	24702	3	8119	8112	8124	0.4172	2	1	2920.53082	974.51755	1379489	0.1136	0.0000
 
         }
 
@@ -525,7 +547,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             //Dataset	MassTagID	ChargeState	Scan	ScanStart	ScanEnd	NET	NumChromPeaksWithinTol	NumQualityChromPeaksWithinTol	MonoisotopicMass	MonoMZ	IntensityRep	FitScore	IScore	FailureType
 
-            //QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18	24702	3	8119	8112	8124	0.4172	2	1	2920.53082	974.51755	1379489	0.1136	0.0000	
+            //QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18	24702	3	8119	8112	8124	0.4172	2	1	2920.53082	974.51755	1379489	0.1136	0.0000
 
         }
 

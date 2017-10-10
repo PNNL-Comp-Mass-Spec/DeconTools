@@ -241,7 +241,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
             PeakChrom chrom = new BasicPeakChrom();
 #pragma warning disable 618
             chrom.ChromSourceData = chromGen.GeneratePeakChromatogram(run.ResultCollection.MSPeakResultList, run.MinLCScan, run.MaxLCScan, targetMZ, chromToleranceInPPM);
-#pragma warning enable 618
+#pragma warning restore 618
 
             Assert.AreEqual(59, chrom.ChromSourceData.Count);
 

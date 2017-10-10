@@ -17,16 +17,20 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             var outputFile = Path.Combine(FileRefs.OutputFolderPath, "SipperExecutorParameters1.xml");
 
-            var parameters = new SipperWorkflowExecutorParameters();
-            parameters.DeleteLocalDatasetAfterProcessing = false;
-            parameters.FolderPathForCopiedRawDataset = string.Empty;
-            parameters.ReferenceDataForTargets = @"C:\Sipper\SipperDemo\SipperInputs\Sample_ReferenceDataForTargets.txt";
-            parameters.TargetedAlignmentIsPerformed = false;
-            parameters.TargetedAlignmentWorkflowParameterFile = string.Empty;
-            parameters.TargetsBaseFolder = @"C:\Sipper\SipperDemo\SipperInputs\Targets";
-            parameters.TargetsFilePath = @"C:\Sipper\SipperDemo\SipperInputs\Targets\sample_targets.txt";
-            parameters.TargetsToFilterOn = string.Empty;
-            parameters.WorkflowParameterFile = @"C:\Sipper\SipperDemo\SipperInputs\SipperWorkflowParameters.xml";
+            var parameters = new SipperWorkflowExecutorParameters
+            {
+                DeleteLocalDatasetAfterProcessing = false,
+                FolderPathForCopiedRawDataset = string.Empty,
+                ReferenceDataForTargets = @"C:\Sipper\SipperDemo\SipperInputs\Sample_ReferenceDataForTargets.txt",
+#pragma warning disable 618
+                TargetedAlignmentIsPerformed = false,
+#pragma warning restore 618
+                TargetedAlignmentWorkflowParameterFile = string.Empty,
+                TargetsBaseFolder = @"C:\Sipper\SipperDemo\SipperInputs\Targets",
+                TargetsFilePath = @"C:\Sipper\SipperDemo\SipperInputs\Targets\sample_targets.txt",
+                TargetsToFilterOn = string.Empty,
+                WorkflowParameterFile = @"C:\Sipper\SipperDemo\SipperInputs\SipperWorkflowParameters.xml"
+            };
 
             parameters.SaveParametersToXML(outputFile);
 

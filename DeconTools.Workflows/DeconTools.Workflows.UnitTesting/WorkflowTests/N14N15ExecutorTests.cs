@@ -20,14 +20,18 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             var exportedExecutorParametersFilePath = @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\N14N15_standard_testing\Parameters\ExecutorParameters1.xml";
 
 
-            var executorParameters = new BasicTargetedWorkflowExecutorParameters();
-            executorParameters.CopyRawFileLocal = false;
-            executorParameters.DeleteLocalDatasetAfterProcessing = false;
-            executorParameters.TargetType = Globals.TargetType.DatabaseTarget;
-            executorParameters.TargetedAlignmentIsPerformed = true;
-            executorParameters.TargetedAlignmentWorkflowParameterFile = targetedAlignmentParameterFile;
-            executorParameters.TargetsFilePath = targetsFilePath;
-            executorParameters.WorkflowParameterFile = workflowFilePath;
+            var executorParameters = new BasicTargetedWorkflowExecutorParameters
+            {
+                CopyRawFileLocal = false,
+                DeleteLocalDatasetAfterProcessing = false,
+                TargetType = Globals.TargetType.DatabaseTarget,
+#pragma warning disable 618
+                TargetedAlignmentIsPerformed = true,
+#pragma warning restore 618
+                TargetedAlignmentWorkflowParameterFile = targetedAlignmentParameterFile,
+                TargetsFilePath = targetsFilePath,
+                WorkflowParameterFile = workflowFilePath
+            };
             executorParameters.SaveParametersToXML(exportedExecutorParametersFilePath);
 
         }

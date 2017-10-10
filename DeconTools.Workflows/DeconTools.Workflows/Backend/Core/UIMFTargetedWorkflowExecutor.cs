@@ -31,7 +31,9 @@ namespace DeconTools.Workflows.Backend.Core
                 _workflowParameters.LoadParameters(ExecutorParameters.WorkflowParameterFile);
             }
 
+#pragma warning disable 618
             if (ExecutorParameters.TargetedAlignmentIsPerformed)
+#pragma warning restore 618
             {
                 if (string.IsNullOrEmpty(ExecutorParameters.TargetedAlignmentWorkflowParameterFile))
                 {
