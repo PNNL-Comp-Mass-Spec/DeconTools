@@ -37,6 +37,9 @@ namespace DeconTools.Backend.Runs
 
             Filename = filename;
             var baseFilename = Path.GetFileName(Filename);
+            if (baseFilename == null)
+                throw new FileNotFoundException("Unable to determine the filename for " + Filename);
+
             DatasetName = baseFilename.Substring(0, baseFilename.LastIndexOf('.'));
             DataSetPath = Path.GetDirectoryName(filename);
 

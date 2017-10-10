@@ -114,24 +114,38 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 
         public void GetElutionCorrelationData(XYData chromData1, XYData chromData2, out double slope, out double intercept, out double rsquaredVal)
         {
-            Check.Require(chromData1?.Xvalues != null, "Chromatogram1 intensities are null");
-            Check.Require(chromData2?.Xvalues != null, "Chromatogram2 intensities are null");
+            slope = -9999;
+            intercept = -9999;
+            rsquaredVal = -1;
 
-            Check.Require(chromData1.Xvalues[0] == chromData2.Xvalues[0], "Correlation failed. Chromatograms being correlated do not have the same scan values!");
+            Check.Require(chromData1?.Xvalues != null, "Chromatogram1 intensities are null");
+            if (chromData1?.Xvalues == null)
+                return;
+
+            Check.Require(chromData2?.Xvalues != null, "Chromatogram2 intensities are null");
+            if (chromData2?.Xvalues == null)
+                return;
+
+            Check.Require(Math.Abs(chromData1.Xvalues[0] - chromData2.Xvalues[0]) < float.Epsilon, "Correlation failed. Chromatograms being correlated do not have the same scan values!");
 
             GetElutionCorrelationData(chromData1.Yvalues, chromData2.Yvalues, out slope, out intercept, out rsquaredVal);
         }
 
         public void GetElutionCorrelationData(double[] chromIntensities1, double[] chromIntensities2, out double slope, out double intercept, out double rsquaredVal)
         {
-            Check.Require(chromIntensities1 != null, "Chromatogram1 intensities are null");
-            Check.Require(chromIntensities2 != null, "Chromatogram2 intensities are null");
-
-            Check.Require(chromIntensities1.Length == chromIntensities2.Length, "Correlation failed. Chromatogram1 and Chromatogram2 must be the same length");
-
             slope = -9999;
             intercept = -9999;
             rsquaredVal = -1;
+
+            Check.Require(chromIntensities1 != null, "Chromatogram1 intensities are null");
+            if (chromIntensities1 == null)
+                return;
+
+            Check.Require(chromIntensities2 != null, "Chromatogram2 intensities are null");
+            if (chromIntensities2 == null)
+                return;
+
+            Check.Require(chromIntensities1.Length == chromIntensities2.Length, "Correlation failed. Chromatogram1 and Chromatogram2 must be the same length");
 
             try
             {
@@ -154,9 +168,18 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
         public override void Execute(ResultCollection resultList)
         {
             Check.Require(resultList.Run.CurrentMassTag != null, Name + " failed; CurrentMassTag is empty");
+            if (resultList.Run.CurrentMassTag == null)
+                return;
+
             Check.Require(resultList.Run.CurrentMassTag.IsotopicProfile != null, Name + " failed; Theor isotopic profile is empty. Run a TheorFeatureGenerator");
             Check.Require(resultList.CurrentTargetedResult != null, Name + " failed; CurrentTargetedResult is empty.");
+            if (resultList.CurrentTargetedResult == null)
+                return;
+
             Check.Require(resultList.CurrentTargetedResult.ChromPeakSelected != null, Name + " failed; ChromPeak was never selected.");
+            if (resultList.CurrentTargetedResult.ChromPeakSelected == null)
+                return;
+
             Check.Require(resultList.CurrentTargetedResult.IsotopicProfile != null, Name + " failed; Isotopic profile is null.");
 
 
