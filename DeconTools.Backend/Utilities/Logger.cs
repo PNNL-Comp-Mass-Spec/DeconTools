@@ -37,6 +37,11 @@ namespace DeconTools.Backend.Utilities
 
         public DateTime TimeOfLastUpdate { get; set; }
 
+        /// <summary>
+        /// Add a message to log, optionally flushing cached messages to the log ifle
+        /// </summary>
+        /// <param name="desc"></param>
+        /// <param name="writeCachedEntriesToDisk"></param>
         public void AddEntry(string desc, bool writeCachedEntriesToDisk = false)
         {
             var entry = new LogEntry
@@ -52,24 +57,45 @@ namespace DeconTools.Backend.Utilities
             if (!writeCachedEntriesToDisk)
                 return;
 
-            // Flush entries in LogEntryBuffer to disk
-            WriteToFile(Instance.OutputFilename);
-            LogEntryBuffer.Clear();
+            FlushLogEntries(Instance.OutputFilename);
+
         }
 
-        [Obsolete("Use the version of AddEntry that takes a bool")]
+        /// <summary>
+        /// Flush the log to the specified file
+        /// </summary>
+        /// <param name="desc"></param>
+        /// <param name="outputFilename"></param>
         public void AddEntry(string desc, string outputFilename)
         {
             AddEntry(desc);
 
             // Flush entries in LogEntryBuffer to disk
-            WriteToFile(outputFilename);
-            LogEntryBuffer.Clear();
+            FlushLogEntries(outputFilename);
         }
 
         public void Close()
         {
             instance = null;
+        }
+
+        /// <summary>
+        /// Flush entries in LogEntryBuffer to console or disk
+        /// </summary>
+        /// <param name="outputFile"></param>
+        private void FlushLogEntries(string outputFile)
+        {
+            if (string.IsNullOrWhiteSpace(outputFile))
+            {
+                foreach (var item in LogEntryBuffer)
+                    Console.WriteLine(item);
+            }
+            else
+            {
+                WriteToFile(outputFile);
+            }
+
+            LogEntryBuffer.Clear();
         }
 
         public TimeSpan GetTimeDifference(string string1, string string2)
