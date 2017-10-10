@@ -10,7 +10,7 @@ using ThermoRawFileReader;
 
 namespace DeconTools.Backend.Runs
 {
-    public class XCaliburRun2 : Run
+    public sealed class XCaliburRun2 : Run
     {
 
         private readonly MSFileReaderLib.MSFileReader_XRawfile _msfileReader;

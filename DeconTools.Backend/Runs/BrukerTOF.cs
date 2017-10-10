@@ -5,7 +5,7 @@ using EDAL;
 
 namespace DeconTools.Backend.Runs
 {
-    public class BrukerTOF : Run
+    public sealed class BrukerTOF : Run
     {
 
         private readonly IMSAnalysis _msAnalysis;

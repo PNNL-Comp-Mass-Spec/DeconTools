@@ -5,7 +5,7 @@ using pwiz.ProteowizardWrapper;
 
 namespace DeconTools.Backend.Runs
 {
-    public class MzRun : Run
+    public sealed class MzRun : Run
     {
         private readonly MSDataFileReader _reader;
 
@@ -19,7 +19,6 @@ namespace DeconTools.Backend.Runs
         #region Constructors
 
         public MzRun()
-            : base()
         {
             IsDataThresholded = true;  //TODO:  this should not be hardcoded, but should be put in parameter file. This property is used by the peak detector
             MSFileType = Globals.MSFileType.Finnigan;
