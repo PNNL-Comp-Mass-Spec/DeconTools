@@ -43,7 +43,7 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
             var bestScan = (int)chromPeak.XValue;
             bestScan = run.GetClosestMSScan(bestScan, DeconTools.Backend.Globals.ScanSelectionMode.CLOSEST);
 
-                    var scanset = _scansetFactory.CreateScanSet(run, bestScan, numLCScansToSum);
+            var scanset = _scansetFactory.CreateScanSet(run, bestScan, numLCScansToSum);
 
             if (run.MSFileType == DeconTools.Backend.Globals.MSFileType.PNNL_UIMF)
             {
@@ -92,9 +92,6 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
             //var centerScan = (uimfRun.MinIMSScan + uimfRun.MaxIMSScan + 1) / 2;
             //uimfRun.CurrentIMSScanSet = new IMSScanSet(centerScan, uimfRun.MinIMSScan, uimfRun.MaxIMSScan);
         }
-
-
-
 
 
         /// <summary>

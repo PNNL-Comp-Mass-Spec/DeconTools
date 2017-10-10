@@ -8,7 +8,7 @@ using DeconTools.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
 {
-    public abstract class PeakDetector:Task
+    public abstract class PeakDetector : Task
     {
         private readonly PeakUtilities _peakUtilities = new PeakUtilities();
 
@@ -42,15 +42,12 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
 
             //[gord] I'm adding a loop here, because we are experiencing an infrequent and seemingly random failure with the peak detector on data from UIMF files
             //looping it may force it to process the current ims scan.
-            while (!isSuccess && counter<=4)
+            while (!isSuccess && counter <= 4)
             {
                 try
                 {
                     resultList.Run.PeakList = FindPeaks(resultList.Run.XYData, MinX, MaxX);
                     isSuccess = true;
-
-
-
                 }
                 catch (Exception ex)
                 {

@@ -61,19 +61,19 @@ namespace DeconTools.Backend.ProcessingTasks
         public double Tolerance { get; set; }
 
         /// <summary>
-        /// The width or range of the NET / scan window. A larger value will result in a chromatogram covering more of the dataset scan range. 
+        /// The width or range of the NET / scan window. A larger value will result in a chromatogram covering more of the dataset scan range.
         /// </summary>
         public float ChromWindowWidthForNonAlignedData { get; set; }
 
 
         /// <summary>
-        /// The width or range of the NET / scan window. A larger value will result in a chromatogram covering more of the dataset scan range. 
+        /// The width or range of the NET / scan window. A larger value will result in a chromatogram covering more of the dataset scan range.
         /// For Aligned data, we should be able to use a smaller range which will lead to faster chromatogram generation
         /// </summary>
         public float ChromWindowWidthForAlignedData { get; set; }
 
         /// <summary>
-        /// Peaks of the theoretical isotopic profile that fall below this cutoff will not be used in generating the chromatogram. 
+        /// Peaks of the theoretical isotopic profile that fall below this cutoff will not be used in generating the chromatogram.
         /// </summary>
         public double TopNPeaksLowerCutOff { get; set; }
 
@@ -96,7 +96,7 @@ namespace DeconTools.Backend.ProcessingTasks
             //[gord] restricting the scan range from which the chromatogram is generated greatly improves speed. e.g) on an Orbitrap file
             //if I get the chrom from the entire scan range (18500 scans) the average time is 120ms. If I restrict to a width of 3000 scans
             //the average time is 20ms. But if we are too restrictive, I have seen cases where the real chrom peak is never generated because
-            //it fell outside the chrom generator window. 
+            //it fell outside the chrom generator window.
 
             float netElutionTime;
             if (resultList.Run.CurrentMassTag.ElutionTimeUnit == Globals.ElutionTimeUnit.ScanNum)
@@ -223,7 +223,7 @@ namespace DeconTools.Backend.ProcessingTasks
         public XYData GenerateChromatogram(Run run, List<double> targetMzList, double elutionTimeCenter = 0.5, Globals.ElutionTimeUnit elutionTimeUnit = Globals.ElutionTimeUnit.NormalizedElutionTime)
         {
 
-           
+
 
             var lowerScan = run.MinLCScan;
             var upperScan = run.MaxLCScan;
