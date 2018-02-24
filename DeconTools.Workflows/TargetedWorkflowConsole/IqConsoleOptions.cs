@@ -14,6 +14,7 @@ namespace IQ.Console
             ReferenceTargetFile = string.Empty;
             TargetFileForAlignment = string.Empty;
             OutputFolder = string.Empty;
+            AppendTargetsFileNameToResultFile = false;
             UseInputScan = false;
             WorkflowParameterFile = string.Empty;
             TemporaryWorkingFolder = string.Empty;
@@ -41,8 +42,11 @@ namespace IQ.Console
         [Option("A", "AlignmentTargetsFile", HelpText = "A text file containing a list of IQ targets which are used in calibrating mass and elution time. Supported formats= .txt, .mgf")]
         public string TargetFileForAlignment { get; set; }
 
-        [Option("D", "OutputFolder", HelpText = "Output folder ")]
+        [Option("D", "OutputFolder", HelpText = "Output folder")]
         public string OutputFolder { get; set; }
+
+        [Option("Append", "AppendTargetName", HelpText = "Append the targets file name to the results file")]
+        public bool AppendTargetsFileNameToResultFile { get; set; }
 
         [Option("UseInputScan", HelpText = "Determines whether or not the user-supplied LC scan is used during IQ processing.")]
         public bool UseInputScan { get; set; }

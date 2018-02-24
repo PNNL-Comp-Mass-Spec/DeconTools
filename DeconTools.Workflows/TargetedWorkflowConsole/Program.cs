@@ -124,6 +124,7 @@ namespace IQ.Console
             {
                 TargetsFilePath = options.TargetsFile,
                 OutputFolderBase = options.OutputFolder,
+                AppendTargetsFileNameToResultFile = options.AppendTargetsFileNameToResultFile,
 #pragma warning disable 618
                 TargetedAlignmentIsPerformed = options.IsAlignmentPerformed,
 #pragma warning restore 618
@@ -171,6 +172,8 @@ namespace IQ.Console
 
 
                 executorParameters.OutputFolderBase = GetParameter(parameterList, "ResultsFolder", executorParameters.OutputFolderBase);
+
+                executorParameters.AppendTargetsFileNameToResultFile = GetParameter(parameterList, "AppendTargetsFileNameToResultFile", executorParameters.AppendTargetsFileNameToResultFile);
 
                 executorParameters.WorkflowParameterFile = GetParameter(parameterList, "WorkflowParameterFile", executorParameters.WorkflowParameterFile);
 
@@ -303,7 +306,7 @@ namespace IQ.Console
 
                 if (!string.IsNullOrWhiteSpace(options.TargetsFile))
                 {
-                    // Override any targets file defined with the XML file
+                    // The targets file specified at the command line overrides any targets file defined in the Workflow Executor Parameters
                     executorParameters.TargetsFilePath = options.TargetsFile;
                 }
 
@@ -318,7 +321,6 @@ namespace IQ.Console
                     TargetedWorkflowExecutor executor = new BasicTargetedWorkflowExecutor(executorParameters,
                                                                                           currentDatasetPath);
 
-                    //executor.Targets.TargetList = executor.Targets.TargetList.Take(10).ToList();
                     executor.MsgfFdrScoreCutoff = 0.1;
                     executor.Execute();
                 }

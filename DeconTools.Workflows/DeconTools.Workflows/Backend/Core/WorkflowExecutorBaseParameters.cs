@@ -35,8 +35,6 @@ namespace DeconTools.Workflows.Backend.Core
         }
         #endregion
 
-
-
         #region Properties
 
         public bool CopyRawFileLocal { get; set; }
@@ -55,9 +53,23 @@ namespace DeconTools.Workflows.Backend.Core
             }
             set => mOutputFolderBase = value;
         }
+
+        /// <summary>
+        /// When true, append the targets file name to the output file name
+        /// </summary>
+        /// <remarks>Useful if searching the same dataset repeatedly with different targets files</remarks>
+        public bool AppendTargetsFileNameToResultFile { get; set; }
+
         public string ReferenceTargetsFilePath { get; set; }
+
         public string TargetsFilePath { get; set; }
+
+        /// <summary>
+        /// Used by TryFindTargetsForCurrentDataset when TargetsFilePath is empty
+        /// Will try to auto-find the targets file in this folder based on the input file name
+        /// </summary>
         public string TargetsBaseFolder { get; set; }
+
         public Globals.TargetType TargetType { get; set; }
 
         [Obsolete("No longer use. Use 'IsMassAlignmentPerformed'")]

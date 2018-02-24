@@ -329,7 +329,39 @@ namespace DeconTools.Workflows.Backend.Core
 
             SetupResultsFolder();
 
-            IqResultExporter.WriteOutResults(Path.Combine(_resultsFolder, Run.DatasetName + "_iqResults.txt"), exportedResults);
+            string resultsFileName;
+            if (_parameters.AppendTargetsFileNameToResultFile && !string.IsNullOrWhiteSpace(_parameters.TargetsFilePath))
+            {
+                var targetsFileName = Path.GetFileNameWithoutExtension(_parameters.TargetsFilePath);
+
+                // Compare targetsFileName to the dataset name
+                // Skip any characters that are in common
+                var startIndex = 0;
+                for (var i = 1; i < targetsFileName.Length; i++)
+                {
+                    if (!Run.DatasetName.StartsWith(targetsFileName.Substring(0, i), StringComparison.InvariantCultureIgnoreCase))
+                        break;
+
+                    startIndex = i;
+                }
+
+                if (startIndex > 0 && startIndex < targetsFileName.Length - 1)
+                {
+                    while (targetsFileName[startIndex] == '_' && startIndex < targetsFileName.Length - 1)
+                    {
+                        startIndex++;
+                    }
+                    resultsFileName = Run.DatasetName + "_" + targetsFileName.Substring(startIndex) + "_iqResults.txt";
+                }
+                else
+                    resultsFileName = Run.DatasetName + "_" + targetsFileName + "_iqResults.txt";
+            }
+            else
+            {
+                resultsFileName = Run.DatasetName + "_iqResults.txt";
+            }
+
+            IqResultExporter.WriteOutResults(Path.Combine(_resultsFolder, resultsFileName), exportedResults);
         }
 
         private void SetupAlignmentFolder(string alignmentFolder = "")
