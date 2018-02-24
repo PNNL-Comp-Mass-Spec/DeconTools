@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
+using System.Threading;
 using System.Xml.Linq;
 using DeconTools.Backend.Runs;
 using DeconTools.Backend.Utilities;
@@ -19,78 +21,105 @@ namespace IQ.Console
 
         static int Main(string[] args)
         {
-
-            var options = new IqConsoleOptions();
-
-            var datasetList = new List<string>();
-
-
-            if (!CommandLine.Parser.Default.ParseArguments(args, options))
+            try
             {
-                return -1;
-            }
 
-            var inputFile = options.InputFile;
+                var asmName = typeof(Program).GetTypeInfo().Assembly.GetName();
+                var exeName = Path.GetFileName(Assembly.GetExecutingAssembly().Location);
+                var version = IqConsoleOptions.GetAppVersion();
 
-
-
-            var inputFileIsAListOfDatasets = inputFile.ToLower().EndsWith(".txt");
-            if (inputFileIsAListOfDatasets)
-            {
-                using (var reader = new StreamReader(inputFile))
+                var parser = new CommandLineParser<IqConsoleOptions>(asmName.Name, version)
                 {
+                    ProgramInfo = "This program runs Iq on one or more datasets.",
 
-                    while (reader.Peek() != -1)
+                    ContactInfo = "Program written by Gordon Slysz for the Department of Energy (PNNL, Richland, WA) in 2010" +
+                      Environment.NewLine + Environment.NewLine +
+                      "E-mail: proteomics@pnnl.gov" + Environment.NewLine +
+                      "Website: https://panomics.pnnl.gov/ or https://omics.pnl.gov or https://github.com/PNNL-Comp-Mass-Spec",
+
+                    UsageExamples = {
+                        exeName + " Dataset.raw -w ExecutorParameters1.xml",
+                        exeName + " DMSDatasetName -w ExecutorParameters1.xml",
+                        exeName + " DMSDatasetName -t TargetsFilePath"
+                    }
+                };
+
+                var parseResults = parser.ParseArgs(args);
+                var options = parseResults.ParsedResults;
+
+                if (!parseResults.Success)
+                {
+                    Thread.Sleep(1500);
+                    return -1;
+                }
+
+                if (!options.ValidateArgs())
+                {
+                    Thread.Sleep(750);
+                    parser.PrintHelp();
+                    Thread.Sleep(750);
+                    return -1;
+                }
+
+                options.OutputSetOptions();
+
+                var inputFile = options.InputFile;
+
+                // This tracks a list of dataset file paths or dataset names
+                var datasetList = new List<string>();
+
+                var inputFileIsAListOfDatasets = inputFile.ToLower().EndsWith(".txt");
+                if (inputFileIsAListOfDatasets)
+                {
+                    System.Console.WriteLine("Reading dataset names from " + inputFile);
+                    using (var reader = new StreamReader(inputFile))
                     {
 
-                        var datsetName = reader.ReadLine();
-                        datasetList.Add(datsetName);
-
+                        while (!reader.EndOfStream)
+                        {
+                            var datasetName = reader.ReadLine();
+                            datasetList.Add(datasetName);
+                        }
                     }
                 }
+                else
+                {
+                    datasetList.Add(options.InputFile);
+                }
+
+                var numDatasets = datasetList.Count;
+                var datasetCounter = 0;
+
+
+                foreach (var datasetNameOrPath in datasetList)
+                {
+                    datasetCounter++;
+
+                    IqLogger.LogMessage("IQ analyzing dataset " + datasetCounter + " of " + numDatasets + ". Dataset = " + datasetNameOrPath);
+
+                    var success = ProcessDataset(options, datasetNameOrPath);
+                    if (success)
+                        break;
+                }
+
+                IqLogger.FlushPendingMessages();
+
+                return 0;
+
             }
-            else
+            catch (Exception ex)
             {
-
-
-                datasetList.Add(options.InputFile);
-
+                ConsoleMsgUtils.ShowError("Error initiating Iq", ex);
+                IqLogger.LogError("Error initiating Iq", ex);
+                IqLogger.FlushPendingMessages();
+                return -1;
             }
-
-
-
-                {
-                }
-
-
-                {
-                }
-
-
-                IqLogger.Log.Info("IQ analyzing dataset " + datasetCounter + " of " + numDatasets + ". Dataset = " + dataset);
-
-
-                {
-                    {
-
-                        {
-                        }
-
-
-
-
-
-                }
-            }
-
-            return 0;
-
-
 
         }
 
         private static BasicTargetedWorkflowExecutorParameters GetExecutorParameters(IqConsoleOptions options)
         {
+
             var executorParameters = new BasicTargetedWorkflowExecutorParameters
             {
                 TargetsFilePath = options.TargetFile,
