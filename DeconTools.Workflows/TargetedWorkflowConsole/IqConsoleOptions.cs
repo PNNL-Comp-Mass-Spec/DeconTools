@@ -83,34 +83,90 @@ namespace IQ.Console
         [Option("OutputGraphs", HelpText = "Output .png images of mass spectra for all the results. See folder 'OutputGraphs' ")]
         public bool OutputGraphs { get; set; }
 
-
-
-        [HelpOption]
-        public string GetUsage()
+        public static string GetAppVersion()
         {
-            HelpText help = new HelpText("MyExe");
-            help.AddPreOptionsLine("Usage: [add this]");
-            help.AdditionalNewLineAfterOption = true;
+            var version = Assembly.GetExecutingAssembly().GetName().Version + " (" + PROGRAM_DATE + ")";
 
-            try
-            {
-                help.AddOptions(this);
-            }
-            catch (TargetInvocationException e)
-            {
-                System.Console.WriteLine(e.InnerException);
-            }
-            
-            return help;
+            return version;
         }
 
-
-
-
-
-        private void OnError(HelpText current)
+        public void OutputSetOptions()
         {
-            HelpText.DefaultParsingErrorsHandler(this, current);
+            System.Console.WriteLine("IqConsole, version " + GetAppVersion());
+            System.Console.WriteLine();
+            System.Console.WriteLine("Using options:");
+            System.Console.WriteLine();
+            System.Console.WriteLine("Input file: " + InputFile);
+            System.Console.WriteLine("Workflow parameter file: " + WorkflowParameterFile);
+
+            if (!string.IsNullOrEmpty(OutputFolder))
+                System.Console.WriteLine("Output folder: " + OutputFolder);
+
+            System.Console.WriteLine();
+            if (!string.IsNullOrEmpty(TargetsFile))
+                System.Console.WriteLine("Targets file: " + TargetsFile);
+
+            if (!string.IsNullOrEmpty(ReferenceTargetFile))
+                System.Console.WriteLine("Reference targets file: " + ReferenceTargetFile);
+
+            if (!string.IsNullOrEmpty(TargetFileForAlignment))
+                System.Console.WriteLine("Target file for alignment: " + TargetFileForAlignment);
+
+            System.Console.WriteLine();
+            System.Console.WriteLine("Use input scan: " + UseInputScan);
+
+            if (!string.IsNullOrEmpty(TemporaryWorkingFolder))
+                System.Console.WriteLine("Temporary working directory: " + TemporaryWorkingFolder);
+
+            System.Console.WriteLine();
+            System.Console.WriteLine("IsAlignmentPerformed: " + IsAlignmentPerformed);
+
+            if (string.IsNullOrEmpty(AlignmentParameterFile))
+                System.Console.WriteLine("AlignmentParameterFile: " + AlignmentParameterFile);
+
+            System.Console.WriteLine("IsMassAlignmentPerformed: " + IsMassAlignmentPerformed);
+            System.Console.WriteLine("IsNetAlignmentPerformed: " + IsNetAlignmentPerformed);
+
+            System.Console.WriteLine();
+            System.Console.WriteLine("ChromGen Source Data PeakBr: {0}", StringUtilities.DblToString(ChromGenSourceDataPeakBr, 2));
+            System.Console.WriteLine("ChromGen Source Data Signal/Noise: {0}", StringUtilities.DblToString(ChromGenSourceDataSigNoise, 2));
+
+            if (DataIsThresholded)
+            {
+                System.Console.WriteLine("Assuming data is thresholded");
+            }
+            else
+            {
+                System.Console.WriteLine("Assuming data is not thresholded");
+            }
+
+            if (ChromGenSourceDataProcessMsMs)
+                System.Console.WriteLine("Processing MS/MS spectra");
+
+            if (UseOldIq)
+                System.Console.WriteLine("Using Old Iq algorithm");
+
+            if (OutputGraphs)
+                System.Console.WriteLine("Generating .png images of mass spectra for all the results. See folder 'OutputGraphs' ");
+
+        }
+
+        public bool ValidateArgs()
+        {
+            if (string.IsNullOrWhiteSpace(InputFile))
+            {
+                ConsoleMsgUtils.ShowWarning("Input dataset not defined (alternatively, provide a text file with a list of datasets");
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(WorkflowParameterFile) && string.IsNullOrWhiteSpace(TargetsFile))
+            {
+                ConsoleMsgUtils.ShowWarning("Either define a workflow executor parameter file with -w or define a Targets file with -t");
+                return false;
+            }
+
+
+            return true;
         }
     }
 }
