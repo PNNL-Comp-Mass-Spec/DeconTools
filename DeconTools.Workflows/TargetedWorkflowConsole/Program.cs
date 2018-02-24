@@ -58,118 +58,28 @@ namespace IQ.Console
             }
 
 
-            var numDatasets = datasetList.Count;
-            var datasetCounter = 0;
 
-            foreach (var dataset in datasetList)
-            {
-                datasetCounter++;
-
-                var datasetNameContainsPath = dataset.Contains(@"\");
-
-                string currentDatasetPath;
-
-                if (datasetNameContainsPath)
                 {
-                    currentDatasetPath = dataset;
-                }
-                else
-                {
-
-                    if (string.IsNullOrEmpty(options.TemporaryWorkingFolder))
-                    {
-                        IqLogger.Log.Fatal("Trying to grab .raw file from DMS, but no temporary working folder was declared. Use option -f. ");
-                        break;
-
-                    }
-
-
-                    if (string.IsNullOrEmpty(options.OutputFolder))
-                    {
-                        options.OutputFolder = options.TemporaryWorkingFolder;
-                    }
-
-
-
-                    var datasetutil = new DatasetUtilities();
-
-                    //TODO: figure out how to do this while supporting other file types
-                    currentDatasetPath = Path.Combine(datasetutil.GetDatasetPath(dataset), dataset + ".raw");
-
-                    if (currentDatasetPath.ToLower().Contains("purged"))
-                    {
-                        currentDatasetPath = Path.Combine(datasetutil.GetDatasetPathArchived(dataset), dataset + ".raw");
-                    }
                 }
 
 
-                if (!File.Exists(currentDatasetPath))
                 {
-                    IqLogger.Log.Fatal("!!!!!!!!! Dataset not found! Dataset path = " + currentDatasetPath);
-                    return -2;
                 }
 
-                if (string.IsNullOrEmpty(options.OutputFolder))
-                {
-                    options.OutputFolder = RunUtilities.GetDatasetParentFolder(currentDatasetPath);
-                }
-
-                var executorParameters = GetExecutorParameters(options);
 
                 IqLogger.Log.Info("IQ analyzing dataset " + datasetCounter + " of " + numDatasets + ". Dataset = " + dataset);
 
 
-                if (options.UseOldIq)
                 {
-                    TargetedWorkflowExecutor executor = new BasicTargetedWorkflowExecutor(executorParameters,
-                                                                                          currentDatasetPath);
-
-                    //executor.Targets.TargetList = executor.Targets.TargetList.Take(10).ToList();
-                    executor.MsgfFdrScoreCutoff = 0.1;
-                    executor.Execute();
-                }
-                else
-                {
-                    var run = new RunFactory().CreateRun(currentDatasetPath);
-                    var executor = new IqExecutor(executorParameters, run);
-
-                    executor.LoadAndInitializeTargets(executorParameters.TargetsFilePath);
-                    executor.SetupMassAndNetAlignment();
-                    executor.DoAlignment();
-
-
-                    foreach (var iqTarget in executor.Targets)
                     {
-                        TargetedWorkflowParameters workflowParameters = new O16O18WorkflowParameters();
 
-                        if (iqTarget.ElutionTimeTheor > 0.7 || iqTarget.ElutionTimeTheor < 0.15)
                         {
-
-                            //TODO: remove the hard-coded value
-                            workflowParameters.ChromNETTolerance = 0.1;
-                        }
-                        else
-                        {
-                            //TODO: remove the hard-coded value
-                            workflowParameters.ChromNETTolerance = 0.025;
                         }
 
-                        if (run.MassAlignmentInfo != null && run.MassAlignmentInfo.StdevPpmShiftData > 0)
-                            workflowParameters.ChromGenTolerance = run.MassAlignmentInfo.StdevPpmShiftData * 3;
 
-                        //define workflows for parentTarget and childTargets
-                        // Note: this is currently hard-coded to user O16O18IqWorkflow
-                        var parentWorkflow = new ChromPeakDeciderIqWorkflow(run, workflowParameters);
-                        var childWorkflow = new O16O18IqWorkflow(run, workflowParameters);
 
-                        var workflowAssigner = new IqWorkflowAssigner();
-                        workflowAssigner.AssignWorkflowToParent(parentWorkflow, iqTarget);
-                        workflowAssigner.AssignWorkflowToChildren(childWorkflow, iqTarget);
-                    }
 
-                    executor.Execute();
 
-                    run.Dispose();
                 }
             }
 
@@ -294,5 +204,154 @@ namespace IQ.Console
 
             return parameterTableFromXML;
         }
+
+        /// <summary>
+        /// Process the given dataset
+        /// </summary>
+        /// <param name="options"></param>
+        /// <param name="datasetNameOrPath"></param>
+        /// <returns>True if success or a non fatal error; false if a fatal error</returns>
+        private static bool ProcessDataset(IqConsoleOptions options, string datasetNameOrPath)
+        {
+            try
+            {
+                string currentDatasetPath;
+
+                var candidatefile = new FileInfo(datasetNameOrPath);
+                if (candidatefile.Exists)
+                {
+                    currentDatasetPath = candidatefile.FullName;
+                }
+                else
+                {
+
+                    var datasetPathHasSepChar = datasetNameOrPath.Contains(Path.PathSeparator.ToString());
+
+                    if (datasetPathHasSepChar)
+                    {
+                        IqLogger.LogWarning("Dataset file not found: " + datasetNameOrPath);
+                        // Non-fatal error; return true
+                        return true;
+                    }
+
+                    if (string.IsNullOrEmpty(options.TemporaryWorkingFolder))
+                    {
+                        IqLogger.LogWarning("Trying to grab .raw file from DMS, but no temporary working folder was declared. Use option -f");
+                        return false;
+
+                    }
+
+                    if (string.IsNullOrEmpty(options.OutputFolder))
+                    {
+                        options.OutputFolder = options.TemporaryWorkingFolder;
+                    }
+
+                    var datasetutil = new DatasetUtilities();
+
+                    //TODO: figure out how to do this while supporting other file types
+                    currentDatasetPath = Path.Combine(datasetutil.GetDatasetPath(datasetNameOrPath), datasetNameOrPath + ".raw");
+
+                    if (currentDatasetPath.ToLower().Contains("purged"))
+                    {
+                        IqLogger.LogWarning("Cannot process a purged dataset; copy the .raw file locally");
+                        // Non-fatal error; return true
+                        return true;
+                    }
+                }
+
+                if (!File.Exists(currentDatasetPath))
+                {
+                    IqLogger.LogWarning("!!!!!!!!! Dataset not found! Dataset path = " + currentDatasetPath);
+                    // Non-fatal error; return true
+                    return true;
+                }
+
+                if (string.IsNullOrEmpty(options.OutputFolder))
+                {
+                    options.OutputFolder = RunUtilities.GetDatasetParentFolder(currentDatasetPath);
+                }
+
+                var executorParameters = GetExecutorParameters(options);
+
+                if (!string.IsNullOrWhiteSpace(options.TargetsFile))
+                {
+                    // Override any targets file defined with the XML file
+                    executorParameters.TargetsFilePath = options.TargetsFile;
+                }
+
+                if (string.IsNullOrWhiteSpace(executorParameters.TargetsFilePath))
+                {
+                    IqLogger.LogWarning("Targets file must be defined, either via argument -t or in the Workflow parameter file via the TargetsFilePath entry");
+                    return false;
+                }
+
+                if (options.UseOldIq)
+                {
+                    TargetedWorkflowExecutor executor = new BasicTargetedWorkflowExecutor(executorParameters,
+                                                                                          currentDatasetPath);
+
+                    //executor.Targets.TargetList = executor.Targets.TargetList.Take(10).ToList();
+                    executor.MsgfFdrScoreCutoff = 0.1;
+                    executor.Execute();
+                }
+                else
+                {
+                    var run = new RunFactory().CreateRun(currentDatasetPath);
+                    var executor = new IqExecutor(executorParameters, run);
+
+                    executor.LoadAndInitializeTargets(executorParameters.TargetsFilePath);
+                    executor.SetupMassAndNetAlignment();
+                    executor.DoAlignment();
+
+                    foreach (var iqTarget in executor.Targets)
+                    {
+                        TargetedWorkflowParameters workflowParameters = new O16O18WorkflowParameters();
+
+                        if (iqTarget.ElutionTimeTheor > 0.7 || iqTarget.ElutionTimeTheor < 0.15)
+                        {
+
+                            //TODO: remove the hard-coded value
+                            workflowParameters.ChromNETTolerance = 0.1;
+                        }
+                        else
+                        {
+                            //TODO: remove the hard-coded value
+                            workflowParameters.ChromNETTolerance = 0.025;
+                        }
+
+                        if (run.MassAlignmentInfo != null && run.MassAlignmentInfo.StdevPpmShiftData > 0)
+                            workflowParameters.ChromGenTolerance = run.MassAlignmentInfo.StdevPpmShiftData * 3;
+
+                        //define workflows for parentTarget and childTargets
+                        // Note: this is currently hard-coded to user O16O18IqWorkflow
+                        var parentWorkflow = new ChromPeakDeciderIqWorkflow(run, workflowParameters);
+                        var childWorkflow = new O16O18IqWorkflow(run, workflowParameters);
+
+                        var workflowAssigner = new IqWorkflowAssigner();
+                        workflowAssigner.AssignWorkflowToParent(parentWorkflow, iqTarget);
+                        workflowAssigner.AssignWorkflowToChildren(childWorkflow, iqTarget);
+                    }
+
+                    executor.Execute();
+
+                    run.Dispose();
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                string datasetNameToShow;
+                if (datasetNameOrPath.Contains(Path.PathSeparator.ToString()))
+                    datasetNameToShow = clsPathUtils.CompactPathString(datasetNameOrPath, 60);
+                else
+                    datasetNameToShow = datasetNameOrPath;
+
+                IqLogger.LogError("Error processing dataset " + datasetNameToShow, ex);
+                return false;
+            }
+
+        }
+
     }
 }
