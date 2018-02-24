@@ -48,7 +48,7 @@ namespace DeconTools.Backend.Parameters
 
         [Obsolete("UseRAPIDDeconvolution is deprecated, use DeconvolutionType instead.")]
         public bool UseRAPIDDeconvolution { get; set; }
-      
+
         #endregion
 
         #region Public Methods
@@ -77,6 +77,6 @@ namespace DeconTools.Backend.Parameters
         }
         #endregion
 
- 
+
     }
 }

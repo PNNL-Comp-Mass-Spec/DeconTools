@@ -35,9 +35,9 @@ namespace DeconTools.Workflows.Backend.Core
                                                            DeconTools.Backend.Globals.PeakFitType.QUADRATIC,
                                                            run.IsDataThresholded);
 
-           
 
-            
+
+
 
         }
 
@@ -125,7 +125,7 @@ namespace DeconTools.Workflows.Backend.Core
                     var childStateIqResult = (O16O18IqResult) iqTarget.GetResult();
 
                     childStateIqResult.IqResultDetail.MassSpectrum = massSpectrum.TrimData(iqTarget.MZTheor - 3, iqTarget.MZTheor + 8);
-                    
+
                     var mspeakList = _mspeakDetector.FindPeaks(childStateIqResult.IqResultDetail.MassSpectrum.Xvalues,
                                                                       childStateIqResult.IqResultDetail.MassSpectrum.Yvalues);
 
@@ -144,7 +144,7 @@ namespace DeconTools.Workflows.Backend.Core
                     childStateIqResult.ObservedIsotopicProfile=  MsfeatureFinder.IterativelyFindMSFeature(childStateIqResult.IqResultDetail.MassSpectrum,
                                                              iqTarget.TheorIsotopicProfile);
 
-                   
+
                     if (childStateIqResult.ObservedIsotopicProfile!=null)
                     {
                         var observedIsoList = childStateIqResult.ObservedIsotopicProfile.Peaklist.Cast<Peak>().Take(4).ToList();    //first 4 peaks excludes the O18 double label peak (fifth peak)
@@ -188,16 +188,16 @@ namespace DeconTools.Workflows.Backend.Core
 
                         ExportGraphs(childStateIqResult);
                     }
-                    
-                   
 
-                    
+
+
+
                 }
             }
         }
 
 
-   
+
 
         private void ExportGraphs(IqResult result)
         {
@@ -205,9 +205,9 @@ namespace DeconTools.Workflows.Backend.Core
             {
                 OutputFolderForGraphs = Path.Combine(Run.DataSetPath, "OutputGraphs");
             }
-            
+
             if (!Directory.Exists(OutputFolderForGraphs)) Directory.CreateDirectory(OutputFolderForGraphs);
-            
+
             ExportMassSpectrumGraph(result);
             ExportChromGraph(result);
         }
@@ -239,9 +239,9 @@ namespace DeconTools.Workflows.Backend.Core
 
 
             _graphGenerator.GraphPane.XAxis.Scale.FontSpec.Size = 12;
-            var outputGraphFilename = Path.Combine(OutputFolderForGraphs, 
+            var outputGraphFilename = Path.Combine(OutputFolderForGraphs,
                                                       result.Target.ID + "_" +
-                                                      result.Target.ChargeState + "_" + 
+                                                      result.Target.ChargeState + "_" +
                                                       result.Target.MZTheor.ToString("0.000") + "_MS.png");
 
 
@@ -295,8 +295,8 @@ namespace DeconTools.Workflows.Backend.Core
 
             _graphGenerator.GraphPane.XAxis.Scale.FontSpec.Size = 12;
             var outputGraphFilename = Path.Combine(OutputFolderForGraphs,
-                                                      result.Target.ID + "_" + 
-                                                      result.Target.ChargeState + "_" + 
+                                                      result.Target.ID + "_" +
+                                                      result.Target.ChargeState + "_" +
                                                       result.Target.MZTheor.ToString("0.000") + "_chrom.png");
 
             var graphInfoText = "ID= " + result.Target.ID + "; z= " + result.Target.ChargeState + "; m/z= " +
@@ -316,7 +316,7 @@ namespace DeconTools.Workflows.Backend.Core
             if (result.CorrelationData!=null && result.CorrelationData.CorrelationDataItems.Count>0)
             {
                 rsquaredVal = result.CorrelationData.RSquaredValsMedian;
-                
+
                 slope = result.CorrelationData.CorrelationDataItems.First().CorrelationSlope;
 
             }
@@ -326,7 +326,7 @@ namespace DeconTools.Workflows.Backend.Core
                 slope = -1;
             }
 
-            
+
 
         }
 
@@ -376,7 +376,7 @@ namespace DeconTools.Workflows.Backend.Core
 
             if (filteredChargeStateResults.Count == 1) return filteredChargeStateResults.First();
 
-            //now to deal with the tough issue of multiple charge states having a possible results. 
+            //now to deal with the tough issue of multiple charge states having a possible results.
 
             var filter2 = filteredChargeStateResults.Where(p => p.CorrelationData.CorrelationDataItems.First().CorrelationRSquaredVal > 0.7).ToList();
 
@@ -427,7 +427,7 @@ namespace DeconTools.Workflows.Backend.Core
             }
             else
             {
-                
+
                 var furtherFilteredResults = new List<IqResult>();
                 double lowestFit = 1;
                 foreach (O16O18IqResult r in filteredChromPeakResults)
@@ -446,7 +446,7 @@ namespace DeconTools.Workflows.Backend.Core
                     }
                 }
 
-                if (furtherFilteredResults.Count == 0)    // all potential candidates were filtered out above. So need a plan B. 
+                if (furtherFilteredResults.Count == 0)    // all potential candidates were filtered out above. So need a plan B.
                 {
                     bestChromPeakResult = filteredChromPeakResults.OrderBy(p => p.FitScore).Take(3).OrderByDescending(p => p.Abundance).FirstOrDefault();
                 }
@@ -484,7 +484,7 @@ namespace DeconTools.Workflows.Backend.Core
                         //fit score is good. Correlation good. But still have multiple possibilities
                         bestChromPeakResult = level3FilteredResults.OrderByDescending(p => p.Abundance).First();
                     }
-                    
+
 
                 }
             }

@@ -19,7 +19,7 @@ namespace DeconTools.Workflows.Backend.Core
             MsRightTrimAmount = 100;
             MsLeftTrimAmount = 3;
 
-            
+
         }
 
         public SipperTargetedWorkflow(TargetedWorkflowParameters parameters)
@@ -63,11 +63,11 @@ namespace DeconTools.Workflows.Backend.Core
         }
 
 
-        
+
         protected override void ExecutePostWorkflowHook()
         {
             base.ExecutePostWorkflowHook();
-            
+
             ExecuteTask(_quantifier);
             GetDataFromQuantifier();
         }
@@ -76,7 +76,7 @@ namespace DeconTools.Workflows.Backend.Core
         {
             RatioVals.Xvalues = _quantifier.RatioVals == null ? new double[] { 1, 2, 3, 4, 5, 6 } : _quantifier.RatioVals.Xvalues;
             RatioVals.Yvalues = _quantifier.RatioVals == null ? new double[] { 0, 0, 0, 0, 0, 0 } : _quantifier.RatioVals.Yvalues;
-            
+
             var peakNumList = new List<double>();
             var rsquaredvalList = new List<double>();
 
@@ -104,7 +104,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         }
 
-        
+
 
         #endregion
 
@@ -124,7 +124,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         #endregion
 
-     
+
 
 
     }

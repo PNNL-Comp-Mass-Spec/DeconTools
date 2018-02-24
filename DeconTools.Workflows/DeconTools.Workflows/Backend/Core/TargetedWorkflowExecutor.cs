@@ -444,7 +444,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         protected virtual string GetTargetFilePathForIqAlignment()
         {
-            if (Run==null)
+            if (Run == null)
             {
                 IqLogger.LogError("Trying to get target file path for use in IqAlignment but Run is null.");
                 return string.Empty;
@@ -687,7 +687,7 @@ namespace DeconTools.Workflows.Backend.Core
             if (string.IsNullOrWhiteSpace(baseFolder))
             {
                 if (Directory.Exists(DatasetPath))
-                    resultsFolder = Path.Combine(DatasetPath,  "Results");
+                    resultsFolder = Path.Combine(DatasetPath, "Results");
                 else
                 {
                     var fiDatasetFile = new FileInfo(DatasetPath);
@@ -696,7 +696,7 @@ namespace DeconTools.Workflows.Backend.Core
             }
             else
             {
-                resultsFolder = Path.Combine(baseFolder,  "Results");
+                resultsFolder = Path.Combine(baseFolder, "Results");
             }
 
 
@@ -1148,13 +1148,13 @@ namespace DeconTools.Workflows.Backend.Core
 
         protected virtual TargetCollection GetLcmsFeatureTargets(string targetsFilePath)
         {
-            if (targetsFilePath.ToLower().Contains("_msgf") )
+            if (targetsFilePath.ToLower().Contains("_msgf"))
             {
                 var iqTargetImporter = new BasicIqTargetImporter(targetsFilePath);
                 var iqTargets = iqTargetImporter.Import();
 
                 var targetUtilities = new IqTargetUtilities();
-                var targetCollection = new TargetCollection {TargetList = new List<TargetBase>()};
+                var targetCollection = new TargetCollection { TargetList = new List<TargetBase>() };
 
                 foreach (var iqTarget in iqTargets)
                 {

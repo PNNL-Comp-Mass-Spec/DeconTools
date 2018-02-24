@@ -63,20 +63,21 @@ namespace DeconTools.Workflows.Backend.Core
         protected IqMassAndNetAligner IqMassAndNetAligner { get; set; }
 
         private Run _run;
-        protected Run Run { 
+        protected Run Run
+        {
             get => _run;
-            set 
-            { 
+            set
+            {
                 _run = value;
                 SetupLogging();
-            } 
+            }
         }
 
         private WorkflowExecutorBaseParameters _parameters;
-        
 
-        protected WorkflowExecutorBaseParameters Parameters 
-        { 
+
+        protected WorkflowExecutorBaseParameters Parameters
+        {
             get => _parameters;
             set
             {
@@ -98,12 +99,12 @@ namespace DeconTools.Workflows.Backend.Core
         public List<IqTarget> Targets { get; set; }
 
         protected IqResultExporter IqResultExporter { get; set; }
-        
+
         public TargetedWorkflowParameters IqWorkflowParameters { get; set; }
 
         /// <summary>
-        /// We need this setting when targets are being created. Indicates whether a target is cysteine-modified (reduced & alkylated, +57). 
-        /// TODO: move this to the IqTarget creator class, once developed. 
+        /// We need this setting when targets are being created. Indicates whether a target is cysteine-modified (reduced & alkylated, +57).
+        /// TODO: move this to the IqTarget creator class, once developed.
         /// </summary>
         public bool IqTargetsAreCysteineModified { get; set; }
 
@@ -127,7 +128,7 @@ namespace DeconTools.Workflows.Backend.Core
         #region Public Methods
 
 
-        public void SetupMassAndNetAlignment(string alignmentFolder="")
+        public void SetupMassAndNetAlignment(string alignmentFolder = "")
         {
             WorkflowExecutorBaseParameters massNetAlignerParameters = new BasicTargetedWorkflowExecutorParameters();
             
@@ -181,10 +182,6 @@ namespace DeconTools.Workflows.Backend.Core
             IqMassAndNetAligner.LoadAndInitializeTargets(targetFileForAlignment);
 
             SetMassTagReferencesForNetAlignment();
-
-           
-
-
 
         }
 
@@ -241,7 +238,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         public void Execute(List<IqTarget> targets)
         {
-            if (targets==null || targets.Count==0)
+            if (targets == null || targets.Count == 0)
             {
                 IqLogger.LogMessage("WARNING - No targets loaded.");
                 return;
@@ -292,7 +289,7 @@ namespace DeconTools.Workflows.Backend.Core
         {
             LoadAndInitializeTargets(Parameters.TargetsFilePath);
 
-         
+
 
         }
 
@@ -337,13 +334,13 @@ namespace DeconTools.Workflows.Backend.Core
             {
                 IqResultExporter = iqResult.Target.Workflow.CreateExporter();
             }
-            
+
             SetupResultsFolder();
 
             IqResultExporter.WriteOutResults(Path.Combine(_resultsFolder, Run.DatasetName + "_iqResults.txt"), exportedResults);
         }
 
-        private void SetupAlignmentFolder(string alignmentFolder= "")
+        private void SetupAlignmentFolder(string alignmentFolder = "")
         {
             if (!string.IsNullOrEmpty(alignmentFolder))
             {
@@ -454,10 +451,8 @@ namespace DeconTools.Workflows.Backend.Core
             {
                 return possibleFilename1;
             }
-            else
-            {
-                return string.Empty;
-            }
+
+            return string.Empty;
         }
 
 
@@ -489,7 +484,7 @@ namespace DeconTools.Workflows.Backend.Core
         }
 
 
-        
+
         private void SetupLogging()
         {
             string loggingFolder;
@@ -503,8 +498,8 @@ namespace DeconTools.Workflows.Backend.Core
             }
 
 
-            if (!Directory.Exists(loggingFolder)) Directory.CreateDirectory(loggingFolder);
-
+            if (!Directory.Exists(loggingFolder))
+                Directory.CreateDirectory(loggingFolder);
 
             IqLogger.InitializeIqLog(_run.DatasetName, loggingFolder);
         }

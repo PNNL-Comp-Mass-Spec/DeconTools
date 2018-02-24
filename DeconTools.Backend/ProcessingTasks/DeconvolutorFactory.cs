@@ -12,7 +12,7 @@ namespace DeconTools.Backend.ProcessingTasks
 
         public static Deconvolutor CreateDeconvolutor(DeconToolsParameters parameters)
         {
-            Check.Require(parameters!=null,"Factory cannot create Deconvolutor class. DeconToolsParameters are null.");
+            Check.Require(parameters != null,"Factory cannot create Deconvolutor class. DeconToolsParameters are null.");
 
             Deconvolutor decon;
             switch (parameters.ScanBasedWorkflowParameters.DeconvolutionType)

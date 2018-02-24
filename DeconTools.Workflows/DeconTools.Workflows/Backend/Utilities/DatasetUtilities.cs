@@ -28,7 +28,7 @@ namespace DeconTools.Workflows.Backend.Utilities
         #region Properties
 
 
-       
+
 
         public string GetDatasetPath(string datasetName)
         {
@@ -38,8 +38,6 @@ namespace DeconTools.Workflows.Backend.Utilities
 
             using (var cnn = fact.CreateConnection())
             {
-                var query =
-
                 cnn.ConnectionString = buildConnectionString();
                 cnn.Open();
 
@@ -91,7 +89,7 @@ namespace DeconTools.Workflows.Backend.Utilities
                     command.CommandTimeout = 60;
                     var reader = command.ExecuteReader();
 
-                   
+
                     while (reader.Read())
                     {
 
@@ -120,7 +118,7 @@ namespace DeconTools.Workflows.Backend.Utilities
 
             using (var cnn = fact.CreateConnection())
             {
-                var query = 
+                var query =
 
                 cnn.ConnectionString = buildConnectionString();
                 cnn.Open();
@@ -141,7 +139,7 @@ namespace DeconTools.Workflows.Backend.Utilities
                             datasetPath = Convert.ToString(reader["Archive Folder Path"]);
                             break;
                         }
-                      
+
 
                     }
                 }
@@ -156,7 +154,7 @@ namespace DeconTools.Workflows.Backend.Utilities
 
         #endregion
 
-     
+
         #region Private Methods
         private string buildConnectionString()
         {
