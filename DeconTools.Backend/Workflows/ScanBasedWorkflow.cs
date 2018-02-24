@@ -242,10 +242,12 @@ namespace DeconTools.Backend.Workflows
             Deconvolutor = DeconvolutorFactory.CreateDeconvolutor(NewDeconToolsParameters);
 
             //the new iThrash imports the _peaks.txt file
+#pragma warning disable 618
             if (Deconvolutor is ProcessingTasks.Deconvoluters.InformedThrashDeconvolutor)
             {
                 _deconvolutorRequiresPeaksFile = true;
             }
+#pragma warning restore 618
 
             //Will initialize these but whether or not they are used are determined elsewhere
             ZeroFiller = new DeconToolsZeroFiller(NewDeconToolsParameters.MiscMSProcessingParameters.ZeroFillingNumZerosToFill);

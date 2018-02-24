@@ -19,17 +19,21 @@ namespace DeconTools.Backend.ProcessingTasks
             {
                 case Globals.DeconvolutionType.None:
                     return new NullDeconvolutor();
+
                 case Globals.DeconvolutionType.ThrashV1:
-//#if Disable_DeconToolsV2
-//                    throw new NotSupportedException(
-//                        "Deconvolution method ThrashV1 is not supported since support for C++ based DeconToolsV2 is disabled; update the parameter file to use <DeconvolutionType>ThrashV2</DeconvolutionType>");
-//#else
+                    // 2016 Port of ThrashV1 in DeconEngineV2 to C#, .NET 4
+                    // This is the preferred deconvoluter as of Fall 2017
                     decon = new HornDeconvolutor(parameters);
                     return decon;
-//#endif
+
                 case Globals.DeconvolutionType.ThrashV2:
+                    // 2012 port of DeconEngine to C#
+                    // As of 2016, not used because results do not agree with ThrashV1, C++
+#pragma warning disable 618
                     decon = new InformedThrashDeconvolutor(parameters.ThrashParameters);
+#pragma warning restore 618
                     return decon;
+
                 case Globals.DeconvolutionType.Rapid:
                     // To include support for Rapid, you must add a reference to DeconEngine.dll, which was compiled with Visual Studio 2003 and uses MSVCP71.dll
                     // Note that DeconEngine.dll also depends on xerces-c_2_7.dll while DeconEngineV2.dll depends on xerces-c_2_8.dll
