@@ -177,9 +177,9 @@ namespace IQ.Console
                 // ToDo: Use this: <WorkflowType>TopDownTargetedWorkflowExecutor1</WorkflowType>
 
                 executorParameters.IsMassAlignmentPerformed = GetParameter(parameterList, "IsMassAlignmentPerformed", executorParameters.IsMassAlignmentPerformed);
-                executorParameters.IsNetAlignmentPerformed = GetParameter(parameterList, "IsNetAlignmentPerformed", executorParameters.IsNetAlignmentPerformed);                
+                executorParameters.IsNetAlignmentPerformed = GetParameter(parameterList, "IsNetAlignmentPerformed", executorParameters.IsNetAlignmentPerformed);
                 executorParameters.ReferenceTargetsFilePath = GetParameter(parameterList, "ReferenceTargetFile", executorParameters.ReferenceTargetsFilePath);
-                
+
             }
             return executorParameters;
         }
@@ -190,9 +190,8 @@ namespace IQ.Console
 
             if (string.IsNullOrWhiteSpace(boolString))
                 return valueIfMissing;
-            
-            bool boolValue;
-            if (bool.TryParse(boolString, out boolValue))
+
+            if (bool.TryParse(boolString, out var boolValue))
                 return boolValue;
 
             return valueIfMissing;
@@ -201,9 +200,7 @@ namespace IQ.Console
 
         private static string GetParameter(IDictionary<string, string> parameterList, string parameterName, string valueIfMissing)
         {
-            string value;
-
-            if (parameterList.TryGetValue(parameterName, out value))
+            if (parameterList.TryGetValue(parameterName, out var value))
                 return value;
 
             return valueIfMissing;
@@ -218,7 +215,7 @@ namespace IQ.Console
             {
                 return new Dictionary<string, string>();
             }
-            
+
             var query = xElement.Elements();
 
             var parameterTableFromXML = new Dictionary<string, string>();
