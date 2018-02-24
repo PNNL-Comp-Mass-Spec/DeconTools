@@ -122,9 +122,11 @@ namespace IQ.Console
 
             var executorParameters = new BasicTargetedWorkflowExecutorParameters
             {
-                TargetsFilePath = options.TargetFile,
+                TargetsFilePath = options.TargetsFile,
                 OutputFolderBase = options.OutputFolder,
+#pragma warning disable 618
                 TargetedAlignmentIsPerformed = options.IsAlignmentPerformed,
+#pragma warning restore 618
                 WorkflowParameterFile = options.WorkflowParameterFile,
                 TargetedAlignmentWorkflowParameterFile = options.AlignmentParameterFile,
                 IsMassAlignmentPerformed = options.IsMassAlignmentPerformed,
