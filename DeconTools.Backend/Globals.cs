@@ -69,9 +69,26 @@ namespace DeconTools.Backend
 
         public enum DeconvolutionType
         {
+            /// <summary>
+            /// No deconvolution
+            /// </summary>
             None,
+
+            /// <summary>
+            /// 2016 port of ThrashV1 in DeconEngineV2 to C#, .NET 4
+            /// This is the preferred deconvoluter
+            /// </summary>
             ThrashV1,
+
+            /// <summary>
+            /// 2012 port of DeconEngine to C#
+            /// </summary>
+            /// <remarks>As of 2016, not used because results do not agree with ThrashV1, C++</remarks>
             ThrashV2,
+
+            /// <summary>
+            /// Experimental deconvoluter; not recommended for use
+            /// </summary>
             Rapid
 
         }

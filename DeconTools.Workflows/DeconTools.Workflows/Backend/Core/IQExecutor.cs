@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.Data;
-using DeconTools.Backend.Runs;
 using DeconTools.Backend.Utilities.IqLogger;
 using DeconTools.Backend.Workflows;
 using DeconTools.Workflows.Backend.FileIO;
@@ -19,7 +18,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         private readonly IqResultUtilities _iqResultUtilities = new IqResultUtilities();
         private readonly IqTargetUtilities _targetUtilities = new IqTargetUtilities();
-        private RunFactory _runFactory = new RunFactory();
+        // Unused: private RunFactory _runFactory = new RunFactory();
 
         private string _resultsFolder;
         private string _alignmentFolder;
@@ -108,18 +107,7 @@ namespace DeconTools.Workflows.Backend.Core
         /// </summary>
         public bool IqTargetsAreCysteineModified { get; set; }
 
-        protected bool ChromDataIsLoaded
-        {
-            get
-            {
-                if (Run != null)
-                {
-                    return Run.ResultCollection.MSPeakResultList.Count > 0;
-                }
-
-                return false;
-            }
-        }
+        protected bool ChromDataIsLoaded => Run?.ResultCollection.MSPeakResultList.Count > 0;
 
         protected bool RunIsInitialized => throw new NotImplementedException();
 
@@ -130,11 +118,15 @@ namespace DeconTools.Workflows.Backend.Core
 
         public void SetupMassAndNetAlignment(string alignmentFolder = "")
         {
-            WorkflowExecutorBaseParameters massNetAlignerParameters = new BasicTargetedWorkflowExecutorParameters();
-            
+            WorkflowExecutorBaseParameters massNetAlignerParameters = new BasicTargetedWorkflowExecutorParameters
+            {
+                OutputFolderBase = Parameters.OutputFolderBase
+            };
 
-            IqMassAndNetAligner = new IqMassAndNetAligner(massNetAlignerParameters, Run);
-            IqMassAndNetAligner.LoessBandwidthNetAlignment = 0.1;
+            IqMassAndNetAligner = new IqMassAndNetAligner(massNetAlignerParameters, Run)
+            {
+                LoessBandwidthNetAlignment = 0.1
+            };
 
             //check if alignment info exists already
 
@@ -152,8 +144,8 @@ namespace DeconTools.Workflows.Backend.Core
                 return;
             }
 
-            //Get a suitable targets file for alignment. These are grabbed from the ..\AlignmentInfo folder. 
-            var targetFileForAlignment = GetTargetFilePathForIqAlignment();
+            //Get a suitable targets file for alignment. These are grabbed from the ..\AlignmentInfo folder.
+            var targetFileForAlignment = GetTargetFilePathForIqAlignment(out var candidateTargetsFilePath);
 
 
             if (string.IsNullOrEmpty(targetFileForAlignment))
@@ -359,7 +351,12 @@ namespace DeconTools.Workflows.Backend.Core
 
         }
 
-        protected virtual string GetTargetFilePathForIqAlignment()
+        /// <summary>
+        /// Look for the target file path for use in IqAlignment
+        /// </summary>
+        /// <param name="candidateTargetsFilePath">File that this method looks for</param>
+        /// <returns>File path if found, otherwise empty string</returns>
+        protected virtual string GetTargetFilePathForIqAlignment(out string candidateTargetsFilePath)
         {
             if (Run == null)
             {
@@ -421,15 +418,17 @@ namespace DeconTools.Workflows.Backend.Core
 
         private string CreatePeaksForChromSourceData()
         {
-            var parameters = new PeakDetectAndExportWorkflowParameters();
+            var parameters = new PeakDetectAndExportWorkflowParameters
+            {
+                PeakBR = Parameters.ChromGenSourceDataPeakBR,
+                PeakFitType = DeconTools.Backend.Globals.PeakFitType.QUADRATIC,
+                SigNoiseThreshold = Parameters.ChromGenSourceDataSigNoise,
+                ProcessMSMS = Parameters.ChromGenSourceDataProcessMsMs,
+                IsDataThresholded = Parameters.ChromGenSourceDataIsThresholded,
+                LCScanMin = Run.GetMinPossibleLCScanNum(),
+                LCScanMax = Run.GetMaxPossibleLCScanNum()
+            };
 
-            parameters.PeakBR = Parameters.ChromGenSourceDataPeakBR;
-            parameters.PeakFitType = DeconTools.Backend.Globals.PeakFitType.QUADRATIC;
-            parameters.SigNoiseThreshold = Parameters.ChromGenSourceDataSigNoise;
-            parameters.ProcessMSMS = Parameters.ChromGenSourceDataProcessMsMs;
-            parameters.IsDataThresholded = Parameters.ChromGenSourceDataIsThresholded;
-            parameters.LCScanMin = Run.GetMinPossibleLCScanNum();
-            parameters.LCScanMax = Run.GetMaxPossibleLCScanNum();
 
             var peakCreator = new PeakDetectAndExportWorkflow(Run, parameters, _backgroundWorker);
             peakCreator.Execute();
@@ -442,8 +441,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         private string GetPossiblePeaksFile()
         {
-            string baseFileName;
-            baseFileName = Path.Combine(Run.DataSetPath, Run.DatasetName);
+            var baseFileName = Path.Combine(Run.DataSetPath, Run.DatasetName);
 
             var possibleFilename1 = baseFileName + "_peaks.txt";
 
