@@ -304,15 +304,11 @@ namespace DeconTools.Workflows.Backend.Core
             }
         }
 
-
-
-
         protected string TryFindTargetsForCurrentDataset()
         {
             var datasetName = RunUtilities.GetDatasetName(DatasetPath);
 
-            string[] possibleFileSuffixs = { "_iqTargets.txt", "_targets.txt", "_LCMSFeatures.txt", "_MSGFPlus.tsv", "_msgfdb_fht.txt" };
-
+            string[] possibleFileSuffixs = { "_iqTargets.txt", "_targets.txt", "_LCMSFeatures.txt", "_MSGFPlus.tsv", "_msgfplus_fht.txt", "_msgfdb_fht.txt" };
 
             var possibleTargetFiles = new List<FileInfo>();
 
@@ -349,7 +345,7 @@ namespace DeconTools.Workflows.Backend.Core
 
             var sb = new StringBuilder();
 
-            sb.Append("Error in getting IQ target file. Multiple files were found for the dataset: " + datasetName + Environment.NewLine);
+            sb.Append("Error getting IQ target file. Multiple files were found for the dataset: " + datasetName + Environment.NewLine);
             sb.Append("Candidate IQ target files: " + Environment.NewLine);
 
             foreach (var possibleTargetFile in possibleTargetFiles)
@@ -465,7 +461,7 @@ namespace DeconTools.Workflows.Backend.Core
             }
 
             IqLogger.LogMessage("Trying to get target file path for use in IqAlignment, but no suitable targets file found. " +
-                                "Suitable source files include: *_msgfdb_fht.txt");
+                                "Suitable source files include: *_msgfplus_fht.txt");
 
             return string.Empty;
         }

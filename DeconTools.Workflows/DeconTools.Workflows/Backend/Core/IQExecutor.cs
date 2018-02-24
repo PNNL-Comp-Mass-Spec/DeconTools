@@ -375,11 +375,11 @@ namespace DeconTools.Workflows.Backend.Core
             }
 
             //first look for _fht.txt file (MSGF output)
-            var targetsForAlignmentFilePath = Path.Combine(_alignmentFolder, Run.DatasetName + "_msgfdb_fht.txt");
+            candidateTargetsFilePath = Path.Combine(_alignmentFolder, Run.DatasetName + "_msgfplus_fht.txt");
 
-            if (File.Exists(targetsForAlignmentFilePath))
+            if (File.Exists(candidateTargetsFilePath))
             {
-                return targetsForAlignmentFilePath;
+                return candidateTargetsFilePath;
             }
 
             return string.Empty;
