@@ -69,8 +69,10 @@ namespace DeconTools.Backend.Data
                     command.CommandText = queryString;
                     var reader = command.ExecuteReader();
 
-
                     var progressCounter = 0;
+                    var lastReportProgress = DateTime.UtcNow;
+                    var lastReportProgressConsole = DateTime.UtcNow;
+
                     while (reader.Read())
                     {
                         var peakresult = new MSPeakResult
@@ -95,7 +97,7 @@ namespace DeconTools.Backend.Data
                         }
 
                         progressCounter++;
-                        reportProgress(progressCounter);
+                        reportProgress(progressCounter, ref lastReportProgress, ref lastReportProgressConsole);
                     }
                     reader.Close();
                 }

@@ -24,24 +24,25 @@ namespace DeconTools.Backend.Data
 
         #endregion
 
-        protected virtual void reportProgress(int progressCounter)
+        protected virtual void reportProgress(int peaksLoaded, ref DateTime lastReportProgress, ref DateTime lastReportProgressConsole)
         {
             if (numRecords == 0) return;
-            if (progressCounter % 10000 == 0)
+            if (peaksLoaded % 1000 != 0) return;
+
+            var percentProgress = (int)(peaksLoaded / (double)numRecords * 100);
+
+            if (backgroundWorker != null && DateTime.UtcNow.Subtract(lastReportProgress).TotalSeconds >= 0.5)
             {
+                lastReportProgress = DateTime.UtcNow;
+                peakProgressInfo.ProgressInfoString = "Loading Peaks ";
+                backgroundWorker.ReportProgress(percentProgress);
+                return;
+            }
 
-                var percentProgress = (int)(progressCounter / (double)numRecords * 100);
-
-                if (backgroundWorker != null)
-                {
-                    peakProgressInfo.ProgressInfoString = "Loading Peaks ";
-                    backgroundWorker.ReportProgress(percentProgress);
-                }
-                else
-                {
-                    if (progressCounter % 50000 == 0) Console.WriteLine("Peak importer progress (%) = " + percentProgress);
-
-                }
+            if (DateTime.UtcNow.Subtract(lastReportProgressConsole).TotalSeconds >= 1)
+            {
+                lastReportProgressConsole = DateTime.UtcNow;
+                Console.WriteLine("Peak importer progress (%) = " + percentProgress);
             }
         }
 

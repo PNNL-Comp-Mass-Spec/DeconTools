@@ -79,6 +79,9 @@ namespace DeconTools.Backend.Data
                 _containsMSFeatureIDColumn = _header != null && _header.Contains("MSFeatureID");
 
                 var progressCounter = 0;
+                var lastReportProgress = DateTime.UtcNow;
+                var lastReportProgressConsole = DateTime.UtcNow;
+
                 while (!reader.EndOfStream)
                 {
                     var line = reader.ReadLine();
@@ -86,35 +89,13 @@ namespace DeconTools.Backend.Data
                     peakList.Add(peak);
 
                     progressCounter++;
-                    reportProgress(progressCounter);
+                    reportProgress(progressCounter, ref lastReportProgress, ref lastReportProgressConsole);
 
                 }
             }
         }
 
         #endregion
-
-
-        protected override void reportProgress(int progressCounter)
-        {
-            if (numRecords == 0) return;
-            if (progressCounter % 10000 == 0)
-            {
-
-                var percentProgress = (int)(progressCounter / (double)numRecords * 100);
-
-                if (backgroundWorker != null)
-                {
-                    peakProgressInfo.ProgressInfoString = "Loading Peaks ";
-                    backgroundWorker.ReportProgress(percentProgress, peakProgressInfo);
-                }
-                else
-                {
-                    if (progressCounter % 50000 == 0) Console.WriteLine("Peak importer progress (%) = " + percentProgress);
-
-                }
-            }
-        }
 
         //TODO: make this so that it works with UIMF data
         //TODO: use column header lookup instead of hard coded values

@@ -108,7 +108,7 @@ namespace DeconTools.Backend.Workflows
             peakExporter = new PeakListTextExporter(Run.MSFileType, outputPeaksFilePath);
 
             var numTotalScans = LcScanSetCollection.ScanSetList.Count;
-            var scanCounter = 0;
+            var lastProgress = DateTime.UtcNow;
 
             using (var sw = new StreamWriter(new FileStream(outputPeaksFilePath, FileMode.Append, FileAccess.Write, FileShare.Read)))
             {
@@ -134,8 +134,9 @@ namespace DeconTools.Backend.Workflows
                         }
                         peakExporter.WriteOutPeaks(sw, uimfRun.ResultCollection.MSPeakResultList);
 
-                        if (frameCounter % 5 == 0 || scanCounter == numTotalFrames)
+                        if (DateTime.UtcNow.Subtract(lastProgress).TotalSeconds >= 1 || frameCounter == numTotalFrames)
                         {
+                            lastProgress = DateTime.UtcNow;
                             var percentProgress = frameCounter * 100 / (double)numTotalFrames;
                             reportProgress(percentProgress);
                         }
@@ -145,6 +146,7 @@ namespace DeconTools.Backend.Workflows
                 }
                 else
                 {
+                    var scanCounter = 0;
                     foreach (var scan in LcScanSetCollection.ScanSetList)
                     {
                         scanCounter++;
@@ -173,8 +175,9 @@ namespace DeconTools.Backend.Workflows
 
                         peakExporter.WriteOutPeaks(sw, Run.ResultCollection.MSPeakResultList);
 
-                        if (scanCounter % 50 == 0 || scanCounter == numTotalScans)
+                        if (DateTime.UtcNow.Subtract(lastProgress).TotalSeconds >= 1 || scanCounter == numTotalScans)
                         {
+                            lastProgress = DateTime.UtcNow;
                             var percentProgress = scanCounter * 100 / (double)numTotalScans;
                             reportProgress(percentProgress);
                         }
