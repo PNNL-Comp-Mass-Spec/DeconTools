@@ -15,10 +15,13 @@ namespace DeconTools.Backend.Data
 
         private readonly Globals.MSFileType fileType;
 
+        private readonly string filepath;
+
         public IsosImporter(string importFilename, Globals.MSFileType filetype)
         {
             delimiter = ',';
             fileType = filetype;
+            filepath = importFilename;
             minVal = int.MinValue;
             maxVal = int.MaxValue;
 
@@ -29,7 +32,7 @@ namespace DeconTools.Backend.Data
             catch (Exception)
             {
 
-                throw new IOException("There was a problem reading the _isos data file\n");
+                throw new IOException("There was a problem reading the _isos data file " + filepath);
             }
         }
 
@@ -51,7 +54,7 @@ namespace DeconTools.Backend.Data
             if (reader.EndOfStream)
             {
                 reader.Close();
-                throw new InvalidDataException("There is no data in the file reader object");
+                throw new InvalidDataException("There is no data in Isos file " + filepath);
 
             }
 

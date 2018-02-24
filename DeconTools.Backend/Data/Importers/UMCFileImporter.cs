@@ -19,10 +19,10 @@ namespace DeconTools.Backend.Data
             {
                 reader = new StreamReader(filename);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
-                throw new IOException("There was a problem reading the UMC data file");
+                throw new IOException("There was a problem reading UMC data file " + Filename + ": " + ex.Message);
             }
         }
         #endregion
@@ -57,7 +57,7 @@ namespace DeconTools.Backend.Data
                 if (sr.EndOfStream)
                 {
                     sr.Close();
-                    throw new InvalidDataException("There is no data in the UMC data object");
+                    throw new InvalidDataException("There is no data in UMC data file " + Filename);
 
                 }
                 var headerLine = sr.ReadLine();
@@ -65,7 +65,7 @@ namespace DeconTools.Backend.Data
 
                 if (!validateHeaders(headers))
                 {
-                    throw new InvalidDataException("There is a problem with the column headers in the UMC data");
+                    throw new InvalidDataException("There is a problem with the column headers in UMC data file " + Filename);
 
                 }
 
@@ -77,7 +77,7 @@ namespace DeconTools.Backend.Data
                     var processedData = processLine(line);
                     if (processedData.Count != headers.Count) // new line is in the wrong format... could be blank
                     {
-                        throw new InvalidDataException("Data in UMC row #" + counter + "is invalid - \nThe number of columns does not match that of the header line");
+                        throw new InvalidDataException("Data in UMC row #" + counter + "is invalid - \nThe number of columns does not match that of the header line; see " + Filename);
                     }
 
                     var row = convertTextToUMCData(processedData, headers);

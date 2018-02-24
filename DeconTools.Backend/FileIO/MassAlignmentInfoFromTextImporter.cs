@@ -51,9 +51,9 @@ namespace DeconTools.Backend.FileIO
             {
                 reader = new StreamReader(_filename);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw new IOException("There was a problem importing from the file.");
+                throw new IOException("There was a problem importing from file " + _filename + ": " + ex.Message);
             }
 
             using (var sr = reader)
@@ -61,7 +61,7 @@ namespace DeconTools.Backend.FileIO
                 if (sr.EndOfStream)
                 {
                     sr.Close();
-                    throw new InvalidDataException("There is no data in the file we are trying to read.");
+                    throw new InvalidDataException("There is no data in file " + _filename);
 
                 }
 
@@ -72,7 +72,7 @@ namespace DeconTools.Backend.FileIO
 
                 if (!areHeadersValid)
                 {
-                    throw new InvalidDataException("There is a problem with the column headers.");
+                    throw new InvalidDataException("There is a problem with the column headers in file " + _filename);
                 }
 
 

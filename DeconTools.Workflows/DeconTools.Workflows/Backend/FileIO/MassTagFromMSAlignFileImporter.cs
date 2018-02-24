@@ -86,7 +86,7 @@ namespace DeconTools.Workflows.Backend.FileIO
             }
             catch (Exception ex)
             {
-                throw new IOException("There was a problem importing from the file.", ex);
+                throw new IOException("There was a problem importing from file " + _filename + ": " + ex.Message, ex);
             }
 
             var targets = new TargetCollection();
@@ -99,7 +99,7 @@ namespace DeconTools.Workflows.Backend.FileIO
                 if (sr.EndOfStream)
                 {
                     sr.Close();
-                    throw new InvalidDataException("There is no data in the file we are trying to read.");
+                    throw new InvalidDataException("There is no data in file " + _filename);
                 }
 
                 var columnHeaders = sr.ReadLine().Split('\t').ToList();

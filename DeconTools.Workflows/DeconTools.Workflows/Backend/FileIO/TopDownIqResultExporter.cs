@@ -44,11 +44,14 @@ namespace DeconTools.Workflows.Backend.FileIO
         public void WriteOutTargetResults(string fileName, IEnumerable<IqResult> results)
         {
             const string targetFileExt = @"_IqResults.txt";
+
+            var filePath = fileName + targetFileExt;
+
             if (!TargetOutputHeaderWritten)
             {
                 try
                 {
-                    using (var writer = new StreamWriter(fileName + targetFileExt))
+                    using (var writer = new StreamWriter(filePath))
                     {
                         var header = GetTargetHeader();
                         writer.WriteLine(header);
@@ -61,9 +64,10 @@ namespace DeconTools.Workflows.Backend.FileIO
                     throw new IOException("Unable to open file for writing!", ex);
                 }
             }
+
             try
             {
-                using (var writer = File.AppendText(fileName + targetFileExt))
+                using (var writer = File.AppendText(filePath))
                 {
                     var resultAsString = GetTargetResultAsString(results);
                     writer.WriteLine(resultAsString);
@@ -85,11 +89,14 @@ namespace DeconTools.Workflows.Backend.FileIO
         public void WriteOutChargeResults(string fileName, IEnumerable<IqResult> results)
         {
             const string chargeFileExt = @"_ChargeStateVerboseOutput.txt";
+
+            var filePath = fileName + chargeFileExt;
+
             if (!ChargeOutputHeaderWritten)
             {
                 try
                 {
-                    using (var writer = new StreamWriter(fileName + chargeFileExt))
+                    using (var writer = new StreamWriter(filePath))
                     {
                         var header = GetChargeHeader();
                         writer.WriteLine(header);
@@ -106,7 +113,7 @@ namespace DeconTools.Workflows.Backend.FileIO
             {
                 try
                 {
-                    using (var writer = File.AppendText(fileName + chargeFileExt))
+                    using (var writer = File.AppendText(filePath))
                     {
                         var resultAsString = GetChargeResultAsString(result);
                         if (resultAsString != null)

@@ -8,11 +8,11 @@ namespace DeconTools.Backend.FileIO
 
     public class LcmsTargetFromFeaturesFileImporter : ImporterBase<TargetCollection>
     {
-        private string _fileName;
+        private string _filename;
 
         public LcmsTargetFromFeaturesFileImporter(string fileName)
         {
-            _fileName = fileName;
+            _filename = fileName;
         }
 
 
@@ -24,7 +24,7 @@ namespace DeconTools.Backend.FileIO
         private string[] featureToMassTagIDHeaders = { "MassTagID", "MatchedMassTagID", "ReferenceID", "Mass_Tag_ID" };
         private string[] empiricalFormulaHeaders= {"formula","empirical_formula","empiricalFormula","molecular_formula","molecularFormula" };
         private string[] monomassHeaders = {"MonoisotopicMass", "UMCMonoMW", "MonoMassIso1"};
-       
+
         private string[] mzHeaders = {"MonoMZ", "UMCMZForChargeBasis"};
         private string[] scanHeaders = { "scan", "scanClassRep", "Scan_Max_Abundance","ScanNum" };
         private string[] scanEndHeaders = {"scanEnd", "scan_end"};
@@ -40,11 +40,11 @@ namespace DeconTools.Backend.FileIO
 
             try
             {
-                reader = new StreamReader(_fileName);
+                reader = new StreamReader(_filename);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw new IOException("There was a problem importing from the file.");
+                throw new IOException("There was a problem importing from file " + _filename + ": " + ex.Message);
             }
 
             using (var sr = reader)
@@ -52,7 +52,7 @@ namespace DeconTools.Backend.FileIO
                 if (sr.EndOfStream)
                 {
                     sr.Close();
-                    throw new InvalidDataException("There is no data in the file we are trying to read.");
+                    throw new InvalidDataException("There is no data in file " + _filename);
 
                 }
 
@@ -63,11 +63,11 @@ namespace DeconTools.Backend.FileIO
 
                 if (!areHeadersValid)
                 {
-                    throw new InvalidDataException("There is a problem with the column headers.");
+                    throw new InvalidDataException("There is a problem with the column headers in file " + _filename);
                 }
 
 
-                var lineCounter = 1;   //used for tracking which line is being processed. 
+                var lineCounter = 1;   //used for tracking which line is being processed.
 
                 //read and process each line of the file
                 while (!sr.EndOfStream)
@@ -78,7 +78,7 @@ namespace DeconTools.Backend.FileIO
                     //ensure that processed line is the same size as the header line
                     if (processedData.Count != m_columnHeaders.Count)
                     {
-                        throw new InvalidDataException("Data in row #" + lineCounter.ToString() + "is invalid - \nThe number of columns does not match that of the header line");
+                        throw new InvalidDataException("Data in row #" + lineCounter + "is invalid - \nThe number of columns does not match that of the header line");
                     }
 
                     var target = ConvertTextToDataObject(processedData);
@@ -132,16 +132,16 @@ namespace DeconTools.Backend.FileIO
             target.FeatureToMassTagID = ParseIntField(LookupData(processedData, featureToMassTagIDHeaders));
             target.EmpiricalFormula = LookupData(processedData, empiricalFormulaHeaders,string.Empty);
             target.Code = LookupData(processedData, peptideSequenceHeaders,string.Empty);
-            
-            //UMCIndex	ScanStart	ScanEnd	ScanClassRep	
-            //NETClassRep	UMCMonoMW	UMCMWStDev	UMCMWMin	
+
+            //UMCIndex	ScanStart	ScanEnd	ScanClassRep
+            //NETClassRep	UMCMonoMW	UMCMWStDev	UMCMWMin
             //UMCMWMax	UMCAbundance	ClassStatsChargeBasis
-            //	ChargeStateMin	ChargeStateMax	UMCMZForChargeBasis	
-            //UMCMemberCount	UMCMemberCountUsedForAbu	UMCAverageFit	
+            //	ChargeStateMin	ChargeStateMax	UMCMZForChargeBasis
+            //UMCMemberCount	UMCMemberCountUsedForAbu	UMCAverageFit
             //MassShiftPPMClassRep	PairIndex	PairMemberType	ExpressionRatio	//
-            //ExpressionRatioStDev	ExpressionRatioChargeStateBasisCount	
-            //ExpressionRatioMemberBasisCount	MultiMassTagHitCount	
-            //MassTagID	MassTagMonoMW	MassTagNET	MassTagNETStDev	SLiC Score	
+            //ExpressionRatioStDev	ExpressionRatioChargeStateBasisCount
+            //ExpressionRatioMemberBasisCount	MultiMassTagHitCount
+            //MassTagID	MassTagMonoMW	MassTagNET	MassTagNETStDev	SLiC Score
             //DelSLiC	MemberCountMatchingMassTag	IsInternalStdMatch	PeptideProphetProbability	Peptide
 
             return target;

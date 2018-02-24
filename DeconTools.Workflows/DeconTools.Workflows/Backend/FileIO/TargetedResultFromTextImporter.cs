@@ -55,16 +55,16 @@ namespace DeconTools.Workflows.Backend.FileIO
 
             if (!File.Exists(_filename))
             {
-                throw new IOException("Cannot import. File does not exist. Input file path= "+ _filename);
+                throw new IOException("Cannot import. File does not exist: " + _filename);
             }
 
             try
             {
                 reader = new StreamReader(_filename);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw new IOException("There was a problem importing from the file.");
+                throw new IOException("There was a problem importing from file " + PRISM.clsPathUtils.CompactPathString(_filename, 60) + ": " + ex.Message);
             }
 
             using (var sr = reader)
@@ -72,7 +72,7 @@ namespace DeconTools.Workflows.Backend.FileIO
                 if (sr.EndOfStream)
                 {
                     sr.Close();
-                    throw new InvalidDataException("There is no data in the file we are trying to read.");
+                    throw new InvalidDataException("There is no data in file " + PRISM.clsPathUtils.CompactPathString(_filename, 60));
 
                 }
 
@@ -83,7 +83,7 @@ namespace DeconTools.Workflows.Backend.FileIO
 
                 if (!areHeadersValid)
                 {
-                    throw new InvalidDataException("There is a problem with the column headers.");
+                    throw new InvalidDataException("There is a problem with the column headers in file " + PRISM.clsPathUtils.CompactPathString(_filename, 60));
                 }
 
 
@@ -98,7 +98,9 @@ namespace DeconTools.Workflows.Backend.FileIO
                     //ensure that processed line is the same size as the header line
                     if (processedData.Count != m_columnHeaders.Count)
                     {
-                        throw new InvalidDataException("In File: " + Path.GetFileName(_filename)+   "; Data in row # " + lineCounter.ToString() + " is NOT valid - \nThe number of columns does not match that of the header line");
+                        throw new InvalidDataException("In File: " + PRISM.clsPathUtils.CompactPathString(_filename, 60) +
+                                                       "; Data in row # " + lineCounter + " is NOT valid - \n" +
+                                                       "The number of columns does not match that of the header line");
                     }
 
 
