@@ -150,10 +150,10 @@ namespace DeconTools.Workflows.Backend.Core
             if (!_headerLogged)
             {
                 _headerLogged = true;
-                IqLogger.Log.Debug(("\t\t" + "ChromPeak.XValue" + "\t" + "NETError" + "\t" + "MassError" + "\t" + "FitScore" + "\t" + "IsIsotopicProfileFlagged"));
+                IqLogger.LogDebug(("\t\t" + "ChromPeak.XValue" + "\t" + "NETError" + "\t" + "MassError" + "\t" + "FitScore" + "\t" + "IsIsotopicProfileFlagged"));
             }
 
-            IqLogger.Log.Debug(("\t\t"+ target.ChromPeak.XValue.ToString("0.00") + "\t" + result.NETError.ToString("0.0000") + "\t" + result.MassErrorBefore.ToString("0.0000") + "\t" +
+            IqLogger.LogDebug(("\t\t"+ target.ChromPeak.XValue.ToString("0.00") + "\t" + result.NETError.ToString("0.0000") + "\t" + result.MassErrorBefore.ToString("0.0000") + "\t" +
                 result.FitScore.ToString("0.0000") + "\t" + result.IsIsotopicProfileFlagged));
         }
 

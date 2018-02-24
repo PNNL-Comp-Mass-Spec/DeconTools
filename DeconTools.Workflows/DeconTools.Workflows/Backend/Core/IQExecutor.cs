@@ -34,8 +34,9 @@ namespace DeconTools.Workflows.Backend.Core
             _parameters = parameters;
             _run = run;
             SetupLogging();
-            IqLogger.Log.Info("Log started for dataset: " + _run.DatasetName);
-            IqLogger.Log.Info(Environment.NewLine + "Parameters: " + Environment.NewLine + _parameters.ToStringWithDetails());
+            IqLogger.LogMessage("Log started for dataset: " + _run.DatasetName);
+            Console.WriteLine();
+            IqLogger.LogMessage("Parameters: " + Environment.NewLine + _parameters.ToStringWithDetails());
         }
 
         public IqExecutor(WorkflowExecutorBaseParameters parameters, Run run, BackgroundWorker backgroundWorker = null)
@@ -46,8 +47,9 @@ namespace DeconTools.Workflows.Backend.Core
             _parameters = parameters;
             _run = run;
             SetupLogging();
-            IqLogger.Log.Info("Log started for dataset: " + _run.DatasetName);
-            IqLogger.Log.Info(Environment.NewLine + "Parameters: " + Environment.NewLine + _parameters.ToStringWithDetails());
+            IqLogger.LogMessage("Log started for dataset: " + _run.DatasetName);
+            Console.WriteLine();
+            IqLogger.LogMessage("Parameters: " + Environment.NewLine + _parameters.ToStringWithDetails());
 
             _backgroundWorker = backgroundWorker;
             _progressInfo = new TargetedWorkflowExecutorProgressInfo();
@@ -142,9 +144,9 @@ namespace DeconTools.Workflows.Backend.Core
 
             if (alignmentResultsExist)
             {
-                IqLogger.Log.Info("Using the IQ alignment results from here: " + expectedAlignmentFilename);
+                IqLogger.LogMessage("Using the IQ alignment results from here: " + expectedAlignmentFilename);
                 IqMassAndNetAligner.LoadPreviousIqResults(expectedAlignmentFilename);
-                
+
                 SetMassTagReferencesForNetAlignment();
                 return;
             }
@@ -155,13 +157,16 @@ namespace DeconTools.Workflows.Backend.Core
 
             if (string.IsNullOrEmpty(targetFileForAlignment))
             {
-                IqLogger.Log.Info("Alignment not performed - No suitable target file found for use in alignment.");
+                IqLogger.LogMessage("Alignment not performed - No suitable target file found for use in alignment.");
+                IqLogger.LogDebug("Considered file paths\n" +
+                                  "  " + PRISM.clsPathUtils.CompactPathString(expectedAlignmentFilename, 130) + " and\n" +
+                                  "  " + PRISM.clsPathUtils.CompactPathString(candidateTargetsFilePath, 130));
                 return;
             }
 
             if (!File.Exists(targetFileForAlignment))
             {
-                IqLogger.Log.Info("Alignment not performed - Target file for alignment has been specified but a FILE NOT FOUND error has occured.");
+                IqLogger.LogWarning("Alignment not performed - Target file for alignment has been specified but a FILE NOT FOUND error has occured.");
                 return;
             }
 
@@ -169,7 +174,7 @@ namespace DeconTools.Workflows.Backend.Core
 
             if (!isFirstHitsFile)
             {
-                IqLogger.Log.Info("Alignment not performed - target file for alignment must be a first hits file (_fht.txt)");
+                IqLogger.LogWarning("Alignment not performed - target file for alignment must be a first hits file (_fht.txt)");
                 return;
             }
 
@@ -191,11 +196,11 @@ namespace DeconTools.Workflows.Backend.Core
                 var massTagRefs = massTagImporter.Import();
 
                 IqMassAndNetAligner.SetMassTagReferences(massTagRefs);
-                IqLogger.Log.Info("IQ Net aligner - " + massTagRefs.Count + " reference targets were loaded successfully.");
+                IqLogger.LogMessage("IQ Net aligner - " + massTagRefs.Count + " reference targets were loaded successfully.");
             }
             else
             {
-                IqLogger.Log.Info("IQ Net aligner INACTIVE - no reference tags were loaded. You need to define 'TargetsUsedForLookupFilePath'");
+                IqLogger.LogMessage("IQ Net aligner INACTIVE - no reference tags were loaded. You need to define 'TargetsUsedForLookupFilePath'");
             }
         }
 
@@ -238,14 +243,16 @@ namespace DeconTools.Workflows.Backend.Core
         {
             if (targets==null || targets.Count==0)
             {
-                IqLogger.Log.Info("WARNING - No targets loaded.");
+                IqLogger.LogMessage("WARNING - No targets loaded.");
                 return;
             }
 
             var totalTargets = targets.Count;
             var targetCount = 1;
-            IqLogger.Log.Info("Total targets being processed: " + totalTargets);
-            IqLogger.Log.Info("Processing...");
+            var lastProgress = DateTime.UtcNow;
+
+            IqLogger.LogMessage("Total targets being processed: " + totalTargets);
+            IqLogger.LogMessage("Processing...");
 
             foreach (var target in targets)
             {
@@ -256,7 +263,7 @@ namespace DeconTools.Workflows.Backend.Core
                     LoadChromData(Run);
                 }
 
-                ReportGeneralProgress(targetCount, totalTargets);
+                ReportGeneralProgress(targetCount, totalTargets, ref lastProgress);
 
                 target.DoWorkflow();
                 var result = target.GetResult();
@@ -275,7 +282,9 @@ namespace DeconTools.Workflows.Backend.Core
                 targetCount++;
             }
 
-            IqLogger.Log.Info("Processing Complete!" + Environment.NewLine + Environment.NewLine);
+            IqLogger.LogMessage("Processing Complete!");
+            Console.WriteLine();
+            Console.WriteLine();
         }
 
 
@@ -295,7 +304,7 @@ namespace DeconTools.Workflows.Backend.Core
                 TargetImporter = new BasicIqTargetImporter(targetsFilePath);
             }
 
-            IqLogger.Log.Info("Target Loading Started...");
+            IqLogger.LogMessage("Target Loading Started...");
 
             Targets = TargetImporter.Import();
 
@@ -312,7 +321,7 @@ namespace DeconTools.Workflows.Backend.Core
             _targetUtilities.CreateChildTargets(Targets, Parameters.MinMzForDefiningChargeStateTargets,
                 Parameters.MaxMzForDefiningChargeStateTargets, Parameters.MaxNumberOfChargeStateTargetsToCreate, IqTargetsAreCysteineModified);
 
-            IqLogger.Log.Info("Targets Loaded Successfully. Total targets loaded= "+ Targets.Count);
+            IqLogger.LogMessage("Targets Loaded Successfully. Total targets loaded= " + Targets.Count);
         }
 
 
@@ -357,7 +366,8 @@ namespace DeconTools.Workflows.Backend.Core
         {
             if (Run == null)
             {
-                IqLogger.Log.Error("Trying to get target file path for use in IqAlignment but Run is null.");
+                IqLogger.LogError("Trying to get target file path for use in IqAlignment but Run is null.");
+                candidateTargetsFilePath = string.Empty;
                 return string.Empty;
             }
 
@@ -378,22 +388,18 @@ namespace DeconTools.Workflows.Backend.Core
             return string.Empty;
         }
 
-
-        protected virtual void ReportGeneralProgress(int currentTarget, int totalTargets)
+        protected virtual void ReportGeneralProgress(int currentTarget, int totalTargets, ref DateTime lastProgress, int progressIntervalSeconds = 10)
         {
             var currentProgress = (currentTarget / (double)totalTargets);
 
-            if (currentTarget % 50 == 0)
+            if (DateTime.UtcNow.Subtract(lastProgress).TotalSeconds >= progressIntervalSeconds)
             {
-                IqLogger.Log.Info("Processing target " + currentTarget + " of " + totalTargets + "; " + (Math.Round(currentProgress * 100, 1)) + "% Complete.");
+                lastProgress = DateTime.UtcNow;
+                IqLogger.LogMessage("Processing target " + currentTarget + " of " + totalTargets + "; " + (Math.Round(currentProgress * 100, 1)) + "% Complete.");
             }
 
-            if (_backgroundWorker != null)
-            {
-                _backgroundWorker.ReportProgress(Convert.ToInt16(currentProgress * 100));
-            }
+            _backgroundWorker?.ReportProgress(Convert.ToInt16(currentProgress * 100));
         }
-
 
         private void SetupResultsFolder()
         {
@@ -466,20 +472,20 @@ namespace DeconTools.Workflows.Backend.Core
             if (string.IsNullOrEmpty(ChromSourceDataFilePath))
             {
                 Console.WriteLine("Creating _Peaks.txt file for " + Run.DatasetName + " at " + Run.DataSetPath);
-                IqLogger.Log.Info("Creating _Peaks.txt");
+                IqLogger.LogMessage("Creating _Peaks.txt");
                 ChromSourceDataFilePath = CreatePeaksForChromSourceData();
             }
             else
             {
-                IqLogger.Log.Info("Using Existing _Peaks.txt");
+                IqLogger.LogMessage("Using Existing _Peaks.txt");
             }
 
-            IqLogger.Log.Info("Peak Loading Started...");
+            IqLogger.LogMessage("Peak Loading Started...");
 
             var peakImporter = new PeakImporterFromText(ChromSourceDataFilePath, _backgroundWorker);
             peakImporter.ImportPeaks(Run.ResultCollection.MSPeakResultList);
 
-            IqLogger.Log.Info("Peak Loading Complete. Number of peaks loaded= " + Run.ResultCollection.MSPeakResultList.Count);
+            IqLogger.LogMessage("Peak Loading Complete. Number of peaks loaded= " + Run.ResultCollection.MSPeakResultList.Count.ToString("#,##0"));
         }
 
 
@@ -500,8 +506,7 @@ namespace DeconTools.Workflows.Backend.Core
             if (!Directory.Exists(loggingFolder)) Directory.CreateDirectory(loggingFolder);
 
 
-            IqLogger.LogDirectory = loggingFolder;
-            IqLogger.InitializeIqLog(_run.DatasetName);
+            IqLogger.InitializeIqLog(_run.DatasetName, loggingFolder);
         }
 
         private string GetDefaultOutputFolder()

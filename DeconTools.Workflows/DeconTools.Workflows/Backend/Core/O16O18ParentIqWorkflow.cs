@@ -98,10 +98,10 @@ namespace DeconTools.Workflows.Backend.Core
             if (!_headerLogged)
             {
                 _headerLogged = true;
-                IqLogger.Log.Info("\t" + "TargetID" + "\t\t\t" + "M/Z" + "\t" + "Charge" + "\t" + "LCScan" + "\t" + "RSquared" + "\t" + "Slope");
+                IqLogger.LogMessage("\t" + "TargetID" + "\t\t\t" + "M/Z" + "\t" + "Charge" + "\t" + "LCScan" + "\t" + "RSquared" + "\t" + "Slope");
             }
 
-            IqLogger.Log.Info("\t" + result.Target.ID + "\t\t\t" + favMz.ToString("0.000") + "\t" + favChargeState + "\t" + result.LcScanObs + "\t" + rsquaredVal + "\t" + slope);
+            IqLogger.LogMessage("\t" + result.Target.ID + "\t\t\t" + favMz.ToString("0.000") + "\t" + favChargeState + "\t" + result.LcScanObs + "\t" + rsquaredVal + "\t" + slope);
 
             //now get the mass spectrum given the info from the favorite child charge state result
 
@@ -175,7 +175,7 @@ namespace DeconTools.Workflows.Backend.Core
 
 
                     getRsquaredVal(childStateIqResult, out rsquaredVal, out slope);
-                    IqLogger.Log.Info("\t\t\t" + childStateIqResult.Target.ID + "\t" + childStateIqResult.Target.MZTheor.ToString("0.000") + "\t" + childStateIqResult.Target.ChargeState
+                    IqLogger.LogMessage("\t\t\t" + childStateIqResult.Target.ID + "\t" + childStateIqResult.Target.MZTheor.ToString("0.000") + "\t" + childStateIqResult.Target.ChargeState
                         + "\t" + childStateIqResult.LcScanObs + "\t" + childStateIqResult.FitScore.ToString("0.000") + "\t" + rsquaredVal + "\t" + slope);
 
 

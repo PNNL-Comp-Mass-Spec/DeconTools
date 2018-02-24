@@ -91,7 +91,7 @@ namespace DeconTools.Workflows.Backend.FileIO
                             }
                             catch (Exception ex)
                             {
-                                IqLogger.Log.Debug("Failed to calculate empirical formula for the Target " + target.ID + " (" + ex.Message + ")" +
+                                IqLogger.LogDebug("Failed to calculate empirical formula for the Target " + target.ID + " (" + ex.Message + ")" +
                                                   "; Having trouble with the mod: " + modString + "; This Target was NOT imported!!");
 
 
@@ -132,7 +132,7 @@ namespace DeconTools.Workflows.Backend.FileIO
 
             }
 
-            IqLogger.Log.Info("IqTargetFromDmsImporter saved " + targets.Count + " to the following file: " + fileName);
+            IqLogger.LogMessage("IqTargetFromDmsImporter saved " + targets.Count + " to the following file: " + fileName);
         }
 
         private string GetTargetStringForExport(IqTargetDms iqTarget)
@@ -249,12 +249,12 @@ namespace DeconTools.Workflows.Backend.FileIO
 
 
                         if (progressCounter % 100 == 0)
-                            IqLogger.Log.Debug(progressCounter + " records loaded; " + reader[0]);
+                            IqLogger.LogDebug(progressCounter + " records loaded; " + reader[0]);
                     }
                     reader.Close();
 
-                    IqLogger.Log.Debug("Total targets= " + iqTargetList.Count);
-                    IqLogger.Log.Debug("Targets with mods = " + _targetsContainingMods.Count);
+                    IqLogger.LogDebug("Total targets= " + iqTargetList.Count);
+                    IqLogger.LogDebug("Targets with mods = " + _targetsContainingMods.Count);
                 }
             }
 
@@ -304,13 +304,13 @@ namespace DeconTools.Workflows.Backend.FileIO
 
                         if (rowData.Item2.Contains("O18"))
                         {
-                            IqLogger.Log.Debug("ignoring this mod: " + rowData.Item1 + "; " + rowData.Item2 + "; " + rowData.Item3 + "; " + rowData.Item4 + "; " + empiricalFormula);
+                            IqLogger.LogDebug("ignoring this mod: " + rowData.Item1 + "; " + rowData.Item2 + "; " + rowData.Item3 + "; " + rowData.Item4 + "; " + empiricalFormula);
                             //ignore O18 modifications. In O18 workflows we look for the unmodified peptide and the labeled
                         }
                         else if (rowData.Item2.Contains("N15"))
                         {
                             //ignore N15 modifications for now
-                            IqLogger.Log.Debug("ignoring this mod: " + rowData.Item1 + "; " + rowData.Item2 + "; " + rowData.Item3 + "; " + rowData.Item4 + "; " + empiricalFormula);
+                            IqLogger.LogDebug("ignoring this mod: " + rowData.Item1 + "; " + rowData.Item2 + "; " + rowData.Item3 + "; " + rowData.Item4 + "; " + empiricalFormula);
 
                         }
                         else

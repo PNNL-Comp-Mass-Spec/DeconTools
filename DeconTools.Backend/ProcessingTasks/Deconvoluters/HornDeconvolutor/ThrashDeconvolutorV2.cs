@@ -189,7 +189,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
                 }
                 else
                 {   //Paul subtraction
-                    IqLogger.Log.Debug("MZ value: " + msPeak.XValue + "\n");
+                    IqLogger.LogDebug("MZ value: " + msPeak.XValue + "\n");
                     potentialChargeStates = GetPotentialChargeStates(indexOfCurrentPeak, mspeakList, ppmTolerance);
                     #region Paul Addition
                     var chargeDecider= new ChromCorrelatingChargeDecider(_run);
@@ -203,7 +203,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
                     reportString201+=charge + "\t";
 
                 }
-                IqLogger.Log.Debug(reportString201 + "\n");
+                IqLogger.LogDebug(reportString201 + "\n");
 
                 var potentialMSFeaturesForGivenChargeState = new List<IsotopicProfile>();
                 foreach (var potentialChargeState in potentialChargeStates)
@@ -295,7 +295,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
                                 stopwatch.Start();
                                 LoadPeaks(_run);
                                 stopwatch.Stop();
-                                IqLogger.Log.Debug("stopwatch: " + stopwatch.Elapsed);
+                                IqLogger.LogDebug("stopwatch: " + stopwatch.Elapsed);
                             }
                             var brain = new ChromCorrelatingChargeDecider(_run);
                             msfeature = brain.DetermineCorrectIsotopicProfile(potentialMSFeaturesForGivenChargeState.Where(n => n.Score < .50).ToList()) ??
@@ -318,7 +318,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
                         //line outputs.
                         var reportString309 = "\nM/Z = " + msfeature.MonoPeakMZ +
                                 "\nCHOSEN CHARGE: " + msfeature.ChargeState + "\n\n";
-                        IqLogger.Log.Debug(reportString309);
+                        IqLogger.LogDebug(reportString309);
 
                         //tabular output
                         //string reportString309 = "\tM/Z = \t" + msfeature.MonoPeakMZ +

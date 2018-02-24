@@ -61,10 +61,10 @@ namespace DeconTools.Workflows.Backend.Core
             result.NumChromPeaksWithinTolerance = result.ChromPeakList.Count;
 
             //General peak information output written to console.
-            IqLogger.Log.Debug("SmartPeakSelector --> NETTolerance= " + WorkflowParameters.ChromNETTolerance + ";  chromMinCenterMax= " +
-                              tempMinScanWithinTol + "\t" + tempCenterTol + "" + "\t" + tempMaxScanWithinTol + Environment.NewLine);
-            IqLogger.Log.Debug("MT= " + result.Target.ID + ";z= " + result.Target.ChargeState + "; mz= " + result.Target.MZTheor.ToString("0.000") +
-                              ";  ------------------------- PeaksWithinTol = " + result.ChromPeakList.Count + Environment.NewLine);
+            IqLogger.LogDebug("SmartPeakSelector --> NETTolerance= " + WorkflowParameters.ChromNETTolerance + ";  chromMinCenterMax= " +
+                              tempMinScanWithinTol + "\t" + tempCenterTol + "" + "\t" + tempMaxScanWithinTol);
+            IqLogger.LogDebug("MT= " + result.Target.ID + ";z= " + result.Target.ChargeState + "; mz= " + result.Target.MZTheor.ToString("0.000") +
+                              ";  ------------------------- PeaksWithinTol = " + result.ChromPeakList.Count);
 
             //Creates a ChromPeakIqTarget for each peak found
             foreach (ChromPeak peak in result.ChromPeakList)

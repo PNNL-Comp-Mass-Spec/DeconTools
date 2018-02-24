@@ -157,9 +157,9 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
             var tempMaxScanWithinTol = (int)resultList.Run.NetAlignmentInfo.GetScanForNet(normalizedElutionTime + Parameters.NETTolerance);
             var tempCenterTol = (int)resultList.Run.NetAlignmentInfo.GetScanForNet(normalizedElutionTime);
 
-            IqLogger.Log.Debug("SmartPeakSelector --> NETTolerance= " + Parameters.NETTolerance + ";  chromMinCenterMax= " + tempMinScanWithinTol + "\t" + tempCenterTol + "" +
+            IqLogger.LogDebug("SmartPeakSelector --> NETTolerance= " + Parameters.NETTolerance + ";  chromMinCenterMax= " + tempMinScanWithinTol + "\t" + tempCenterTol + "" +
                               "\t" + tempMaxScanWithinTol);
-            IqLogger.Log.Debug("MT= " + currentResult.Target.ID + ";z= " + currentResult.Target.ChargeState + "; mz= " + currentResult.Target.MZ.ToString("0.000") + ";  ------------------------- PeaksWithinTol = " + peaksWithinTol.Count);
+            IqLogger.LogDebug("MT= " + currentResult.Target.ID + ";z= " + currentResult.Target.ChargeState + "; mz= " + currentResult.Target.MZ.ToString("0.000") + ";  ------------------------- PeaksWithinTol = " + peaksWithinTol.Count);
 
             currentResult.NumChromPeaksWithinTolerance = peaksWithinTol.Count;
             currentResult.NumQualityChromPeaks = -1;
@@ -208,7 +208,7 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
 
                     AddScoresToPeakQualityData(pq, currentResult);
 #if DEBUG
-                    IqLogger.Log.Debug(pq.Display() + Environment.NewLine);
+                    IqLogger.LogDebug(pq.Display() + Environment.NewLine);
 #endif
                 }
 

@@ -9,6 +9,7 @@ using DeconTools.Utilities;
 using DeconTools.Workflows.Backend;
 using DeconTools.Workflows.Backend.Core;
 using DeconTools.Workflows.Backend.Utilities;
+using PRISM;
 
 
 namespace IQ.Console

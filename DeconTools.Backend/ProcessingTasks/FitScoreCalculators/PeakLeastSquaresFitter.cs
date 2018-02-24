@@ -34,8 +34,8 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
             int numPeaksToTheLeftForScoring,
             out int ionCountUsed)
         {
-            Utilities.IqLogger.IqLogger.SamPayneLog("Min Intensity For Scoring: " + minIntensityForScore);
-            Utilities.IqLogger.IqLogger.SamPayneLog("PPM Tolerance: " + toleranceInPPM);
+            Utilities.IqLogger.IqLogger.LogTrace("Min Intensity For Scoring: " + minIntensityForScore);
+            Utilities.IqLogger.IqLogger.LogTrace("PPM Tolerance: " + toleranceInPPM);
 
             ionCountUsed = 0;
             var theorIntensitiesUsedInCalc = new List<double>();
@@ -62,7 +62,7 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
                 {
                     theorIntensitiesUsedInCalc.Add(peak.Height);
 
-                    Utilities.IqLogger.IqLogger.SamPayneLog("Theoretical Peak Selected!	Peak Height: " + peak.Height + " Peak X-Value: " + peak.XValue);
+                    Utilities.IqLogger.IqLogger.LogTrace("Theoretical Peak Selected!	Peak Height: " + peak.Height + " Peak X-Value: " + peak.XValue);
 
                     //find peak in obs data
                     var mzTolerance = toleranceInPPM*peak.XValue/1e6;
@@ -71,25 +71,25 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
                     double obsIntensity;
                     if (foundPeaks.Count == 0)
                     {
-                        Utilities.IqLogger.IqLogger.SamPayneLog("No Observed Peaks Found Within Tolerance" + Environment.NewLine);
+                        Utilities.IqLogger.IqLogger.LogTrace("No Observed Peaks Found Within Tolerance");
                         obsIntensity = 0;
                     }
                     else if (foundPeaks.Count == 1)
                     {
                         obsIntensity = foundPeaks.First().Height;
-                        Utilities.IqLogger.IqLogger.SamPayneLog("Observed Peak Selected!	Peak Height: " + foundPeaks[0].Height + " Peak X-Value " + foundPeaks[0].XValue + Environment.NewLine);
+                        Utilities.IqLogger.IqLogger.LogTrace("Observed Peak Selected!	Peak Height: " + foundPeaks[0].Height + " Peak X-Value " + foundPeaks[0].XValue);
                     }
                     else
                     {
                         obsIntensity = foundPeaks.OrderByDescending(p => p.Height).First().Height;
-                        Utilities.IqLogger.IqLogger.SamPayneLog("Observed Peak Selected!	Peak Height: " + foundPeaks[0].Height + " Peak X-Value " + foundPeaks[0].XValue + Environment.NewLine);
+                        Utilities.IqLogger.IqLogger.LogTrace("Observed Peak Selected!	Peak Height: " + foundPeaks[0].Height + " Peak X-Value " + foundPeaks[0].XValue);
                     }
 
                     observedIntensitiesUsedInCalc.Add(obsIntensity);
                 }
                 else
                 {
-                    Utilities.IqLogger.IqLogger.SamPayneLog("Theoretical Peak Not Selected!	Peak Height: " + peak.Height + " Peak X-Value: " + peak.XValue + Environment.NewLine);
+                    Utilities.IqLogger.IqLogger.LogTrace("Theoretical Peak Not Selected!	Peak Height: " + peak.Height + " Peak X-Value: " + peak.XValue);
                 }
             }
 
@@ -97,19 +97,19 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
             //want to throw errors here
             if (theorIntensitiesUsedInCalc.Count == 0)
             {
-                Utilities.IqLogger.IqLogger.SamPayneLog("No peaks meet minIntensityForScore." + Environment.NewLine);
+                Utilities.IqLogger.IqLogger.LogTrace("No peaks meet minIntensityForScore.");
                 return 1.0;
             }
 
             var maxObs = observedIntensitiesUsedInCalc.Max();
             if (Math.Abs(maxObs) < float.Epsilon) maxObs = double.PositiveInfinity;
-            Utilities.IqLogger.IqLogger.SamPayneLog("Max Observed Intensity: " + maxObs);
+            Utilities.IqLogger.IqLogger.LogTrace("Max Observed Intensity: " + maxObs);
 
             var normalizedObs = observedIntensitiesUsedInCalc.Select(p => p / maxObs).ToList();
 
             var maxTheor = theorIntensitiesUsedInCalc.Max();
             var normalizedTheo = theorIntensitiesUsedInCalc.Select(p => p / maxTheor).ToList();
-            Utilities.IqLogger.IqLogger.SamPayneLog("Max Theoretical Intensity: " + maxTheor + Environment.NewLine);
+            Utilities.IqLogger.IqLogger.LogTrace("Max Theoretical Intensity: " + maxTheor);
 
 
             //foreach (var val in normalizedObs)
@@ -132,9 +132,10 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
 
                 sumSquareOfDiffs += (diff * diff);
                 sumSquareOfTheor += (normalizedTheo[i]*normalizedTheo[i]);
-                Utilities.IqLogger.IqLogger.SamPayneLog("Normalized Observed: " + normalizedObs[i]);
-                Utilities.IqLogger.IqLogger.SamPayneLog("Normalized Theoretical: " + normalizedTheo[i]);
-                Utilities.IqLogger.IqLogger.SamPayneLog("Iterator: " + i + " Sum of Squares Differences: " + sumSquareOfDiffs + " Sum of Squares Theoretical: " + sumSquareOfTheor + Environment.NewLine);
+
+                Utilities.IqLogger.IqLogger.LogTrace("Normalized Observed: " + normalizedObs[i]);
+                Utilities.IqLogger.IqLogger.LogTrace("Normalized Theoretical: " + normalizedTheo[i]);
+                Utilities.IqLogger.IqLogger.LogTrace("Iterator: " + i + " Sum of Squares Differences: " + sumSquareOfDiffs + " Sum of Squares Theoretical: " + sumSquareOfTheor);
             }
 
             ionCountUsed = normalizedTheo.Count;
@@ -151,7 +152,7 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
                 // fitScore /= ionCountUsed;
             }
 
-            Utilities.IqLogger.IqLogger.SamPayneLog("Fit Score: " + fitScore + Environment.NewLine);
+            Utilities.IqLogger.IqLogger.LogTrace("Fit Score: " + fitScore);
             return fitScore;
         }
 

@@ -1,11 +1,7 @@
 using System;
 using System.IO;
-using System.Linq;
-using System.Reflection;
-using log4net;
-using log4net.Appender;
-using log4net.Core;
-
+using PRISM.Logging;
+using PRISM;
 
 namespace DeconTools.Backend.Utilities.IqLogger
 {
@@ -13,144 +9,113 @@ namespace DeconTools.Backend.Utilities.IqLogger
     {
         static IqLogger()
         {
-            //Sets up log4net
-            //Make sure app.config is setup as well
-            SetupLoggingLevels();
-            log4net.Config.XmlConfigurator.Configure();
-            Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-            //get the current logging repository for this application
-            var repository = LogManager.GetRepository();
+            Log = new FileLogger {
+                LogLevel = BaseLogger.LogLevels.INFO
+            };
 
-            //get all of the appenders for the repository
-            var appenders = repository.GetAppenders().ToList();
-
-            //only change the file path on the 'FileAppenders'
-            //sets default path to the current working directory
-
-            //only change the file path on the 'FileAppenders'
-            foreach (var appender in appenders)
-            {
-                var isFileAppender = appender is FileAppender;
-
-                if (!isFileAppender) continue;
-
-                var fileAppender = (FileAppender)appender;
-                //set the path to your LogDirectory
-                fileAppender.File = Path.Combine(Environment.CurrentDirectory, fileAppender.Name + ".txt");
-                //make sure to call fileAppender.ActivateOptions() to notify the logging of changes
-                fileAppender.ActivateOptions();
-            }
-
-
-
+            var baseName = Path.Combine(Environment.CurrentDirectory, "IqLog");
+            FileLogger.ChangeLogFileBaseName(baseName, false);
         }
 
-        public static readonly ILog Log;
+        private static readonly FileLogger Log;
 
-        public static string LogDirectory { get; set; }
+        public static string LogDirectory { get; set; } = string.Empty;
 
         /// <summary>
-        /// Serves as a globally accessible counter (for debugging purposes only!)
+        /// Set to True to enable verbose logging
         /// </summary>
-        public static long Counter1 { get; set; }
-
-        private static readonly Level SamPayne = new Level(0, "SamPayne");
-
-        private static readonly Level DebugChannel1 = new Level(29999, "DebugChannel1");
-
-        private static readonly Level DebugChannel2 = new Level(29998, "DebugChannel2");
-
-        private static readonly Level DebugChannel3 = new Level(29997, "DebugChannel3");
-
+        public static bool VerboseLogging { get; set; } = false;
 
         /// <summary>
-        /// Initializes the standard IqLog file.
+        /// Immediately write out any queued messages
+        /// </summary>
+        public static void FlushPendingMessages()
+        {
+            FileLogger.FlushPendingMessages();
+        }
+
+        /// <summary>
+        /// Initializes the standard IqLog file for the given dataset
         /// </summary>
         /// <param name="datasetName"></param>
-        public static void InitializeIqLog (string datasetName)
+        /// <param name="logDirectory"></param>
+        public static void InitializeIqLog (string datasetName, string logDirectory)
         {
-            //Sets up the default IqLog.txt file
-            ChangeLogLocation("IqLog", LogDirectory, datasetName + "_IqLog.txt");
+            if (string.IsNullOrWhiteSpace(logDirectory))
+                LogDirectory = string.Empty;
+            else
+                LogDirectory = logDirectory;
+
+            ChangeLogLocation(LogDirectory, "IqLog", datasetName + "_IqLog.txt");
         }
 
         /// <summary>
         /// Changes the log location / log file name of the desired appender
         /// </summary>
-        /// <param name="name"></param>
-        /// <param name="path"></param>
-        /// <param name="filename"></param>
-        public static void ChangeLogLocation(string name, string path, string filename)
+        /// <param name="logDirectoryPath"></param>
+        /// <param name="logFileNamePrefix"></param>
+        /// <param name="logFileNameSuffix"></param>
+        private static void ChangeLogLocation(string logDirectoryPath, string logFileNamePrefix, string logFileNameSuffix)
         {
-            //get the current logging repository for this application
-            var repository = LogManager.GetRepository();
-
-            //get all of the appenders for the repository
-            var appenders = repository.GetAppenders();
-
-            //only change the file path on the 'FileAppenders'
-            foreach (var appender in appenders)
-            {
-                var isFileAppender = appender is FileAppender;
-
-                if (!isFileAppender) continue;
-
-                var fileAppender = (FileAppender)appender;
-                //set the path to your LogDirectory
-                fileAppender.File = Path.Combine(path, filename);
-                //make sure to call fileAppender.ActivateOptions() to notify the logging of changes
-                fileAppender.ActivateOptions();
-            }
-
-
+            var baseName = Path.Combine(logDirectoryPath, logFileNamePrefix + logFileNameSuffix);
+            FileLogger.ChangeLogFileBaseName(baseName, false);
         }
 
         /// <summary>
-        /// Log level between Finest and All
-        /// Extremely Verbose!
+        /// Verbose logging; not shown at the console
         /// </summary>
         /// <param name="message"></param>
-        public static void SamPayneLog(string message)
+        public static void LogTrace(string message)
         {
-            Log.Logger.Log(MethodBase.GetCurrentMethod().DeclaringType, SamPayne, message, null);
+            if (!VerboseLogging)
+                return;
+
+            if (Log.LogLevel < BaseLogger.LogLevels.DEBUG)
+                Log.LogLevel = BaseLogger.LogLevels.DEBUG;
+            Log.Debug(message);
         }
 
         /// <summary>
-        /// DebugChannel1 is between Info and Debug
+        /// Log a debug message, level Info
         /// </summary>
         /// <param name="message"></param>
-        public static void DebugChannel1Log(string message)
+        public static void LogDebug(string message)
         {
-            Log.Logger.Log(MethodBase.GetCurrentMethod().DeclaringType, DebugChannel1, message, null);
+            Log.Debug(message);
+            ConsoleMsgUtils.ShowDebug(message);
         }
 
-
         /// <summary>
-        /// DebugChannel2 is between Info and Debug
+        /// Log an errr message
         /// </summary>
         /// <param name="message"></param>
-        public static void DebugChannel2Log(string message)
+        /// <param name="ex"></param>
+        public static void LogError(string message, Exception ex = null)
         {
-            Log.Logger.Log(MethodBase.GetCurrentMethod().DeclaringType, DebugChannel2, message, null);
+            Log.Error(message, ex);
+            ConsoleMsgUtils.ShowError(message, ex);
+        }
+
+        /// <summary>
+        /// Log a message, level Info
+        /// </summary>
+        /// <param name="message"></param>
+        public static void LogMessage(string message)
+        {
+            Log.Info(message);
+            Console.WriteLine(message);
         }
 
 
         /// <summary>
-        /// DebugChannel3 is between Info and Debug
+        /// Log a message, level warn
         /// </summary>
         /// <param name="message"></param>
-        public static void DebugChannel3Log(string message)
+        public static void LogWarning(string message)
         {
-            Log.Logger.Log(MethodBase.GetCurrentMethod().DeclaringType, DebugChannel3, message, null);
-        }
-
-
-        private static void SetupLoggingLevels()
-        {
-            LogManager.GetRepository().LevelMap.Add(SamPayne);
-            LogManager.GetRepository().LevelMap.Add(DebugChannel1);
-            LogManager.GetRepository().LevelMap.Add(DebugChannel2);
-            LogManager.GetRepository().LevelMap.Add(DebugChannel3);
+            Log.Warn(message);
+            ConsoleMsgUtils.ShowWarning(message);
         }
     }
 }

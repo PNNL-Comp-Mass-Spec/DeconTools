@@ -28,7 +28,7 @@ namespace DeconTools.Workflows.Backend
         {
             IsDataExported = false;
 
-           
+
             LoessBandwidthNetAlignment = 0.2;
             LoessBandwidthMassAlignment = 0.2;
 
@@ -68,13 +68,13 @@ namespace DeconTools.Workflows.Backend
         {
             if (string.IsNullOrEmpty(targetsFilePath))
             {
-                IqLogger.Log.Info("IqMassAndNetAligner - no alignment targets were loaded. The inputted targets file path is NULL.");
+                IqLogger.LogMessage("IqMassAndNetAligner - no alignment targets were loaded. The inputted targets file path is NULL.");
                 return;
             }
-            
+
             if (!File.Exists(targetsFilePath))
             {
-                IqLogger.Log.Info("IqMassAndNetAligner - no alignment targets were loaded. The inputted targets file path is does not exist.");
+                IqLogger.LogMessage("IqMassAndNetAligner - no alignment targets were loaded. The inputted targets file path is does not exist.");
                 return;
             }
 
@@ -131,7 +131,7 @@ namespace DeconTools.Workflows.Backend
             TargetedWorkflowParameters workflowParameters = new BasicTargetedWorkflowParameters();
             workflowParameters.ChromNETTolerance = 0.005;
             workflowParameters.ChromGenTolerance = 50;
-           
+
             //define workflows for parentTarget and childTargets
             var parentWorkflow = new ChromPeakDeciderIqWorkflow(Run, workflowParameters);
             var childWorkflow = new ChargeStateChildIqWorkflow(Run, workflowParameters);
@@ -143,13 +143,13 @@ namespace DeconTools.Workflows.Backend
 
             if (Targets.Count>0)
             {
-                IqLogger.Log.Info("IqMassAndNetAligner - Loaded " + Targets.Count + " targets for use in mass and net alignment");
+                IqLogger.LogMessage("IqMassAndNetAligner - Loaded " + Targets.Count + " targets for use in mass and net alignment");
             }
             else
             {
-                IqLogger.Log.Info("IqMassAndNetAligner - NOTE - no targets have been loaded.");
+                IqLogger.LogMessage("IqMassAndNetAligner - NOTE - no targets have been loaded.");
             }
-            
+
 
 
             //IqWorkflowAssigner workflowAssigner = new IqWorkflowAssigner();
@@ -277,7 +277,7 @@ namespace DeconTools.Workflows.Backend
             IqResultImporter importer = new IqResultImporterBasic(filename);
             IqResultsForAlignment = importer.Import();
 
-            IqLogger.Log.Info("IqMassAndNetAligner - Imported " + IqResultsForAlignment.Count + " IqResults for use in alignment. ");
+            IqLogger.LogMessage("IqMassAndNetAligner - Imported " + IqResultsForAlignment.Count + " IqResults for use in alignment. ");
 
 
         }
@@ -287,7 +287,7 @@ namespace DeconTools.Workflows.Backend
         {
             if (IqResultsForAlignment==null || IqResultsForAlignment.Count==0)
             {
-                IqLogger.Log.Info("Iq mass and NET aligner trying to export results. But no results exist.");
+                IqLogger.LogMessage("Iq mass and NET aligner trying to export results. But no results exist.");
                 return;
             }
 
@@ -298,10 +298,10 @@ namespace DeconTools.Workflows.Backend
             }
             catch (Exception ex)
             {
-                IqLogger.Log.Info("Iq mass and NET aligner trying to export results but there was an error. Error details: " + ex.Message);
+                IqLogger.LogMessage("Iq mass and NET aligner trying to export results but there was an error. Error details: " + ex.Message);
 
             }
-           
+
         }
 
         #endregion
@@ -332,7 +332,7 @@ namespace DeconTools.Workflows.Backend
             var loessInterpolatorForMassAlignment = new LoessInterpolator(LoessBandwidthMassAlignment, iterationsForMassAlignment);
 
 
-            IqLogger.Log.Info("Applying Loess smoothing to mass alignment data. LoessBandwidth= "+ LoessBandwidthMassAlignment);
+            IqLogger.LogMessage("Applying Loess smoothing to mass alignment data. LoessBandwidth= "+ LoessBandwidthMassAlignment);
 
 
             var massAlignmentInfo = new MassAlignmentInfoBasic();
@@ -361,12 +361,12 @@ namespace DeconTools.Workflows.Backend
             }
 
 
-            IqLogger.Log.Info("Mass alignment complete using " + massAlignmentInfo.GetNumPoints() + " data points");
+            IqLogger.LogMessage("Mass alignment complete using " + massAlignmentInfo.GetNumPoints() + " data points");
 
-            IqLogger.Log.Info("Average ppm shift = \t" + massAlignmentInfo.AveragePpmShift.ToString("0.00")+ " +/- " + massAlignmentInfo.StdevPpmShiftData.ToString("0.00"));
+            IqLogger.LogMessage("Average ppm shift = \t" + massAlignmentInfo.AveragePpmShift.ToString("0.00")+ " +/- " + massAlignmentInfo.StdevPpmShiftData.ToString("0.00"));
 
             MassAlignmentInfo = massAlignmentInfo;
-            
+
             return massAlignmentInfo;
         }
 
@@ -383,11 +383,11 @@ namespace DeconTools.Workflows.Backend
 
             IqResultsForNetAlignment = UpdateMsgfTargetsWithDatabaseNetValues(IqResultsForAlignment);
 
-            IqLogger.Log.Info("Applying Loess smoothing to NET alignment data. LoessBandwidth= "+ LoessBandwidthNetAlignment);
-            
+            IqLogger.LogMessage("Applying Loess smoothing to NET alignment data. LoessBandwidth= "+ LoessBandwidthNetAlignment);
+
             var netAlignmentDataForLoess = PrepareNetAlignmentDataForLoessSmoothing();
 
-           
+
 
 
             var iterationsForNetAlignment = 2;
@@ -416,7 +416,7 @@ namespace DeconTools.Workflows.Backend
             netAlignmentInfo.SetScanToNETAlignmentData(scanToNetVals);
 
 
-            IqLogger.Log.Info("NET alignment complete using " + scanToNetVals.Count + " data points.");
+            IqLogger.LogMessage("NET alignment complete using " + scanToNetVals.Count + " data points.");
 
             NetAlignmentInfo = netAlignmentInfo;
 
@@ -448,7 +448,7 @@ namespace DeconTools.Workflows.Backend
                 }
 
 
-                
+
                 var yval = iqResult.MassErrorBefore;
 
                 if (!scanMassVals.ContainsKey(lcScan))

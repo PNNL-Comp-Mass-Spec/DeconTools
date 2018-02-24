@@ -222,11 +222,11 @@ namespace DeconTools.Backend.Workflows
                 var peaksFileExists = CheckForPeaksFile(OutputFolderPath);
                 if (!peaksFileExists)
                 {
-                    IqLogger.Log.Info("Creating _peaks.txt file. Takes 1 to 5 minutes.");
+                    IqLogger.LogMessage("Creating _peaks.txt file. Takes 1 to 5 minutes.");
                     CreatePeaksFile(NewDeconToolsParameters.PeakDetectorParameters, OutputFolderPath);
                 }
 
-                IqLogger.Log.Info("Loading _peaks.txt file into memory. Takes 0 - 30 seconds" + Environment.NewLine);
+                IqLogger.LogMessage("Loading _peaks.txt file into memory. Takes 0 - 30 seconds" + Environment.NewLine);
                 LoadPeaks(OutputFolderPath);
 
             }

@@ -141,7 +141,7 @@ namespace DeconTools.Workflows.Backend.Core
             if (Targets == null)
                 return;
 
-            IqLogger.Log.Info("Total targets loaded= " + Targets.TargetList.Count);
+            IqLogger.LogMessage("Total targets loaded= " + Targets.TargetList.Count);
 
 
             if (ExecutorParameters.TargetType == Globals.TargetType.LcmsFeature)
@@ -446,7 +446,7 @@ namespace DeconTools.Workflows.Backend.Core
         {
             if (Run==null)
             {
-                IqLogger.Log.Error("Trying to get target file path for use in IqAlignment but Run is null.");
+                IqLogger.LogError("Trying to get target file path for use in IqAlignment but Run is null.");
                 return string.Empty;
             }
 
@@ -464,7 +464,8 @@ namespace DeconTools.Workflows.Backend.Core
                 return targetsForAlignmentFilePath;
             }
 
-            IqLogger.Log.Info("Trying to get target file path for use in IqAlignment, but no suitable targets file found. Suitable source files include: *_msgfdb_fht.txt");
+            IqLogger.LogMessage("Trying to get target file path for use in IqAlignment, but no suitable targets file found. " +
+                                "Suitable source files include: *_msgfdb_fht.txt");
 
             return string.Empty;
         }
@@ -804,14 +805,13 @@ namespace DeconTools.Workflows.Backend.Core
                 if (generalProgressString.IndexOf('\r') >= 0 ||
                     generalProgressString.IndexOf('\n') >= 0)
                 {
-                    IqLogger.Log.Info(generalProgressString);
+                    IqLogger.LogMessage(generalProgressString);
                 }
                 else
                 {
-                    IqLogger.Log.Info(generalProgressString + Environment.NewLine);
+                    IqLogger.LogMessage(generalProgressString);
+                    Console.WriteLine();
                 }
-
-                //Console.WriteLine(DateTime.Now + "\t" + generalProgressString);
             }
             else
             {

@@ -26,7 +26,7 @@ namespace DeconTools.Workflows.Backend.FileIO
                 }
                 catch (Exception ex)
                 {
-                    IqLogger.Log.Fatal("Unable to open file for writing!" + Environment.NewLine);
+                    IqLogger.LogError("Unable to open file for writing: " + fileName, ex);
                     throw new IOException("Unable to open file for writing!", ex);
                 }
             }
@@ -42,7 +42,7 @@ namespace DeconTools.Workflows.Backend.FileIO
                 }
                 catch (Exception ex)
                 {
-                    IqLogger.Log.Fatal("Unable to open file for writing!" + Environment.NewLine);
+                    IqLogger.LogError("Unable to open file for writing: " + fileName, ex);
                     throw new IOException("Unable to open file for writing!", ex);
                 }
             }

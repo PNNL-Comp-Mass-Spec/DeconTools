@@ -46,7 +46,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChargeStateDeciders
 
             //with line spaces
             var reportString1 = "\nM/Z : " + potentialIsotopicProfiles.First().Peaklist[index].XValue + "\n";
-            IqLogger.Log.Debug(reportString1);
+            IqLogger.LogDebug(reportString1);
             foreach (var potentialfeature in potentialIsotopicProfiles)
             {
                 indexCurrentFeature++;
@@ -68,7 +68,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChargeStateDeciders
                     correlationswithAltChargeState[indexCurrentFeature, i] + "\n";
                 }
                 reportString += "Score: " + potentialfeature.Score;
-                IqLogger.Log.Debug(reportString);
+                IqLogger.LogDebug(reportString);
 
 
                 //tabular output
@@ -233,15 +233,15 @@ namespace DeconTools.Backend.ProcessingTasks.ChargeStateDeciders
 
             var chargeStateCalculator = new PattersonChargeStateCalculatorWithChanges();
             var chargeState = chargeStateCalculator.GetChargeState(_run.XYData, _run.PeakList, potentialIsotopicProfiles.First().getMonoPeak());
-            IqLogger.Log.Debug("had to use the patterson calculator and this is what it gave me: " + chargeState);
+            IqLogger.LogDebug("had to use the patterson calculator and this is what it gave me: " + chargeState);
             foreach (var charge in chargeStates)
             {
-                IqLogger.Log.Debug(charge + "\t");
+                IqLogger.LogDebug(charge + "\t");
             }
-            IqLogger.Log.Debug("Charge state length: " + chargeStates.Length);
+            IqLogger.LogDebug("Charge state length: " + chargeStates.Length);
             if (chargeStates.Contains(chargeState))
             {
-                IqLogger.Log.Debug(Array.IndexOf(chargeStates, chargeState));
+                IqLogger.LogDebug(Array.IndexOf(chargeStates, chargeState).ToString());
                 return potentialIsotopicProfiles.ElementAt(Array.IndexOf(chargeStates, chargeState));
             }
 
@@ -451,7 +451,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChargeStateDeciders
             {
                 reportString521+=curcharge + "\t";
             }
-            IqLogger.Log.Debug(reportString521 + "\n");
+            IqLogger.LogDebug(reportString521 + "\n");
             return chargeStates;
         }
 

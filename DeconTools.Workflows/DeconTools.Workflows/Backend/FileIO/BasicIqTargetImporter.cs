@@ -15,7 +15,6 @@ namespace DeconTools.Workflows.Backend.FileIO
             Filename = filename;
         }
 
-
         protected override IqTarget ConvertTextToIqTarget(List<string> processedRow)
         {
             IqTarget target = new IqChargeStateTarget();

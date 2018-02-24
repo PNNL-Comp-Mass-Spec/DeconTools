@@ -71,13 +71,14 @@ namespace DeconTools.Workflows.Backend.Core
 
         #endregion
 
-        protected override void ReportGeneralProgress(int currentTarget, int totalTargets)
+        protected override void ReportGeneralProgress(int currentTarget, int totalTargets, ref DateTime lastProgress, int progressIntervalSeconds = 10)
         {
             var currentProgress = (currentTarget / (double)totalTargets);
 
-            if (currentTarget % 50 == 0)
+            if (DateTime.UtcNow.Subtract(lastProgress).TotalSeconds >= progressIntervalSeconds)
             {
-                IqLogger.Log.Info("Processing target " + currentTarget + " of " + totalTargets + "; " + (Math.Round(currentProgress * 100, 1)) + "% Complete.");
+                lastProgress = DateTime.UtcNow;
+                IqLogger.LogMessage("Processing target " + currentTarget + " of " + totalTargets + "; " + (Math.Round(currentProgress * 100, 1)) + "% Complete.");
             }
 
             if (_backgroundWorker != null)
