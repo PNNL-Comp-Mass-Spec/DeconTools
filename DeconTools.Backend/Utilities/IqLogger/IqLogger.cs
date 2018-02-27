@@ -47,7 +47,7 @@ namespace DeconTools.Backend.Utilities.IqLogger
             else
                 LogDirectory = logDirectory;
 
-            ChangeLogLocation(LogDirectory, "IqLog", datasetName + "_IqLog.txt");
+            ChangeLogLocation(LogDirectory, datasetName, "_IqLog.txt");
         }
 
         /// <summary>
