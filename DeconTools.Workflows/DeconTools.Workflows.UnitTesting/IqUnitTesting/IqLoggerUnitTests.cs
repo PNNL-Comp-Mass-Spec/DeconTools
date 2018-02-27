@@ -1,14 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using DeconTools.Backend.Core;
 using DeconTools.Backend.Runs;
 using DeconTools.Backend.Utilities;
 using DeconTools.Workflows.Backend.Core;
 using NUnit.Framework;
-using log4net;
+using PRISM.Logging;
 
 namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
 {
@@ -18,33 +15,46 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
         [Test]
         public void IqLoggerUnitTest1()
         {
-            var util = new IqTargetUtilities();
+            // var util = new IqTargetUtilities();
             var testFile = UnitTesting2.FileRefs.RawDataMSFiles.OrbitrapStdFile1;
-            var peaksTestFile = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_scans5500-6500_peaks.txt";
+            const string peaksTestFile = @"\\proto-2\unitTest_Files\DeconTools_TestFiles\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_scans5500-6500_peaks.txt";
 
-            var targetsFile = @"\\protoapps\UserData\Slysz\Data\MassTags\QCShew_Formic_MassTags_Bin10_all.txt";
+            const string targetsFile = @"\\proto-2\unitTest_Files\DeconTools_TestFiles\Targeted_FeatureFinding\SIPPER_standard_testing\Targets\refID22508_massTags.txt";
 
-            var resultsFolder = @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Unlabelled\Results";
+            const string resultsFolder = @"\\proto-2\unitTest_Files\DeconTools_TestFiles\Targeted_FeatureFinding\Results_IqLoggerUnitTest";
 
-
-            WorkflowExecutorBaseParameters executorBaseParameters = new BasicTargetedWorkflowExecutorParameters();
-            executorBaseParameters.ChromGenSourceDataPeakBR = 3;
-            executorBaseParameters.ChromGenSourceDataSigNoise = 2;
-            executorBaseParameters.TargetsFilePath = targetsFile;
+            WorkflowExecutorBaseParameters executorBaseParameters = new BasicTargetedWorkflowExecutorParameters
+            {
+                ChromGenSourceDataPeakBR = 3,
+                ChromGenSourceDataSigNoise = 2,
+                TargetsFilePath = targetsFile,
+                OutputFolderBase = resultsFolder
+            };
 
             var run = new RunFactory().CreateRun(testFile);
+            var datasetName = RunUtilities.GetDatasetName(testFile);
 
-            var expectedResultsFilename = Path.Combine(resultsFolder, RunUtilities.GetDatasetName(testFile) + "_IqLog.txt");
-            if (File.Exists(expectedResultsFilename)) File.Delete(expectedResultsFilename);
+            var expectedLogFile = new FileInfo(Path.Combine(resultsFolder, "IqLogs", datasetName + "_IqLog.txt"));
 
-            var executor = new IqExecutor(executorBaseParameters, run);
-            executor.ChromSourceDataFilePath = peaksTestFile;
+            if (expectedLogFile.Exists)
+                expectedLogFile.Delete();
+
+            // FileLogger.ChangeLogFileBaseName(expectedLogFile.FullName, false);
+
+            var executor = new IqExecutor(executorBaseParameters, run)
+            {
+                ChromSourceDataFilePath = peaksTestFile
+            };
 
             executor.LoadAndInitializeTargets(targetsFile);
-            executor.Targets = (from n in executor.Targets where n.ElutionTimeTheor > 0.305 && n.ElutionTimeTheor < 0.325 select n).Take(10).ToList();
+            executor.Targets = (from n in executor.Targets where n.ElutionTimeTheor > 0.1 && n.ElutionTimeTheor < 0.9 select n).Take(10).ToList();
 
-            var targetedWorkflowParameters = new BasicTargetedWorkflowParameters();
-            targetedWorkflowParameters.ChromNETTolerance = 0.5;
+            Assert.AreEqual(10, executor.Targets.Count, "Unexpected number of targets");
+
+            var targetedWorkflowParameters = new BasicTargetedWorkflowParameters
+            {
+                ChromNETTolerance = 0.5
+            };
 
             //define workflows for parentTarget and childTargets
             var parentWorkflow = new BasicIqWorkflow(run, targetedWorkflowParameters);
@@ -54,31 +64,34 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
             workflowAssigner.AssignWorkflowToParent(parentWorkflow, executor.Targets);
             workflowAssigner.AssignWorkflowToChildren(childWorkflow, executor.Targets);
 
-            //Main line for executing IQ:
+            // Main line for executing IQ:
             executor.Execute();
 
-            //Test the Log File
-            Assert.IsTrue(File.Exists(expectedResultsFilename), "IqLog.txt file doesn't exist");
+            FileLogger.FlushPendingMessages();
+
+            // Test the Log File
+            expectedLogFile.Refresh();
+
+            if (!expectedLogFile.Exists)
+                return;
+
             Console.WriteLine("");
             Console.WriteLine("Log File");
             var numLogs = 0;
-            var outputToConsole = true;
 
-            using (var reader = new StreamReader(expectedResultsFilename))
+            using (var reader = new StreamReader(expectedLogFile.FullName))
             {
                 while (!reader.EndOfStream)
                 {
                     var line = reader.ReadLine();
                     numLogs++;
-
-                    if (outputToConsole)
-                    {
-                        Console.WriteLine(line);
-                    }
+                    Console.WriteLine(line);
                 }
             }
-            Console.WriteLine(numLogs);
-            Assert.IsTrue(numLogs == 37, "No Logs in output file");
+            Console.WriteLine("Log file lines read: " + numLogs);
+
+            const int ExpectedLineCount = 33;
+            Assert.AreEqual(ExpectedLineCount, numLogs, "Log file has {0} entries; expecting {1}", numLogs, ExpectedLineCount);
         }
 
     }
