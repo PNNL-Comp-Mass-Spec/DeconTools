@@ -25,7 +25,6 @@ namespace DeconTools.Workflows.Backend.FileIO
                 target.ID = GetAutoIncrementForTargetID();
             }
 
-
             target.EmpiricalFormula = ParseStringField(processedRow, EmpiricalFormulaHeaders, string.Empty);
             target.Code = ParseStringField(processedRow, CodeHeaders, "");
             target.ElutionTimeTheor = ParseDoubleField(processedRow, NETHeaders, 0);

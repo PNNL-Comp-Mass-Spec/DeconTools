@@ -105,7 +105,6 @@ namespace DeconTools.Backend.Utilities
 
             return File.Exists(datasetPath);
         }
-            
 
         public static string GetDatasetParentFolder(string datasetPath)
         {

@@ -90,7 +90,6 @@ namespace IQ.Console
                 var numDatasets = datasetList.Count;
                 var datasetCounter = 0;
 
-
                 foreach (var datasetNameOrPath in datasetList)
                 {
                     datasetCounter++;
@@ -169,7 +168,6 @@ namespace IQ.Console
 
                 if (string.Equals(targetType, "DatabaseTarget", StringComparison.CurrentCultureIgnoreCase))
                     executorParameters.TargetType = Globals.TargetType.DatabaseTarget;
-
 
                 executorParameters.OutputFolderBase = GetParameter(parameterList, "ResultsFolder", executorParameters.OutputFolderBase);
 
