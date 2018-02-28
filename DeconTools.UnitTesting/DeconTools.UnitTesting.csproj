@@ -71,7 +71,6 @@
     <Compile Include="ProcessingTasksTests\TargetedAnalysisTests\N14N15TargetedTests.cs" />
     <Compile Include="ProcessingTasksTests\TargetedAnalysisTests\N14N15_CustomWorkflow1Tests.cs" />
     <Compile Include="ProcessingTasksTests\TargetedAnalysisTests\O16O18TargetedTests.cs" />
-    <Compile Include="ProcessingTasksTests\TargetedAnalysisTests\SmartChromPeakSelectorTests.cs" />
     <Compile Include="ProcessingTasksTests\UIMFDriftTimeExtractorTests.cs" />
     <Compile Include="ProjectControllerTests\BonesProjectControllerTests.cs" />
     <Compile Include="DeconEngineTests.cs" />
