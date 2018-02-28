@@ -40,6 +40,9 @@
     <Reference Include="DeconEngineV2">
       <HintPath>..\Library\DeconEngineV2.dll</HintPath>
     </Reference>
+    <Reference Include="MSDataFileReader">
+      <HintPath>..\Library\MSDataFileReader.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>

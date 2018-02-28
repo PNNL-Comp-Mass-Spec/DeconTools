@@ -95,6 +95,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Library\Agilent_D\MassHunter DataAccess Component MHDAC B.06.00\MassHunterDataAccessAssembly_32bit\bin\MassSpecDataReader.dll</HintPath>
     </Reference>
+    <Reference Include="MSDataFileReader">
+      <HintPath>..\Library\MSDataFileReader.dll</HintPath>
+    </Reference>
     <Reference Include="MSDBLibrary, Version=1.0.3603.29048, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Library\MSDBLibrary.dll</HintPath>
