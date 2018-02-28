@@ -1,5 +1,4 @@
-﻿using System;
-
+﻿
 namespace DeconTools.Backend.Core
 {
     public class ChromPeakQualityData

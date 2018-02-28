@@ -3,8 +3,9 @@
 // E-mail: matthew.monroe@pnnl.gov or proteomics@pnnl.gov
 // Website: https://panomics.pnnl.gov/software/
 // -------------------------------------------------------------------------------
+//
 // Licensed under the Apache License, Version 2.0; you may not use this file except
-// in compliance with the License.  You may obtain a copy of the License at 
+// in compliance with the License.  You may obtain a copy of the License at
 // http://www.apache.org/licenses/LICENSE-2.0
 
 
@@ -13,11 +14,11 @@ using MathNet.Numerics.LinearAlgebra.Double;
 
 namespace DeconTools.Backend.ProcessingTasks.Smoothers
 {
-    public class SavitzkyGolaySmoother:Smoother
+    public class SavitzkyGolaySmoother : Smoother
     {
         DenseMatrix _smoothingFilters;
-        
-        public SavitzkyGolaySmoother(int pointsForSmoothing, int polynomialOrder, bool allowNegativeValues=true)
+
+        public SavitzkyGolaySmoother(int pointsForSmoothing, int polynomialOrder, bool allowNegativeValues = true)
         {
             PointsForSmoothing = pointsForSmoothing;
             PolynomialOrder = polynomialOrder;
@@ -27,7 +28,7 @@ namespace DeconTools.Backend.ProcessingTasks.Smoothers
 
         public int PointsForSmoothing { get; set; }
         public int PolynomialOrder { get; set; }
-        
+
         /// <summary>
         /// When smoothing, smoothed values that once were positive, may become negative. This will zero-out any negative values
         /// </summary>
@@ -45,14 +46,14 @@ namespace DeconTools.Backend.ProcessingTasks.Smoothers
 
             if (PointsForSmoothing % 2 == 0)
                 throw new ArgumentOutOfRangeException("savGolayPoints must be an odd number 3 or higher");
-            
+
             var colCount = inputValues.Length;
             var returnYValues = new double[colCount];
 
             var newPointsForSmoothing = PointsForSmoothing > colCount ? colCount : PointsForSmoothing;
             var m = (newPointsForSmoothing - 1) / 2;
-            
-            if (_smoothingFilters == null || _smoothingFilters.ColumnCount != newPointsForSmoothing) 
+
+            if (_smoothingFilters == null || _smoothingFilters.ColumnCount != newPointsForSmoothing)
             {
                 _smoothingFilters = CalculateSmoothingFilters(PolynomialOrder, newPointsForSmoothing);
             }
@@ -68,7 +69,7 @@ namespace DeconTools.Backend.ProcessingTasks.Smoothers
                 {
                     multiplicationResult += (conjTransposeColumn[z] * inputValues[z]);
                 }
-                
+
                 returnYValues[i] = multiplicationResult;
             }
 
@@ -118,13 +119,13 @@ namespace DeconTools.Backend.ProcessingTasks.Smoothers
             var returnVals = new XYData();
             returnVals.Xvalues = xyData.Xvalues;
             returnVals.Yvalues = smoothedData;
-           
+
             return returnVals;
         }
 
 
 
-        private DenseMatrix CalculateSmoothingFilters(int polynomialOrder, int filterLength )
+        private DenseMatrix CalculateSmoothingFilters(int polynomialOrder, int filterLength)
         {
             var m = (filterLength - 1) / 2;
             var denseMatrix = new DenseMatrix(filterLength, polynomialOrder + 1);
@@ -146,7 +147,7 @@ namespace DeconTools.Backend.ProcessingTasks.Smoothers
         }
 
 
-       
+
     }
 
 

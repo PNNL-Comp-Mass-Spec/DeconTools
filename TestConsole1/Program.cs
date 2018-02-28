@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
-using DeconTools.Backend.Core;
 using DeconTools.Backend.Parameters;
 using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend.ProcessingTasks.Deconvoluters;
-using DeconTools.Backend.ProcessingTasks.MSGenerators;
 using DeconTools.Backend.ProcessingTasks.PeakDetectors;
 using DeconTools.Backend.Runs;
 using DeconTools.Backend.Utilities.IsotopeDistributionCalculation.MercuryIsotopicDistribution;
@@ -61,7 +58,7 @@ namespace TestConsole1
         public static void TestErnestosData1()
         {
 
-         
+
 
         }
 
@@ -75,9 +72,11 @@ namespace TestConsole1
             var peakBr = 0.5;
             var peakDetector = new DeconToolsPeakDetectorV2(peakBr, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
 
-            var thrashParameters = new ThrashParameters();
-            thrashParameters.MinMSFeatureToBackgroundRatio = peakBr;
-            thrashParameters.MaxFit = 0.4;
+            var thrashParameters = new ThrashParameters
+            {
+                MinMSFeatureToBackgroundRatio = peakBr,
+                MaxFit = 0.4
+            };
 
 #pragma warning disable 618
             var newDeconvolutor = new InformedThrashDeconvolutor(thrashParameters);
@@ -134,8 +133,10 @@ namespace TestConsole1
 
         private static void testMercury()
         {
-            var mercury = new MercuryIsoDistCreator2();
-            mercury.Resolution = 100000;
+            var mercury = new MercuryIsoDistCreator2 {
+                Resolution = 100000
+            };
+
             var iso = mercury.GetIsotopePattern("C66H114N20O21S2", 2);    //Peptide 'SAMPLERSAMPLER'
 
             var timeVals = new List<long>();

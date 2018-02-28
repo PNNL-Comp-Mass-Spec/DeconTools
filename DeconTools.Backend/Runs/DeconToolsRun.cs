@@ -30,10 +30,8 @@ namespace DeconTools.Backend.Runs
             {
                 return base.GetScanInfo(scanNum);
             }
-            else
-            {
-                return RawData.GetScanDescription(scanNum);
-            }
+
+            return RawData.GetScanDescription(scanNum);
         }
 
         public override double GetTime(int scanNum)

@@ -9,9 +9,7 @@
 // http://www.apache.org/licenses/LICENSE-2.0
 using System;
 using System.Collections;
-using System.ComponentModel;
 using System.Drawing;
-using System.Data;
 using System.Windows.Forms;
 using System.Threading ;
 using PNNL.Controls;
@@ -2042,12 +2040,6 @@ namespace Decon2LS
 
         private void copyXYDataToClipBoard()
         {
-
-
-
-
-
-
 
         }
 

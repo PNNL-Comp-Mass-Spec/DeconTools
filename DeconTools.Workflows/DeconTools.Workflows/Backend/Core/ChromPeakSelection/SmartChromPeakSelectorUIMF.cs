@@ -60,13 +60,13 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
                 normalizedElutionTime = resultList.Run.CurrentMassTag.NormalizedElutionTime;
             }
 
-            //collect Chrom peaks that fall within the NET tolerance
+            // Collect Chrom peaks that fall within the NET tolerance
             var peaksWithinTol = new List<ChromPeak>(); //
 
             foreach (var item in resultList.Run.PeakList)
             {
                 var peak = (ChromPeak)item;
-                if (Math.Abs(peak.NETValue - normalizedElutionTime) <= Parameters.NETTolerance)     //peak.NETValue was determined by the ChromPeakDetector or a future ChromAligner Task
+                if (Math.Abs(peak.NETValue - normalizedElutionTime) <= Parameters.NETTolerance)     // Peak.NETValue was determined by the ChromPeakDetector or a future ChromAligner Task
                 {
                     peaksWithinTol.Add(peak);
                 }
@@ -74,7 +74,7 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
 
             var peakQualityList = new List<ChromPeakQualityData>();
 
-            //iterate over peaks within tolerance and score each peak according to MSFeature quality
+            // Iterate over peaks within tolerance and score each peak according to MSFeature quality
 #if DEBUG
             var tempMinScanWithinTol = (int) resultList.Run.NetAlignmentInfo.GetScanForNet(normalizedElutionTime - Parameters.NETTolerance);
             var tempMaxScanWithinTol = (int)resultList.Run.NetAlignmentInfo.GetScanForNet(normalizedElutionTime + Parameters.NETTolerance);
@@ -104,22 +104,22 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
                     // TODO: Currently hard-coded to sum only 1 scan
                     resultList.Run.CurrentScanSet=  ChromPeakUtilities.GetLCScanSetForChromPeakUIMF(chromPeak, resultList.Run, 1);
 
-                    //This resets the flags and the scores on a given result
+                    // This resets the flags and the scores on a given result
                     currentResult.ResetResult();
 
-                    //generate a mass spectrum
+                    // Generate a mass spectrum
                     msgen.Execute(resultList);
 
-                    //find isotopic profile
+                    // Find isotopic profile
                     TargetedMSFeatureFinder.Execute(resultList);
 
-                    //get fit score
+                    // Get fit score
                     fitScoreCalc.Execute(resultList);
 
-                    //get i_score
+                    // Get i_score
                     resultValidator.Execute(resultList);
 
-                    //collect the results together
+                    // Collect the results together
 #pragma warning disable 618
                     AddScoresToPeakQualityData(pq, currentResult);
 #pragma warning restore 618
@@ -129,7 +129,7 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
 #endif
                 }
 
-                //run a algorithm that decides, based on fit score mostly.
+                // Run a algorithm that decides, based on fit score mostly.
                 bestChromPeak = determineBestChromPeak(peakQualityList, currentResult);
             }
 

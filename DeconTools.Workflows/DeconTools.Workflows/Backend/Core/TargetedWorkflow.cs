@@ -258,11 +258,7 @@ namespace DeconTools.Workflows.Backend.Core
             var leftTrimValue = targetVal - leftTrimAmount;
             var rightTrimValue = targetVal + rightTrimAmount;
 
-
-            return xyData.TrimData(leftTrimValue, rightTrimValue, 0.1);
-
-
-
+            return xyData.TrimData(leftTrimValue, rightTrimValue);
 
         }
 
@@ -430,15 +426,15 @@ namespace DeconTools.Workflows.Backend.Core
         public static ChromPeakSelectorBase CreateChromPeakSelector(TargetedWorkflowParameters workflowParameters)
         {
             ChromPeakSelectorBase chromPeakSelector;
-            var chromPeakSelectorParameters = new ChromPeakSelectorParameters();
-            chromPeakSelectorParameters.NETTolerance = (float)workflowParameters.ChromNETTolerance;
-            chromPeakSelectorParameters.NumScansToSum = workflowParameters.NumMSScansToSum;
-            chromPeakSelectorParameters.PeakSelectorMode = workflowParameters.ChromPeakSelectorMode;
-            chromPeakSelectorParameters.SummingMode = workflowParameters.SummingMode;
-            chromPeakSelectorParameters.AreaOfPeakToSumInDynamicSumming = workflowParameters.AreaOfPeakToSumInDynamicSumming;
-            chromPeakSelectorParameters.MaxScansSummedInDynamicSumming = workflowParameters.MaxScansSummedInDynamicSumming;
-
-
+            var chromPeakSelectorParameters = new ChromPeakSelectorParameters
+            {
+                NETTolerance = (float)workflowParameters.ChromNETTolerance,
+                NumScansToSum = workflowParameters.NumMSScansToSum,
+                PeakSelectorMode = workflowParameters.ChromPeakSelectorMode,
+                SummingMode = workflowParameters.SummingMode,
+                AreaOfPeakToSumInDynamicSumming = workflowParameters.AreaOfPeakToSumInDynamicSumming,
+                MaxScansSummedInDynamicSumming = workflowParameters.MaxScansSummedInDynamicSumming
+            };
 
             switch (workflowParameters.ChromPeakSelectorMode)
             {
@@ -451,28 +447,32 @@ namespace DeconTools.Workflows.Backend.Core
 
                 case DeconTools.Backend.Globals.PeakSelectorMode.Smart:
 
-                    var smartchrompeakSelectorParameters = new SmartChromPeakSelectorParameters(chromPeakSelectorParameters);
-                    smartchrompeakSelectorParameters.MSFeatureFinderType = DeconTools.Backend.Globals.TargetedFeatureFinderType.ITERATIVE;
-                    smartchrompeakSelectorParameters.MSPeakDetectorPeakBR = workflowParameters.MSPeakDetectorPeakBR;
-                    smartchrompeakSelectorParameters.MSPeakDetectorSigNoiseThresh = workflowParameters.MSPeakDetectorSigNoise;
-                    smartchrompeakSelectorParameters.MSToleranceInPPM = workflowParameters.MSToleranceInPPM;
-                    smartchrompeakSelectorParameters.NumChromPeaksAllowed = workflowParameters.NumChromPeaksAllowedDuringSelection;
-                    smartchrompeakSelectorParameters.MultipleHighQualityMatchesAreAllowed = workflowParameters.MultipleHighQualityMatchesAreAllowed;
-                    smartchrompeakSelectorParameters.IterativeTffMinRelIntensityForPeakInclusion = 0.66;
-                    smartchrompeakSelectorParameters.NumMSSummedInSmartSelector = workflowParameters.SmartChromPeakSelectorNumMSSummed;
+                    var smartchrompeakSelectorParameters = new SmartChromPeakSelectorParameters(chromPeakSelectorParameters)
+                    {
+                        MSFeatureFinderType = DeconTools.Backend.Globals.TargetedFeatureFinderType.ITERATIVE,
+                        MSPeakDetectorPeakBR = workflowParameters.MSPeakDetectorPeakBR,
+                        MSPeakDetectorSigNoiseThresh = workflowParameters.MSPeakDetectorSigNoise,
+                        MSToleranceInPPM = workflowParameters.MSToleranceInPPM,
+                        NumChromPeaksAllowed = workflowParameters.NumChromPeaksAllowedDuringSelection,
+                        MultipleHighQualityMatchesAreAllowed = workflowParameters.MultipleHighQualityMatchesAreAllowed,
+                        IterativeTffMinRelIntensityForPeakInclusion = 0.66,
+                        NumMSSummedInSmartSelector = workflowParameters.SmartChromPeakSelectorNumMSSummed
+                    };
 
                     chromPeakSelector = new SmartChromPeakSelector(smartchrompeakSelectorParameters);
 
                     break;
                 case DeconTools.Backend.Globals.PeakSelectorMode.SmartUIMF:
-                    var smartUIMFchrompeakSelectorParameters = new SmartChromPeakSelectorParameters(chromPeakSelectorParameters);
-                    smartUIMFchrompeakSelectorParameters.MSFeatureFinderType = DeconTools.Backend.Globals.TargetedFeatureFinderType.ITERATIVE;
-                    smartUIMFchrompeakSelectorParameters.MSPeakDetectorPeakBR = workflowParameters.MSPeakDetectorPeakBR;
-                    smartUIMFchrompeakSelectorParameters.MSPeakDetectorSigNoiseThresh = workflowParameters.MSPeakDetectorSigNoise;
-                    smartUIMFchrompeakSelectorParameters.MSToleranceInPPM = workflowParameters.MSToleranceInPPM;
-                    smartUIMFchrompeakSelectorParameters.NumChromPeaksAllowed = workflowParameters.NumChromPeaksAllowedDuringSelection;
-                    smartUIMFchrompeakSelectorParameters.MultipleHighQualityMatchesAreAllowed = workflowParameters.MultipleHighQualityMatchesAreAllowed;
-                    smartUIMFchrompeakSelectorParameters.IterativeTffMinRelIntensityForPeakInclusion = 0.66;
+                    var smartUIMFchrompeakSelectorParameters = new SmartChromPeakSelectorParameters(chromPeakSelectorParameters)
+                    {
+                        MSFeatureFinderType = DeconTools.Backend.Globals.TargetedFeatureFinderType.ITERATIVE,
+                        MSPeakDetectorPeakBR = workflowParameters.MSPeakDetectorPeakBR,
+                        MSPeakDetectorSigNoiseThresh = workflowParameters.MSPeakDetectorSigNoise,
+                        MSToleranceInPPM = workflowParameters.MSToleranceInPPM,
+                        NumChromPeaksAllowed = workflowParameters.NumChromPeaksAllowedDuringSelection,
+                        MultipleHighQualityMatchesAreAllowed = workflowParameters.MultipleHighQualityMatchesAreAllowed,
+                        IterativeTffMinRelIntensityForPeakInclusion = 0.66
+                    };
 
                     chromPeakSelector = new SmartChromPeakSelectorUIMF(smartUIMFchrompeakSelectorParameters);
 

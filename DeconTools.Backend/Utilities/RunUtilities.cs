@@ -183,8 +183,6 @@ namespace DeconTools.Backend.Utilities
                 }
             }
 
-            
-
             var expectedMZAlignmentFile = Path.Combine(basePath,  run.DatasetName + "_MZAlignment.txt");
             var expectedNETAlignmentFile = Path.Combine(basePath, run.DatasetName + "_NETAlignment.txt");
 
@@ -237,8 +235,8 @@ namespace DeconTools.Backend.Utilities
                     netAlignmentInfo.SetScanToNETAlignmentData(scannetPairs);
 
                     run.NetAlignmentInfo = netAlignmentInfo;
-                    
-                   
+
+
                     Console.WriteLine(run.DatasetName + " aligned.");
                     alignmentSuccessful = true;
                 }
@@ -257,7 +255,7 @@ namespace DeconTools.Backend.Utilities
                         netAlignmentInfo.SetScanToNETAlignmentData(scannetPairs);
 
                         run.NetAlignmentInfo = netAlignmentInfo;
-                       
+
                         Console.WriteLine(run.DatasetName + " NET aligned using UMC file: " + expectedUMCName);
 
                         alignmentSuccessful = true;
@@ -285,7 +283,7 @@ namespace DeconTools.Backend.Utilities
 
                 if (File.Exists(expectedViperMassAlignmentFile))
                 {
-                    
+
                     var importer = new ViperMassCalibrationLoader(expectedViperMassAlignmentFile);
                     var viperCalibrationData = importer.ImportMassCalibrationData();
 
@@ -316,10 +314,10 @@ namespace DeconTools.Backend.Utilities
 
             var folderExists = Directory.Exists(filename);
             var fileExists = File.Exists(filename);
-            
-            
+
+
             Check.Require(folderExists||fileExists, "Dataset file not found error when RunUtilites tried to create Run.");
-     
+
             var rf = new RunFactory();
             var run = rf.CreateRun(filename);
 
@@ -381,7 +379,7 @@ namespace DeconTools.Backend.Utilities
         public static List<int> FindPrimaryLcScanNumbers(IEnumerable<MSPeakResult> msPeaks)
         {
             var primaryLcScanNumbers = new HashSet<int>();
-            
+
             foreach (var msPeakResult in msPeaks)
             {
                 var scan = msPeakResult.FrameNum > 0 ? msPeakResult.FrameNum : msPeakResult.Scan_num;

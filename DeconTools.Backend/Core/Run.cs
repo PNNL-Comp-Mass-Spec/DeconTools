@@ -199,17 +199,11 @@ namespace DeconTools.Backend.Core
 
         public abstract XYData GetMassSpectrum(ScanSet scanset, double minMZ, double maxMZ);
 
-
-
-
-
         public virtual double GetTICFromInstrumentInfo(int scanNum)
         {
             return 0;
         }
-
-
-
+    
         public TargetBase CurrentMassTag { get; set; }
 
         public virtual XYData GetMassSpectrum(ScanSet lcScanset, ScanSet imsScanset, double minMZ, double maxMZ)

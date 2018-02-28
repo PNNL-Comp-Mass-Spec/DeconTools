@@ -3,9 +3,9 @@
 // E-mail: navdeep.jaitly@pnl.gov
 // Website: https://omics.pnl.gov/software or http://panomics.pnnl.gov
 // -------------------------------------------------------------------------------
-// 
+//
 // Licensed under the Apache License, Version 2.0; you may not use this file except
-// in compliance with the License.  You may obtain a copy of the License at 
+// in compliance with the License.  You may obtain a copy of the License at
 // http://www.apache.org/licenses/LICENSE-2.0
 
 using System;
@@ -30,11 +30,11 @@ namespace Decon2LS
             XCaliburCategory = CategoryForType("XCalibur", IconUtils.GetIconForFileType("raw", IconSize.Small, false, false, false));
             AgilentCategory = CategoryForType("Agilent", IconUtils.GetIconForFileType("wiff", IconSize.Small, false, false, false));
             MicromassCategory = CategoryForType("Micromass",
-                IconUtils.AttemptIconForFile(new String[] {@"C:\MassLynx\mlynx.exe", 
+                IconUtils.AttemptIconForFile(new String[] {@"C:\MassLynx\mlynx.exe",
                                                               @"C:\MassLynx\mlynx3.exe",
                                                               @"C:\MassLynx\mlynx4.exe",
                                                               @"C:\MassLynx\mlynx5.exe",
-                                                              @"C:\Program Files\MassLynx\mlynx.exe", 
+                                                              @"C:\Program Files\MassLynx\mlynx.exe",
                                                               @"C:\Program Files\MassLynx\mlynx3.exe",
                                                               @"C:\Program Files\MassLynx\mlynx4.exe",
                                                               @"C:\Program Files\MassLynx\mlynx5.exe"},
@@ -105,9 +105,9 @@ namespace Decon2LS
         private clsMediator mMediator;
 
         //NOTE: these don't seemed to be used anywhere.
-        //		private bool mbln_overlap_mode = false ; 
-        //		private bool mbln_summation_mode = false ; 
-        //private bool mbln_tic_view = true ; 
+        //		private bool mbln_overlap_mode = false ;
+        //		private bool mbln_summation_mode = false ;
+        //private bool mbln_tic_view = true ;
 
         private bool mbln_processing = false;
 
@@ -193,7 +193,7 @@ namespace Decon2LS
             set
             {
                 mctl_spectrum.PeakProcessorParameters = value;
-                //				mctl_spectrum.PeakProcessorParameters = (DeconToolsV2.Peaks.clsPeakProcessorParameters) value.Clone() ; 
+                //				mctl_spectrum.PeakProcessorParameters = (DeconToolsV2.Peaks.clsPeakProcessorParameters) value.Clone() ;
             }
         }
 
@@ -207,7 +207,7 @@ namespace Decon2LS
             {
                 mctl_spectrum.DTAGenerationParameters = value;
 
-                //				mctl_spectrum.DTAGenerationParameters = (DeconToolsV2.DTAGeneration.clsDTAGenerationParameters) value.Clone() ; 
+                //				mctl_spectrum.DTAGenerationParameters = (DeconToolsV2.DTAGeneration.clsDTAGenerationParameters) value.Clone() ;
             }
         }
 
@@ -220,8 +220,8 @@ namespace Decon2LS
             }
             set
             {
-                //				mctl_spectrum.HornTransformParameters = 
-                //					(DeconToolsV2.HornTransform.clsHornTransformParameters) value.Clone() ; 
+                //				mctl_spectrum.HornTransformParameters =
+                //					(DeconToolsV2.HornTransform.clsHornTransformParameters) value.Clone() ;
 
                 mctl_spectrum.HornTransformParameters = value;
             }
@@ -286,9 +286,9 @@ namespace Decon2LS
             ((System.ComponentModel.ISupportInitialize)(this.mctl_tic)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
-            // 
+            //
             // mctl_tic
-            // 
+            //
             this.mctl_tic.AutoViewPortOnAddition = true;
             this.mctl_tic.AutoViewPortOnSeriesChange = true;
             this.mctl_tic.AutoViewPortXBase = 0F;
@@ -351,16 +351,16 @@ namespace Decon2LS
             this.mctl_tic.ViewPort = ((System.Drawing.RectangleF)(resources.GetObject("mctl_tic.ViewPort")));
             this.mctl_tic.XAxisLabel = "Scan Time";
             this.mctl_tic.YAxisLabel = "intensity";
-            // 
+            //
             // mimg_list_toolbar
-            // 
+            //
             this.mimg_list_toolbar.ColorDepth = System.Windows.Forms.ColorDepth.Depth16Bit;
             this.mimg_list_toolbar.ImageSize = new System.Drawing.Size(16, 16);
             this.mimg_list_toolbar.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("mimg_list_toolbar.ImageStream")));
             this.mimg_list_toolbar.TransparentColor = System.Drawing.Color.White;
-            // 
+            //
             // btnCopytoClipboard
-            // 
+            //
             this.btnCopytoClipboard.BackColor = System.Drawing.Color.WhiteSmoke;
             this.btnCopytoClipboard.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnCopytoClipboard.Location = new System.Drawing.Point(3, 7);
@@ -370,9 +370,9 @@ namespace Decon2LS
             this.btnCopytoClipboard.Text = "Copy data to clipboard";
             this.toolTip1.SetToolTip(this.btnCopytoClipboard, "Copy data to clipboard (Shift + \'C\')");
             this.btnCopytoClipboard.Click += new System.EventHandler(this.btnCopytoClipboard_Click);
-            // 
+            //
             // groupBox1
-            // 
+            //
             this.groupBox1.BackColor = System.Drawing.Color.WhiteSmoke;
             this.groupBox1.Controls.Add(this.btnCopytoClipboard);
             this.groupBox1.Controls.Add(this.mctl_tic);
@@ -381,16 +381,16 @@ namespace Decon2LS
             this.groupBox1.Size = new System.Drawing.Size(696, 296);
             this.groupBox1.TabIndex = 7;
             this.groupBox1.TabStop = false;
-            // 
+            //
             // panel1
-            // 
+            //
             this.panel1.Location = new System.Drawing.Point(32, 328);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(696, 248);
             this.panel1.TabIndex = 8;
-            // 
+            //
             // frmSpectra
-            // 
+            //
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
             this.BackColor = System.Drawing.Color.WhiteSmoke;
             this.ClientSize = new System.Drawing.Size(1024, 654);
@@ -577,7 +577,7 @@ namespace Decon2LS
 
         public void LoadFileWithTicThreaded(string file_name, DeconToolsV2.Readers.FileType file_type)
         {
-            // start loading in a different thread. 
+            // start loading in a different thread.
             this.mFileName = file_name;
             this.menmFileType = file_type;
 
@@ -648,7 +648,7 @@ namespace Decon2LS
                 if (mbln_processing)
                 {
                     this.mStatusTimer.Stop();
-                    // doing its business.. someone wants to abort. 
+                    // doing its business.. someone wants to abort.
                     if (mthrd_tic != null && mthrd_tic.IsAlive)
                     {
                         if (abort)
@@ -761,7 +761,7 @@ namespace Decon2LS
         }
 
         /// <summary>
-        /// Draws the line indicating the currently active spectrum scan in the 
+        /// Draws the line indicating the currently active spectrum scan in the
         /// tic chart.  Draws after the chart is drawn.
         /// </summary>
         /// <param name="chart"></param>
@@ -819,25 +819,25 @@ namespace Decon2LS
 
             //				if (e.Button == mtlb_button_options)
             //				{
-            //					// time to expose the options. 
-            //					frmTransformOptions frmOptions = new frmTransformOptions(this.PeakProcessorParameters, this.HornTransformParameters, 
-            //						this.FTICRPreProcessOptions, this.DTAGenerationParameters) ; 
-            //					DialogResult result = frmOptions.ShowDialog(this) ; 
+            //					// time to expose the options.
+            //					frmTransformOptions frmOptions = new frmTransformOptions(this.PeakProcessorParameters, this.HornTransformParameters,
+            //						this.FTICRPreProcessOptions, this.DTAGenerationParameters) ;
+            //					DialogResult result = frmOptions.ShowDialog(this) ;
             //					if (result == DialogResult.Cancel)
-            //						return ; 
-            //					frmOptions.GetPeakPickingOptions(this.PeakProcessorParameters) ; 
-            //					frmOptions.GetTransformOptions(this.HornTransformParameters) ; 
-            //					frmOptions.GetMiscellaneousOptions(this.HornTransformParameters) ; 
+            //						return ;
+            //					frmOptions.GetPeakPickingOptions(this.PeakProcessorParameters) ;
+            //					frmOptions.GetTransformOptions(this.HornTransformParameters) ;
+            //					frmOptions.GetMiscellaneousOptions(this.HornTransformParameters) ;
             //					frmOptions.GetFTICRRawPreProcessing(this.FTICRPreProcessOptions) ;
             //				}
             //				else if (e.Button == mtlb_button_fit_formula)
             //				{
-            //					 
+            //
             //				}
             //			}
             //			catch (Exception ex)
             //			{
-            //				MessageBox.Show(this, ex.Message + ex.StackTrace) ; 
+            //				MessageBox.Show(this, ex.Message + ex.StackTrace) ;
             //			}
         }
 
@@ -887,14 +887,14 @@ namespace Decon2LS
 
         private void TicDefaultZoomHandler_SingleClickNoZoomPerformed(object sender, MouseEventArgs e)
         {
-            // mz value will be drawn along the x axis. 
+            // mz value will be drawn along the x axis.
             var time_focus = mctl_tic.GetChartX(mctl_tic.GetChartAreaX(e.X));
             var scanIndex = GetScanIndex(time_focus) + 1;
             if (scanIndex >= mobjRawData.GetFirstScanNum() && scanIndex < mobjRawData.GetNumScans())
                 ShowSpectrumInSpectralChart(scanIndex, true, true);
             // Anoop: changed back to true, happened with .imf data
-            // SHOULD WE CHANGE BEHAVIOUR OF ZOOMING. PERHAPS ON ARROW BUTTONS 
-            // WE SHOULD STAY IN THE VIEWPORT BUT ON CLICKING ZOOM OUT. 
+            // SHOULD WE CHANGE BEHAVIOUR OF ZOOMING. PERHAPS ON ARROW BUTTONS
+            // WE SHOULD STAY IN THE VIEWPORT BUT ON CLICKING ZOOM OUT.
             // Anoop: changed reset_viewport from false to true
             // Everytime you loaded in a .raw data set, on clicking a scan on the tic the spectrum was not
             // being shown. Only after hitting the right and left arrows was it made clear. thus, emulating

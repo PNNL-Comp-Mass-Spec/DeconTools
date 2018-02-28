@@ -8,7 +8,7 @@ namespace DeconTools.Backend.Core
 
         public abstract void Execute(ResultCollection resultList);
 
-        public virtual string Name {get;set;}
+        public virtual string Name { get; set; }
 
         public bool ShowTraceMessages { get; set; }
 

@@ -17,7 +17,7 @@ using System.IO;
 
 namespace DeconTools.Backend.ProcessingTasks.Deconvoluters
 {
-    [Obsolete("Implements Globals.DeconvolutionType.ThrashV2; use ThrashV1 instead (ProcessingTasks.Deconvoluters.HornDeconvolutor)")]
+    [Obsolete("Implements Globals.DeconvolutionType.ThrashV2; use ThrashV1 instead (Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.ThrashDeconvolutorV2)")]
     public class InformedThrashDeconvolutor : Deconvolutor
     {
         #region Paul Addition
