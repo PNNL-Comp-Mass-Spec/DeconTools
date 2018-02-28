@@ -2,7 +2,6 @@
 
 namespace DeconTools.Backend.Core
 {
-    [Obsolete]
     public class ChromPeakQualityData
     {
         public ChromPeak Peak { get; }

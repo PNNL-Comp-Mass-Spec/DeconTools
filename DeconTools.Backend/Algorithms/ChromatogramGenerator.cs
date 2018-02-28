@@ -294,9 +294,6 @@ namespace DeconTools.Backend.Algorithms
             return intensitySum;
         }
 
-
-
-        [Obsolete("Use the other GeneratePeakChromatogram!")]
         public List<MSPeakResult> GeneratePeakChromatogram(List<MSPeakResult> msPeakList, int minScan, int maxScan, List<double> targetMZList, double toleranceInPPM)
         {
             var scanTolerance = 5;     // TODO:   keep an eye on this
@@ -334,7 +331,6 @@ namespace DeconTools.Backend.Algorithms
             return compiledChromPeakList;
         }
 
-        [Obsolete("Use the other GeneratePeakChromatogram!")]
         public List<MSPeakResult> GeneratePeakChromatogram(List<MSPeakResult> msPeakList, int minScan, int maxScan, double targetMZ, double toleranceInPPM)
         {
             var targetMZList = new List<double>
