@@ -31,7 +31,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         protected IterativeTFFParameters _iterativeTFFParameters = new IterativeTFFParameters();
 
-        protected TargetedWorkflow(Run run, TargetedWorkflowParameters parameters)
+        protected TargetedWorkflow(Run run, WorkflowParameters parameters)
         {
             Run = run;
             WorkflowParameters = parameters;
@@ -40,7 +40,7 @@ namespace DeconTools.Workflows.Backend.Core
             MsRightTrimAmount = 1e10;  // set this high so, by default, nothing is trimmed
         }
 
-        protected TargetedWorkflow(TargetedWorkflowParameters parameters)
+        protected TargetedWorkflow(WorkflowParameters parameters)
             : this(null, parameters)
         {
 
@@ -68,13 +68,13 @@ namespace DeconTools.Workflows.Backend.Core
         public string Name => ToString();
 
         /// <summary>
-        /// For trimming the final mass spectrum. A value of '2' means 
+        /// For trimming the final mass spectrum. A value of '2' means
         /// that the mass spectrum will be trimmed -2 to the given m/z value.
         /// </summary>
         public double MsLeftTrimAmount { get; set; }
 
         /// <summary>
-        /// For trimming the final mass spectrum. A value of '10' means 
+        /// For trimming the final mass spectrum. A value of '10' means
         /// that the mass spectrum will be trimmed +10 to the given m/z value.
         /// </summary>
         public double MsRightTrimAmount { get; set; }
@@ -86,10 +86,10 @@ namespace DeconTools.Workflows.Backend.Core
 
         protected void UpdateChromDetectedPeaks(List<Peak> list)
         {
-            foreach (ChromPeak chrompeak in list)
+            foreach (var peak in list)
             {
+                var chrompeak = (ChromPeak)peak;
                 ChromPeaksDetected.Add(chrompeak);
-
             }
 
 
@@ -99,10 +99,10 @@ namespace DeconTools.Workflows.Backend.Core
         {
             Check.Require(_workflowParameters != null, "Cannot validate workflow parameters. Parameters are null");
 
-            var pointsInSmoothIsEvenNumber = (_workflowParameters.ChromSmootherNumPointsInSmooth % 2 == 0);
+            var pointsInSmoothIsEvenNumber = _workflowParameters != null && (_workflowParameters.ChromSmootherNumPointsInSmooth % 2 == 0);
             if (pointsInSmoothIsEvenNumber)
             {
-                throw new ArgumentOutOfRangeException("Points in chrom smoother is an even number, but must be an odd number.");
+                throw new Exception("Points in chrom smoother is an even number, but must be an odd number.");
             }
         }
 
@@ -113,11 +113,9 @@ namespace DeconTools.Workflows.Backend.Core
                 //ResetStoredXYData(ChromatogramXYData);
                 return;
             }
-            else
-            {
-                ChromatogramXYData.Xvalues = xydata.Xvalues;
-                ChromatogramXYData.Yvalues = xydata.Yvalues;
-            }
+
+            ChromatogramXYData.Xvalues = xydata.Xvalues;
+            ChromatogramXYData.Yvalues = xydata.Yvalues;
 
         }
 
@@ -136,16 +134,17 @@ namespace DeconTools.Workflows.Backend.Core
                 //ResetStoredXYData(ChromatogramXYData);
                 return;
             }
-            else
-            {
-                MassSpectrumXYData.Xvalues = xydata.Xvalues;
-                MassSpectrumXYData.Yvalues = xydata.Yvalues;
-            }
+
+            MassSpectrumXYData.Xvalues = xydata.Xvalues;
+            MassSpectrumXYData.Yvalues = xydata.Yvalues;
         }
 
         public void InitializeWorkflow()
         {
             Check.Require(Run != null, "Run is null");
+            if (Run == null)
+                return;
+
             Run.ResultCollection.ResultType = GetResultType();
 
             DoPreInitialization();
@@ -177,17 +176,16 @@ namespace DeconTools.Workflows.Backend.Core
                             };
 
             //only
-
-            var allowNegativeValues = false;
-            _chromSmoother = new SavitzkyGolaySmoother(_workflowParameters.ChromSmootherNumPointsInSmooth, 2, allowNegativeValues);
+            _chromSmoother = new SavitzkyGolaySmoother(_workflowParameters.ChromSmootherNumPointsInSmooth, 2, allowNegativeValues: false);
             _chromPeakDetector = new ChromPeakDetectorMedianBased(_workflowParameters.ChromPeakDetectorPeakBR, _workflowParameters.ChromPeakDetectorSigNoise);
-            
+
 
 
             _chromPeakSelector = CreateChromPeakSelector(_workflowParameters);
 
-            _iterativeTFFParameters = new IterativeTFFParameters();
-            _iterativeTFFParameters.ToleranceInPPM = _workflowParameters.MSToleranceInPPM;
+            _iterativeTFFParameters = new IterativeTFFParameters {
+                ToleranceInPPM = _workflowParameters.MSToleranceInPPM
+            };
 
             _msfeatureFinder = new IterativeTFF(_iterativeTFFParameters);
             _fitScoreCalc = new IsotopicProfileFitScoreCalculator();
@@ -228,7 +226,7 @@ namespace DeconTools.Workflows.Backend.Core
 
             ExecuteTask(_msfeatureFinder);
 
-            ApplyMassCalibration(Result);
+            ApplyMassCalibration();
 
             ExecuteTask(_fitScoreCalc);
             ExecuteTask(_resultValidator);
@@ -241,7 +239,7 @@ namespace DeconTools.Workflows.Backend.Core
             Success = true;
         }
 
-        private void ApplyMassCalibration(TargetedResultBase result)
+        private void ApplyMassCalibration()
         {
             Result.MonoIsotopicMassCalibrated = Result.GetCalibratedMonoisotopicMass();
             Result.MassErrorBeforeAlignment = Result.GetMassErrorBeforeAlignmentInPPM();
@@ -251,11 +249,12 @@ namespace DeconTools.Workflows.Backend.Core
 
         protected virtual XYData TrimData(XYData xyData, double targetVal, double leftTrimAmount, double rightTrimAmount)
         {
-            if (xyData == null) return xyData;
+            if (xyData == null)
+                return null;
 
-            if (xyData.Xvalues == null || xyData.Xvalues.Length == 0) return xyData;
+            if (xyData.Xvalues == null || xyData.Xvalues.Length == 0)
+                return xyData;
 
-            
             var leftTrimValue = targetVal - leftTrimAmount;
             var rightTrimValue = targetVal + rightTrimAmount;
 
@@ -304,7 +303,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         protected virtual void ExecutePostWorkflowHook()
         {
-            if (Result != null && Result.Target != null && Success)
+            if (Result?.Target != null && Success)
             {
                 WorkflowStatusMessage = "Result " + Result.Target.ID + "; m/z= " + Result.Target.MZ.ToString("0.0000") +
                                         "; z=" + Result.Target.ChargeState;
@@ -367,9 +366,9 @@ namespace DeconTools.Workflows.Backend.Core
 
             base.InitializeRunRelatedTasks();
 
-            if (WorkflowParameters is TargetedWorkflowParameters)
+            if (WorkflowParameters is TargetedWorkflowParameters parameters)
             {
-                Run.ResultCollection.ResultType = ((TargetedWorkflowParameters)WorkflowParameters).ResultType;
+                Run.ResultCollection.ResultType = parameters.ResultType;
             }
         }
 

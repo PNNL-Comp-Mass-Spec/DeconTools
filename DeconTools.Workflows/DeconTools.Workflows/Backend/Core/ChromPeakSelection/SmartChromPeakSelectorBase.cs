@@ -27,11 +27,6 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
 
         #region Properties
 
-
-
-
-
-
         protected SmartChromPeakSelectorParameters _parameters;
         public override ChromPeakSelectorParameters Parameters
         {
@@ -111,12 +106,18 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
             return bestpeak;
         }
 
-        [Obsolete("This is the old SmartChromPeakSelector")]
+        /// <summary>
+        /// Note: This is the old SmartChromPeakSelector
+        /// </summary>
+        /// <param name="resultList"></param>
         public override void Execute(ResultCollection resultList)
         {
-            Check.Require(resultList.Run.CurrentMassTag != null, Name + " failed. MassTag was not defined.");
+            var massTag = resultList.Run.CurrentMassTag;
+            Check.Require(massTag != null, Name + " failed. MassTag was not defined.");
+            if (massTag == null)
+                return;
 
-            var currentResult = resultList.GetTargetedResult(resultList.Run.CurrentMassTag);
+            var currentResult = resultList.GetTargetedResult(massTag);
 
             if (msgen == null)
             {
@@ -124,20 +125,18 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
                 msgen.IsTICRequested = false;
             }
 
-            var mt = resultList.Run.CurrentMassTag;
-
             float normalizedElutionTime;
 
             if (currentResult.Run.CurrentMassTag.ElutionTimeUnit == DeconTools.Backend.Globals.ElutionTimeUnit.ScanNum)
             {
-                normalizedElutionTime = resultList.Run.CurrentMassTag.ScanLCTarget / (float)currentResult.Run.GetNumMSScans();
+                normalizedElutionTime = massTag.ScanLCTarget / (float)currentResult.Run.GetNumMSScans();
             }
             else
             {
-                normalizedElutionTime = resultList.Run.CurrentMassTag.NormalizedElutionTime;
+                normalizedElutionTime = massTag.NormalizedElutionTime;
             }
 
-            //collect Chrom peaks that fall within the NET tolerance
+            // Collect Chrom peaks that fall within the NET tolerance
             var peaksWithinTol = new List<ChromPeak>(); //
 
             foreach (var peak in resultList.Run.PeakList)
@@ -203,10 +202,10 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
 
                     //collect the results together
 
-
-
-
+#pragma warning disable 618
                     AddScoresToPeakQualityData(pq, currentResult);
+#pragma warning restore 618
+
 #if DEBUG
                     IqLogger.LogDebug(pq.Display() + Environment.NewLine);
 #endif

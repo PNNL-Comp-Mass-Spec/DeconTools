@@ -24,10 +24,15 @@ namespace DeconTools.Backend.Runs
             Filename = filename;
 
             var baseFilename = Path.GetFileName(Filename);
+            if (baseFilename == null)
+                throw new Exception("Could not determine the path to the input file");
+
             DatasetName = baseFilename.Substring(0, baseFilename.LastIndexOf('.'));
             DataSetPath = Path.GetDirectoryName(filename);
 
+#pragma warning disable 618
             RawData = new clsRawData(filename, FileType.PNNL_IMS);
+#pragma warning restore 618
             MinLCScan = GetMinPossibleLCScanNum();
             MaxLCScan = GetMaxPossibleLCScanNum();
         }
@@ -52,9 +57,12 @@ namespace DeconTools.Backend.Runs
         public override XYData GetMassSpectrum(ScanSet scanSet, double minMZ, double maxMZ)
         {
             Check.Require(scanSet != null, "Can't get mass spectrum; inputted set of scans is null");
+            if (scanSet == null)
+                return new XYData();
+
             Check.Require(scanSet.IndexValues.Count > 0, "Can't get mass spectrum; no scan numbers inputted");
 
-            var totScans = GetNumMSScans();
+            // Unused: var totScans = GetNumMSScans();
 
             var xvals = new double[0];
             var yvals = new double[0];

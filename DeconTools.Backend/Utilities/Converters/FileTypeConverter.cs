@@ -10,6 +10,7 @@ namespace DeconTools.Backend.Utilities.Converters
     {
         public static DeconTools.Backend.Globals.MSFileType ConvertDeconEngineFileType(DeconToolsV2.Readers.FileType filetype)
         {
+#pragma warning disable CS0618 // Type or member is obsolete
             switch (filetype)
             {
                 case DeconToolsV2.Readers.FileType.AGILENT_TOF:
@@ -39,9 +40,10 @@ namespace DeconTools.Backend.Utilities.Converters
                 default:
                     return Globals.MSFileType.Undefined;
             }
+#pragma warning restore CS0618 // Type or member is obsolete
 
         }
-        
+
     }
 #endif
 }

@@ -158,8 +158,10 @@ namespace DeconTools.Backend.Workflows
 
                     imsScanCountProcessed++;
 
+#pragma warning disable 162
                     if (SKIP_DECONVOLUTION)
                         continue;
+#pragma warning restore 162
 
                     // Deconvolute Unsummed MSFeatures
                     // This is a preliminary step for Saturation Detection

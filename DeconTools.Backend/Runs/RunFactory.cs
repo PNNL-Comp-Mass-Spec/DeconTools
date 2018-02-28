@@ -17,6 +17,10 @@ namespace DeconTools.Backend.Runs
             Run run;
 
             var fullfileName = getFullPath(filename);
+            if (string.IsNullOrEmpty(fullfileName))
+            {
+                throw new Exception("Could determine the filename");
+            }
 
             var extension = Path.GetExtension(fullfileName).ToLower();
             if (extension.Equals(".mzxml") || extension.Equals(".mzml") || extension.Equals(".mz5"))
@@ -130,7 +134,9 @@ namespace DeconTools.Backend.Runs
                     break;
 #if !Disable_DeconToolsV2
                 case Globals.MSFileType.Bruker_V2:
+#pragma warning disable 618
                     run = new BrukerV2Run(fileName);
+#pragma warning restore 618
                     break;
 #endif
                 case Globals.MSFileType.Bruker_Ascii:

@@ -7,15 +7,16 @@ namespace DeconTools.Backend.Runs
     [Serializable]
     public abstract class DeconToolsRun : Run
     {
+#pragma warning disable 618
         public DeconToolsV2.Readers.clsRawData RawData { get; set; }
+#pragma warning restore 618
 
         protected DeconToolsRun()
         {
             XYData = new XYData();
         }
 
-        public override XYData XYData {get;set;}
-
+        public sealed override XYData XYData {get;set;}
 
         public override int GetNumMSScans()
         {
@@ -47,7 +48,7 @@ namespace DeconTools.Backend.Runs
                 return RawData.GetMSLevel(scanNum);
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 if (scanNum > GetMaxPossibleLCScanNum())
                 {

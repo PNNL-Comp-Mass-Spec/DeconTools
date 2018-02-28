@@ -21,7 +21,9 @@ namespace DeconTools.Backend.Runs
 
             try
             {
+#pragma warning disable 618
                 RawData = new clsRawData(filename, FileType.ICR2LSRAWDATA);
+#pragma warning restore 618
             }
             catch (Exception ex)
             {
@@ -45,7 +47,7 @@ namespace DeconTools.Backend.Runs
             return 1;
         }
 
-        public override int GetMaxPossibleLCScanNum()
+        public sealed override int GetMaxPossibleLCScanNum()
         {
             return GetNumMSScans();
         }
@@ -53,9 +55,12 @@ namespace DeconTools.Backend.Runs
         public override XYData GetMassSpectrum(ScanSet scanset, double minMZ, double maxMZ)
         {
             Check.Require(scanset != null, "Can't get mass spectrum; inputted set of scans is null");
+            if (scanset == null)
+                return new XYData();
+
             Check.Require(scanset.IndexValues.Count > 0, "Can't get mass spectrum; no scan numbers inputted");
 
-            var totScans = GetNumMSScans();
+            // Unused: var totScans = GetNumMSScans();
 
             var xvals = new double[0];
             var yvals = new double[0];

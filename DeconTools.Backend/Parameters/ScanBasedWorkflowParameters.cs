@@ -67,7 +67,9 @@ namespace DeconTools.Backend.Parameters
             ScanBasedWorkflowName = GetStringValue(xElement, "ScanBasedWorkflowType", ScanBasedWorkflowName);
             DeconvolutionType = (Globals.DeconvolutionType)GetEnum(xElement, "DeconvolutionType", DeconvolutionType.GetType(), DeconvolutionType);
 
+#pragma warning disable 618
             UseRAPIDDeconvolution = GetBoolVal(xElement, "UseRAPIDDeconvolution", UseRAPIDDeconvolution);
+#pragma warning restore 618
 
             IsRefittingPerformed = GetBoolVal(xElement, "ReplaceRAPIDScoreWithHornFitScore", IsRefittingPerformed);
 

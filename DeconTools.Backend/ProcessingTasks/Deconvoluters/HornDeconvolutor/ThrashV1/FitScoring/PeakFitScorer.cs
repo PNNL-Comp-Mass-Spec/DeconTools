@@ -4,7 +4,7 @@ using DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.ThrashV1
 namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.ThrashV1.FitScoring
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <seealso cref="DeconTools.Backend.ProcessingTasks.FitScoreCalculators.IsotopicPeakFitScoreCalculator"/>
     public class PeakFitScorer : IsotopicProfileFitScorer
@@ -99,7 +99,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             double minIntensityForScore, bool debug = false)
         {
             throw new Exception("Don't Ever come into this FitScore overload in PeakFit");
-
+            /*
             var numPoints = TheoreticalDistMzs.Count;
             if (numPoints < 3)
                 return 1;
@@ -134,6 +134,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             }
 
             return fit / (sum + 0.001);
+            */
         }
     }
 }

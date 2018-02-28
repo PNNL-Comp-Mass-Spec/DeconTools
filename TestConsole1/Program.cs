@@ -79,7 +79,9 @@ namespace TestConsole1
             thrashParameters.MinMSFeatureToBackgroundRatio = peakBr;
             thrashParameters.MaxFit = 0.4;
 
+#pragma warning disable 618
             var newDeconvolutor = new InformedThrashDeconvolutor(thrashParameters);
+#pragma warning restore 618
 
             var watch = new Stopwatch();
             watch.Start();
@@ -108,7 +110,7 @@ namespace TestConsole1
         {
             var copyToFolder = @"D:\Data\TopDown";
 
-            var outputFolder = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\TargetedWorkflowTesting\Output";
+            // var outputFolder = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\TargetedWorkflowTesting\Output";
 
             var executorParameters = new TopDownTargetedWorkflowExecutorParameters
             {

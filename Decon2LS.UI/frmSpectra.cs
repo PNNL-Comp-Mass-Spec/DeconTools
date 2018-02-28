@@ -79,7 +79,9 @@ namespace Decon2LS
         private DeconToolsV2.Readers.FileType menmFileType;
         private System.ComponentModel.IContainer components;
 
+#pragma warning disable 618
         private DeconToolsV2.Readers.clsRawData mobjRawData;
+#pragma warning restore 618
         private PNNL.Controls.ctlLineChart mctl_tic;
         private float[] marr_tic_values = null;
         private float[] marr_scan_times = null;

@@ -40,8 +40,12 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
         {
             Check.Require(resultList.Run.CurrentMassTag != null, "ChromPeakSelector failed. Mass Tag must be defined but it isn't.");
             Check.Require(resultList.Run.PeakList != null, "ChromPeakSelector failed. Peak list has not been established. You need to run a peak detector.");
-            Check.Require(resultList.Run.PeakList.Count > 0, "ChromPeakSelector failed. Peak list is empty.");
-            Check.Require(resultList.Run.PeakList[0] is ChromPeak, "ChromPeakSelector failed. Input peaklist contains the wrong type of peak");
+
+            if (resultList.Run.PeakList != null)
+            {
+                Check.Require(resultList.Run.PeakList.Count > 0, "ChromPeakSelector failed. Peak list is empty.");
+                Check.Require(resultList.Run.PeakList[0] is ChromPeak, "ChromPeakSelector failed. Input peaklist contains the wrong type of peak");
+            }
 
             var result = resultList.GetTargetedResult(resultList.Run.CurrentMassTag);
 
@@ -58,7 +62,7 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
             }
 
 
-            var bestPeak = (ChromPeak)selectBestPeak(Parameters.PeakSelectorMode,
+            var bestPeak = (ChromPeak)SelectBestPeak(Parameters.PeakSelectorMode,
                 resultList.Run.PeakList, normalizedElutionTime,
                 Parameters.NETTolerance, out var numPeaksWithinTolerance);
 
@@ -71,12 +75,14 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
 
         }
 
-        [Obsolete("Do not use. Will delete in future")]
-        public Peak selectBestPeak(DeconTools.Backend.Globals.PeakSelectorMode peakSelectorMode, List<Peak> chromPeakList, float targetNET, double netTolerance, out int numPeaksWithinTolerance)
+        private Peak SelectBestPeak(
+            DeconTools.Backend.Globals.PeakSelectorMode peakSelectorMode,
+            IReadOnlyCollection<Peak> chromPeakList,
+            float targetNET,
+            double netTolerance,
+            out int numPeaksWithinTolerance)
         {
             var peaksWithinTol = new List<ChromPeak>(); // will collect Chrom peaks that fall within the NET tolerance
-
-
 
             foreach (var item in chromPeakList)
             {
@@ -88,7 +94,6 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
             }
 
             numPeaksWithinTolerance = peaksWithinTol.Count;
-
 
             ChromPeak bestPeak = null;
 
@@ -123,7 +128,6 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
                     break;
                 case DeconTools.Backend.Globals.PeakSelectorMode.RelativeToOtherChromPeak:
                     diff = double.MaxValue;
-
 
                     foreach (var peak in peaksWithinTol)
                     {

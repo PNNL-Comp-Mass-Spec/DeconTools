@@ -17,7 +17,7 @@ using DeconTools.Utilities;
 namespace DeconTools.Workflows.Backend.Core
 {
 #if !Disable_DeconToolsV2
-    public class WholisticChromBasedLCMSFeatureFinderWorkflow : WorkflowBase
+    public sealed class WholisticChromBasedLCMSFeatureFinderWorkflow : WorkflowBase
     {
         readonly string m_peakOutputFileName;
         readonly string m_logFileName;
@@ -63,7 +63,7 @@ namespace DeconTools.Workflows.Backend.Core
         public Deconvolutor Deconvolutor { get; set; }
 
 
-        DeconTools.Backend.FileIO.MSFeatureToTextFileExporterBasic isosExporter;
+        // Unused: DeconTools.Backend.FileIO.MSFeatureToTextFileExporterBasic isosExporter;
 
 
         #endregion
@@ -124,8 +124,14 @@ namespace DeconTools.Workflows.Backend.Core
 
 
             Check.Require(Run != null, string.Format("{0} failed. Run not defined.", Name));
-            Check.Require(Run.ResultCollection != null && Run.ResultCollection.MSPeakResultList != null && Run.ResultCollection.MSPeakResultList.Count > 0,
+            if (Run == null)
+                return;
+
+            Check.Require(Run.ResultCollection?.MSPeakResultList != null && Run.ResultCollection.MSPeakResultList.Count > 0,
                 string.Format("{0} failed. Workflow requires MSPeakResults, but these were not defined.", Name));
+
+            if (Run.ResultCollection?.MSPeakResultList == null)
+                return;
 
             var sortedMSPeakResultList = Run.ResultCollection.MSPeakResultList.OrderByDescending(p => p.MSPeak.Height).ToList();
 
@@ -284,7 +290,7 @@ namespace DeconTools.Workflows.Backend.Core
                 {
 
 
-                    isosExporter.ExportResults(Run.ResultCollection.ResultList);
+                    // Unused: isosExporter.ExportResults(Run.ResultCollection.ResultList);
                     Run.ResultCollection.ResultList.Clear();
 
 
@@ -327,8 +333,14 @@ namespace DeconTools.Workflows.Backend.Core
 
 
             Check.Require(run != null, string.Format("{0} failed. Run not defined.", Name));
-            Check.Require(run.ResultCollection != null && run.ResultCollection.MSPeakResultList != null && run.ResultCollection.MSPeakResultList.Count > 0,
+            if (run == null)
+                return;
+
+            Check.Require(run.ResultCollection?.MSPeakResultList != null && run.ResultCollection.MSPeakResultList.Count > 0,
                 string.Format("{0} failed. Workflow requires MSPeakResults, but these were not defined.", Name));
+
+            if (run.ResultCollection?.MSPeakResultList == null)
+                return;
 
             var sortedMSPeakResultList = run.ResultCollection.MSPeakResultList.OrderByDescending(p => p.MSPeak.Height).ToList();
 
@@ -558,7 +570,7 @@ namespace DeconTools.Workflows.Backend.Core
                 var triggerToExport = 10;
                 if (run.ResultCollection.ResultList.Count > triggerToExport)
                 {
-                    isosExporter.ExportResults(run.ResultCollection.ResultList);
+                    // Unused: isosExporter.ExportResults(run.ResultCollection.ResultList);
                     run.ResultCollection.ResultList.Clear();
 
                     exportPeakData(run, m_peakOutputFileName, whatPeakWentWhere);
@@ -570,7 +582,7 @@ namespace DeconTools.Workflows.Backend.Core
 
 
             //needs clean up....   sometimes there might be a case where the above loop is broken and we need the last few results written out.
-            isosExporter.ExportResults(run.ResultCollection.ResultList);
+            // Unused: isosExporter.ExportResults(run.ResultCollection.ResultList);
             run.ResultCollection.ResultList.Clear();
 
             exportPeakData(run, m_peakOutputFileName, whatPeakWentWhere);
@@ -611,15 +623,7 @@ namespace DeconTools.Workflows.Backend.Core
                          select n);
 
 
-            if (query.Count() == 0)
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
-
+            return query.Any();
         }
 
         private IsosResult getMSFeatureForCurrentSourcePeak(MSPeakResult peakResult, Run run)
@@ -631,10 +635,8 @@ namespace DeconTools.Workflows.Backend.Core
 
             var isosResultPossiblyContainingSourcePeak = new Dictionary<IsosResult, double>();    //store possible isosResult, along with it's difference with the peakResult
 
-            for (var i = 0; i < run.ResultCollection.IsosResultBin.Count; i++)
+            foreach (var msfeature in run.ResultCollection.IsosResultBin)
             {
-                var msfeature = run.ResultCollection.IsosResultBin[i];
-
                 double toleranceInMZ = peakResult.MSPeak.Width / 2;
 
 
@@ -654,17 +656,14 @@ namespace DeconTools.Workflows.Backend.Core
             {
                 return null;
             }
-            else if (isosResultPossiblyContainingSourcePeak.Count == 1)
+
+            if (isosResultPossiblyContainingSourcePeak.Count == 1)
             {
                 return isosResultPossiblyContainingSourcePeak.First().Key;
 
             }
-            else
-            {
-                return isosResultPossiblyContainingSourcePeak.Keys.OrderByDescending(p => p.IntensityAggregate).First();
-            }
 
-
+            return isosResultPossiblyContainingSourcePeak.Keys.OrderByDescending(p => p.IntensityAggregate).First();
 
 
         }
@@ -674,13 +673,11 @@ namespace DeconTools.Workflows.Backend.Core
 
         private void exportPeakData(Run run, string outputFilename, Dictionary<int, string> whatPeakWentWhere)
         {
-            var peaksb = new StringBuilder();
-
             using (var outputStream = new StreamWriter(new FileStream(outputFilename, FileMode.Append, FileAccess.Write, FileShare.Read)))
             {
                 foreach (var item in whatPeakWentWhere)
                 {
-                    peaksb = new StringBuilder();
+                    var peaksb = new StringBuilder();
                     peaksb.Append(item.Key);
                     peaksb.Append("\t");
 
@@ -710,7 +707,7 @@ namespace DeconTools.Workflows.Backend.Core
 
             foreach (var msfeature in msFeatureList)
             {
-                if (msfeature.IsotopicProfile == null || msfeature.IsotopicProfile.Peaklist == null || msfeature.IsotopicProfile.Peaklist.Count == 0) continue;
+                if (msfeature.IsotopicProfile?.Peaklist == null || msfeature.IsotopicProfile.Peaklist.Count == 0) continue;
 
                 //check target peak is within an allowable scan tolerance
                 var targetPeakIsWithinScanTol = Math.Abs(msfeature.ScanSet.PrimaryScanNumber - peakResult.Scan_num) <= scanTolerance;
@@ -722,11 +719,8 @@ namespace DeconTools.Workflows.Backend.Core
                 {
                     continue;
                 }
-                else
-                {
-                    return true;
-                }
 
+                return true;
 
 
             }
@@ -745,18 +739,19 @@ namespace DeconTools.Workflows.Backend.Core
             var msFeatureList = run.ResultCollection.IsosResultBin;    //this is the small list if features found within a small m/z range, based on the targeted peak.
 
 
-            for (var i = 0; i < msFeatureList.Count; i++)
+            foreach (var msfeature in msFeatureList)
             {
-                var msfeature = msFeatureList[i];
-                if (msfeature.IsotopicProfile == null || msfeature.IsotopicProfile.Peaklist == null || msfeature.IsotopicProfile.Peaklist.Count == 0) continue;
+                if (msfeature.IsotopicProfile?.Peaklist == null || msfeature.IsotopicProfile.Peaklist.Count == 0) continue;
 
                 var peaksWithinTol = PeakUtilities.GetMSPeaksWithinTolerance(msfeature.IsotopicProfile.Peaklist, peakResult.MSPeak.XValue, toleranceInMZ);
 
                 if (peaksWithinTol.Count == 0)
                 {
                     foundPeakWithinMSFeature = false;
+                    continue;
                 }
-                else if (peaksWithinTol.Count == 1)
+
+                if (peaksWithinTol.Count == 1)
                 {
                     foundPeakWithinMSFeature = true;
 
@@ -773,7 +768,7 @@ namespace DeconTools.Workflows.Backend.Core
                 }
                 else
                 {
-                    Console.WriteLine("Not sure what to do with this case!");
+                    Console.WriteLine("Not sure what to do with this case (peaksWithinTol.Count is > 1)!");
                 }
 
                 if (foundPeakWithinMSFeature) break;

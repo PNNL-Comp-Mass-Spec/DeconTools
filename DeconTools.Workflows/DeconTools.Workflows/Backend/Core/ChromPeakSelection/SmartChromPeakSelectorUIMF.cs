@@ -120,7 +120,9 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
                     resultValidator.Execute(resultList);
 
                     //collect the results together
+#pragma warning disable 618
                     AddScoresToPeakQualityData(pq, currentResult);
+#pragma warning restore 618
 
 #if DEBUG
                     pq.Display();
