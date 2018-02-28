@@ -1,13 +1,12 @@
 ﻿using System;
 using System.IO;
 using DeconTools.Backend.Core;
-using pwiz.ProteowizardWrapper;
 
 namespace DeconTools.Backend.Runs
 {
     public sealed class MzRun : Run
     {
-        private readonly MSDataFileReader _reader;
+        private readonly pwiz.ProteowizardWrapper.MSDataFileReader _reader;
 
         private double[] _pwizScanTimes;
 
@@ -58,7 +57,7 @@ namespace DeconTools.Backend.Runs
             DatasetName = baseFilename.Substring(0, baseFilename.LastIndexOf('.'));
             DataSetPath = Path.GetDirectoryName(Filename);
 
-            _reader = new MSDataFileReader(fileName);
+            _reader = new pwiz.ProteowizardWrapper.MSDataFileReader(fileName);
 
             MinLCScan = GetMinPossibleLCScanNum();
             MaxLCScan = GetMaxPossibleLCScanNum();
