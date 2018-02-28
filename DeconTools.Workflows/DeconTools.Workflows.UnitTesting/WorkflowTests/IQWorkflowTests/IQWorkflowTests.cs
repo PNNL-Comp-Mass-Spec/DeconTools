@@ -48,7 +48,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
 
             Console.WriteLine(target.EmpiricalFormula + "\t" + target.ChargeState);
 
-            
+
             target.DoWorkflow();
             var result=  target.GetResult();
 
@@ -65,7 +65,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
         {
             var testFile = DeconTools.UnitTesting2.FileRefs.RawDataMSFiles.OrbitrapStdFile1;
             var peaksTestFile = DeconTools.UnitTesting2.FileRefs.PeakDataFiles.OrbitrapPeakFile_scans5500_6500;
-            var massTagFile = @"\\protoapps\UserData\Slysz\Data\MassTags\QCShew_Formic_MassTags_Bin10_all.txt";
+            // Unused: var massTagFile = @"\\protoapps\UserData\Slysz\Data\MassTags\QCShew_Formic_MassTags_Bin10_all.txt";
 
             var run = RunUtilities.CreateAndLoadPeaks(testFile, peaksTestFile);
 
@@ -82,7 +82,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
             target.ElutionTimeTheor = 0.3;
             target.ChargeState = 1;
 
-            
+
             target.DoWorkflow();
             var result = target.GetResult();
 

@@ -8,9 +8,11 @@ using NUnit.Framework;
 namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSGeneratorTests
 {
     [TestFixture]
+    [Ignore("Ignore since uses YAFMS")]
+    [Obsolete("Old file format")]
     public class MSGeneratorFromPeakDataTests
     {
-        string m_testFile = FileRefs.RawDataMSFiles.YAFMSStandardFile2;
+        readonly string m_testFile = FileRefs.RawDataMSFiles.YAFMSStandardFile2;
 
 
         [Test]
@@ -25,8 +27,8 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSGeneratorTests
             var scan = new ScanSet(311);
             run.CurrentScanSet = scan;
 
-            
-            
+
+
             var peakWidthForAllPeaks = 0.001;
             var synMSGen =
                 new DeconTools.Backend.ProcessingTasks.MSGenerators.SyntheticMSGeneratorFromPeakData();
@@ -50,7 +52,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSGeneratorTests
 
             Console.WriteLine(run.XYData.Xvalues.Length);
 
-            
+
             TestUtilities.WriteToFile(run.XYData,fileOutput_xyvalsAfter);
 
         }

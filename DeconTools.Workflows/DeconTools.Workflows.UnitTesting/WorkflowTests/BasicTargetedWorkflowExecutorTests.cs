@@ -4,7 +4,6 @@ using System.Linq;
 using DeconTools.Workflows.Backend;
 using DeconTools.Workflows.Backend.Core;
 using DeconTools.Workflows.Backend.FileIO;
-using DeconTools.Workflows.Backend.Results;
 using NUnit.Framework;
 
 namespace DeconTools.Workflows.UnitTesting.WorkflowTests
@@ -13,7 +12,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
     [Category("Functional")]
     public class BasicTargetedWorkflowExecutorTests
     {
-        private string baseFolder = @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Unlabelled";
+        private readonly string baseFolder = @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Unlabelled";
 
         [Test]
         public void ParameterTest1()
@@ -99,8 +98,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             TargetedWorkflowExecutor executor = new BasicTargetedWorkflowExecutor(executorParameters, workflow, testDatasetPath);
             executor.Execute();
 
-            var expectedResultsFilename =
-                @"C:\Users\d3x720\Documents\Data\QCShew\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_results.txt";
+            // var expectedResultsFilename = @"QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_results.txt";
 
             var result = executor.TargetedWorkflow.Result;
             Assert.IsTrue(workflow.Success);
@@ -109,8 +107,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             Assert.IsNotNull(result.ChromPeakSelected);
 
             Assert.IsTrue(result.Score < 0.1);
-
-
 
             Assert.AreEqual(3, result.NumChromPeaksWithinTolerance);
             Assert.AreEqual(8627, (decimal)Math.Round(result.ChromPeakSelected.XValue, 0));
@@ -175,8 +171,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             TargetedWorkflowExecutor executor = new BasicTargetedWorkflowExecutor(executorParameters, workflow, testDatasetPath);
             executor.Execute();
 
-            var expectedResultsFilename =
-                @"C:\Users\d3x720\Documents\Data\QCShew\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_results.txt";
+            // var expectedResultsFilename = @"QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_results.txt";
 
             var result = executor.TargetedWorkflow.Result;
             Assert.IsTrue(workflow.Success);
@@ -329,8 +324,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             TargetedWorkflowExecutor executor = new BasicTargetedWorkflowExecutor(executorParameters, workflow, testDatasetPath);
             executor.Execute();
 
-            var expectedResultsFilename =
-                @"C:\Users\d3x720\Documents\Data\QCShew\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_results.txt";
+            // var expectedResultsFilename = @"QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_results.txt";
 
 
             var result = executor.TargetedWorkflow.Result;
@@ -377,12 +371,14 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             var rawFileInfo = new FileInfo(testDatasetPath);
 
-
             //delete alignment files
-            var mzalignmentFile = Path.Combine(rawFileInfo.DirectoryName, testDatasetName + "_mzAlignment.txt");
-            var netAlignmentFile = Path.Combine(rawFileInfo.DirectoryName, testDatasetName + "_netAlignment.txt");
-            if (File.Exists(mzalignmentFile)) File.Delete(mzalignmentFile);
-            if (File.Exists(netAlignmentFile)) File.Delete(netAlignmentFile);
+            if (rawFileInfo.DirectoryName != null)
+            {
+                var mzalignmentFile = Path.Combine(rawFileInfo.DirectoryName, testDatasetName + "_mzAlignment.txt");
+                var netAlignmentFile = Path.Combine(rawFileInfo.DirectoryName, testDatasetName + "_netAlignment.txt");
+                if (File.Exists(mzalignmentFile)) File.Delete(mzalignmentFile);
+                if (File.Exists(netAlignmentFile)) File.Delete(netAlignmentFile);
+            }
 
 
 #pragma warning disable 618
@@ -464,12 +460,13 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             var rawFileInfo = new FileInfo(testDatasetPath);
 
-            var mzalignmentFile = Path.Combine(rawFileInfo.DirectoryName, testDatasetName + "_mzAlignment.txt");
-            var netAlignmentFile = Path.Combine(rawFileInfo.DirectoryName, testDatasetName + "_netAlignment.txt");
-            if (File.Exists(mzalignmentFile)) File.Delete(mzalignmentFile);
-            if (File.Exists(netAlignmentFile)) File.Delete(netAlignmentFile);
-
-
+            if (rawFileInfo.DirectoryName != null)
+            {
+                var mzalignmentFile = Path.Combine(rawFileInfo.DirectoryName, testDatasetName + "_mzAlignment.txt");
+                var netAlignmentFile = Path.Combine(rawFileInfo.DirectoryName, testDatasetName + "_netAlignment.txt");
+                if (File.Exists(mzalignmentFile)) File.Delete(mzalignmentFile);
+                if (File.Exists(netAlignmentFile)) File.Delete(netAlignmentFile);
+            }
 
 
             TargetedWorkflowExecutor executor = new BasicTargetedWorkflowExecutor(executorParameters, testDatasetPath);

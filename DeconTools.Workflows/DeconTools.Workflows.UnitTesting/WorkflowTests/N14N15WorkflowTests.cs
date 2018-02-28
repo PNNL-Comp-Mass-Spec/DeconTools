@@ -104,7 +104,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             Assert.IsNotNull(result.ChromPeakSelectedN15);
 
             return;
-
+            /*
             Assert.AreEqual(1639.3m, (decimal)Math.Round(result.ChromPeakSelected.XValue, 1));
             Assert.AreEqual(1638.5m, (decimal)Math.Round(result.ChromPeakSelectedN15.XValue, 1));
 
@@ -125,6 +125,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             Console.WriteLine("Result NET Error= " + result.GetNETAlignmentError());
             Console.WriteLine("NumChromPeaksWithinTol= " + result.NumChromPeaksWithinTolerance);
             Console.WriteLine("NumChromPeaksWithinTolN15= " + result.NumChromPeaksWithinToleranceForN15Profile);
+            */
 
         }
 

@@ -108,7 +108,9 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
                 MaxFit = 0.4
             };
 
+#pragma warning disable 618
             var newDeconvolutor = new InformedThrashDeconvolutor(thrashParameters);
+#pragma warning restore 618
 
             var watch = new Stopwatch();
             watch.Start();
@@ -188,7 +190,9 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
                 MaxFit = 0.4
             };
 
+#pragma warning disable 618
             var newDeconvolutor = new InformedThrashDeconvolutor(thrashParameters);
+#pragma warning restore 618
 
             var scanset = new ScanSet(5509);
             run.CurrentScanSet = scanset;
@@ -261,7 +265,9 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             //3;
 
             //var newDeconvolutor = new ThrashDeconvolutorV2(thrashParameters);
+#pragma warning disable 618
             var newDeconvolutor = new InformedThrashDeconvolutor(thrashParameters);
+#pragma warning restore 618
 
             var scanset = new ScanSet(5509);
 
@@ -426,7 +432,9 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
                 MaxFit = 0.3
             };
 
+#pragma warning disable 618
             var deconvolutor = new InformedThrashDeconvolutor(parameters);
+#pragma warning restore 618
             //var deconvolutor2 = new
 
             var scan = new ScanSet(6005);

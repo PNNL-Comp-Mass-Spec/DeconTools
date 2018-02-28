@@ -1,13 +1,16 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using DeconTools.Backend.Runs;
 using DeconTools.Backend.Core;
 
 namespace DeconTools.UnitTesting2.Run_relatedTests
 {
     [TestFixture]
+    [Ignore("Ignore since uses YAFMS")]
+    [Obsolete("Old file format")]
     public class YAFMS_Tests
     {
-        string m_testFile = FileRefs.RawDataMSFiles.YAFMSStandardFile1;
+        readonly string m_testFile = FileRefs.RawDataMSFiles.YAFMSStandardFile1;
 
         // string tempFile = @"D:\Data\MEND\3_c_elegans_large_eqd_zero.yafms";
 

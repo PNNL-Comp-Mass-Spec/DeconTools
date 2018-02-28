@@ -214,9 +214,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
 
 
             var chromGen = new ChromatogramGenerator();
-#pragma warning disable 618
             var filteredMSPeaks = chromGen.GeneratePeakChromatogram(run.ResultCollection.MSPeakResultList, run.MinLCScan, run.MaxLCScan, targetMZ, chromToleranceInPPM);
-#pragma warning restore 618
 
             //Assert.AreEqual(56, filteredMSPeaks.Count);
 
@@ -239,9 +237,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
             var chromGen = new ChromatogramGenerator();
 
             PeakChrom chrom = new BasicPeakChrom();
-#pragma warning disable 618
             chrom.ChromSourceData = chromGen.GeneratePeakChromatogram(run.ResultCollection.MSPeakResultList, run.MinLCScan, run.MaxLCScan, targetMZ, chromToleranceInPPM);
-#pragma warning restore 618
 
             Assert.AreEqual(59, chrom.ChromSourceData.Count);
 
