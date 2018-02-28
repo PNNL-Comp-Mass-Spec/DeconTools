@@ -159,7 +159,7 @@ namespace DeconConsole
             Console.WriteLine("Incorporates previous code written by Gordon Anderson and Deep Jaitly");
             Console.WriteLine("Version: " + GetAppVersion());
             Console.WriteLine("Contact info: matthew.monroe@pnnl.gov or proteomics@pnnl.gov");
-            Console.WriteLine("Website: http://omics.pnl.gov/software or http://panomics.pnnl.gov");
+            Console.WriteLine("Website: https://omics.pnl.gov/software or http://panomics.pnnl.gov");
             Console.WriteLine();
 
             System.Threading.Thread.Sleep(1000);

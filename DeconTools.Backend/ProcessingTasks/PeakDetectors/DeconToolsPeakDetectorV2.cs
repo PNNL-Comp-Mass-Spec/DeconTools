@@ -1,7 +1,7 @@
 ﻿// Written by Navdeep Jaitly and Gordon Slysz.
 // Copyright 2012, Battelle Memorial Institute for the Department of Energy (PNNL, Richland, WA)
 // E-mail: matthew.monroe@pnnl.gov or proteomics@pnnl.gov
-// Website: http://panomics.pnnl.gov/software/
+// Website: https://panomics.pnnl.gov/software/
 // -------------------------------------------------------------------------------
 //
 // Licensed under the Apache License, Version 2.0; you may not use this file except
