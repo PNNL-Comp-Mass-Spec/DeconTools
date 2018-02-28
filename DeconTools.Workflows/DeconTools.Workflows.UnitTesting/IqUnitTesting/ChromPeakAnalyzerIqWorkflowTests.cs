@@ -11,7 +11,6 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
     class ChromPeakAnalyzerIqWorkflowTests
     {
         [Test]
-        [ExpectedException(typeof(NullReferenceException))]
         public void ChromPeakAnalyzerWorkflowWrongTargetTest()
         {
             //Reference JIRA: https://jira.pnnl.gov/jira/browse/OMCS-884
@@ -20,8 +19,22 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
             var run = new RunFactory().CreateRun(testFile);
             TargetedWorkflowParameters parameters = new BasicTargetedWorkflowParameters();
             IqTarget testTarget = new IqChargeStateTarget();
-            testTarget.SetWorkflow(new ChromPeakAnalyzerIqWorkflow(run, parameters));
-            testTarget.DoWorkflow();
+
+            try
+            {
+                testTarget.SetWorkflow(new ChromPeakAnalyzerIqWorkflow(run, parameters));
+                testTarget.DoWorkflow();
+            }
+            catch (NullReferenceException)
+            {
+                Assert.Pass("NullReferenceException caught; this is expected");
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail("Exception caught of type {0}: {1}", ex.GetType(), ex.Message);
+            }
+
+            Assert.Fail("Exception was not caught; we expected an NullReferenceException to be thrown");
         }
 
         [Test]

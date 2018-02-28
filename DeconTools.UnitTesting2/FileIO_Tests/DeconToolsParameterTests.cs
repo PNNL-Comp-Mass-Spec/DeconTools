@@ -14,13 +14,13 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
         {
             //see https://jira.pnnl.gov/jira/browse/OMCS-460
 
-            var fiParameterFile = new FileInfo(@"..\..\..\TestFiles\SampleParameterFile.xml");
+            var fiParameterFile = new FileInfo(@"\\proto-2\unitTest_Files\DeconTools_TestFiles\ParameterFiles\SampleParameterFile.xml");
 
-            Assert.IsTrue(fiParameterFile.Exists);
+            Assert.IsTrue(fiParameterFile.Exists, "Parameter file not found: " + fiParameterFile.FullName);
             var parameters = new DeconToolsParameters();
             parameters.LoadFromOldDeconToolsParameterFile(fiParameterFile.FullName);
 
-            Assert.IsNotNullOrEmpty(parameters.ThrashParameters.AveragineFormula);
+            Assert.IsNotEmpty(parameters.ThrashParameters.AveragineFormula);
             Assert.AreEqual("C4.9384 H7.7583 N1.3577 O1.4773 S0.0417", parameters.ThrashParameters.AveragineFormula);
             Assert.AreEqual("AREA", parameters.ThrashParameters.IsotopicProfileFitType.ToString());
             Assert.AreEqual(1.00727649, parameters.ThrashParameters.ChargeCarrierMass);
@@ -62,7 +62,7 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
             var parameters = new DeconToolsParameters();
             parameters.LoadFromOldDeconToolsParameterFile(parameterFile);
 
-            Assert.IsNotNullOrEmpty(parameters.ThrashParameters.AveragineFormula);
+            Assert.IsNotEmpty(parameters.ThrashParameters.AveragineFormula);
             Assert.AreEqual("C4.9384 H7.7583 N1.3577 O1.4773 S0.0417", parameters.ThrashParameters.AveragineFormula);
             Assert.AreEqual("AREA", parameters.ThrashParameters.IsotopicProfileFitType.ToString());
             Assert.AreEqual(1.00727649, parameters.ThrashParameters.ChargeCarrierMass);

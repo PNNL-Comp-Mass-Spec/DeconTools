@@ -72,7 +72,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         public void CreateMZMLRunTest1()
         {
             var testfile =
-                @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\mzXML\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.mzML";
+                @"\\proto-2\unitTest_Files\DeconTools_TestFiles\mzXML\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.mzML";
 
             var rf = new RunFactory();
             var run = rf.CreateRun(testfile);
@@ -86,7 +86,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         public void CreateMZXMLRunTest1()
         {
             var testfile =
-                @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\mzXML\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.mzXML";
+                @"\\proto-2\unitTest_Files\DeconTools_TestFiles\mzXML\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.mzXML";
 
             var rf = new RunFactory();
             var run = rf.CreateRun(testfile);
@@ -100,7 +100,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         public void CreateMZ5RunTest1()
         {
             var testfile =
-                @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\mzXML\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.mz5";
+                @"\\proto-2\unitTest_Files\DeconTools_TestFiles\mzXML\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.mz5";
 
             var rf = new RunFactory();
             var run = rf.CreateRun(testfile);
@@ -147,13 +147,27 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         }
 
         [Test]
-        [ExpectedException(typeof(ApplicationException))]
         public void UnknownDatasetTypeTest1()
         {
             var testfile = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\Other_testFileTypes\sampleXYData.wiffer";
 
             var rf = new RunFactory();
-            var run = rf.CreateRun(testfile);
+
+            try
+            {
+                var run = rf.CreateRun(testfile);
+            }
+            catch (ApplicationException)
+            {
+                Assert.Pass("ApplicationException caught; this is expected");
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail("Exception caught of type {0}: {1}", ex.GetType(), ex.Message);
+            }
+
+            Assert.Fail("Exception was not caught; we expected an ApplicationException to be thrown");
+
         }
 
 

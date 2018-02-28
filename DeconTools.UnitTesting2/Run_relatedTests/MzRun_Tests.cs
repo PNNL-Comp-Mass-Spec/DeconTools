@@ -12,7 +12,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
     [TestFixture]
     public class MzRun_Tests
     {
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void ConfigureDllLookup()
         {
             pwiz.ProteowizardWrapper.DependencyLoader.AddAssemblyResolver();
@@ -22,7 +22,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         public void constructorTest1()
         {
             var testfile =
-                @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\mzXML\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.mzXML";
+                @"\\proto-2\unitTest_Files\DeconTools_TestFiles\mzXML\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.mzXML";
 
             Run run = new MzRun(testfile);
             Assert.AreEqual(Backend.Globals.MSFileType.MZXML_Rawdata, run.MSFileType);
@@ -32,7 +32,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             Assert.AreEqual(18504, run.MaxLCScan);
 
             Assert.AreEqual("QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18", run.DatasetName);
-            Assert.AreEqual(@"\\protoapps\UserData\Slysz\DeconTools_TestFiles\mzXML", run.DataSetPath);
+            Assert.AreEqual(@"\\proto-2\unitTest_Files\DeconTools_TestFiles\mzXML", run.DataSetPath);
 
         }
 
@@ -43,12 +43,12 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             var testscan = 6004;
 
             var testfile =
-               @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\mzXML\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.mzXML";
+               @"\\proto-2\unitTest_Files\DeconTools_TestFiles\mzXML\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.mzXML";
 
             Run run = new MzRun(testfile);
 
             var scanSet = new ScanSet(testscan);
-            run.GetMassSpectrum(scanSet);
+            run.XYData = run.GetMassSpectrum(scanSet);
 
             Assert.AreEqual(481.274514196002, (decimal)run.XYData.Xvalues[3769]);
             Assert.AreEqual(13084442, run.XYData.Yvalues[3769]);
@@ -57,18 +57,31 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         }
 
         [Test]
-        [ExpectedException(typeof(System.ArgumentOutOfRangeException))]
         public void GetMassSpectrum_higherThanTotalScans()
         {
             var testscan = 18506;
 
             var testfile =
-               @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\mzXML\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.mzXML";
+               @"\\proto-2\unitTest_Files\DeconTools_TestFiles\mzXML\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.mzXML";
 
             Run run = new MzRun(testfile);
 
-            var scanSet = new ScanSet(testscan);
-            run.GetMassSpectrum(scanSet);
+            try
+            {
+                var scanSet = new ScanSet(testscan);
+                run.GetMassSpectrum(scanSet);
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                Assert.Pass("ArgumentOutOfRangeException caught; this is expected");
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail("Exception caught of type {0}: {1}", ex.GetType(), ex.Message);
+            }
+
+            Assert.Fail("Exception was not caught; we expected an ArgumentOutOfRangeException to be thrown");
+
         }
 
         [Test]
@@ -79,11 +92,11 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             var testscan2 = 6005;
 
             var testfile =
-               @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\mzXML\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.mzXML";
+               @"\\proto-2\unitTest_Files\DeconTools_TestFiles\mzXML\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.mzXML";
 
             Run run = new MzRun(testfile);
 
-            var level=  run.GetMSLevel(testscan);
+            var level = run.GetMSLevel(testscan);
 
             var scanTime = run.GetTime(testscan);
 
@@ -97,10 +110,10 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
 
 
         [Test]
-        public void ValidateDataTest1()    //purpose is to compare 
+        public void ValidateDataTest1()    //purpose is to compare
         {
 
-            var testMz5File = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\mzXML\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.mz5";
+            var testMz5File = @"\\proto-2\unitTest_Files\DeconTools_TestFiles\mzXML\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.mz5";
             var testThermoFile = FileRefs.RawDataMSFiles.OrbitrapStdFile1;
 
             var mz5run = new RunFactory().CreateRun(testMz5File);
@@ -117,8 +130,8 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             thermoRun.CurrentScanSet = testScanSetThermo;
 
 
-            mz5run.XYData=   mz5run.GetMassSpectrum(testScanSet1);
-            thermoRun.XYData=   thermoRun.GetMassSpectrum(testScanSetThermo);
+            mz5run.XYData = mz5run.GetMassSpectrum(testScanSet1);
+            thermoRun.XYData = thermoRun.GetMassSpectrum(testScanSetThermo);
 
 
             Assert.AreEqual(mz5run.XYData.Xvalues.Length, thermoRun.XYData.Xvalues.Length);
@@ -149,7 +162,8 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
 
 
         [Test]
-        public void ValidateDataTest_temp()    //purpose is to compare 
+        [Ignore("Local file")]
+        public void ValidateDataTest_temp()    //purpose is to compare
         {
 
             var testMz5File = @"C:\Sipper\SipperDemo\RawDataFiles\Yellow_C13_070_23Mar10_Griffin_10-01-28.mz5";
@@ -199,7 +213,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             Console.WriteLine();
             Console.WriteLine();
 
-           // TestUtilities.DisplayPeaks(thermoRun.PeakList);
+            // TestUtilities.DisplayPeaks(thermoRun.PeakList);
 
 
         }
@@ -208,13 +222,13 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         public void GetScanInfoTest1()
         {
             var testfile =
-             @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\mzXML\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.mz5";
+             @"\\proto-2\unitTest_Files\DeconTools_TestFiles\mzXML\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.mz5";
 
             Run run = new MzRun(testfile);
 
             var ms2scan = 6005;
 
-            var info= run.GetScanInfo(ms2scan);
+            var info = run.GetScanInfo(ms2scan);
 
             Console.WriteLine(info);
 
@@ -224,13 +238,13 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         public void Speedtest1()
         {
             //string testfile =
-            //  @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\mzXML\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.mzXML";
+            //  @"\\proto-2\unitTest_Files\DeconTools_TestFiles\mzXML\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.mzXML";
 
             var testfile2 =
-             @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\mzXML\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.mz5";
+             @"\\proto-2\unitTest_Files\DeconTools_TestFiles\mzXML\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.mz5";
 
             //string testfile3 =
-            //@"\\protoapps\UserData\Slysz\DeconTools_TestFiles\mzXML\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.mzML";
+            //@"\\proto-2\unitTest_Files\DeconTools_TestFiles\mzXML\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.mzML";
 
             Run run = new MzRun(testfile2);
 
@@ -250,13 +264,13 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
                 scanSet = new ScanSet(i);
 
                 if (run.GetMSLevel(i) == 2) continue;
-                
+
 
                 stopwatch.Start();
                 run.GetMassSpectrum(scanSet);
                 stopwatch.Stop();
 
-                
+
                 times.Add(stopwatch.ElapsedMilliseconds);
 
                 stopwatch.Reset();
@@ -281,7 +295,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         public void WatersMzXmlTest1()
         {
             var testfile =
-                @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\Waters\LC_MS_pHis_Caulo_meth_110207.mzXML";
+                @"\\proto-2\unitTest_Files\DeconTools_TestFiles\Waters\LC_MS_pHis_Caulo_meth_110207.mzXML";
 
             var run = new RunFactory().CreateRun(testfile);
             Console.WriteLine(TestUtilities.DisplayRunInformation(run));
@@ -291,7 +305,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
 
             foreach (var scanSet in run.ScanSetCollection.ScanSetList)
             {
-                var level =   run.GetMSLevel(scanSet.PrimaryScanNumber);
+                var level = run.GetMSLevel(scanSet.PrimaryScanNumber);
 
                 Console.WriteLine(scanSet + "\t" + level);
             }

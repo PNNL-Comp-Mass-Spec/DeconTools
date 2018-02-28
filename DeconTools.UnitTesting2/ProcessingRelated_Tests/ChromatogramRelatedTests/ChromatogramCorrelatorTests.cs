@@ -36,19 +36,19 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
             var stopScan = 5755;
 
             var smoother = new SavitzkyGolaySmoother(3, 2);
-            
+
             var peakChromGen = new PeakChromatogramGenerator(chromToleranceInPPM);
-            run.XYData=   peakChromGen.GenerateChromatogram(run,startScan,stopScan,mt.IsotopicProfile.Peaklist[0].XValue,chromToleranceInPPM);
+            run.XYData = peakChromGen.GenerateChromatogram(run, startScan, stopScan, mt.IsotopicProfile.Peaklist[0].XValue, chromToleranceInPPM);
             run.XYData = smoother.Smooth(run.XYData);
-            
+
             var chromdata1 = run.XYData.TrimData(startScan, stopScan);
 
 
-            run.XYData=  peakChromGen.GenerateChromatogram(run, startScan, stopScan, mt.IsotopicProfile.Peaklist[3].XValue, chromToleranceInPPM);
+            run.XYData = peakChromGen.GenerateChromatogram(run, startScan, stopScan, mt.IsotopicProfile.Peaklist[3].XValue, chromToleranceInPPM);
             run.XYData = smoother.Smooth(run.XYData);
-            
+
             var chromdata2 = run.XYData.TrimData(startScan, stopScan);
-            
+
             //chromdata1.Display();
             //Console.WriteLine();
             //chromdata2.Display();
@@ -97,13 +97,13 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
             run.XYData = peakChromGen.GenerateChromatogram(run, startScan, stopScan, mt.IsotopicProfile.Peaklist[0].XValue, chromToleranceInPPM);
             run.XYData = smoother.Smooth(run.XYData);
 
-            var result= run.ResultCollection.GetTargetedResult(mt);
+            var result = run.ResultCollection.GetTargetedResult(mt);
 
             ChromatogramCorrelatorBase correlator = new ChromatogramCorrelator(3);
-            var corrData=  correlator.CorrelatePeaksWithinIsotopicProfile(run, mt.IsotopicProfile, startScan, stopScan);
+            var corrData = correlator.CorrelatePeaksWithinIsotopicProfile(run, mt.IsotopicProfile, startScan, stopScan);
 
             Debug.Assert(corrData.CorrelationDataItems != null, "corrData.CorrelationDataItems != null");
-            Assert.AreEqual(0.98m, (decimal) Math.Round((double) corrData.CorrelationDataItems[1].CorrelationRSquaredVal, 2));
+            Assert.AreEqual(0.98m, (decimal)Math.Round((double)corrData.CorrelationDataItems[1].CorrelationRSquaredVal, 2));
 
             foreach (var item in corrData.CorrelationDataItems)
             {
@@ -137,13 +137,13 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
             var testMZVal1 = 719.80349;
 
             var peakChromGen = new PeakChromatogramGenerator(chromToleranceInPPM);
-            run.XYData= peakChromGen.GenerateChromatogram(run, startScan, stopScan, testMZVal1, chromToleranceInPPM);
+            run.XYData = peakChromGen.GenerateChromatogram(run, startScan, stopScan, testMZVal1, chromToleranceInPPM);
             run.XYData = smoother.Smooth(run.XYData);
 
             var chromdata1 = run.XYData.TrimData(startScan, stopScan);
 
             var testMZVal2 = 722.325;
-            run.XYData=  peakChromGen.GenerateChromatogram(run, startScan, stopScan, testMZVal2, chromToleranceInPPM);
+            run.XYData = peakChromGen.GenerateChromatogram(run, startScan, stopScan, testMZVal2, chromToleranceInPPM);
             run.XYData = smoother.Smooth(run.XYData);
 
             var chromdata2 = run.XYData.TrimData(startScan, stopScan);

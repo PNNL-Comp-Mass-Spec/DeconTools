@@ -864,7 +864,6 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
         }
 
 
-        [ExpectedException("System.ArgumentOutOfRangeException")]
         [Test]
         public void WorkflowTypeIsWrongTest1()
         {
@@ -877,9 +876,20 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
                 }
             };
 
+            try
+            {
+                ScanBasedWorkflow.CreateWorkflow(run, parameters);
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                Assert.Pass("ArgumentOutOfRangeException caught; this is expected");
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail("Exception caught of type {0}: {1}", ex.GetType(), ex.Message);
+            }
 
-            ScanBasedWorkflow.CreateWorkflow(run, parameters);
-
+            Assert.Fail("Exception was not caught; we expected an ArgumentOutOfRangeException to be thrown");
         }
 
         private static void OutputFeatureIntensityData(IReadOnlyCollection<UIMFIsosResult> featureData, int minFrame, int maxFrame, int maxScan, int minScan)

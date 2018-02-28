@@ -773,7 +773,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
 
 
             var testFile =
-                @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\mzXML\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.mz5";
+                @"\\proto-2\unitTest_Files\DeconTools_TestFiles\mzXML\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.mz5";
             var parameterFile = FileRefs.ParameterFiles.Orbitrap_Scans6000_6050ParamFile;
 
             var expectedIsosOutput = Path.Combine(Path.GetDirectoryName(testFile), Path.GetFileNameWithoutExtension(testFile) + "_isos.csv");

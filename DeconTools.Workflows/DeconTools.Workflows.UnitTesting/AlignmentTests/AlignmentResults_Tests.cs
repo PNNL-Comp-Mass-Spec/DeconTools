@@ -16,7 +16,8 @@ namespace DeconTools.Workflows.UnitTesting
     {
         private Run run;
         private NETAndMassAligner aligner;
-        [TestFixtureSetUp]
+
+        [OneTimeSetUp]
         public void setupTests()
         {
             var rf = new RunFactory();
