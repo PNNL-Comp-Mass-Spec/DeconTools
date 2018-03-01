@@ -46,7 +46,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChargeStateDeciders
 
             //with line spaces
             var reportString1 = "\nM/Z : " + potentialIsotopicProfiles.First().Peaklist[index].XValue + "\n";
-            IqLogger.LogDebug(reportString1);
+            IqLogger.LogTrace(reportString1);
             foreach (var potentialfeature in potentialIsotopicProfiles)
             {
                 indexCurrentFeature++;
@@ -68,7 +68,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChargeStateDeciders
                     correlationswithAltChargeState[indexCurrentFeature, i] + "\n";
                 }
                 reportString += "Score: " + potentialfeature.Score;
-                IqLogger.LogDebug(reportString);
+                IqLogger.LogTrace(reportString);
 
 
                 //tabular output
@@ -98,16 +98,16 @@ namespace DeconTools.Backend.ProcessingTasks.ChargeStateDeciders
         {
             if (_run.ResultCollection.MSPeakResultList.Count == 0)
             {
-                   var expectedPeaksfile = Path.Combine(_run.DataSetPath, _run.DatasetName + "_peaks.txt");
-                   if (!File.Exists(expectedPeaksfile))
-                   {
-                       var ex = new Exception("No Peaks file found.");
-                       throw ex;
+                var expectedPeaksfile = Path.Combine(_run.DataSetPath, _run.DatasetName + "_peaks.txt");
+                if (!File.Exists(expectedPeaksfile))
+                {
+                    var ex = new Exception("No Peaks file found.");
+                    throw ex;
                     //    CreatePeaksFile();
                     //ExportPeaks_copied(expectedPeaksfile);
 
-                   }
-                 RunUtilities.GetPeaks(_run, expectedPeaksfile);
+                }
+                RunUtilities.GetPeaks(_run, expectedPeaksfile);
             }
         }
 
@@ -184,7 +184,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChargeStateDeciders
                 }
 
             }
-            if (favorites.Count>0)
+            if (favorites.Count > 0)
             {
                 return potentialIsotopicProfiles.ElementAt((favorites.OrderByDescending(x => x.Value).First().Key));
             }
@@ -229,6 +229,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChargeStateDeciders
                 }
             }
             #endregion
+
             #region Metric 3, ask Patterson
 
             var chargeStateCalculator = new PattersonChargeStateCalculatorWithChanges();
@@ -256,7 +257,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChargeStateDeciders
                     bestChargeIndex = index;
                 }
             }
-            if (bestCorrelation<=0)
+            if (bestCorrelation <= 0)
             {
                 return null;
             }
@@ -281,7 +282,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChargeStateDeciders
 
         private List<int> GetSet(int i, HashSet<int> indexesWhoAreFactorsOfMe, IReadOnlyList<int> chargeStates)
         {
-            var list = new List<int> {chargeStates[i]};
+            var list = new List<int> { chargeStates[i] };
 
             foreach (var index in indexesWhoAreFactorsOfMe)
             {
@@ -321,6 +322,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChargeStateDeciders
 
             return getCorrelation(xValuePeak1, xValuePeak2, ppmTolerancePeak1, ppmTolerancePeak2);
         }
+
         private double getCorrelation(double mzPeak1, double mzPeak2, double tolerancePPMpeak1, double tolerancePPMpeak2)
         {
             var chromgenPeak1 = new PeakChromatogramGenerator
@@ -330,7 +332,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChargeStateDeciders
             };
             //TODO: correlate narrow range. -100 +100
             //TODO: for gord.
-            var scanWindow=100;
+            var scanWindow = 100;
             var lowerScan = _run.CurrentScanSet.PrimaryScanNumber - scanWindow;
             var upperScan = _run.CurrentScanSet.PrimaryScanNumber + scanWindow;
 
@@ -393,7 +395,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChargeStateDeciders
                 arrayToCorrelatePeak2[j] = chromxydataPeak2.Yvalues[i];
             }
 
-            if (arrayToCorrelatePeak1.Length< 5 || arrayToCorrelatePeak2.Length<5)
+            if (arrayToCorrelatePeak1.Length < 5 || arrayToCorrelatePeak2.Length < 5)
             {
                 return false;
             }
@@ -421,11 +423,11 @@ namespace DeconTools.Backend.ProcessingTasks.ChargeStateDeciders
             CreatePeaksIfNeeded();//note: does not actually create peaks. Only loads them. An exception is thrown if it's not there.
 
 
-            var chargeStates= new HashSet<int>();
-            var charge=1;
+            var chargeStates = new HashSet<int>();
+            var charge = 1;
             for (; charge < 10; charge++)
             {
-                var mzPeak1=mspeakList.ElementAt(indexOfCurrentPeak).XValue;
+                var mzPeak1 = mspeakList.ElementAt(indexOfCurrentPeak).XValue;
                 var distanceToFindNextPeak = 1.0 / charge;
                 var xValueToLookFor = mzPeak1 + distanceToFindNextPeak;
                 var lowerMZ = xValueToLookFor - ppmTolerance * xValueToLookFor / 1e6;
@@ -433,25 +435,25 @@ namespace DeconTools.Backend.ProcessingTasks.ChargeStateDeciders
 
 
 
-                var peak2 = mspeakList.Find(peak => peak.XValue<= upperMZ && peak.XValue>=lowerMZ);
-                if (peak2==null)
+                var peak2 = mspeakList.Find(peak => peak.XValue <= upperMZ && peak.XValue >= lowerMZ);
+                if (peak2 == null)
                 {
                     continue;
                 }
                 var mzPeak2 = peak2.XValue;
                 var correlation = getCorrelation(mzPeak1, mzPeak2, ppmTolerance, ppmTolerance);
-                if (correlation>0.2)
+                if (correlation > 0.2)
                 {
                     chargeStates.Add(charge);
                 }
             }
 
-            var reportString521= "Potential Charges using correlation: ";
+            var reportString521 = "Potential Charges using correlation: ";
             foreach (var curcharge in chargeStates)
             {
-                reportString521+=curcharge + "\t";
+                reportString521 += curcharge + "\t";
             }
-            IqLogger.LogDebug(reportString521 + "\n");
+            IqLogger.LogTrace(reportString521 + "\n");
             return chargeStates;
         }
 
@@ -476,7 +478,8 @@ namespace DeconTools.Backend.ProcessingTasks.ChargeStateDeciders
             var _ms1PeakDetector = new DeconToolsPeakDetectorV2(2.0, 2.0);
 
             var _ms2PeakDetectorForProfileData = new DeconToolsPeakDetectorV2(2.0, 2.0);
-            var _ms2PeakDetectorForCentroidedData = new DeconToolsPeakDetectorV2(0, 0, Globals.PeakFitType.QUADRATIC, true) {
+            var _ms2PeakDetectorForCentroidedData = new DeconToolsPeakDetectorV2(0, 0, Globals.PeakFitType.QUADRATIC, true)
+            {
                 RawDataType = Globals.RawDataType.Centroided
             };
 
@@ -515,7 +518,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChargeStateDeciders
                     if (frameCounter % 5 == 0 || scanCounter == numTotalFrames)
                     {
                         double percentProgress = frameCounter * 100 / numTotalFrames;
-                       // reportProgress(percentProgress);
+                        // reportProgress(percentProgress);
                     }
 
                 }

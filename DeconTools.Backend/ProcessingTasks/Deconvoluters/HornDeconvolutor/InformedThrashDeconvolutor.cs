@@ -193,7 +193,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters
                 }
                 else
                 {   //Paul subtraction
-                    IqLogger.LogDebug("MZ value: " + msPeak.XValue + "\n");
+                    IqLogger.LogTrace("MZ value: " + msPeak.XValue + "\n");
                     potentialChargeStates = GetPotentialChargeStates(indexOfCurrentPeak, mspeakList, ppmTolerance);
                     #region Paul Addition
                     // ChromCorrelatingChargeDecider chargeDecider= new ChromCorrelatingChargeDecider(_run);
@@ -208,7 +208,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters
                     reportString201 += charge + "\t";
 
                 }
-                IqLogger.LogDebug(reportString201 + "\n");
+                IqLogger.LogTrace(reportString201 + "\n");
 
                 var potentialMSFeaturesForGivenChargeState = new List<IsotopicProfile>();
                 foreach (var potentialChargeState in potentialChargeStates)

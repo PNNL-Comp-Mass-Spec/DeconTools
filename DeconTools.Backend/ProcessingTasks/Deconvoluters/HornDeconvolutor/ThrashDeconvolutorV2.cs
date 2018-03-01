@@ -185,25 +185,25 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
                 if (UseAutocorrelationChargeDetermination)
                 {
                     var chargeState = PattersonChargeStateCalculator.GetChargeState(xyData, mspeakList, msPeak as MSPeak);
-                    potentialChargeStates = new HashSet<int> {chargeState};
+                    potentialChargeStates = new HashSet<int> { chargeState };
                 }
                 else
                 {   //Paul subtraction
-                    IqLogger.LogDebug("MZ value: " + msPeak.XValue + "\n");
+                    IqLogger.LogTrace("MZ value: " + msPeak.XValue + "\n");
                     potentialChargeStates = GetPotentialChargeStates(indexOfCurrentPeak, mspeakList, ppmTolerance);
                     #region Paul Addition
-                    var chargeDecider= new ChromCorrelatingChargeDecider(_run);
+                    var chargeDecider = new ChromCorrelatingChargeDecider(_run);
                     chargeDecider.GetPotentialChargeState(indexOfCurrentPeak, mspeakList, ppmTolerance);
 
                     #endregion
                 }
-                var reportString201="potentialChargeStates: ";
+                var reportString201 = "potentialChargeStates: ";
                 foreach (var charge in potentialChargeStates)
                 {
-                    reportString201+=charge + "\t";
+                    reportString201 += charge + "\t";
 
                 }
-                IqLogger.LogDebug(reportString201 + "\n");
+                IqLogger.LogTrace(reportString201 + "\n");
 
                 var potentialMSFeaturesForGivenChargeState = new List<IsotopicProfile>();
                 foreach (var potentialChargeState in potentialChargeStates)
@@ -222,7 +222,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
                         var indexMostAbundantPeakTheor = theorIso.GetIndexOfMostIntensePeak();
 
                         //Paul edit. "&& indexMostAbundantPeakTheor>=0"
-                        if (msFeature.Peaklist.Count > indexMostAbundantPeakTheor && indexMostAbundantPeakTheor>=0)
+                        if (msFeature.Peaklist.Count > indexMostAbundantPeakTheor && indexMostAbundantPeakTheor >= 0)
                         {
 
                             msFeature.IntensityMostAbundantTheor = msFeature.Peaklist[indexMostAbundantPeakTheor].Height;
@@ -284,7 +284,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
                         #region Paul addition
                         //TODO: [Paul]  This is the major means of deciding between charge states and where we need to do better.
                         //We need some test cases to capture this problem.
-   var stopwatch = new Stopwatch();
+                        var stopwatch = new Stopwatch();
 
                         if (doPaulMethod)
                         {
@@ -304,7 +304,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
                         }
                         else//do it the regular way.
                         {
-                        #endregion
+                            #endregion
                             msfeature = (from n in potentialMSFeaturesForGivenChargeState
                                          where n.Score < 0.15
                                          orderby n.ChargeState descending
@@ -318,13 +318,13 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
                         //line outputs.
                         var reportString309 = "\nM/Z = " + msfeature.MonoPeakMZ +
                                 "\nCHOSEN CHARGE: " + msfeature.ChargeState + "\n\n";
-                        IqLogger.LogDebug(reportString309);
+                        IqLogger.LogTrace(reportString309);
 
                         //tabular output
                         //string reportString309 = "\tM/Z = \t" + msfeature.MonoPeakMZ +
                         //        "\tCHOSEN CHARGE: \t" + msfeature.ChargeState+ "\n";
                         //IqLogger.Log.Debug(reportString309);
-                            #endregion
+                        #endregion
 
 
 
