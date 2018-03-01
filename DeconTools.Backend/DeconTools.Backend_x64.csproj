@@ -485,7 +485,7 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\Library\MassLynxRaw.dll">
+    <Content Include="..\Library\DLLsToBeCopied_x64\MassLynxRaw.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Interop.MSFileReaderLib.dll">
