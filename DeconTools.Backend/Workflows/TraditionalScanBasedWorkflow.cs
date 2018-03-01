@@ -65,7 +65,6 @@ namespace DeconTools.Backend.Workflows
             }
         }
 
-
         protected string getErrorInfo(Run run, Exception ex)
         {
             var sb = new StringBuilder();
@@ -93,9 +92,6 @@ namespace DeconTools.Backend.Workflows
 
         }
 
-
-
-
         public override void ReportProgress()
         {
             if (Run.ScanSetCollection == null || Run.ScanSetCollection.ScanSetList.Count == 0) return;
@@ -105,7 +101,7 @@ namespace DeconTools.Backend.Workflows
             var percentDone = _scanCounter / (float)(Run.ScanSetCollection.ScanSetList.Count) * 100;
             userstate.PercentDone = percentDone;
 
-            var logText = "Scan/Frame= " + Run.GetCurrentScanOrFrame() + "; PercentComplete= " + percentDone.ToString("0.0") + "; AccumlatedFeatures= " + Run.ResultCollection.getTotalIsotopicProfiles();
+            var logText = "Scan/Frame= " + Run.GetCurrentScanOrFrame() + "; PercentComplete= " + percentDone.ToString("0.0") + "; AccumulatedFeatures= " + Run.ResultCollection.getTotalIsotopicProfiles();
 
             BackgroundWorker?.ReportProgress((int)percentDone, userstate);
 
@@ -121,13 +117,7 @@ namespace DeconTools.Backend.Workflows
             }
         }
 
-
         #endregion
-
-
-
-
-
 
     }
 }

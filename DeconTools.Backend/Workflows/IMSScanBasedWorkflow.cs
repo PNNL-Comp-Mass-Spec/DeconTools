@@ -145,13 +145,10 @@ namespace DeconTools.Backend.Workflows
 
             var frameTotal = uimfRun.ScanSetCollection.ScanSetList.Count;
 
-
-
             var percentDone = (framenum / (double)frameTotal + (scanNum / (double)scanTotal) / frameTotal) * 100;
             userstate.PercentDone = (float)percentDone;
 
-
-            var logText = "Scan/Frame= " + Run.GetCurrentScanOrFrame() + "; PercentComplete= " + percentDone.ToString("0.0") + "; AccumlatedFeatures= " + Run.ResultCollection.getTotalIsotopicProfiles();
+            var logText = "Scan/Frame= " + Run.GetCurrentScanOrFrame() + "; PercentComplete= " + percentDone.ToString("0.0") + "; AccumulatedFeatures= " + Run.ResultCollection.getTotalIsotopicProfiles();
 
             var numScansBetweenProgress = 1;
 
@@ -166,7 +163,6 @@ namespace DeconTools.Backend.Workflows
             {
 
                 BackgroundWorker.ReportProgress((int)percentDone, userstate);
-
             }
 
         }
