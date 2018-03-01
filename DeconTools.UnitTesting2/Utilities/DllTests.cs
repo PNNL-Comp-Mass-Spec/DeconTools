@@ -11,6 +11,7 @@ namespace DeconTools.UnitTesting2.Utilities
     public class DllTests
     {
         [Test]
+        [Ignore("Obsolete")]
         public void checkDeconEngineDllsInAllProjects()
         {
             var baseFolder = @"..\..\..\..";

@@ -73,6 +73,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
 
         //}
 
+        [Obsolete("Missing file")]
         public List<double> ReadScottsAnnotationsScan5509()
         {
             var fileName = @"\\pnl\projects\MSSHARE\Gord\For_Paul\Anotated from Scott\ScottsAnnotatedScan5509.txt";
@@ -92,6 +93,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
         }
 
         [Test]
+        [Ignore("Broken")]
         public void SpeedTest1()
         {
             var fileName = FileRefs.RawDataMSFiles.OrbitrapStdFile1;
@@ -131,6 +133,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
 
 
         [Test]
+        [Ignore("Missing file")]
         public void SpeedTest_oldThrash()
         {
             var fileName = FileRefs.RawDataMSFiles.OrbitrapStdFile1;
@@ -174,6 +177,8 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
 
 
         [Test]
+        [Ignore("Missing file")]
+        [Obsolete("Missing file")]
         public void CompareToScottsData1()
         {
             var fileName = FileRefs.RawDataMSFiles.OrbitrapStdFile1;
@@ -229,10 +234,14 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
         }
 
         [Test]
+        [Ignore("Missing file")]
+        [Obsolete("Missing file")]
         public void ReadInScottsDataTest()
         {
             GetScottsData();
         }
+
+        [Obsolete("Missing file")]
         private List<double> GetScottsData()
         {
             string line;
@@ -246,7 +255,10 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             file.Close();
             return scottsData;
         }
+
         [Test]
+        [Ignore("Missing file")]
+        [Obsolete("Missing file")]
         public void TestAndComparingScottsData()
         {
             var fileName = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\Orbitrap\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.raw";
@@ -457,6 +469,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
         }
 
         [Test]
+        [Ignore("Missing files")]
         public void Stolen_CompareOldAndNewDeconvolutorsOrbitrap()
         {
             Run run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
@@ -658,18 +671,21 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
         }
 
         [Test]
+        [Ignore("Broken")]
         public void EasyDecision()
         {
-            var fileName =
-                            @"\\Protoapps\UserData\Slysz\DeconTools_TestFiles\Orbitrap\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
+            var fileName = @"\\Protoapps\UserData\Slysz\DeconTools_TestFiles\Orbitrap\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
             //Run run = RunUtilities.CreateAndLoadPeaks(fileName);
             var run = new RunFactory().CreateRun(fileName);
+            run.CurrentScanSet = new ScanSet(1000);
+
             EasyDecisionSetUp(out var potentialFeatures);
             ChargeStateDecider chargestatedecider = new ChromCorrelatingChargeDecider(run);
             var msFeature = chargestatedecider.DetermineCorrectIsotopicProfile(potentialFeatures);
 
             Assert.AreEqual(msFeature.ChargeState, 2);
         }
+
         private void EasyDecisionSetUp(out List<IsotopicProfile> potentialFeatures)
         {
 
@@ -684,12 +700,11 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             var peaklist2 = MakeMSPeakList(peak1_iso2, peak2_iso2);
             var iso2 = MakePotentialFeature(1, 481.27410112055895, 0, peaklist2);
 
-
-
             potentialFeatures = MakePotentialFeaturesList(iso1, iso2);
         }
 
         [Test]
+        [Ignore("Broken")]
         public void MediumDecision()
         {
             var fileName = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\Orbitrap\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.raw";
@@ -727,13 +742,16 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
 
             potentialFeatures = MakePotentialFeaturesList(iso1, iso2, iso3);
         }
+
         [Test]
+        [Ignore("Not implemented")]
         public void HardDecision()
         {
 
             //Assert.AreEqual(msFeature.ChargeState, 2);
 
         }
+
         [Test]
         public void testPeakGeneration()
         {
@@ -749,7 +767,8 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
 
 
             var expectedPeaksFile = Path.Combine(run.DataSetPath, run.DatasetName + "_peaks.txt");
-            if (File.Exists(expectedPeaksFile)) File.Delete(expectedPeaksFile);
+            if (File.Exists(expectedPeaksFile))
+                File.Delete(expectedPeaksFile);
 
 
             var workflow = new PeakDetectAndExportWorkflow(run, parameters);
@@ -760,6 +779,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             Assert.IsTrue(fileinfo.Length > 1000000);
 
         }
+
         [Test]
         public void GetPeakChromatogram_IQStyle_Test1()
         {
@@ -903,14 +923,17 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
         {
             return msPeaks.ToList();
         }
+
         private List<IsotopicProfile> MakePotentialFeaturesList(params IsotopicProfile[] isotopicProfiles)
         {
             return isotopicProfiles.ToList(); //cool...
         }
+
         private IsotopicProfile MakePotentialFeature(int chargeState, double monoPeakMZ, int monoIsotpoicPeakIndex, params MSPeak[] peakList)
         {
             return MakePotentialFeature(chargeState, monoPeakMZ, monoIsotpoicPeakIndex, peakList.ToList());
         }
+
         private IsotopicProfile MakePotentialFeature(int chargeState, double monoPeakMZ, int monoIsotpoicPeakIndex, List<MSPeak> peakList)
         {
             var isopo = new IsotopicProfile

@@ -20,21 +20,20 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
             }
 
             var run = TestDataCreationUtilities.CreatePeakDataFromStandardOrbitrapData();
-            NUnit.Framework.Assume.That(5608==run.ResultCollection.MSPeakResultList.Count);
+            Assume.That(6115 == run.ResultCollection.MSPeakResultList.Count);
 
             var peakExporter = new PeakListTextExporter(run.MSFileType, outputFile);
             peakExporter.WriteOutPeaks(run.ResultCollection.MSPeakResultList);
 
-            var fi=new FileInfo(outputFile);
+            var fi = new FileInfo(outputFile);
 
-            Assert.AreEqual(true, fi.Exists);
+            Assert.IsTrue(fi.Exists);
             Assert.AreNotEqual(0, fi.Length);
-            
-            
 
         }
 
         [Test]
+        [Ignore("Not implemented")]
         public void ExportUIMFPeakDataToTextFileTest1()
         {
             //TODO:  finish this
@@ -42,14 +41,16 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
 
 
         [Test]
+        [Ignore("Not implemented")]
         public void ExportToSQLiteFileTest1()
         {
             //TODO: finish this
-        
+
         }
 
 
         [Test]
+        [Ignore("Not implemented")]
         public void ExportUIMFPeakDataToSQLiteFileTest1()
         {
             //TODO: finish this

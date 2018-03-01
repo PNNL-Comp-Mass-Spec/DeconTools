@@ -18,10 +18,11 @@ namespace DeconTools.UnitTesting2
         {
             Run run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
-            run.ScanSetCollection .Create(run, 6000, 6050, 1, 1, false);
+            run.ScanSetCollection.Create(run, 6000, 6050, 1, 1, false);
 
             Task msgen = new GenericMSGenerator();
-            var peakDetector = new DeconToolsPeakDetectorV2 {
+            var peakDetector = new DeconToolsPeakDetectorV2
+            {
                 PeaksAreStored = true
             };
 
@@ -53,7 +54,7 @@ namespace DeconTools.UnitTesting2
             Run run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
             Console.WriteLine("Opening " + run.Filename);
 
-            run.ScanSetCollection.Create(run, 6000, 6020, 1, 1, false);
+            run.ScanSetCollection.Create(run, 6000, 6005, 1, 1, false);
 
             Task msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
             Task peakDetector = new DeconToolsPeakDetectorV2();
@@ -82,10 +83,10 @@ namespace DeconTools.UnitTesting2
         {
             var run = new UIMFRun(FileRefs.RawDataMSFiles.UIMFStdFile1)
             {
-                ResultCollection = {ResultType = Globals.ResultType.UIMF_TRADITIONAL_RESULT}
+                ResultCollection = { ResultType = Globals.ResultType.UIMF_TRADITIONAL_RESULT }
             };
 
-            run.ScanSetCollection .Create(run, 500, 501, 3, 1);
+            run.ScanSetCollection.Create(run, 500, 501, 3, 1);
 
             run.IMSScanSetCollection.Create(run, 250, 270, 9, 1);
 

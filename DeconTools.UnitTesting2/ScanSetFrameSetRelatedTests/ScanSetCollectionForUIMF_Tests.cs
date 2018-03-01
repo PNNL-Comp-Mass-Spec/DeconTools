@@ -249,7 +249,7 @@ namespace DeconTools.UnitTesting2.ScanSetFrameSetRelatedTests
             Assert.IsNotNull(run.IMSScanSetCollection);
 
             //tests the lowest ims_scans
-            Assert.AreEqual(360, run.IMSScanSetCollection.ScanSetList.Count);
+            Assert.AreEqual(361, run.IMSScanSetCollection.ScanSetList.Count);
             Assert.AreEqual(4, run.IMSScanSetCollection.ScanSetList[0].IndexValues.Count);
             Assert.AreEqual(0, run.IMSScanSetCollection.ScanSetList[0].IndexValues[0]);
             Assert.AreEqual(3, run.IMSScanSetCollection.ScanSetList[0].IndexValues[3]);

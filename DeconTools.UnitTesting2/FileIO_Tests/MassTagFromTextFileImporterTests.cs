@@ -6,6 +6,7 @@ using NUnit.Framework;
 namespace DeconTools.UnitTesting2.FileIO_Tests
 {
     [TestFixture]
+    [Ignore("Missing files")]
     public class MassTagFromTextFileImporterTests
     {
         readonly string massTagTestFile1 = @"..\..\..\TestFiles\FileIOTests\top40MassTags.txt";

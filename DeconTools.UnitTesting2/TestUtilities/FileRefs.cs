@@ -6,7 +6,7 @@ namespace DeconTools.UnitTesting2
     {
         public static string RawDataBasePath = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles";
         public static string TestFileBasePath = @"..\..\..\..\TestFiles";
-        public static string OutputFolderPath = @"..\..\..\TestFiles\OutputtedData";
+        public static string OutputFolderPath = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\Output";
 
         public class RawDataMSFiles
         {

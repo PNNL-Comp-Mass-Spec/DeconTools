@@ -26,7 +26,7 @@ namespace DeconTools.UnitTesting2.Algorithm_tests
                 #Resolution: 10000 resolving power
                 #Threshold (%): 1.0000
                 #Isotope List - 5 Mass(es)
-                # 
+                #
                 #Isotope Mass   Relative Intensity
                    924.39202        100.0000
                    925.39495         53.0190
@@ -39,7 +39,7 @@ namespace DeconTools.UnitTesting2.Algorithm_tests
             /*
             *  Output Data from 'CalcDeut' testing from Dave Schriemer's data (see link above)
             *  File: MS924.3_Z1_10.0-10.2_A344-351_dist.xml
-            * 
+            *
             *    <DeutDist startdeut='-0.0' chisq='5.80293903626e-05' content_type='numlist' distsum='1.00331024913' entries='5'>
                      0.832945525577
                      0.0747772118716
@@ -47,8 +47,8 @@ namespace DeconTools.UnitTesting2.Algorithm_tests
                      0.0704222225599
                      -0.00534728755986
                  </DeutDist>
-            * 
-            * 
+            *
+            *
             */
             var theorIntensities = new List<double>(new[] {1, 0.530190, 0.206161, 0.059286, 0.013694});
             var obsIntensities = new List<double>(new[] { 118.8932, 73.8074, 34.413, 14.4563, 6.3169 });
@@ -56,12 +56,12 @@ namespace DeconTools.UnitTesting2.Algorithm_tests
             var labelDistCalc = new LabelingDistributionCalculator();
 
             var intensityThreshold = 0.01;
-            labelDistCalc.CalculateLabelingDistribution(theorIntensities, obsIntensities, intensityThreshold, intensityThreshold, out var solvedXVals, out var solvedYvals, 
-                                                        truncateTheorBasedOnRelIntensity: false, 
-                                                        truncateObservedBasedOnRelIntensity: false, 
-                                                        leftPadding: 0, 
-                                                        rightPadding: 2, 
-                                                        numPeaksForAbsoluteTheorList: 3, 
+            labelDistCalc.CalculateLabelingDistribution(theorIntensities, obsIntensities, intensityThreshold, intensityThreshold, out var solvedXVals, out var solvedYvals,
+                                                        truncateTheorBasedOnRelIntensity: false,
+                                                        truncateObservedBasedOnRelIntensity: false,
+                                                        leftPadding: 0,
+                                                        rightPadding: 2,
+                                                        numPeaksForAbsoluteTheorList: 3,
                                                         numPeaksForAbsoluteObsList: 5);
 
             Assert.AreEqual(0.8329455, Math.Round(solvedYvals[0]), 7);
@@ -69,7 +69,7 @@ namespace DeconTools.UnitTesting2.Algorithm_tests
             Assert.AreEqual(0.0305126, Math.Round(solvedYvals[2]), 7);
             Assert.AreEqual(0.0704222, Math.Round(solvedYvals[3]), 7);
             Assert.AreEqual(-0.0053473, Math.Round(solvedYvals[4]), 7);
-         
+
             var xydata = new XYData();
             xydata.Xvalues = solvedXVals;
             xydata.Yvalues = solvedYvals;
@@ -128,10 +128,10 @@ namespace DeconTools.UnitTesting2.Algorithm_tests
 
 
             /*
-             * 
-             * Data for observed profile:  
+             *
+             * Data for observed profile:
              * LCMSFeature 8517 from Yellow_C13_070_23Mar10_Griffin_10-01-28
-             *              * 
+             *              *
              * peak	mz	relIntens	width	sn
                 0	770.418569278349	1	0.008119391	285.256
                 1	770.919748892834	0.8335001	0.008161238	884.9909
@@ -148,7 +148,7 @@ namespace DeconTools.UnitTesting2.Algorithm_tests
                 12	776.438361528879	0.001711554	0.00877683	44.79652
                 13	776.940072709136	0.0007663054	0.007601836	17.12788
                 14	777.441663634739	0.0004845143	0.007320933	100
-             * 
+             *
              */
 
 

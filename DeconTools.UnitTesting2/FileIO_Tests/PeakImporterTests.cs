@@ -15,7 +15,7 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
             peakImporter.ImportPeaks(mspeaks);
 
             Assert.AreEqual(105540, mspeaks.Count);
-            
+
         }
 
         [Test]

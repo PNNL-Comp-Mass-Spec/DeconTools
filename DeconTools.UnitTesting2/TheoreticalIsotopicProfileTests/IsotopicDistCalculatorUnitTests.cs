@@ -27,7 +27,7 @@ namespace DeconTools.UnitTesting2.TheoreticalIsotopicProfileTests
 
             var isoCalc = IsotopicDistributionCalculator.Instance;
             var iso=  isoCalc.GetIsotopePattern(empFormula);
-            
+
 
             TestUtilities.DisplayIsotopicProfileData(iso);
 
@@ -108,7 +108,7 @@ namespace DeconTools.UnitTesting2.TheoreticalIsotopicProfileTests
 
 
             var iso1 = isotopicDistributionCalculator.GetIsotopePattern(formula);
-            
+
             PeakUtilities.TrimIsotopicProfile(iso1, 0.001);
 
             TestUtilities.DisplayIsotopicProfileData(iso1);
@@ -125,12 +125,12 @@ namespace DeconTools.UnitTesting2.TheoreticalIsotopicProfileTests
 
             Console.WriteLine();
             TestUtilities.DisplayIsotopicProfileData(iso2);
-        
+
 
             for (var i = 0; i < iso1.Peaklist.Count; i++)
             {
                 Assert.AreEqual((decimal)Math.Round(iso1.Peaklist[i].Height, 4), (decimal)Math.Round(iso3.Peaklist[i].Height, 4));
-                
+
             }
 
             Console.WriteLine();
@@ -353,7 +353,7 @@ namespace DeconTools.UnitTesting2.TheoreticalIsotopicProfileTests
             distcreator.CreateDistribution(monoMass, chargestate, resolution);
 
             distcreator.getIsotopicProfile();
-            Assert.AreEqual(8, distcreator.IsotopicProfile.GetNumOfIsotopesInProfile());
+            Assert.AreEqual(5, distcreator.IsotopicProfile.GetNumOfIsotopesInProfile());
 
             var sb = new StringBuilder();
             TestUtilities.IsotopicProfileDataToStringBuilder(sb, distcreator.IsotopicProfile);

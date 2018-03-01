@@ -27,9 +27,8 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
 
             parameters.ThrashParameters.MinIntensityForScore = 1;
             parameters.ThrashParameters.MinMSFeatureToBackgroundRatio = 1;
-           
 
-            var run = new RunFactory().CreateRun(testFile1);
+             var run = new RunFactory().CreateRun(testFile1);
 
             var expectedResultsFile1 = Path.Combine(run.DataSetPath, run.DatasetName + ".mgf");
             var expectedResultsFile2 = Path.Combine(run.DataSetPath, run.DatasetName + "_DeconMSn_log.txt");

@@ -19,7 +19,6 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
         {
             var exportedFile = exportedMSScanInfoToTextFileFromOrbitrapFile1;
 
-
             if (File.Exists(exportedFile))
             {
                 File.Delete(exportedFile);
@@ -34,7 +33,7 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
             Assert.AreEqual(true, File.Exists(exportedFile));
 
             var fi = new FileInfo(exportedFile);
-            Assert.IsTrue(fi.Length>200);
+            Assert.IsTrue(fi.Length > 200);
 
             Console.WriteLine("Created " + fi.FullName);
 
