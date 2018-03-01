@@ -50,7 +50,7 @@ namespace DeconTools.Backend.Core
 
             if (sumAllScans)
             {
-                //find first MS1 scan
+                // Find first MS1 scan
 
                 var firstMS1Scan = -1;
                 for (var i = minScan; i <= maxScan; i++)
@@ -63,7 +63,7 @@ namespace DeconTools.Backend.Core
                     }
                 }
 
-                if (firstMS1Scan == -1)   //never found a single MS1 scan in the whole dataset
+                if (firstMS1Scan == -1)   // Never found a single MS1 scan in the whole dataset
                 {
 
                 }
@@ -109,8 +109,6 @@ namespace DeconTools.Backend.Core
         {
             return run.GetMaxPossibleLCScanNum();
         }
-
-
 
         //private static ScanSetCollection CreateScanSetCollectionMS1OnlyData(Run run, int scanStart, int scanStop, int numScansSummed, int scanIncrement)
         //{
@@ -218,7 +216,7 @@ namespace DeconTools.Backend.Core
 
             var haveProcessedCurrentMsMsSet = false;
 
-            for (var i = scanStart; i <= scanStop; i+= scanIncrement)
+            for (var i = scanStart; i <= scanStop; i += scanIncrement)
             {
                 var currentMSLevel = run.GetMSLevel(i);
 
@@ -242,14 +240,14 @@ namespace DeconTools.Backend.Core
                 }
                 else
                 {
-                    //NOTE: we wish to sum non-adjacent UIMF MS/MS frames. I.e. Frame 2 and 7 were both fully fragmented using the same voltage. We wish to sum these together
-                    //NOTE: we may want to abstract this section out somehow.
+                    // NOTE: we wish to sum non-adjacent UIMF MS/MS frames. I.e. Frame 2 and 7 were both fully fragmented using the same voltage. We wish to sum these together
+                    // NOTE: we may want to abstract this section out somehow.
                     if (run is UIMFRun uimfRun)
                     {
                         // TODO: Use a parameter to see if we want to sum all collision energies together or not. Currently hard-coded as default to true
                         if (sumConsecutiveMsMs)
                         {
-                            if(!haveProcessedCurrentMsMsSet)
+                            if (!haveProcessedCurrentMsMsSet)
                             {
                                 var framesToSum = new List<int>();
 
@@ -287,7 +285,7 @@ namespace DeconTools.Backend.Core
                             var numLowerFramesToGet = (numScansSummed - 1) / 2;
                             var numUpperFramesToGet = (numScansSummed - 1) / 2;
 
-                            //get lower frames
+                            // Get lower frames
                             var framesCounter = 0;
                             while (lowerIndex >= 0 && numLowerFramesToGet > framesCounter)
                             {
@@ -296,10 +294,10 @@ namespace DeconTools.Backend.Core
                                 framesCounter++;
                             }
 
-                            //get middle frame
+                            // Get middle frame
                             framesToSum.Add(i);
 
-                            //get upper frames
+                            // Get upper frames
                             framesCounter = 0;
                             var maxPossibleFrameIndex = uimfrun.MS2Frames.Count - 1;
                             while (upperIndex <= maxPossibleFrameIndex && numUpperFramesToGet > framesCounter)
@@ -366,8 +364,6 @@ namespace DeconTools.Backend.Core
             return scans;
 
         }
-
-
 
         public ScanSet GetScanSet(int primaryNum)
         {

@@ -234,7 +234,6 @@ namespace DeconTools.Backend.Workflows
 
         }
 
-
         protected virtual void InitializeProcessingTasks()
         {
             MSGenerator = MSGeneratorFactory.CreateMSGenerator(Run.MSFileType);
