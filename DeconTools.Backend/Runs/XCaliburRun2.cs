@@ -134,66 +134,29 @@ namespace DeconTools.Backend.Runs
 
         public override int GetMSLevelFromRawData(int scanNum)
         {
-            //Thermo's API doesn't seem to expose an easy method for getting the MS Level
-            //so we have to get it from the 'Filter' or scan description string
+            // Parse the scan's filter string to determine the MS Level (typically MS1, MS2, or MS3)
 
-            //example of MS1:
-            //FTMS + p NSI Full ms [400.00-2000.00]
+            // Example of MS1:
+            // FTMS + p NSI Full ms [400.00-2000.00]
 
-            //example of MS2:
-            //ITMS + c NSI d Full ms2 408.25@cid35.00 [100.00-420.00]
+            // Example of MS2:
+            // ITMS + c NSI d Full ms2 408.25@cid35.00 [100.00-420.00]
 
             string filter = null;
             _msfileReader.GetFilterForScanNum(scanNum, ref filter);
 
-            int msLevel;
-
-            if (filter == null)
+            if (string.IsNullOrWhiteSpace(filter))
             {
                 return 1;
             }
 
-            var indexOfMSReference = filter.IndexOf("ms", StringComparison.OrdinalIgnoreCase);
-            if (indexOfMSReference == -1)
+            if (XRawFileIO.ExtractMSLevel(filter, out var msLevel, out var _))
             {
-                msLevel = 1;
-            }
-            else if (indexOfMSReference < filter.Length - 2)  // ensure we aren't at the end of the filter string
-            {
-                var mslevelFromFilter = filter[indexOfMSReference + 2];
-
-                switch (mslevelFromFilter)
-                {
-                    case ' ':
-                        msLevel = 1;
-                        break;
-                    case '1':
-                        msLevel = 1;
-                        break;
-                    case '2':
-                        msLevel = 2;
-                        break;
-                    case '3':
-                        msLevel = 3;
-                        break;
-                    case '4':
-                        msLevel = 4;
-                        break;
-                    case '5':
-                        msLevel = 5;
-                        break;
-
-                    default:
-                        msLevel = 1;
-                        break;
-                }
-            }
-            else
-            {
-                msLevel = 1;    //  the 'ms' was found right at the end of the scan description. Probably never happens.
+                return msLevel;
             }
 
-            return msLevel;
+            return 1;
+
         }
 
         public double GetCollisionEnergyInfoFromInstrumentInfo(int scanNum)
