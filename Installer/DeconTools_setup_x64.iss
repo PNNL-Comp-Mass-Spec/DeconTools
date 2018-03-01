@@ -24,16 +24,15 @@ Source: DeconTools.Backend\bin\x64\Release\x86\SQLite.Interop.dll               
 Source: DeconTools.Backend\bin\x64\Release\System.Data.SQLite.dll                                                                                 ; DestDir: {app}
 Source: DeconTools.Backend\bin\x64\Release\UIMFLibrary.dll                                                                                        ; DestDir: {app}
 Source: DeconTools.Backend\bin\x64\Release\PRISM.dll                                                                                              ; DestDir: {app}
-Source: DeconTools.Backend\bin\x64\Release\log4net.dll                                                                                                                       ; DestDir: {app}
 
 Source: Library\alglibnet2.dll                                                                                                                    ; DestDir: {app}
 Source: Library\BrukerDataReader.dll                                                                                                              ; DestDir: {app}
-;Source: Library\DeconEngineV2.dll                                                                                                                 ; DestDir: {app}
+
 Source: Library\GWSFileUtilities.dll                                                                                                              ; DestDir: {app}
-Source: Library\x64\Interop.EDAL.SxS.manifest                                                                                                     ; DestDir: {app}
+Source: Library\DLLsToBeCopied_x64\Interop.EDAL.SxS.manifest                                                                                                     ; DestDir: {app}
 Source: Library\DLLsToBeCopied\Interop.HSREADWRITELib.SxS.manifest                                                                                ; DestDir: {app}
 Source: Library\Mapack.dll                                                                                                                        ; DestDir: {app}
-Source: Library\MassLynxRaw.dll                                                                                                                   ; DestDir: {app}
+Source: Library\DLLsToBeCopied_x64\MassLynxRaw.dll                                                                                                                   ; DestDir: {app}
 Source: Library\MSDBLibrary.dll                                                                                                                   ; DestDir: {app}
 Source: Library\DLLsToBeCopied\MSFileReader.XRawfile2.SxS.manifest                                                                                ; DestDir: {app}
 Source: Library\x64\MultiAlignEngine.dll                                                                                                          ; DestDir: {app}
