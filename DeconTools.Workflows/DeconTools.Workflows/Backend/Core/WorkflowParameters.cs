@@ -121,7 +121,7 @@ namespace DeconTools.Workflows.Backend.Core
             Check.Require(File.Exists(xmlFilepath), "Workflow parameter file could not be loaded. File not found: " + xmlFilepath);
             var doc = XDocument.Load(xmlFilepath);
             var xElement = doc.Element("WorkflowParameters");
-            
+
             if (xElement == null)
             {
                 throw new Exception("WorkflowParameters element not found in " + xmlFilepath);

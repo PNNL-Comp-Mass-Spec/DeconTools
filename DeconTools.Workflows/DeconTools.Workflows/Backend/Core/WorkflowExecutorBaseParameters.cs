@@ -29,10 +29,8 @@ namespace DeconTools.Workflows.Backend.Core
             MinMzForDefiningChargeStateTargets = 400;
             MaxMzForDefiningChargeStateTargets = 1500;
             MaxNumberOfChargeStateTargetsToCreate = 100;
-
-
-
         }
+
         #endregion
 
         #region Properties

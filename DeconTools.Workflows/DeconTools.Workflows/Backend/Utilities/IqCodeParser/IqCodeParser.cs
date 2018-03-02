@@ -13,7 +13,7 @@ namespace DeconTools.Workflows.Backend.Utilities.IqCodeParser
     {
 
         #region Constructors
-        
+
         public IqCodeParser()
         {
             PeptideUtils = new PeptideUtils();
@@ -83,7 +83,7 @@ namespace DeconTools.Workflows.Backend.Utilities.IqCodeParser
             return ptmMass;
         }
 
-        //Extracts the unmodified sequence from the original input sequence. 
+        //Extracts the unmodified sequence from the original input sequence.
         //Uses the regex SequenceExpression to parse for the sequence in a specified format.
         public string SequenceToEmpiricalFormula(string code, bool cysteinesAreModified = false)
         {
@@ -102,7 +102,7 @@ namespace DeconTools.Workflows.Backend.Utilities.IqCodeParser
                 sequence += Regex.Match(s, "^[A-Z]*[A-Z]$").Value;
             }
 
-            
+
             return PeptideUtils.GetEmpiricalFormulaForPeptideSequence(sequence, true, cysteinesAreModified);
         }
 

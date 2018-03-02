@@ -137,7 +137,6 @@ namespace IQ.Console
                                  : Globals.TargetType.DatabaseTarget
             };
 
-
             if (!string.IsNullOrEmpty(options.TemporaryWorkingFolder))
             {
                 executorParameters.CopyRawFileLocal = true;
