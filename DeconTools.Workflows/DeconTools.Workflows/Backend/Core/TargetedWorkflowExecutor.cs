@@ -527,10 +527,8 @@ namespace DeconTools.Workflows.Backend.Core
         public void ProcessDataset()
         {
 
-
             //apply mass calibration and NET alignment from .txt files, if they exist
             PerformAlignment();
-
 
             var runIsNotAligned = (!Run.MassIsAligned && !Run.NETIsAligned);     //if one of these two is aligned, the run is considered to be aligned
 
@@ -555,9 +553,6 @@ namespace DeconTools.Workflows.Backend.Core
 
                 PerformAlignment();     //now perform alignment, based on alignment .txt files that were outputted from the targetedAlignmentWorkflow
 
-
-
-
                 TargetedAlignmentWorkflow.SaveFeaturesToTextfile(_alignmentFolder);
                 if (Run.AlignmentInfo != null)
                 {
@@ -573,7 +568,6 @@ namespace DeconTools.Workflows.Backend.Core
 
             TargetedWorkflow.Run = Run;
 
-
             ResultRepository.Results.Clear();
 
             var mtCounter = 0;
@@ -588,7 +582,6 @@ namespace DeconTools.Workflows.Backend.Core
 #if DEBUG
                 var stopwatch = new System.Diagnostics.Stopwatch();
                 stopwatch.Start();
-
 #endif
 
 
@@ -609,8 +602,8 @@ namespace DeconTools.Workflows.Backend.Core
 
 #if DEBUG
                 stopwatch.Stop();
-                Console.WriteLine(massTag.ID + "\tprocessing time = " + stopwatch.ElapsedMilliseconds);
-
+                // Uncomment to display processing time stats
+                // Console.WriteLine(massTag.ID + "\tprocessing time = " + stopwatch.ElapsedMilliseconds);
 #endif
 
                 var progressString = "Percent complete = " + ((double)mtCounter / totalTargets * 100.0).ToString("0.0") + "\tTarget " + mtCounter + " of " + totalTargets;
