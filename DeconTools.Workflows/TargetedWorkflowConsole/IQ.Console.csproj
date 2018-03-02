@@ -93,8 +93,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Library\MSDBLibrary.dll</HintPath>
     </Reference>
-    <Reference Include="MultiAlignEngine">
-      <HintPath>..\Library\x64\MultiAlignEngine.dll</HintPath>
+    <Reference Include="MultiAlignEngine, Version=1.0.5983.25970, Culture=neutral, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Library\MultiAlignEngine.dll</HintPath>
     </Reference>
     <Reference Include="PNNLOmics">
       <HintPath>..\Library\PNNLOmics.dll</HintPath>

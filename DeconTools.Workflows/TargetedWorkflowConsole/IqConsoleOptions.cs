@@ -5,7 +5,7 @@ namespace IQ.Console
 {
     public class IqConsoleOptions
     {
-        private const string PROGRAM_DATE = "February 27, 2018";
+        private const string PROGRAM_DATE = "March 2, 2018";
 
         public IqConsoleOptions()
         {
