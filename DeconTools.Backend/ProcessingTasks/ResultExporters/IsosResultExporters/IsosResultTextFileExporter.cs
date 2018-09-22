@@ -58,7 +58,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
             catch (Exception ex)
             {
                 Logger.Instance.AddEntry(string.Format("{0} failed. Details: " + ex.Message +
-                    "; STACKTRACE = " + PRISM.clsStackTraceFormatter.GetExceptionStackTraceMultiLine(ex), Name), true);
+                    "; STACKTRACE = " + PRISM.StackTraceFormatter.GetExceptionStackTraceMultiLine(ex), Name), true);
                 throw;
             }
 

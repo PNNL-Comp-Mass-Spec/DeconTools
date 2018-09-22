@@ -152,8 +152,8 @@ namespace DeconTools.Workflows.Backend.Core
             {
                 IqLogger.LogMessage("Alignment not performed - No suitable target file found for use in alignment.");
                 IqLogger.LogDebug("Considered file paths\n" +
-                                  "  " + PRISM.clsPathUtils.CompactPathString(expectedAlignmentFilename, 130) + " and\n" +
-                                  "  " + PRISM.clsPathUtils.CompactPathString(candidateTargetsFilePath, 130));
+                                  "  " + PRISM.PathUtils.CompactPathString(expectedAlignmentFilename, 130) + " and\n" +
+                                  "  " + PRISM.PathUtils.CompactPathString(candidateTargetsFilePath, 130));
                 return;
             }
 

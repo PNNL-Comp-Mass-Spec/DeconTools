@@ -75,7 +75,7 @@ namespace DeconTools.Backend.Workflows
             sb.Append("; errorObject details: ");
             sb.Append(ex.Message);
             sb.Append("; ");
-            sb.Append(PRISM.clsStackTraceFormatter.GetExceptionStackTraceMultiLine(ex));
+            sb.Append(PRISM.StackTraceFormatter.GetExceptionStackTraceMultiLine(ex));
 
             return sb.ToString();
 

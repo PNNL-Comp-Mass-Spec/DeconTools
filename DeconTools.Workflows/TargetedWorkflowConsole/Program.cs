@@ -370,7 +370,7 @@ namespace IQ.Console
             {
                 string datasetNameToShow;
                 if (datasetNameOrPath.Contains(Path.PathSeparator.ToString()))
-                    datasetNameToShow = clsPathUtils.CompactPathString(datasetNameOrPath, 60);
+                    datasetNameToShow = PathUtils.CompactPathString(datasetNameOrPath, 60);
                 else
                     datasetNameToShow = datasetNameOrPath;
 

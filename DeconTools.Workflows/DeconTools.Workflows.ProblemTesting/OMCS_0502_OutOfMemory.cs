@@ -20,18 +20,18 @@ namespace DeconTools.Workflows.ProblemTesting
             string copyToFolder = @"D:\Data\TopDown";
 
             string outputFolder = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\TargetedWorkflowTesting\Output";
-            
+
             var executorParameters = new TopDownTargetedWorkflowExecutorParameters();
             executorParameters.CopyRawFileLocal = true;
             executorParameters.FolderPathForCopiedRawDataset = copyToFolder;
-           
+
             executorParameters.TargetsFilePath =
                 @"\\proto-7\VOrbiETD04\2012_1\CPTAC_Peptidome_Test2_P6-5_13Jan12_Polaroid_11-10-14\MSA201202231748_Auto796393\CPTAC_Peptidome_Test2_P6-5_13Jan12_Polaroid_11-10-14_MSAlign_ResultTable.txt";
 
             const string testDatasetPath =
                 @"\\proto-7\VOrbiETD04\2012_1\CPTAC_Peptidome_Test2_P6-5_13Jan12_Polaroid_11-10-14\CPTAC_Peptidome_Test2_P6-5_13Jan12_Polaroid_11-10-14.raw";
 
-            
+
 
             var executor = new TopDownTargetedWorkflowExecutor(executorParameters, testDatasetPath);
             executor.Execute();
@@ -50,12 +50,12 @@ namespace DeconTools.Workflows.ProblemTesting
             executorParameters.CopyRawFileLocal = true;
             executorParameters.FolderPathForCopiedRawDataset = copyToFolder;
             executorParameters.OutputFolderBase = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\TargetedWorkflowTesting\Output";
-           
+
             executorParameters.TargetType = Globals.TargetType.LcmsFeature;
             executorParameters.WorkflowParameterFile =
                 @"\\proto-7\VOrbiETD01\2012_1\CPTAC_Peptidome_Test1_P1_Poroshell_03Feb12_Frodo_Poroshell300SB\MSA201202231748_Auto796395\MSAlign_Quant_Workflow_2012-07-25.xml";
-            
-            
+
+
             executorParameters.TargetsFilePath =
                 @"\\proto-7\VOrbiETD01\2012_1\CPTAC_Peptidome_Test1_P1_Poroshell_03Feb12_Frodo_Poroshell300SB\MSA201202231748_Auto796395\CPTAC_Peptidome_Test1_P1_Poroshell_03Feb12_Frodo_Poroshell300SB_MSAlign_ResultTable.txt";
 
@@ -85,7 +85,7 @@ namespace DeconTools.Workflows.ProblemTesting
             executorParameters.OutputFolderBase = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\TargetedWorkflowTesting\Output";
 
             executorParameters.TargetType = Globals.TargetType.LcmsFeature;
-           
+
 
             string testDatasetPath = @"\\protoapps\UserData\Slysz\Data\O16O18\Ernesto\PSI_LRW_18O_02A_18Jun12_Falcon_12-03-34.RAW";
             testDatasetPath = @"D:\Data\O16O18\Ernesto\PSI_LRW_1to1_03A_6Jul12_Falcon_12-06-04.raw";

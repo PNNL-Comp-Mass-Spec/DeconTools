@@ -58,7 +58,7 @@ namespace DeconTools.Workflows.Backend.FileIO
             }
             catch (Exception ex)
             {
-                throw new IOException("There was a problem importing from file " + PRISM.clsPathUtils.CompactPathString(Filename, 60) + ": " + ex.Message);
+                throw new IOException("There was a problem importing from file " + PRISM.PathUtils.CompactPathString(Filename, 60) + ": " + ex.Message);
             }
 
             //Sequence is the key and processed line is the value
@@ -69,7 +69,7 @@ namespace DeconTools.Workflows.Backend.FileIO
                 if (sr.EndOfStream)
                 {
                     sr.Close();
-                    throw new InvalidDataException("There is no data in file " + PRISM.clsPathUtils.CompactPathString(Filename, 60));
+                    throw new InvalidDataException("There is no data in file " + PRISM.PathUtils.CompactPathString(Filename, 60));
 
                 }
 
@@ -87,7 +87,7 @@ namespace DeconTools.Workflows.Backend.FileIO
                     //ensure that processed line is the same size as the header line
                     if (processedData.Count != m_columnHeaders.Count)
                     {
-                        throw new InvalidDataException("In File: " + PRISM.clsPathUtils.CompactPathString(Filename, 60) +
+                        throw new InvalidDataException("In File: " + PRISM.PathUtils.CompactPathString(Filename, 60) +
                                                        "; Data in row # " + lineCounter + " is NOT valid - \n" +
                                                        "The number of columns does not match that of the header line");
                     }

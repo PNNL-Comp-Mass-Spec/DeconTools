@@ -138,7 +138,7 @@ namespace DeconTools.UnitTesting2.DeconEngineClasses
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                Console.WriteLine(PRISM.clsStackTraceFormatter.GetExceptionStackTraceMultiLine(ex));
+                Console.WriteLine(PRISM.StackTraceFormatter.GetExceptionStackTraceMultiLine(ex));
             }
         }
 

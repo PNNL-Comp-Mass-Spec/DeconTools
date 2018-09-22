@@ -7,7 +7,7 @@ namespace DeconConsole
     public class Program
     {
 
-        public const string PROGRAM_DATE = "March 1, 2018";
+        public const string PROGRAM_DATE = "September 21, 2018";
 
         public static int Main(string[] args)
         {
@@ -78,7 +78,7 @@ namespace DeconConsole
                 Console.WriteLine("-------------------------------------------- ERROR! -------------------------------------------------");
 
                 Console.WriteLine(ex.Message);
-                Console.WriteLine(PRISM.clsStackTraceFormatter.GetExceptionStackTraceMultiLine(ex));
+                Console.WriteLine(PRISM.StackTraceFormatter.GetExceptionStackTraceMultiLine(ex));
 
                 Console.WriteLine();
                 Console.WriteLine();
