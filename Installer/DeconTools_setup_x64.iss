@@ -48,7 +48,7 @@ Source: "Library\Agilent_D\MassHunter DataAccess Component MHDAC B.06.00\MassHun
 Source: "Library\Agilent_D\MassHunter DataAccess Component MHDAC B.06.00\MassHunterDataAccessAssembly_64bit\bin\BaseTof.dll"                      ; DestDir: {app}
 Source: "Library\Agilent_D\MassHunter DataAccess Component MHDAC B.06.00\MassHunterDataAccessAssembly_64bit\bin\MassSpecDataReader.dll"           ; DestDir: {app}
 
-Source: Readme.txt                                                                                                                                ; DestDir: {app}
+Source: Readme.md                                                                                                                                 ; DestDir: {app}
 Source: RevisionHistory.txt                                                                                                                       ; DestDir: {app}
 Source: Parameter_Files\SampleParameterFile.xml                                                                                                   ; DestDir: {app}
 Source: Parameter_Files\SampleParameterFileIMS.xml                                                                                                ; DestDir: {app}
@@ -62,7 +62,7 @@ Name: desktopicon; Description: {cm:CreateDesktopIcon}; GroupDescription: {cm:Ad
 
 [Icons]
 Name: {group}\DeconToolsAutoProcessor; Filename: {app}\DeconToolsAutoProcessV1.exe; Comment: Decon Tools Auto Processor
-Name: {group}\ReadMe; Filename: {app}\Readme.txt; Comment: DeconTools ReadMe
+Name: {group}\ReadMe; Filename: {app}\Readme.md; Comment: DeconTools ReadMe
 Name: {group}\SampleParameterFile; Filename: {app}\SampleParameterFile.xml; Comment: Sample Parameter File
 Name: {group}\SampleParameterFileIMS; Filename: {app}\SampleParameterFileIMS.xml; Comment: Sample IMS Parameter File
 Name: {group}\Uninstall DeconTools; Filename: {uninstallexe}
