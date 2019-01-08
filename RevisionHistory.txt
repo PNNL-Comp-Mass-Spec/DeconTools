@@ -1,5 +1,8 @@
 DeconTools DeconConsole / AutoProcessor Revision History
 
+Version 1.1.6946; January 7, 2019 mem
+	- New version of ThermoRawFileReader.dll that uses ThermoFisher.CommonCore.RawFileReader.dll
+
 Version 1.1.6633; February 28, 2018 mem
 	- Use FileLogger in PRISM.dll instead of log4net
 	- Update TargetedWorkflowConsole to use CommandLineParser in Prism.dll

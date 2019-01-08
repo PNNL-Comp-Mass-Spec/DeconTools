@@ -12,19 +12,12 @@ Preferably use the 64-bit installer: [DeconTools_Installer_x64.exe](https://gith
 
 ### Requirements
 
-You need either Xcalibur or MSFileReader to process Thermo .raw files.  Obtain MS File Reader from Thermo using these steps:
-* Create an account at https://thermo.flexnetoperations.com/control/thmo/login
-* Login and choose `Utility Software`
-* Click `MS File Reader 3.1 SP2` then download `MSFileReader_x64.exe`
-  * SP4 and SP3 are also available and may work, but we have had some systems where SP2 works while SP4 and SP3 do not work
-* Run the installer and install both the 32-bit and 64-bit versions.
-
 DeconTools can read the following file formats.  However, some of the file formats require that you 
 install the vendor-supplied data browsing software so that DeconTools has access to the necessary DLLs.
 * mzXML files   (Requires ProteoWizard installation)
 * mzML files    (Requires ProteoWizard installation)
 * mz5 files     (Requires ProteoWizard installation)
-* Thermo Finnigan .Raw files (requires Xcalibur or MSFileReader)
+* Thermo Finnigan .Raw files (uses ThermoFisher.CommonCore.RawFileReader.dll)
 * Agilent .Wiff files (requires Analyst)
 * Agilent .D folders (requires Chemstation)
 * Micromass files (requires MassLynx)
