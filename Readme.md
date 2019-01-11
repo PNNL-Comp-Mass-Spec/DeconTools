@@ -97,3 +97,5 @@ Website: https://omics.pnl.gov or https://panomics.pnl.gov/
 Licensed under the Apache License, Version 2.0; you may not use this file except 
 in compliance with the License.  You may obtain a copy of the License at 
 http://www.apache.org/licenses/LICENSE-2.0
+
+RawFileReader reading tool. Copyright © 2016 by Thermo Fisher Scientific, Inc. All rights reserved.
