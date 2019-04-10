@@ -39,12 +39,12 @@ namespace DeconTools.Workflows.Backend.FileIO
 
         // The following constants are the columns that this class uses
         private const string TopPIC_PRSM_ID_HEADER = "Prsm ID";
-        // private const string TopPIC_SCAN_HEADER = SCAN_HEADER;
-        // private const string TopPIC_CHARGE_HEADER = CHARGE_HEADER;
+        private const string TopPIC_SCAN_HEADER = SCAN_HEADER;
+        private const string TopPIC_CHARGE_HEADER = CHARGE_HEADER;
         private const string TopPIC_PROTEIN_NAME_HEADER = "Protein name";
         private const string TopPIC_PROTEIN_MASS_HEADER = "Adjusted precursor mass";
         private const string TopPIC_PEPTIDE_HEADER = "Proteoform";
-        // private const string TopPIC_E_VALUE_HEADER = E_VALUE_HEADER;
+        private const string TopPIC_E_VALUE_HEADER = E_VALUE_HEADER;
 
         private readonly string _filename;
 
@@ -586,6 +586,38 @@ namespace DeconTools.Workflows.Backend.FileIO
             var columnName = headerColumnNames[columnId];
             ConsoleMsgUtils.ShowWarning(string.Format("Could not parse an integer from '{0}' in column {1}", valueText, columnName));
             return false;
+        }
+
+        public static List<string> GetRequiredMSAlignColumns()
+        {
+            var colNames = new List<string>
+            {
+                MSALIGN_PRSM_ID_HEADER,
+                SCAN_HEADER,
+                CHARGE_HEADER,
+                MSALIGN_PROTEIN_NAME_HEADER,
+                MSALIGN_PROTEIN_MASS_HEADER,
+                PEPTIDE_HEADER,
+                E_VALUE_HEADER
+            };
+
+            return colNames;
+        }
+
+        public static List<string> GetRequiredTopPICColumns()
+        {
+            var colNames = new List<string>
+            {
+                TopPIC_PRSM_ID_HEADER,
+                TopPIC_SCAN_HEADER,
+                TopPIC_CHARGE_HEADER,
+                TopPIC_PROTEIN_NAME_HEADER,
+                TopPIC_PROTEIN_MASS_HEADER,
+                TopPIC_PEPTIDE_HEADER,
+                TopPIC_E_VALUE_HEADER
+            };
+
+            return colNames;
         }
 
         private bool RemoveModViaRegEx(

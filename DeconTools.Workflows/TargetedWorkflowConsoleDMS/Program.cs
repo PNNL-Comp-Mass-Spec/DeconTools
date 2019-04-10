@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using DeconTools.Workflows.Backend.Core;
+using DeconTools.Workflows.Backend.FileIO;
 
 namespace TargetedWorkflowConsole
 {
@@ -116,6 +117,15 @@ namespace TargetedWorkflowConsole
             Console.WriteLine("  Arg1 = dataset path (Thermo .raw file)");
             Console.WriteLine("  Arg2 = workflow executor parameter file (.xml)");
             Console.WriteLine("  Arg3 (optional) = targets file path (overrides targets file defined in the .xml file)");
+            Console.WriteLine();
+            Console.WriteLine("The input file peptide is specified by <TargetsFilePath> in the workflow executor parameter file");
+            Console.WriteLine();
+            Console.WriteLine("Supported tab-delimited text formats include:");
+            Console.WriteLine("  _TopPIC_PrSMs.txt");
+            Console.WriteLine("  " + string.Join("   ", MassTagFromMSAlignFileImporter.GetRequiredTopPICColumns()));
+            Console.WriteLine();
+            Console.WriteLine("  _MSAlign_ResultTable.txt");
+            Console.WriteLine("  " + string.Join("   ", MassTagFromMSAlignFileImporter.GetRequiredMSAlignColumns()));
             Console.WriteLine();
         }
 
