@@ -8,7 +8,7 @@ using DeconTools.Utilities;
 namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
 {
     /// <summary>
-    /// Does a least-squares fit.  
+    /// Does a least-squares fit.
     /// </summary>
     public class AreaFitter:LeastSquaresFitter
     {
@@ -39,7 +39,7 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
 
             var trimmedObservedXYData = observedXYData.TrimData(xmin, xmax);
             //XYData trimmedObservedXYData = observedXYData;
-            
+
             //trimmedObservedXYData.Display();
             //theorXYData.Display();
 
@@ -111,7 +111,7 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
 
                     //double normalizedObservedIntensity = interopolatedIntensity / maxIntensity;
 
-                    //double normalizedTheorIntensity = theorXYData.Yvalues[i]/maxTheorIntensity;   
+                    //double normalizedTheorIntensity = theorXYData.Yvalues[i]/maxTheorIntensity;
 
                     //double diff = normalizedTheorIntensity - normalizedObservedIntensity;
 
@@ -142,7 +142,7 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
                 sumOfSquaredTheorIntens += normalizedTheorIntensity * normalizedTheorIntensity;
             }
 
-            if (theoreticalValues.Count == 0 || Math.Abs(sumOfSquaredTheorIntens) < double.Epsilon) 
+            if (theoreticalValues.Count == 0 || Math.Abs(sumOfSquaredTheorIntens) < double.Epsilon)
                 return -1;
 
             //StringBuilder sb = new StringBuilder();
@@ -156,7 +156,7 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
             // Future possibility (considered in January 2014):
             // Normalize the fit score by the number of theoretical ions
             // fitScore /= ionCountUsed;
-            
+
             return fitScore;
 
         }

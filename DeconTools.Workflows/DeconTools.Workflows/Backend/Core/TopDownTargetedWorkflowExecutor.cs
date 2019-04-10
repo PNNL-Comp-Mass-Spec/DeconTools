@@ -27,9 +27,7 @@ namespace DeconTools.Workflows.Backend.Core
         {
         }
 
-
         #endregion
-
 
         #region Public Methods
 
@@ -46,7 +44,6 @@ namespace DeconTools.Workflows.Backend.Core
                 workflowParams.SaveChromatogramData = true;
             }
         }
-
 
         protected override void ExecutePostProcessingHook()
         {
@@ -199,10 +196,6 @@ namespace DeconTools.Workflows.Backend.Core
 
             }
 
-
-
-
-
         }
 
         protected override TargetCollection GetLcmsFeatureTargets(string targetsFilePath)
@@ -266,10 +259,6 @@ namespace DeconTools.Workflows.Backend.Core
 
             return targets;
         }
-
-
-
-
 
         private void PostProcessResults(IList<TargetedResultDTO> results)
         {
@@ -338,8 +327,6 @@ namespace DeconTools.Workflows.Backend.Core
                 }
             }
         }
-
-
 
         #endregion
 

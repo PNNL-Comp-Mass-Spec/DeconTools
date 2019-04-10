@@ -23,11 +23,9 @@ namespace DeconTools.Workflows.Backend.Core
     {
         protected IsotopicDistributionCalculator IsotopicDistributionCalculator = IsotopicDistributionCalculator.Instance;
 
-
         protected string _loggingFileName;
         protected string _resultsFolder;
         protected TargetedResultRepository ResultRepository;
-
 
         protected List<long> MassTagIDsinTargets = new List<long>();
 
@@ -69,7 +67,6 @@ namespace DeconTools.Workflows.Backend.Core
             InitializeWorkflow();
         }
 
-
         protected TargetedWorkflowExecutor(WorkflowParameters parameters, WorkflowParameters workflowParameters, string datasetPath, BackgroundWorker backgroundWorker = null)
         {
             DatasetPath = datasetPath;
@@ -99,7 +96,6 @@ namespace DeconTools.Workflows.Backend.Core
             ResultRepository = new TargetedResultRepository();
             InitializeWorkflow();
         }
-
 
         public void InitializeWorkflow()
         {
@@ -179,10 +175,7 @@ namespace DeconTools.Workflows.Backend.Core
 
             }
 
-
         }
-
-
 
         #endregion
 

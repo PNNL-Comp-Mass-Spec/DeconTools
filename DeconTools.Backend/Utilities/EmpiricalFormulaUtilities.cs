@@ -24,7 +24,7 @@ namespace DeconTools.Backend.Utilities
             return monomass;
 
         }
-        
+
         public static string AddFormula(string baseFormula, string formulaToBeAdded)
         {
             var baseElementTable = ParseDoubleEmpiricalFormulaString(baseFormula);
@@ -71,7 +71,7 @@ namespace DeconTools.Backend.Utilities
         {
             var doubleDictionary = ParseDoubleEmpiricalFormulaString(empiricalFormula);
             var parsedFormula = new Dictionary<string, int>();
-            
+
             foreach (var item in doubleDictionary)
             {
                 parsedFormula.Add(item.Key,(int)Math.Round(item.Value));
@@ -89,7 +89,7 @@ namespace DeconTools.Backend.Utilities
             string regexString;
             if (formulaIsUnimodFormat)
             {
-               
+
                     var elementArray = empiricalFormula.Split(' ');
 
                     foreach (var element in elementArray)
@@ -139,17 +139,17 @@ namespace DeconTools.Backend.Utilities
 
 
                             }
-                        
+
                     }
 
 
                 }
                 return parsedFormula;
             }
-            regexString = GetRegexStringForNonUnimodFormat();
-            var re = new Regex(regexString);    
-            var mc = re.Matches(empiricalFormula);
 
+            regexString = GetRegexStringForNonUniModFormat();
+            var re = new Regex(regexString);
+            var mc = re.Matches(empiricalFormula);
 
             foreach (Match item in mc)
             {
@@ -175,7 +175,7 @@ namespace DeconTools.Backend.Utilities
             }
             return parsedFormula;
         }
-        
+
         public static string GetEmpiricalFormulaFromElementTable(Dictionary<string, int> elementTable)
         {
 
@@ -222,9 +222,9 @@ namespace DeconTools.Backend.Utilities
                     }
                     else
                     {
-                        sb.Append(item.Value); 
+                        sb.Append(item.Value);
                     }
-                    
+
                 }
 
             }
@@ -256,6 +256,6 @@ namespace DeconTools.Backend.Utilities
 
 
 
-       
+
     }
 }

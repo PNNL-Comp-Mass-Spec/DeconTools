@@ -1,5 +1,4 @@
 ﻿
-using System;
 using System.Collections.Generic;
 using System.IO;
 using DeconTools.Backend.Data;
@@ -11,7 +10,7 @@ namespace DeconTools.Backend.FileIO
     {
 
 
-        
+
 
         #region Constructors
 
@@ -20,7 +19,7 @@ namespace DeconTools.Backend.FileIO
             Filename = filename;
         }
 
-        
+
         #endregion
 
         #region Properties

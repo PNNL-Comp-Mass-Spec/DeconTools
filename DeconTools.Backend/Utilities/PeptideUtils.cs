@@ -205,16 +205,12 @@ namespace DeconTools.Backend.Utilities
             return 0;
         }
 
-
         public Dictionary<string, int> ParseEmpiricalFormulaString(string empiricalFormula)
         {
 
             return EmpiricalFormulaUtilities.ParseEmpiricalFormulaString(empiricalFormula);
 
         }
-
-
-
 
         public bool ValidateSequence(string peptideSequence)
         {
@@ -226,16 +222,9 @@ namespace DeconTools.Backend.Utilities
                 {
                     return false;
                 }
-
-
             }
             return true;
         }
-
-
-        #endregion
-
-        #region Private Methods
 
         #endregion
 

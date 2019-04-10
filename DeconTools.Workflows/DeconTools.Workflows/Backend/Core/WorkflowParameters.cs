@@ -16,9 +16,8 @@ namespace DeconTools.Workflows.Backend.Core
         #endregion
 
         #region Properties
+
         public abstract Globals.TargetedWorkflowTypes WorkflowType { get; }
-
-
 
         #endregion
 
@@ -42,7 +41,7 @@ namespace DeconTools.Workflows.Backend.Core
 
             var query = xElement.Elements();
 
-            var parameterTableFromXML = new Dictionary<string, string>();
+            var parameterTableFromXML = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             foreach (var item in query)
             {
                 var paramName = item.Name.ToString();
@@ -218,8 +217,6 @@ namespace DeconTools.Workflows.Backend.Core
             return sb.ToString();
 
         }
-
-
 
         public Dictionary<string, object> GetParameterTable()
         {

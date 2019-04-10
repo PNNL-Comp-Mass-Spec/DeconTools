@@ -132,12 +132,6 @@ namespace DeconTools.Backend.Core
             ElementLookupTable = PeptideUtils.ParseEmpiricalFormulaString(EmpiricalFormula);
         }
 
-
-
-
-
-
-
         #endregion
 
     }
