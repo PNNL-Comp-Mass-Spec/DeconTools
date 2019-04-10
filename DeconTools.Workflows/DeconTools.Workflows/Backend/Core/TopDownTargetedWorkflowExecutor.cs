@@ -18,10 +18,25 @@ namespace DeconTools.Workflows.Backend.Core
         private Dictionary<int, PrsmData> _prsmData;
 
         #region Constructors
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <param name="datasetPath"></param>
+        /// <param name="backgroundWorker"></param>
         public TopDownTargetedWorkflowExecutor(WorkflowParameters parameters, string datasetPath, BackgroundWorker backgroundWorker = null)
             : base(parameters, datasetPath, backgroundWorker)
         {
         }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <param name="workflowParameters"></param>
+        /// <param name="datasetPath"></param>
+        /// <param name="backgroundWorker"></param>
         public TopDownTargetedWorkflowExecutor(WorkflowParameters parameters, WorkflowParameters workflowParameters, string datasetPath, BackgroundWorker backgroundWorker = null)
             : base(parameters, workflowParameters, datasetPath, backgroundWorker)
         {
