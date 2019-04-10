@@ -279,16 +279,16 @@ namespace DeconTools.Backend.Algorithms
 
             double intensitySum = 0;
 
-            for (var i = indexOfGoodStartingPoint; i < xydata.Xvalues.Length; i++)
+            for (var i = indexOfGoodStartingPoint; i < xyData.Xvalues.Length; i++)
             {
-                if (xydata.Xvalues[i] >= lowerMZ)
+                if (xyData.Xvalues[i] < lowerMZ) continue;
+
+                if (xyData.Xvalues[i] > upperMZ)
                 {
-                    if (xydata.Xvalues[i] > upperMZ)
-                    {
-                        break;
-                    }
-                    intensitySum = +xydata.Yvalues[i];
+                    break;
                 }
+
+                intensitySum += xyData.Yvalues[i];
             }
 
             return intensitySum;
