@@ -26,7 +26,15 @@ namespace TargetedWorkflowConsole
                 return -1;
             }
 
-            if (!(args.Length == 2 || args.Length == 3))
+            if (args.Length < 2)
+            {
+                Console.WriteLine("Not enough command line arguments; expecting 2 or 3");
+                ReportSyntax();
+                System.Threading.Thread.Sleep(1500);
+                return -1;
+            }
+
+            if (args.Length > 3)
             {
                 Console.WriteLine("Too many command line arguments; expecting 2 or 3");
                 ReportSyntax();
