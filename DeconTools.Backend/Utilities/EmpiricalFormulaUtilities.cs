@@ -205,9 +205,11 @@ namespace DeconTools.Backend.Utilities
             {
                 if (item.Value <= 0)
                 {
+                    // Do not allow negative element counts
                 }
-                else if (Math.Abs(item.Value - 1) < double.Epsilon)
+                else if (Math.Abs(item.Value - 1) < float.Epsilon)
                 {
+                    // Single instance of the element
                     sb.Append(item.Key);
                 }
                 else
