@@ -160,7 +160,7 @@ namespace DeconTools.Backend.Utilities
 
                 if (elementCountString.Length > 0)
                 {
-                    numAtoms = Double.Parse(elementCountString);
+                    numAtoms = double.Parse(elementCountString);
                 }
                 else
                 {

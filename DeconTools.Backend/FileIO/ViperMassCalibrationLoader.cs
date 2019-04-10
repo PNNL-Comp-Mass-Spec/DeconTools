@@ -60,7 +60,7 @@ namespace DeconTools.Backend.FileIO
                     {
                         rowData.MassErrorPpm = double.Parse(parsedLine[0]);
 
-                        rowData.Count = Int32.Parse(parsedLine[1]);
+                        rowData.Count = int.Parse(parsedLine[1]);
 
                         rowData.SmoothedCount = double.Parse(parsedLine[2]);
                     }
