@@ -14,14 +14,14 @@ namespace DeconTools.Backend.Core
         #region Constructors
         public ResultCollection(Run run)
         {
-            this.run = run;
+            Run = run;
             ResultList = new List<IsosResult>();
             MassTagResultList = new Dictionary<TargetBase, TargetedResultBase>();
-            scanResultList = new List<ScanResult>();
+            ScanResultList = new List<ScanResult>();
             msPeakResultsGroupedAndMzOrdered = new Dictionary<int, List<MSPeakResult>>();
             MSPeakResultList = new List<MSPeakResult>();
-            m_IsosResultBin = new List<IsosResult>(10);
-            logMessageList = new List<string>();
+            IsosResultBin = new List<IsosResult>(10);
+            LogMessageList = new List<string>();
             ElutingPeakCollection = new List<ElutingPeak>();
         }
 
@@ -44,44 +44,13 @@ namespace DeconTools.Backend.Core
             }
         }
 
-        private IList<IsosResult> m_IsosResultBin;
-        public IList<IsosResult> IsosResultBin
-        {
-            get => m_IsosResultBin;
-            set => m_IsosResultBin = value;
-        }
-
-
-        private List<ScanResult> scanResultList;
-        public List<ScanResult> ScanResultList
-        {
-            get => scanResultList;
-            set => scanResultList = value;
-        }
+        public IList<IsosResult> IsosResultBin { get; set; }
+        public List<ScanResult> ScanResultList { get; set; }
 
         public List<IsosResult> ResultList { get; set; }
-
-
-        private Run run;
-        public Run Run
-        {
-            get => run;
-            set => run = value;
-        }
-
-        private List<string> logMessageList;
-        public List<string> LogMessageList
-        {
-            get => logMessageList;
-            set => logMessageList = value;
-        }
-
-        private List<ElutingPeak> m_ElutingPeakCollection;
-        public List<ElutingPeak> ElutingPeakCollection
-        {
-            get => m_ElutingPeakCollection;
-            set => m_ElutingPeakCollection = value;
-        }
+        public Run Run { get; set; }
+        public List<string> LogMessageList { get; set; }
+        public List<ElutingPeak> ElutingPeakCollection { get; set; }
 
         public int MSFeatureCounter { get; set; }
 
@@ -97,8 +66,8 @@ namespace DeconTools.Backend.Core
         #region Public Methods
         public ScanResult GetCurrentScanResult()
         {
-            if (scanResultList == null || scanResultList.Count == 0) return null;
-            return scanResultList[scanResultList.Count - 1];
+            if (ScanResultList == null || ScanResultList.Count == 0) return null;
+            return ScanResultList[ScanResultList.Count - 1];
         }
 
         public Dictionary<int, List<MSPeakResult>> GetMsPeakResultsGroupedAndMzOrdered()
@@ -308,7 +277,7 @@ namespace DeconTools.Backend.Core
                     break;
                 case Globals.ResultType.UIMF_TRADITIONAL_RESULT:
                     Check.Require(Run is UIMFRun, "Tried to create an IMS_TRADITIONAL_RESULT but the Dataset is not a UIMF file.");
-                    var uimfRun = (UIMFRun)run;
+                    var uimfRun = (UIMFRun)Run;
                     result = new UIMFIsosResult(Run, uimfRun.CurrentScanSet, uimfRun.CurrentIMSScanSet);
                     break;
                 case Globals.ResultType.O16O18_TRADITIONAL_RESULT:
@@ -334,15 +303,12 @@ namespace DeconTools.Backend.Core
             return result;
         }
 
-
-
         internal void AddLog(string logMessage)
         {
-            logMessageList.Add(logMessage);
+            LogMessageList.Add(logMessage);
         }
 
-
-        internal static List<IsosResult> getIsosResultsForCurrentScanSet(ResultCollection results)
+        internal static List<IsosResult> GetIsosResultsForCurrentScanSet(ResultCollection results)
         {
             Check.Require(results != null, "Can't retrieve IsosResults. Input list is null");
 

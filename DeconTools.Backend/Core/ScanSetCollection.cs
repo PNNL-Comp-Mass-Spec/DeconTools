@@ -35,7 +35,7 @@ namespace DeconTools.Backend.Core
             Check.Require(isNumScansOdd, "Number of scans summed must be an odd number");
             Check.Require(scanIncrement > 0, "Scan Increment must be greater than 0");
 
-            CreateScansets(run, scanStart, scanStop, numScansSummed, scanIncrement, processMSMS);
+            CreateScanSets(run, scanStart, scanStop, numScansSummed, scanIncrement, processMSMS);
         }
 
         public void Create(Run run, bool sumAllScans = true, bool processMSMS = true)
@@ -70,9 +70,9 @@ namespace DeconTools.Backend.Core
                 else
                 {
                     var scanSetFactory = new ScanSetFactory();
-                    var scanset = scanSetFactory.CreateScanSet(run, firstMS1Scan, minScan, maxScan);
+                    var scanSet = scanSetFactory.CreateScanSet(run, firstMS1Scan, minScan, maxScan);
 
-                    ScanSetList.Add(scanset);
+                    ScanSetList.Add(scanSet);
                 }
 
             }
@@ -81,9 +81,9 @@ namespace DeconTools.Backend.Core
 
                 for (var i = minScan; i <= maxScan; i++)
                 {
-                    var mslevel = run.GetMSLevel(i);
+                    var msLevel = run.GetMSLevel(i);
 
-                    if (mslevel == 1 || processMSMS)
+                    if (msLevel == 1 || processMSMS)
                     {
                         ScanSetList.Add(new ScanSet(i));
                     }
@@ -180,7 +180,7 @@ namespace DeconTools.Backend.Core
 
         //}
 
-        protected virtual void CreateScansets(Run run, int scanStart, int scanStop, int numScansSummed, int scanIncrement, bool processMSMS = false, bool sumConsecutiveMsMs = true)
+        protected virtual void CreateScanSets(Run run, int scanStart, int scanStop, int numScansSummed, int scanIncrement, bool processMSMS = false, bool sumConsecutiveMsMs = true)
         {
 
             ScanSetList = new List<ScanSet>();
@@ -251,8 +251,7 @@ namespace DeconTools.Backend.Core
                             {
                                 var framesToSum = new List<int>();
 
-                                var uimfrun = uimfRun;
-                                var numberOfConsecutiveMs2Frames = uimfrun.GetNumberOfConsecutiveMs2Frames(i);
+                                var numberOfConsecutiveMs2Frames = uimfRun.GetNumberOfConsecutiveMs2Frames(i);
 
                                 for (var j = 0; j < numberOfConsecutiveMs2Frames; j++)
                                 {
@@ -270,11 +269,9 @@ namespace DeconTools.Backend.Core
                         }
                         else
                         {
-                            var uimfrun = uimfRun;
+                            var numberOfFrameIndexesToSkip = uimfRun.GetNumberOfConsecutiveMs2Frames(i);
 
-                            var numberOfFrameIndexesToSkip = uimfrun.GetNumberOfConsecutiveMs2Frames(i);
-
-                            var indexOfCurrentFrame = uimfrun.MS2Frames.IndexOf(i);
+                            var indexOfCurrentFrame = uimfRun.MS2Frames.IndexOf(i);
 
                             if (indexOfCurrentFrame < 0) continue;
 
@@ -289,7 +286,7 @@ namespace DeconTools.Backend.Core
                             var framesCounter = 0;
                             while (lowerIndex >= 0 && numLowerFramesToGet > framesCounter)
                             {
-                                framesToSum.Insert(0, uimfrun.MS2Frames[lowerIndex]);
+                                framesToSum.Insert(0, uimfRun.MS2Frames[lowerIndex]);
                                 lowerIndex -= numberOfFrameIndexesToSkip;
                                 framesCounter++;
                             }
@@ -299,10 +296,10 @@ namespace DeconTools.Backend.Core
 
                             // Get upper frames
                             framesCounter = 0;
-                            var maxPossibleFrameIndex = uimfrun.MS2Frames.Count - 1;
+                            var maxPossibleFrameIndex = uimfRun.MS2Frames.Count - 1;
                             while (upperIndex <= maxPossibleFrameIndex && numUpperFramesToGet > framesCounter)
                             {
-                                framesToSum.Add(uimfrun.MS2Frames[upperIndex]);
+                                framesToSum.Add(uimfRun.MS2Frames[upperIndex]);
                                 upperIndex += numberOfFrameIndexesToSkip;
                                 framesCounter++;
                             }

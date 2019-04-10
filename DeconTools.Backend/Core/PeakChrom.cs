@@ -45,8 +45,6 @@ namespace DeconTools.Backend.Core
             }
         }
 
-
-
         public XYData GetXYDataFromChromPeakData(int minScan, int maxScan)
         {
 
@@ -57,11 +55,10 @@ namespace DeconTools.Backend.Core
                 xyValues.Add(i, 0);
             }
 
-
             var msPeakDataIsEmpty = (ChromSourceData == null || ChromSourceData.Count == 0);
             if (!msPeakDataIsEmpty)
             {
-                //iterate over the peaklist, assign chromID,  and extract intensity values
+                // iterate over the peak list, assign chromID,  and extract intensity values
                 foreach (var peak in ChromSourceData)
                 {
                     double intensity = peak.MSPeak.Height;

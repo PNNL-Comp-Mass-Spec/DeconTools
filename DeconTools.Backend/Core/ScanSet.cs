@@ -58,26 +58,19 @@ namespace DeconTools.Backend.Core
 
         public float NETValue { get; set; }
 
-        private List<int> indexValues;
-
-        public List<int> IndexValues
-        {
-            get => indexValues;
-            set => indexValues = value;
-        }
+        public List<int> IndexValues { get; set; }
 
         public int PrimaryScanNumber { get; set; }
 
-
         public void AddScan(int scanNumber)
         {
-            if (indexValues != null)
+            if (IndexValues != null)
             {
-                indexValues.Add(scanNumber);
+                IndexValues.Add(scanNumber);
             }
             else
             {
-                indexValues = new List<int> {scanNumber};
+                IndexValues = new List<int> {scanNumber};
             }
         }
 
@@ -92,24 +85,23 @@ namespace DeconTools.Backend.Core
         //    set { m_MSPeakResultPeakListIndex = value; }
         //}
 
-        internal int getLowestScanNumber()
+        internal int GetLowestScanNumber()
         {
             var lowVal = int.MaxValue;
 
-            for (var i = 0; i < IndexValues.Count; i++)
+            foreach (var value in IndexValues)
             {
-                if (IndexValues[i] < lowVal) lowVal = indexValues[i];
-
+                if (value < lowVal) lowVal = value;
             }
             return lowVal;
         }
 
-        internal int getHighestScanNumber()
+        internal int GetHighestScanNumber()
         {
             var highVal = -1;
-            for (var i = 0; i < IndexValues.Count; i++)
+            foreach (var value in IndexValues)
             {
-                if (IndexValues[i] > highVal) highVal = indexValues[i];
+                if (value > highVal) highVal = value;
             }
             return highVal;
         }
@@ -120,13 +112,13 @@ namespace DeconTools.Backend.Core
             var sb = new StringBuilder();
             sb.Append(PrimaryScanNumber);
 
-            if (indexValues.Count > 1)    //if there is summing, will show these scans in the string
+            if (IndexValues.Count > 1)    //if there is summing, will show these scans in the string
             {
                 sb.Append(" {");
-                for (var i = 0; i < indexValues.Count; i++)
+                for (var i = 0; i < IndexValues.Count; i++)
                 {
-                    var isLast = (i == indexValues.Count - 1);
-                    sb.Append(indexValues[i]);
+                    var isLast = (i == IndexValues.Count - 1);
+                    sb.Append(IndexValues[i]);
                     if (isLast)
                     {
                         sb.Append("}");
@@ -144,8 +136,8 @@ namespace DeconTools.Backend.Core
 
         internal int GetScanCount()
         {
-            if (indexValues == null || indexValues.Count == 0) return 0;
-            return indexValues.Count;
+            if (IndexValues == null || IndexValues.Count == 0) return 0;
+            return IndexValues.Count;
         }
 
 

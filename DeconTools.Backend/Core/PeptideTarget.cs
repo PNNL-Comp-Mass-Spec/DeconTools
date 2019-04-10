@@ -26,11 +26,6 @@ namespace DeconTools.Backend.Core
 
         #region Properties
 
-
-
-
-
-
         /// <summary>
         /// the ID of the protein to which the peptide MassTag is linked
         /// </summary>
@@ -45,8 +40,6 @@ namespace DeconTools.Backend.Core
         public int MultipleProteinCount { get; set; }
 
         #endregion
-
-
 
         public override string GetEmpiricalFormulaFromTargetCode()
         {

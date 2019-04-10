@@ -17,10 +17,10 @@ namespace DeconTools.Backend.Data
 
         private readonly string filepath;
 
-        public IsosImporter(string importFilename, Globals.MSFileType filetype)
+        public IsosImporter(string importFilename, Globals.MSFileType msFileType)
         {
             delimiter = ',';
-            fileType = filetype;
+            fileType = msFileType;
             filepath = importFilename;
             minVal = int.MinValue;
             maxVal = int.MaxValue;
@@ -36,8 +36,8 @@ namespace DeconTools.Backend.Data
             }
         }
 
-        public IsosImporter(string importFilename, Globals.MSFileType filetype, int minValue, int maxValue)
-            : this(importFilename, filetype)
+        public IsosImporter(string importFilename, Globals.MSFileType msFileType, int minValue, int maxValue)
+            : this(importFilename, msFileType)
         {
             minVal = minValue;
             maxVal = maxValue;
@@ -72,7 +72,7 @@ namespace DeconTools.Backend.Data
                 }
 
                 var result = convertTextToIsosResult(processedData, headers);
-                if (result is UIMFIsosResult)   //GORD:  see if I can remove this conditional
+                if (result is UIMFIsosResult)   // GORD:  see if I can remove this conditional
                 {
                     if (result.ScanSet.PrimaryScanNumber >= minVal)
                     {
@@ -118,7 +118,7 @@ namespace DeconTools.Backend.Data
             result.IsotopicProfile = new IsotopicProfile();
             //result.Run = getRunFromIsosFilename(this.importFilename, this.fileType); AM commenting this out since this gives me an error
 
-            //get scanset number from file
+            //get ScanSet number from file
             if (fileType == Globals.MSFileType.PNNL_UIMF)
             {
                 var imsScanNum = parseIntField(lookup(processedData, headers, "ims_scan_num"));
@@ -180,12 +180,12 @@ namespace DeconTools.Backend.Data
 
         }
 
-        private Run getRunFromIsosFilename(string p, Globals.MSFileType filetype)
+        private Run GetRunFromIsosFilename(string p, Globals.MSFileType msFileType)
         {
             var runFilename = p.Replace("_isos", "");
             var replacementExtension = "";
 
-            switch (filetype)
+            switch (msFileType)
             {
                 case Globals.MSFileType.Undefined:
                     break;
@@ -223,7 +223,7 @@ namespace DeconTools.Backend.Data
                     break;
             }
 
-            runFilename.Replace(".csv", replacementExtension);
+            runFilename = runFilename.Replace(".csv", replacementExtension);
 
             var factory = new RunFactory();
             Run run;

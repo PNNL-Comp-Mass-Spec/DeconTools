@@ -4,8 +4,8 @@ namespace DeconTools.Backend.Core
 
     //this class was created for the purpose of interacting with older Decon2LS and it's clsProcRunner.cls
     //We needed a way of getting RAPID deconvoluted results into the clsProcRunner.  So this class was created
-    //And the Rapiddeconvolutor has a method that returns an array of this class.
-    //This class mimics the IsofitRecord class of the DeconEngine...
+    //And the Rapid deconvolutor has a method that returns an array of this class.
+    //This class mimics the IsoFitRecord class of the DeconEngine...
     public class OldDeconFormatResult
     {
         public int PeakIndex { get; set; }
@@ -32,7 +32,7 @@ namespace DeconTools.Backend.Core
 
         public int MonoIntensity { get; set; }
 
-        public int IplusTwoIntensity { get; set; }
+        public int IPlusTwoIntensity { get; set; }
 
         public double Delta { get; set; }
 

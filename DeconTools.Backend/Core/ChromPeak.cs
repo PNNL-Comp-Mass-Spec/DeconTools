@@ -5,7 +5,6 @@ namespace DeconTools.Backend.Core
     {
 
         public ChromPeak()
-            : base()
         {
             NETValue = -1;
             IntegratedAbundance = -1;

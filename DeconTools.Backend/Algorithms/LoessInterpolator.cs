@@ -6,7 +6,7 @@ namespace DeconTools.Backend.Algorithms
     public class LoessInterpolator
     {
         public static double DEFAULT_BANDWIDTH = 0.3;
-        public static int DEFAULT_ROBUSTNESS_ITERS = 2;
+        public static int DEFAULT_ROBUSTNESS_ITERATIONS = 2;
 
         /**
          * The bandwidth parameter: when computing the loess fit at
@@ -25,34 +25,34 @@ namespace DeconTools.Backend.Algorithms
          * A sensible value is usually 0 (just the initial fit without any
          * robustness iterations) to 4.
          */
-        private readonly int robustnessIters;
+        private readonly int robustnessIterations;
 
         public LoessInterpolator()
         {
             bandwidth = DEFAULT_BANDWIDTH;
-            robustnessIters = DEFAULT_ROBUSTNESS_ITERS;
+            robustnessIterations = DEFAULT_ROBUSTNESS_ITERATIONS;
         }
 
-        public LoessInterpolator(double bandwidth, int robustnessIters)
+        public LoessInterpolator(double bandwidth, int robustnessIterations)
         {
             if (bandwidth < 0 || bandwidth > 1)
             {
                 throw new ApplicationException(string.Format("bandwidth must be in the interval [0,1], but got {0}", bandwidth));
             }
             this.bandwidth = bandwidth;
-            if (robustnessIters < 0)
+            if (robustnessIterations < 0)
             {
-                throw new ApplicationException(string.Format("the number of robustness iterations must be non-negative, but got {0}", robustnessIters));
+                throw new ApplicationException(string.Format("the number of robustness iterations must be non-negative, but got {0}", robustnessIterations));
             }
-            this.robustnessIters = robustnessIters;
+            this.robustnessIterations = robustnessIterations;
         }
 
         /**
-         * Compute a loess fit on the data at the original abscissae.
+         * Compute a loess fit on the data at the original abscissas.
          *
-         * @param xval the arguments for the interpolation points
-         * @param yval the values for the interpolation points
-         * @return values of the loess fit at corresponding original abscissae
+         * @param xVal the arguments for the interpolation points
+         * @param yVal the values for the interpolation points
+         * @return values of the loess fit at corresponding original abscissas
          * @throws MathException if some of the following conditions are false:
          * <ul>
          * <li> Arguments and values are of the same size that is greater than zero</li>
@@ -60,30 +60,30 @@ namespace DeconTools.Backend.Algorithms
          * <li> All arguments and values are finite real numbers</li>
          * </ul>
          */
-        public double[] Smooth(double[] xval, double[] yval)
+        public double[] Smooth(double[] xVal, double[] yVal)
         {
-            if (xval.Length != yval.Length)
+            if (xVal.Length != yVal.Length)
             {
-                throw new ApplicationException(string.Format("Loess expects the abscissa and ordinate arrays to be of the same size, but got {0} abscisssae and {1} ordinatae", xval.Length, yval.Length));
+                throw new ApplicationException(string.Format("Loess expects the abscissa and ordinate arrays to be of the same size, but got {0} abscissas and {1} ordinates", xVal.Length, yVal.Length));
             }
-            var n = xval.Length;
+            var n = xVal.Length;
             if (n == 0)
             {
                 throw new ApplicationException("Loess expects at least 1 point");
             }
 
-            checkAllFiniteReal(xval, true);
-            checkAllFiniteReal(yval, false);
-            checkStrictlyIncreasing(xval);
+            CheckAllFiniteReal(xVal, true);
+            CheckAllFiniteReal(yVal, false);
+            CheckStrictlyIncreasing(xVal);
 
             if (n == 1)
             {
-                return new[] { yval[0] };
+                return new[] { yVal[0] };
             }
 
             if (n == 2)
             {
-                return new[] { yval[0], yval[1] };
+                return new[] { yVal[0], yVal[1] };
             }
 
             var bandwidthInPoints = (int)(bandwidth * n);
@@ -103,42 +103,44 @@ namespace DeconTools.Backend.Algorithms
 
             var robustnessWeights = new double[n];
 
-            // Do an initial fit and 'robustnessIters' robustness iterations.
-            // This is equivalent to doing 'robustnessIters+1' robustness iterations
+            // Do an initial fit and 'robustnessIterations' robustness iterations.
+            // This is equivalent to doing 'robustnessIterations+1' robustness iterations
             // starting with all robustness weights set to 1.
-            for (var i = 0; i < robustnessWeights.Length; i++) robustnessWeights[i] = 1;
-            for (var iter = 0; iter <= robustnessIters; ++iter)
+            for (var i = 0; i < robustnessWeights.Length; i++)
+                robustnessWeights[i] = 1;
+
+            for (var iteration = 0; iteration <= robustnessIterations; ++iteration)
             {
                 int[] bandwidthInterval = { 0, bandwidthInPoints - 1 };
                 // At each x, compute a local weighted linear regression
                 for (var i = 0; i < n; ++i)
                 {
-                    var x = xval[i];
+                    var x = xVal[i];
 
                     // Find out the interval of source points on which
                     // a regression is to be made.
                     if (i > 0)
                     {
-                        updateBandwidthInterval(xval, i, bandwidthInterval);
+                        updateBandwidthInterval(xVal, i, bandwidthInterval);
                     }
 
-                    var ileft = bandwidthInterval[0];
-                    var iright = bandwidthInterval[1];
+                    var iLeft = bandwidthInterval[0];
+                    var iRight = bandwidthInterval[1];
 
                     // Compute the point of the bandwidth interval that is
                     // farthest from x
                     int edge;
-                    if (xval[i] - xval[ileft] > xval[iright] - xval[i])
+                    if (xVal[i] - xVal[iLeft] > xVal[iRight] - xVal[i])
                     {
-                        edge = ileft;
+                        edge = iLeft;
                     }
                     else
                     {
-                        edge = iright;
+                        edge = iRight;
                     }
 
                     // Compute a least-squares linear fit weighted by
-                    // the product of robustness weights and the tricube
+                    // the product of robustness weights and the TriCube
                     // weight function.
                     // See http://en.wikipedia.org/wiki/Linear_regression
                     // (section "Univariate linear case")
@@ -146,11 +148,11 @@ namespace DeconTools.Backend.Algorithms
                     // (section "Weighted least squares")
                     double sumWeights = 0;
                     double sumX = 0, sumXSquared = 0, sumY = 0, sumXY = 0;
-                    var denom = Math.Abs(1.0 / (xval[edge] - x));
-                    for (var k = ileft; k <= iright; ++k)
+                    var denominator = Math.Abs(1.0 / (xVal[edge] - x));
+                    for (var k = iLeft; k <= iRight; ++k)
                     {
-                        var xk = xval[k];
-                        var yk = yval[k];
+                        var xk = xVal[k];
+                        var yk = yVal[k];
                         double dist;
                         if (k < i)
                         {
@@ -160,7 +162,7 @@ namespace DeconTools.Backend.Algorithms
                         {
                             dist = (xk - x);
                         }
-                        var w = tricube(dist * denom) * robustnessWeights[k];
+                        var w = TriCube(dist * denominator) * robustnessWeights[k];
                         var xkw = xk * w;
                         sumWeights += w;
                         sumX += xkw;
@@ -187,12 +189,12 @@ namespace DeconTools.Backend.Algorithms
                     var alpha = meanY - beta * meanX;
 
                     res[i] = beta * x + alpha;
-                    residuals[i] = Math.Abs(yval[i] - res[i]);
+                    residuals[i] = Math.Abs(yVal[i] - res[i]);
                 }
 
                 // No need to recompute the robustness weights at the last
                 // iteration, they won't be needed anymore
-                if (iter == robustnessIters)
+                if (iteration == robustnessIterations)
                 {
                     break;
                 }
@@ -200,10 +202,11 @@ namespace DeconTools.Backend.Algorithms
                 // Recompute the robustness weights.
 
                 // Find the median residual.
-                // An arraycopy and a sort are completely tractable here,
+                // An Array.Copy and a sort are completely tractable here,
                 // because the preceding loop is a lot more expensive
                 Array.Copy(residuals, sortedResiduals, n);
-                //System.arraycopy(residuals, 0, sortedResiduals, 0, n);
+
+                // Array.Copy(residuals, 0, sortedResiduals, 0, n);
                 Array.Sort(sortedResiduals);
                 var medianResidual = sortedResiduals[n / 2];
 
@@ -223,26 +226,26 @@ namespace DeconTools.Backend.Algorithms
         }
 
         /**
-         * Given an index interval into xval that embraces a certain number of
-         * points closest to xval[i-1], update the interval so that it embraces
-         * the same number of points closest to xval[i]
+         * Given an index interval into xVal that embraces a certain number of
+         * points closest to xVal[i-1], update the interval so that it embraces
+         * the same number of points closest to xVal[i]
          *
-         * @param xval arguments array
+         * @param xVal arguments array
          * @param i the index around which the new interval should be computed
          * @param bandwidthInterval a two-element array {left, right} such that: <p/>
-         * <tt>(left==0 or xval[i] - xval[left-1] > xval[right] - xval[i])</tt>
+         * <tt>(left==0 or xVal[i] - xVal[left-1] > xVal[right] - xVal[i])</tt>
          * <p/> and also <p/>
-         * <tt>(right==xval.length-1 or xval[right+1] - xval[i] > xval[i] - xval[left])</tt>.
+         * <tt>(right==xVal.length-1 or xVal[right+1] - xVal[i] > xVal[i] - xVal[left])</tt>.
          * The array will be updated.
          */
-        private static void updateBandwidthInterval(IReadOnlyList<double> xval, int i, IList<int> bandwidthInterval)
+        private static void updateBandwidthInterval(IReadOnlyList<double> xVal, int i, IList<int> bandwidthInterval)
         {
             var left = bandwidthInterval[0];
             var right = bandwidthInterval[1];
             // The right edge should be adjusted if the next point to the right
-            // is closer to xval[i] than the leftmost point of the current interval
-            if (right < xval.Count - 1 &&
-               xval[right + 1] - xval[i] < xval[i] - xval[left])
+            // is closer to xVal[i] than the leftmost point of the current interval
+            if (right < xVal.Count - 1 &&
+               xVal[right + 1] - xVal[i] < xVal[i] - xVal[left])
             {
                 bandwidthInterval[0]++;
                 bandwidthInterval[1]++;
@@ -251,13 +254,13 @@ namespace DeconTools.Backend.Algorithms
 
         /**
          * Compute the
-         * <a href="http://en.wikipedia.org/wiki/Local_regression#Weight_function">tricube</a>
+         * <a href="http://en.wikipedia.org/wiki/Local_regression#Weight_function">TriCube</a>
          * weight function
          *
          * @param x the argument
          * @return (1-|x|^3)^3
          */
-        private static double tricube(double x)
+        private static double TriCube(double x)
         {
             var tmp = 1 - x * x * x;
             return tmp * tmp * tmp;
@@ -267,44 +270,44 @@ namespace DeconTools.Backend.Algorithms
          * Check that all elements of an array are finite real numbers.
          *
          * @param values the values array
-         * @param isAbscissae if true, elements are abscissae otherwise they are ordinatae
+         * @param areAbscissas if true, elements are abscissas otherwise they are ordinates
          * @throws MathException if one of the values is not
          *         a finite real number
          */
-        private static void checkAllFiniteReal(IReadOnlyList<double> values, bool isAbscissae)
+        private static void CheckAllFiniteReal(IReadOnlyList<double> values, bool areAbscissas)
         {
             for (var i = 0; i < values.Count; i++)
             {
                 var x = values[i];
-                if (Double.IsInfinity(x) || Double.IsNaN(x))
+                if (double.IsInfinity(x) || double.IsNaN(x))
                 {
-                    var pattern = isAbscissae ?
-                            "all abscissae must be finite real numbers, but {0}-th is {1}" :
-                            "all ordinatae must be finite real numbers, but {0}-th is {1}";
+                    var pattern = areAbscissas ?
+                            "all abscissas must be finite real numbers, but {0}-th is {1}" :
+                            "all ordinates must be finite real numbers, but {0}-th is {1}";
                     throw new ApplicationException(string.Format(pattern, i, x));
                 }
             }
         }
 
         /**
-         * Check that elements of the abscissae array are in a strictly
+         * Check that elements of the abscissas array are in a strictly
          * increasing order.
          *
-         * @param xval the abscissae array
-         * @throws MathException if the abscissae array
+         * @param xVal the abscissas array
+         * @throws MathException if the abscissas array
          * is not in a strictly increasing order
          */
-        private static void checkStrictlyIncreasing(IReadOnlyList<double> xval)
+        private static void CheckStrictlyIncreasing(IReadOnlyList<double> xVal)
         {
-            for (var i = 0; i < xval.Count; ++i)
+            for (var i = 0; i < xVal.Count; ++i)
             {
-                if (i >= 1 && xval[i - 1] >= xval[i])
+                if (i >= 1 && xVal[i - 1] >= xVal[i])
                 {
                     throw new ApplicationException(string.Format(
-                            "the abscissae array must be sorted in a strictly " +
+                            "the abscissas array must be sorted in a strictly " +
                             "increasing order, but the {0}-th element is {1} " +
                             "whereas {2}-th is {3}",
-                            i - 1, xval[i - 1], i, xval[i]));
+                            i - 1, xVal[i - 1], i, xVal[i]));
                 }
             }
         }

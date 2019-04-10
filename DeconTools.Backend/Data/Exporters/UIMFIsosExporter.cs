@@ -44,21 +44,11 @@ namespace DeconTools.Backend.Data
 
         public override void Export(ResultCollection results)
         {
-            StreamWriter sw;
-            try
+            using (var sw = new StreamWriter(fileName))
             {
-                sw = new StreamWriter(fileName);
-
+                sw.WriteLine(headerLine);
+                WriteUIMFIsosResults(sw, results);
             }
-            catch (Exception)
-            {
-                throw;
-            }
-            sw.WriteLine(headerLine);
-
-            writeUIMFIsosResults(sw, results);
-
-            sw.Close();
         }
 
         public override void Export(string binaryResultCollectionFilename, bool deleteBinaryFileAfterUse)
@@ -84,37 +74,32 @@ namespace DeconTools.Backend.Data
             do
             {
                 results = deserializer.GetNextSetOfResults();
-                writeUIMFIsosResults(sw, results);
-
+                WriteUIMFIsosResults(sw, results);
             } while (results != null);
 
             sw.Close();
             deserializer.Close();
 
+            if (!deleteBinaryFileAfterUse) return;
 
-            if (deleteBinaryFileAfterUse)
+            try
             {
-                try
+                if (File.Exists(binaryResultCollectionFilename))
                 {
-                    if (File.Exists(binaryResultCollectionFilename))
-                    {
-                        File.Delete(binaryResultCollectionFilename);
-                    }
-
+                    File.Delete(binaryResultCollectionFilename);
                 }
-                catch (Exception ex)
-                {
-                    throw new IOException("Exporter could not delete binary file. Details: " + ex.Message);
 
-                }
             }
+            catch (Exception ex)
+            {
+                throw new IOException("Exporter could not delete binary file. Details: " + ex.Message);
 
-
+            }
 
         }
 
 
-        private void writeUIMFIsosResults(TextWriter sw, ResultCollection results)
+        private void WriteUIMFIsosResults(TextWriter sw, ResultCollection results)
         {
             if (results == null) return;
 

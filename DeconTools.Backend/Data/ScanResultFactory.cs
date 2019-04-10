@@ -7,92 +7,95 @@ namespace DeconTools.Backend.Data
     public class ScanResultFactory
     {
 
-        public ScanResultFactory()
-        {
-
-        }
-
         public ScanResult CreateScanResult(Run run)
         {
 
 
-            ScanResult scanresult;
-            if (run is UIMFRun)
+            ScanResult scanResult;
+            if (run is UIMFRun uimfRun)
             {
-                var uimfRun = (UIMFRun)run;
-                scanresult = createUIMFScanResult(uimfRun, uimfRun.CurrentScanSet, uimfRun.CurrentIMSScanSet);
+                scanResult = createUIMFScanResult(uimfRun, uimfRun.CurrentScanSet, uimfRun.CurrentIMSScanSet);
             }
             else
             {
-                scanresult = createStandardScanResult(run, run.CurrentScanSet);
+                scanResult = createStandardScanResult(run, run.CurrentScanSet);
             }
 
 
-            return scanresult;
+            return scanResult;
 
         }
 
         private ScanResult createStandardScanResult(Run run, ScanSet scanSet)
         {
-            
+            ScanResult scanResult = new StandardScanResult(scanSet)
+            {
+                ScanTime = run.GetTime(scanSet.PrimaryScanNumber),
+                SpectrumType = run.GetMSLevel(scanSet.PrimaryScanNumber),
+                NumPeaks = scanSet.NumPeaks,
+                NumIsotopicProfiles = scanSet.NumIsotopicProfiles,
+                BasePeak = scanSet.BasePeak,
+                TICValue = scanSet.TICValue,
+                Description = run.GetScanInfo(scanSet.PrimaryScanNumber)
+            };
 
-            ScanResult scanresult;
-            
-                scanresult = new StandardScanResult(scanSet);
-                scanresult.ScanTime = run.GetTime(scanSet.PrimaryScanNumber);
-                scanresult.SpectrumType = run.GetMSLevel(scanSet.PrimaryScanNumber);
-                scanresult.NumPeaks = scanSet.NumPeaks;
-                scanresult.NumIsotopicProfiles = scanSet.NumIsotopicProfiles;
-                scanresult.BasePeak = scanSet.BasePeak;
-                scanresult.TICValue = scanSet.TICValue;
-                scanresult.Description = run.GetScanInfo(scanSet.PrimaryScanNumber);
 
-            
-            return scanresult;
+            return scanResult;
         }
 
-        private ScanResult createUIMFScanResult(UIMFRun run, ScanSet lcScanset, ScanSet scanSet)
+        private ScanResult createUIMFScanResult(UIMFRun run, ScanSet lcScanSet, ScanSet scanSet)
         {
-            Check.Require(run is UIMFRun, "UIMFScanResults can only be created from UIMF files");
+            if (!(run is UIMFRun uimfRun))
+            {
+                Check.Require(false, "UIMFScanResults can only be created from UIMF files");
+                return null;
+            }
+
             Check.Require(run.IMSScanSetCollection != null && run.IMSScanSetCollection.ScanSetList.Count > 0, "ScanResult creator failed...ScanSetCollection is empty");
             Check.Require(run.ScanSetCollection != null && run.ScanSetCollection.ScanSetList.Count > 0, "ScanResult creator failed...FrameSetCollection is empty");
 
-            var lcscansetUIMF = (LCScanSetIMS) lcScanset;
+            var lcScanSetUIMF = (LCScanSetIMS)lcScanSet;
 
-            UimfScanResult scanresult;
+            UimfScanResult scanResult;
 
             var totPeaks = 0;
             var totIsotopicProfiles = 0;
             float tic = 0;
-            var basepeak = new Peak();
+            var basePeak = new Peak();
 
-            var currentScanListIsLastOne = (scanSet == run.IMSScanSetCollection.ScanSetList[run.IMSScanSetCollection.ScanSetList.Count - 1]);
+            var currentScanListIsLastOne = (scanSet == uimfRun.IMSScanSetCollection.ScanSetList[uimfRun.IMSScanSetCollection.ScanSetList.Count - 1]);
 
             if (currentScanListIsLastOne)
             {
-                foreach (IMSScanSet imsScanset in run.IMSScanSetCollection.ScanSetList)
+                foreach (var scanItem in uimfRun.IMSScanSetCollection.ScanSetList)
                 {
-                    totPeaks += imsScanset.NumPeaks;
-                    totIsotopicProfiles += imsScanset.NumIsotopicProfiles;
-
-                    tic += imsScanset.TICValue;
-
-                    if (imsScanset.BasePeak.Height > basepeak.Height)
+                    if (!(scanItem is IMSScanSet imsScanSet))
                     {
-                        basepeak = imsScanset.BasePeak;
+                        continue;
+                    }
+
+                    totPeaks += imsScanSet.NumPeaks;
+                    totIsotopicProfiles += imsScanSet.NumIsotopicProfiles;
+
+                    tic += imsScanSet.TICValue;
+
+                    if (imsScanSet.BasePeak.Height > basePeak.Height)
+                    {
+                        basePeak = imsScanSet.BasePeak;
                     }
                 }
-                scanresult = new UimfScanResult(lcScanset);
-
-                scanresult.LCScanNum = lcScanset.PrimaryScanNumber;
-                scanresult.NumIsotopicProfiles = totIsotopicProfiles;
-                scanresult.NumPeaks = totPeaks;
-                scanresult.BasePeak = basepeak;
-                scanresult.TICValue = tic;
-                scanresult.ScanTime = run.GetTime(lcScanset.PrimaryScanNumber);
-                scanresult.SpectrumType = run.GetMSLevel(lcScanset.PrimaryScanNumber);
-                scanresult.FramePressureSmoothed = lcscansetUIMF.FramePressureSmoothed;
-                scanresult.FramePressureUnsmoothed = run.GetFramePressure(lcScanset.PrimaryScanNumber);
+                scanResult = new UimfScanResult(lcScanSet)
+                {
+                    LCScanNum = lcScanSet.PrimaryScanNumber,
+                    NumIsotopicProfiles = totIsotopicProfiles,
+                    NumPeaks = totPeaks,
+                    BasePeak = basePeak,
+                    TICValue = tic,
+                    ScanTime = run.GetTime(lcScanSet.PrimaryScanNumber),
+                    SpectrumType = run.GetMSLevel(lcScanSet.PrimaryScanNumber),
+                    FramePressureSmoothed = lcScanSetUIMF.FramePressureSmoothed,
+                    FramePressureUnsmoothed = run.GetFramePressure(lcScanSet.PrimaryScanNumber)
+                };
 
             }
             else
@@ -100,14 +103,9 @@ namespace DeconTools.Backend.Data
                 return null;
             }
 
-            return scanresult;
-
-
-
+            return scanResult;
 
         }
-
-
 
     }
 }

@@ -8,11 +8,10 @@ namespace DeconTools.Backend.Core.Results
 
         public LcmsFeatureTargetedResult()
         {
-            
+
         }
 
         public LcmsFeatureTargetedResult(TargetBase target) : base(target) { }
-
 
         #endregion
 

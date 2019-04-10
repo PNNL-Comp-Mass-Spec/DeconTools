@@ -15,8 +15,6 @@ namespace DeconTools.Backend.Core
         }
         #endregion
 
-
-
         #region Properties
 
         public List<ChromCorrelationDataItem> CorrelationDataItems { get; set; }

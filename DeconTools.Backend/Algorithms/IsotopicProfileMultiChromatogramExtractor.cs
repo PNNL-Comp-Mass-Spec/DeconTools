@@ -45,32 +45,30 @@ namespace DeconTools.Backend.Algorithms
 
             foreach (var peak in topTheorIsoPeaks)
             {
-                var xydata = chromGen.GenerateChromatogram(peakList, peakList.First().Scan_num, peakList.Last().Scan_num, peak.XValue, m_toleranceInPPM);
+                var xyData = chromGen.GenerateChromatogram(peakList, peakList.First().Scan_num, peakList.Last().Scan_num, peak.XValue, m_toleranceInPPM);
 
                 if (filterOutMSMSScans && ms1LevelScanTable!=null)
                 {
                     var filteredChromVals = new Dictionary<int, double>();
 
-                    for (var i = 0; i < xydata.Xvalues.Length; i++)
+                    for (var i = 0; i < xyData.Xvalues.Length; i++)
                     {
-                        var currentScanVal = (int)xydata.Xvalues[i];
+                        var currentScanVal = (int)xyData.Xvalues[i];
 
                         if (ms1LevelScanTable.Contains(currentScanVal))
                         {
-                            filteredChromVals.Add(currentScanVal, xydata.Yvalues[i]);
+                            filteredChromVals.Add(currentScanVal, xyData.Yvalues[i]);
                         }
                     }
 
-                    xydata.Xvalues = XYData.ConvertIntsToDouble(filteredChromVals.Keys.ToArray());
-                    xydata.Yvalues = filteredChromVals.Values.ToArray();
+                    xyData.Xvalues = XYData.ConvertIntsToDouble(filteredChromVals.Keys.ToArray());
+                    xyData.Yvalues = filteredChromVals.Values.ToArray();
                 }
 
-
-                chromatogramsForIsotopicProfiles.Add((MSPeak)peak, xydata);
+                chromatogramsForIsotopicProfiles.Add((MSPeak)peak, xyData);
             }
 
             return chromatogramsForIsotopicProfiles;
-
 
         }
 
@@ -82,8 +80,6 @@ namespace DeconTools.Backend.Algorithms
                 chromatograms[peak] = smoother.Smooth(chromatograms[peak]);
             }
         }
-
-
 
         #endregion
 

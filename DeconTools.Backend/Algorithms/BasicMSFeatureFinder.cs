@@ -22,7 +22,7 @@ namespace DeconTools.Backend.Algorithms
 
         }
         [Obsolete("Unused")]
-        private Peak findMostIntensePeak(IReadOnlyList<Peak> peaksWithinTol)
+        private Peak FindMostIntensePeak(IReadOnlyList<Peak> peaksWithinTol)
         {
             double maxIntensity = 0;
             Peak mostIntensePeak = null;
@@ -40,7 +40,7 @@ namespace DeconTools.Backend.Algorithms
         }
 
         [Obsolete("Unused")]
-        private Peak findClosestToXValue(IReadOnlyList<Peak> peaksWithinTol, double targetVal)
+        private Peak FindClosestToXValue(IReadOnlyList<Peak> peaksWithinTol, double targetVal)
         {
             var diff = double.MaxValue;
             Peak closestPeak = null;

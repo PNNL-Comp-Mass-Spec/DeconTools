@@ -29,8 +29,8 @@
     //                throw new IOException(string.Format("{0} failed. File contains no data", this.Name));
     //            }
 
-    //            string headerline = sr.ReadLine();
-    //            m_columnHeaders = ProcessLine(headerline);
+    //            string headerLine = sr.ReadLine();
+    //            m_columnHeaders = ProcessLine(headerLine);
 
     //            bool areHeadersValid = validateHeaders();
 
@@ -54,8 +54,8 @@
     //                    throw new InvalidDataException("Data in row #" + lineCounter.ToString() + "is invalid - \nThe number of columns does not match that of the header line");
     //                }
 
-    //                MSPeakResult peakresult = convertTextToPeakData(processedData);
-    //                peakList.Add(peakresult);
+    //                MSPeakResult peakResult = convertTextToPeakData(processedData);
+    //                peakList.Add(peakResult);
 
     //                //increase counter that keeps track of what line we are on... for use in error reporting.
     //                lineCounter++;

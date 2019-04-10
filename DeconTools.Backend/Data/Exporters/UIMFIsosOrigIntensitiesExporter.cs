@@ -69,8 +69,8 @@ namespace DeconTools.Backend.Data
                 results = deserializer.GetNextSetOfResults();
 
 
-                //OriginalIntensitiesExtractor origIntensExtractor = new OriginalIntensitiesExtractor(results);
-                //List<OriginalIntensitiesDTO> origIntensitiesCollection = origIntensExtractor.ExtractOriginalIntensities();
+                //OriginalIntensitiesExtractor origIntensityExtractor = new OriginalIntensitiesExtractor(results);
+                //List<OriginalIntensitiesDTO> origIntensitiesCollection = origIntensityExtractor.ExtractOriginalIntensities();
                 //writeUIMFIsosResults(sw, results, origIntensitiesCollection);
 
             } while (results != null);
@@ -101,9 +101,9 @@ namespace DeconTools.Backend.Data
 
         private void writeUIMFIsosResults(TextWriter sw, ResultCollection results, IReadOnlyList<OriginalIntensitiesDTO> origIntensitiesCollection)
         {
-            Check.Require(results.ResultList.Count == origIntensitiesCollection.Count, "OriginalIntensities Data Transfer Object should have the same number of results as in the IsosResult object");
-
             if (results == null) return;
+
+            Check.Require(results.ResultList.Count == origIntensitiesCollection.Count, "OriginalIntensities Data Transfer Object should have the same number of results as in the IsosResult object");
 
             var data = new List<string>();
 
@@ -156,8 +156,8 @@ namespace DeconTools.Backend.Data
             }
             sw.WriteLine(headerLine);
 
-            //OriginalIntensitiesExtractor origIntensExtractor = new OriginalIntensitiesExtractor(results);
-            //List<OriginalIntensitiesDTO> origIntensitiesCollection = origIntensExtractor.ExtractOriginalIntensities();
+            //OriginalIntensitiesExtractor origIntensityExtractor = new OriginalIntensitiesExtractor(results);
+            //List<OriginalIntensitiesDTO> origIntensitiesCollection = origIntensityExtractor.ExtractOriginalIntensities();
             //writeUIMFIsosResults(sw, results, origIntensitiesCollection);
 
             sw.Close();

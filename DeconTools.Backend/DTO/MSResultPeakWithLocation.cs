@@ -12,6 +12,10 @@ namespace DeconTools.Backend.DTO
         private readonly ushort scanNumber;
         private readonly Dictionary<ushort, List<ushort>> frameAndScansRange;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="peak"></param>
         public MSResultPeakWithLocation(MSPeakResult peak)
         {
             XValue = peak.MSPeak.XValue;
@@ -35,18 +39,20 @@ namespace DeconTools.Backend.DTO
             frameScansRange = new BitArray2D(numScans, numFrames);
         }*/
 
-
-        /**
-         * constructor
-         * Creates a peak result with a sorted list of framenumbers and scannumbers within those frame numbers
-         *
-         * To improve efficiency these arrays should be passed in sorted order. We might be able to do that by
-         * using insertion sort during the creation of these arrays.
-         *
-         * An nlogn sort here might be an overkill.
-         *
-         * */
-
+        /// <summary>
+        /// Constructor
+        /// Creates a peak result with a sorted list of frame numbers and scan numbers within those frame numbers
+        /// </summary>
+        /// <param name="peak"></param>
+        /// <param name="frameAndScansRange"></param>
+        /// <param name="frameNum"></param>
+        /// <param name="scanNum"></param>
+        /// <remarks>
+        /// To improve efficiency these arrays should be passed in sorted order. We might be able to do that by
+        /// using insertion sort during the creation of these arrays.
+        ///
+        /// An n log(n) sort here might be an overkill.
+        /// </remarks>
         public MSResultPeakWithLocation(Peak peak, Dictionary<ushort, List<ushort>> frameAndScansRange, int frameNum, int scanNum)
         {
             XValue = peak.XValue;
@@ -93,7 +99,7 @@ namespace DeconTools.Backend.DTO
         //}
 
         /*
-        public void updateFrameScansRange(BitArray2D frameScansFound)
+        public void UpdateFrameScansRange(BitArray2D frameScansFound)
         {
             this.frameScansRange.Or(frameScansFound);
 
@@ -158,7 +164,7 @@ namespace DeconTools.Backend.DTO
             return mergedArray;
         }
 
-        public void updateFrameScansRange(Dictionary<ushort, List<ushort>> newRangeValues)
+        public void UpdateFrameScansRange(Dictionary<ushort, List<ushort>> newRangeValues)
         {
 
             foreach (var key in newRangeValues.Keys.ToList())
@@ -184,7 +190,7 @@ namespace DeconTools.Backend.DTO
 
 
         //checks if the given mass is within a tolerance of this feature
-        public bool containsMass(double massValue, int toleranceInPPM)
+        public bool ContainsMass(double massValue, int toleranceInPPM)
         {
             var differenceInPPM = Math.Abs(1000000 * (XValue - massValue) / XValue);
 
@@ -197,7 +203,7 @@ namespace DeconTools.Backend.DTO
         }
 
 
-        public int containsPeak(Peak peak, ushort frameNum, ushort scanNum, ushort toleranceInPPM, ushort netRange, ushort driftRange)
+        public int ContainsPeak(Peak peak, ushort frameNum, ushort scanNum, ushort toleranceInPPM, ushort netRange, ushort driftRange)
         {
             if (peak == null)
             {

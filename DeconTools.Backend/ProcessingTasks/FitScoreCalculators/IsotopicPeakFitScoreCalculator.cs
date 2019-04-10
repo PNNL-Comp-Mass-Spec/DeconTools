@@ -2,7 +2,6 @@
 using DeconTools.Backend.Core;
 using DeconTools.Backend.Utilities;
 using DeconTools.Utilities;
-using System.Collections.Generic;
 
 namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
 {
@@ -10,30 +9,30 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
     {
         #region properties
         /// <summary>
-        /// score experimental profile to labeled or unlabeled theoretical profile
+        /// score experimental profile to labelled or unlabelled theoretical profile
         /// </summary>
-        public DeconTools.Backend.Globals.IsotopicProfileType IsotopicProfileType { get; set; }
+        public Globals.IsotopicProfileType IsotopicProfileType { get; set; }
 
         /// <summary>
-        /// Penalize FitScore  based on this any peaks to the left of the monoisotopiic peak.  Zeroes need to be added to the theoretical isotope profile
+        /// Penalize FitScore  based on this any peaks to the left of the monoisotopic peak.  Zeroes need to be added to the theoretical isotope profile
         /// </summary>
         public int NumberOfPeaksToLeftForPenalty { get; set; }
 
         public IsotopicPeakFitScoreCalculator()
         {
-            IsotopicProfileType = DeconTools.Backend.Globals.IsotopicProfileType.UNLABELLED;
+            IsotopicProfileType = Globals.IsotopicProfileType.UNLABELLED;
             NumberOfPeaksToLeftForPenalty = 0;
         }
 
-        public IsotopicPeakFitScoreCalculator(DeconTools.Backend.Globals.IsotopicProfileType lableType, int numberOfPeaksToLeftForPenalty)
+        public IsotopicPeakFitScoreCalculator(Globals.IsotopicProfileType labelType, int numberOfPeaksToLeftForPenalty)
         {
-            IsotopicProfileType = lableType;
+            IsotopicProfileType = labelType;
             NumberOfPeaksToLeftForPenalty = numberOfPeaksToLeftForPenalty;
         }
 
         public IsotopicPeakFitScoreCalculator(int numberOfPeaksToLeftForPenalty = 0)
         {
-            IsotopicProfileType = DeconTools.Backend.Globals.IsotopicProfileType.UNLABELLED;
+            IsotopicProfileType = Globals.IsotopicProfileType.UNLABELLED;
             NumberOfPeaksToLeftForPenalty = numberOfPeaksToLeftForPenalty;
         }
 
@@ -43,17 +42,22 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
         public override void Execute(ResultCollection resultList)
         {
             Check.Require(resultList.Run.CurrentMassTag != null, this.Name + " failed; CurrentMassTag is empty");
-            Check.Require(resultList.Run.XYData != null && resultList.Run.XYData.Xvalues != null && resultList.Run.XYData.Xvalues.Length > 0, this.Name + " failed; Run's XY data is empty. Need to Run an MSGenerator");
-            Check.Require(resultList.CurrentTargetedResult != null, "No MassTagResult has been generated for CurrentMassTag");
+            if (resultList.Run.CurrentMassTag == null)
+                return;
 
-            var theorProfile = new IsotopicProfile();
+            Check.Require(resultList.Run.XYData?.Xvalues != null && resultList.Run.XYData.Xvalues.Length > 0, Name + " failed; Run's XY data is empty. Need to Run an MSGenerator");
+            Check.Require(resultList.CurrentTargetedResult != null, "No MassTagResult has been generated for CurrentMassTag");
+            if (resultList.CurrentTargetedResult == null)
+                return;
+
+            IsotopicProfile theorProfile;
             switch (IsotopicProfileType)
             {
-                case DeconTools.Backend.Globals.IsotopicProfileType.UNLABELLED:
+                case Globals.IsotopicProfileType.UNLABELLED:
                     Check.Require(resultList.Run.CurrentMassTag.IsotopicProfile != null, "Target's theoretical isotopic profile has not been established");
                     theorProfile = resultList.Run.CurrentMassTag.IsotopicProfile;
                     break;
-                case DeconTools.Backend.Globals.IsotopicProfileType.LABELLED:
+                case Globals.IsotopicProfileType.LABELLED:
                     //Check.Require(resultList.Run.CurrentMassTag.IsotopicProfileLabelled != null, this.Name + " failed; Theor isotopic profile is empty. Run a TheorFeatureGenerator");
                     Check.Require(resultList.Run.CurrentMassTag.IsotopicProfileLabelled != null, "Target's labelled theoretical isotopic profile has not been established");
                     theorProfile = resultList.Run.CurrentMassTag.IsotopicProfileLabelled;
@@ -70,9 +74,9 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
 
         public double CalculateFitScore(IsotopicProfile theorProfile, IsotopicProfile observedProfile, XYData massSpecXYData, int numberOfPeaksToLeftForPenalty = 0, double massErrorPPMBetweenPeaks = 15)
         {
-            if (observedProfile == null || observedProfile.Peaklist == null || observedProfile.Peaklist.Count == 0)
+            if (observedProfile?.Peaklist == null || observedProfile.Peaklist.Count == 0)
             {
-                return 1.0;   // this is the worst possible fit score. ( 0.000 is the best possible fit score);  Maybe we want to return a '-1' to indicate a failure...              
+                return 1.0;   // this is the worst possible fit score. ( 0.000 is the best possible fit score);  Maybe we want to return a '-1' to indicate a failure...
             }
 
             var indexOfMostAbundantTheorPeak = theorProfile.GetIndexOfMostIntensePeak();
@@ -93,20 +97,22 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
                 peak.XValue += mzOffset;
             }
 
-            var minCuttoffTheorPeakIntensityFraction = 0.1f;
- 
+            const double minCutoffTheorPeakIntensityFraction = 0.1;
+
             var peakFitter = new PeakLeastSquaresFitter();
 
-            var fitval = peakFitter.GetFit(
+            var fitVal = peakFitter.GetFit(
                 theorPeakList,
                 observedPeakList,
-                minCuttoffTheorPeakIntensityFraction,
+                minCutoffTheorPeakIntensityFraction,
                 massErrorPPMBetweenPeaks,
                 numberOfPeaksToLeftForPenalty,
-                out var ionCountUsed);
+                out _);
 
-            if (double.IsNaN(fitval) || fitval > 1) fitval = 1;
-            return fitval;
+            if (double.IsNaN(fitVal) || fitVal > 1)
+                return 1;
+
+            return fitVal;
         }
 
     }

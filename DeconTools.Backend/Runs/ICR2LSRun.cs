@@ -74,7 +74,7 @@ namespace DeconTools.Backend.Runs
             else
             {
                 throw new NotImplementedException("Summing is not yet supported for ICR2LS_MS Data files.");
-                //this.rawData.GetSummedSpectra(scanset.getLowestScanNumber(), scanset.getHighestScanNumber(), minMZ, maxMZ, ref xvals, ref yvals);
+                //this.rawData.GetSummedSpectra(scanSet.GetLowestScanNumber(), scanSet.GetHighestScanNumber(), minMZ, maxMZ, ref xVals, ref yVals);
             }
 
             var xydata = new XYData

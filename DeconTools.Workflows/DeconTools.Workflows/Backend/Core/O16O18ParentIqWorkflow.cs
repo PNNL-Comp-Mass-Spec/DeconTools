@@ -234,7 +234,7 @@ namespace DeconTools.Workflows.Backend.Core
             _graphGenerator.GraphPane.YAxis.Scale.Min = 0;
 
 
-            _graphGenerator.GraphPane.YAxis.Scale.Max = result.IqResultDetail.MassSpectrum.getMaxY();
+            _graphGenerator.GraphPane.YAxis.Scale.Max = result.IqResultDetail.MassSpectrum.GetMaxY();
             _graphGenerator.GraphPane.YAxis.Scale.Format = "0";
 
 
@@ -287,7 +287,7 @@ namespace DeconTools.Workflows.Backend.Core
             _graphGenerator.GraphPane.YAxis.Scale.MinAuto = false;
             _graphGenerator.GraphPane.YAxis.Scale.MaxAuto = false;
             _graphGenerator.GraphPane.YAxis.Scale.Min = 0;
-            _graphGenerator.GraphPane.YAxis.Scale.Max = result.IqResultDetail.Chromatogram.getMaxY();
+            _graphGenerator.GraphPane.YAxis.Scale.Max = result.IqResultDetail.Chromatogram.GetMaxY();
             _graphGenerator.GraphPane.YAxis.Scale.Format = "0";
 
             _graphGenerator.GraphPane.XAxis.Scale.Min = minScan;

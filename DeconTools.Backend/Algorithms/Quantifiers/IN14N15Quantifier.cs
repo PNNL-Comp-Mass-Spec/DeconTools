@@ -11,7 +11,7 @@ namespace DeconTools.Backend.Algorithms.Quantifiers
         #endregion
 
         #region Public Methods
-        public abstract double GetRatio(double[] xvals, double[] yvals,
+        public abstract double GetRatio(double[] xVals, double[] yVals,
             Core.IsotopicProfile iso1, Core.IsotopicProfile iso2,
             double backgroundIntensity);
 

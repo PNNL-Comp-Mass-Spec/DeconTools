@@ -13,14 +13,14 @@ namespace DeconTools.Backend.Core
             DataIndex = -1;
         }
 
-        public Peak(double xvalue, float yvalue, float width)
+        public Peak(double xValue, float yValue, float width)
             : this()
         {
             // ReSharper disable once VirtualMemberCallInConstructor
-            XValue = xvalue;
+            XValue = xValue;
 
             // ReSharper disable once VirtualMemberCallInConstructor
-            Height = yvalue;
+            Height = yValue;
 
             // ReSharper disable once VirtualMemberCallInConstructor
             Width = width;

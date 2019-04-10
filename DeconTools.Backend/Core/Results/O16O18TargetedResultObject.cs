@@ -21,9 +21,5 @@ namespace DeconTools.Backend.Core
 
         #endregion
 
-  
-   
-
-        
     }
 }

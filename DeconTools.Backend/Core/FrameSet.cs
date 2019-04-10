@@ -18,25 +18,24 @@ namespace DeconTools.Backend.Core
         public FrameSet(int primaryFrame, List<int> frameArray)
             : this()
         {
-            this.primaryFrame = primaryFrame;
+            PrimaryFrame = primaryFrame;
             IndexValues = frameArray;
         }
-
-
 
         public FrameSet(int primaryFrame)
             : this()
         {
-            this.primaryFrame = primaryFrame;
-            IndexValues = new List<int>();
-            indexValues.Add(primaryFrame);
+            PrimaryFrame = primaryFrame;
+            IndexValues = new List<int> {
+                primaryFrame
+            };
 
         }
 
         public FrameSet(int primaryFrame, int[] indexArray)
             : this()
         {
-            this.primaryFrame = primaryFrame;
+            PrimaryFrame = primaryFrame;
             IndexValues = new List<int>();
 
             foreach (var indexItem in indexArray)
@@ -49,7 +48,7 @@ namespace DeconTools.Backend.Core
         public FrameSet(int primaryFrame, int lowerFrame, int upperFrame)
             : this()
         {
-            this.primaryFrame = primaryFrame;
+            PrimaryFrame = primaryFrame;
             Check.Require(lowerFrame <= upperFrame, "Lower frame number must be less than or equal to the frame scan number");
             IndexValues = new List<int>();
 
@@ -62,74 +61,53 @@ namespace DeconTools.Backend.Core
 
         public void AddFrame(int frameNumber)
         {
-            if (indexValues != null)
+            if (IndexValues != null)
             {
-                indexValues.Add(frameNumber);
+                IndexValues.Add(frameNumber);
             }
             else
             {
-                indexValues = new List<int> {
+                IndexValues = new List<int> {
                     frameNumber
                 };
             }
         }
 
-        private int primaryFrame;
+        public int PrimaryFrame { get; set; }
 
-        public int PrimaryFrame
-        {
-            get => primaryFrame;
-            set => primaryFrame = value;
-        }
-        private bool isContiguous = true;
-
-        public bool IsContiguous
-        {
-            get => isContiguous;
-            set => isContiguous = value;
-        }
-
+        public bool IsContiguous { get; set; } = true;
 
         public double FramePressure { get; set; }
         public double AvgTOFLength { get; set; }
 
-        private List<int> indexValues;
-
-        public List<int> IndexValues
-        {
-            get => indexValues;
-            set => indexValues = value;
-        }
+        public List<int> IndexValues { get; set; }
 
 
-        internal int getLowestFrameNumber()
+        internal int GetLowestFrameNumber()
         {
             var lowVal = int.MaxValue;
 
-            for (var i = 0; i < IndexValues.Count; i++)
+            foreach (var value in IndexValues)
             {
-                if (IndexValues[i] < lowVal) lowVal = indexValues[i];
-
+                if (value < lowVal) lowVal = value;
             }
             return lowVal;
         }
 
-        internal int getHighestFrameNumber()
+        internal int GetHighestFrameNumber()
         {
             var highVal = -1;
-            for (var i = 0; i < IndexValues.Count; i++)
+            foreach (var value in IndexValues)
             {
-                if (IndexValues[i] > highVal) highVal = indexValues[i];
+                if (value > highVal) highVal = value;
             }
             return highVal;
         }
 
-
-
         internal int Count()
         {
-            if (indexValues == null || indexValues.Count == 0) return 0;
-            return indexValues.Count;
+            if (IndexValues == null || IndexValues.Count == 0) return 0;
+            return IndexValues.Count;
         }
 
         public override string ToString()
@@ -138,7 +116,7 @@ namespace DeconTools.Backend.Core
             foreach (var item in IndexValues)
             {
                 sb.Append(item);
-                sb.Append(",");                
+                sb.Append(",");
             }
 
             return sb.ToString().TrimEnd(',');

@@ -462,7 +462,7 @@ namespace DeconTools.UnitTesting.QualityControlTests
 
                     List<int> indices = getIndicesOf0MZValues(run.XYData.Xvalues);
 
-                    double maxY = run.XYData.getMaxY();
+                    double maxY = run.XYData.GetMaxY();
 
 
                     if (indices.Count > -1)

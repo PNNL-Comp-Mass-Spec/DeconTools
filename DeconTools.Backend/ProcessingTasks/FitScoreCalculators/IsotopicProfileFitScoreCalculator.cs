@@ -7,8 +7,9 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
     public class IsotopicProfileFitScoreCalculator:Task
     {
         #region properties
+
         /// <summary>
-        /// score experimental profile to labeled or unlabeled theoretical profile
+        /// score experimental profile to labelled or unlabelled theoretical profile
         /// </summary>
         public Globals.IsotopicProfileType IsotopicProfileType { get; set; }
 
@@ -17,10 +18,11 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
             IsotopicProfileType = Globals.IsotopicProfileType.UNLABELLED;
         }
 
-        public IsotopicProfileFitScoreCalculator(Globals.IsotopicProfileType lableType)
+        public IsotopicProfileFitScoreCalculator(Globals.IsotopicProfileType labelType)
         {
-            IsotopicProfileType = lableType;
+            IsotopicProfileType = labelType;
         }
+
         #endregion
 
         #region Public Methods
@@ -80,16 +82,16 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
             var theorXYData = theorProfile.GetTheoreticalIsotopicProfileXYData(observedProfile.GetFWHM());
             //theorXYData.Display();
 
-            theorXYData.OffSetXValues(mzOffset);     //May want to avoid this offset if the masses have been aligned using LCMS Warp
+            theorXYData.OffSetXValues(mzOffset);     // May want to avoid this offset if the masses have been aligned using LCMS Warp
 
             //theorXYData.Display();
 
-            var areafitter = new AreaFitter();
+            var areaFitter = new AreaFitter();
 
-            var fitval = areafitter.GetFit(theorXYData, massSpecXYData, 0.1, out var _);
+            var fitVal = areaFitter.GetFit(theorXYData, massSpecXYData, 0.1, out var _);
 
-            if (double.IsNaN(fitval) || fitval > 1) fitval = 1;
-            return fitval;
+            if (double.IsNaN(fitVal) || fitVal > 1) fitVal = 1;
+            return fitVal;
         }
 
     }

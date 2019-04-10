@@ -14,7 +14,6 @@ namespace DeconTools.Backend.Algorithms.Quantifiers
 
         public abstract double GetRatio(IsotopicProfile isotopicProfile);
 
-
         #endregion
 
         #region Private Methods

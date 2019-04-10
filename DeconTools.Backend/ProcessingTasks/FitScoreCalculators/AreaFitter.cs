@@ -21,11 +21,21 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
 
         public double GetFit(XYData theorXYData, XYData observedXYData, double minIntensityForScore, out int ionCountUsed, double offset = 0)
         {
-            Check.Require(theorXYData != null && theorXYData.Xvalues != null && theorXYData.Yvalues != null,
-                "AreaFitter failed. Theoretical XY data is null");
+            ionCountUsed = 0;
 
-            Check.Require(observedXYData != null & observedXYData.Xvalues != null && observedXYData.Yvalues != null,
+            Check.Require(theorXYData?.Xvalues != null && theorXYData.Yvalues != null,
+                "AreaFitter failed. Theoretical XY data is null");
+            if (theorXYData?.Xvalues == null || theorXYData.Yvalues == null)
+                return 0;
+
+            Check.Require(observedXYData != null,
                 "AreaFitter failed. Observed XY data is null");
+            if (observedXYData == null)
+                return 0;
+
+            Check.Require(observedXYData.Xvalues != null && observedXYData.Yvalues != null,
+                          "AreaFitter failed. Observed XY X values or Y values are null");
+
             //Check.Require(minIntensityForScore >= 0 && minIntensityForScore <= 100, "MinIntensityForScore should be between 0 and 100");
 
 
@@ -33,11 +43,11 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
 
             double sumOfSquaredDiff = 0;
             double sumOfSquaredTheorIntens = 0;
-            var xmin = theorXYData.Xvalues[0] + offset;
-            var xmax = theorXYData.Xvalues.Max() + offset;
+            var xMin = theorXYData.Xvalues[0] + offset;
+            var xMax = theorXYData.Xvalues.Max() + offset;
 
 
-            var trimmedObservedXYData = observedXYData.TrimData(xmin, xmax);
+            var trimmedObservedXYData = observedXYData.TrimData(xMin, xMax);
             //XYData trimmedObservedXYData = observedXYData;
 
             //trimmedObservedXYData.Display();
@@ -49,7 +59,6 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
 
             for (var i = 0; i < theorXYData.Xvalues.Length; i++)
             {
-
                 if (theorXYData.Yvalues[i] >= minIntensityForScore)
                 {
                     var currentTheorMZ = theorXYData.Xvalues[i] + offset;
@@ -62,14 +71,14 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
                         return 1;
                     }
 
-                    //findout if closest is above or below
+                    //find out if closest is above or below
                     var closestIsBelow = (trimmedObservedXYData.Xvalues[indexOfClosest] < currentTheorMZ);
 
-                    double mz1 = 0;
-                    double mz2 = 0;
-                    double intensity1 = 0;
-                    double intensity2 = 0;
+                    double mz1;
+                    double intensity1;
 
+                    double mz2;
+                    double intensity2;
                     if (closestIsBelow)
                     {
                         mz1 = trimmedObservedXYData.Xvalues[indexOfClosest];
@@ -111,7 +120,7 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
 
                     //double normalizedObservedIntensity = interopolatedIntensity / maxIntensity;
 
-                    //double normalizedTheorIntensity = theorXYData.Yvalues[i]/maxTheorIntensity;
+                    //double normalizedTheorIntensity = theorXYData.YValues[i]/maxTheorIntensity;
 
                     //double diff = normalizedTheorIntensity - normalizedObservedIntensity;
 
@@ -121,8 +130,6 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
 
 
                 }
-
-
             }
 
             var maxTheoreticalIntens = getMax(theoreticalValues);

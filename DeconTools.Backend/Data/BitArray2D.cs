@@ -90,14 +90,14 @@ namespace DeconTools.Backend.Data.Structures
             /// <returns></returns>
             public BitArray2D Clone()
             {
-                var new_bitarray2d = new BitArray2D(Width, Height);
+                var new2DArray = new BitArray2D(Width, Height);
 
                 for (var i = 0; i < BitArray.Length; i++)
                 {
-                    new_bitarray2d.BitArray[i] = BitArray[i];
+                    new2DArray.BitArray[i] = BitArray[i];
                 }
 
-                return new_bitarray2d;
+                return new2DArray;
             }
 
             public void SetAll(bool value)
@@ -117,27 +117,28 @@ namespace DeconTools.Backend.Data.Structures
                 BitArray.Not();
             }
 
-            public byte[] ToBytes()
-            {
-                return BitArrayToBytes(BitArray);
-            }
-            public static byte[] BitArrayToBytes(System.Collections.BitArray bitarray)
-            {
-                if (bitarray.Length == 0)
-                {
-                    throw new System.ArgumentException("must have at least length 1", nameof(bitarray));
-                }
+            //public byte[] ToBytes()
+            //{
+            //    return BitArrayToBytes(BitArray);
+            //}
 
-                var num_bytes = bitarray.Length / 8;
+            //public static byte[] BitArrayToBytes(System.Collections.BitArray bitArray)
+            //{
+            //    if (bitArray.Length == 0)
+            //    {
+            //        throw new System.ArgumentException("must have at least length 1", nameof(bitArray));
+            //    }
 
-                if (bitarray.Length % 8 != 0)
-                {
-                    num_bytes += 1;
-                }
+            //    var num_bytes = bitArray.Length / 8;
 
-                var bytes = new byte[num_bytes];
-                bitarray.CopyTo(bytes, 0);
-                return bytes;
-            }
+            //    if (bitArray.Length % 8 != 0)
+            //    {
+            //        num_bytes += 1;
+            //    }
+
+            //    var bytes = new byte[num_bytes];
+            //    bitArray.CopyTo(bytes, 0);
+            //    return bytes;
+            //}
         }
     }

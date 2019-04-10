@@ -11,7 +11,7 @@ namespace DeconTools.Backend.Core.Results
         public SipperLcmsTargetedResult(TargetBase target)
             : base(target)
         {
-            ChromCorrelationStdev = -1;
+            ChromCorrelationStDev = -1;
         }
 
         #endregion
@@ -33,7 +33,7 @@ namespace DeconTools.Backend.Core.Results
 
         public double AreaUnderRatioCurveRevised { get; set; }
 
-        public double ChromCorrelationStdev { get; set; }
+        public double ChromCorrelationStDev { get; set; }
 
         public double PercentPeptideLabelled { get; set; }
 

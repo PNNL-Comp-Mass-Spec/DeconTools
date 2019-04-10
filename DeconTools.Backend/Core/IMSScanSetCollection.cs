@@ -9,7 +9,7 @@ namespace DeconTools.Backend.Core
 
         protected override int GetMinScan(Run run)
         {
-            Check.Require(run is UIMFRun, "Trying to make the IMSScanset collection, but Run is not a UIMF run");
+            Check.Require(run is UIMFRun, "Trying to make the IMSScanSet collection, but Run is not a UIMF run");
 
             return ((UIMFRun)run).GetMinPossibleIMSScanNum();
 
@@ -18,12 +18,12 @@ namespace DeconTools.Backend.Core
 
         protected override int GetMaxScan(Run run)
         {
-            Check.Require(run is UIMFRun, "Trying to make the IMSScanset collection, but Run is not a UIMF run");
+            Check.Require(run is UIMFRun, "Trying to make the IMSScanSet collection, but Run is not a UIMF run");
 
             return ((UIMFRun)run).GetMaxPossibleIMSScanNum();
         }
 
-        protected override void CreateScansets(Run run, int scanStart, int scanStop, int numScansSummed, int scanIncrement, bool processMSMS = false, bool sumConsecutiveMsMs = true)
+        protected override void CreateScanSets(Run run, int scanStart, int scanStop, int numScansSummed, int scanIncrement, bool processMSMS = false, bool sumConsecutiveMsMs = true)
         {
                ScanSetList = new List<ScanSet>();
 

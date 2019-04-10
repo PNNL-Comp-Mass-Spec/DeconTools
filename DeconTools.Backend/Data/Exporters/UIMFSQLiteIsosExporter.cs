@@ -10,7 +10,7 @@ namespace DeconTools.Backend.Data
     public class UIMFSQLiteIsosExporter : IsosExporter
     {
         private readonly string fileName;
-        private readonly DBWriter sqliteWriter = new DBWriter();
+        private readonly DBWriter sqLiteWriter = new DBWriter();
 
         public UIMFSQLiteIsosExporter(string fileName)
         {
@@ -25,7 +25,7 @@ namespace DeconTools.Backend.Data
         {
             try
             {
-                sqliteWriter.CreateNewDB(fileName);
+                sqLiteWriter.CreateNewDB(fileName);
 
             }
             catch (Exception)
@@ -35,7 +35,7 @@ namespace DeconTools.Backend.Data
 
             exportSQLiteUIMFIsosResults(results);
 
-            sqliteWriter.CloseDB(fileName);
+            sqLiteWriter.CloseDB(fileName);
         }
 
         public override void Export(string binaryResultCollectionFilename, bool deleteBinaryFileAfterUse)
@@ -44,7 +44,7 @@ namespace DeconTools.Backend.Data
 
             try
             {
-                sqliteWriter.CreateNewDB(fileName);
+                sqLiteWriter.CreateNewDB(fileName);
 
             }
             catch (Exception ex)
@@ -62,7 +62,7 @@ namespace DeconTools.Backend.Data
 
             } while (results != null);
 
-            sqliteWriter.CloseDB(fileName);
+            sqLiteWriter.CloseDB(fileName);
             deserializer.Close();
 
 
@@ -85,8 +85,6 @@ namespace DeconTools.Backend.Data
 
         }
 
-
-
         private void exportSQLiteUIMFIsosResults(ResultCollection results)
         {
             if (results == null) return;
@@ -94,7 +92,7 @@ namespace DeconTools.Backend.Data
             //Insert records to MS_Features table
             //Insert records in bulk mood, 500 records each time
             //this is significantly faster than inserting one record at a time
-            //500 records are the maximum number sqlite3 can handle
+            //500 records are the maximum number SQLite3 can handle
             var records = new ArrayList();
             var count = 0;
             foreach (var result in results.ResultList)
@@ -126,13 +124,14 @@ namespace DeconTools.Backend.Data
                 count++;
                 if (count == 500)
                 {
-                    sqliteWriter.InsertMSFeatures(records);
+                    sqLiteWriter.InsertMSFeatures(records);
                     count = 0;
                     records = new ArrayList();
                 }
             }
+
             //Insert the rest of the records to MS_Features table
-            sqliteWriter.InsertMSFeatures(records);
+            sqLiteWriter.InsertMSFeatures(records);
         }
 
         protected override int getScanNumber(int scan_num)

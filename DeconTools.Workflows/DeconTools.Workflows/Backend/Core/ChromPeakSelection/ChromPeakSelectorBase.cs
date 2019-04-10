@@ -23,8 +23,6 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
 
         #endregion
 
-
-
         #region Properties
 
         public abstract ChromPeakSelectorParameters Parameters { get; set; }
@@ -33,7 +31,7 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
 
 
         #endregion
- 
+
         protected virtual void UpdateResultWithChromPeakAndLCScanInfo(TargetedResultBase result, ChromPeak bestPeak)
         {
             result.AddSelectedChromPeakAndScanSet(bestPeak, result.Run.CurrentScanSet, IsotopicProfileType);

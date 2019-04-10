@@ -47,7 +47,7 @@ namespace DeconTools.Backend.ProcessingTasks
         }
 
         /// <summary>
-        ///     minimum signal to noise for a peak to consider it for deisotoping.
+        /// Minimum signal to noise for a peak to consider it for deisotoping.
         /// </summary>
         private double MinSignalToNoise { get; set; }
 
@@ -80,14 +80,14 @@ namespace DeconTools.Backend.ProcessingTasks
         }
 
         /// <summary>
-        ///     Is the medium a mixture of O16 and O18 labelled peptides.
+        /// Is the medium a mixture of O16 and O18 labelled peptides.
         /// </summary>
         public bool IsO16O18Data { get; set; }
 
         public bool IsActualMonoMZUsed { get; set; }
 
         /// <summary>
-        ///     Check feature against charge 1.
+        /// Check feature against charge 1.
         /// </summary>
         public bool CheckPatternsAgainstChargeOne { get; set; }
 
@@ -117,7 +117,7 @@ namespace DeconTools.Backend.ProcessingTasks
         public double RightFitStringencyFactor { get; set; }
 
         /// <summary>
-        ///     mass of charge carrier
+        /// Mass of charge carrier
         /// </summary>
         public double ChargeCarrierMass
         {
@@ -133,20 +133,20 @@ namespace DeconTools.Backend.ProcessingTasks
         }
 
         /// <summary>
-        ///     After deisotoping is done, we delete the isotopic profile.  This threshold sets the value of the minimum
-        ///     intensity of a peak to delete. Note that ths intensity is in the theoretical profile which is scaled to
-        ///     where the maximum peak has an intensity of 100.
+        /// After deisotoping is done, we delete the isotopic profile.  This threshold sets the value of the minimum
+        /// intensity of a peak to delete. Note that ths intensity is in the theoretical profile which is scaled to
+        /// where the maximum peak has an intensity of 100.
         /// </summary>
         /// <seealso cref="IsotopicProfileFitScorer.GetZeroingMassRange" />
         public double DeleteIntensityThreshold { get; set; }
 
         /// <summary>
-        ///     Maximum time (in minutes) allowed for deisotoping data in a single scan (or scan set)
+        /// Maximum time (in minutes) allowed for deisotoping data in a single scan (or scan set)
         /// </summary>
         public int MaxProcessingTimeMinutes { get; set; }
 
         /// <summary>
-        ///     minimum intensity of a point in the theoretical profile of a peptide for it to be considered in scoring.
+        /// Minimum intensity of a point in the theoretical profile of a peptide for it to be considered in scoring.
         /// </summary>
         /// <seealso cref="IsotopicProfileFitScorer.GetIsotopeDistribution" />
         public double MinIntensityForScore { get; set; }
@@ -156,17 +156,17 @@ namespace DeconTools.Backend.ProcessingTasks
         public double AbsoluteThresholdPeptideIntensity { get; set; }
 
         /// <summary>
-        ///     maximium MW for deisotoping
+        /// Maximum MW for deisotoping
         /// </summary>
         public double MaxMWAllowed { get; set; }
 
         /// <summary>
-        ///     maximum charge to check while deisotoping
+        /// Maximum charge to check while deisotoping
         /// </summary>
         public int MaxChargeAllowed { get; set; }
 
         /// <summary>
-        ///     maximum fit value to report a deisotoped peak
+        /// Maximum fit value to report a deisotoped peak
         /// </summary>
         public double MaxFitAllowed { get; set; }
 
@@ -211,13 +211,13 @@ namespace DeconTools.Backend.ProcessingTasks
         }
 
         /// <summary>
-        ///     Number of peaks from the monoisotope before the shoulder
+        /// Number of peaks from the monoisotopic peak before the shoulder
         /// </summary>
         /// <remarks>
-        ///     After deisotoping is performed, we delete points corresponding to the isotopic profile, To do so, we move
-        ///     to the left and right of each isotope peak and delete points till the shoulder of the peak is reached. To
-        ///     decide if the current point is a shoulder, we check if the next (_numPeaksForShoulder) # of
-        ///     points are of continuously increasing intensity.
+        /// After deisotoping is performed, we delete points corresponding to the isotopic profile, To do so, we move
+        /// to the left and right of each isotope peak and delete points till the shoulder of the peak is reached. To
+        /// decide if the current point is a shoulder, we check if the next (_numPeaksForShoulder) # of
+        /// points are of continuously increasing intensity.
         /// </remarks>
         /// <seealso cref="SetPeakToZero" />
         public int NumAllowedShoulderPeaks { get; set; }
@@ -326,7 +326,7 @@ namespace DeconTools.Backend.ProcessingTasks
             if (resultList.Run.XYData == null)
                 return;
 
-            resultList.Run.XYData.GetXYValuesAsSingles(out var xvals, out var yvals);
+            resultList.Run.XYData.GetXYValuesAsSingles(out var xVals, out var yVals);
 
             mPeakList = resultList.Run.DeconToolsPeakList;
             mTransformResults = new HornTransformResults[0];
@@ -362,7 +362,7 @@ namespace DeconTools.Backend.ProcessingTasks
 
             PerformTransform(
                 backgroundIntensity, minPeptideIntensity, MaxProcessingTimeMinutes,
-                ref xvals, ref yvals,
+                ref xVals, ref yVals,
                 ref mPeakList, ref mTransformResults,
                 out var processingAborted);
 
@@ -816,22 +816,22 @@ namespace DeconTools.Backend.ProcessingTasks
             bool processingWasAborted,
             int maxProcessingTimeMinutes)
         {
-            ScanSet currentScanset;
+            ScanSet currentScanSet;
             var currentRun = resultList.Run as UIMFRun;
             bool processingUIMF;
 
             if (currentRun != null)
             {
-                currentScanset = currentRun.CurrentIMSScanSet;
+                currentScanSet = currentRun.CurrentIMSScanSet;
                 processingUIMF = true;
             }
             else
             {
-                currentScanset = resultList.Run.CurrentScanSet;
+                currentScanSet = resultList.Run.CurrentScanSet;
                 processingUIMF = false;
             }
 
-            currentScanset.NumIsotopicProfiles = 0; //reset to 0;
+            currentScanSet.NumIsotopicProfiles = 0; //reset to 0;
 
             foreach (var hornResult in transformResults)
             {
@@ -867,7 +867,7 @@ namespace DeconTools.Backend.ProcessingTasks
 
                 AddDeconResult(resultList, result);
                 //resultList.ResultList.Add(result);
-                currentScanset.NumIsotopicProfiles++;
+                currentScanSet.NumIsotopicProfiles++;
             }
 
 
@@ -879,33 +879,33 @@ namespace DeconTools.Backend.ProcessingTasks
             if (processingUIMF)
             {
                 // LC-IMS-MS dataset
-                if (currentScanset.GetScanCount() <= 1)
+                if (currentScanSet.GetScanCount() <= 1)
                 {
                     messageBase = string.Format("Aborted processing of frame {0}, IMS scan {1}",
-                                      currentScanset.PrimaryScanNumber,
-                                      currentScanset.getLowestScanNumber());
+                                      currentScanSet.PrimaryScanNumber,
+                                      currentScanSet.GetLowestScanNumber());
                 }
                 else
                 {
                     messageBase = string.Format("Aborted processing of frame {0}, IMS scans {1}-{2}",
-                                      currentScanset.PrimaryScanNumber,
-                                      currentScanset.getLowestScanNumber(),
-                                      currentScanset.getHighestScanNumber());
+                                      currentScanSet.PrimaryScanNumber,
+                                      currentScanSet.GetLowestScanNumber(),
+                                      currentScanSet.GetHighestScanNumber());
                 }
             }
             else
             {
                 // LC-MS dataset
-                if (currentScanset.GetScanCount() <= 1)
+                if (currentScanSet.GetScanCount() <= 1)
                 {
                     messageBase = string.Format("Aborted processing of scan {0}",
-                                      currentScanset.getLowestScanNumber());
+                                      currentScanSet.GetLowestScanNumber());
                 }
                 else
                 {
                     messageBase = string.Format("Aborted processing of summed scans {0}-{1}",
-                                      currentScanset.getLowestScanNumber(),
-                                      currentScanset.getHighestScanNumber());
+                                      currentScanSet.GetLowestScanNumber(),
+                                      currentScanSet.GetHighestScanNumber());
                 }
 
             }
@@ -913,7 +913,7 @@ namespace DeconTools.Backend.ProcessingTasks
             Console.WriteLine("{0}; runtime exceeded {1} minutes. IsotopicProfileCount={2}",
                                     messageBase,
                                     maxProcessingTimeMinutes,
-                                    currentScanset.NumIsotopicProfiles);
+                                    currentScanSet.NumIsotopicProfiles);
 
         }
 
@@ -941,20 +941,21 @@ namespace DeconTools.Backend.ProcessingTasks
             return summedIntensities;
         }
 
-        private void GetIsotopicProfile(IReadOnlyList<int> peakIndexList, IReadOnlyList<ThrashV1Peak> peakdata, ref IsotopicProfile profile)
+        private void GetIsotopicProfile(IReadOnlyList<int> peakIndexList, IReadOnlyList<ThrashV1Peak> peakData, ref IsotopicProfile profile)
         {
             if (peakIndexList == null || peakIndexList.Count == 0)
                 return;
-            var deconMonopeak = peakdata[peakIndexList[0]];
 
-            profile.Peaklist.Add(deconMonopeak);
+            var deconMonoIsotopicPeak = peakData[peakIndexList[0]];
+
+            profile.Peaklist.Add(deconMonoIsotopicPeak);
 
             if (peakIndexList.Count == 1)
                 return; //only one peak in the DeconEngine's profile
 
             for (var i = 1; i < peakIndexList.Count; i++) //start with second peak and add each peak to profile
             {
-                var deconPeak = peakdata[peakIndexList[i]];
+                var deconPeak = peakData[peakIndexList[i]];
                 profile.Peaklist.Add(deconPeak);
             }
         }

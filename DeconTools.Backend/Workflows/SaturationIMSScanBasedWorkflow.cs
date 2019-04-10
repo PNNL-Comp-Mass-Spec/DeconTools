@@ -116,14 +116,14 @@ namespace DeconTools.Backend.Workflows
                 var frameStartTime = DateTime.UtcNow;
                 var timeoutReached = false;
 
-                foreach (var scanset in uimfRun.IMSScanSetCollection.ScanSetList)
+                foreach (var scanSet in uimfRun.IMSScanSetCollection.ScanSetList)
                 {
 
                     if (DateTime.UtcNow.Subtract(dtLastProgress).TotalSeconds >= CONSOLE_INTERVAL_SECONDS || forceProgressMessage)
                     {
                         dtLastProgress = DateTime.UtcNow;
                         forceProgressMessage = false;
-                        Console.WriteLine("Processing frame " + lcScanSet.PrimaryScanNumber + ", scan " + scanset.PrimaryScanNumber + " (Unsummed)");
+                        Console.WriteLine("Processing frame " + lcScanSet.PrimaryScanNumber + ", scan " + scanSet.PrimaryScanNumber + " (Unsummed)");
                     }
 
                     if (DateTime.UtcNow.Subtract(frameStartTime).TotalMinutes >= maxMinutesPerFrame)
@@ -141,17 +141,17 @@ namespace DeconTools.Backend.Workflows
 
                     uimfRun.ResultCollection.IsosResultBin.Clear();  //clear any previous MSFeatures
 
-                    var unsummedIMSScanset = new IMSScanSet(scanset.PrimaryScanNumber);
-                    uimfRun.CurrentIMSScanSet = unsummedIMSScanset;
+                    var unsummedIMSScanSet = new IMSScanSet(scanSet.PrimaryScanNumber);
+                    uimfRun.CurrentIMSScanSet = unsummedIMSScanSet;
 
                     _msGenerator.Execute(Run.ResultCollection);
 
                     _zeroFiller.Execute(Run.ResultCollection);
 
                     // For debugging....
-                    // if (scanset.PrimaryScanNumber == 123)
+                    // if (scanSet.PrimaryScanNumber == 123)
                     // {
-                    //    Console.WriteLine(scanset + "\t being processed!");
+                    //    Console.WriteLine(scanSet + "\t being processed!");
                     // }
 
                     _peakDetector.Execute(Run.ResultCollection);
@@ -232,12 +232,12 @@ namespace DeconTools.Backend.Workflows
 
                 foreach (var scanSet in uimfRun.IMSScanSetCollection.ScanSetList)
                 {
-                    var scanset = (IMSScanSet)scanSet;
+                    var imsScanSet = (IMSScanSet)scanSet;
                     if (DateTime.UtcNow.Subtract(dtLastProgress).TotalSeconds >= CONSOLE_INTERVAL_SECONDS || forceProgressMessage)
                     {
                         dtLastProgress = DateTime.UtcNow;
                         forceProgressMessage = false;
-                        Console.WriteLine("Processing frame " + lcScanSet.PrimaryScanNumber + ", scan " + scanset.PrimaryScanNumber + " (Summed)");
+                        Console.WriteLine("Processing frame " + lcScanSet.PrimaryScanNumber + ", scan " + imsScanSet.PrimaryScanNumber + " (Summed)");
                     }
 
                     if (DateTime.UtcNow.Subtract(frameStartTime).TotalMinutes >= maxMinutesPerFrame + maxFrameMinutesAddon)
@@ -255,7 +255,7 @@ namespace DeconTools.Backend.Workflows
 
                     // Get the summed isotopic profile
                     uimfRun.CurrentScanSet = lcScanSet;
-                    uimfRun.CurrentIMSScanSet = scanset;
+                    uimfRun.CurrentIMSScanSet = imsScanSet;
 
                     ExecuteTask(MSGenerator);
 
@@ -293,10 +293,10 @@ namespace DeconTools.Backend.Workflows
                                                                              isosResult.IsotopicProfile.MonoPeakMZ + 10);
 
 
-                                RebuildSaturatedIsotopicProfile(msFeatureXYData, isosResult, Run.PeakList, out var theorIso);
-                                AdjustSaturatedIsotopicProfile(isosResult.IsotopicProfile, theorIso, AdjustMonoIsotopicMasses, false);
+                                RebuildSaturatedIsotopicProfile(msFeatureXYData, isosResult, Run.PeakList, out var theorIsotopicProfile);
+                                AdjustSaturatedIsotopicProfile(isosResult.IsotopicProfile, theorIsotopicProfile, AdjustMonoIsotopicMasses, false);
 
-                                UpdateReportedSummedPeakIntensities(isosResult, lcScanSet, scanset);
+                                UpdateReportedSummedPeakIntensities(isosResult, lcScanSet, imsScanSet);
                             }
 
                             if (isosResult.IsotopicProfile.IsSaturated)
@@ -394,10 +394,10 @@ namespace DeconTools.Backend.Workflows
 
         }
 
-        //private void DisplayMSFeatures(List<IsosResult> msfeatures)
+        //private void DisplayMSFeatures(List<IsosResult> msFeatures)
         //{
         //    var sb = new StringBuilder();
-        //    foreach (UIMFIsosResult uimfIsosResult in msfeatures)
+        //    foreach (UIMFIsosResult uimfIsosResult in msFeatures)
         //    {
         //        sb.Append(uimfIsosResult.FrameSet.PrimaryFrame + "\t" + uimfIsosResult.ScanSet.PrimaryScanNumber + "\t" +
         //                  uimfIsosResult.IsotopicProfile.MonoIsotopicMass.ToString("0.000") + "\t" +
@@ -440,13 +440,13 @@ namespace DeconTools.Backend.Workflows
             //    TheorXYDataCalculationUtilities.Get_Theoretical_IsotopicProfileXYData(isosResult.IsotopicProfile,
             //                                                                          isosResult.IsotopicProfile.GetFWHM());
 
-            //AreaFitter areafitter = new AreaFitter(theorXYData, rebuiltXYData, 0.1);
-            //double fitval = areafitter.getFit();
+            //AreaFitter areaFitter = new AreaFitter(theorXYData, rebuiltXYData, 0.1);
+            //double fitVal = areaFitter.getFit();
 
-            //if (double.IsNaN(fitval) || fitval > 1)
-            //    fitval = 0.01; //if there is a problem, we are artificially going to set it low
+            //if (double.IsNaN(fitVal) || fitVal > 1)
+            //    fitVal = 0.01; //if there is a problem, we are artificially going to set it low
 
-            //isosResult.IsotopicProfile.Score = fitval;
+            //isosResult.IsotopicProfile.Score = fitVal;
         }
 
         [Obsolete("Unused")]
@@ -478,11 +478,11 @@ namespace DeconTools.Backend.Workflows
 
         private void UpdateReportedSummedPeakIntensities(IsosResult profile, ScanSet lcScanSet, ScanSet imsScanSet)
         {
-            var minFrame = lcScanSet.getLowestScanNumber();
-            var maxFrame = lcScanSet.getHighestScanNumber();
+            var minFrame = lcScanSet.GetLowestScanNumber();
+            var maxFrame = lcScanSet.GetHighestScanNumber();
 
-            var minIMSScan = imsScanSet.getLowestScanNumber();
-            var maxIMSScan = imsScanSet.getHighestScanNumber();
+            var minIMSScan = imsScanSet.GetLowestScanNumber();
+            var maxIMSScan = imsScanSet.GetHighestScanNumber();
 
             var massTolerance = 0.2;
 
@@ -635,7 +635,7 @@ namespace DeconTools.Backend.Workflows
                     }
 
 
-                    //correct the m/z value, to more accurately base it on the non-saturated peak.  See Chernushevich et al. 2001 http://onlinelibrary.wiley.com/doi/10.1002/jms.207/abstract
+                    //correct the m/z value, to more accurately base it on the non-saturated peak.  See Chernushevich et al. 2001 https://onlinelibrary.wiley.com/doi/full/10.1002/jms.207
                     if (updatePeakMasses)
                     {
                         iso.Peaklist[i].XValue = iso.Peaklist[indexOfPeakUsedInExtrapolation].XValue -                  // formula is  MZ0 = MZ3 - (1.003/z)*n
@@ -696,8 +696,8 @@ namespace DeconTools.Backend.Workflows
         /// <param name="msFeatureXYData"> </param>
         /// <param name="saturatedFeature"></param>
         /// <param name="peakList"></param>
-        /// <param name="theorIso"></param>
-        public void RebuildSaturatedIsotopicProfile(XYData msFeatureXYData, IsosResult saturatedFeature, List<Peak> peakList, out IsotopicProfile theorIso)
+        /// <param name="theorIsotopicProfile"></param>
+        public void RebuildSaturatedIsotopicProfile(XYData msFeatureXYData, IsosResult saturatedFeature, List<Peak> peakList, out IsotopicProfile theorIsotopicProfile)
         {
             //check for peak to the left
 
@@ -765,10 +765,10 @@ namespace DeconTools.Backend.Workflows
 
             //create the theoretical isotopic profile. Will need this to help rebuild and then correct the saturated
             //peaks
-            theorIso = GetTheorIsotopicProfile(saturatedFeature);
+            theorIsotopicProfile = GetTheorIsotopicProfile(saturatedFeature);
 
             //now, starting at the updated monoisotopic peak, will re-find the other peaks and add them
-            AssignMissingPeaksToSaturatedProfile(Run.PeakList, saturatedFeature.IsotopicProfile, theorIso);
+            AssignMissingPeaksToSaturatedProfile(Run.PeakList, saturatedFeature.IsotopicProfile, theorIsotopicProfile);
 
         }
 
@@ -819,6 +819,12 @@ namespace DeconTools.Backend.Workflows
 
         }
 
+        /// <summary>
+        /// Obtain the theoretical isotopic profile
+        /// </summary>
+        /// <param name="saturatedFeature"></param>
+        /// <param name="lowerIntensityCutoff"></param>
+        /// <returns></returns>
         private IsotopicProfile GetTheorIsotopicProfile(IsosResult saturatedFeature, double lowerIntensityCutoff = 0.0001)
         {
             var theorTarget = new PeptideTarget
@@ -836,12 +842,12 @@ namespace DeconTools.Backend.Workflows
             theorTarget.EmpiricalFormula = averagineFormula;
             theorTarget.CalculateMassesForIsotopicProfile(saturatedFeature.IsotopicProfile.ChargeState);
 
-            //NOTE: This is critical to choosing the optimum peak of the observed isotopic profile
-            //A value of 0.001 will leave more peaks in the theor profile. This
-            //can be bad with co-eluting peptides, so that a peak of the interfering peptide
-            //is used to correct the intensity of our target peptide.
-            //A value of 0.01 helps prevent this (by trimming the peaks of the theor profile,
-            //and reducing the peaks to be considered for peak intensity extrapolation of the target peptide.
+            // NOTE: This is critical to choosing the optimum peak of the observed isotopic profile
+            // A value of 0.001 will leave more peaks in the theor profile. This
+            // can be bad with co-eluting peptides, so that a peak of the interfering peptide
+            // is used to correct the intensity of our target peptide.
+            // A value of 0.01 helps prevent this (by trimming the peaks of the theor profile,
+            // and reducing the peaks to be considered for peak intensity extrapolation of the target peptide.
             PeakUtilities.TrimIsotopicProfile(theorTarget.IsotopicProfile, lowerIntensityCutoff);
 
             return theorTarget.IsotopicProfile;

@@ -64,30 +64,30 @@ namespace DeconTools.Backend.Runs
 
             // Unused: var totScans = GetNumMSScans();
 
-            var xvals = new double[0];
-            var yvals = new double[0];
+            var xVals = new double[0];
+            var yVals = new double[0];
 
             //if (scanSet.IndexValues.Count == 1)            //this is the case of only wanting one MS spectrum
             //{
-            //    this.rawData.GetSpectrum(scanSet.IndexValues[0], ref xvals, ref yvals);
+            //    this.rawData.GetSpectrum(scanSet.IndexValues[0], ref xVals, ref yVals);
             //}
             //else
             //{
-            //    int upperscan = Math.Min(scanSet.getHighestScanNumber(), this.GetNumMSScans());
-            //    int lowerscan = Math.Max(scanSet.getLowestScanNumber(), 1);
-            //    this.rawData.GetSummedSpectra(lowerscan, upperscan, minMZ, maxMZ, ref xvals, ref yvals);
+            //    int upperScan = Math.Min(scanSet.GetHighestScanNumber(), this.GetNumMSScans());
+            //    int lowerScan = Math.Max(scanSet.GetLowestScanNumber(), 1);
+            //    this.rawData.GetSummedSpectra(lowerScan, upperScan, minMZ, maxMZ, ref xVals, ref yVals);
             //}
 
-            var upperscan = Math.Min(scanSet.getHighestScanNumber(), GetNumMSScans());
-            var lowerscan = Math.Max(scanSet.getLowestScanNumber(), 1);
+            var upperScan = Math.Min(scanSet.GetHighestScanNumber(), GetNumMSScans());
+            var lowerScan = Math.Max(scanSet.GetLowestScanNumber(), 1);
 
             //TODO:  Old DeconTools reference!! remove this
-            RawData.GetSummedSpectra(lowerscan, upperscan, minMZ, maxMZ, ref xvals, ref yvals);
+            RawData.GetSummedSpectra(lowerScan, upperScan, minMZ, maxMZ, ref xVals, ref yVals);
 
             var xydata = new XYData
             {
-                Xvalues = xvals,
-                Yvalues = yvals
+                Xvalues = xVals,
+                Yvalues = yVals
             };
 
             return xydata;

@@ -130,7 +130,7 @@ namespace DeconTools.Backend.ProcessingTasks
 
                     //retrieve IsosResults for CurrentScanSet
                     //TODO: next line might be a time bottleneck! needs checking
-                    //List<IsosResult> scanSetIsosResults = ResultCollection.getIsosResultsForCurrentScanSet(baseResultList);
+                    //List<IsosResult> scanSetIsosResults = ResultCollection.GetIsosResultsForCurrentScanSet(baseResultList);
 
                     //search isosResults for a (monoPeak = addedResult's monoPeak) AND chargeState = addedResult's chargeState
                     if (doesResultExist(baseResultList.IsosResultBin, addedResult))

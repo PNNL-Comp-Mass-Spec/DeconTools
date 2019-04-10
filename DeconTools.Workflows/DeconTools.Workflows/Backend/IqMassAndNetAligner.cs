@@ -353,17 +353,17 @@ namespace DeconTools.Workflows.Backend
 
             if (massAlignmentInfo.GetNumPoints() > 2)
             {
-                massAlignmentInfo.StdevPpmShiftData = MathUtils.GetStDev(massAlignmentInfo.ScanAndPpmShiftVals.Yvalues);
+                massAlignmentInfo.StDevPpmShiftData = MathUtils.GetStDev(massAlignmentInfo.ScanAndPpmShiftVals.Yvalues);
             }
             else
             {
-                massAlignmentInfo.StdevPpmShiftData = double.NaN;
+                massAlignmentInfo.StDevPpmShiftData = double.NaN;
             }
 
 
             IqLogger.LogMessage("Mass alignment complete using " + massAlignmentInfo.GetNumPoints() + " data points");
 
-            IqLogger.LogMessage("Average ppm shift = \t" + massAlignmentInfo.AveragePpmShift.ToString("0.00")+ " +/- " + massAlignmentInfo.StdevPpmShiftData.ToString("0.00"));
+            IqLogger.LogMessage("Average ppm shift = \t" + massAlignmentInfo.AveragePpmShift.ToString("0.00")+ " +/- " + massAlignmentInfo.StDevPpmShiftData.ToString("0.00"));
 
             MassAlignmentInfo = massAlignmentInfo;
 

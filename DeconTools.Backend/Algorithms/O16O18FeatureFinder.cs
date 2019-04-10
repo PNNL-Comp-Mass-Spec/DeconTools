@@ -29,19 +29,7 @@ namespace DeconTools.Backend.Algorithms
             var theorO18DoubleLabel = convertO16ProfileToO18(theorFeature, 4);
 
             var o18SingleLabelProfile = basicFeatureFinder.FindMSFeature(peakList, theorO18SingleLabel, toleranceInPPM, false);
-            var o18DoubleLabelprofile = basicFeatureFinder.FindMSFeature(peakList, theorO18DoubleLabel, toleranceInPPM, false);
-
-
-            //TO BE DELETED:
-            //if (o18SingleLabelProfile != null)
-            //{
-            //    o16profile.Peaklist = o16profile.Peaklist.Union(o18SingleLabelProfile.Peaklist).ToList();
-            //}
-            //if (o18DoubleLabelprofile != null)
-            //{
-            //    o16profile.Peaklist = o16profile.Peaklist.Union(o18DoubleLabelprofile.Peaklist).ToList();
-            //}
-
+            var o18DoubleLabelProfile = basicFeatureFinder.FindMSFeature(peakList, theorO18DoubleLabel, toleranceInPPM, false);
 
             var foundO16O18Profile = new IsotopicProfile {
                 ChargeState = theorFeature.ChargeState
@@ -49,15 +37,11 @@ namespace DeconTools.Backend.Algorithms
 
             addIsotopePeaks(foundO16O18Profile, o16profile, 2);
             addIsotopePeaks(foundO16O18Profile, o18SingleLabelProfile, 2);
-            addIsotopePeaks(foundO16O18Profile, o18DoubleLabelprofile, 100);    // add as many peaks as possible
-
-
+            addIsotopePeaks(foundO16O18Profile, o18DoubleLabelProfile, 100);    // add as many peaks as possible
 
             lookForMissingPeaksAndInsertZeroIntensityPeaksWhenMissing(foundO16O18Profile, theorFeature);
 
             return foundO16O18Profile;
-
-
         }
 
         private void addIsotopePeaks(IsotopicProfile foundO16O18Profile, IsotopicProfile profileToAdd, int numIsotopePeaksToAdd)
@@ -116,14 +100,11 @@ namespace DeconTools.Backend.Algorithms
                 Peaklist = new List<MSPeak>()
             };
 
-
-
             var mzBetweenIsotopes = 1.003 / theorFeature.ChargeState;
 
-
-            foreach (var theorpeak in theorFeature.Peaklist)
+            foreach (var theorPeak in theorFeature.Peaklist)
             {
-                var peak = new MSPeak(theorpeak.XValue, theorpeak.Height, theorpeak.Width, theorpeak.SignalToNoise);
+                var peak = new MSPeak(theorPeak.XValue, theorPeak.Height, theorPeak.Width, theorPeak.SignalToNoise);
 
                 peak.XValue += numPeaksToShift * mzBetweenIsotopes;
 

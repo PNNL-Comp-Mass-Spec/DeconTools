@@ -64,7 +64,7 @@ namespace DeconTools.Backend.DTO
 
         }
 
-        public void updateFrameScansRange(BitArray2D frameScansFound)
+        public void UpdateFrameScansRange(BitArray2D frameScansFound)
         {
             
 
@@ -72,7 +72,7 @@ namespace DeconTools.Backend.DTO
 
 
         //checks if the given mass is within a tolerance of this feature
-        public bool containsMass(double massValue, int toleranceInPPM)
+        public bool ContainsMass(double massValue, int toleranceInPPM)
         {
                 double differenceInPPM = Math.Abs(1000000 * (this.MSPeak.XValue - massValue) / this.MSPeak.XValue);
 
@@ -88,7 +88,7 @@ namespace DeconTools.Backend.DTO
         }
 
 
-        public int containsPeak(MSPeak peak, int frameNum, int scanNum, int toleranceInPPM, int netRange, int driftRange )
+        public int ContainsPeak(MSPeak peak, int frameNum, int scanNum, int toleranceInPPM, int netRange, int driftRange )
         {
             if (peak == null)
             {

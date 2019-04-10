@@ -51,8 +51,8 @@ namespace DeconTools.Backend.Core
         {
             var currentLevel = run.GetMSLevel(scan);
 
-            var lowerScansToSum = getLowerScans(run, scan, currentLevel, (scansSummed - 1) / 2);
-            var upperScansToSum = getUpperScans(run, scan, currentLevel, (scansSummed - 1) / 2);
+            var lowerScansToSum = GetLowerScans(run, scan, currentLevel, (scansSummed - 1) / 2);
+            var upperScansToSum = GetUpperScans(run, scan, currentLevel, (scansSummed - 1) / 2);
 
             var scansToSum = lowerScansToSum.OrderBy(p => p).ToList();
             scansToSum.Add(scan);
@@ -65,42 +65,29 @@ namespace DeconTools.Backend.Core
         }
 
 
-        public void TrimScans(ScanSet scanset, int maxScansAllowed)
+        public void TrimScans(ScanSet scanSet, int maxScansAllowed)
         {
             Check.Require(maxScansAllowed > 0, "Scans cannot be trimmed to fewer than one");
 
-
-
-            if (scanset.IndexValues.Count > maxScansAllowed)
+            if (scanSet.IndexValues.Count > maxScansAllowed)
             {
-                var numScansToBeRemoved = (scanset.IndexValues.Count - maxScansAllowed + 1) / 2;
+                var numScansToBeRemoved = (scanSet.IndexValues.Count - maxScansAllowed + 1) / 2;
 
                 var newScans = new List<int>();
 
-                for (var i = numScansToBeRemoved; i < (scanset.IndexValues.Count - numScansToBeRemoved); i++)    //this loop will cleave off the first n scans and the last n scans
+                for (var i = numScansToBeRemoved; i < (scanSet.IndexValues.Count - numScansToBeRemoved); i++)    //this loop will cleave off the first n scans and the last n scans
                 {
-                    newScans.Add(scanset.IndexValues[i]);
-
+                    newScans.Add(scanSet.IndexValues[i]);
                 }
 
-                scanset.IndexValues = newScans;
-
-
+                scanSet.IndexValues = newScans;
             }
-
-
-
-
-
 
         }
 
-
         #endregion
 
-
-
-        private List<int> getLowerScans(Run run, int startingScan, int currentMSLevel, int numLowerScansToGet)
+        private IEnumerable<int> GetLowerScans(Run run, int startingScan, int currentMSLevel, int numLowerScansToGet)
         {
             var currentScan = startingScan - 1;
             var lowerScans = new List<int>();
@@ -114,21 +101,19 @@ namespace DeconTools.Backend.Core
                     scansCounter++;
                 }
                 currentScan--;
-
-
             }
             return lowerScans;
 
         }
-        private List<int> getUpperScans(Run run, int startingScan, int currentMSLevel, int numUpperScansToGet)
+        private IEnumerable<int> GetUpperScans(Run run, int startingScan, int currentMSLevel, int numUpperScansToGet)
         {
             var currentScan = startingScan + 1;
             var scans = new List<int>();
 
             var scansCounter = 0;
-            var scanUppperLimit = run.GetNumMSScans();
+            var scanUpperLimit = run.GetNumMSScans();
 
-            while (currentScan <= scanUppperLimit && numUpperScansToGet > scansCounter)
+            while (currentScan <= scanUpperLimit && numUpperScansToGet > scansCounter)
             {
                 if (run.GetMSLevel(currentScan) == currentMSLevel)
                 {
@@ -136,8 +121,6 @@ namespace DeconTools.Backend.Core
                     scansCounter++;
                 }
                 currentScan++;
-
-
             }
             return scans;
 

@@ -1,4 +1,6 @@
 ﻿
+using System;
+
 namespace DeconTools.Backend.Core
 {
 
@@ -6,7 +8,7 @@ namespace DeconTools.Backend.Core
     /// this class has been decommissioned. Delete after Jan 2011.
     /// Singleton class that functions to allow only one UIMF file to be opened at a time
     /// and keeps the file open allowing for more efficient use of the UIMFLibrary class.
-    /// (instead of opening and closing it everytime you want to retrieve information from
+    /// (instead of opening and closing it every time you want to retrieve information from
     /// the class)
     /// </summary>
     public class UIMFLibraryAdapter
@@ -14,16 +16,18 @@ namespace DeconTools.Backend.Core
         private static UIMFLibraryAdapter instance;
         private readonly string fileName;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="filename"></param>
         private UIMFLibraryAdapter(string filename)
         {
             fileName = filename;
-            Datareader = new UIMFLibrary.DataReader(fileName);
+            Reader = new UIMFLibrary.DataReader(fileName);
             ConnectionState = System.Data.ConnectionState.Open;
         }
 
-
-        public UIMFLibrary.DataReader Datareader { get; set; }
-
+        public UIMFLibrary.DataReader Reader { get; }
 
         public static UIMFLibraryAdapter getInstance(string filename)
         {
@@ -62,18 +66,13 @@ namespace DeconTools.Backend.Core
         {
             if (instance != null)
             {
-                Datareader.Dispose();
+                Reader.Dispose();
 
                 ConnectionState = System.Data.ConnectionState.Closed;
             }
         }
 
-
-
-
-
-
-        internal static string getLibraryVersion()
+        internal static string GetLibraryVersion()
         {
             return Utilities.AssemblyInfoRetriever.GetVersion(typeof(UIMFLibrary.DataReader));
         }

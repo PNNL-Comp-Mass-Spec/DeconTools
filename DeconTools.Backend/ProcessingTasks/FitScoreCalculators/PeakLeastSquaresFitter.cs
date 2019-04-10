@@ -108,7 +108,7 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
             var normalizedObs = observedIntensitiesUsedInCalc.Select(p => p / maxObs).ToList();
 
             var maxTheor = theorIntensitiesUsedInCalc.Max();
-            var normalizedTheo = theorIntensitiesUsedInCalc.Select(p => p / maxTheor).ToList();
+            var normalizedTheor = theorIntensitiesUsedInCalc.Select(p => p / maxTheor).ToList();
             Utilities.IqLogger.IqLogger.LogTrace("Max Theoretical Intensity: " + maxTheor);
 
 
@@ -118,7 +118,7 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
             //}
 
             //Console.WriteLine();
-            //foreach (var val in normalizedTheo)
+            //foreach (var val in normalizedTheor)
             //{
             //    Console.WriteLine(val);
             //}
@@ -126,19 +126,19 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
 
             double sumSquareOfDiffs = 0;
             double sumSquareOfTheor = 0;
-            for (var i = 0; i < normalizedTheo.Count; i++)
+            for (var i = 0; i < normalizedTheor.Count; i++)
             {
-                var diff = normalizedObs[i] - normalizedTheo[i];
+                var diff = normalizedObs[i] - normalizedTheor[i];
 
                 sumSquareOfDiffs += (diff * diff);
-                sumSquareOfTheor += (normalizedTheo[i]*normalizedTheo[i]);
+                sumSquareOfTheor += (normalizedTheor[i]*normalizedTheor[i]);
 
                 Utilities.IqLogger.IqLogger.LogTrace("Normalized Observed: " + normalizedObs[i]);
-                Utilities.IqLogger.IqLogger.LogTrace("Normalized Theoretical: " + normalizedTheo[i]);
+                Utilities.IqLogger.IqLogger.LogTrace("Normalized Theoretical: " + normalizedTheor[i]);
                 Utilities.IqLogger.IqLogger.LogTrace("Iterator: " + i + " Sum of Squares Differences: " + sumSquareOfDiffs + " Sum of Squares Theoretical: " + sumSquareOfTheor);
             }
 
-            ionCountUsed = normalizedTheo.Count;
+            ionCountUsed = normalizedTheor.Count;
 
             var fitScore = sumSquareOfDiffs / sumSquareOfTheor;
             if (double.IsNaN(fitScore) || fitScore > 1)

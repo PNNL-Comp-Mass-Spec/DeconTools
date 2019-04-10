@@ -18,45 +18,45 @@ namespace DeconTools.Backend.Data
 
         }
 
-        protected bool parseBoolField(string inputstring)
+        protected bool parseBoolField(string inputString)
         {
-            if (bool.TryParse(inputstring, out var result))
+            if (bool.TryParse(inputString, out var result))
                 return result;
             return false;     //TODO:  need to figure out the default value
         }
 
-        protected short parseShortField(string inputstring)
+        protected short parseShortField(string inputString)
         {
-            if (Int16.TryParse(inputstring, out var result))
+            if (Int16.TryParse(inputString, out var result))
                 return result;
             return 0;
         }
 
-        protected double parseDoubleField(string inputstring)
+        protected double parseDoubleField(string inputString)
         {
 
-            if (double.TryParse(inputstring, out var result))
+            if (double.TryParse(inputString, out var result))
                 return result;
             return double.NaN;
         }
 
-        protected float parseFloatField(string inputstring)
+        protected float parseFloatField(string inputString)
         {
-            if (float.TryParse(inputstring, out var result))
+            if (float.TryParse(inputString, out var result))
                 return result;
             return float.NaN;
         }
 
 
-        protected int parseIntField(string inputstring)
+        protected int parseIntField(string inputString)
         {
 
-            if (string.IsNullOrEmpty(inputstring)) return -1;
+            if (string.IsNullOrEmpty(inputString)) return -1;
 
-            if (int.TryParse(inputstring, out var result))
+            if (int.TryParse(inputString, out var result))
                 return result;
 
-            var secondAttempt = parseDoubleField(inputstring);
+            var secondAttempt = parseDoubleField(inputString);
             if (!double.IsNaN(secondAttempt))
             {
                 return Convert.ToInt32(secondAttempt);

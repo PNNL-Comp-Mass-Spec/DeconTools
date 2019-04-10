@@ -33,12 +33,12 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
             double sumOfDiffsBetweenValues = 0;
             double pointCounter = 0;
 
-            for (var i = 0; i < filteredXYData.Xvalues.Length-1; i++)
+            for (var i = 0; i < filteredXYData.Xvalues.Length - 1; i++)
             {
                 var y1 = filteredXYData.Yvalues[i];
                 var y2 = filteredXYData.Yvalues[i + 1];
 
-                if ( y1>0 && y2>0)
+                if (y1 > 0 && y2 > 0)
                 {
                     var x1 = filteredXYData.Xvalues[i];
                     var x2 = filteredXYData.Xvalues[i + 1];
@@ -52,13 +52,13 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
 
 
             int numL;
-            if (pointCounter>5)
+            if (pointCounter > 5)
             {
                 var averageDiffBetweenPoints = sumOfDiffsBetweenValues / pointCounter;
 
-                numL = (int) Math.Ceiling((maxMZ - minMZ)/averageDiffBetweenPoints);
+                numL = (int)Math.Ceiling((maxMZ - minMZ) / averageDiffBetweenPoints);
 
-                numL = (int) (numL +numL*0.1);
+                numL = (int)(numL + numL * 0.1);
                 //numL = 445;
             }
             else
@@ -87,24 +87,22 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
 
             }
 
-             //Console.WriteLine("Number of points in interpolated data= " + numL);
+            //Console.WriteLine("Number of points in interpolated data= " + numL);
 
 
-
-
-            var interpolant = new alglib.spline1d.spline1dinterpolant();
+            var interpolationFunction = new alglib.spline1d.spline1dinterpolant();
 
             var sw = new System.Diagnostics.Stopwatch();
             sw.Start();
 
-            alglib.spline1d.spline1dbuildcubic(filteredXYData.Xvalues, filteredXYData.Yvalues, filteredXYData.Xvalues.Length, 1, +1, 1, -1, interpolant);
+            alglib.spline1d.spline1dbuildcubic(
+                filteredXYData.Xvalues, filteredXYData.Yvalues, filteredXYData.Xvalues.Length,
+                1, +1, 1, -1, interpolationFunction);
 
             sw.Stop();
             //Console.WriteLine("spline time = " + sw.ElapsedMilliseconds);
 
-
-
-           // DisplayXYVals(filteredXYData);
+            // DisplayXYVals(filteredXYData);
 
             var evenlySpacedXYData = new XYData
             {
@@ -114,14 +112,12 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
 
             for (var i = 0; i < numL; i++)
             {
-                var xval = (minMZ + ((maxMZ - minMZ) * i) / numL);
-                var yval = alglib.spline1d.spline1dcalc(interpolant, xval);
+                var xVal = (minMZ + ((maxMZ - minMZ) * i) / numL);
+                var yVal = alglib.spline1d.spline1dcalc(interpolationFunction, xVal);
 
-                evenlySpacedXYData.Xvalues[i] = xval;
-                evenlySpacedXYData.Yvalues[i] = yval;
+                evenlySpacedXYData.Xvalues[i] = xVal;
+                evenlySpacedXYData.Yvalues[i] = yVal;
             }
-
-
 
 
             //Console.WriteLine();
@@ -130,13 +126,13 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
 
             var autoCorrScores = ACss(evenlySpacedXYData.Yvalues);
 
-            //var tempXYdata = new XYData
+            //var tempXYData = new XYData
             //{
             //    Xvalues = autoCorrScores,
             //    Yvalues = autoCorrScores
             //};
 
-            // DisplayXYVals(tempXYdata);
+            // DisplayXYVals(tempXYData);
 
 
             var startingIndex = 0;
@@ -220,7 +216,7 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
             //}
             //Console.WriteLine(sb.ToString());
 
-            //then extract Autocorrelation scores (ACss)
+            //then extract AutoCorrelation scores (ACss)
 
             //determine highest charge state peak (?)
 
@@ -295,19 +291,19 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
 
                 if (wasGoingUp && !goingUp)
                 {
-                    var currentChargeState = (numPoints / ((maxMZ - minMZ) * (i - 1)) );
+                    var currentChargeState = (numPoints / ((maxMZ - minMZ) * (i - 1)));
 
 
-                    // var tempAutocorrScore = autoCorrScores[i];
+                    // var tempAutoCorrScore = autoCorrScores[i];
                     var currentAutoCorrScore = autoCorrScores[i - 1];
 
                     //Console.WriteLine(i+ "\tCurrent charge state=\t" + currentChargeState + "\tcurrent corr score= \t" +
-                    //                  currentAutoCorrScore +"\tComparedCorrScore= \t"+tempAutocorrScore);
+                    //                  currentAutoCorrScore +"\tComparedCorrScore= \t"+tempAutoCorrScore);
 
 
                     if ((currentAutoCorrScore > bestAutoCorrScore * 0.1) && (currentChargeState < maxCharge))
                     {
-                        var chargeState = (int) Math.Round(currentChargeState);
+                        var chargeState = (int)Math.Round(currentChargeState);
                         chargeStatesAndScores.Add(chargeState);
                     }
                 }
@@ -356,12 +352,12 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
         }
 
         [Obsolete("Unused")]
-        private static void DisplayXYVals(XYData xydata)
+        private static void DisplayXYVals(XYData xyData)
         {
             var sb = new StringBuilder();
-            for (var i = 0; i < xydata.Xvalues.Length; i++)
+            for (var i = 0; i < xyData.Xvalues.Length; i++)
             {
-                sb.Append(xydata.Xvalues[i] + "\t" + xydata.Yvalues[i]);
+                sb.Append(xyData.Xvalues[i] + "\t" + xyData.Yvalues[i]);
                 sb.Append(Environment.NewLine);
 
             }

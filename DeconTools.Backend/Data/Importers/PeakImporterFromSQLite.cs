@@ -11,24 +11,24 @@ namespace DeconTools.Backend.Data
 {
     public class PeakImporterFromSQLite : IPeakImporter
     {
-        private readonly string sqliteFilename;
+        private readonly string _sqLiteFilename;
 
         #region Constructors
-        public PeakImporterFromSQLite(string sqliteFilename)
-            : this(sqliteFilename, null)
+        public PeakImporterFromSQLite(string sqLiteFilename)
+            : this(sqLiteFilename, null)
         {
 
         }
 
-        public PeakImporterFromSQLite(string sqliteFilename, BackgroundWorker bw)
+        public PeakImporterFromSQLite(string sqLiteFilename, BackgroundWorker bw)
         {
             backgroundWorker = bw;
 
-            if (!File.Exists(sqliteFilename))
+            if (!File.Exists(sqLiteFilename))
             {
-                throw new IOException("Peak import failed. File doesn't exist: " + DiagnosticUtilities.GetFullPathSafe(sqliteFilename));
+                throw new IOException("Peak import failed. File doesn't exist: " + DiagnosticUtilities.GetFullPathSafe(sqLiteFilename));
             }
-            this.sqliteFilename = sqliteFilename;
+            _sqLiteFilename = sqLiteFilename;
         }
 
         #endregion
@@ -47,7 +47,7 @@ namespace DeconTools.Backend.Data
                 if (cnn == null)
                     throw new Exception("Factory.CreateConnection returned a null DbConnection instance in ImportPeaks");
 
-                cnn.ConnectionString = "Data Source=" + sqliteFilename;
+                cnn.ConnectionString = "Data Source=" + _sqLiteFilename;
 
                 try
                 {
@@ -75,7 +75,7 @@ namespace DeconTools.Backend.Data
 
                     while (reader.Read())
                     {
-                        var peakresult = new MSPeakResult
+                        var peakResult = new MSPeakResult
                         {
                             PeakID = (int)(long)reader["peak_id"],
                             Scan_num = (int)(long)reader["scan_num"]
@@ -85,8 +85,8 @@ namespace DeconTools.Backend.Data
                         var intensity = (float)(double)reader["intensity"];
                         var fwhm = (float)(double)reader["fwhm"];
 
-                        peakresult.MSPeak = new MSPeak(mz, intensity, fwhm);
-                        peakList.Add(peakresult);
+                        peakResult.MSPeak = new MSPeak(mz, intensity, fwhm);
+                        peakList.Add(peakResult);
 
                         if (backgroundWorker != null)
                         {
@@ -104,17 +104,7 @@ namespace DeconTools.Backend.Data
             }
         }
 
-
-
-
         #endregion
-
-        #region Private Methods
-
-
-        #endregion
-
-
 
     }
 }

@@ -25,9 +25,6 @@ namespace DeconTools.Backend.Core
         public void ApplyChargeStateFilter()
         {
             ApplyChargeStateFilter(0.1);
-
-
-
         }
 
         /// <summary>
@@ -62,9 +59,6 @@ namespace DeconTools.Backend.Core
 
             TargetList = filteredMassTagList;
 
-
-
-
         }
 
         public void FilterOutDuplicates()
@@ -88,15 +82,12 @@ namespace DeconTools.Backend.Core
 
             TargetList = filteredList;
 
-
-
         }
-
-
 
         #endregion
 
         #region Private Methods
+
         private bool massTagListContainsMassTag(List<TargetBase> filteredList, TargetBase targetMassTag)
         {
             foreach (var mt in filteredList)
@@ -108,8 +99,8 @@ namespace DeconTools.Backend.Core
             }
             return false;
         }
-        #endregion
 
+        #endregion
 
         /// <summary>
         /// This updates LCMS targets with information from the source list. I.e. we use
@@ -132,14 +123,7 @@ namespace DeconTools.Backend.Core
 
             }
 
-
-
-
         }
-
-
-
-
 
     }
 }

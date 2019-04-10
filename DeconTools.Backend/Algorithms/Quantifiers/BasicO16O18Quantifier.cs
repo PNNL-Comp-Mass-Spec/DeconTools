@@ -72,7 +72,7 @@ namespace DeconTools.Backend.Algorithms.Quantifiers
             //}
             //else
             //{
-            //    // see Yeo et al (2001), Analytical Chemistry. "Proteolytic O-18 labeling for comparative proteomics: Model studies with two serotypes of adenovirus."
+            //    // see Yeo et al (2001), Analytical Chemistry. https://www.ncbi.nlm.nih.gov/pubmed/11467524  (Anal Chem. 2001 Jul 1;73(13):2836-42.)
             //    adjustedI4Intensity = intensityI4 - (intensityTheorI4 / intensityTheorI0 * intensityI0);
 
             //    if (intensityI2 > 0)
@@ -107,20 +107,20 @@ namespace DeconTools.Backend.Algorithms.Quantifiers
             if (o16O18TargetedResultObject.ChromCorrelationData == null) return -1;
 
             var noO16PeakPresent = !o16O18TargetedResultObject.ChromCorrelationData.CorrelationDataItems.Any();
-            if (noO16PeakPresent )
+            if (noO16PeakPresent)
             {
                 ratio = 0;
             }
             else
             {
-                var ratioSingleO18ToO16 = o16O18TargetedResultObject.ChromCorrelationData.CorrelationDataItems[0].CorrelationSlope??0d;
+                var ratioSingleO18ToO16 = o16O18TargetedResultObject.ChromCorrelationData.CorrelationDataItems[0].CorrelationSlope ?? 0d;
 
                 var ratioDoubleO18ToO16 = o16O18TargetedResultObject.ChromCorrelationData.CorrelationDataItems[1].CorrelationSlope ?? 0d;
 
                 var tempIntensity = CalculateRatio(intensityTheorI0, intensityTheorI2, intensityTheorI4, 1.0, ratioSingleO18ToO16,
                                                       ratioDoubleO18ToO16, out var adjRatioI0I4);
 
-                ratio = 1/adjRatioI0I4;   //report the o16/o18 ratio
+                ratio = 1 / adjRatioI0I4;   //report the o16/o18 ratio
 
             }
 
@@ -138,7 +138,7 @@ namespace DeconTools.Backend.Algorithms.Quantifiers
             }
             else
             {
-                // see Yeo et al (2001), Analytical Chemistry. "Proteolytic O-18 labeling for comparative proteomics: Model studies with two serotypes of adenovirus."
+                // see Yeo et al (2001), Analytical Chemistry. https://www.ncbi.nlm.nih.gov/pubmed/11467524  (Anal Chem. 2001 Jul 1;73(13):2836-42.)
                 adjustedI4 = i4 - (theorI4 / theorI0 * i0);
 
                 if (i2 > 0)

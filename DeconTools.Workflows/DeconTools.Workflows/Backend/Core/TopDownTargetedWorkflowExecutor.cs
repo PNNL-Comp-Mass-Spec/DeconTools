@@ -72,14 +72,8 @@ namespace DeconTools.Workflows.Backend.Core
 
             }
 
-
             // Collapse + process results
             PostProcessResults(ResultRepository.Results);
-
-
-
-
-
 
         }
 
@@ -294,46 +288,45 @@ namespace DeconTools.Workflows.Backend.Core
                 {
                     var otherResult = (TopDownTargetedResultDTO)results[j];
 
-                    if (result.PeptideSequence.Equals(otherResult.PeptideSequence))
+                    if (!result.PeptideSequence.Equals(otherResult.PeptideSequence)) continue;
+
+                    // Add other Prsm
+                    if (otherResult.MatchedMassTagID > 0) result.PrsmList.Add(otherResult.MatchedMassTagID);
+
+                    // Add other charge state to list and chrom peak to quantitation
+                    if (otherResult.ChromPeakSelectedHeight > 0)
                     {
-                        // Add other Prsm
-                        if (otherResult.MatchedMassTagID > 0) result.PrsmList.Add(otherResult.MatchedMassTagID);
-
-                        // Add other charge state to list and chrom peak to quantitation
-                        if (otherResult.ChromPeakSelectedHeight > 0)
-                        {
-                            result.ChargeStateList.Add(otherResult.ChargeState);
-                            result.Quantitation += otherResult.ChromPeakSelectedHeight;
-                        }
-
-                        // Update most abundant charge state & scan apex
-                        if (otherResult.ChromPeakSelectedHeight > result.ChromPeakSelectedHeight)
-                        {
-                            result.MostAbundantChargeState = otherResult.ChargeState;
-                            result.ScanLC = otherResult.ScanLC;
-                        }
-
-                        // Add name and mass if we don't have already
-                        if (!havePrsmData && _prsmData.ContainsKey(otherResult.MatchedMassTagID))
-                        {
-                            result.ProteinName = _prsmData[otherResult.MatchedMassTagID].ProteinName;
-                            result.ProteinMass = _prsmData[otherResult.MatchedMassTagID].ProteinMass;
-                        }
-
-                        // Update Prsm_ID if it doesn't exist
-                        if (result.MatchedMassTagID < 0 && _prsmData.ContainsKey(otherResult.MatchedMassTagID))
-                        {
-                            result.MatchedMassTagID = otherResult.MatchedMassTagID;
-                        }
-                        // Or if this spectrum is better than the current one, update Prsm_ID
-                        if (_prsmData.ContainsKey(result.MatchedMassTagID) && _prsmData.ContainsKey(otherResult.MatchedMassTagID) &&
-                            _prsmData[result.MatchedMassTagID].EValue > _prsmData[otherResult.MatchedMassTagID].EValue)
-                        {
-                            result.MatchedMassTagID = otherResult.MatchedMassTagID;
-                        }
-
-                        results.RemoveAt(j--);
+                        result.ChargeStateList.Add(otherResult.ChargeState);
+                        result.Quantitation += otherResult.ChromPeakSelectedHeight;
                     }
+
+                    // Update most abundant charge state & scan apex
+                    if (otherResult.ChromPeakSelectedHeight > result.ChromPeakSelectedHeight)
+                    {
+                        result.MostAbundantChargeState = otherResult.ChargeState;
+                        result.ScanLC = otherResult.ScanLC;
+                    }
+
+                    // Add name and mass if we don't have already
+                    if (!havePrsmData && _prsmData.ContainsKey(otherResult.MatchedMassTagID))
+                    {
+                        result.ProteinName = _prsmData[otherResult.MatchedMassTagID].ProteinName;
+                        result.ProteinMass = _prsmData[otherResult.MatchedMassTagID].ProteinMass;
+                    }
+
+                    // Update Prsm_ID if it doesn't exist
+                    if (result.MatchedMassTagID < 0 && _prsmData.ContainsKey(otherResult.MatchedMassTagID))
+                    {
+                        result.MatchedMassTagID = otherResult.MatchedMassTagID;
+                    }
+                    // Or if this spectrum is better than the current one, update Prsm_ID
+                    if (_prsmData.ContainsKey(result.MatchedMassTagID) && _prsmData.ContainsKey(otherResult.MatchedMassTagID) &&
+                        _prsmData[result.MatchedMassTagID].EValue > _prsmData[otherResult.MatchedMassTagID].EValue)
+                    {
+                        result.MatchedMassTagID = otherResult.MatchedMassTagID;
+                    }
+
+                    results.RemoveAt(j--);
                 }
             }
         }

@@ -96,7 +96,6 @@ namespace DeconTools.Backend.Core
         #region Private Methods
         #endregion
 
-
         public int GetScanNum()
         {
             if (ScanSet == null)
@@ -172,10 +171,6 @@ namespace DeconTools.Backend.Core
             }
 
             return monoMass;
-
-
-
-
         }
 
         public double GetMZOfMostIntenseTheorIsotopicPeak()
@@ -205,7 +200,6 @@ namespace DeconTools.Backend.Core
             return 0;
         }
 
-
         internal virtual void AddLabelledIso(IsotopicProfile labelledIso)
         {
             throw new NotImplementedException();
@@ -216,26 +210,19 @@ namespace DeconTools.Backend.Core
             throw new NotImplementedException();
         }
 
-
-
-
-
-        public virtual void AddSelectedChromPeakAndScanSet(ChromPeak bestPeak, ScanSet scanset, Globals.IsotopicProfileType isotopicProfileType = Globals.IsotopicProfileType.UNLABELLED)
+        public virtual void AddSelectedChromPeakAndScanSet(ChromPeak bestPeak, ScanSet scanSet, Globals.IsotopicProfileType isotopicProfileType)
         {
 
             if (isotopicProfileType== Globals.IsotopicProfileType.UNLABELLED)
             {
 
                 ChromPeakSelected = bestPeak;
-                ScanSet = scanset;
+                ScanSet = scanSet;
 
                 if (ScanSet!=null)
                 {
                     NumMSScansSummed = ScanSet.IndexValues.Count;
                 }
-
-
-
 
                 var failedChromPeakSelection = (ChromPeakSelected == null || Math.Abs(ChromPeakSelected.XValue) < double.Epsilon);
                 if (failedChromPeakSelection)
@@ -255,11 +242,7 @@ namespace DeconTools.Backend.Core
                 throw new NotSupportedException("Cannot add data for a labeled result in this base class");
             }
 
-
-
         }
-
-
 
         public virtual void AddNumChromPeaksWithinTolerance(int numChromPeaksWithinTolerance)
         {
@@ -286,10 +269,7 @@ namespace DeconTools.Backend.Core
             IsotopicProfile = null;
         }
 
-
-
         public int NumQualityChromPeaks { get; set; }
-
 
         public double MonoIsotopicMassCalibrated { get; set; }
 

@@ -44,7 +44,7 @@ namespace DeconTools.Workflows.Backend.Results
         /// <summary>
         /// area under the parabolic LC fit
         /// </summary>
-        public double IndegratedLcAbundance { get; set; }
+        public double IntegratedLcAbundance { get; set; }
 
         #endregion
 
@@ -86,7 +86,7 @@ namespace DeconTools.Workflows.Backend.Results
                 RawI4.ToString("0.000"),
                 LabelingEfficiency.ToString("0.000"),
                 RatioDH.ToString("0.0000"),
-                IndegratedLcAbundance.ToString("0.0")
+                IntegratedLcAbundance.ToString("0.0")
             };
 
             return string.Join("\t", data);

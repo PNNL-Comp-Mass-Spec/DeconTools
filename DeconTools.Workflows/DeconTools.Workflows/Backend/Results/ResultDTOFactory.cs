@@ -9,66 +9,63 @@ namespace DeconTools.Workflows.Backend.Results
 
         public static void CreateTargetedResult(TargetedResultBase result, TargetedResultDTO resultLight)
         {
-            writeStandardInfoToResult(resultLight, result);
+            WriteStandardInfoToResult(resultLight, result);
 
         }
 
         public static TargetedResultDTO CreateTargetedResult(TargetedResultBase result)
         {
             TargetedResultDTO tr;
-            if (result is MassTagResult)
+            if (result is MassTagResult mtResult)
             {
                 tr = new UnlabelledTargetedResultDTO();
-                writeStandardInfoToResult(tr, result);
-                addAdditionalInfo(tr, result as MassTagResult);
+                WriteStandardInfoToResult(tr, mtResult);
+                AddAdditionalInfo(tr, mtResult);
             }
-            else if (result is O16O18TargetedResultObject)
+            else if (result is O16O18TargetedResultObject o16o18Result)
             {
                 tr = new O16O18TargetedResultDTO();
-                writeStandardInfoToResult(tr, result);
-                addAdditionalInfo(tr, result as O16O18TargetedResultObject);
+                WriteStandardInfoToResult(tr, o16o18Result);
+                AddAdditionalInfo(tr, o16o18Result);
             }
-            else if (result is N14N15_TResult)
+            else if (result is N14N15_TResult n14n15Result)
             {
                 tr = new N14N15TargetedResultDTO();
-                writeStandardInfoToResult(tr, result);
-                addAdditionalInfo(tr, result as N14N15_TResult);
+                WriteStandardInfoToResult(tr, n14n15Result);
+                AddAdditionalInfo(tr, n14n15Result);
             }
-            else if (result is SipperLcmsTargetedResult)
+            else if (result is SipperLcmsTargetedResult sipperTargetedResult)
             {
                 tr = new SipperLcmsFeatureTargetedResultDTO();
-                writeStandardInfoToResult(tr, result);
-                addAdditionalInfo(tr, result as SipperLcmsTargetedResult);
+                WriteStandardInfoToResult(tr, sipperTargetedResult);
+                AddAdditionalInfo(tr, sipperTargetedResult);
             }
-            else if (result is TopDownTargetedResult)
+            else if (result is TopDownTargetedResult topDownTargetedResult)
             {
                 tr = new TopDownTargetedResultDTO();
-                writeStandardInfoToResult(tr, result);
-                addAdditionalInfo(tr, result as TopDownTargetedResult);
+                WriteStandardInfoToResult(tr, topDownTargetedResult);
+                AddAdditionalInfo(tr, topDownTargetedResult);
             }
-            else if (result is DeuteratedTargetedResultObject)
+            // ReSharper disable once IdentifierTypo
+            else if (result is DeuteratedTargetedResultObject deuteratedTargetedResult)
             {
                 tr = new DeuteratedTargetedResultDTO();
-                writeStandardInfoToResult(tr, result);
-                addAdditionalInfo(tr, result as DeuteratedTargetedResultObject);
+                WriteStandardInfoToResult(tr, deuteratedTargetedResult);
+                AddAdditionalInfo(tr, deuteratedTargetedResult);
             }
             else
             {
                 throw new NotImplementedException();
             }
 
-
-
-
             return tr;
-
-
-
         }
 
-        private static void addAdditionalInfo(TargetedResultDTO tr, SipperLcmsTargetedResult result)
+        private static void AddAdditionalInfo(TargetedResultDTO tr, SipperLcmsTargetedResult result)
         {
-            var r = (SipperLcmsFeatureTargetedResultDTO)tr;
+            if (!(tr is SipperLcmsFeatureTargetedResultDTO r))
+                return;
+
             r.MatchedMassTagID = ((LcmsFeatureTarget)result.Target).FeatureToMassTagID;
             r.AreaUnderDifferenceCurve = result.AreaUnderDifferenceCurve;
             r.AreaUnderRatioCurve = result.AreaUnderRatioCurve;
@@ -77,49 +74,54 @@ namespace DeconTools.Workflows.Backend.Results
             r.ChromCorrelationMax = result.ChromCorrelationMax;
             r.ChromCorrelationAverage = result.ChromCorrelationAverage;
             r.ChromCorrelationMedian = result.ChromCorrelationMedian;
-            r.ChromCorrelationStdev = result.ChromCorrelationStdev;
+            r.ChromCorrelationStdev = result.ChromCorrelationStDev;
             r.NumCarbonsLabelled = result.NumCarbonsLabelled;
             r.PercentPeptideLabelled = result.PercentPeptideLabelled;
             r.PercentCarbonsLabelled = result.PercentCarbonsLabelled;
             r.NumHighQualityProfilePeaks = result.NumHighQualityProfilePeaks;
-            r.LabelDistributionVals = result.LabelDistributionVals == null ? null : result.LabelDistributionVals.ToArray();
+            r.LabelDistributionVals = result.LabelDistributionVals?.ToArray();
             r.FitScoreLabeledProfile = result.FitScoreLabeledProfile;
             r.ContiguousnessScore = result.ContiguousnessScore;
             r.RSquaredValForRatioCurve = result.RSquaredValForRatioCurve;
         }
 
 
-        private static void addAdditionalInfo(TargetedResultDTO tr, MassTagResult massTagResult)
+        private static void AddAdditionalInfo(TargetedResultDTO tr, MassTagResult massTagResult)
         {
             // no other info needed now
         }
 
-        private static void addAdditionalInfo(TargetedResultDTO tr, TopDownTargetedResult result)
+        // ReSharper disable once SuggestBaseTypeForParameter
+        private static void AddAdditionalInfo(TargetedResultDTO tr, TopDownTargetedResult result)
         {
-            var r = (TopDownTargetedResultDTO)tr;
+            if (!(tr is TopDownTargetedResultDTO r))
+                return;
 
             r.PrsmList = null;
             r.ChargeStateList = null;
-            r.Quantitation = result.ChromPeakSelected != null ? result.ChromPeakSelected.Height : 0;
+            r.Quantitation = result.ChromPeakSelected?.Height ?? 0;
 
             r.MatchedMassTagID = ((LcmsFeatureTarget)result.Target).FeatureToMassTagID;
             //r.ProteinName = "";
             //r.ProteinMass = 0.0;
             r.PeptideSequence = result.Target.Code;
             r.MostAbundantChargeState = r.ChargeState;
-            r.ChromPeakSelectedHeight = result.ChromPeakSelected != null ? result.ChromPeakSelected.Height : 0;
+            r.ChromPeakSelectedHeight = result.ChromPeakSelected?.Height ?? 0;
         }
 
-        private static void addAdditionalInfo(TargetedResultDTO tr, N14N15_TResult result)
+        // ReSharper disable once SuggestBaseTypeForParameter
+        private static void AddAdditionalInfo(TargetedResultDTO tr, N14N15_TResult result)
         {
-            var r = tr as N14N15TargetedResultDTO;
+            if (!(tr is N14N15TargetedResultDTO r))
+                return;
+
             r.FitScoreN15 = (float)result.ScoreN15;
             r.IScoreN15 = (float)result.InterferenceScoreN15;
             r.IntensityN15 = result.IsotopicProfileLabeled == null ? 0f : (float)result.IntensityAggregate;
-            r.MonoMZN15 = result.IsotopicProfileLabeled == null ? 0 : result.IsotopicProfileLabeled.MonoPeakMZ;
+            r.MonoMZN15 = result.IsotopicProfileLabeled?.MonoPeakMZ ?? 0;
             r.MonoMassCalibratedN15 = result.IsotopicProfileLabeled == null ? 0d : -1 * ((result.Target.IsotopicProfileLabelled.MonoIsotopicMass * tr.MassErrorBeforeCalibration / 1e6) -
                 result.Target.IsotopicProfileLabelled.MonoIsotopicMass);   // massError= (theorMZ-alignedObsMZ)/theorMZ * 1e6
-            r.MonoMassN15 = result.IsotopicProfileLabeled == null ? 0 : result.IsotopicProfileLabeled.MonoIsotopicMass;
+            r.MonoMassN15 = result.IsotopicProfileLabeled?.MonoIsotopicMass ?? 0;
 
             r.NETN15 = (float)result.GetNETN15();
             r.NumChromPeaksWithinTolN15 = (short)result.NumChromPeaksWithinToleranceForN15Profile;
@@ -136,32 +138,33 @@ namespace DeconTools.Workflows.Backend.Results
                 r.ScanN15End = (int)Math.Round(result.ChromPeakSelectedN15.XValue + sigma);
             }
 
-
-
-
         }
 
-        private static void addAdditionalInfo(TargetedResultDTO tr, O16O18TargetedResultObject result)
+        private static void AddAdditionalInfo(TargetedResultDTO tr, O16O18TargetedResultObject result)
         {
-            var r = (O16O18TargetedResultDTO)tr;
-            r.IntensityI0 = getIntensityFromIso(result.IsotopicProfile, 0);
-            r.IntensityI2 = getIntensityFromIso(result.IsotopicProfile, 2);
-            r.IntensityI4 = getIntensityFromIso(result.IsotopicProfile, 4);
-            r.IntensityTheorI0 = getIntensityFromIso(result.Target.IsotopicProfile, 0);
-            r.IntensityTheorI2 = getIntensityFromIso(result.Target.IsotopicProfile, 2);
-            r.IntensityTheorI4 = getIntensityFromIso(result.Target.IsotopicProfile, 4);
+            if (!(tr is O16O18TargetedResultDTO r))
+                return;
+
+            r.IntensityI0 = GetIntensityFromIso(result.IsotopicProfile, 0);
+            r.IntensityI2 = GetIntensityFromIso(result.IsotopicProfile, 2);
+            r.IntensityI4 = GetIntensityFromIso(result.IsotopicProfile, 4);
+            r.IntensityTheorI0 = GetIntensityFromIso(result.Target.IsotopicProfile, 0);
+            r.IntensityTheorI2 = GetIntensityFromIso(result.Target.IsotopicProfile, 2);
+            r.IntensityTheorI4 = GetIntensityFromIso(result.Target.IsotopicProfile, 4);
             r.IntensityI4Adjusted = result.IntensityI4Adjusted;
 
             r.ChromCorrO16O18DoubleLabel = (float) (result.ChromCorrO16O18DoubleLabel ?? 0f);
             r.ChromCorrO16O18SingleLabel = (float)(result.ChromCorrO16O18SingleLabel ?? 0f);
-            
+
             r.Ratio = result.RatioO16O18;
             r.RatioFromChromCorr = result.RatioO16O18FromChromCorr;
         }
 
-        private static void addAdditionalInfo(TargetedResultDTO tr, DeuteratedTargetedResultObject result)
+        private static void AddAdditionalInfo(TargetedResultDTO tr, DeuteratedTargetedResultObject result)
         {
-            var r = (DeuteratedTargetedResultDTO)tr;
+            if (!(tr is DeuteratedTargetedResultDTO r))
+                return;
+
             r.HydrogenI0 = result.HydrogenI0;
             r.HydrogenI1 = result.HydrogenI1;
             r.HydrogenI2 = result.HydrogenI2;
@@ -190,38 +193,32 @@ namespace DeconTools.Workflows.Backend.Results
             r.LabelingEfficiency = result.LabelingEfficiency;
             r.RatioDH = result.RatioDH;
             r.IntensityI0HydrogenMono = result.IntensityI0HydrogenMono;
-            r.IndegratedLcAbundance = result.IndegratedLcAbundance;
+            r.IntegratedLcAbundance = result.IntegratedLcAbundance;
         }
 
-        private static float getIntensityFromIso(IsotopicProfile isotopicProfile, int indexOfPeak)
+        private static float GetIntensityFromIso(IsotopicProfile isotopicProfile, int indexOfPeak)
         {
-            if (isotopicProfile == null || isotopicProfile.Peaklist == null || isotopicProfile.Peaklist.Count == 0) return -1;
+            if (isotopicProfile?.Peaklist == null || isotopicProfile.Peaklist.Count == 0) return -1;
 
             if (indexOfPeak >= isotopicProfile.Peaklist.Count)
             {
                 return 0;
             }
-            else
-            {
-                return isotopicProfile.Peaklist[indexOfPeak].Height;
-            }
+
+            return isotopicProfile.Peaklist[indexOfPeak].Height;
         }
 
-
-
-
-        public static void writeStandardInfoToResult(TargetedResultDTO tr, TargetedResultBase result)
+        public static void WriteStandardInfoToResult(TargetedResultDTO tr, TargetedResultBase result)
         {
             if (result.Target == null)
             {
-                throw new ArgumentNullException("Cannot create result object. MassTag is null.");
+                throw new Exception("Cannot create result object. MassTag is null (result.Target)");
             }
 
             if (result.Run == null)
             {
-                throw new ArgumentNullException("Cannot create result object. Run is null.");
+                throw new Exception("Cannot create result object. Run is null (result.Run)");
             }
-
 
             tr.DatasetName = result.Run.DatasetName;
             tr.TargetID = result.Target.ID;
@@ -233,11 +230,11 @@ namespace DeconTools.Workflows.Backend.Results
             tr.IndexOfMostAbundantPeak = result.IsotopicProfile == null ? (short)0 : (short)result.IsotopicProfile.GetIndexOfMostIntensePeak();
             tr.Intensity = result.IsotopicProfile == null ? 0f : (float)result.IntensityAggregate;
             tr.IntensityI0 = result.IsotopicProfile == null ? 0f : (float)result.IsotopicProfile.GetMonoAbundance();
-            tr.IntensityMostAbundantPeak = result.IsotopicProfile == null ? 0f : (float)result.IsotopicProfile.getMostIntensePeak().Height;
+            tr.IntensityMostAbundantPeak = (float?)result.IsotopicProfile?.getMostIntensePeak().Height ?? 0f;
             tr.IScore = (float)result.InterferenceScore;
-            tr.MonoMass = result.IsotopicProfile == null ? result.Target.MonoIsotopicMass : result.IsotopicProfile.MonoIsotopicMass;
-            tr.MonoMZ = result.IsotopicProfile == null ? result.Target.MZ : result.IsotopicProfile.MonoPeakMZ;
-            
+            tr.MonoMass = result.IsotopicProfile?.MonoIsotopicMass ?? result.Target.MonoIsotopicMass;
+            tr.MonoMZ = result.IsotopicProfile?.MonoPeakMZ ?? result.Target.MZ;
+
             tr.MonoMassCalibrated = result.MonoIsotopicMassCalibrated;
             tr.MassErrorBeforeCalibration = result.MassErrorBeforeAlignment;
             tr.MassErrorAfterCalibration = result.MassErrorAfterAlignment;
@@ -267,10 +264,7 @@ namespace DeconTools.Workflows.Backend.Results
 
             tr.ErrorDescription = result.ErrorDescription ?? "";
 
-
         }
-
-
 
     }
 }

@@ -6,9 +6,9 @@ namespace DeconTools.Backend.Core
     public abstract class ScanResult
     {
 
-        public ScanResult(ScanSet scanset)
+        protected ScanResult(ScanSet scanSet)
         {
-            ScanSet = scanset;
+            ScanSet = scanSet;
         }
 
         protected ScanResult()
@@ -17,11 +17,11 @@ namespace DeconTools.Backend.Core
         }
 
         public Run Run { get; set; }
-        public  int NumPeaks { get; set; }
-        public  int NumIsotopicProfiles { get; set; }
-        public  Peak BasePeak { get; set; }
-        public  float TICValue { get; set; }
-        public  ScanSet ScanSet { get; set; }
+        public int NumPeaks { get; set; }
+        public int NumIsotopicProfiles { get; set; }
+        public Peak BasePeak { get; set; }
+        public float TICValue { get; set; }
+        public ScanSet ScanSet { get; set; }
         public double ScanTime { get; set; }
         public int SpectrumType { get; set; }
         public string Description { get; set; }

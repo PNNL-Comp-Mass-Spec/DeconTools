@@ -129,7 +129,7 @@ namespace DeconTools.Backend.Data.Structures
         }
 
         private BinaryTreeNode<T> head;
-        private Comparison<IComparable> comparer = CompareElements;
+        private readonly Comparison<IComparable> comparer = CompareElements;
         private int size;
 
         /// <summary>
@@ -280,16 +280,22 @@ namespace DeconTools.Backend.Data.Structures
             {
                 try
                 {
+                    // ReSharper disable once SuspiciousTypeConversion.Global
                     var thisFeature = node.Value as MSResultPeakWithLocation;
+                    if (thisFeature == null)
+                    {
+                        Console.WriteLine("BinarySearchTree: The node is not of type MSResultPeakWithLocation");
+                        continue;
+                    }
 
                     //now check if the peak value is within the mass tolerance of this UMC
-                    //int number = thisFeature.containsPeak(value, (ushort)frameNum, (ushort)scanNum, (ushort)toleranceInPPM, (ushort)netTolRange, (ushort)driftTolRange);
-                    var hasMass = thisFeature.containsMass(value.XValue, toleranceInPPM);
+                    //int number = thisFeature.ContainsPeak(value, (ushort)frameNum, (ushort)scanNum, (ushort)toleranceInPPM, (ushort)netTolRange, (ushort)driftTolRange);
+                    var hasMass = thisFeature.ContainsMass(value.XValue, toleranceInPPM);
 
                     if (hasMass)
                     {
 
-                        var number = thisFeature.containsPeak(value, (ushort)frameNum, (ushort)scanNum, (ushort)toleranceInPPM, (ushort)netTolRange, (ushort)driftTolRange);
+                        var number = thisFeature.ContainsPeak(value, (ushort)frameNum, (ushort)scanNum, (ushort)toleranceInPPM, (ushort)netTolRange, (ushort)driftTolRange);
 
                         if (number == 0)
                         {
@@ -311,7 +317,7 @@ namespace DeconTools.Backend.Data.Structures
                 }
                 catch (InvalidCastException invalidCast)
                 {
-                    Console.WriteLine("The node is not of type UMC");
+                    Console.WriteLine("BinarySearchTree: The node is not of type MSResultPeakWithLocation");
                     Console.WriteLine(invalidCast.Message);
                 }
 
@@ -320,7 +326,6 @@ namespace DeconTools.Backend.Data.Structures
             return false;
 
         }
-
 
         /// <summary>
         /// Returns the first node in the tree with the parameter value.
@@ -334,6 +339,8 @@ namespace DeconTools.Backend.Data.Structures
                 {
                     var msPeak1 = node.Value as Peak;
                     var msPeak2 = value as Peak;
+
+                    if (msPeak1 == null || msPeak2 == null) continue;
 
                     var ppmDifference = 1000000 * (msPeak1.XValue - msPeak2.XValue) / msPeak1.XValue;
                     var absolutePPMDifference = Math.Abs(ppmDifference);
@@ -452,7 +459,7 @@ namespace DeconTools.Backend.Data.Structures
             }
             else //Case 3: Two Children
             {
-                //Find inorder predecessor (right-most node in left subtree)
+                //Find in order predecessor (right-most node in left subtree)
                 var successorNode = removeNode.LeftChild;
                 while (successorNode.RightChild != null)
                 {
@@ -461,7 +468,7 @@ namespace DeconTools.Backend.Data.Structures
 
                 removeNode.Value = successorNode.Value; //replace value
 
-                Remove(successorNode); //recursively remove the inorder predecessor
+                Remove(successorNode); //recursively remove the in order predecessor
             }
 
 
@@ -631,7 +638,7 @@ namespace DeconTools.Backend.Data.Structures
         }
 
         /// <summary>
-        /// Returns an inorder-traversal enumerator for the tree values
+        /// Returns an in order-traversal enumerator for the tree values
         /// </summary>
         internal class BinaryTreeInOrderEnumerator : IEnumerator<T>
         {
@@ -685,7 +692,7 @@ namespace DeconTools.Backend.Data.Structures
         }
 
         /// <summary>
-        /// Returns a postorder-traversal enumerator for the tree values
+        /// Returns a post order-traversal enumerator for the tree values
         /// </summary>
         internal class BinaryTreePostOrderEnumerator : IEnumerator<T>
         {
@@ -739,7 +746,7 @@ namespace DeconTools.Backend.Data.Structures
         }
 
         /// <summary>
-        /// Returns an preorder-traversal enumerator for the tree values
+        /// Returns an pre order-traversal enumerator for the tree values
         /// </summary>
         internal class BinaryTreePreOrderEnumerator : IEnumerator<T>
         {

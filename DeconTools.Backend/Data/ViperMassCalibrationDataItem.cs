@@ -34,7 +34,6 @@ namespace DeconTools.Backend.Data
             return MassErrorPpm + "\t" + Count + "\t" + SmoothedCount + "\t" + Comment;
         }
 
-
         #endregion
 
         #region Private Methods

@@ -68,24 +68,15 @@ namespace DeconTools.Backend.Core
             get => _netAlignmentInfo ?? (_netAlignmentInfo = new NetAlignmentInfoBasic(MinLCScan, MaxLCScan));
             set => _netAlignmentInfo = value;
         }
-
-
-        private Globals.MSFileType mSFileType;
-        public Globals.MSFileType MSFileType
-        {
-            get => mSFileType;
-            set => mSFileType = value;
-        }
+        public Globals.MSFileType MSFileType { get; set; }
 
         public int MinLCScan { get; set; }
         public int MaxLCScan { get; set; }
 
-        private bool areRunResultsSerialized;   //this is a flag to indicate whether or not Run's results were written to disk
-        public bool AreRunResultsSerialized
-        {
-            get => areRunResultsSerialized;
-            set => areRunResultsSerialized = value;
-        }
+        /// <summary>
+        /// This is a flag to indicate whether or not Run's results were written to disk
+        /// </summary>
+        public bool AreRunResultsSerialized { get; set; }
 
         [field: NonSerialized]
         private List<Peak> peakList;
@@ -96,13 +87,7 @@ namespace DeconTools.Backend.Core
         }
 
         public ScanSetCollection ScanSetCollection { get; set; }
-
-        private ResultCollection resultCollection;
-        public ResultCollection ResultCollection
-        {
-            get => resultCollection;
-            set => resultCollection = value;
-        }
+        public ResultCollection ResultCollection { get; set; }
 
         private ScanSet currentScanSet;
         public virtual ScanSet CurrentScanSet
@@ -110,19 +95,13 @@ namespace DeconTools.Backend.Core
             get => currentScanSet;
             set => currentScanSet = value;
         }
-
-        private bool isDataThresholded;
-        public bool IsDataThresholded          //not crazy about having this here; may want to change later
-        {
-            get => isDataThresholded;
-            set => isDataThresholded = value;
-        }
+        public bool IsDataThresholded { get; set; }
 
         private MultiAlignEngine.Alignment.clsAlignmentFunction _alignmentInfo;
 
         public virtual bool ContainsMSMSData { get; set; }
 
-        private List<int> msLevelScanIndexList { get; set; }
+        private List<int> MSLevelScanIndexList { get; set; }
 
         public IList<int> MSLevelMappings { get; set; }
 
@@ -165,18 +144,18 @@ namespace DeconTools.Backend.Core
         public virtual int GetMSLevel(int scanNum)
         {
             // check to see if we have a value already stored
-            if (MSLevelList.TryGetValue(scanNum, out var msLevel))
+            if (MSLevelList.TryGetValue(scanNum, out var msLevelCached))
             {
                 // Return the cached value
-                return msLevel;
+                return msLevelCached;
             }
 
             // Look up MSLevel from Raw data
-            var mslevel = GetMSLevelFromRawData(scanNum);
+            var msLevel = GetMSLevelFromRawData(scanNum);
 
-            MSLevelList.Add(scanNum, (byte)mslevel);
+            MSLevelList.Add(scanNum, (byte)msLevel);
 
-            return mslevel;
+            return msLevel;
         }
 
         public virtual PrecursorInfo GetPrecursorInfo(int scanNum)
@@ -191,22 +170,22 @@ namespace DeconTools.Backend.Core
         }
 
 
-        public virtual XYData GetMassSpectrum(ScanSet scanset)
+        public virtual XYData GetMassSpectrum(ScanSet scanSet)
         {
             //set a wide mz range so we get everything
-            return GetMassSpectrum(scanset, 0, 100000);
+            return GetMassSpectrum(scanSet, 0, 100000);
         }
 
-        public abstract XYData GetMassSpectrum(ScanSet scanset, double minMZ, double maxMZ);
+        public abstract XYData GetMassSpectrum(ScanSet scanSet, double minMZ, double maxMZ);
 
         public virtual double GetTICFromInstrumentInfo(int scanNum)
         {
             return 0;
         }
-    
+
         public TargetBase CurrentMassTag { get; set; }
 
-        public virtual XYData GetMassSpectrum(ScanSet lcScanset, ScanSet imsScanset, double minMZ, double maxMZ)
+        public virtual XYData GetMassSpectrum(ScanSet lcScanSet, ScanSet imsScanSet, double minMZ, double maxMZ)
         {
             throw new NotSupportedException("This overload of GetMassSpectrum is only supported in IMS dataset types");
         }
@@ -218,10 +197,10 @@ namespace DeconTools.Backend.Core
         public abstract int GetMaxPossibleLCScanNum();
         //{
         ////default:  scan is zero-based
-        //int maxpossibleScanIndex = GetNumMSScans() - 1;
-        //if (maxpossibleScanIndex < 0) maxpossibleScanIndex = 0;
+        //int maxPossibleScanIndex = GetNumMSScans() - 1;
+        //if (maxPossibleScanIndex < 0) maxPossibleScanIndex = 0;
 
-        //return maxpossibleScanIndex;
+        //return maxPossibleScanIndex;
         //}
 
         internal void ResetXYPoints()
@@ -249,8 +228,8 @@ namespace DeconTools.Backend.Core
                 numPointsToAdd++;
             }
 
-            var xvals = new double[numPointsToAdd];
-            var yvals = new double[numPointsToAdd];
+            var xVals = new double[numPointsToAdd];
+            var yVals = new double[numPointsToAdd];
 
             var counter = 0;
             for (var i = 0; i < XYData.Xvalues.Length; i++)
@@ -261,13 +240,13 @@ namespace DeconTools.Backend.Core
                 if (XYData.Xvalues[i] > maxMZ)
                     break;
 
-                xvals[counter] = XYData.Xvalues[i];
-                yvals[counter] = XYData.Yvalues[i];
+                xVals[counter] = XYData.Xvalues[i];
+                yVals[counter] = XYData.Yvalues[i];
                 counter++;
             }
 
-            XYData.Xvalues = xvals;
-            XYData.Yvalues = yvals;
+            XYData.Xvalues = xVals;
+            XYData.Yvalues = yVals;
         }
 
         #endregion
@@ -367,9 +346,9 @@ namespace DeconTools.Backend.Core
 
         public List<int> GetMSLevelScanValues(int minScan, int maxScan)
         {
-            if (msLevelScanIndexList == null)
+            if (MSLevelScanIndexList == null)
             {
-                msLevelScanIndexList = new List<int>();
+                MSLevelScanIndexList = new List<int>();
 
                 for (var i = minScan; i <= maxScan; i++)
                 {
@@ -377,20 +356,20 @@ namespace DeconTools.Backend.Core
                     {
                         if (GetMSLevel(i) == 1)
                         {
-                            msLevelScanIndexList.Add(i);
+                            MSLevelScanIndexList.Add(i);
                         }
                     }
                     else      // all MS are MS1
                     {
-                        msLevelScanIndexList.Add(i);
+                        MSLevelScanIndexList.Add(i);
                     }
                 }
             }
 
-            return msLevelScanIndexList;
+            return MSLevelScanIndexList;
         }
 
-        protected void addToMSLevelData(int scanNum, int mslevel)
+        protected void addToMSLevelData(int scanNum, int msLevel)
         {
             if (MSLevelList.ContainsKey(scanNum))
             {
@@ -398,7 +377,7 @@ namespace DeconTools.Backend.Core
             }
             else
             {
-                MSLevelList.Add(scanNum, (byte)mslevel);
+                MSLevelList.Add(scanNum, (byte)msLevel);
             }
 
         }
@@ -507,7 +486,6 @@ namespace DeconTools.Backend.Core
         {
             return 0;
         }
-
 
         public virtual double GetMS2IsolationWidth(int scanNum)
         {

@@ -7,12 +7,12 @@ namespace DeconTools.Backend.Core
     public class N14N15_TResult : TargetedResultBase
     {
 
-
         #region Constructors
 
         public N14N15_TResult() : base() { }
 
         public N14N15_TResult(TargetBase target) : base(target) { }
+
         #endregion
 
         #region Properties
@@ -46,9 +46,6 @@ namespace DeconTools.Backend.Core
         /// </summary>
         public Dictionary<MSPeak, XYData> LabeledPeakChromData { get; set; }
 
-
-
-
         #endregion
 
         #region Public Methods
@@ -58,22 +55,20 @@ namespace DeconTools.Backend.Core
             Console.WriteLine("Ratio = \t" + StringUtilities.DblToString(RatioN14N15, 2));
         }
 
-
-        public override void AddSelectedChromPeakAndScanSet(ChromPeak bestPeak, ScanSet scanset, Globals.IsotopicProfileType isotopicProfileType)
+        public override void AddSelectedChromPeakAndScanSet(ChromPeak bestPeak, ScanSet scanSet, Globals.IsotopicProfileType isotopicProfileType)
         {
-            //if result was not previously processed, will do a standard add of selected chrom peak and scanset
-            //if result was previously processed, add new data to the Labelled results 
-            if (isotopicProfileType==Globals.IsotopicProfileType.UNLABELLED)
+            //if result was not previously processed, will do a standard add of selected chrom peak and scanSet
+            //if result was previously processed, add new data to the Labelled results
+            if (isotopicProfileType == Globals.IsotopicProfileType.UNLABELLED)
             {
-                base.AddSelectedChromPeakAndScanSet(bestPeak, scanset,isotopicProfileType);
+                base.AddSelectedChromPeakAndScanSet(bestPeak, scanSet, isotopicProfileType);
             }
             else
             {
                 ChromPeakSelectedN15 = bestPeak;
-                ScanSetForN15Profile = scanset;
+                ScanSetForN15Profile = scanSet;
             }
         }
-
 
         public override void AddNumChromPeaksWithinTolerance(int numChromPeaksWithinTolerance)
         {
@@ -96,7 +91,6 @@ namespace DeconTools.Backend.Core
             }
         }
 
-
         public double GetNETN15()
         {
             if (ChromPeakSelectedN15 == null) return -1;
@@ -113,14 +107,14 @@ namespace DeconTools.Backend.Core
                 return null;
             }
 
-            var numNitrogens = Target.GetAtomCountForElement("N");
+            var nitrogenCount = Target.GetAtomCountForElement("N");
 
             var monoPeakForUnlabelled = IsotopicProfile.getMonoPeak();
             if (monoPeakForUnlabelled == null) return null;
 
-            var expectedMZForLabelled = monoPeakForUnlabelled.XValue+ (Globals.N15_MASS - Globals.N14_MASS) * numNitrogens / IsotopicProfile.ChargeState;
+            var expectedMZForLabelled = monoPeakForUnlabelled.XValue + (Globals.N15_MASS - Globals.N14_MASS) * nitrogenCount / IsotopicProfile.ChargeState;
 
-            var monoPeakOfLabelled= Utilities.IsotopicProfileUtilities.GetPeakAtGivenMZ(IsotopicProfileLabeled, expectedMZForLabelled, 0.05);
+            var monoPeakOfLabelled = Utilities.IsotopicProfileUtilities.GetPeakAtGivenMZ(IsotopicProfileLabeled, expectedMZForLabelled, 0.05);
 
             return monoPeakOfLabelled;
 

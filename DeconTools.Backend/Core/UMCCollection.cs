@@ -8,10 +8,12 @@ namespace DeconTools.Backend.Core
     public class UMCCollection
     {
         #region Constructors
+
         public UMCCollection()
         {
             UMCList = new List<UMC>();
         }
+
         #endregion
 
         #region Properties
@@ -32,14 +34,12 @@ namespace DeconTools.Backend.Core
 
             foreach (var umc in tempUMCs)
             {
-                var scannetpair = new ScanNETPair(umc.ScanClassRep, (float)umc.NETClassRep);
+                var scanNetPair = new ScanNETPair(umc.ScanClassRep, (float)umc.NETClassRep);
 
-                lookupTable.Add(scannetpair);
+                lookupTable.Add(scanNetPair);
             }
             return lookupTable;
         }
-
-
 
         public double GetNETValueForScan(int scanNum)
         {
@@ -94,7 +94,6 @@ namespace DeconTools.Backend.Core
 
         }
 
-
         public List<UMC> FilterOutPairedData()
         {
             if (UMCList == null || UMCList.Count == 0) return UMCList;
@@ -116,7 +115,6 @@ namespace DeconTools.Backend.Core
 
 
         }
-
 
         public void DisplayBasicInfo()
         {
@@ -157,8 +155,6 @@ namespace DeconTools.Backend.Core
 
             Console.WriteLine(string.Join("\t", data));
         }
-
-
 
         public void DisplayUMCExpressionInfo()
         {
@@ -206,7 +202,5 @@ namespace DeconTools.Backend.Core
 
         #endregion
 
-        #region Private Methods
-        #endregion
     }
 }

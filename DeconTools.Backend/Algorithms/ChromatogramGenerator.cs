@@ -112,8 +112,8 @@ namespace DeconTools.Backend.Algorithms
 
                     if (toleranceUnit == Globals.ToleranceUnit.PPM)
                     {
-                        lowerMZ = targetMZ - tolerance*targetMZ/1e6;
-                        upperMZ = targetMZ + tolerance*targetMZ/1e6;
+                        lowerMZ = targetMZ - tolerance * targetMZ / 1e6;
+                        upperMZ = targetMZ + tolerance * targetMZ / 1e6;
                     }
                     else if (toleranceUnit == Globals.ToleranceUnit.MZ)
                     {
@@ -127,7 +127,7 @@ namespace DeconTools.Backend.Algorithms
                     }
 
                     var lowMsPeak = new MSPeak(lowerMZ);
-                    var lowMsPeakResult = new MSPeakResult {MSPeak = lowMsPeak};
+                    var lowMsPeakResult = new MSPeakResult { MSPeak = lowMsPeak };
 
                     var binarySearchResult = msPeakResultList.BinarySearch(lowMsPeakResult, comparer);
                     var nearestSearchResult = binarySearchResult >= 0 ? binarySearchResult : ~binarySearchResult;
@@ -135,7 +135,7 @@ namespace DeconTools.Backend.Algorithms
                     for (var j = nearestSearchResult; j < msPeakResultList.Count; j++)
                     {
                         var msPeakResult = msPeakResultList[j];
-                        if(msPeakResult.MSPeak.XValue <= upperMZ)
+                        if (msPeakResult.MSPeak.XValue <= upperMZ)
                         {
                             tempPeakList.Add(msPeakResult);
                         }
@@ -175,7 +175,7 @@ namespace DeconTools.Backend.Algorithms
                 double lowerMZ;
                 double upperMZ;
 
-                if (toleranceUnit==Globals.ToleranceUnit.PPM)
+                if (toleranceUnit == Globals.ToleranceUnit.PPM)
                 {
                     lowerMZ = targetMZ - tolerance * targetMZ / 1e6;
                     upperMZ = targetMZ + tolerance * targetMZ / 1e6;
@@ -187,7 +187,7 @@ namespace DeconTools.Backend.Algorithms
                 }
                 else
                 {
-                    throw new ArgumentOutOfRangeException("Trying to create chromatogram, but the "  + toleranceUnit +" unit isn't supported");
+                    throw new ArgumentOutOfRangeException("Trying to create chromatogram, but the " + toleranceUnit + " unit isn't supported");
                 }
 
                 var tempPeakList = new List<MSPeakResult>();
@@ -209,8 +209,8 @@ namespace DeconTools.Backend.Algorithms
                 }
                 else
                 {
-                    var currentChromdata = GetChromDataAndFillInZerosAndAssignChromID(tempPeakList, chromIDToAssign);
-                    chromData = AddCurrentXYDataToBaseXYData(chromData, currentChromdata);
+                    var currentChromData = GetChromDataAndFillInZerosAndAssignChromID(tempPeakList, chromIDToAssign);
+                    chromData = AddCurrentXYDataToBaseXYData(chromData, currentChromData);
                 }
             }
 
@@ -220,10 +220,10 @@ namespace DeconTools.Backend.Algorithms
 
         public XYData GenerateChromatogramFromRawData(Run run, int minScan, int maxScan, double targetMZ, double toleranceInPPM)
         {
-            var xydata = new XYData();
+            var xyData = new XYData();
 
-            var xvals = new List<double>();
-            var yvals = new List<double>();
+            var xVals = new List<double>();
+            var yVals = new List<double>();
 
             for (var scan = minScan; scan <= maxScan; scan++)
             {
@@ -240,24 +240,24 @@ namespace DeconTools.Backend.Algorithms
                     continue;
                 }
 
-                var scanset = new ScanSet(scan);
-                run.GetMassSpectrum(scanset);
+                var scanSet = new ScanSet(scan);
+                run.GetMassSpectrum(scanSet);
 
                 var chromDataPointIntensity = GetChromDataPoint(run.XYData, targetMZ, toleranceInPPM);
 
-                xvals.Add(scan);
-                yvals.Add(chromDataPointIntensity);
+                xVals.Add(scan);
+                yVals.Add(chromDataPointIntensity);
             }
 
-            xydata.Xvalues = xvals.ToArray();
-            xydata.Yvalues = yvals.ToArray();
+            xyData.Xvalues = xVals.ToArray();
+            xyData.Yvalues = yVals.ToArray();
 
-            return xydata;
+            return xyData;
         }
 
-        private double GetChromDataPoint(XYData xydata, double targetMZ, double toleranceInPPM)
+        private double GetChromDataPoint(XYData xyData, double targetMZ, double toleranceInPPM)
         {
-            var dataIsEmpty = (xydata == null || xydata.Xvalues.Length == 0);
+            var dataIsEmpty = (xyData == null || xyData.Xvalues.Length == 0);
             if (dataIsEmpty)
             {
                 return 0;
@@ -270,7 +270,7 @@ namespace DeconTools.Backend.Algorithms
 
             var startingPointMZ = lowerMZ - 2;
 
-            var indexOfGoodStartingPoint = MathUtils.BinarySearchWithTolerance(xydata.Xvalues, startingPointMZ, 0, xydata.Xvalues.Length - 1, 1.9);
+            var indexOfGoodStartingPoint = MathUtils.BinarySearchWithTolerance(xyData.Xvalues, startingPointMZ, 0, xyData.Xvalues.Length - 1, 1.9);
 
             if (indexOfGoodStartingPoint == -1)
             {
@@ -345,16 +345,16 @@ namespace DeconTools.Backend.Algorithms
         {
             var filteredPeakListCount = filteredPeakList.Count;
 
-            var leftZeroPadding = 200;   //number of scans to the left of the minscan for which zeros will be added
-            var rightZeroPadding = 200;   //number of scans to the left of the minscan for which zeros will be added
+            var leftZeroPadding = 200;      // number of scans to the left of the minScan for which zeros will be added
+            var rightZeroPadding = 200;     // number of scans to the right of the minScan for which zeros will be added
 
             var peakListMinScan = filteredPeakList[0].Scan_num;
             var peakListMaxScan = filteredPeakList[filteredPeakList.Count - 1].Scan_num;
 
             //will pad min and max scans with zeros, and add zeros in between. This allows smoothing to execute properly
 
-            peakListMinScan = peakListMinScan - leftZeroPadding;
-            peakListMaxScan = peakListMaxScan + rightZeroPadding;
+            peakListMinScan -= leftZeroPadding;
+            peakListMaxScan += rightZeroPadding;
 
             if (peakListMinScan < 0) peakListMinScan = 0;
 
@@ -365,7 +365,7 @@ namespace DeconTools.Backend.Algorithms
                 xyValues.Add(i, 0);
             }
 
-            //iterate over the peaklist, assign chromID,  and extract intensity values
+            // iterate over the peak list, assign chromID,  and extract intensity values
             for (var i = 0; i < filteredPeakListCount; i++)
             {
                 var peakResult = filteredPeakList[i];
@@ -403,46 +403,44 @@ namespace DeconTools.Backend.Algorithms
             return outputXYData;
         }
 
-        private XYData AddCurrentXYDataToBaseXYData(XYData baseData, XYData newdata)
+        private XYData AddCurrentXYDataToBaseXYData(XYData baseData, XYData newData)
         {
-            var returnedData = new XYData();
 
             if (baseData == null)
             {
-                returnedData = newdata;
+                return newData;
             }
-            else
+
+            //this might need to be cleaned up   :)
+
+            //first add the base data
+            var baseValues = new SortedDictionary<int, double>();
+            for (var i = 0; i < baseData.Xvalues.Length; i++)
             {
-                //this might need to be cleaned up   :)
+                baseValues.Add((int)baseData.Xvalues[i], baseData.Yvalues[i]);
+            }
 
-                //first add the base data
-                var baseValues = new SortedDictionary<int, double>();
-                for (var i = 0; i < baseData.Xvalues.Length; i++)
+            //now combine base data with the new
+            for (var i = 0; i < newData.Xvalues.Length; i++)
+            {
+                var scanToBeInserted = (int)newData.Xvalues[i];
+                var intensityToBeInserted = newData.Yvalues[i];
+
+                if (baseValues.ContainsKey(scanToBeInserted))
                 {
-                    baseValues.Add((int)baseData.Xvalues[i], baseData.Yvalues[i]);
+                    baseValues[scanToBeInserted] += intensityToBeInserted;
                 }
-
-                //now combine base data with the new
-                for (var i = 0; i < newdata.Xvalues.Length; i++)
+                else
                 {
-                    var scanToBeInserted = (int)newdata.Xvalues[i];
-                    var intensityToBeInserted = newdata.Yvalues[i];
-
-                    if (baseValues.ContainsKey(scanToBeInserted))
-                    {
-                        baseValues[scanToBeInserted] += intensityToBeInserted;
-                    }
-                    else
-                    {
-                        baseValues.Add(scanToBeInserted, intensityToBeInserted);
-                    }
-
+                    baseValues.Add(scanToBeInserted, intensityToBeInserted);
                 }
-
-                returnedData.Xvalues = XYData.ConvertIntsToDouble(baseValues.Keys.ToArray());
-                returnedData.Yvalues = baseValues.Values.ToArray();
 
             }
+
+            var returnedData = new XYData {
+                Xvalues = XYData.ConvertIntsToDouble(baseValues.Keys.ToArray()),
+                Yvalues = baseValues.Values.ToArray()
+            };
 
             return returnedData;
         }

@@ -63,8 +63,11 @@ namespace DeconTools.Backend.Core
 
             AlignmentInfo.marrMassFncMZInput = new float[mzVals.Length];
             AlignmentInfo.marrMassFncMZPPMOutput = new float[mzVals.Length];
+
+            // ReSharper disable CommentTypo
             //this.AlignmentInfo.marrMassFncTimeInput = new float[mzVals.Length];
             //this.AlignmentInfo.marrMassFncTimePPMOutput = new float[mzVals.Length];
+            // ReSharper restore CommentTypo
 
             AlignmentInfo.SetMassCalibrationFunctionWithMZ(ref mzVals, ref mzPPMCorrVals);
         }

@@ -10,7 +10,7 @@ namespace DeconTools.Backend.Core
         #region Properties
 
         public double AveragePpmShift { get; set; }
-        public double StdevPpmShiftData { get; set; }
+        public double StDevPpmShiftData { get; set; }
         public XYData ScanAndPpmShiftVals { get; set; }
 
         #endregion

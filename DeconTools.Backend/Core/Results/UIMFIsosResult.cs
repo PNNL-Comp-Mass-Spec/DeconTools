@@ -13,16 +13,16 @@ namespace DeconTools.Backend.Core
         }
 
         /// <summary>
-        /// Constructor that takes run, LC scanset, and an IMS scan set
+        /// Constructor that takes run, LC scan set, and an IMS scan set
         /// </summary>
         /// <param name="run"></param>
-        /// <param name="lcScanset"></param>
-        /// <param name="scanset"></param>
-        public UIMFIsosResult(Run run, ScanSet lcScanset, IMSScanSet scanset)
+        /// <param name="lcScanSet"></param>
+        /// <param name="scanSet"></param>
+        public UIMFIsosResult(Run run, ScanSet lcScanSet, IMSScanSet scanSet)
         {
             Run = run;
-            ScanSet = lcScanset;
-            IMSScanSet = scanset;
+            ScanSet = lcScanSet;
+            IMSScanSet = scanSet;
 
         }
 

@@ -5,9 +5,9 @@ namespace DeconTools.Backend.Core
     [Serializable]
     public class UimfScanResult : ScanResult
     {
-        public UimfScanResult(ScanSet frameset)
+        public UimfScanResult(ScanSet frameSet)
         {
-            ScanSet = frameset;
+            ScanSet = frameSet;
         }
 
         public int LCScanNum { get; set; }

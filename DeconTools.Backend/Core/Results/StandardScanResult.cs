@@ -6,12 +6,11 @@ namespace DeconTools.Backend.Core
     public class StandardScanResult : ScanResult
     {
 
-        public StandardScanResult(ScanSet scanset):base(scanset)
+        public StandardScanResult(ScanSet scanSet) : base(scanSet)
         {
-            
 
         }
 
-        
+
     }
 }

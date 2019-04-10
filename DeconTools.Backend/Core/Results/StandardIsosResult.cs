@@ -14,14 +14,14 @@ namespace DeconTools.Backend
         }
 
         /// <summary>
-        /// Constructor that takes a run and scanset
+        /// Constructor that takes a run and scanSet
         /// </summary>
         /// <param name="run"></param>
-        /// <param name="scanset"></param>
-        public StandardIsosResult(Run run, ScanSet scanset)
+        /// <param name="scanSet"></param>
+        public StandardIsosResult(Run run, ScanSet scanSet)
         {
             Run = run;
-            ScanSet = scanset;
+            ScanSet = scanSet;
         }
 
     }

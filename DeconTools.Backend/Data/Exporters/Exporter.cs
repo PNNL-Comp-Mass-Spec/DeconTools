@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Text;
-
+﻿
 namespace DeconTools.Backend.Data
 {
     public abstract class Exporter<T>
@@ -18,7 +14,7 @@ namespace DeconTools.Backend.Data
         {
             return PNNLOmics.Utilities.StringUtilities.DblToString(value, digitsAfterDecimal, limitDecimalsForLargeValues);
         }
-   
+
     }
 
 

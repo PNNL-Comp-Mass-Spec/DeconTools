@@ -569,7 +569,7 @@ namespace DeconTools.Workflows.Backend.Core
     //    //    if (featureNode != null)
     //    //    {
     //    //        //that means we found something that is exactly the same mass. let's simply update the frame scans map for this peak
-    //    //        featureNode.Value.updateFrameScansRange(frameScanLoc);
+    //    //        featureNode.Value.UpdateFrameScansRange(frameScanLoc);
     //    //    }
     //    //    else
     //    //    {

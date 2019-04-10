@@ -135,21 +135,21 @@ namespace DeconTools.Backend.Core
             }
 
             var slope = (upperNET - lowerNET) / (upperScan - lowerScan);
-            var yintercept = (upperNET - slope * upperScan);
+            var yIntercept = (upperNET - slope * upperScan);
 
-            var xvalue = (net - yintercept) / slope;
+            var xValue = (net - yIntercept) / slope;
 
-            if (xvalue < MinLcScan)
+            if (xValue < MinLcScan)
             {
-                xvalue = MinLcScan;
+                xValue = MinLcScan;
             }
 
-            if (xvalue > MaxLcScan)
+            if (xValue > MaxLcScan)
             {
-                xvalue = MaxLcScan;
+                xValue = MaxLcScan;
             }
 
-            return xvalue;
+            return xValue;
 
 
 
@@ -247,20 +247,11 @@ namespace DeconTools.Backend.Core
             }
 
             var slope = (upperNET - lowerNET) / (upperScan - lowerScan);
-            var yintercept = (upperNET - slope * upperScan);
+            var yIntercept = (upperNET - slope * upperScan);
 
-            return (scanNum * slope + yintercept);
+            return (scanNum * slope + yIntercept);
 
         }
-
-
-
-
-
-
-        #endregion
-
-        #region Private Methods
 
         #endregion
 

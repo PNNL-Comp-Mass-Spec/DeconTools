@@ -9,7 +9,7 @@ namespace DeconTools.Backend.Algorithms
 
     /// <summary>
     /// Calculates the distribution of labeled atoms. i.e fraction of species that have 0 label, 1 label, 2 label, etc.
-    /// Based on work by Chik et al, 2006.  http://pubs.acs.org/doi/abs/10.1021/ac050988l
+    /// Based on work by Chik et al, 2006.  https://www.ncbi.nlm.nih.gov/pubmed/16383329 (DOI: 10.1021/ac050988l)
     /// </summary>
     public class LabelingDistributionCalculator
     {
@@ -42,11 +42,11 @@ namespace DeconTools.Backend.Algorithms
             out double[] numLabelVals, out double[] labelDistributionVals, bool truncateTheorBasedOnRelIntensity = true, bool truncateObservedBasedOnRelIntensity = true,
             int leftPadding = 0, int rightPadding = 3, int numPeaksForAbsoluteTheorList = 0, int numPeaksForAbsoluteObsList = 0)
         {
-            var truncatedTheorIntensities = truncateList(theorIntensities, truncateTheorBasedOnRelIntensity,
+            var truncatedTheorIntensities = TruncateList(theorIntensities, truncateTheorBasedOnRelIntensity,
                                                                 theorIntensityThresh, numPeaksForAbsoluteTheorList);
 
-            var truncatedObsIntensities = truncateList(obsIntensities, truncateObservedBasedOnRelIntensity,
-                                                                obsIntensityThresh, numPeaksForAbsoluteObsList);
+            var truncatedObsIntensities = TruncateList(obsIntensities, truncateObservedBasedOnRelIntensity,
+                                                       obsIntensityThresh, numPeaksForAbsoluteObsList);
 
             Check.Require(truncatedObsIntensities.Count > 0, "No values found after using LabelDistribution threshold");
             var matrixLength = truncatedObsIntensities.Count + leftPadding + rightPadding;
@@ -54,12 +54,12 @@ namespace DeconTools.Backend.Algorithms
             var degreesFreedom = matrixLength - truncatedTheorIntensities.Count + 1;
 
 
-            double[] xvals;
+            double[] xVals;
 
-            double[] yvals;
+            double[] yVals;
 
 
-            if (degreesFreedom>1)
+            if (degreesFreedom > 1)
             {
 
                 var theorMatrix = buildMatrix(truncatedTheorIntensities, matrixLength, degreesFreedom);
@@ -70,40 +70,46 @@ namespace DeconTools.Backend.Algorithms
 
                 Check.Ensure(solvedMatrix.Rows > 0, "the labeling distribution array is empty");
 
-                xvals = new double[solvedMatrix.Rows];
-                yvals = new double[solvedMatrix.Rows];
+                xVals = new double[solvedMatrix.Rows];
+                yVals = new double[solvedMatrix.Rows];
                 for (var i = 0; i < solvedMatrix.Rows; i++)
                 {
-                    xvals[i] = i;
-                    yvals[i] = solvedMatrix[i, 0];
+                    xVals[i] = i;
+                    yVals[i] = solvedMatrix[i, 0];
                 }
 
 
             }
             else
             {
-                xvals = new double[1];
-                yvals = new double[1];
+                xVals = new double[1];
+                yVals = new double[1];
 
-                xvals[0] = 0;
-                yvals[0] = 1;
+                xVals[0] = 0;
+                yVals[0] = 1;
             }
 
 
 
-            numLabelVals = xvals;
-            labelDistributionVals = yvals;
+            numLabelVals = xVals;
+            labelDistributionVals = yVals;
 
         }
 
 
-        public void OutputLabelingInfo(List<double> distributionData, out double fractionUnlabelled, out double fractionLabelled, out double averageLabelsIncorporated )
+        public void OutputLabelingInfo(List<double> distributionData, out double fractionUnlabelled, out double fractionLabelled, out double averageLabelsIncorporated)
         {
 
             Check.Require(distributionData != null && distributionData.Count > 0, "distributionData is empty in call to OutputLabelingInfo");
+            if (distributionData == null)
+            {
+                fractionUnlabelled = 0;
+                fractionLabelled = 0;
+                averageLabelsIncorporated = 0;
+                return;
+            }
 
             var dotProducts = new List<double>();
-
 
             fractionUnlabelled = distributionData[0];
             fractionLabelled = 1 - fractionUnlabelled;
@@ -160,7 +166,7 @@ namespace DeconTools.Backend.Algorithms
 
         }
 
-        private List<double> truncateList(IReadOnlyList<double> intensityVals, bool useRelIntensity, double intensityThresh, int numPeaksForAbsoluteTrucation)
+        private List<double> TruncateList(IReadOnlyList<double> intensityVals, bool useRelIntensity, double intensityThresh, int numPeaksForAbsoluteTruncation)
         {
             var truncatedVals = new List<double>();
 
@@ -174,18 +180,18 @@ namespace DeconTools.Backend.Algorithms
                 {
                     var currentRelIntensity = intensityVal / maxIntensity * 100;
 
-                    var currentValIsAboveTheshold = currentRelIntensity >= intensityThresh;
+                    var currentValIsAboveThreshold = currentRelIntensity >= intensityThresh;
 
-                    if (currentValIsAboveTheshold)
+                    if (currentValIsAboveThreshold)
                     {
                         foundPeakAboveThreshold = true;
                     }
 
-                    //once a value above theshold is found, we will keep adding values until a value is found that is below threshold.
+                    //once a value above Threshold is found, we will keep adding values until a value is found that is below threshold.
                     //This will truncate the right side of an isotopic profile.
                     if (foundPeakAboveThreshold)
                     {
-                        if (currentValIsAboveTheshold)
+                        if (currentValIsAboveThreshold)
                         {
                             truncatedVals.Add(intensityVal);
                         }
@@ -203,18 +209,16 @@ namespace DeconTools.Backend.Algorithms
             }
             else
             {
-                var upperLimit = Math.Min(numPeaksForAbsoluteTrucation, intensityVals.Count);
+                var upperLimit = Math.Min(numPeaksForAbsoluteTruncation, intensityVals.Count);
 
                 for (var i = 0; i < upperLimit; i++)
                 {
                     truncatedVals.Add(intensityVals[i]);
                 }
 
-
             }
 
             return truncatedVals;
-
 
         }
 

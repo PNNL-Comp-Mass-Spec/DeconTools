@@ -26,10 +26,9 @@ namespace DeconTools.Backend.Core
 
         public double? CorrelationSlope { get; set; }
         public double? CorrelationIntercept { get; set; }
-        public double? CorrelationRSquaredVal { get; set; }  
+        public double? CorrelationRSquaredVal { get; set; }
 
         #endregion
-
 
         public override string ToString()
         {

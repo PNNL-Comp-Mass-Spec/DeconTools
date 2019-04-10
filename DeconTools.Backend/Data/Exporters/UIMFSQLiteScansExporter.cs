@@ -8,8 +8,8 @@ namespace DeconTools.Backend.Data
 {
     public class UIMFSQLiteScansExporter : ScansExporter
     {
-        private string fileName;
-        private DBWriter sqliteWriter = new DBWriter();
+        private readonly string fileName;
+        private readonly DBWriter sqLiteWriter = new DBWriter();
 
         public UIMFSQLiteScansExporter(string fileName)
         {
@@ -23,8 +23,8 @@ namespace DeconTools.Backend.Data
         {
             try
             {
-                sqliteWriter.CreateNewDB(fileName);
-                
+                sqLiteWriter.CreateNewDB(fileName);
+
             }
             catch (Exception)
             {
@@ -34,7 +34,7 @@ namespace DeconTools.Backend.Data
             //Insert records to IMS_Frames table
             //Insert records in bulk mood, 500 records each time
             //this is significantly faster than inserting one record at a time
-            //500 records are the maximum number sqlite3 can handle
+            //500 records are the maximum number SQLite3 can handle
             var records = new ArrayList();
             var count = 0;
             foreach (var result in results.ScanResultList)
@@ -42,29 +42,32 @@ namespace DeconTools.Backend.Data
                 Check.Require(result is UimfScanResult, "UIMF_Scans_Exporter only works on UIMF Scan Results");
                 var uimfResult = (UimfScanResult)result;
 
-                var fp = new IMS_Frames();
-                fp.frame_num = (ushort)uimfResult.ScanSet.PrimaryScanNumber;
-                fp.frame_time = (float)uimfResult.ScanTime;
-                fp.type = (ushort)uimfResult.SpectrumType;
-                fp.bpi = uimfResult.BasePeak.Height;
-                fp.bpi_mz = (float)uimfResult.BasePeak.XValue;
-                fp.tic = uimfResult.TICValue;
-                fp.num_peaks = (uint)uimfResult.NumPeaks;
-                fp.num_deisotoped = (uint)uimfResult.NumIsotopicProfiles;
-                fp.frame_pressure_front = (float)uimfResult.FramePressureUnsmoothed;
-                fp.frame_pressure_back = (float)uimfResult.FramePressureSmoothed;
+                var fp = new IMS_Frames
+                {
+                    frame_num = (ushort)uimfResult.ScanSet.PrimaryScanNumber,
+                    frame_time = (float)uimfResult.ScanTime,
+                    type = (ushort)uimfResult.SpectrumType,
+                    bpi = uimfResult.BasePeak.Height,
+                    bpi_mz = (float)uimfResult.BasePeak.XValue,
+                    tic = uimfResult.TICValue,
+                    num_peaks = (uint)uimfResult.NumPeaks,
+                    num_deisotoped = (uint)uimfResult.NumIsotopicProfiles,
+                    frame_pressure_front = (float)uimfResult.FramePressureUnsmoothed,
+                    frame_pressure_back = (float)uimfResult.FramePressureSmoothed
+                };
                 records.Add(fp);
                 count++;
                 if (count == 500)
                 {
-                    sqliteWriter.InsertIMSFrames(records);
+                    sqLiteWriter.InsertIMSFrames(records);
                     count = 0;
                     records = new ArrayList();
                 }
             }
+
             //Insert the rest of the records to IMS_Frames table
-            sqliteWriter.InsertIMSFrames(records);
-            sqliteWriter.CloseDB(fileName);
+            sqLiteWriter.InsertIMSFrames(records);
+            sqLiteWriter.CloseDB(fileName);
         }
     }
 }
