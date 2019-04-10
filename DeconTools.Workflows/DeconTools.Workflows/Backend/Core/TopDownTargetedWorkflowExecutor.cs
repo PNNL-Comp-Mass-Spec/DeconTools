@@ -149,8 +149,6 @@ namespace DeconTools.Workflows.Backend.Core
 
                 var lengthOfScanArray = allChromVals.First().Xvalues.Length;
 
-
-
                 //add headers
                 for (var i = 0; i < resultsForProtein.Count; i++)
                 {
@@ -204,10 +202,7 @@ namespace DeconTools.Workflows.Backend.Core
 
                 }
 
-
-
                 //output graph image
-
 
             }
 
@@ -220,20 +215,20 @@ namespace DeconTools.Workflows.Backend.Core
 
         protected override string GetOutputFileName()
         {
-            string resultsFolder;
+            string resultsDirectoryPath;
 
             if (string.IsNullOrEmpty(ExecutorParameters.OutputFolderBase))
             {
-                resultsFolder = RunUtilities.GetDatasetParentFolder(DatasetPath);
+                resultsDirectoryPath = RunUtilities.GetDatasetParentFolder(DatasetPath);
             }
             else
             {
-                resultsFolder = Path.Combine(ExecutorParameters.OutputFolderBase, "IqResults");
+                resultsDirectoryPath = Path.Combine(ExecutorParameters.OutputFolderBase, "IqResults");
             }
 
-            if (!Directory.Exists(resultsFolder)) Directory.CreateDirectory(resultsFolder);
+            if (!Directory.Exists(resultsDirectoryPath)) Directory.CreateDirectory(resultsDirectoryPath);
 
-            return Path.Combine(resultsFolder, Run.DatasetName + "_quant.txt");
+            return Path.Combine(resultsDirectoryPath, Run.DatasetName + "_quant.txt");
 
         }
 

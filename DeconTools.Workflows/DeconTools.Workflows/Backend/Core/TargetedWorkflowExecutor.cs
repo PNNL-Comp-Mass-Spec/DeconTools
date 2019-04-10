@@ -301,20 +301,20 @@ namespace DeconTools.Workflows.Backend.Core
         {
             var datasetName = RunUtilities.GetDatasetName(DatasetPath);
 
-            string[] possibleFileSuffixs = { "_iqTargets.txt", "_targets.txt", "_LCMSFeatures.txt", "_MSGFPlus.tsv", "_msgfplus_fht.txt", "_msgfdb_fht.txt" };
+            string[] possibleFileSuffixes = { "_iqTargets.txt", "_targets.txt", "_LCMSFeatures.txt", "_MSGFPlus.tsv", "_msgfplus_fht.txt", "_msgfdb_fht.txt" };
 
             var possibleTargetFiles = new List<FileInfo>();
 
-            var targetsBaseFolder = ExecutorParameters.TargetsBaseFolder;
+            var targetsBaseDirPath = ExecutorParameters.TargetsBaseFolder;
             if (string.IsNullOrEmpty(ExecutorParameters.TargetsBaseFolder))
             {
-                targetsBaseFolder = Path.Combine(ExecutorParameters.OutputFolderBase, "Targets");
+                targetsBaseDirPath = Path.Combine(ExecutorParameters.OutputFolderBase, "Targets");
             }
 
-            var dirinfo = new DirectoryInfo(targetsBaseFolder);
-            foreach (var suffix in possibleFileSuffixs)
+            var targetsBaseDirectory = new DirectoryInfo(targetsBaseDirPath);
+            foreach (var suffix in possibleFileSuffixes)
             {
-                var fileInfos = dirinfo.GetFiles("*" + suffix);
+                var fileInfos = targetsBaseDirectory.GetFiles("*" + suffix);
 
 
                 foreach (var fileInfo in fileInfos)
@@ -496,8 +496,6 @@ namespace DeconTools.Workflows.Backend.Core
             return ResultRepository.Results;
         }
 
-
-
         public bool RunIsInitialized
         {
             get
@@ -662,34 +660,37 @@ namespace DeconTools.Workflows.Backend.Core
         #endregion
 
         #region Private Methods
+
         protected string GetResultsFolder(string baseFolder)
         {
-            string resultsFolder;
+            string resultsDirectoryPath;
 
             if (string.IsNullOrWhiteSpace(baseFolder))
             {
                 if (Directory.Exists(DatasetPath))
-                    resultsFolder = Path.Combine(DatasetPath, "Results");
+                    resultsDirectoryPath = Path.Combine(DatasetPath, "Results");
                 else
                 {
                     var fiDatasetFile = new FileInfo(DatasetPath);
-                    resultsFolder = Path.Combine(fiDatasetFile.Directory.FullName, "Results");
+                    if (fiDatasetFile.Directory == null)
+                        resultsDirectoryPath = "Results";
+                    else
+                        resultsDirectoryPath = Path.Combine(fiDatasetFile.Directory.FullName, "Results");
                 }
             }
             else
             {
-                resultsFolder = Path.Combine(baseFolder, "Results");
+                resultsDirectoryPath = Path.Combine(baseFolder, "Results");
             }
 
+            var resultsDirectory = new DirectoryInfo(resultsDirectoryPath);
 
-            var dirinfo = new DirectoryInfo(resultsFolder);
-
-            if (!dirinfo.Exists)
+            if (!resultsDirectory.Exists)
             {
-                dirinfo.Create();
+                resultsDirectory.Create();
             }
 
-            return dirinfo.FullName;
+            return resultsDirectory.FullName;
 
         }
 
