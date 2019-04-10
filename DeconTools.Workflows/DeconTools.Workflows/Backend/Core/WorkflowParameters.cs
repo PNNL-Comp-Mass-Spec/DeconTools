@@ -53,9 +53,7 @@ namespace DeconTools.Workflows.Backend.Core
                 }
             }
 
-            Globals.TargetedWorkflowTypes workflowType;
-
-            var successfulEnum = Enum.TryParse(parameterTableFromXML["WorkflowType"], out workflowType);
+            var successfulEnum = Enum.TryParse(parameterTableFromXML["WorkflowType"], out Globals.TargetedWorkflowTypes workflowType);
 
             WorkflowParameters workflowParameters;
             if (successfulEnum)
@@ -105,8 +103,7 @@ namespace DeconTools.Workflows.Backend.Core
             }
             else
             {
-                throw new ArgumentOutOfRangeException(
-                    "Tried to create WorkflowParameter object. But WorkflowType is unknown.");
+                throw new Exception("Tried to create WorkflowParameter object. But WorkflowType enum is unknown.");
             }
 
             workflowParameters.LoadParameters(xmlFilepath);
@@ -128,7 +125,7 @@ namespace DeconTools.Workflows.Backend.Core
 
             var query = xElement.Elements();
 
-            var parameterTableFromXML = new Dictionary<string, string>();
+            var parameterTableFromXML = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             foreach (var item in query)
             {
                 var paramName = item.Name.ToString();
@@ -140,6 +137,8 @@ namespace DeconTools.Workflows.Backend.Core
                 }
             }
 
+            Console.WriteLine();
+            Console.WriteLine("Loading settings from parameter file " + xmlFilepath);
 
             var t = GetType();
             foreach (var mi in t.GetMembers().OrderBy(p => p.Name))
@@ -175,16 +174,16 @@ namespace DeconTools.Workflows.Backend.Core
                     }
 
                     pi.SetValue(this, value, null);
+                    Console.WriteLine("  {0,-40} --> {1}", propertyName, pi.GetValue(this, null));
                 }
                 else
                 {
-                    var shortFilename = Path.GetFileName(xmlFilepath);
-                    Console.WriteLine("xml file: " + shortFilename + "; missing parameter: " + propertyName + ". Using default value: " + pi.GetValue(this, null));
+                    Console.WriteLine("  {0,-40} --> {1}", propertyName, "Not defined in XML; using default: " + pi.GetValue(this, null));
                 }
             }
+
+            Console.WriteLine();
         }
-
-
 
         public virtual void SaveParametersToXML(string xmlFilename)
         {
