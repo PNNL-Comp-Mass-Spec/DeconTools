@@ -117,7 +117,7 @@ namespace DeconTools.Workflows.Backend.Core
                 sb.Append(Environment.NewLine);
 
 
-                var topdownChromData = new TopdownChromData();
+                var topDownChromData = new TopdownChromData();
 
 
                 foreach (var targetedResultBase in resultsForProtein)
@@ -126,11 +126,11 @@ namespace DeconTools.Workflows.Backend.Core
 
                     if (result.ChromValues != null)
                     {
-                        topdownChromData.AddChromDataItem(result.ChromValues);
+                        topDownChromData.AddChromDataItem(result.ChromValues);
                     }
                 }
 
-                var allChromVals = topdownChromData.GetChromData();
+                var allChromVals = topDownChromData.GetChromData();
 
                 var lengthOfScanArray = allChromVals.First().Xvalues.Length;
 
@@ -253,7 +253,7 @@ namespace DeconTools.Workflows.Backend.Core
                 if (importer.DataRowsProcessed == importer.DataRowsSkippedUnknownMods)
                 {
                     ReportGeneralProgress("Error: every peptide in the mass tags file had an unknown modification; cannot continue; see " + massTagFileName);
-                    ReportGeneralProgress("   ... can only process peptides that are unmodified or have Acetylation (C2H2O, 42.01 Da), Phosphorylation (HPO3, 79.97 Da), or Pyroglutomate (H3N1, 17.03 Da) mods");
+                    ReportGeneralProgress("   ... can only process peptides that are unmodified or have Acetylation (C2H2O, 42.01 Da), Phosphorylation (HPO3, 79.97 Da), or Pyroglutamate (H3N1, 17.03 Da) mods");
                 }
             }
 

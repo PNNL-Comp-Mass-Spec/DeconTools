@@ -12,16 +12,16 @@ namespace DeconTools.Backend.Utilities
         public static double GetMonoisotopicMassFromEmpiricalFormula(string empiricalFormula)
         {
             var formulaTable = ParseDoubleEmpiricalFormulaString(empiricalFormula);
-            double monomass = 0;
+            double monoisotopicMass = 0;
             foreach (var valuePair in formulaTable)
             {
                 var elementMass = Constants.Elements[valuePair.Key].MassMonoIsotopic;
                 var elementCount = valuePair.Value;
 
-                monomass += elementMass*elementCount;
+                monoisotopicMass += elementMass*elementCount;
             }
 
-            return monomass;
+            return monoisotopicMass;
 
         }
 
@@ -84,10 +84,10 @@ namespace DeconTools.Backend.Utilities
             var parsedFormula = new Dictionary<string, double>();
             if (string.IsNullOrEmpty(empiricalFormula)) return parsedFormula;
 
-            var formulaIsUnimodFormat = empiricalFormula.Contains("(");
+            var formulaIsUniModFormat = empiricalFormula.Contains("(");
 
             string regexString;
-            if (formulaIsUnimodFormat)
+            if (formulaIsUniModFormat)
             {
 
                     var elementArray = empiricalFormula.Split(' ');
@@ -96,8 +96,8 @@ namespace DeconTools.Backend.Utilities
                     {
                         if (element.Contains("("))
                         {
-                            regexString = GetRegexStringForUnimodFormat();
-                            var match = Regex.Match(element, regexString);  
+                            regexString = GetRegexStringForUniModFormat();
+                            var match = Regex.Match(element, regexString);
                             var elementCountString = match.Groups["num"].Value;
                             var elementSymbol = match.Groups["ele"].Value;
                         Double.TryParse(elementCountString, out var numAtoms);
@@ -109,7 +109,7 @@ namespace DeconTools.Backend.Utilities
                         }
                         else
                         {
-                            regexString = GetRegexStringForUnimodFormatNoParentheses();
+                            regexString = GetRegexStringForUniModFormatNoParentheses();
                             var regex = new Regex(regexString);    //got this from StackOverflow
                             var matches = regex.Matches(element);
 
@@ -233,7 +233,7 @@ namespace DeconTools.Backend.Utilities
         }
 
 
-        private static string GetRegexStringForNonUnimodFormat()
+        private static string GetRegexStringForNonUniModFormat()
         {
             // This has a bug - the following would pass: Brrrrrrrrrrrrr0.0.19.23.5
             //return @"([A-Z][a-z]*)([0-9\.]*)";
@@ -242,12 +242,12 @@ namespace DeconTools.Backend.Utilities
             return @"([A-Z][a-z]{0,2})(\d*\.?\d*)";
         }
 
-        private static string GetRegexStringForUnimodFormat()
+        private static string GetRegexStringForUniModFormat()
         {
             return @"(?<ele>[A-Za-z0-9]+)[\(]*(?<num>[0-9-\.]+)[\)]*";
         }
 
-        private static string GetRegexStringForUnimodFormatNoParentheses()
+        private static string GetRegexStringForUniModFormatNoParentheses()
         {
             //eg  '13C' or 'H26' or 'Na2' or '2H2.5'
 

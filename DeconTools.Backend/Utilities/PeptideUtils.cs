@@ -12,7 +12,7 @@ namespace DeconTools.Backend.Utilities
         const double HYDROGEN_MASS = 1.00782503196;  // IUPAC 2002
         const double OXYGEN16_MASS = 15.994914622325; // IUPAC 2002
 
-        const double FREEACID_MONOISOTOPIC_MASS = HYDROGEN_MASS + OXYGEN16_MASS;
+        const double FREE_ACID_MONOISOTOPIC_MASS = HYDROGEN_MASS + OXYGEN16_MASS;
 
         const string AMINO_ACID_SINGLE_LETTER_CODES = "ARNDCEQGHILKMFPSTWYV";
         private List<Tuple<char, string, double>> _aminoAcidList;
@@ -93,7 +93,7 @@ namespace DeconTools.Backend.Utilities
             if (includeAmineHydrogenAndFreeAcid)
             {
                 outputMonoisotopicMass += HYDROGEN_MASS;
-                outputMonoisotopicMass += FREEACID_MONOISOTOPIC_MASS;
+                outputMonoisotopicMass += FREE_ACID_MONOISOTOPIC_MASS;
             }
 
             return outputMonoisotopicMass;
@@ -123,11 +123,11 @@ namespace DeconTools.Backend.Utilities
             if (includeAmineHydrogenAndFreeAcid)
             {
 
-                var nterminalHydrogen = "H";
-                var cterminalFreeAcid = "OH";
+                var nTerminalHydrogen = "H";
+                var cTerminalFreeAcid = "OH";
 
-                outputEmpiricalFormula = EmpiricalFormulaUtilities.AddFormula(outputEmpiricalFormula, nterminalHydrogen);
-                outputEmpiricalFormula = EmpiricalFormulaUtilities.AddFormula(outputEmpiricalFormula, cterminalFreeAcid);
+                outputEmpiricalFormula = EmpiricalFormulaUtilities.AddFormula(outputEmpiricalFormula, nTerminalHydrogen);
+                outputEmpiricalFormula = EmpiricalFormulaUtilities.AddFormula(outputEmpiricalFormula, cTerminalFreeAcid);
             }
             return outputEmpiricalFormula;
         }
