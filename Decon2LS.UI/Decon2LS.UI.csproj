@@ -216,9 +216,6 @@
     <Compile Include="IProgressCallback.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MolecularFormula.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="RTFConverter.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -339,10 +336,6 @@
     <EmbeddedResource Include="Icons\Spectra.ico" />
     <EmbeddedResource Include="Icons\Spectrum_Overlap.ico" />
     <EmbeddedResource Include="Icons\Spectrum_Summation.ico" />
-    <EmbeddedResource Include="MolecularFormula.resx">
-      <DependentUpon>MolecularFormula.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
@@ -381,6 +374,12 @@
     <PackageReference Include="System.Data.SQLite.Core">
       <Version>1.0.97</Version>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DeconTools.Backend\DeconTools.Backend.csproj">
+      <Project>{c9d895e0-a35e-497b-9103-0ec2fefaac56}</Project>
+      <Name>DeconTools.Backend</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
