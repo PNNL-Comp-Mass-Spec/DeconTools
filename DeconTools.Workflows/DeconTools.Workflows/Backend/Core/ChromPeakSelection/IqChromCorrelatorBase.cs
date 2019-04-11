@@ -32,7 +32,7 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
                                                          DeconTools.Backend.Globals.IsotopicProfileType.UNLABELLED, toleranceUnit);
 
 
-            Smoother = new SavitzkyGolaySmoother(NumPointsInSmoother, SavitzkyGolaySmoothingOrder, false);
+            Smoother = new SavitzkyGolaySmoother(NumPointsInSmoother, SavitzkyGolaySmoothingOrder);
         }
 
         

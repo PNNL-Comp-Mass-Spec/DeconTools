@@ -48,11 +48,11 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             Run run = new DeconTools.Backend.Runs.AgilentDRun(agilentDataset1);
 
             var scanset = new ScanSet(25);
-            var xydata = new XYData();
-            xydata =run.GetMassSpectrum(scanset, 0, 6000);
-            //TestUtilities.DisplayXYValues(xydata);
-            Console.WriteLine("numPoints = " + xydata.Xvalues.Length);
-            Assert.AreEqual(156723, xydata.Xvalues.Length);
+            var xyData = new XYData();
+            xyData =run.GetMassSpectrum(scanset, 0, 6000);
+            //TestUtilities.DisplayXYValues(xyData);
+            Console.WriteLine("numPoints = " + xyData.Xvalues.Length);
+            Assert.AreEqual(156723, xyData.Xvalues.Length);
         }
 
          [Ignore("Testing only")]
@@ -72,8 +72,8 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
 
             stopWatch.Start();
 
-             var xydata = new XYData();
-            xydata =run.GetMassSpectrum(scanset);
+             var xyData = new XYData();
+            xyData =run.GetMassSpectrum(scanset);
 
             stopWatch.Stop();
             var singleSpectraLoadTime = stopWatch.Elapsed;
@@ -87,7 +87,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
 
             stopWatch.Start();
 
-            xydata =run.GetMassSpectrum(scansetSum);
+            xyData =run.GetMassSpectrum(scansetSum);
 
             stopWatch.Stop();
             var threeScanSumSpectraLoadTime = stopWatch.Elapsed;
@@ -116,14 +116,14 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             var scanset = new ScanSet(25);
 
             stopWatch.Start();
-            var xydata = new XYData();
-            xydata =run.GetMassSpectrum(scanset, 1000,1100);
+            var xyData = new XYData();
+            xyData =run.GetMassSpectrum(scanset, 1000,1100);
 
             stopWatch.Stop();
             var singleSpectraLoadTime = stopWatch.Elapsed;
 
             TestUtilities.DisplayXYValues(run.XYData);
-            Console.WriteLine("numPoints = " + xydata.Xvalues.Length);
+            Console.WriteLine("numPoints = " + xyData.Xvalues.Length);
             Assert.AreEqual(8926, run.XYData.Xvalues.Length);
 
 
@@ -131,17 +131,17 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
 
             stopWatch.Start();
 
-            xydata =run.GetMassSpectrum(scansetSum, 1000,1100);
+            xyData =run.GetMassSpectrum(scansetSum, 1000,1100);
 
             stopWatch.Stop();
             var threeScanSumSpectraLoadTime = stopWatch.Elapsed;
 
 
-            TestUtilities.DisplayXYValues(xydata);
-            Console.WriteLine("numPoints = " + xydata.Xvalues.Length);
+            TestUtilities.DisplayXYValues(xyData);
+            Console.WriteLine("numPoints = " + xyData.Xvalues.Length);
             Console.WriteLine("This took " + singleSpectraLoadTime + " seconds to load one scan");
             Console.WriteLine("This took " + threeScanSumSpectraLoadTime + " seconds to load and sum three scans");
-            Assert.AreEqual(8926, xydata.Xvalues.Length);
+            Assert.AreEqual(8926, xyData.Xvalues.Length);
         }
 
         [Ignore("Testing only")]
@@ -157,19 +157,19 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             var primaryScan = 10000;
             //Scan A
             var scansetA = new ScanSet(primaryScan-1);
-            var xydata = new XYData();
-            xydata =run.GetMassSpectrum(scansetA, 0, 6000);
+            var xyData = new XYData();
+            xyData =run.GetMassSpectrum(scansetA, 0, 6000);
 
-            TestUtilities.WriteToFile(xydata,@"P:\ScanA.txt");
+            TestUtilities.WriteToFile(xyData,@"P:\ScanA.txt");
 
-            TestUtilities.DisplayXYValues(xydata);
+            TestUtilities.DisplayXYValues(xyData);
             Console.WriteLine("numPoints = " + run.XYData.Xvalues.Length);
             Assert.AreEqual(258899, run.XYData.Xvalues.Length);
 
             //Scan B
             var scansetB = new ScanSet(primaryScan);
 
-            xydata =run.GetMassSpectrum(scansetB, 0, 6000);
+            xyData =run.GetMassSpectrum(scansetB, 0, 6000);
 
             TestUtilities.WriteToFile(run.XYData, @"P:\ScanB.txt");
 
@@ -180,7 +180,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             //Scan C
             var scansetC = new ScanSet(primaryScan+1);
 
-            xydata =run.GetMassSpectrum(scansetC, 0, 6000);
+            xyData =run.GetMassSpectrum(scansetC, 0, 6000);
 
             TestUtilities.WriteToFile(run.XYData, @"P:\ScanC.txt");
 
@@ -191,7 +191,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             //Scan ABC summed
             var scansetSum = new ScanSet(primaryScan, primaryScan-1, primaryScan+1);//primary, min, max
 
-            xydata =run.GetMassSpectrum(scansetSum, 0, 6000);
+            xyData =run.GetMassSpectrum(scansetSum, 0, 6000);
 
             TestUtilities.WriteToFile(run.XYData, @"P:\ScanABC.txt");
 

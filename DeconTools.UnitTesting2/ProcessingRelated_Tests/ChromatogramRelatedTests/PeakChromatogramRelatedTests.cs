@@ -65,10 +65,10 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
             var toleranceInMZ = 0.02;
 
             var chromGen = new PeakChromatogramGenerator();
-            var xydata = chromGen.GenerateChromatogram(run, startScan, stopScan, targetMZ, toleranceInMZ, Globals.ToleranceUnit.MZ);
+            var xyData = chromGen.GenerateChromatogram(run, startScan, stopScan, targetMZ, toleranceInMZ, Globals.ToleranceUnit.MZ);
 
-            Assert.IsNotNull(xydata);
-            TestUtilities.DisplayXYValues(xydata);
+            Assert.IsNotNull(xyData);
+            TestUtilities.DisplayXYValues(xyData);
 
         }
 
@@ -86,10 +86,10 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
             var toleranceInMZ = 1.0;
 
             var chromGen = new PeakChromatogramGenerator();
-            var xydata = chromGen.GenerateChromatogram(run, startScan, stopScan, targetMZ, toleranceInMZ, Globals.ToleranceUnit.MZ);
+            var xyData = chromGen.GenerateChromatogram(run, startScan, stopScan, targetMZ, toleranceInMZ, Globals.ToleranceUnit.MZ);
 
-            Assert.IsNotNull(xydata);
-            TestUtilities.DisplayXYValues(xydata);
+            Assert.IsNotNull(xyData);
+            TestUtilities.DisplayXYValues(xyData);
 
         }
 
@@ -109,10 +109,10 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
             double toleranceInPPM = 20;
 
             var chromGen = new PeakChromatogramGenerator();
-            var xydata = chromGen.GenerateChromatogram(run, startScan, stopScan, targetMZ, toleranceInPPM);
+            var xyData = chromGen.GenerateChromatogram(run, startScan, stopScan, targetMZ, toleranceInPPM);
 
-            Assert.IsNotNull(xydata);
-            TestUtilities.DisplayXYValues(xydata);
+            Assert.IsNotNull(xyData);
+            TestUtilities.DisplayXYValues(xyData);
 
 
         }

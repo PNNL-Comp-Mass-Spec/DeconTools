@@ -64,12 +64,12 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             var scan = new ScanSet(_testScan);
 
 
-            var xydata=   run.GetMassSpectrum(scan);
+            var xyData=   run.GetMassSpectrum(scan);
 
 
-            Assert.IsTrue(xydata.Xvalues.Length > 100);
+            Assert.IsTrue(xyData.Xvalues.Length > 100);
 
-            TestUtilities.DisplayXYValues(xydata);
+            TestUtilities.DisplayXYValues(xyData);
 
             run.Close();
 

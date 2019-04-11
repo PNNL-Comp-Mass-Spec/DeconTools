@@ -176,7 +176,7 @@ namespace DeconTools.Workflows.Backend.Core
                             };
 
             //only
-            _chromSmoother = new SavitzkyGolaySmoother(_workflowParameters.ChromSmootherNumPointsInSmooth, 2, allowNegativeValues: false);
+            _chromSmoother = new SavitzkyGolaySmoother(_workflowParameters.ChromSmootherNumPointsInSmooth, 2);
             _chromPeakDetector = new ChromPeakDetectorMedianBased(_workflowParameters.ChromPeakDetectorPeakBR, _workflowParameters.ChromPeakDetectorSigNoise);
 
 

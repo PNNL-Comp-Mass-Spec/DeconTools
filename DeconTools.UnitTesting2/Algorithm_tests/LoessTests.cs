@@ -17,17 +17,17 @@ namespace DeconTools.UnitTesting2.Algorithm_tests
 
             var testFile = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\MassAlignmentTesting\scanPpmErrorValues1.txt";
 
-            var xydata=  TestUtilities.LoadXYDataFromFile(testFile);
+            var xyData=  TestUtilities.LoadXYDataFromFile(testFile);
 
 
 
             var loessInterpolator = new LoessInterpolator();
 
-            var smoothedData= loessInterpolator.Smooth(xydata.Xvalues, xydata.Yvalues);
+            var smoothedData= loessInterpolator.Smooth(xyData.Xvalues, xyData.Yvalues);
 
-            for (var i = 0; i < xydata.Xvalues.Length; i++)
+            for (var i = 0; i < xyData.Xvalues.Length; i++)
             {
-                Console.WriteLine(xydata.Xvalues[i] +"\t"+  xydata.Yvalues[i] +  "\t" + smoothedData[i]);
+                Console.WriteLine(xyData.Xvalues[i] +"\t"+  xyData.Yvalues[i] +  "\t" + smoothedData[i]);
             }
         }
 
@@ -38,14 +38,14 @@ namespace DeconTools.UnitTesting2.Algorithm_tests
 
             var testFile = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\MassAlignmentTesting\scanToNetTheorData1.txt";
 
-            var xydata = TestUtilities.LoadXYDataFromFile(testFile);
+            var xyData = TestUtilities.LoadXYDataFromFile(testFile);
 
             var scanNetVals = new Dictionary<decimal, double>();
 
-            for (var i = 0; i < xydata.Xvalues.Length; i++)
+            for (var i = 0; i < xyData.Xvalues.Length; i++)
             {
-                var xval =  (decimal) Math.Round(xydata.Xvalues[i],1);
-                var yval = xydata.Yvalues[i];
+                var xval =  (decimal) Math.Round(xyData.Xvalues[i],1);
+                var yval = xyData.Yvalues[i];
 
                 if (!scanNetVals.ContainsKey(xval))
                 {
@@ -87,14 +87,14 @@ namespace DeconTools.UnitTesting2.Algorithm_tests
             var testFile =
                 @"C:\Users\d3x720\Documents\PNNL\My_DataAnalysis\2013\IQ\2013_06_04_Using MSGF for IQ alignment - part2\QCShew_ScanVsTheorNetValues.txt";
 
-            var xydata = TestUtilities.LoadXYDataFromFile(testFile);
+            var xyData = TestUtilities.LoadXYDataFromFile(testFile);
 
             var scanNetVals = new Dictionary<decimal, double>();
 
-            for (var i = 0; i < xydata.Xvalues.Length; i++)
+            for (var i = 0; i < xyData.Xvalues.Length; i++)
             {
-                var xval = (decimal)Math.Round(xydata.Xvalues[i], 1);
-                var yval = xydata.Yvalues[i];
+                var xval = (decimal)Math.Round(xyData.Xvalues[i], 1);
+                var yval = xyData.Yvalues[i];
 
                 if (!scanNetVals.ContainsKey(xval))
                 {

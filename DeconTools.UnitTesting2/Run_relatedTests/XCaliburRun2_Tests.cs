@@ -132,12 +132,12 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         {
             var run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
-            var xydata=  run.GetMassSpectrum(new Backend.Core.ScanSet(6005));
+            var xyData=  run.GetMassSpectrum(new Backend.Core.ScanSet(6005));
 
-            Assert.IsTrue(xydata.Xvalues.Length > 1000);
+            Assert.IsTrue(xyData.Xvalues.Length > 1000);
          
 
-           // TestUtilities.DisplayXYValues(xydata);
+           // TestUtilities.DisplayXYValues(xyData);
 
         }
 
@@ -150,8 +150,8 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
 
             var scanset = new ScanSet(6005, new int[] { 6005, 6012, 6019 });
 
-            var xydata= run.GetMassSpectrum(scanset);
-            Assert.IsTrue(xydata.Xvalues.Length > 1000);
+            var xyData= run.GetMassSpectrum(scanset);
+            Assert.IsTrue(xyData.Xvalues.Length > 1000);
             //TestUtilities.DisplayXYValues(run.XYData);
 
         }

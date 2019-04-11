@@ -70,12 +70,12 @@ namespace DeconTools.UnitTesting2.Algorithm_tests
             Assert.AreEqual(0.0704222, Math.Round(solvedYvals[3]), 7);
             Assert.AreEqual(-0.0053473, Math.Round(solvedYvals[4]), 7);
 
-            var xydata = new XYData();
-            xydata.Xvalues = solvedXVals;
-            xydata.Yvalues = solvedYvals;
+            var xyData = new XYData();
+            xyData.Xvalues = solvedXVals;
+            xyData.Yvalues = solvedYvals;
 
             Console.WriteLine();
-            xydata.Display();
+            xyData.Display();
             labelDistCalc.OutputLabelingInfo(solvedYvals.ToList(), out var fractionUnlabelled, out var fractionLabelled,
                                              out var averageLabelsIncorporated);
 
@@ -159,24 +159,24 @@ namespace DeconTools.UnitTesting2.Algorithm_tests
             labelDistCalc.CalculateLabelingDistribution(theorIntensities, obsIntensities, d, d, out var solvedXVals, out var solvedYvals);
 
 
-            var xydata = new XYData();
-            xydata.Xvalues = solvedXVals;
-            xydata.Yvalues = solvedYvals;
+            var xyData = new XYData();
+            xyData.Xvalues = solvedXVals;
+            xyData.Yvalues = solvedYvals;
 
             Console.WriteLine();
             Console.WriteLine("threshold= " + d);
-            xydata.Display();
+            xyData.Display();
 
 
 
             labelDistCalc.CalculateLabelingDistribution(theorIntensities, relexCorrectedIntensities, d, d, out solvedXVals, out solvedYvals);
 
-            xydata.Xvalues = solvedXVals;
-            xydata.Yvalues = solvedYvals;
+            xyData.Xvalues = solvedXVals;
+            xyData.Yvalues = solvedYvals;
 
             Console.WriteLine();
             Console.WriteLine("Relex-corrected isotopic profile= " + d);
-            xydata.Display();
+            xyData.Display();
             labelDistCalc.OutputLabelingInfo(solvedYvals.ToList(), out var fractionUnlabelled, out var fractionLabelled,
                                              out var averageLabelsIncorporated);
 
@@ -192,13 +192,13 @@ namespace DeconTools.UnitTesting2.Algorithm_tests
             //    labelDistCalc.CalculateLabelingDistribution(theorIntensities, obsIntensities, d, d, out solvedXVals, out solvedYvals);
 
 
-            //    XYData xydata = new XYData();
-            //    xydata.Xvalues = solvedXVals;
-            //    xydata.Yvalues = solvedYvals;
+            //    XYData xyData = new XYData();
+            //    xyData.Xvalues = solvedXVals;
+            //    xyData.Yvalues = solvedYvals;
 
             //    Console.WriteLine();
             //    Console.WriteLine("threshold= " + d);
-            //    xydata.Display();
+            //    xyData.Display();
             //}
 
 

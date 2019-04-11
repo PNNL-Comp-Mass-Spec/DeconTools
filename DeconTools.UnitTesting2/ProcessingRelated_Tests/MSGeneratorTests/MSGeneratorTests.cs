@@ -23,10 +23,10 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSGeneratorTests
             var testLCScan=6005;
             var scanSet = new ScanSetFactory().CreateScanSet(run, testLCScan, 1);
 
-            var xydata= msgen.GenerateMS(run, scanSet);
+            var xyData= msgen.GenerateMS(run, scanSet);
 
-            Assert.IsNotNull(xydata);
-            Assert.IsTrue(xydata.Xvalues.Length > 1000);
+            Assert.IsNotNull(xyData);
+            Assert.IsTrue(xyData.Xvalues.Length > 1000);
         }
 
         [Test]

@@ -140,7 +140,7 @@ namespace DeconTools.UnitTesting2.Scripts
 
             var _deconvolutor = new ThrashDeconvolutorV2
             {
-                UseAutocorrelationChargeDetermination = true,
+                UseAutoCorrelationChargeDetermination = true,
                 Parameters = {MaxFit = 0.8}
             };
 

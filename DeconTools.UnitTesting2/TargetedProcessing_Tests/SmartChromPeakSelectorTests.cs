@@ -71,10 +71,10 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
 
             var testChromatogramDataFile = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\TargetedWorkflowStandards\massTag635428_chromatogramData.txt";
 
-            var xydata = TestUtilities.LoadXYDataFromFile(testChromatogramDataFile);
-            Assert.IsNotNull(xydata);
+            var xyData = TestUtilities.LoadXYDataFromFile(testChromatogramDataFile);
+            Assert.IsNotNull(xyData);
 
-            run.XYData = xydata;
+            run.XYData = xyData;
            // run.XYData.Display();
 
             run.CurrentMassTag = massTagColl.TargetList.Where(p => p.ID == 635428).First();
@@ -92,7 +92,7 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
 
 
             //now run the smart chrom peak selector
-            run.XYData = xydata;
+            run.XYData = xyData;
             chromPeakDet.Execute(run.ResultCollection);
             smartChromPeakSelector.Parameters.NETTolerance = 0.025f;
             smartChromPeakSelector.Execute(run.ResultCollection);
@@ -150,12 +150,12 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
 
             var testChromatogramDataFile = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\TargetedWorkflowStandards\massTag635428_chromatogramData.txt";
 
-            var xydata = TestUtilities.LoadXYDataFromFile(testChromatogramDataFile);
-            Assert.IsNotNull(xydata);
+            var xyData = TestUtilities.LoadXYDataFromFile(testChromatogramDataFile);
+            Assert.IsNotNull(xyData);
 
             run.XYData = new XYData();
-            run.XYData.Xvalues = xydata.Xvalues;
-            run.XYData.Yvalues = xydata.Yvalues;
+            run.XYData.Xvalues = xyData.Xvalues;
+            run.XYData.Yvalues = xyData.Yvalues;
             // run.XYData.Display();
 
             run.CurrentMassTag = massTagColl.TargetList.Where(p => p.ID == 635428).First();
@@ -177,8 +177,8 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
 
             //now run the smart chrom peak selector
             run.XYData = new XYData();
-            run.XYData.Xvalues = xydata.Xvalues;
-            run.XYData.Yvalues = xydata.Yvalues;
+            run.XYData.Xvalues = xyData.Xvalues;
+            run.XYData.Yvalues = xyData.Yvalues;
             chromPeakDet.Execute(run.ResultCollection);
             smartChromPeakSelector.Parameters.NETTolerance = 0.025f;
             smartChromPeakSelector.Parameters.MaxScansSummedInDynamicSumming = 51;
@@ -198,8 +198,8 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
             Assert.AreEqual("9575 {9534, 9540, 9547, 9554, 9561, 9568, 9575, 9582, 9589, 9596, 9603, 9610, 9617, 9624}", result.ScanSet.ToString());
 
             run.XYData = new XYData();
-            run.XYData.Xvalues = xydata.Xvalues;
-            run.XYData.Yvalues = xydata.Yvalues;
+            run.XYData.Xvalues = xyData.Xvalues;
+            run.XYData.Yvalues = xyData.Yvalues;
             chromPeakDet.Execute(run.ResultCollection);
             smartChromPeakSelector.Parameters.NETTolerance = 0.025f;
             smartChromPeakSelector.Parameters.MaxScansSummedInDynamicSumming = 51;

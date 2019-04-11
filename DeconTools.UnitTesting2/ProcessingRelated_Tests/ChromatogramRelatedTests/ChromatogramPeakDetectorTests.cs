@@ -22,9 +22,9 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
             Assert.IsTrue(File.Exists(testDataFile), "Test file doesn't exist. File path= " + testDataFile);
 
 
-            var xydata=  TestUtilities.LoadXYDataFromFile(testDataFile);
+            var xyData=  TestUtilities.LoadXYDataFromFile(testDataFile);
 
-            var peakList= chromPeakDetector.FindPeaks(xydata);
+            var peakList= chromPeakDetector.FindPeaks(xyData);
 
             TestUtilities.DisplayPeaks(peakList);
 
@@ -48,9 +48,9 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
             Assert.IsTrue(File.Exists(testDataFile), "Test file doesn't exist. File path= " + testDataFile);
 
 
-            var xydata = TestUtilities.LoadXYDataFromFile(testDataFile);
+            var xyData = TestUtilities.LoadXYDataFromFile(testDataFile);
 
-            var peakList = chromPeakDetector.FindPeaks(xydata);
+            var peakList = chromPeakDetector.FindPeaks(xyData);
 
             TestUtilities.DisplayPeaks(peakList);
 

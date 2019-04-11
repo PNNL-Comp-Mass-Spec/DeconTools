@@ -28,32 +28,32 @@ namespace DeconTools.UnitTesting2.QuantificationTests
         public XYData GetSpectrumAMTTag23140708_Z2_Sum1()
         {
             Run run = new MSScanFromTextFileRun(N14N15TestingUtilities.MS_AMTTag23140708_z2_sum1);
-            var xydata = run.GetMassSpectrum(new ScanSet(1), 0, 50000);
-            return xydata;
+            var xyData = run.GetMassSpectrum(new ScanSet(1), 0, 50000);
+            return xyData;
         }
 
 
         public XYData GetSpectrumAMTTag23140708_Z2_Sum3()
         {
             Run run = new MSScanFromTextFileRun(N14N15TestingUtilities.MS_AMTTag23140708_z2_sum3);
-            var xydata=   run.GetMassSpectrum(new ScanSet(1), 0, 50000);
-            return xydata;
+            var xyData=   run.GetMassSpectrum(new ScanSet(1), 0, 50000);
+            return xyData;
 
         }
 
         public XYData GetSpectrumAMTTag23140708_Z3_Sum1()
         {
             Run run = new MSScanFromTextFileRun(N14N15TestingUtilities.MS_AMTTag23140708_z3_sum1);
-            var xydata = run.GetMassSpectrum(new ScanSet(1), 0, 50000);
-            return xydata;
+            var xyData = run.GetMassSpectrum(new ScanSet(1), 0, 50000);
+            return xyData;
         }
 
 
         public XYData GetSpectrumAMTTag23140708_Z3_Sum3()
         {
             Run run = new MSScanFromTextFileRun(N14N15TestingUtilities.MS_AMTTag23140708_z3_sum3);
-            var xydata = run.GetMassSpectrum(new ScanSet(1), 0, 50000);
-            return xydata;
+            var xyData = run.GetMassSpectrum(new ScanSet(1), 0, 50000);
+            return xyData;
 
         }
 
@@ -61,8 +61,8 @@ namespace DeconTools.UnitTesting2.QuantificationTests
         public static XYData GetTestSpectrum(string xydataFileName)
         {
             Run run = new MSScanFromTextFileRun(xydataFileName);
-            var xydata = run.GetMassSpectrum(new ScanSet(1), 0, 50000);
-            return xydata;
+            var xyData = run.GetMassSpectrum(new ScanSet(1), 0, 50000);
+            return xyData;
         }
 
 

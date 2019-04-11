@@ -161,22 +161,22 @@ namespace DeconTools.UnitTesting2
             Console.Write(sb.ToString());
         }
 
-        public static void DisplayXYValues(XYData xydata)
+        public static void DisplayXYValues(XYData xyData)
         {
-            DisplayXYValues(xydata, double.MinValue, double.MaxValue);
+            DisplayXYValues(xyData, double.MinValue, double.MaxValue);
         }
 
-        public static void DisplayXYValues(XYData xydata, double lowerX, double upperX)
+        public static void DisplayXYValues(XYData xyData, double lowerX, double upperX)
         {
             var sb = new StringBuilder();
             sb.Append("--------- XYData -----------------\n");
-            for (var i = 0; i < xydata.Xvalues.Length; i++)
+            for (var i = 0; i < xyData.Xvalues.Length; i++)
             {
-                if (xydata.Xvalues[i] >= lowerX && xydata.Xvalues[i] <= upperX)
+                if (xyData.Xvalues[i] >= lowerX && xyData.Xvalues[i] <= upperX)
                 {
-                    sb.Append(xydata.Xvalues[i]);
+                    sb.Append(xyData.Xvalues[i]);
                     sb.Append("\t");
-                    sb.Append(xydata.Yvalues[i]);
+                    sb.Append(xyData.Yvalues[i]);
                     sb.Append("\n");
                 }
             }
@@ -465,16 +465,16 @@ namespace DeconTools.UnitTesting2
         }
 
 
-        public static void WriteToFile(XYData xydata, string outputFile)
+        public static void WriteToFile(XYData xyData, string outputFile)
         {
             using (var sw = new StreamWriter(outputFile))
             {
                 sw.WriteLine("mz\tintensity");
-                for (var i = 0; i < xydata.Xvalues.Length; i++)
+                for (var i = 0; i < xyData.Xvalues.Length; i++)
                 {
-                    sw.Write(xydata.Xvalues[i]);
+                    sw.Write(xyData.Xvalues[i]);
                     sw.Write("\t");
-                    sw.Write(xydata.Yvalues[i]);
+                    sw.Write(xyData.Yvalues[i]);
                     sw.Write(Environment.NewLine);
                 }
 
@@ -515,9 +515,9 @@ namespace DeconTools.UnitTesting2
         public static XYData LoadXYDataFromFile(string testChromatogramDataFile)
         {
             var tempRun = new MSScanFromTextFileRun(testChromatogramDataFile);
-            var xydata=   tempRun.GetMassSpectrum(new ScanSet(0));
+            var xyData=   tempRun.GetMassSpectrum(new ScanSet(0));
 
-            return xydata;
+            return xyData;
 
         }
     }

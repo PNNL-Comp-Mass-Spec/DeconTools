@@ -16,13 +16,13 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         {
 
             var textfiledata = new MSScanFromTextFileRun(FileRefs.RawDataMSFiles.TextFileMS_std1);
-            var xydata=  textfiledata.GetMassSpectrum(new DeconTools.Backend.Core.ScanSet(0),0,2000);
+            var xyData=  textfiledata.GetMassSpectrum(new DeconTools.Backend.Core.ScanSet(0),0,2000);
 
-            TestUtilities.DisplayXYValues(xydata);
+            TestUtilities.DisplayXYValues(xyData);
 
-            Assert.AreEqual(2596, xydata.Xvalues.Length);
-            Assert.AreEqual(582.822204589844, Convert.ToDecimal(xydata.Xvalues[418]));
-            Assert.AreEqual(2984, xydata.Yvalues[418]);
+            Assert.AreEqual(2596, xyData.Xvalues.Length);
+            Assert.AreEqual(582.822204589844, Convert.ToDecimal(xyData.Xvalues[418]));
+            Assert.AreEqual(2984, xyData.Yvalues[418]);
             Assert.AreEqual(1, textfiledata.GetNumMSScans());
 
             

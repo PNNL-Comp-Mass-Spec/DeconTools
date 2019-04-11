@@ -166,17 +166,15 @@ namespace DeconTools.Workflows.Backend.Core
                 ChromWindowWidthForNonAlignedData = (float)WorkflowParameters.ChromNETTolerance * 2
             };
 
-            //only
-
-            var allowNegativeValues = false;
-            ChromSmoother = new SavitzkyGolaySmoother(WorkflowParameters.ChromSmootherNumPointsInSmooth, 2, allowNegativeValues);
+            ChromSmoother = new SavitzkyGolaySmoother(WorkflowParameters.ChromSmootherNumPointsInSmooth, 2);
             ChromPeakDetector = new ChromPeakDetector(WorkflowParameters.ChromPeakDetectorPeakBR, WorkflowParameters.ChromPeakDetectorSigNoise);
             ChromPeakSelector = CreateChromPeakSelector(WorkflowParameters);
 
             ChromPeakAnalyzer = new ChromPeakAnalyzer(WorkflowParameters);
 
-            IterativeTffParameters = new IterativeTFFParameters();
-            IterativeTffParameters.ToleranceInPPM = WorkflowParameters.MSToleranceInPPM;
+            IterativeTffParameters = new IterativeTFFParameters {
+                ToleranceInPPM = WorkflowParameters.MSToleranceInPPM
+            };
 
             MsfeatureFinder = new IterativeTFF(IterativeTffParameters);
             FitScoreCalc = new IsotopicProfileFitScoreCalculator();

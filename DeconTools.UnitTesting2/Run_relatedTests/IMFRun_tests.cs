@@ -26,12 +26,12 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
 
             Run run = new IMFRun(FileRefs.RawDataMSFiles.IMFStdFile1);
 
-            var xydata = run.GetMassSpectrum(new ScanSet(233), 200, 2000);
+            var xyData = run.GetMassSpectrum(new ScanSet(233), 200, 2000);
 
             var numscans = run.GetNumMSScans();
             Assert.AreEqual(600, numscans);
 
-            xydata.GetXYValuesAsSingles(out var xvals, out var yvals);
+            xyData.GetXYValuesAsSingles(out var xvals, out var yvals);
 
 
             var sb = new StringBuilder();
@@ -55,12 +55,12 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         public void GetMassSpectrumAndSumAllTest()
         {
             Run run = new IMFRun(FileRefs.RawDataMSFiles.IMFStdFile1);
-            var xydata = run.GetMassSpectrum(new ScanSet(10000, 1, 20000), 200, 2000);     // this will sum scans 1 through 20000 (if <20000 scans, then will sum all available)
+            var xyData = run.GetMassSpectrum(new ScanSet(10000, 1, 20000), 200, 2000);     // this will sum scans 1 through 20000 (if <20000 scans, then will sum all available)
 
             var numscans = run.GetNumMSScans();
             Assert.AreEqual(600, numscans);
-            Assert.AreEqual(38326, xydata.Xvalues.Length);
-            Assert.AreEqual(38326, xydata.Yvalues.Length);
+            Assert.AreEqual(38326, xyData.Xvalues.Length);
+            Assert.AreEqual(38326, xyData.Yvalues.Length);
         }
 
         [Test]

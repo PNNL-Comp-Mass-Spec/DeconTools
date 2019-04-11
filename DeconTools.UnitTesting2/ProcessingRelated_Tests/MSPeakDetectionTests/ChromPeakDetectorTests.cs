@@ -16,8 +16,8 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
             //see https://jira.pnnl.gov/jira/browse/OMCS-634
             var testChromatogramDataFile = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\TargetedWorkflowStandards\massTag635428_chromatogramData.txt";
 
-            var xydata = TestUtilities.LoadXYDataFromFile(testChromatogramDataFile);
-            Assert.IsNotNull(xydata);
+            var xyData = TestUtilities.LoadXYDataFromFile(testChromatogramDataFile);
+            Assert.IsNotNull(xyData);
 
 
             var peakDetector = new ChromPeakDetector();
@@ -30,8 +30,8 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
             oldChromPeakDetector.PeakBackgroundRatio = 0.5;
             oldChromPeakDetector.SigNoise = 0.5;
 
-            var peaks = peakDetector.FindPeaks(xydata.Xvalues, xydata.Yvalues);
-            var peaksFromOld = oldChromPeakDetector.FindPeaks(xydata, 0, 0);
+            var peaks = peakDetector.FindPeaks(xyData.Xvalues, xyData.Yvalues);
+            var peaksFromOld = oldChromPeakDetector.FindPeaks(xyData, 0, 0);
 
             Assert.AreEqual(8, peaks.Count);
 
@@ -48,17 +48,17 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
         {
             var testChromatogramDataFile = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\TargetedWorkflowStandards\massTag635428_chromatogramData.txt";
 
-            var xydata = TestUtilities.LoadXYDataFromFile(testChromatogramDataFile);
-            Assert.IsNotNull(xydata);
+            var xyData = TestUtilities.LoadXYDataFromFile(testChromatogramDataFile);
+            Assert.IsNotNull(xyData);
 
-            Run run = new ConcreteXYDataRun(xydata.Xvalues, xydata.Yvalues);
+            Run run = new ConcreteXYDataRun(xyData.Xvalues, xyData.Yvalues);
 
             var peakDetector = new ChromPeakDetector();
             peakDetector.PeakToBackgroundRatio = 0.5;
             peakDetector.SignalToNoiseThreshold = 0.5;
             peakDetector.IsDataThresholded = true;
 
-            run.XYData = xydata;
+            run.XYData = xyData;
             peakDetector.Execute(run.ResultCollection);
 
             Assert.IsTrue(run.PeakList.Count > 0);
