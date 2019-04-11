@@ -27,7 +27,7 @@ namespace DeconTools.Backend.Utilities
             }
             catch (Exception ex)
             {
-                Logger.Instance.AddEntry("SqlitePeakListExporter failed. Details: " + ex.Message, true);
+                Logger.Instance.AddEntry("SQLitePeakListExporter failed. Details: " + ex.Message, true);
                 throw;
             }
 
@@ -46,7 +46,7 @@ namespace DeconTools.Backend.Utilities
             addTOFCorrectionTimeIfAbsent(cnn);
 
 
-            using (var mytransaction = cnn.BeginTransaction())
+            using (var myTransaction = cnn.BeginTransaction())
             {
                 using (var cmd = cnn.CreateCommand())
                 {
@@ -54,7 +54,7 @@ namespace DeconTools.Backend.Utilities
                     cmd.ExecuteNonQuery();
                 }
 
-                mytransaction.Commit();
+                myTransaction.Commit();
             }
 
         }
@@ -89,7 +89,7 @@ namespace DeconTools.Backend.Utilities
             }
             catch (Exception ex)
             {
-                Logger.Instance.AddEntry("SqlitePeakListExporter failed. Details: " + ex.Message, true);
+                Logger.Instance.AddEntry("SQLitePeakListExporter failed. Details: " + ex.Message, true);
                 throw;
             }
 
@@ -106,7 +106,7 @@ namespace DeconTools.Backend.Utilities
 
         private static void modifyPolynomialConstants(DbConnection cnn, double a2, double b2, double c2, double d2, double e2, double f2)
         {
-            using (var mytransaction = cnn.BeginTransaction())
+            using (var myTransaction = cnn.BeginTransaction())
             {
                 using (var cmd = cnn.CreateCommand())
                 {
@@ -130,14 +130,14 @@ namespace DeconTools.Backend.Utilities
 
                 }
 
-                mytransaction.Commit();
+                myTransaction.Commit();
             }
         }
 
         private static void modifySlopeAndIntercept(DbConnection cnn, double calSlope, double calIntercept)
         {
 
-            using (var mytransaction = cnn.BeginTransaction())
+            using (var myTransaction = cnn.BeginTransaction())
             {
                 using (var cmd = cnn.CreateCommand())
                 {
@@ -149,7 +149,7 @@ namespace DeconTools.Backend.Utilities
 
                 }
 
-                mytransaction.Commit();
+                myTransaction.Commit();
             }
 
 
@@ -176,7 +176,7 @@ namespace DeconTools.Backend.Utilities
 
         private static void addNewColumn(DbConnection cnn, string tableName, string col, string variableType)
         {
-            using (var mytransaction = cnn.BeginTransaction())
+            using (var myTransaction = cnn.BeginTransaction())
             {
 
                 using (var cmd = cnn.CreateCommand())
@@ -185,7 +185,7 @@ namespace DeconTools.Backend.Utilities
                     cmd.ExecuteNonQuery();
                 }
 
-                mytransaction.Commit();
+                myTransaction.Commit();
             }
         }
 

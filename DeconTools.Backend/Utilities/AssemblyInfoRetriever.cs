@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 
 namespace DeconTools.Backend.Utilities
@@ -23,23 +20,18 @@ namespace DeconTools.Backend.Utilities
                     {
                         return ("v" + versionString);
                     }
-                    else
+
+                    var posOfLastDot = versionString.LastIndexOf(".", StringComparison.Ordinal);
+                    if (posOfLastDot > 1)
                     {
-                        var posOfLastDot = versionString.LastIndexOf(".");
-                        if (posOfLastDot > 1)
-                        {
-                            return ("v" + versionString.Substring(0, posOfLastDot));
-                        }
-                        else
-                        {
-                            return ("v" + versionString);
-                        }
+                        return ("v" + versionString.Substring(0, posOfLastDot));
                     }
+
+
+                    return ("v" + versionString);
                 }
-                else
-                {
-                    return "";
-                }
+
+                return "";
 
             }
             catch (Exception)
@@ -50,13 +42,11 @@ namespace DeconTools.Backend.Utilities
 
         }
 
-        
-        
         public static string GetVersion(Type classType)
         {
             return GetVersion(classType, true);
 
- 
+
 
         }
 

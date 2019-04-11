@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using DeconTools.Backend.ProcessingTasks.MSGenerators;
+﻿using DeconTools.Backend.ProcessingTasks.MSGenerators;
 
 namespace DeconTools.Backend.ProcessingTasks
 {
     public class MSGeneratorFactory
     {
-        public static MSGenerator CreateMSGenerator(Globals.MSFileType filetype)
+        public static MSGenerator CreateMSGenerator(Globals.MSFileType fileType)
         {
             MSGenerator msGenerator;
 
-            switch (filetype)
+            switch (fileType)
             {
                 case Globals.MSFileType.Undefined:
                     msGenerator = new GenericMSGenerator();
@@ -22,7 +19,6 @@ namespace DeconTools.Backend.ProcessingTasks
                 case Globals.MSFileType.Agilent_D:
                     msGenerator = new GenericMSGenerator();
                     break;
-
                 case Globals.MSFileType.Ascii:
                     msGenerator = new GenericMSGenerator();
                     break;

@@ -6,13 +6,10 @@ namespace DeconTools.Backend.ProcessingTasks
 {
     public class PeakDetectorFactory
     {
-
-
         public static PeakDetector CreatePeakDetector(DeconToolsParameters parameters)
         {
             return CreatePeakDetector(Globals.PeakDetectorType.DeconTools, parameters);
         }
-
 
         public static PeakDetector CreatePeakDetector(Globals.PeakDetectorType peakDetectorType, DeconToolsParameters parameters)
         {
@@ -35,7 +32,7 @@ namespace DeconTools.Backend.ProcessingTasks
                                                  parameters.PeakDetectorParameters.SignalToNoiseThreshold);
 
                 default:
-                    throw new ArgumentOutOfRangeException("peakDetectorType");
+                    throw new ArgumentOutOfRangeException(nameof(peakDetectorType));
             }
         }
     }

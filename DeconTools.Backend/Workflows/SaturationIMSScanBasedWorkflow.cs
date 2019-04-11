@@ -635,12 +635,16 @@ namespace DeconTools.Backend.Workflows
                     }
 
 
-                    //correct the m/z value, to more accurately base it on the non-saturated peak.  See Chernushevich et al. 2001 https://onlinelibrary.wiley.com/doi/full/10.1002/jms.207
+                    // Correct the m/z value, to more accurately base it on the non-saturated peak.
+                    // See Chernushevich et al. 2001 https://onlinelibrary.wiley.com/doi/full/10.1002/jms.207
+                    // "An introduction to quadrupole–time‐of‐flight mass spectrometry"
+                    // Journal of Mass Spectrometry, Volume 36, Issue 8, (2001), pages 849-865
+
                     if (updatePeakMasses)
                     {
-                        iso.Peaklist[i].XValue = iso.Peaklist[indexOfPeakUsedInExtrapolation].XValue -                  // formula is  MZ0 = MZ3 - (1.003/z)*n
-                                              ((Globals.MASS_DIFF_BETWEEN_ISOTOPICPEAKS) / iso.ChargeState *            // where MZ0 is the m/z of the saturated peak and MZ3 the m/z of the nonSaturated peak
-                                               (indexOfPeakUsedInExtrapolation - i));                                // and z is charge state and n is the difference in peak number
+                        iso.Peaklist[i].XValue = iso.Peaklist[indexOfPeakUsedInExtrapolation].XValue -              // formula is  MZ0 = MZ3 - (1.003/z)*n
+                                              ((Globals.MASS_DIFF_BETWEEN_ISOTOPICPEAKS) / iso.ChargeState *        // where MZ0 is the m/z of the saturated peak and MZ3 the m/z of the nonSaturated peak
+                                               (indexOfPeakUsedInExtrapolation - i));                               // and z is charge state and n is the difference in peak number
                     }
 
                 }

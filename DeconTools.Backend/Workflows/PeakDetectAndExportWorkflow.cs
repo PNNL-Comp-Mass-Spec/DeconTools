@@ -27,7 +27,6 @@ namespace DeconTools.Backend.Workflows
         public PeakDetectAndExportWorkflow(Run run)
             : this(run, new PeakDetectAndExportWorkflowParameters())
         {
-
         }
 
         public PeakDetectAndExportWorkflow(Run run, PeakDetectAndExportWorkflowParameters parameters)
@@ -308,8 +307,8 @@ namespace DeconTools.Backend.Workflows
                         var primaryIMSScan = Run.MinLCScan;
 
                         uimfRun.IMSScanSetCollection.ScanSetList.Clear();
-                        var imsScanset = new IMSScanSet(primaryIMSScan, uimfRun.MinIMSScan, uimfRun.MaxIMSScan);
-                        uimfRun.IMSScanSetCollection.ScanSetList.Add(imsScanset);
+                        var imsScanSet = new IMSScanSet(primaryIMSScan, uimfRun.MinIMSScan, uimfRun.MaxIMSScan);
+                        uimfRun.IMSScanSetCollection.ScanSetList.Add(imsScanSet);
                     }
                     else
                     {

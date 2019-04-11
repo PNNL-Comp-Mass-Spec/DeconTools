@@ -10,27 +10,27 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
     {
         #region Constructors
 
-        TomIsotopicPattern _tomIsotopicPatternGenerator = new TomIsotopicPattern();
-        
-        N15IsotopeProfileGenerator _N15IsotopicProfileGenerator = new N15IsotopeProfileGenerator();
+        readonly TomIsotopicPattern _tomIsotopicPatternGenerator = new TomIsotopicPattern();
+
+        readonly N15IsotopeProfileGenerator _N15IsotopicProfileGenerator = new N15IsotopeProfileGenerator();
 
         public TomTheorFeatureGenerator()
             : this(Globals.LabellingType.NONE,0.005)
         {
-            
+
         }
 
         public TomTheorFeatureGenerator(DeconTools.Backend.Globals.LabellingType labellingType, double lowPeakCutOff)
         {
-            this.LabellingType = labellingType;
-            this.LowPeakCutOff = lowPeakCutOff;
+            LabellingType = labellingType;
+            LowPeakCutOff = lowPeakCutOff;
         }
         #endregion
 
         #region Properties
 
         public Globals.LabellingType LabellingType { get; set; }
-        
+
         /// <summary>
         /// Peaks below the cutoff will be trimmed out from the theoretical profile
         /// </summary>
@@ -44,6 +44,9 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
         public override void GenerateTheorFeature(TargetBase mt)
         {
             Check.Require(mt != null, "FeatureGenerator failed. MassTag not defined.");
+            if (mt == null)
+                return;
+
             Check.Require(mt.EmpiricalFormula != null, "Theoretical feature generator failed. Can't retrieve empirical formula from Mass Tag");
 
             switch (LabellingType)
@@ -56,7 +59,7 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
                     throw new NotImplementedException();
                 case Globals.LabellingType.N15:
                     mt.IsotopicProfileLabelled = _N15IsotopicProfileGenerator.GetN15IsotopicProfile(mt, LowPeakCutOff);
-                    
+
                     break;
                 default:
                     break;
@@ -64,12 +67,12 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
 
         }
 
-       
+
 
         private IsotopicProfile GetUnlabelledIsotopicProfile(TargetBase mt)
         {
 
-            var iso = new IsotopicProfile();
+            IsotopicProfile iso;
 
             try
             {
@@ -79,7 +82,7 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
             {
                 throw new Exception("Theoretical feature generator failed. Details: " + ex.Message);
             }
-            
+
             PeakUtilities.TrimIsotopicProfile(iso, LowPeakCutOff);
             iso.ChargeState = mt.ChargeState;
             if (iso.ChargeState != 0) calculateMassesForIsotopicProfile(iso, mt);
@@ -96,9 +99,7 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
 
         private void calculateMassesForIsotopicProfile(IsotopicProfile iso, TargetBase mt)
         {
-            if (iso == null || iso.Peaklist == null) return;
-
-          
+            if (iso?.Peaklist == null) return;
 
             for (var i = 0; i < iso.Peaklist.Count; i++)
             {

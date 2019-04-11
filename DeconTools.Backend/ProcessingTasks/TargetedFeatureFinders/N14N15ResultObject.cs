@@ -30,7 +30,6 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
         }
 
-
         internal void DisplaySelectedChromPeaks(List<Peak> chromPeakList)
         {
 

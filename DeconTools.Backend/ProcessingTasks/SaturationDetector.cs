@@ -17,7 +17,6 @@ namespace DeconTools.Backend.ProcessingTasks
         /// </summary>
         public double SaturationThreshold { get; set; }
 
-
         readonly TomIsotopicPattern _tomIsotopicPatternGenerator = new TomIsotopicPattern();
         private double _minRelIntTheorProfile = 0.3;
         private readonly BasicTFF _basicFeatureFinder = new BasicTFF();
@@ -53,10 +52,10 @@ namespace DeconTools.Backend.ProcessingTasks
                 if (uimfRun.CurrentScanSet == null) throw new NullReferenceException("CurrentScanSet is null. You need to set it.");
                 if (uimfRun.CurrentIMSScanSet == null) throw new NullReferenceException("CurrentIMSScanSet is null. You need to set it.");
 
-                //this creates a Frameset containing only the primary frame.  Therefore no summing will occur
+                //this creates a FrameSet containing only the primary frame.  Therefore no summing will occur
                 var lcScanSet = new ScanSet(uimfRun.CurrentScanSet.PrimaryScanNumber);
 
-                //this creates a Scanset containing only the primary scan.  Therefore no summing will occur
+                //this creates a ScanSet containing only the primary scan.  Therefore no summing will occur
                 var imsScanSet = new IMSScanSet(uimfRun.CurrentIMSScanSet.PrimaryScanNumber);
 
                 //get the mass spectrum +/- 5 da from the range of the isotopicProfile
@@ -71,10 +70,10 @@ namespace DeconTools.Backend.ProcessingTasks
                 if (run.CurrentScanSet == null)
                     throw new NullReferenceException("CurrentScanSet is null. You need to set it.");
 
-                //this creates a Scanset containing only the primary scan.  Therefore no summing will occur
-                var scanset = new ScanSet(run.CurrentScanSet.PrimaryScanNumber);
+                //this creates a ScanSet containing only the primary scan.  Therefore no summing will occur
+                var scanSet = new ScanSet(run.CurrentScanSet.PrimaryScanNumber);
 
-                run.CurrentScanSet = scanset;
+                run.CurrentScanSet = scanSet;
 
                 _msGenerator.Execute(run.ResultCollection);
             }
@@ -95,7 +94,7 @@ namespace DeconTools.Backend.ProcessingTasks
 
                     if (result.IsotopicProfile.IsSaturated )
                     {
-                        //problem is that with these saturated profiles, they are often trucated because another
+                        //problem is that with these saturated profiles, they are often truncated because another
                         //isotopic profile was falsely assigned to the back end of it. So we need to find more peaks that should
                         //belong to the saturated profile.
                         var theorTarget = new PeptideTarget

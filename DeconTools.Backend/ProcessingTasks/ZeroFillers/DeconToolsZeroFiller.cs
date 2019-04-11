@@ -34,7 +34,7 @@ namespace DeconTools.Backend.ProcessingTasks.ZeroFillers
         /// <param name="x">X data values</param>
         /// <param name="y">Y data values</param>
         /// <param name="maxPointsToAdd">Number of points to add</param>
-        /// <param name="maxZeroFillDistance">Maximum distance (in Thompsons) between the new zero'd points and the real data points; default is 0.05</param>
+        /// <param name="maxZeroFillDistance">Maximum distance (in Daltons) between the new zero'd points and the real data points; default is 0.05</param>
         /// <returns></returns>
         public override XYData ZeroFill(double[] x, double[] y, int maxPointsToAdd, double maxZeroFillDistance)
         {
@@ -46,7 +46,7 @@ namespace DeconTools.Backend.ProcessingTasks.ZeroFillers
             {
                 if (x.Length != y.Length)
                 {
-                    throw new ArgumentException("Zerofiller failed. Xvalues and Yvalues had different lengths.");
+                    throw new ArgumentException("Zerofiller failed. X values and Y values had different lengths.");
                 }
 
                 var numPoints = x.Length;
@@ -180,13 +180,13 @@ namespace DeconTools.Backend.ProcessingTasks.ZeroFillers
                 if (ShowTraceMessages)
                     Console.WriteLine();
 
-                var zerofilledData = new XYData
+                var zeroFilledData = new XYData
                 {
                     Xvalues = zeroFilledXVals.ToArray(),
                     Yvalues = zeroFilledYVals.ToArray()
                 };
 
-                return zerofilledData;
+                return zeroFilledData;
             }
             catch (Exception ex)
             {

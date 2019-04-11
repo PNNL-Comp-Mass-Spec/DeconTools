@@ -26,13 +26,13 @@ namespace DeconTools.Backend.ProcessingTasks.ZeroFillers
         public int MaxNumPointsToAdd { get; set; }
 
         /// <summary>
-        /// Maximum distance (in Thompsons aka Da) between each real data point and the adjacent zero'd values added to the side of the primary data point
+        /// Maximum distance (in Daltons) between each real data point and the adjacent zero'd values added to the side of the primary data point
         /// </summary>
         public double MaxZeroFillDistance { get; set; }
 
-        public abstract XYData ZeroFill(double[] xvalues, double[] yvalues, int maxZerosToAdd);
+        public abstract XYData ZeroFill(double[] xValues, double[] yValues, int maxZerosToAdd);
 
-        public abstract XYData ZeroFill(double[] xvalues, double[] yvalues, int maxZerosToAdd, double maxZeroFillDistance);
+        public abstract XYData ZeroFill(double[] xValues, double[] yValues, int maxZerosToAdd, double maxZeroFillDistance);
 
         public override void Execute(ResultCollection resultList)
         {

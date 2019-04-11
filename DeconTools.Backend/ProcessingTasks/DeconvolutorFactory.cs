@@ -1,8 +1,6 @@
 ﻿using System;
-using DeconTools.Backend.Core;
 using DeconTools.Backend.Parameters;
 using DeconTools.Backend.ProcessingTasks.Deconvoluters;
-using DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor;
 using DeconTools.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks
@@ -13,6 +11,8 @@ namespace DeconTools.Backend.ProcessingTasks
         public static Deconvolutor CreateDeconvolutor(DeconToolsParameters parameters)
         {
             Check.Require(parameters != null,"Factory cannot create Deconvolutor class. DeconToolsParameters are null.");
+            if (parameters == null)
+                return new NullDeconvolutor();
 
             Deconvolutor decon;
             switch (parameters.ScanBasedWorkflowParameters.DeconvolutionType)

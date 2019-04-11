@@ -38,7 +38,7 @@ namespace DeconTools.Backend.Utilities
         public DateTime TimeOfLastUpdate { get; set; }
 
         /// <summary>
-        /// Add a message to log, optionally flushing cached messages to the log ifle
+        /// Add a message to log, optionally flushing cached messages to the log file
         /// </summary>
         /// <param name="desc"></param>
         /// <param name="writeCachedEntriesToDisk"></param>
@@ -100,15 +100,15 @@ namespace DeconTools.Backend.Utilities
 
         public TimeSpan GetTimeDifference(string string1, string string2)
         {
-            var logentry1 = LogEntries.Find(entry => entry.LogDescription == string1);
-            var logentry2 = LogEntries.Find(entry => entry.LogDescription == string2);
+            var logEntry1 = LogEntries.Find(entry => entry.LogDescription == string1);
+            var logEntry2 = LogEntries.Find(entry => entry.LogDescription == string2);
 
-            if (logentry1.LogDescription == null || logentry2.LogDescription == null)
+            if (logEntry1.LogDescription == null || logEntry2.LogDescription == null)
             {
                 return new TimeSpan(-1);
             }
 
-            var span = logentry2.LogTime.Subtract(logentry1.LogTime);
+            var span = logEntry2.LogTime.Subtract(logEntry1.LogTime);
             return span;
 
 
@@ -123,9 +123,9 @@ namespace DeconTools.Backend.Utilities
             }
         }
 
-        public void WriteToFile(string outputfilename)
+        public void WriteToFile(string outputFilename)
         {
-            using (var sw = new StreamWriter(new FileStream(outputfilename, FileMode.Append, FileAccess.Write, FileShare.Read)))
+            using (var sw = new StreamWriter(new FileStream(outputFilename, FileMode.Append, FileAccess.Write, FileShare.Read)))
             {
                 foreach (var entry in LogEntryBuffer)
                 {

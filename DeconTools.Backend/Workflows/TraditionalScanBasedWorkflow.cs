@@ -35,9 +35,9 @@ namespace DeconTools.Backend.Workflows
                 maxRuntimeHours = int.MaxValue;
 
             _scanCounter = 1;
-            foreach (var scanset in Run.ScanSetCollection.ScanSetList)
+            foreach (var scanSet in Run.ScanSetCollection.ScanSetList)
             {
-                Run.CurrentScanSet = scanset;
+                Run.CurrentScanSet = scanSet;
 
                 ExecuteProcessingTasks();
 
@@ -65,7 +65,7 @@ namespace DeconTools.Backend.Workflows
             }
         }
 
-        protected string getErrorInfo(Run run, Exception ex)
+        protected string GetErrorInfo(Run run, Exception ex)
         {
             var sb = new StringBuilder();
             sb.Append("ERROR THROWN. Scan/Frame = ");
@@ -96,14 +96,14 @@ namespace DeconTools.Backend.Workflows
         {
             if (Run.ScanSetCollection == null || Run.ScanSetCollection.ScanSetList.Count == 0) return;
 
-            var userstate = new ScanBasedProgressInfo(Run, Run.CurrentScanSet);
+            var userState = new ScanBasedProgressInfo(Run, Run.CurrentScanSet);
 
             var percentDone = _scanCounter / (float)(Run.ScanSetCollection.ScanSetList.Count) * 100;
-            userstate.PercentDone = percentDone;
+            userState.PercentDone = percentDone;
 
             var logText = "Scan/Frame= " + Run.GetCurrentScanOrFrame() + "; PercentComplete= " + percentDone.ToString("0.0") + "; AccumulatedFeatures= " + Run.ResultCollection.getTotalIsotopicProfiles();
 
-            BackgroundWorker?.ReportProgress((int)percentDone, userstate);
+            BackgroundWorker?.ReportProgress((int)percentDone, userState);
 
             if (_scanCounter % NumScansBetweenProgress == 0 || mShowTraceMessages)
             {

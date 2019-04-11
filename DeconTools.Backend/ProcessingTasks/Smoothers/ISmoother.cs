@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using DeconTools.Backend.Core;
+﻿using DeconTools.Backend.Core;
 using DeconTools.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks.Smoothers
@@ -15,9 +12,7 @@ namespace DeconTools.Backend.ProcessingTasks.Smoothers
             resultList.Run.XYData = Smooth(resultList.Run.XYData);
         }
 
-        public abstract XYData Smooth(XYData xYData);
+        public abstract XYData Smooth(XYData xYData)
 
-
-     
     }
 }

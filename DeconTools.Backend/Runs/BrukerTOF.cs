@@ -51,8 +51,8 @@ namespace DeconTools.Backend.Runs
 
             Filename = folderName;
             _spectrumCollection = _msAnalysis.MSSpectrumCollection;
-            DatasetName = getDatasetName(Filename);
-            DataSetPath = getDatasetfolderName(Filename);
+            DatasetName = GetDatasetName(Filename);
+            DataSetPath = GetDatasetFolderName(Filename);
 
             MinLCScan = GetMinPossibleLCScanNum();
             MaxLCScan = GetMaxPossibleLCScanNum();
@@ -95,25 +95,25 @@ namespace DeconTools.Backend.Runs
 
         }
 
-        public override XYData GetMassSpectrum(ScanSet scanset, double minMZ, double maxMZ)
+        public override XYData GetMassSpectrum(ScanSet scanSet, double minMZ, double maxMZ)
         {
-            return GetMassSpectrum(scanset);
+            return GetMassSpectrum(scanSet);
         }
 
-        public override XYData GetMassSpectrum(ScanSet scanset)
+        public override XYData GetMassSpectrum(ScanSet scanSet)
         {
 
-            var spectrum = _spectrumCollection[scanset.PrimaryScanNumber];
+            var spectrum = _spectrumCollection[scanSet.PrimaryScanNumber];
 
 
             spectrum.GetMassIntensityValues(SpectrumTypes.SpectrumType_Profile, out var mzVals, out var intensityVals);
-            var xydata = new XYData
+            var xyData = new XYData
             {
                 Xvalues = (double[])mzVals,
                 Yvalues = (double[])intensityVals
             };
 
-            return xydata;
+            return xyData;
 
         }
 
@@ -128,7 +128,7 @@ namespace DeconTools.Backend.Runs
             return GetNumMSScans();
         }
 
-        private string getDatasetName(string fullFolderPath)
+        private string GetDatasetName(string fullFolderPath)
         {
 
             var dirInfo = new DirectoryInfo(fullFolderPath);
@@ -141,7 +141,7 @@ namespace DeconTools.Backend.Runs
             return dirInfo.Name;
         }
 
-        private string getDatasetfolderName(string fullFolderPath)
+        private string GetDatasetFolderName(string fullFolderPath)
         {
             var dirInfo = new DirectoryInfo(fullFolderPath);
             return dirInfo.FullName;

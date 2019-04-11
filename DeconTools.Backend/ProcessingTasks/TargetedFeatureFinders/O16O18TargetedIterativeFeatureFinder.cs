@@ -41,8 +41,8 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             }
 
             //TODO: decide whether not to trim or not. Trimming XYData may help with speed.
-            double mzwindowForPeakDetection = 20;
-            resultList.Run.XYData = resultList.Run.XYData.TrimData(resultList.Run.CurrentMassTag.MZ - mzwindowForPeakDetection / 2, resultList.Run.CurrentMassTag.MZ + mzwindowForPeakDetection / 2);
+            double mzWindowForPeakDetection = 20;
+            resultList.Run.XYData = resultList.Run.XYData.TrimData(resultList.Run.CurrentMassTag.MZ - mzWindowForPeakDetection / 2, resultList.Run.CurrentMassTag.MZ + mzWindowForPeakDetection / 2);
 
             resultList.IsosResultBin.Clear();
 
@@ -54,7 +54,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             var o18TheorProfileSingleLabel = convertO16ProfileToO18(o16TheorFeature, 2);
             var o18SingleLabelProfile = _iterativeTFFStandard.IterativelyFindMSFeature(resultList.Run.XYData, o18TheorProfileSingleLabel, out peakList);
 
-            if (peakList!=null && peakList.Count>peakListToUseLater.Count)
+            if (peakList != null && peakList.Count > peakListToUseLater.Count)
             {
                 peakListToUseLater = new List<Peak>(peakList);
             }
@@ -73,7 +73,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
             IsotopicProfile foundO16O18Profile;
 
-            if (o16profile==null)
+            if (o16profile == null)
             {
 
                 if (o18DoubleLabelProfile == null)
@@ -152,10 +152,10 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             {
                 if (i < profileToAdd.Peaklist.Count)
                 {
-                    var peakmz = profileToAdd.Peaklist[i].XValue;
-                    var toleranceInMZ = ToleranceInPPM / 1e6 * peakmz;
+                    var peakMz = profileToAdd.Peaklist[i].XValue;
+                    var toleranceInMZ = ToleranceInPPM / 1e6 * peakMz;
 
-                    var peaksAlreadyThere = PeakUtilities.GetMSPeaksWithinTolerance(foundO16O18Profile.Peaklist, peakmz, toleranceInMZ);
+                    var peaksAlreadyThere = PeakUtilities.GetMSPeaksWithinTolerance(foundO16O18Profile.Peaklist, peakMz, toleranceInMZ);
 
                     if (peaksAlreadyThere == null || peaksAlreadyThere.Count == 0)
                     {
@@ -187,9 +187,9 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             var mzBetweenIsotopes = 1.003 / theorFeature.ChargeState;
 
 
-            foreach (var theorpeak in theorFeature.Peaklist)
+            foreach (var theorPeak in theorFeature.Peaklist)
             {
-                var peak = new MSPeak(theorpeak.XValue, theorpeak.Height, theorpeak.Width, theorpeak.SignalToNoise);
+                var peak = new MSPeak(theorPeak.XValue, theorPeak.Height, theorPeak.Width, theorPeak.SignalToNoise);
 
                 peak.XValue += numPeaksToShift * mzBetweenIsotopes;
 

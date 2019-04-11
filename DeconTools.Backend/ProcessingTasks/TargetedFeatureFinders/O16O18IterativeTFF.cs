@@ -23,16 +23,16 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
         #region Public Methods
 
-        public override IsotopicProfile IterativelyFindMSFeature(XYData xydata, IsotopicProfile theorIso)
+        public override IsotopicProfile IterativelyFindMSFeature(XYData xyData, IsotopicProfile theorIso)
         {
             var o16TheorFeature = theorIso;
-            var o16Profile = _iterativeTffStandard.IterativelyFindMSFeature(xydata, o16TheorFeature);
+            var o16Profile = _iterativeTffStandard.IterativelyFindMSFeature(xyData, o16TheorFeature);
 
             var o18TheorProfileSingleLabel = convertO16ProfileToO18(o16TheorFeature, 2);
-            var o18SingleLabelProfile = _iterativeTffStandard.IterativelyFindMSFeature(xydata, o18TheorProfileSingleLabel);
+            var o18SingleLabelProfile = _iterativeTffStandard.IterativelyFindMSFeature(xyData, o18TheorProfileSingleLabel);
 
             var o18TheorProfileDoubleLabel = convertO16ProfileToO18(o16TheorFeature, 4);
-            var o18DoubleLabelProfile = _iterativeTffStandard.IterativelyFindMSFeature(xydata, o18TheorProfileDoubleLabel);
+            var o18DoubleLabelProfile = _iterativeTffStandard.IterativelyFindMSFeature(xyData, o18TheorProfileDoubleLabel);
 
            IsotopicProfile foundO16O18Profile;
 
@@ -77,9 +77,9 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             var o18Iso = new IsotopicProfile {ChargeState = theorFeature.ChargeState, Peaklist = new List<MSPeak>()};
             var mzBetweenIsotopes = 1.003 / theorFeature.ChargeState;
 
-            foreach (var theorpeak in theorFeature.Peaklist)
+            foreach (var theorPeak in theorFeature.Peaklist)
             {
-                var peak = new MSPeak(theorpeak.XValue, theorpeak.Height, theorpeak.Width, theorpeak.SignalToNoise);
+                var peak = new MSPeak(theorPeak.XValue, theorPeak.Height, theorPeak.Width, theorPeak.SignalToNoise);
 
                 peak.XValue += numPeaksToShift * mzBetweenIsotopes;
 
@@ -97,10 +97,10 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             {
                 if (i < profileToAdd.Peaklist.Count)
                 {
-                    var peakmz = profileToAdd.Peaklist[i].XValue;
-                    var toleranceInMz = ToleranceInPPM / 1e6 * peakmz;
+                    var peakMz = profileToAdd.Peaklist[i].XValue;
+                    var toleranceInMz = ToleranceInPPM / 1e6 * peakMz;
 
-                    var peaksAlreadyThere = PeakUtilities.GetMSPeaksWithinTolerance(foundO16O18Profile.Peaklist, peakmz, toleranceInMz);
+                    var peaksAlreadyThere = PeakUtilities.GetMSPeaksWithinTolerance(foundO16O18Profile.Peaklist, peakMz, toleranceInMz);
 
                     if (peaksAlreadyThere == null || peaksAlreadyThere.Count == 0)
                     {

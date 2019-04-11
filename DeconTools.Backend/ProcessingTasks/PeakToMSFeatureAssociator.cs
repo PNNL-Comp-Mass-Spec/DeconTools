@@ -31,10 +31,10 @@ namespace DeconTools.Backend.ProcessingTasks
             if (resultList.Run.PeakList == null || resultList.Run.PeakList.Count == 0) return;
 
 
-            foreach (var msfeature in resultList.IsosResultBin)
+            foreach (var msFeature in resultList.IsosResultBin)
             {
 
-                foreach (var peak in msfeature.IsotopicProfile.Peaklist)
+                foreach (var peak in msFeature.IsotopicProfile.Peaklist)
                 {
                     var targetMZ = peak.XValue;
                     toleranceInPPM = 0.1d;
@@ -45,20 +45,16 @@ namespace DeconTools.Backend.ProcessingTasks
                     var indexOfPeak = PeakUtilities.getIndexOfClosestValue(resultList.Run.PeakList, targetMZ, 0, resultList.Run.PeakList.Count - 1, toleranceInMZ);
                     if (indexOfPeak != -1)
                     {
-                        var foundpeak = resultList.Run.PeakList[indexOfPeak];
+                        var foundPeak = resultList.Run.PeakList[indexOfPeak];
 
-                        if (foundpeak is MSPeak)
+                        if (foundPeak is MSPeak msPeak)
                         {
-                            ((MSPeak)foundpeak).MSFeatureID = peak.MSFeatureID;
+                            msPeak.MSFeatureID = peak.MSFeatureID;
                         }
                     }
                 }
 
-
             }
-
-
-
 
         }
     }

@@ -17,7 +17,7 @@ namespace DeconTools.Backend.Utilities
 
         #region Public Methods
 
-        public static double CalculateAreaOfProfile(IsotopicProfile iso, double[] xvals, double[] yvals, double backgroundIntensity, ref int startingIndex)
+        public static double CalculateAreaOfProfile(IsotopicProfile iso, double[] xVals, double[] yVals, double backgroundIntensity, ref int startingIndex)
         {
             double area = 0;
 
@@ -27,29 +27,29 @@ namespace DeconTools.Backend.Utilities
 
 
                 var peakSigma = peak.Width / 2.35;      //   width@half-height =  2.35σ   (Gaussian peak theory)
-                var startMZ = peak.XValue - peakSigma * 2;   // width at base = 4σ;  
+                var startMZ = peak.XValue - peakSigma * 2;   // width at base = 4σ;
                 var stopMZ = peak.XValue + peakSigma * 2;
 
-                for (var i = startingIndex; i < xvals.Length; i++)
+                for (var i = startingIndex; i < xVals.Length; i++)
                 {
                     startingIndex = i;    // move the starting point along so that next peak will start at the end of the last peak
 
-                    if (xvals[i] >= startMZ)
+                    if (xVals[i] >= startMZ)
                     {
-                        if (xvals[i] <= stopMZ)
+                        if (xVals[i] <= stopMZ)
                         {
-                            if (i == xvals.Length - 1) break;   // rare circumstance that m/z value is the last of the raw data points
+                            if (i == xVals.Length - 1) break;   // rare circumstance that m/z value is the last of the raw data points
 
-                            var x1 = xvals[i];
-                            var y1 = yvals[i];
-                            var x2 = xvals[i + 1];
-                            var y2 = yvals[i + 1];
+                            var x1 = xVals[i];
+                            var y1 = yVals[i];
+                            var x2 = xVals[i + 1];
+                            var y2 = yVals[i + 1];
 
-                            area += (x2 - x1) * (y1 - backgroundIntensity) + (x2 - x1) * (y2 - y1) * 0.5;    //area of square + area of triangle (semi-trapazoid)
+                            area += (x2 - x1) * (y1 - backgroundIntensity) + (x2 - x1) * (y2 - y1) * 0.5;    //area of square + area of triangle (semi-trapezoid)
                         }
                         else
                         {
-                            break;    //  went past the stopMZ. So break out and go onto the next peak. 
+                            break;    //  went past the stopMZ. So break out and go onto the next peak.
                         }
 
                     }
@@ -75,16 +75,16 @@ namespace DeconTools.Backend.Utilities
         public static void NormalizeIsotopicProfile(IsotopicProfile profile, float intensityForNormalization = 1.0f)
         {
             Check.Require(profile != null, "Isotopic profile is null");
-            Check.Require(profile.Peaklist!=null, "Isotopic profile peaklist is null");
+            Check.Require(profile.Peaklist != null, "Isotopic profile peaklist is null");
 
             var maxIntensity = profile.getMostIntensePeak().Height;
-            
-            for (var i = 0; i < profile.Peaklist.Count; i++)
+
+            foreach (var dataPoint in profile.Peaklist)
             {
-                profile.Peaklist[i].Height = profile.Peaklist[i].Height/maxIntensity*intensityForNormalization;
+                dataPoint.Height = dataPoint.Height / maxIntensity * intensityForNormalization;
             }
 
-           
+
         }
 
 
@@ -94,16 +94,16 @@ namespace DeconTools.Backend.Utilities
             Check.Require(profile.Peaklist != null, "Isotopic profile peaklist is null");
             Check.Require(indexOfPeakUsedForNormalization < profile.Peaklist.Count, "Cannot normalize. Requested index exceeds array bounds.");
 
-            if (indexOfPeakUsedForNormalization>=profile.Peaklist.Count)
+            if (indexOfPeakUsedForNormalization >= profile.Peaklist.Count)
             {
                 return;
             }
 
             var intensityTargetPeak = profile.Peaklist[indexOfPeakUsedForNormalization].Height;
 
-            for (var i = 0; i < profile.Peaklist.Count; i++)
+            foreach (var dataPoint in profile.Peaklist)
             {
-                profile.Peaklist[i].Height = profile.Peaklist[i].Height/intensityTargetPeak*intensityForNormalization;
+                dataPoint.Height = dataPoint.Height / intensityTargetPeak * intensityForNormalization;
             }
 
         }
@@ -114,10 +114,10 @@ namespace DeconTools.Backend.Utilities
         /// </summary>
         /// <param name="iso1">Source isotopic profile</param>
         /// <param name="iso2">isotopic profile to be offset</param>
-        public static void AlignTwoIsotopicProfiles(IsotopicProfile iso1, IsotopicProfile iso2 )
+        public static void AlignTwoIsotopicProfiles(IsotopicProfile iso1, IsotopicProfile iso2)
         {
-            double offset = 0;
-            if (iso2 == null || iso2.Peaklist == null || iso2.Peaklist.Count == 0) return;
+            double offset;
+            if (iso2?.Peaklist == null || iso2.Peaklist.Count == 0) return;
 
             var mostIntensePeak = iso2.getMostIntensePeak();
             var indexOfMostIntensePeak = iso2.Peaklist.IndexOf(mostIntensePeak);
@@ -137,7 +137,7 @@ namespace DeconTools.Backend.Utilities
             {
                 offset = iso1.Peaklist[0].XValue - iso2.Peaklist[0].XValue;
             }
-            
+
 
             foreach (var peak in iso2.Peaklist)
             {
@@ -177,35 +177,36 @@ namespace DeconTools.Backend.Utilities
 
         public static MSPeak GetPeakAtGivenMZ(IsotopicProfile iso1, double targetMZ, double mzTolerance)
         {
-
             //given the size of an isotopic distribution, we can use a linear (slow) search
-            for (var i = 0; i < iso1.Peaklist.Count; i++)
+            foreach (var dataPoint in iso1.Peaklist)
             {
-                if (Math.Abs(iso1.Peaklist[i].XValue-targetMZ)<=mzTolerance)
+                if (Math.Abs(dataPoint.XValue - targetMZ) <= mzTolerance)
                 {
-                    return iso1.Peaklist[i];
+                    return dataPoint;
                 }
             }
+
             return null;
         }
 
-        public static List<MSPeak> GetTopMSPeaks(List<MSPeak> msPeaklist, double intensityCutoff)
+        public static List<MSPeak> GetTopMSPeaks(List<MSPeak> msPeakList, double intensityCutoff)
         {
-            var filteredMSPeaklist = new List<MSPeak>();
+            var filteredMSPeakList = new List<MSPeak>();
 
-            foreach (var peak in msPeaklist)
+            foreach (var peak in msPeakList)
             {
 
-                if (peak.Height >= intensityCutoff) filteredMSPeaklist.Add(peak);
-               
+                if (peak.Height >= intensityCutoff)
+                    filteredMSPeakList.Add(peak);
+
             }
 
-            return filteredMSPeaklist;
+            return filteredMSPeakList;
         }
 
-        public static List<double> GetTopNMZValues(List<MSPeak> msPeaklist, int topNPeaks)
+        public static List<double> GetTopNMZValues(List<MSPeak> msPeakList, int topNPeaks)
         {
-            var sortedPeakList = msPeaklist.OrderByDescending(x => x.Height);
+            var sortedPeakList = msPeakList.OrderByDescending(x => x.Height);
             var mzList = new List<double>();
 
             var count = 0;

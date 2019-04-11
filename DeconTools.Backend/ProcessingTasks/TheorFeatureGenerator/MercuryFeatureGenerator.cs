@@ -7,8 +7,6 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
     public class MercuryFeatureGenerator : ITheorFeatureGenerator
     {
 
-       
-        
         #region Constructors
         public MercuryFeatureGenerator()
         {
@@ -17,7 +15,7 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
         #endregion
 
         #region Properties
-        
+
         #endregion
 
         #region Public Methods
@@ -30,10 +28,12 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
             var result = resultColl.CurrentTargetedResult;
 
             Check.Require(result != null, this.Name + " failed; This task requires a MassTagResult, which is null");
-            var fwhm = result.IsotopicProfile.GetFWHM();
+            if (result == null)
+                return;
 
-            
+            var fwhm = result.IsotopicProfile.GetFWHM();
         }
+
         #endregion
 
         #region Private Methods
@@ -76,6 +76,6 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
             throw new NotImplementedException();
         }
 
-  
+
     }
 }

@@ -5,10 +5,10 @@ using System.ComponentModel;
 using System.Windows.Forms;
 using PNNL.Controls;
 using System.Reflection;
-using System.IO ; 
-using System.Text ; 
-using System.Data.Odbc ; 
-using System.Data ; 
+using System.IO;
+using System.Text;
+using System.Data.Odbc;
+using System.Data;
 
 
 
@@ -23,30 +23,30 @@ namespace Decon2LS
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.Container components = null;
-        private PNNL.Controls.ctlLineChart mctl_tic; 
-        private PNNL.Controls.ctlLineChart mctl_bpi ; 
+        private PNNL.Controls.ctlLineChart mctl_tic;
+        private PNNL.Controls.ctlLineChart mctl_bpi;
 
-        const double TIC_HEIGHT_RATIO=0.5;
-         
+        const double TIC_HEIGHT_RATIO = 0.5;
 
-        
-        
+
+
+
         private PNNL.Controls.ArrayChartDataProvider m_tic_chart_data_provider;
-        private PNNL.Controls.clsSeries mobj_tic_series ; 	
-        private PNNL.Controls.clsPlotParams mobj_tic_plt_params ;
+        private PNNL.Controls.clsSeries mobj_tic_series;
+        private PNNL.Controls.clsPlotParams mobj_tic_plt_params;
 
-        private float [] marr_scans = null ; 
-        private float [] marr_tic_values = null ;
-        private float [] marr_bpi_values  = null ;
-        private System.Data.DataTable mdata_tbl ; 		
+        private float[] marr_scans = null;
+        private float[] marr_tic_values = null;
+        private float[] marr_bpi_values = null;
+        private System.Data.DataTable mdata_tbl;
         private PNNL.Controls.ArrayChartDataProvider m_bpi_chart_data_provider;
-        private PNNL.Controls.clsSeries mobj_bpi_series ; 	
-        private PNNL.Controls.clsPlotParams mobj_bpi_plt_params ;
-        private DeconToolsV2.Readers.clsRawData mobjRawData ; //For ICR2ls TIC files
-        private clsMediator mMediator;		
+        private PNNL.Controls.clsSeries mobj_bpi_series;
+        private PNNL.Controls.clsPlotParams mobj_bpi_plt_params;
+        private DeconToolsV2.Readers.clsRawData mobjRawData; //For ICR2ls TIC files
+        private clsMediator mMediator;
 
-        public String mFileNameForHeader ; 
-        public String mFileName ; 
+        public String mFileNameForHeader;
+        public String mFileName;
 
         public frmTICViewer()
         {
@@ -54,10 +54,10 @@ namespace Decon2LS
             // Required for Windows Form Designer support
             //
             InitializeComponent();
-            mMediator = new clsMediator(this) ; 
-            Init()  ; 
+            mMediator = new clsMediator(this);
+            Init();
 
-            this.frmTICViewer_Resize(this,null);
+            this.frmTICViewer_Resize(this, null);
 
         }
 
@@ -65,134 +65,134 @@ namespace Decon2LS
         {
             try
             {
-                
-                var shape = new PNNL.Controls.DiamondShape(3, false) ; 
-                mobj_tic_plt_params = new PNNL.Controls.clsPlotParams(shape, Color.Red, false, true, true) ; 
-                mobj_bpi_plt_params = new PNNL.Controls.clsPlotParams(shape, Color.Blue, false, true, true) ; 
-                m_tic_chart_data_provider = new PNNL.Controls.ArrayChartDataProvider() ; 
-                m_bpi_chart_data_provider = new PNNL.Controls.ArrayChartDataProvider() ; 
-                mobjRawData = new DeconToolsV2.Readers.clsRawData() ;
-                
+
+                var shape = new PNNL.Controls.DiamondShape(3, false);
+                mobj_tic_plt_params = new PNNL.Controls.clsPlotParams(shape, Color.Red, false, true, true);
+                mobj_bpi_plt_params = new PNNL.Controls.clsPlotParams(shape, Color.Blue, false, true, true);
+                m_tic_chart_data_provider = new PNNL.Controls.ArrayChartDataProvider();
+                m_bpi_chart_data_provider = new PNNL.Controls.ArrayChartDataProvider();
+                mobjRawData = new DeconToolsV2.Readers.clsRawData();
+
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, ex.Message) ; 
+                MessageBox.Show(this, ex.Message);
             }
         }
 
-        public void LoadIcr2lsTICFile() 
+        public void LoadIcr2lsTICFile()
         {
             try
-            {				
-                mobjRawData.LoadFile(mFileName, DeconToolsV2.Readers.FileType.ICR2LSRAWDATA)  ; 
-                mobjRawData.GetTicFromFile(ref marr_tic_values, ref marr_scans, true) ; 
-                var plotParams = (clsPlotParams) mobj_tic_plt_params.Clone();
-                plotParams.Name = "TIC" ;				
+            {
+                mobjRawData.LoadFile(mFileName, DeconToolsV2.Readers.FileType.ICR2LSRAWDATA);
+                mobjRawData.GetTicFromFile(ref marr_tic_values, ref marr_scans, true);
+                var plotParams = (clsPlotParams)mobj_tic_plt_params.Clone();
+                plotParams.Name = "TIC";
 
-                mobj_tic_series = 
-                    new clsSpectraSeries(new PNNL.Controls.ArrayChartDataProvider(marr_scans, marr_tic_values), 
-                    plotParams, mFileNameForHeader) ; 
-                mctl_tic.SeriesCollection.Add(mobj_tic_series) ; 					
+                mobj_tic_series =
+                    new clsSpectraSeries(new PNNL.Controls.ArrayChartDataProvider(marr_scans, marr_tic_values),
+                    plotParams, mFileNameForHeader);
+                mctl_tic.SeriesCollection.Add(mobj_tic_series);
                 m_tic_chart_data_provider.SetData(marr_scans, marr_tic_values);
-                mctl_tic.Title = "TIC" ; 
+                mctl_tic.Title = "TIC";
                 this.mctl_tic.ViewPortHistory.Clear();
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, ex.Message + ex.StackTrace) ; 
+                MessageBox.Show(this, ex.Message + ex.StackTrace);
             }
         }
 
 
-        public void LoadScansTICFile() 
+        public void LoadScansTICFile()
         {
-            
+
             try
             {
-                mdata_tbl = new System.Data.DataTable() ; 
+                mdata_tbl = new System.Data.DataTable();
                 using (var parser = new clsGenericParserAdapter())
                 {
-                    parser.SetDataSource(mFileName) ; 
-                    parser.ColumnDelimiter = ",".ToCharArray() ; 
-                    parser.FirstRowHasHeader = true ; 
-                    parser.MaxBufferSize = 4096 ; 
-                    parser.TextQualifier  = '\'';
-                    mdata_tbl = parser.GetDataTable() ; 
-                    var scan_num_col = parser.GetColumnIndex("scan_num") ; 
-                    var tic_col = parser.GetColumnIndex("tic") ; 
-                    var bpi_col = parser.GetColumnIndex("bpi") ; 
-                    var num_entries  = mdata_tbl.Rows.Count ; 
-                    double scan ; 
-                    double tic ; 
-                    double bpi ; 
+                    parser.SetDataSource(mFileName);
+                    parser.ColumnDelimiter = ",".ToCharArray();
+                    parser.FirstRowHasHeader = true;
+                    parser.MaxBufferSize = 4096;
+                    parser.TextQualifier = '\'';
+                    mdata_tbl = parser.GetDataTable();
+                    var scan_num_col = parser.GetColumnIndex("scan_num");
+                    var tic_col = parser.GetColumnIndex("tic");
+                    var bpi_col = parser.GetColumnIndex("bpi");
+                    var num_entries = mdata_tbl.Rows.Count;
+                    double scan;
+                    double tic;
+                    double bpi;
 
-                    marr_tic_values = new float[num_entries] ; 
-                    marr_scans = new float[num_entries] ; 
-                    marr_bpi_values = new float[num_entries] ; 
-                    
-                    for (var entry_num = 0 ; entry_num < num_entries ; entry_num++)
+                    marr_tic_values = new float[num_entries];
+                    marr_scans = new float[num_entries];
+                    marr_bpi_values = new float[num_entries];
+
+                    for (var entry_num = 0; entry_num < num_entries; entry_num++)
                     {
-                        var row = mdata_tbl.Rows[entry_num] ; 
-                        scan =  Convert.ToDouble(row[scan_num_col].ToString())  ; 
-                        tic = Convert.ToDouble(row[tic_col].ToString())  ; 
-                        bpi = Convert.ToDouble(row[bpi_col].ToString()) ; 
+                        var row = mdata_tbl.Rows[entry_num];
+                        scan = Convert.ToDouble(row[scan_num_col].ToString());
+                        tic = Convert.ToDouble(row[tic_col].ToString());
+                        bpi = Convert.ToDouble(row[bpi_col].ToString());
 
-                        marr_scans.SetValue((float)scan , entry_num) ; 
-                        marr_tic_values.SetValue((float)tic , entry_num) ; 
-                        marr_bpi_values.SetValue((float)bpi, entry_num) ; 
+                        marr_scans.SetValue((float)scan, entry_num);
+                        marr_tic_values.SetValue((float)tic, entry_num);
+                        marr_bpi_values.SetValue((float)bpi, entry_num);
                     }
 
-                    parser.Close() ; 
+                    parser.Close();
 
-                    var plotParams = (clsPlotParams) mobj_tic_plt_params.Clone();
-                    plotParams.Name = "TIC" ;
+                    var plotParams = (clsPlotParams)mobj_tic_plt_params.Clone();
+                    plotParams.Name = "TIC";
 
-                    mobj_tic_series = 
-                        new clsSpectraSeries(new PNNL.Controls.ArrayChartDataProvider(marr_scans, marr_tic_values), 
-                        plotParams, mFileNameForHeader) ; 
+                    mobj_tic_series =
+                        new clsSpectraSeries(new PNNL.Controls.ArrayChartDataProvider(marr_scans, marr_tic_values),
+                        plotParams, mFileNameForHeader);
 
-                    var plotParams1 = (clsPlotParams) mobj_bpi_plt_params.Clone() ;
-                    plotParams1.Name = "BPI"  ; 
+                    var plotParams1 = (clsPlotParams)mobj_bpi_plt_params.Clone();
+                    plotParams1.Name = "BPI";
 
-                    mobj_bpi_series = 
-                        new clsSpectraSeries(new PNNL.Controls.ArrayChartDataProvider(marr_scans, marr_bpi_values), 
-                        plotParams1, mFileNameForHeader) ; 
+                    mobj_bpi_series =
+                        new clsSpectraSeries(new PNNL.Controls.ArrayChartDataProvider(marr_scans, marr_bpi_values),
+                        plotParams1, mFileNameForHeader);
 
-                        
-                    mctl_tic.SeriesCollection.Add(mobj_tic_series) ; 					
-                    mctl_bpi.SeriesCollection.Add(mobj_bpi_series) ; 
+
+                    mctl_tic.SeriesCollection.Add(mobj_tic_series);
+                    mctl_bpi.SeriesCollection.Add(mobj_bpi_series);
                     m_tic_chart_data_provider.SetData(marr_scans, marr_tic_values);
-                    m_bpi_chart_data_provider.SetData(marr_scans, marr_bpi_values) ; 
-                    mctl_bpi.Title = "BPI"; 
-                    mctl_tic.Title = "TIC" ; 
-                    this.Text = mFileNameForHeader ; 
+                    m_bpi_chart_data_provider.SetData(marr_scans, marr_bpi_values);
+                    mctl_bpi.Title = "BPI";
+                    mctl_tic.Title = "TIC";
+                    this.Text = mFileNameForHeader;
 
 
                     this.mctl_tic.ViewPortHistory.Clear();
-                    this.mctl_bpi.ViewPortHistory.Clear() ; 
+                    this.mctl_bpi.ViewPortHistory.Clear();
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, ex.Message + ex.StackTrace) ; 
+                MessageBox.Show(this, ex.Message + ex.StackTrace);
             }
-        }		
+        }
 
 
 
         /// <summary>
         /// Clean up any resources being used.
         /// </summary>
-        protected override void Dispose( bool disposing )
+        protected override void Dispose(bool disposing)
         {
-            if( disposing )
+            if (disposing)
             {
-                if(components != null)
+                if (components != null)
                 {
                     components.Dispose();
                 }
             }
-            base.Dispose( disposing );
+            base.Dispose(disposing);
         }
 
         #region Windows Form Designer generated code
@@ -213,9 +213,9 @@ namespace Decon2LS
             ((System.ComponentModel.ISupportInitialize)(this.mctl_bpi)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.mctl_tic)).BeginInit();
             this.SuspendLayout();
-            // 
+            //
             // mctl_bpi
-            // 
+            //
             this.mctl_bpi.AutoViewPortOnAddition = true;
             this.mctl_bpi.AutoViewPortOnSeriesChange = true;
             this.mctl_bpi.AutoViewPortXBase = 0F;
@@ -276,9 +276,9 @@ namespace Decon2LS
             this.mctl_bpi.ViewPort = ((System.Drawing.RectangleF)(resources.GetObject("mctl_bpi.ViewPort")));
             this.mctl_bpi.XAxisLabel = "Scan Number";
             this.mctl_bpi.YAxisLabel = "Base Peak Intensity";
-            // 
+            //
             // mctl_tic
-            // 
+            //
             this.mctl_tic.AutoViewPortOnAddition = true;
             this.mctl_tic.AutoViewPortOnSeriesChange = true;
             this.mctl_tic.AutoViewPortXBase = 0F;
@@ -340,9 +340,9 @@ namespace Decon2LS
             this.mctl_tic.ViewPort = ((System.Drawing.RectangleF)(resources.GetObject("mctl_tic.ViewPort")));
             this.mctl_tic.XAxisLabel = "Scan Number";
             this.mctl_tic.YAxisLabel = "Total Intensity";
-            // 
+            //
             // frmTICViewer
-            // 
+            //
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
             this.BackColor = System.Drawing.Color.WhiteSmoke;
             this.ClientSize = new System.Drawing.Size(792, 566);
@@ -361,52 +361,52 @@ namespace Decon2LS
 
         private void mctl_bpi_Load(object sender, System.EventArgs e)
         {
-        
+
         }
 
         private void frmTICViewer_Resize(object sender, System.EventArgs e)
         {
-            this.mctl_tic.Left=1;
-            this.mctl_tic.Top=1;
-            this.mctl_tic.Width=this.Width;
-            this.mctl_tic.Height=(int)(this.Height*TIC_HEIGHT_RATIO);
+            this.mctl_tic.Left = 1;
+            this.mctl_tic.Top = 1;
+            this.mctl_tic.Width = this.Width;
+            this.mctl_tic.Height = (int)(this.Height * TIC_HEIGHT_RATIO);
 
-            this.mctl_bpi.Left=1;
-            this.mctl_bpi.Top=this.mctl_tic.Top+this.mctl_tic.Height;
-            this.mctl_bpi.Width=this.Width;
-            this.mctl_bpi.Height=this.Height-this.mctl_tic.Height-40;
+            this.mctl_bpi.Left = 1;
+            this.mctl_bpi.Top = this.mctl_tic.Top + this.mctl_tic.Height;
+            this.mctl_bpi.Width = this.Width;
+            this.mctl_bpi.Height = this.Height - this.mctl_tic.Height - 40;
 
-            
+
         }
 
 
-    /*	/// <summary>
-        /// Draws the line indicating the currently active spectrum scan in the 
-        /// tic chart.  Draws after the chart is drawn.
-        /// </summary>
-        /// <param name="chart"></param>
-        /// <param name="args"></param>
-        private void mctl_tic_PostRender(PNNL.Controls.ctlChartBase chart, PNNL.Controls.PostRenderEventArgs args)
-        {
-            // If we have a tic, attempt to draw the spectrum line on it
-            if (this.marr_tic_values != null) 
+        /*	/// <summary>
+            /// Draws the line indicating the currently active spectrum scan in the
+            /// tic chart.  Draws after the chart is drawn.
+            /// </summary>
+            /// <param name="chart"></param>
+            /// <param name="args"></param>
+            private void mctl_tic_PostRender(PNNL.Controls.ctlChartBase chart, PNNL.Controls.PostRenderEventArgs args)
             {
-                try 
+                // If we have a tic, attempt to draw the spectrum line on it
+                if (this.marr_tic_values != null)
                 {
-                    if (this.mint_spectrum_num <= 0)
-                        return ; 
-                    // Get the time that the spectrum occurs in the overall run
-                    double spectrumTime = mdbl_spectrum_time ;
-                    // Convert into a pixel offset relative to the left of the charting area
-                    float xChartValue = this.mctl_tic.GetScreenPixelX((float) spectrumTime);
-                    // Draw the line onto the chart					
-                } 
-                catch (Exception e) 
-                {
-                    Console.WriteLine(e);
+                    try
+                    {
+                        if (this.mint_spectrum_num <= 0)
+                            return ;
+                        // Get the time that the spectrum occurs in the overall run
+                        double spectrumTime = mdbl_spectrum_time ;
+                        // Convert into a pixel offset relative to the left of the charting area
+                        float xChartValue = this.mctl_tic.GetScreenPixelX((float) spectrumTime);
+                        // Draw the line onto the chart
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e);
+                    }
                 }
-            }
-        }*/
+            }*/
 
         #region IMediatedForm Members
 
@@ -423,10 +423,10 @@ namespace Decon2LS
         /// <summary>
         /// Spectra customized clsSeries with special copy support for including file name
         /// </summary>
-        internal class clsSpectraSeries : clsSeries 
+        internal class clsSpectraSeries : clsSeries
         {
             private String mFilename;
-            internal clsSpectraSeries(IChartDataProvider provider, clsPlotParams plotParams, String filename) : 
+            internal clsSpectraSeries(IChartDataProvider provider, clsPlotParams plotParams, String filename) :
                 base(provider, plotParams)
             {
                 this.mFilename = filename;

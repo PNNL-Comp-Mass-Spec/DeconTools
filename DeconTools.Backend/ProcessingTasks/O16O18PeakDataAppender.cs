@@ -7,8 +7,8 @@ namespace DeconTools.Backend.ProcessingTasks
 {
     public class O16O18PeakDataAppender : Task
     {
-        
-        const double MASSUNIT_BETWEEN_ISO = 1.002125;
+
+        const double MASS_UNIT_BETWEEN_ISO = 1.002125;
 
         public override void Execute(ResultCollection resultList)
         {
@@ -19,41 +19,37 @@ namespace DeconTools.Backend.ProcessingTasks
             AppendO16O18PeakInfo(resultList.Run.PeakList, resultList.IsosResultBin as List<IsosResult>);
         }
 
-
-
         public void AppendO16O18PeakInfo(List<Peak> peakList, List<IsosResult> resultList)
         {
             //iterate over each ms feature
-            foreach (O16O18IsosResult msFeature in resultList)
+            foreach (var isosResult in resultList)
             {
+                if (!(isosResult is O16O18IsosResult msFeature))
+                    continue;
+
                 if (msFeature.IsotopicProfile == null) continue;
 
                 var monoMZ = msFeature.IsotopicProfile.GetMZ();
 
-                var mzMinusDaltons = monoMZ - (MASSUNIT_BETWEEN_ISO * 4 / msFeature.IsotopicProfile.ChargeState);
-                var mzPlusDaltons = monoMZ + (MASSUNIT_BETWEEN_ISO *4 / msFeature.IsotopicProfile.ChargeState);
-                var mzPlusTwoDaltons = monoMZ + (MASSUNIT_BETWEEN_ISO *2 / msFeature.IsotopicProfile.ChargeState);
+                var mzMinusDaltons = monoMZ - (MASS_UNIT_BETWEEN_ISO * 4 / msFeature.IsotopicProfile.ChargeState);
+                var mzPlusDaltons = monoMZ + (MASS_UNIT_BETWEEN_ISO * 4 / msFeature.IsotopicProfile.ChargeState);
+                var mzPlusTwoDaltons = monoMZ + (MASS_UNIT_BETWEEN_ISO * 2 / msFeature.IsotopicProfile.ChargeState);
 
                 double toleranceInPPM = 50;
 
-
                 var toleranceInMZ = toleranceInPPM * monoMZ / 1e6;
-
 
                 var minusPeaksWithinTol = PeakUtilities.GetPeaksWithinTolerance(peakList, mzMinusDaltons, toleranceInMZ);
                 var plusPeaksWithinTol = PeakUtilities.GetPeaksWithinTolerance(peakList, mzPlusDaltons, toleranceInMZ);
-                var twoDaltonsPlusPeaksWithinTol = PeakUtilities.GetPeaksWithinTolerance(peakList,mzPlusTwoDaltons,toleranceInMZ);
-
-
+                var twoDaltonsPlusPeaksWithinTol = PeakUtilities.GetPeaksWithinTolerance(peakList, mzPlusTwoDaltons, toleranceInMZ);
 
                 var fourDaltonsMinusPeak = GetBestPeak(minusPeaksWithinTol, mzMinusDaltons);
                 var fourDaltonsPlusPeak = GetBestPeak(plusPeaksWithinTol, mzPlusDaltons);
 
                 var twoDaltonsPlusPeak = GetBestPeak(twoDaltonsPlusPeaksWithinTol, mzPlusTwoDaltons);
 
-                if (fourDaltonsMinusPeak!=null)
+                if (fourDaltonsMinusPeak != null)
                 {
-                    
                     msFeature.MonoMinus4Abundance = fourDaltonsMinusPeak.Height;
                 }
                 else
@@ -79,16 +75,11 @@ namespace DeconTools.Backend.ProcessingTasks
                     msFeature.MonoPlus2Abundance = 0;
                 }
 
-
-                
-
-
-
             }
 
         }
 
-        private Peak GetBestPeak(List<Peak> peaksWithinTol, double targetMZ)
+        private Peak GetBestPeak(IReadOnlyList<Peak> peaksWithinTol, double targetMZ)
         {
             if (peaksWithinTol.Count == 0) return null;
 

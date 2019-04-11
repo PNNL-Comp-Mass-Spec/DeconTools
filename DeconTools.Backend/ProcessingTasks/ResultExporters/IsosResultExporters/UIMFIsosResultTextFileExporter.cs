@@ -7,8 +7,6 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
 {
     public sealed class UIMFIsosResultTextFileExporter : IsosResultTextFileExporter
     {
-        private char delimiter;
-
         #region Constructors
         public UIMFIsosResultTextFileExporter(string fileName)
             : this(fileName, 1000000)
@@ -19,7 +17,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
         public UIMFIsosResultTextFileExporter(string fileName, int triggerValueToExport)
         {
             TriggerToExport = triggerValueToExport;
-            delimiter = ',';
+            Delimiter = ',';
             Name = "UIMF IsosResult TextFile Exporter";
             FileName = fileName;
 
@@ -30,11 +28,8 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
 
         #region Properties
 
-        public override char Delimiter
-        {
-            get => delimiter;
-            set => delimiter = value;
-        }
+        public override char Delimiter { get; set; }
+
         public override int TriggerToExport { get; set; }
 
         #endregion

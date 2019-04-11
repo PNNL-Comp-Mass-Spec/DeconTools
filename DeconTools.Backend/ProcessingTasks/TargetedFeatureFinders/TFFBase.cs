@@ -15,7 +15,6 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             NeedMonoIsotopicPeak = needMonoIsotopicPeak;
         }
 
-
         #region Properties
 
         public double ToleranceInPPM { get; set; }
@@ -184,17 +183,15 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             outFeature.MonoIsotopicPeakIndex = indexOfMonoPeak;
 
 
-            double monopeakMZ = 0;
+            double monoIsotopicPeakMZ = 0;
             double monoIsotopicMass = 0;
             var monoPeakFoundInObservedIso = (outFeature.MonoIsotopicPeakIndex != -1);
             if (monoPeakFoundInObservedIso)
             {
                 var monoPeak = outFeature.Peaklist[outFeature.MonoIsotopicPeakIndex];
 
-                monopeakMZ = monoPeak.XValue;
+                monoIsotopicPeakMZ = monoPeak.XValue;
                 monoIsotopicMass = (monoPeak.XValue - Globals.PROTON_MASS) * outFeature.ChargeState;
-
-
             }
             else
             {
@@ -211,12 +208,12 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
                     var mzOfObservedMostAbundantPeak = outFeature.Peaklist[indexOfCorrespondingObservedPeak].XValue;
 
-                    monopeakMZ = mzOfObservedMostAbundantPeak + (locationOfMonoPeakRelativeToTheorMaxPeak * Globals.MASS_DIFF_BETWEEN_ISOTOPICPEAKS / outFeature.ChargeState);
-                    monoIsotopicMass = (monopeakMZ - Globals.PROTON_MASS) * outFeature.ChargeState;
+                    monoIsotopicPeakMZ = mzOfObservedMostAbundantPeak + (locationOfMonoPeakRelativeToTheorMaxPeak * Globals.MASS_DIFF_BETWEEN_ISOTOPICPEAKS / outFeature.ChargeState);
+                    monoIsotopicMass = (monoIsotopicPeakMZ - Globals.PROTON_MASS) * outFeature.ChargeState;
                 }
             }
 
-            outFeature.MonoPeakMZ = monopeakMZ;
+            outFeature.MonoPeakMZ = monoIsotopicPeakMZ;
             outFeature.MonoIsotopicMass = monoIsotopicMass;
 
 
@@ -415,9 +412,6 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
 
         #endregion
-
-
-
 
         public bool RunIsAligned { get; set; }
     }

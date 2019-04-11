@@ -144,6 +144,7 @@ namespace DeconTools.Backend.Workflows
                 case "run_merging_with_peak_export":
                     return new RunMergingPeakExportingWorkflow(parameters, null, outputFolderPath, backgroundWorker);
 
+                // ReSharper disable once StringLiteralTypo
                 case "deconmsn":
                     return new DeconMSnWorkflow(parameters, run, outputFolderPath, backgroundWorker);
 
@@ -425,10 +426,10 @@ namespace DeconTools.Backend.Workflows
         {
             Logger.Instance.AddEntry("Finished file processing", true);
 
-            var formattedOverallprocessingTime = string.Format("{0:00}:{1:00}:{2:00}",
+            var formattedOverallProcessingTime = string.Format("{0:00}:{1:00}:{2:00}",
                 WorkflowStats.ElapsedTime.Hours, WorkflowStats.ElapsedTime.Minutes, WorkflowStats.ElapsedTime.Seconds);
 
-            Logger.Instance.AddEntry("total processing time = " + formattedOverallprocessingTime);
+            Logger.Instance.AddEntry("total processing time = " + formattedOverallProcessingTime);
             Logger.Instance.AddEntry("total features = " + WorkflowStats.NumFeatures, true);
             Logger.Instance.Close();
         }
@@ -607,22 +608,22 @@ namespace DeconTools.Backend.Workflows
 
         protected virtual void CreateOutputFileNames()
         {
-            var basefileName = GetBaseFileName(Run);
+            var baseFileName = GetBaseFileName(Run);
 
-            Logger.Instance.OutputFilename = basefileName + "_log.txt";
+            Logger.Instance.OutputFilename = baseFileName + "_log.txt";
 
 
             switch (ExporterType)
             {
                 case Globals.ExporterType.Text:
-                    IsosOutputFileName = basefileName + "_isos.csv";
-                    ScansOutputFileName = basefileName + "_scans.csv";
-                    PeakListOutputFileName = basefileName + "_peaks.txt";
+                    IsosOutputFileName = baseFileName + "_isos.csv";
+                    ScansOutputFileName = baseFileName + "_scans.csv";
+                    PeakListOutputFileName = baseFileName + "_peaks.txt";
                     break;
                 case Globals.ExporterType.Sqlite:
-                    IsosOutputFileName = basefileName + "_isos.db3";
-                    ScansOutputFileName = basefileName + "_scans.db3";
-                    PeakListOutputFileName = basefileName + "_peaks.db3";
+                    IsosOutputFileName = baseFileName + "_isos.db3";
+                    ScansOutputFileName = baseFileName + "_scans.db3";
+                    PeakListOutputFileName = baseFileName + "_peaks.db3";
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

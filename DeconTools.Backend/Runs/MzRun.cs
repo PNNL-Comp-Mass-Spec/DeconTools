@@ -125,33 +125,33 @@ namespace DeconTools.Backend.Runs
 
         }
 
-        public override XYData GetMassSpectrum(ScanSet scanset)
+        public override XYData GetMassSpectrum(ScanSet scanSet)
         {
-            if (scanset.PrimaryScanNumber > MaxLCScan)
+            if (scanSet.PrimaryScanNumber > MaxLCScan)
             {
                 throw new ArgumentOutOfRangeException("Cannot get mass spectrum. Exceeded max scan (which = " + MaxLCScan + ")");
             }
 
-            if (scanset.PrimaryScanNumber < MinLCScan)
+            if (scanSet.PrimaryScanNumber < MinLCScan)
             {
                 throw new ArgumentOutOfRangeException("Cannot get mass spectrum. Exceeded min scan (which = " + MinLCScan + ")");
             }
 
-            _reader.GetSpectrum(scanset.PrimaryScanNumber, out var xvals, out var yvals);
-            var xydata = new XYData {Xvalues = xvals, Yvalues = yvals};
-            return xydata;
+            _reader.GetSpectrum(scanSet.PrimaryScanNumber, out var xVals, out var yVals);
+            var xyData = new XYData { Xvalues = xVals, Yvalues = yVals };
+            return xyData;
         }
 
-        public override XYData GetMassSpectrum(ScanSet scanset, double minMZ, double maxMZ)
+        public override XYData GetMassSpectrum(ScanSet scanSet, double minMZ, double maxMZ)
         {
-            var xydata=   GetMassSpectrum(scanset);
+            var xyData = GetMassSpectrum(scanSet);
 
-            if (xydata.Xvalues == null || xydata.Xvalues.Length <= 0) return xydata;
-            if (minMZ > xydata.Xvalues[0] || maxMZ < xydata.Xvalues[xydata.Xvalues.Length - 1])
+            if (xyData.Xvalues == null || xyData.Xvalues.Length <= 0) return xyData;
+            if (minMZ > xyData.Xvalues[0] || maxMZ < xyData.Xvalues[xyData.Xvalues.Length - 1])
             {
-                xydata = xydata.TrimData(minMZ, maxMZ);
+                xyData = xyData.TrimData(minMZ, maxMZ);
             }
-            return xydata;
+            return xyData;
         }
 
         public override int GetMinPossibleLCScanNum()

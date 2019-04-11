@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -10,15 +8,15 @@ namespace DeconTools.Backend.Utilities
     public class Logger_Importer
     {
 
-        public static void displayLogFile(string logtestfile)
+        public static void displayLogFile(string logTestFile)
         {
-            if (!File.Exists(logtestfile))
+            if (!File.Exists(logTestFile))
             {
                 Console.WriteLine("Log file couldn't be loaded. Check path etc.");
                 throw new FileNotFoundException("Log file couldn't be loaded. Check path");
 
             }
-            var sr = new StreamReader(logtestfile);
+            var sr = new StreamReader(logTestFile);
 
             var sb = new StringBuilder();
 

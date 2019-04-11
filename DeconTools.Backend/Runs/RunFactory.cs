@@ -16,13 +16,13 @@ namespace DeconTools.Backend.Runs
         {
             Run run;
 
-            var fullfileName = getFullPath(filename);
-            if (string.IsNullOrEmpty(fullfileName))
+            var fullFileName = getFullPath(filename);
+            if (string.IsNullOrEmpty(fullFileName))
             {
                 throw new Exception("Could determine the filename");
             }
 
-            var extension = Path.GetExtension(fullfileName).ToLower();
+            var extension = Path.GetExtension(fullFileName).ToLower();
             if (extension.Equals(".mzxml") || extension.Equals(".mzml") || extension.Equals(".mz5"))
             {
                 pwiz.ProteowizardWrapper.DependencyLoader.AddAssemblyResolver();
@@ -33,18 +33,18 @@ namespace DeconTools.Backend.Runs
             var match = Regex.Match(extension, @"\.\d\d\d\d\d$");
             if (match.Success)
             {
-                return new ICR2LSRun(fullfileName);
+                return new ICR2LSRun(fullFileName);
             }
 #endif
 
-            var fileNameWithoutPathOrExtension = Path.GetFileNameWithoutExtension(fullfileName).ToLower();
+            var fileNameWithoutPathOrExtension = Path.GetFileNameWithoutExtension(fullFileName).ToLower();
 
-            var dirInfo = new DirectoryInfo(fullfileName);
+            var dirInfo = new DirectoryInfo(fullFileName);
             var isFolder = dirInfo.Exists;
 
             if (isFolder)
             {
-                run = determineIfRunIsABrukerTypeAndCreateRun(fullfileName);
+                run = determineIfRunIsABrukerTypeAndCreateRun(fullFileName);
 
                 if (run != null)
                 {
@@ -60,40 +60,40 @@ namespace DeconTools.Backend.Runs
             switch (extension)
             {
                 case ".raw":
-                    run = new XCaliburRun2(fullfileName);
+                    run = new XCaliburRun2(fullFileName);
                     break;
 #if !Disable_DeconToolsV2
                 case ".imf":
-                    run = new IMFRun(fullfileName);
+                    run = new IMFRun(fullFileName);
                     break;
 #endif
                 case ".txt":
-                    run = new MSScanFromTextFileRun(fullfileName);
+                    run = new MSScanFromTextFileRun(fullFileName);
                     break;
                 case ".mzxml":
-                    run = new MzRun(fullfileName);
+                    run = new MzRun(fullFileName);
                     break;
                 case ".mz5":
-                    run = new MzRun(fullfileName);
+                    run = new MzRun(fullFileName);
                     break;
                 case ".mzml":
-                    run = new MzRun(fullfileName);
+                    run = new MzRun(fullFileName);
                     break;
                 case ".uimf":
-                    run = new UIMFRun(fullfileName);
+                    run = new UIMFRun(fullFileName);
                     break;
 
                 case ".db":                            //might want to remove this later
-                    run = new UIMFRun(fullfileName);
+                    run = new UIMFRun(fullFileName);
                     break;
 
                 case ".d":
-                    run = new AgilentDRun(fullfileName);
+                    run = new AgilentDRun(fullFileName);
                     break;
 
                 // Deprecated in February 2017
                 // case ".yafms":
-                //     run = new YAFMSRun(fullfileName);
+                //     run = new YAFMSRun(fullFileName);
                 //     break;
 
                 default:
@@ -180,10 +180,10 @@ namespace DeconTools.Backend.Runs
 
         private string getFullPath(string filename)
         {
-            var fullfileName = filename.Trim(' ', '"');
+            var fullFileName = filename.Trim(' ', '"');
 
-            var dirInfo = new DirectoryInfo(fullfileName);
-            var fileInfo = new FileInfo(fullfileName);
+            var dirInfo = new DirectoryInfo(fullFileName);
+            var fileInfo = new FileInfo(fullFileName);
 
             if (!dirInfo.Exists && !fileInfo.Exists)
             {
@@ -192,15 +192,15 @@ namespace DeconTools.Backend.Runs
 
             if (dirInfo.Exists)
             {
-                fullfileName = dirInfo.FullName;
+                fullFileName = dirInfo.FullName;
             }
 
             if (fileInfo.Exists)
             {
-                fullfileName = fileInfo.FullName;
+                fullFileName = fileInfo.FullName;
             }
 
-            return fullfileName;
+            return fullFileName;
         }
 
 
@@ -247,16 +247,16 @@ namespace DeconTools.Backend.Runs
                 return null;
             }
 
-            var acquistionMethodFiles = dotMethodFiles.Where(p => p.EndsWith("Acquisition.method", StringComparison.OrdinalIgnoreCase)).ToList();
+            var acquisitionMethodFiles = dotMethodFiles.Where(p => p.EndsWith("Acquisition.method", StringComparison.OrdinalIgnoreCase)).ToList();
 
-            if (acquistionMethodFiles.Count == 0)
+            if (acquisitionMethodFiles.Count == 0)
             {
                 return null;
             }
 
-            if (acquistionMethodFiles.Count == 1)
+            if (acquisitionMethodFiles.Count == 1)
             {
-                return new FileInfo(acquistionMethodFiles[0]);
+                return new FileInfo(acquisitionMethodFiles[0]);
             }
 
             throw new NotImplementedException("Run initialization failed. Multiple 'Acquisition.method' files were found within the dataset folder structure. \nNot sure which one to pick for the settings file.");
@@ -327,16 +327,16 @@ namespace DeconTools.Backend.Runs
                 return null;
             }
 
-            var acquistionMethodFiles = dotMethodFiles.Where(p => p.EndsWith("apexAcquisition.method", StringComparison.OrdinalIgnoreCase)).ToList();
+            var acquisitionMethodFiles = dotMethodFiles.Where(p => p.EndsWith("apexAcquisition.method", StringComparison.OrdinalIgnoreCase)).ToList();
 
-            if (acquistionMethodFiles.Count == 0)
+            if (acquisitionMethodFiles.Count == 0)
             {
                 return null;
             }
 
-            if (acquistionMethodFiles.Count == 1)
+            if (acquisitionMethodFiles.Count == 1)
             {
-                return new FileInfo(acquistionMethodFiles[0]);
+                return new FileInfo(acquisitionMethodFiles[0]);
             }
 
             throw new NotImplementedException("Run initialization failed. Multiple 'apexAcquisition.method' files were found within the dataset folder structure. \nNot sure which one to pick for the settings file.");

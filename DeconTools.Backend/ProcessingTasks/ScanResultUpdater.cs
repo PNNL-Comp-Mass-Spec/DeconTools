@@ -3,7 +3,6 @@ using DeconTools.Backend.Data;
 using DeconTools.Backend.Runs;
 using DeconTools.Utilities;
 
-
 namespace DeconTools.Backend.ProcessingTasks
 {
     public class ScanResultUpdater : Task
@@ -54,12 +53,12 @@ namespace DeconTools.Backend.ProcessingTasks
             {
 
                 var srf = new ScanResultFactory();
-                var scanresult = srf.CreateScanResult(resultList.Run);
+                var scanResult = srf.CreateScanResult(resultList.Run);
 
-                if (scanresult != null)
+                if (scanResult != null)
                 {
-                    resultList.ScanResultList.Add(scanresult);
-                    //Console.WriteLine("ScanResult isotopic profiles = \t" + scanresult.NumIsotopicProfiles);
+                    resultList.ScanResultList.Add(scanResult);
+                    //Console.WriteLine("ScanResult isotopic profiles = \t" + scanResult.NumIsotopicProfiles);
                 }
             }
 

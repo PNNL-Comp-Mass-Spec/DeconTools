@@ -27,9 +27,6 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
         #region Public Methods
 
-
-
-
         protected override IsotopicProfile CreateTargetIso(Run run)
         {
             IsotopicProfile iso;
@@ -101,7 +98,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
             IsotopicProfile foundIso = null;
 
-            //start with high PeakBR and rachet it down, so as to detect more peaks with each pass.  Stop when you find the isotopic profile.
+            //start with high PeakBR and ratchet it down, so as to detect more peaks with each pass.  Stop when you find the isotopic profile.
 
             peakList = new List<Peak>();
             for (var d = PeakDetectorPeakBR; d >= PeakBRMin; d = d - PeakBRStep)

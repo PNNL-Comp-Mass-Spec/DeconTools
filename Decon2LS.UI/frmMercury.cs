@@ -1,20 +1,18 @@
-// Written by Navdeep Jaitly and Kyle Littlefield 
+// Written by Navdeep Jaitly and Kyle Littlefield
 // for the Department of Energy (PNNL, Richland, WA)
 // Copyright 2006, Battelle Memorial Institute
 // E-mail: navdeep.jaitly@pnl.gov
 // Website: https://omics.pnl.gov/software or http://panomics.pnnl.gov
 // -------------------------------------------------------------------------------
-// 
+//
 // Licensed under the Apache License, Version 2.0; you may not use this file except
-// in compliance with the License.  You may obtain a copy of the License at 
+// in compliance with the License.  You may obtain a copy of the License at
 // http://www.apache.org/licenses/LICENSE-2.0
 
 using System;
 using System.Drawing;
-using System.Collections;
-using System.ComponentModel;
 using System.Windows.Forms;
-using System.Reflection;
+using DeconTools.Backend.Utilities;
 
 namespace Decon2LS
 {
@@ -23,7 +21,7 @@ namespace Decon2LS
     /// </summary>
     public class frmMercury : PNNL.Controls.CategorizedForm
     {
-        enum ResolutionMode  
+        enum ResolutionMode
         {
             Resolution, FWHM
         }
@@ -36,7 +34,7 @@ namespace Decon2LS
         private static readonly String PREVIEW_NOT_SYNCED_MESSAGE = "Preview may not be synced with current settings";
         private static readonly String RESOLUTION_ERROR_MESSAGE = "Must be a real number";
         #endregion
-        
+
         private System.Windows.Forms.Panel mPreviewHoldingPanel;
         private System.Windows.Forms.TextBox mAverageMolecularWeightResultTextBox;
         private System.Windows.Forms.TextBox mMonoMolecularWeightResultTextBox;
@@ -102,7 +100,7 @@ namespace Decon2LS
         /// Adds the Mercury category to the file view.
         /// </summary>
         /// <param name="fileView"></param>
-        public static void InitializeCategories(PNNL.Controls.ctlFileView fileView) 
+        public static void InitializeCategories(PNNL.Controls.ctlFileView fileView)
         {
             fileView.AddCategory(MercuryCategory);
         }
@@ -112,16 +110,16 @@ namespace Decon2LS
         private static readonly String CategorizedTextString = "Mercury";
         private static readonly String DetailFormula = "Formula: ";
         #endregion
-    
+
         private DeconToolsV2.clsMercuryIsotopeDistribution mMercuryIsotopeDistribution;
         private MercuryDataProvider mPreviewSeriesDataProvider;
         private PNNL.Controls.clsSeries mPreviewSeries;
-        private Decon2LS.MolecularFormula mMolecularFormula = MolecularFormula.Parse("C10 H22");
+        private MolecularFormula mMolecularFormula = MolecularFormula.Parse("C10 H22");
         private ResolutionMode mResolutionMode = ResolutionMode.Resolution;
         private double mFWHM = .05;
 
-        private Decon2LS.MolecularFormulaTranslator mProteinTranslator;
-        private Decon2LS.MolecularFormulaTranslator mDNATranslator;
+        private DeconTools.Backend.Utilities.MolecularFormulaTranslator mProteinTranslator;
+        private DeconTools.Backend.Utilities.MolecularFormulaTranslator mDNATranslator;
         public System.Windows.Forms.GroupBox Frame5;
         public System.Windows.Forms.ComboBox cmbCterm;
         public System.Windows.Forms.ComboBox cmbNterm;
@@ -171,7 +169,7 @@ namespace Decon2LS
             try
             {
                 // Create the preview series and add it to the chart
-                this.mPreviewSeriesDataProvider = 
+                this.mPreviewSeriesDataProvider =
                     new MercuryDataProvider(new float[]{0, 0}, new float[]{1, 0});
 
                 //
@@ -198,9 +196,9 @@ namespace Decon2LS
                 this.mMercurySizeCombo.Items.Add(65536);
                 this.mMercurySizeCombo.Items.Add(131072);
                 this.mMercurySizeCombo.Items.Add(262144);
-        
-                mPreviewSeries = new clsMercurySeries(this.mPreviewSeriesDataProvider, 
-                    new PNNL.Controls.clsPlotParams(new PNNL.Controls.SquareShape(3, false), Color.DimGray), 
+
+                mPreviewSeries = new clsMercurySeries(this.mPreviewSeriesDataProvider,
+                    new PNNL.Controls.clsPlotParams(new PNNL.Controls.SquareShape(3, false), Color.DimGray),
                     this.mPreviewChart);
 
                 // Add series to chart
@@ -215,12 +213,12 @@ namespace Decon2LS
                 this.mDNARNACombo.SelectedIndex = 0;
 
                 // Add handler to each of the protein buttons and dna buttons
-                foreach (Button button in this.mProteinButtonsPanel.Controls) 
+                foreach (Button button in this.mProteinButtonsPanel.Controls)
                 {
                     button.Click += new EventHandler(this.ProteinOrDNAButtonClickHandler);
                 }
 
-                foreach (Button button in this.mDNAButtonPanel.Controls) 
+                foreach (Button button in this.mDNAButtonPanel.Controls)
                 {
                     button.Click += new EventHandler(this.ProteinOrDNAButtonClickHandler);
                 }
@@ -229,11 +227,11 @@ namespace Decon2LS
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, ex.Message + ex.StackTrace) ; 
+                MessageBox.Show(this, ex.Message + ex.StackTrace) ;
             }
         }
 
-        private void InitializeMFTranslators() 
+        private void InitializeMFTranslators()
         {
             try
             {
@@ -275,7 +273,7 @@ namespace Decon2LS
                 this.cmbCterm.Items.Add(MolecularFormula.Parse("", "(none)"));
                 this.cmbCterm.Items.Add(MolecularFormula.Parse("H1 O1", "Free acid"));
                 this.cmbCterm.Items.Add(MolecularFormula.Parse("N1 H2", "Amide"));
-                
+
                 mDNATranslator =  new MolecularFormulaTranslator();
                 mDNATranslator.Add("A", MolecularFormula.Parse("C10 H13 N5 O3", "Aacid"));
                 mDNATranslator.Add("G", MolecularFormula.Parse("C10 H13 N5 O4", "Gacid"));
@@ -286,12 +284,12 @@ namespace Decon2LS
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, ex.Message + ex.StackTrace) ; 
+                MessageBox.Show(this, ex.Message + ex.StackTrace) ;
             }
 
         }
 
-        
+
 
         /// <summary>
         /// Clean up any resources being used.
@@ -435,9 +433,9 @@ namespace Decon2LS
             this.mOptsPanel.SuspendLayout();
             this.mPreviewHoldingPanel.SuspendLayout();
             this.SuspendLayout();
-            // 
+            //
             // mApodizationTypeOptGaussian
-            // 
+            //
             this.mApodizationTypeOptGaussian.Checked = true;
             this.mApodizationTypeOptGaussian.Cursor = System.Windows.Forms.Cursors.Default;
             this.mApodizationTypeOptGaussian.ForeColor = System.Drawing.SystemColors.ControlText;
@@ -449,9 +447,9 @@ namespace Decon2LS
             this.mApodizationTypeOptGaussian.TabStop = true;
             this.mApodizationTypeOptGaussian.Text = "Gaussian";
             this.mApodizationTypeOptGaussian.CheckedChanged += new System.EventHandler(this.mApodizationTypeOptGaussian_CheckedChanged);
-            // 
+            //
             // mApodizationTypeOptLorentzian
-            // 
+            //
             this.mApodizationTypeOptLorentzian.Cursor = System.Windows.Forms.Cursors.Default;
             this.mApodizationTypeOptLorentzian.ForeColor = System.Drawing.SystemColors.ControlText;
             this.mApodizationTypeOptLorentzian.Location = new System.Drawing.Point(8, 40);
@@ -462,9 +460,9 @@ namespace Decon2LS
             this.mApodizationTypeOptLorentzian.TabStop = true;
             this.mApodizationTypeOptLorentzian.Text = "Lorentzian";
             this.mApodizationTypeOptLorentzian.CheckedChanged += new System.EventHandler(this.mApodizationTypeOptLorentzian_CheckedChanged);
-            // 
+            //
             // mChargeStateTextBox
-            // 
+            //
             this.mChargeStateTextBox.AutoSize = false;
             this.mChargeStateTextBox.BackColor = System.Drawing.SystemColors.Window;
             this.mChargeStateTextBox.Cursor = System.Windows.Forms.Cursors.IBeam;
@@ -477,9 +475,9 @@ namespace Decon2LS
             this.mChargeStateTextBox.TabIndex = 56;
             this.mChargeStateTextBox.Text = "";
             this.mChargeStateTextBox.Validating += new System.ComponentModel.CancelEventHandler(this.mChargeStateTextBox_Validating);
-            // 
+            //
             // mTrisphosCheckBox
-            // 
+            //
             this.mTrisphosCheckBox.BackColor = System.Drawing.SystemColors.Control;
             this.mTrisphosCheckBox.Cursor = System.Windows.Forms.Cursors.Default;
             this.mTrisphosCheckBox.ForeColor = System.Drawing.SystemColors.ControlText;
@@ -490,9 +488,9 @@ namespace Decon2LS
             this.mTrisphosCheckBox.TabIndex = 68;
             this.mTrisphosCheckBox.Text = "Triphosphate";
             this.mTrisphosCheckBox.CheckedChanged += new System.EventHandler(this.UpdateFormulaFromProteinOrDNAEventHandler2);
-            // 
+            //
             // mCyclicPhosCheckBox
-            // 
+            //
             this.mCyclicPhosCheckBox.BackColor = System.Drawing.SystemColors.Control;
             this.mCyclicPhosCheckBox.Cursor = System.Windows.Forms.Cursors.Default;
             this.mCyclicPhosCheckBox.ForeColor = System.Drawing.SystemColors.ControlText;
@@ -503,9 +501,9 @@ namespace Decon2LS
             this.mCyclicPhosCheckBox.TabIndex = 67;
             this.mCyclicPhosCheckBox.Text = "Cyclic Phosphate";
             this.mCyclicPhosCheckBox.CheckedChanged += new System.EventHandler(this.UpdateFormulaFromProteinOrDNAEventHandler2);
-            // 
+            //
             // mChargeCarrierMassTextBox
-            // 
+            //
             this.mChargeCarrierMassTextBox.AutoSize = false;
             this.mChargeCarrierMassTextBox.BackColor = System.Drawing.SystemColors.Window;
             this.mChargeCarrierMassTextBox.Cursor = System.Windows.Forms.Cursors.IBeam;
@@ -518,9 +516,9 @@ namespace Decon2LS
             this.mChargeCarrierMassTextBox.TabIndex = 63;
             this.mChargeCarrierMassTextBox.Text = "";
             this.mChargeCarrierMassTextBox.Validating += new System.ComponentModel.CancelEventHandler(this.mChargeCarrierMassTextBox_Validating);
-            // 
+            //
             // Frame5
-            // 
+            //
             this.Frame5.BackColor = System.Drawing.Color.WhiteSmoke;
             this.Frame5.Controls.Add(this.cmbCterm);
             this.Frame5.Controls.Add(this.cmbNterm);
@@ -534,9 +532,9 @@ namespace Decon2LS
             this.Frame5.TabIndex = 31;
             this.Frame5.TabStop = false;
             this.Frame5.Text = "Terminal groups";
-            // 
+            //
             // cmbCterm
-            // 
+            //
             this.cmbCterm.BackColor = System.Drawing.SystemColors.Window;
             this.cmbCterm.Cursor = System.Windows.Forms.Cursors.Default;
             this.cmbCterm.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -547,9 +545,9 @@ namespace Decon2LS
             this.cmbCterm.Size = new System.Drawing.Size(76, 21);
             this.cmbCterm.TabIndex = 35;
             this.cmbCterm.SelectedIndexChanged += new System.EventHandler(this.UpdateFormulaFromProteinOrDNAEventHandler2);
-            // 
+            //
             // cmbNterm
-            // 
+            //
             this.cmbNterm.BackColor = System.Drawing.SystemColors.Window;
             this.cmbNterm.Cursor = System.Windows.Forms.Cursors.Default;
             this.cmbNterm.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -560,9 +558,9 @@ namespace Decon2LS
             this.cmbNterm.Size = new System.Drawing.Size(76, 21);
             this.cmbNterm.TabIndex = 32;
             this.cmbNterm.SelectedIndexChanged += new System.EventHandler(this.UpdateFormulaFromProteinOrDNAEventHandler2);
-            // 
+            //
             // Label13
-            // 
+            //
             this.Label13.BackColor = System.Drawing.Color.WhiteSmoke;
             this.Label13.Cursor = System.Windows.Forms.Cursors.Default;
             this.Label13.ForeColor = System.Drawing.SystemColors.ControlText;
@@ -572,9 +570,9 @@ namespace Decon2LS
             this.Label13.Size = new System.Drawing.Size(9, 17);
             this.Label13.TabIndex = 36;
             this.Label13.Text = "C";
-            // 
+            //
             // Label12
-            // 
+            //
             this.Label12.BackColor = System.Drawing.Color.WhiteSmoke;
             this.Label12.Cursor = System.Windows.Forms.Cursors.Default;
             this.Label12.ForeColor = System.Drawing.SystemColors.ControlText;
@@ -584,9 +582,9 @@ namespace Decon2LS
             this.Label12.Size = new System.Drawing.Size(9, 17);
             this.Label12.TabIndex = 34;
             this.Label12.Text = "N";
-            // 
+            //
             // mDNARNACombo
-            // 
+            //
             this.mDNARNACombo.BackColor = System.Drawing.SystemColors.Window;
             this.mDNARNACombo.Cursor = System.Windows.Forms.Cursors.Default;
             this.mDNARNACombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -601,9 +599,9 @@ namespace Decon2LS
             this.mDNARNACombo.Size = new System.Drawing.Size(109, 21);
             this.mDNARNACombo.TabIndex = 39;
             this.mDNARNACombo.SelectedIndexChanged += new System.EventHandler(this.UpdateFormulaFromProteinOrDNAEventHandler2);
-            // 
+            //
             // mComplementCheckBox
-            // 
+            //
             this.mComplementCheckBox.BackColor = System.Drawing.SystemColors.Control;
             this.mComplementCheckBox.Cursor = System.Windows.Forms.Cursors.Default;
             this.mComplementCheckBox.ForeColor = System.Drawing.SystemColors.ControlText;
@@ -613,9 +611,9 @@ namespace Decon2LS
             this.mComplementCheckBox.TabIndex = 38;
             this.mComplementCheckBox.Text = "Complement";
             this.mComplementCheckBox.CheckedChanged += new System.EventHandler(this.UpdateFormulaFromProteinOrDNAEventHandler2);
-            // 
+            //
             // mTermPhosCheckBox
-            // 
+            //
             this.mTermPhosCheckBox.BackColor = System.Drawing.SystemColors.Control;
             this.mTermPhosCheckBox.Cursor = System.Windows.Forms.Cursors.Default;
             this.mTermPhosCheckBox.ForeColor = System.Drawing.SystemColors.ControlText;
@@ -626,9 +624,9 @@ namespace Decon2LS
             this.mTermPhosCheckBox.TabIndex = 23;
             this.mTermPhosCheckBox.Text = "Terminal Phosphate";
             this.mTermPhosCheckBox.CheckedChanged += new System.EventHandler(this.UpdateFormulaFromProteinOrDNAEventHandler2);
-            // 
+            //
             // mResolutionTextBox
-            // 
+            //
             this.mResolutionTextBox.AutoSize = false;
             this.mResolutionTextBox.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.mResolutionTextBox.ForeColor = System.Drawing.SystemColors.WindowText;
@@ -641,9 +639,9 @@ namespace Decon2LS
             this.mResolutionTextBox.Text = "";
             this.mResolutionTextBox.Validating += new System.ComponentModel.CancelEventHandler(this.mResolutionTextBox_Validating);
             this.mResolutionTextBox.Enter += new System.EventHandler(this.mResolutionTextBox_Enter);
-            // 
+            //
             // cmbGenerate
-            // 
+            //
             this.cmbGenerate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.cmbGenerate.Cursor = System.Windows.Forms.Cursors.Default;
             this.cmbGenerate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -655,10 +653,10 @@ namespace Decon2LS
             this.cmbGenerate.Size = new System.Drawing.Size(336, 24);
             this.cmbGenerate.TabIndex = 48;
             this.cmbGenerate.Text = "Generate to External Scope";
-            // 
+            //
             // mMolecularFormulaTextBox
-            // 
-            this.mMolecularFormulaTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            //
+            this.mMolecularFormulaTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                 | System.Windows.Forms.AnchorStyles.Right)));
             this.mMolecularFormulaTextBox.AutoSize = false;
             this.mMolecularFormulaTextBox.BackColor = System.Drawing.SystemColors.Window;
@@ -672,9 +670,9 @@ namespace Decon2LS
             this.mMolecularFormulaTextBox.TabIndex = 46;
             this.mMolecularFormulaTextBox.Text = "C10 H22";
             this.mMolecularFormulaTextBox.Validating += new System.ComponentModel.CancelEventHandler(this.mMolecularFormulaTextBox_Validating);
-            // 
+            //
             // Label8
-            // 
+            //
             this.Label8.Cursor = System.Windows.Forms.Cursors.Default;
             this.Label8.ForeColor = System.Drawing.SystemColors.ControlText;
             this.Label8.Location = new System.Drawing.Point(8, 92);
@@ -684,9 +682,9 @@ namespace Decon2LS
             this.Label8.TabIndex = 64;
             this.Label8.Text = "Charge carrier mass";
             this.Label8.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
+            //
             // mMonoWeightLabel
-            // 
+            //
             this.mMonoWeightLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.mMonoWeightLabel.BackColor = System.Drawing.Color.WhiteSmoke;
             this.mMonoWeightLabel.Cursor = System.Windows.Forms.Cursors.Default;
@@ -698,9 +696,9 @@ namespace Decon2LS
             this.mMonoWeightLabel.TabIndex = 62;
             this.mMonoWeightLabel.Text = "Mono-Isotopic Weight";
             this.mMonoWeightLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
+            //
             // Label7
-            // 
+            //
             this.Label7.Cursor = System.Windows.Forms.Cursors.Default;
             this.Label7.ForeColor = System.Drawing.SystemColors.ControlText;
             this.Label7.Location = new System.Drawing.Point(8, 64);
@@ -710,9 +708,9 @@ namespace Decon2LS
             this.Label7.TabIndex = 57;
             this.Label7.Text = "Charge state";
             this.Label7.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
+            //
             // Label4
-            // 
+            //
             this.Label4.Cursor = System.Windows.Forms.Cursors.Default;
             this.Label4.ForeColor = System.Drawing.SystemColors.ControlText;
             this.Label4.Location = new System.Drawing.Point(16, 8);
@@ -722,9 +720,9 @@ namespace Decon2LS
             this.Label4.TabIndex = 53;
             this.Label4.Text = "Resolution";
             this.Label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
+            //
             // mVarianceLabel
-            // 
+            //
             this.mVarianceLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.mVarianceLabel.BackColor = System.Drawing.Color.WhiteSmoke;
             this.mVarianceLabel.Cursor = System.Windows.Forms.Cursors.Default;
@@ -736,9 +734,9 @@ namespace Decon2LS
             this.mVarianceLabel.TabIndex = 51;
             this.mVarianceLabel.Text = "Variance";
             this.mVarianceLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
+            //
             // mAverageMolecularWeightLabel
-            // 
+            //
             this.mAverageMolecularWeightLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.mAverageMolecularWeightLabel.BackColor = System.Drawing.Color.WhiteSmoke;
             this.mAverageMolecularWeightLabel.Cursor = System.Windows.Forms.Cursors.Default;
@@ -750,9 +748,9 @@ namespace Decon2LS
             this.mAverageMolecularWeightLabel.TabIndex = 50;
             this.mAverageMolecularWeightLabel.Text = "Average Molecular Weight";
             this.mAverageMolecularWeightLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
+            //
             // Label1
-            // 
+            //
             this.Label1.Cursor = System.Windows.Forms.Cursors.Default;
             this.Label1.ForeColor = System.Drawing.SystemColors.ControlText;
             this.Label1.Location = new System.Drawing.Point(8, 8);
@@ -762,11 +760,11 @@ namespace Decon2LS
             this.Label1.TabIndex = 47;
             this.Label1.Text = "Molecular Formula";
             this.Label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
+            //
             // mPreviewChart
-            // 
-            this.mPreviewChart.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-                | System.Windows.Forms.AnchorStyles.Left) 
+            //
+            this.mPreviewChart.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                | System.Windows.Forms.AnchorStyles.Left)
                 | System.Windows.Forms.AnchorStyles.Right)));
             this.mPreviewChart.AutoSizeFonts = false;
             this.mPreviewChart.AutoViewPortOnSeriesChange = true;
@@ -834,27 +832,27 @@ namespace Decon2LS
             this.mPreviewChart.ViewPort = ((System.Drawing.RectangleF)(resources.GetObject("mPreviewChart.ViewPort")));
             this.mPreviewChart.XAxisLabel = "m/z";
             this.mPreviewChart.YAxisLabel = "% of Highest Peak";
-            // 
+            //
             // mMercurySizeCombo
-            // 
+            //
             this.mMercurySizeCombo.Location = new System.Drawing.Point(128, 120);
             this.mMercurySizeCombo.Name = "mMercurySizeCombo";
             this.mMercurySizeCombo.Size = new System.Drawing.Size(104, 21);
             this.mMercurySizeCombo.TabIndex = 76;
             this.mMercurySizeCombo.SelectedIndexChanged += new System.EventHandler(this.mMercurySizeCombo_SelectedIndexChanged);
-            // 
+            //
             // label9
-            // 
+            //
             this.label9.Location = new System.Drawing.Point(8, 120);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(104, 20);
             this.label9.TabIndex = 77;
             this.label9.Text = "Mercury Size";
             this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
+            //
             // mProteinOrDNATab
-            // 
-            this.mProteinOrDNATab.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            //
+            this.mProteinOrDNATab.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                 | System.Windows.Forms.AnchorStyles.Right)));
             this.mProteinOrDNATab.Controls.Add(this.mProteinEditorTab);
             this.mProteinOrDNATab.Controls.Add(this.mDNAEditorTab);
@@ -864,9 +862,9 @@ namespace Decon2LS
             this.mProteinOrDNATab.Size = new System.Drawing.Size(344, 122);
             this.mProteinOrDNATab.TabIndex = 75;
             this.mProteinOrDNATab.SelectedIndexChanged += new System.EventHandler(this.UpdateFormulaFromProteinOrDNAEventHandler);
-            // 
+            //
             // mProteinEditorTab
-            // 
+            //
             this.mProteinEditorTab.BackColor = System.Drawing.Color.WhiteSmoke;
             this.mProteinEditorTab.Controls.Add(this.mProteinButtonsPanel);
             this.mProteinEditorTab.Controls.Add(this.Frame5);
@@ -875,9 +873,9 @@ namespace Decon2LS
             this.mProteinEditorTab.Size = new System.Drawing.Size(336, 96);
             this.mProteinEditorTab.TabIndex = 0;
             this.mProteinEditorTab.Text = "Protein";
-            // 
+            //
             // mProteinButtonsPanel
-            // 
+            //
             this.mProteinButtonsPanel.Controls.Add(this.mProteinButtonLeu);
             this.mProteinButtonsPanel.Controls.Add(this.mProteinButtonSer);
             this.mProteinButtonsPanel.Controls.Add(this.mProteinButtonMet);
@@ -907,234 +905,234 @@ namespace Decon2LS
             this.mProteinButtonsPanel.Name = "mProteinButtonsPanel";
             this.mProteinButtonsPanel.Size = new System.Drawing.Size(224, 96);
             this.mProteinButtonsPanel.TabIndex = 61;
-            // 
+            //
             // mProteinButtonLeu
-            // 
+            //
             this.mProteinButtonLeu.Location = new System.Drawing.Point(96, 24);
             this.mProteinButtonLeu.Name = "mProteinButtonLeu";
             this.mProteinButtonLeu.Size = new System.Drawing.Size(32, 24);
             this.mProteinButtonLeu.TabIndex = 45;
             this.mProteinButtonLeu.Tag = "L";
             this.mProteinButtonLeu.Text = "Leu";
-            // 
+            //
             // mProteinButtonSer
-            // 
+            //
             this.mProteinButtonSer.Location = new System.Drawing.Point(32, 48);
             this.mProteinButtonSer.Name = "mProteinButtonSer";
             this.mProteinButtonSer.Size = new System.Drawing.Size(32, 24);
             this.mProteinButtonSer.TabIndex = 49;
             this.mProteinButtonSer.Tag = "S";
             this.mProteinButtonSer.Text = "Ser";
-            // 
+            //
             // mProteinButtonMet
-            // 
+            //
             this.mProteinButtonMet.Location = new System.Drawing.Point(160, 24);
             this.mProteinButtonMet.Name = "mProteinButtonMet";
             this.mProteinButtonMet.Size = new System.Drawing.Size(32, 24);
             this.mProteinButtonMet.TabIndex = 47;
             this.mProteinButtonMet.Tag = "M";
             this.mProteinButtonMet.Text = "Met";
-            // 
+            //
             // mProteinButtonThr
-            // 
+            //
             this.mProteinButtonThr.Location = new System.Drawing.Point(64, 48);
             this.mProteinButtonThr.Name = "mProteinButtonThr";
             this.mProteinButtonThr.Size = new System.Drawing.Size(32, 24);
             this.mProteinButtonThr.TabIndex = 50;
             this.mProteinButtonThr.Tag = "T";
             this.mProteinButtonThr.Text = "Thr";
-            // 
+            //
             // mProteinButtonAla
-            // 
+            //
             this.mProteinButtonAla.Location = new System.Drawing.Point(0, 0);
             this.mProteinButtonAla.Name = "mProteinButtonAla";
             this.mProteinButtonAla.Size = new System.Drawing.Size(32, 24);
             this.mProteinButtonAla.TabIndex = 32;
             this.mProteinButtonAla.Tag = "A";
             this.mProteinButtonAla.Text = "Ala";
-            // 
+            //
             // mProteinButtonLys
-            // 
+            //
             this.mProteinButtonLys.Location = new System.Drawing.Point(128, 24);
             this.mProteinButtonLys.Name = "mProteinButtonLys";
             this.mProteinButtonLys.Size = new System.Drawing.Size(32, 24);
             this.mProteinButtonLys.TabIndex = 46;
             this.mProteinButtonLys.Tag = "K";
             this.mProteinButtonLys.Text = "Lys";
-            // 
+            //
             // mProteinButtonAsnAsp
-            // 
+            //
             this.mProteinButtonAsnAsp.Location = new System.Drawing.Point(32, 72);
             this.mProteinButtonAsnAsp.Name = "mProteinButtonAsnAsp";
             this.mProteinButtonAsnAsp.Size = new System.Drawing.Size(64, 24);
             this.mProteinButtonAsnAsp.TabIndex = 58;
             this.mProteinButtonAsnAsp.Tag = "Z";
             this.mProteinButtonAsnAsp.Text = "Asn/Asp";
-            // 
+            //
             // mProteinButtonPro
-            // 
+            //
             this.mProteinButtonPro.Location = new System.Drawing.Point(0, 48);
             this.mProteinButtonPro.Name = "mProteinButtonPro";
             this.mProteinButtonPro.Size = new System.Drawing.Size(32, 24);
             this.mProteinButtonPro.TabIndex = 48;
             this.mProteinButtonPro.Tag = "P";
             this.mProteinButtonPro.Text = "Pro";
-            // 
+            //
             // mProteinButtonVal
-            // 
+            //
             this.mProteinButtonVal.Location = new System.Drawing.Point(160, 48);
             this.mProteinButtonVal.Name = "mProteinButtonVal";
             this.mProteinButtonVal.Size = new System.Drawing.Size(32, 24);
             this.mProteinButtonVal.TabIndex = 53;
             this.mProteinButtonVal.Tag = "V";
             this.mProteinButtonVal.Text = "Val";
-            // 
+            //
             // mProteinButtonHis
-            // 
+            //
             this.mProteinButtonHis.Location = new System.Drawing.Point(32, 24);
             this.mProteinButtonHis.Name = "mProteinButtonHis";
             this.mProteinButtonHis.Size = new System.Drawing.Size(32, 24);
             this.mProteinButtonHis.TabIndex = 43;
             this.mProteinButtonHis.Tag = "H";
             this.mProteinButtonHis.Text = "His";
-            // 
+            //
             // mProteinButtonAsn
-            // 
+            //
             this.mProteinButtonAsn.Location = new System.Drawing.Point(64, 0);
             this.mProteinButtonAsn.Name = "mProteinButtonAsn";
             this.mProteinButtonAsn.Size = new System.Drawing.Size(32, 24);
             this.mProteinButtonAsn.TabIndex = 35;
             this.mProteinButtonAsn.Tag = "N";
             this.mProteinButtonAsn.Text = "Asn";
-            // 
+            //
             // mProteinButtonArg
-            // 
+            //
             this.mProteinButtonArg.Location = new System.Drawing.Point(32, 0);
             this.mProteinButtonArg.Name = "mProteinButtonArg";
             this.mProteinButtonArg.Size = new System.Drawing.Size(32, 24);
             this.mProteinButtonArg.TabIndex = 34;
             this.mProteinButtonArg.Tag = "R";
             this.mProteinButtonArg.Text = "Arg";
-            // 
+            //
             // mProteinButtonCys
-            // 
+            //
             this.mProteinButtonCys.Location = new System.Drawing.Point(128, 0);
             this.mProteinButtonCys.Name = "mProteinButtonCys";
             this.mProteinButtonCys.Size = new System.Drawing.Size(32, 24);
             this.mProteinButtonCys.TabIndex = 37;
             this.mProteinButtonCys.Tag = "C";
             this.mProteinButtonCys.Text = "Cys";
-            // 
+            //
             // mProteinButtonHse
-            // 
+            //
             this.mProteinButtonHse.Location = new System.Drawing.Point(0, 72);
             this.mProteinButtonHse.Name = "mProteinButtonHse";
             this.mProteinButtonHse.Size = new System.Drawing.Size(32, 24);
             this.mProteinButtonHse.TabIndex = 57;
             this.mProteinButtonHse.Tag = "U";
             this.mProteinButtonHse.Text = "Hse";
-            // 
+            //
             // mProteinButtonGlnGsp
-            // 
+            //
             this.mProteinButtonGlnGsp.Location = new System.Drawing.Point(96, 72);
             this.mProteinButtonGlnGsp.Name = "mProteinButtonGlnGsp";
             this.mProteinButtonGlnGsp.Size = new System.Drawing.Size(64, 24);
             this.mProteinButtonGlnGsp.TabIndex = 59;
             this.mProteinButtonGlnGsp.Tag = "B";
             this.mProteinButtonGlnGsp.Text = "Gln/Glu";
-            // 
+            //
             // mProteinButtonOrn
-            // 
+            //
             this.mProteinButtonOrn.Location = new System.Drawing.Point(192, 48);
             this.mProteinButtonOrn.Name = "mProteinButtonOrn";
             this.mProteinButtonOrn.Size = new System.Drawing.Size(32, 24);
             this.mProteinButtonOrn.TabIndex = 56;
             this.mProteinButtonOrn.Tag = "O";
             this.mProteinButtonOrn.Text = "Orn";
-            // 
+            //
             // mProteinButtonAsp
-            // 
+            //
             this.mProteinButtonAsp.Location = new System.Drawing.Point(96, 0);
             this.mProteinButtonAsp.Name = "mProteinButtonAsp";
             this.mProteinButtonAsp.Size = new System.Drawing.Size(32, 24);
             this.mProteinButtonAsp.TabIndex = 36;
             this.mProteinButtonAsp.Tag = "D";
             this.mProteinButtonAsp.Text = "Asp";
-            // 
+            //
             // mProteinButtonGlu
-            // 
+            //
             this.mProteinButtonGlu.Location = new System.Drawing.Point(192, 0);
             this.mProteinButtonGlu.Name = "mProteinButtonGlu";
             this.mProteinButtonGlu.Size = new System.Drawing.Size(32, 24);
             this.mProteinButtonGlu.TabIndex = 54;
             this.mProteinButtonGlu.Tag = "E";
             this.mProteinButtonGlu.Text = "Glu";
-            // 
+            //
             // mProteinButtonPhe
-            // 
+            //
             this.mProteinButtonPhe.Location = new System.Drawing.Point(192, 24);
             this.mProteinButtonPhe.Name = "mProteinButtonPhe";
             this.mProteinButtonPhe.Size = new System.Drawing.Size(32, 24);
             this.mProteinButtonPhe.TabIndex = 55;
             this.mProteinButtonPhe.Tag = "F";
             this.mProteinButtonPhe.Text = "Phe";
-            // 
+            //
             // mProteinButtonGln
-            // 
+            //
             this.mProteinButtonGln.Location = new System.Drawing.Point(160, 0);
             this.mProteinButtonGln.Name = "mProteinButtonGln";
             this.mProteinButtonGln.Size = new System.Drawing.Size(32, 24);
             this.mProteinButtonGln.TabIndex = 41;
             this.mProteinButtonGln.Tag = "Q";
             this.mProteinButtonGln.Text = "Gln";
-            // 
+            //
             // UnknownmProteinButton
-            // 
+            //
             this.UnknownmProteinButton.Location = new System.Drawing.Point(160, 72);
             this.UnknownmProteinButton.Name = "UnknownmProteinButton";
             this.UnknownmProteinButton.Size = new System.Drawing.Size(64, 24);
             this.UnknownmProteinButton.TabIndex = 60;
             this.UnknownmProteinButton.Tag = "X";
             this.UnknownmProteinButton.Text = "Unknown";
-            // 
+            //
             // mProteinButtonTyr
-            // 
+            //
             this.mProteinButtonTyr.Location = new System.Drawing.Point(128, 48);
             this.mProteinButtonTyr.Name = "mProteinButtonTyr";
             this.mProteinButtonTyr.Size = new System.Drawing.Size(32, 24);
             this.mProteinButtonTyr.TabIndex = 52;
             this.mProteinButtonTyr.Tag = "Y";
             this.mProteinButtonTyr.Text = "Tyr";
-            // 
+            //
             // mProteinButtonGly
-            // 
+            //
             this.mProteinButtonGly.Location = new System.Drawing.Point(0, 24);
             this.mProteinButtonGly.Name = "mProteinButtonGly";
             this.mProteinButtonGly.Size = new System.Drawing.Size(32, 24);
             this.mProteinButtonGly.TabIndex = 42;
             this.mProteinButtonGly.Tag = "G";
             this.mProteinButtonGly.Text = "Gly";
-            // 
+            //
             // mProteinButtonTrp
-            // 
+            //
             this.mProteinButtonTrp.Location = new System.Drawing.Point(96, 48);
             this.mProteinButtonTrp.Name = "mProteinButtonTrp";
             this.mProteinButtonTrp.Size = new System.Drawing.Size(32, 24);
             this.mProteinButtonTrp.TabIndex = 51;
             this.mProteinButtonTrp.Tag = "W";
             this.mProteinButtonTrp.Text = "Trp";
-            // 
+            //
             // mProteinButtonIle
-            // 
+            //
             this.mProteinButtonIle.Location = new System.Drawing.Point(64, 24);
             this.mProteinButtonIle.Name = "mProteinButtonIle";
             this.mProteinButtonIle.Size = new System.Drawing.Size(32, 24);
             this.mProteinButtonIle.TabIndex = 44;
             this.mProteinButtonIle.Tag = "I";
             this.mProteinButtonIle.Text = "Ile";
-            // 
+            //
             // mDNAEditorTab
-            // 
+            //
             this.mDNAEditorTab.BackColor = System.Drawing.SystemColors.Control;
             this.mDNAEditorTab.Controls.Add(this.mDNAButtonPanel);
             this.mDNAEditorTab.Controls.Add(this.mCyclicPhosCheckBox);
@@ -1147,9 +1145,9 @@ namespace Decon2LS
             this.mDNAEditorTab.Size = new System.Drawing.Size(336, 96);
             this.mDNAEditorTab.TabIndex = 1;
             this.mDNAEditorTab.Text = "DNA";
-            // 
+            //
             // mDNAButtonPanel
-            // 
+            //
             this.mDNAButtonPanel.Controls.Add(this.mDNAButtonU);
             this.mDNAButtonPanel.Controls.Add(this.mDNAButtonT);
             this.mDNAButtonPanel.Controls.Add(this.mDNAButtonG);
@@ -1159,55 +1157,55 @@ namespace Decon2LS
             this.mDNAButtonPanel.Name = "mDNAButtonPanel";
             this.mDNAButtonPanel.Size = new System.Drawing.Size(80, 72);
             this.mDNAButtonPanel.TabIndex = 69;
-            // 
+            //
             // mDNAButtonU
-            // 
+            //
             this.mDNAButtonU.Location = new System.Drawing.Point(0, 48);
             this.mDNAButtonU.Name = "mDNAButtonU";
             this.mDNAButtonU.Size = new System.Drawing.Size(80, 23);
             this.mDNAButtonU.TabIndex = 4;
             this.mDNAButtonU.Tag = "U";
             this.mDNAButtonU.Text = "U";
-            // 
+            //
             // mDNAButtonT
-            // 
+            //
             this.mDNAButtonT.Location = new System.Drawing.Point(40, 24);
             this.mDNAButtonT.Name = "mDNAButtonT";
             this.mDNAButtonT.Size = new System.Drawing.Size(40, 23);
             this.mDNAButtonT.TabIndex = 3;
             this.mDNAButtonT.Tag = "T";
             this.mDNAButtonT.Text = "T";
-            // 
+            //
             // mDNAButtonG
-            // 
+            //
             this.mDNAButtonG.Location = new System.Drawing.Point(0, 24);
             this.mDNAButtonG.Name = "mDNAButtonG";
             this.mDNAButtonG.Size = new System.Drawing.Size(40, 23);
             this.mDNAButtonG.TabIndex = 2;
             this.mDNAButtonG.Tag = "G";
             this.mDNAButtonG.Text = "G";
-            // 
+            //
             // mDNAButtonC
-            // 
+            //
             this.mDNAButtonC.Location = new System.Drawing.Point(40, 0);
             this.mDNAButtonC.Name = "mDNAButtonC";
             this.mDNAButtonC.Size = new System.Drawing.Size(40, 23);
             this.mDNAButtonC.TabIndex = 1;
             this.mDNAButtonC.Tag = "C";
             this.mDNAButtonC.Text = "C";
-            // 
+            //
             // mDNAButtonA
-            // 
+            //
             this.mDNAButtonA.Location = new System.Drawing.Point(0, 0);
             this.mDNAButtonA.Name = "mDNAButtonA";
             this.mDNAButtonA.Size = new System.Drawing.Size(40, 23);
             this.mDNAButtonA.TabIndex = 0;
             this.mDNAButtonA.Tag = "A";
             this.mDNAButtonA.Text = "A";
-            // 
+            //
             // mProteinDNAEditorTextBox
-            // 
-            this.mProteinDNAEditorTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            //
+            this.mProteinDNAEditorTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                 | System.Windows.Forms.AnchorStyles.Right)));
             this.mProteinDNAEditorTextBox.Location = new System.Drawing.Point(8, 8);
             this.mProteinDNAEditorTextBox.Name = "mProteinDNAEditorTextBox";
@@ -1215,9 +1213,9 @@ namespace Decon2LS
             this.mProteinDNAEditorTextBox.TabIndex = 86;
             this.mProteinDNAEditorTextBox.Text = "";
             this.mProteinDNAEditorTextBox.TextChanged += new System.EventHandler(this.UpdateFormulaFromProteinOrDNAEventHandler);
-            // 
+            //
             // mSettingsExpandPanel
-            // 
+            //
             this.mSettingsExpandPanel.Controls.Add(this.mSettingsInternalPanel);
             this.mSettingsExpandPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.mSettingsExpandPanel.ExpandImage = ((System.Drawing.Image)(resources.GetObject("mSettingsExpandPanel.ExpandImage")));
@@ -1234,9 +1232,9 @@ namespace Decon2LS
             this.mSettingsExpandPanel.Name = "mSettingsExpandPanel";
             this.mSettingsExpandPanel.Size = new System.Drawing.Size(720, 304);
             this.mSettingsExpandPanel.TabIndex = 73;
-            // 
+            //
             // mSettingsInternalPanel
-            // 
+            //
             this.mSettingsInternalPanel.Controls.Add(this.panel3);
             this.mSettingsInternalPanel.Controls.Add(this.mMolecularFormulaTextBox);
             this.mSettingsInternalPanel.Controls.Add(this.mSimplifyFormulaButton);
@@ -1251,18 +1249,18 @@ namespace Decon2LS
             this.mSettingsInternalPanel.Name = "mSettingsInternalPanel";
             this.mSettingsInternalPanel.Size = new System.Drawing.Size(718, 283);
             this.mSettingsInternalPanel.TabIndex = 92;
-            // 
+            //
             // panel3
-            // 
+            //
             this.panel3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.panel3.Controls.Add(this.mAdvancedSettingsExpandPanel);
             this.panel3.Location = new System.Drawing.Point(376, 8);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(336, 200);
             this.panel3.TabIndex = 98;
-            // 
+            //
             // mAdvancedSettingsExpandPanel
-            // 
+            //
             this.mAdvancedSettingsExpandPanel.Controls.Add(this.panel4);
             this.mAdvancedSettingsExpandPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.mAdvancedSettingsExpandPanel.ExpandImage = ((System.Drawing.Image)(resources.GetObject("mAdvancedSettingsExpandPanel.ExpandImage")));
@@ -1275,9 +1273,9 @@ namespace Decon2LS
             this.mAdvancedSettingsExpandPanel.Name = "mAdvancedSettingsExpandPanel";
             this.mAdvancedSettingsExpandPanel.Size = new System.Drawing.Size(336, 170);
             this.mAdvancedSettingsExpandPanel.TabIndex = 93;
-            // 
+            //
             // panel4
-            // 
+            //
             this.mVerticalBubbleUpLayout.SetBubbleUp(this.panel4, true);
             this.panel4.Controls.Add(this.mcheckBoxAbsolute);
             this.panel4.Controls.Add(this.mResolutionTextBox);
@@ -1296,26 +1294,26 @@ namespace Decon2LS
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(334, 149);
             this.panel4.TabIndex = 94;
-            // 
+            //
             // mcheckBoxAbsolute
-            // 
+            //
             this.mcheckBoxAbsolute.Location = new System.Drawing.Point(240, 8);
             this.mcheckBoxAbsolute.Name = "mcheckBoxAbsolute";
             this.mcheckBoxAbsolute.Size = new System.Drawing.Size(88, 24);
             this.mcheckBoxAbsolute.TabIndex = 81;
             this.mcheckBoxAbsolute.Text = "Absolute";
-            // 
+            //
             // mFWHMLabel
-            // 
+            //
             this.mFWHMLabel.Location = new System.Drawing.Point(8, 36);
             this.mFWHMLabel.Name = "mFWHMLabel";
             this.mFWHMLabel.Size = new System.Drawing.Size(104, 20);
             this.mFWHMLabel.TabIndex = 80;
             this.mFWHMLabel.Text = "FWHM";
             this.mFWHMLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
+            //
             // mFWHMTextBox
-            // 
+            //
             this.mFWHMTextBox.BackColor = System.Drawing.Color.White;
             this.mFWHMTextBox.Location = new System.Drawing.Point(128, 36);
             this.mFWHMTextBox.Name = "mFWHMTextBox";
@@ -1325,9 +1323,9 @@ namespace Decon2LS
             this.mFWHMTextBox.Text = "";
             this.mFWHMTextBox.Validating += new System.ComponentModel.CancelEventHandler(this.mFWHMTextBox_Validating);
             this.mFWHMTextBox.Enter += new System.EventHandler(this.mFWHMTextBox_Enter);
-            // 
+            //
             // mApodizationTypeGroupBox
-            // 
+            //
             this.mApodizationTypeGroupBox.Controls.Add(this.mApodizationTypeOptGaussian);
             this.mApodizationTypeGroupBox.Controls.Add(this.mApodizationTypeOptLorentzian);
             this.mApodizationTypeGroupBox.Location = new System.Drawing.Point(240, 40);
@@ -1336,9 +1334,9 @@ namespace Decon2LS
             this.mApodizationTypeGroupBox.TabIndex = 78;
             this.mApodizationTypeGroupBox.TabStop = false;
             this.mApodizationTypeGroupBox.Text = "Apodization";
-            // 
+            //
             // mSimplifyFormulaButton
-            // 
+            //
             this.mSimplifyFormulaButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.mSimplifyFormulaButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.mSimplifyFormulaButton.Location = new System.Drawing.Point(312, 8);
@@ -1347,10 +1345,10 @@ namespace Decon2LS
             this.mSimplifyFormulaButton.TabIndex = 95;
             this.mSimplifyFormulaButton.Text = "Simplify";
             this.mSimplifyFormulaButton.Click += new System.EventHandler(this.mSimplifyFormulaButton_Click);
-            // 
+            //
             // mEditorsExpandPanel
-            // 
-            this.mEditorsExpandPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            //
+            this.mEditorsExpandPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                 | System.Windows.Forms.AnchorStyles.Right)));
             this.mEditorsExpandPanel.Controls.Add(this.panel1);
             this.mEditorsExpandPanel.ExpandImage = ((System.Drawing.Image)(resources.GetObject("mEditorsExpandPanel.ExpandImage")));
@@ -1368,9 +1366,9 @@ namespace Decon2LS
             this.mEditorsExpandPanel.Name = "mEditorsExpandPanel";
             this.mEditorsExpandPanel.Size = new System.Drawing.Size(360, 184);
             this.mEditorsExpandPanel.TabIndex = 89;
-            // 
+            //
             // panel1
-            // 
+            //
             this.mVerticalBubbleUpLayout.SetBubbleUp(this.panel1, true);
             this.panel1.Controls.Add(this.mProteinDNAEditorTextBox);
             this.panel1.Controls.Add(this.mProteinOrDNATab);
@@ -1379,10 +1377,10 @@ namespace Decon2LS
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(358, 163);
             this.panel1.TabIndex = 87;
-            // 
+            //
             // mReferenceLabel
-            // 
-            this.mReferenceLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            //
+            this.mReferenceLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                 | System.Windows.Forms.AnchorStyles.Right)));
             this.mReferenceLabel.BackColor = System.Drawing.Color.WhiteSmoke;
             this.mReferenceLabel.Location = new System.Drawing.Point(8, 232);
@@ -1391,9 +1389,9 @@ namespace Decon2LS
             this.mReferenceLabel.TabIndex = 96;
             this.mReferenceLabel.Text = "Reference:\nRockwood, A.L., Van Orden, S.L. Smith, R.D.\n\"Rapid Calculation of Isot" +
                 "ope Distributions\". Analytical Chemistry. Vol. 67, No. 15. August 1, 1995";
-            // 
+            //
             // mPreviewButton
-            // 
+            //
             this.mPreviewButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.mPreviewButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.mPreviewButton.Location = new System.Drawing.Point(488, 246);
@@ -1402,9 +1400,9 @@ namespace Decon2LS
             this.mPreviewButton.TabIndex = 92;
             this.mPreviewButton.Text = "Update Preview";
             this.mPreviewButton.Click += new System.EventHandler(this.mPreviewButton_Click);
-            // 
+            //
             // mAutoPreviewCheckBox
-            // 
+            //
             this.mAutoPreviewCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.mAutoPreviewCheckBox.Checked = true;
             this.mAutoPreviewCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
@@ -1413,9 +1411,9 @@ namespace Decon2LS
             this.mAutoPreviewCheckBox.TabIndex = 78;
             this.mAutoPreviewCheckBox.Text = "Auto Preview";
             this.mAutoPreviewCheckBox.CheckedChanged += new System.EventHandler(this.mAutoPreviewCheckBox_CheckedChanged);
-            // 
+            //
             // mPreviewExpandPanel
-            // 
+            //
             this.mPreviewExpandPanel.BackColor = System.Drawing.Color.WhiteSmoke;
             this.mPreviewExpandPanel.Controls.Add(this.panel2);
             this.mPreviewExpandPanel.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -1433,9 +1431,9 @@ namespace Decon2LS
             this.mPreviewExpandPanel.Name = "mPreviewExpandPanel";
             this.mPreviewExpandPanel.Size = new System.Drawing.Size(720, 531);
             this.mPreviewExpandPanel.TabIndex = 90;
-            // 
+            //
             // panel2
-            // 
+            //
             this.panel2.Controls.Add(this.btnCopyToClipboard);
             this.panel2.Controls.Add(this.mtextBoxMostAbundant);
             this.panel2.Controls.Add(this.labelMaxIsotopeAbundace);
@@ -1451,9 +1449,9 @@ namespace Decon2LS
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(718, 510);
             this.panel2.TabIndex = 92;
-            // 
+            //
             // btnCopyToClipboard
-            // 
+            //
             this.btnCopyToClipboard.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnCopyToClipboard.Location = new System.Drawing.Point(3, 5);
             this.btnCopyToClipboard.Name = "btnCopyToClipboard";
@@ -1461,10 +1459,10 @@ namespace Decon2LS
             this.btnCopyToClipboard.TabIndex = 80;
             this.btnCopyToClipboard.Text = "Copy XY values";
             this.btnCopyToClipboard.Click += new System.EventHandler(this.btnCopyToClipboard_Click);
-            // 
+            //
             // mtextBoxMostAbundant
-            // 
-            this.mtextBoxMostAbundant.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            //
+            this.mtextBoxMostAbundant.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
                 | System.Windows.Forms.AnchorStyles.Right)));
             this.mtextBoxMostAbundant.BackColor = System.Drawing.Color.Gainsboro;
             this.mtextBoxMostAbundant.Location = new System.Drawing.Point(552, 486);
@@ -1473,9 +1471,9 @@ namespace Decon2LS
             this.mtextBoxMostAbundant.Size = new System.Drawing.Size(104, 20);
             this.mtextBoxMostAbundant.TabIndex = 79;
             this.mtextBoxMostAbundant.Text = "";
-            // 
+            //
             // labelMaxIsotopeAbundace
-            // 
+            //
             this.labelMaxIsotopeAbundace.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.labelMaxIsotopeAbundace.BackColor = System.Drawing.Color.WhiteSmoke;
             this.labelMaxIsotopeAbundace.Cursor = System.Windows.Forms.Cursors.Default;
@@ -1487,10 +1485,10 @@ namespace Decon2LS
             this.labelMaxIsotopeAbundace.TabIndex = 78;
             this.labelMaxIsotopeAbundace.Text = "Relative Height of Most Abundant Isotope";
             this.labelMaxIsotopeAbundace.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
+            //
             // mVarianceResultTextBox
-            // 
-            this.mVarianceResultTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            //
+            this.mVarianceResultTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
                 | System.Windows.Forms.AnchorStyles.Right)));
             this.mVarianceResultTextBox.BackColor = System.Drawing.Color.Gainsboro;
             this.mVarianceResultTextBox.Location = new System.Drawing.Point(176, 485);
@@ -1499,10 +1497,10 @@ namespace Decon2LS
             this.mVarianceResultTextBox.Size = new System.Drawing.Size(104, 20);
             this.mVarianceResultTextBox.TabIndex = 77;
             this.mVarianceResultTextBox.Text = "";
-            // 
+            //
             // mMonoMolecularWeightResultTextBox
-            // 
-            this.mMonoMolecularWeightResultTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            //
+            this.mMonoMolecularWeightResultTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
                 | System.Windows.Forms.AnchorStyles.Right)));
             this.mMonoMolecularWeightResultTextBox.BackColor = System.Drawing.Color.Gainsboro;
             this.mMonoMolecularWeightResultTextBox.Location = new System.Drawing.Point(176, 461);
@@ -1511,10 +1509,10 @@ namespace Decon2LS
             this.mMonoMolecularWeightResultTextBox.Size = new System.Drawing.Size(536, 20);
             this.mMonoMolecularWeightResultTextBox.TabIndex = 76;
             this.mMonoMolecularWeightResultTextBox.Text = "";
-            // 
+            //
             // mAverageMolecularWeightResultTextBox
-            // 
-            this.mAverageMolecularWeightResultTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            //
+            this.mAverageMolecularWeightResultTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
                 | System.Windows.Forms.AnchorStyles.Right)));
             this.mAverageMolecularWeightResultTextBox.BackColor = System.Drawing.Color.Gainsboro;
             this.mAverageMolecularWeightResultTextBox.Location = new System.Drawing.Point(176, 437);
@@ -1523,9 +1521,9 @@ namespace Decon2LS
             this.mAverageMolecularWeightResultTextBox.Size = new System.Drawing.Size(536, 20);
             this.mAverageMolecularWeightResultTextBox.TabIndex = 75;
             this.mAverageMolecularWeightResultTextBox.Text = "";
-            // 
+            //
             // mOptsPanel
-            // 
+            //
             this.mOptsPanel.Controls.Add(this.mPreviewHoldingPanel);
             this.mOptsPanel.Controls.Add(this.mSettingsExpandPanel);
             this.mOptsPanel.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -1534,9 +1532,9 @@ namespace Decon2LS
             this.mOptsPanel.Name = "mOptsPanel";
             this.mOptsPanel.Size = new System.Drawing.Size(736, 859);
             this.mOptsPanel.TabIndex = 91;
-            // 
+            //
             // mPreviewHoldingPanel
-            // 
+            //
             this.mPreviewHoldingPanel.Controls.Add(this.mPreviewExpandPanel);
             this.mPreviewHoldingPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mPreviewHoldingPanel.DockPadding.Top = 8;
@@ -1544,22 +1542,22 @@ namespace Decon2LS
             this.mPreviewHoldingPanel.Name = "mPreviewHoldingPanel";
             this.mPreviewHoldingPanel.Size = new System.Drawing.Size(720, 539);
             this.mPreviewHoldingPanel.TabIndex = 91;
-            // 
+            //
             // mErrorProvider
-            // 
+            //
             this.mErrorProvider.ContainerControl = this;
-            // 
+            //
             // mWarningProvider
-            // 
+            //
             this.mWarningProvider.ContainerControl = this;
             this.mWarningProvider.Icon = ((System.Drawing.Icon)(resources.GetObject("mWarningProvider.Icon")));
-            // 
+            //
             // mVerticalBubbleUpLayout2
-            // 
+            //
             this.mVerticalBubbleUpLayout2.InitialSpacing = 0;
-            // 
+            //
             // frmMercury
-            // 
+            //
             this.AutoScale = false;
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
             this.BackColor = System.Drawing.Color.WhiteSmoke;
@@ -1601,10 +1599,10 @@ namespace Decon2LS
         #region "Data loading from MercuryIsotopeDistribution"
 
         /// <summary>
-        /// These function load the settings in the MercuryIsotopeDistribution and 
+        /// These function load the settings in the MercuryIsotopeDistribution and
         /// private class variables into the GUI elements.
         /// </summary>
-        private void LoadControlDataFromMercuryIsotopeDistribution() 
+        private void LoadControlDataFromMercuryIsotopeDistribution()
         {
             try
             {
@@ -1624,7 +1622,7 @@ namespace Decon2LS
             }
         }
 
-        private void LoadFormula() 
+        private void LoadFormula()
         {
             try
             {
@@ -1635,8 +1633,8 @@ namespace Decon2LS
                 MessageBox.Show(this, ex.Message + ex.StackTrace) ;
             }
         }
-        
-        private void LoadResolutionFromMercuryIsotopeDistribution() 
+
+        private void LoadResolutionFromMercuryIsotopeDistribution()
         {
             try
             {
@@ -1648,7 +1646,7 @@ namespace Decon2LS
             }
         }
 
-        private void LoadChargeStateFromMercuryIsotopeDistribution() 
+        private void LoadChargeStateFromMercuryIsotopeDistribution()
         {
             try
             {
@@ -1660,7 +1658,7 @@ namespace Decon2LS
             }
         }
 
-        private void LoadChargeCarrierMassFromMercuryIsotopeDistribution() 
+        private void LoadChargeCarrierMassFromMercuryIsotopeDistribution()
         {
             try
             {
@@ -1672,20 +1670,20 @@ namespace Decon2LS
             }
         }
 
-        private void LoadApodizationTypeFromMercuryIsotopeDistribution() 
+        private void LoadApodizationTypeFromMercuryIsotopeDistribution()
         {
             try
             {
                 var apType = this.mMercuryIsotopeDistribution.ApodizationType;
-                if (apType == DeconToolsV2.ApodizationType.Gaussian) 
+                if (apType == DeconToolsV2.ApodizationType.Gaussian)
                 {
                     this.mApodizationTypeOptGaussian.Checked = true;
-                } 
-                else if (apType == DeconToolsV2.ApodizationType.Lorentzian) 
+                }
+                else if (apType == DeconToolsV2.ApodizationType.Lorentzian)
                 {
                     this.mApodizationTypeOptLorentzian.Checked = true;
                 }
-                else 
+                else
                 {
                     this.mApodizationTypeOptGaussian.Checked = false;
                     this.mApodizationTypeOptLorentzian.Checked = false;
@@ -1697,8 +1695,8 @@ namespace Decon2LS
             }
         }
 
-        private void LoadMercurySizeFromMercuryIsotopeDistribution() 
-        {	
+        private void LoadMercurySizeFromMercuryIsotopeDistribution()
+        {
             try
             {
                 this.mMercurySizeCombo.SelectedItem = this.mMercuryIsotopeDistribution.MercurySize;
@@ -1709,7 +1707,7 @@ namespace Decon2LS
             }
         }
 
-        private void LoadFWHM() 
+        private void LoadFWHM()
         {
             try
             {
@@ -1724,7 +1722,7 @@ namespace Decon2LS
         #endregion
 
         #region "GUI Updating"
-        private void UpdatePreviewDistribution() 
+        private void UpdatePreviewDistribution()
         {
             try
             {
@@ -1737,75 +1735,75 @@ namespace Decon2LS
         }
 
         /// <summary>
-        /// Updates the preview chart.  If force is false, the preview is updated only if the 
-        /// Auto-Preview mode check box is checked.  If force is true, the preview is always updated.  
+        /// Updates the preview chart.  If force is false, the preview is updated only if the
+        /// Auto-Preview mode check box is checked.  If force is true, the preview is always updated.
         /// If there are input errors on screen, the last successful inputs are used.
         /// </summary>
         /// <param name="force"></param>
-        private void UpdatePreviewDistribution(bool forceUpdate) 
+        private void UpdatePreviewDistribution(bool forceUpdate)
         {
             try
             {
-                if (this.HasInputErrors()) 
+                if (this.HasInputErrors())
                 {
-                    SetError(this.mPreviewChart, PREVIEW_INPUT_ERRORS_MESSAGE);	
-                } 
-                else 
+                    SetError(this.mPreviewChart, PREVIEW_INPUT_ERRORS_MESSAGE);
+                }
+                else
                 {
                     SetError(this.mPreviewChart, NO_ERROR_MESSAGE);
                 }
 
                 this.SyncDetails();
 
-                if (!forceUpdate && !this.mAutoPreviewCheckBox.Checked) 
+                if (!forceUpdate && !this.mAutoPreviewCheckBox.Checked)
                 {
-                    if (this.HasInputErrors()) 
+                    if (this.HasInputErrors())
                     {
                         SetWarning(this.mPreviewChart, NO_ERROR_MESSAGE);
-                    } 
-                    else 
+                    }
+                    else
                     {
                         SetWarning(this.mPreviewChart, PREVIEW_NOT_SYNCED_MESSAGE);
                     }
                     return;
                 }
-                var points = 
+                var points =
                     this.mMercuryIsotopeDistribution.CalculateDistribution(
                     this.mMolecularFormula.ToElementTable());
 
-                var maxAbundance = float.NegativeInfinity ; 
-                float sum = 0 ; 
+                var maxAbundance = float.NegativeInfinity ;
+                float sum = 0 ;
                 for (var ptNum = 0 ; ptNum < points.Length ; ptNum++)
                 {
-                    sum += points[ptNum].Y ; 
+                    sum += points[ptNum].Y ;
                     if (maxAbundance < points[ptNum].Y)
                     {
-                        maxAbundance = points[ptNum].Y ; 
+                        maxAbundance = points[ptNum].Y ;
                     }
                 }
-                var ratio = (100*maxAbundance)/sum ; 
-                mtextBoxMostAbundant.Text = ratio.ToString("F2") ; 
+                var ratio = (100*maxAbundance)/sum ;
+                mtextBoxMostAbundant.Text = ratio.ToString("F2") ;
 
                 if (!mcheckBoxAbsolute.Checked)
                 {
                     for (var ptNum = 0 ; ptNum < points.Length ; ptNum++)
                     {
-                        points[ptNum].Y = (points[ptNum].Y*100)/sum ; 
+                        points[ptNum].Y = (points[ptNum].Y*100)/sum ;
                     }
-                    maxAbundance /= sum ; 
+                    maxAbundance /= sum ;
                 }
                 this.mPreviewSeriesDataProvider.SetData(points);
-                
-                this.mPreviewSeries.PlotParams.Name = this.mMolecularFormula.ToSimpleOrganicElementalString();
-                this.mPreviewChart.ViewPortHistory.Clear() ; 
-                this.mPreviewChart.AutoViewPort() ; 
 
-                // copy molecular weight results from the 
-                this.mMonoMolecularWeightResultTextBox.Text = 
+                this.mPreviewSeries.PlotParams.Name = this.mMolecularFormula.ToSimpleOrganicElementalString();
+                this.mPreviewChart.ViewPortHistory.Clear() ;
+                this.mPreviewChart.AutoViewPort() ;
+
+                // copy molecular weight results from the
+                this.mMonoMolecularWeightResultTextBox.Text =
                     this.mMercuryIsotopeDistribution.MonoMolecularMass.ToString();
-                this.mAverageMolecularWeightResultTextBox.Text = 
+                this.mAverageMolecularWeightResultTextBox.Text =
                     this.mMercuryIsotopeDistribution.AverageMolecularMass.ToString();
-                this.mVarianceResultTextBox.Text = 
+                this.mVarianceResultTextBox.Text =
                     this.mMercuryIsotopeDistribution.MassVariance.ToString();
 
                 SetWarning(this.mPreviewChart, NO_ERROR_MESSAGE);
@@ -1816,20 +1814,20 @@ namespace Decon2LS
             }
         }
 
-        private void UpdateResolutionAndFWHM() 
+        private void UpdateResolutionAndFWHM()
         {
             try
             {
                 this.mMercuryIsotopeDistribution.CalculateMasses(
                     this.mMolecularFormula.ToElementTable());
-                if (this.mResolutionMode == ResolutionMode.FWHM) 
+                if (this.mResolutionMode == ResolutionMode.FWHM)
                 {
                     //take FWHM
                     var mass = this.mMercuryIsotopeDistribution.AverageMolecularMass;
                     this.mMercuryIsotopeDistribution.Resolution = mass / this.mFWHM;
                     this.LoadResolutionFromMercuryIsotopeDistribution();
                 }
-                else 
+                else
                 {
                     //Using Resolution, so update FWHM text box based on mass of current formula
                     var mass = this.mMercuryIsotopeDistribution.AverageMolecularMass;
@@ -1846,7 +1844,7 @@ namespace Decon2LS
         #endregion
 
         #region "Error Utilities"
-        private void SetWarning(Control control, String message) 
+        private void SetWarning(Control control, String message)
         {
             try
             {
@@ -1859,7 +1857,7 @@ namespace Decon2LS
             }
         }
 
-        private void SetError(Control control, String message) 
+        private void SetError(Control control, String message)
         {
             try
             {
@@ -1872,70 +1870,70 @@ namespace Decon2LS
             }
         }
 
-        //		private void SetParentError(Control control) 
+        //		private void SetParentError(Control control)
         //		{
         //			Control parent = control.Parent;
-        //			if (parent != this) 
+        //			if (parent != this)
         //			{
         //				bool hasErrors = false;
-        //				foreach (Control child in parent.Controls) 
+        //				foreach (Control child in parent.Controls)
         //				{
-        //					if (this.mErrorProvider.GetError(child) != "") 
+        //					if (this.mErrorProvider.GetError(child) != "")
         //					{
         //						hasErrors = true;
         //					}
         //				}
-        //				if (hasErrors) 
+        //				if (hasErrors)
         //				{
         //					this.SetError(parent, frmMercury.CHILD_CONTROLS_HAVE_ERRORS);
-        //				} 
-        //				else 
+        //				}
+        //				else
         //				{
         //					this.SetError(parent, frmMercury.NO_ERROR_MESSAGE);
         //				}
         //			}
         //		}
         //
-        //		private void SetParentWarning(Control control) 
+        //		private void SetParentWarning(Control control)
         //		{
         //			Control parent = control.Parent;
-        //			if (parent != this) 
+        //			if (parent != this)
         //			{
         //				bool hasErrors = false;
-        //				foreach (Control child in parent.Controls) 
+        //				foreach (Control child in parent.Controls)
         //				{
-        //					if (this.mWarningProvider.GetError(child) != "") 
+        //					if (this.mWarningProvider.GetError(child) != "")
         //					{
         //						hasErrors = true;
         //					}
         //				}
-        //				if (hasErrors) 
+        //				if (hasErrors)
         //				{
         //					this.SetWarning(parent, frmMercury.CHILD_CONTROLS_HAVE_ERRORS);
-        //				} 
-        //				else 
+        //				}
+        //				else
         //				{
         //					this.SetWarning(parent, frmMercury.NO_ERROR_MESSAGE);
         //				}
         //			}
         //		}
 
-        private bool HasInputErrors() 
+        private bool HasInputErrors()
         {
-            return ControlHasError(this.mChargeCarrierMassTextBox) 
+            return ControlHasError(this.mChargeCarrierMassTextBox)
                 || ControlHasError(this.mChargeStateTextBox)
-                || ControlHasError(this.mMolecularFormulaTextBox) 
-                || ControlHasError(this.mResolutionTextBox) 
+                || ControlHasError(this.mMolecularFormulaTextBox)
+                || ControlHasError(this.mResolutionTextBox)
                 || ControlHasError(this.mFWHMTextBox);
         }
 
-        private bool ControlHasError(Control control) 
+        private bool ControlHasError(Control control)
         {
             return this.mErrorProvider.GetError(control) != "";
         }
         #endregion
 
-        #region "GUI Input Validations" 
+        #region "GUI Input Validations"
         /// <summary>
         /// These functions parse GUI input from controls that can have errors.
         /// </summary>
@@ -1943,19 +1941,19 @@ namespace Decon2LS
         /// <param name="e"></param>
         private void mChargeCarrierMassTextBox_Validating(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            try 
+            try
             {
                 var cc_mass = double.Parse(this.mChargeCarrierMassTextBox.Text);
                 this.mMercuryIsotopeDistribution.ChargeCarrierMass = cc_mass;
                 this.LoadChargeCarrierMassFromMercuryIsotopeDistribution();
                 SetError(this.mChargeCarrierMassTextBox, NO_ERROR_MESSAGE);
-            } 
-            catch (Exception ex) 
+            }
+            catch (Exception ex)
             {
                 SetError(this.mChargeCarrierMassTextBox, frmMercury.CHARGE_CARRIER_ERROR_MESSAGE);
-                Console.WriteLine(ex.Message + ex.StackTrace) ; 
-            } 
-            finally 
+                Console.WriteLine(ex.Message + ex.StackTrace) ;
+            }
+            finally
             {
                 this.UpdatePreviewDistribution();
             }
@@ -1963,19 +1961,19 @@ namespace Decon2LS
 
         private void mChargeStateTextBox_Validating(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            try 
+            try
             {
                 var charge = short.Parse(this.mChargeStateTextBox.Text);
                 this.mMercuryIsotopeDistribution.ChargeState = charge;
                 this.LoadChargeStateFromMercuryIsotopeDistribution();
                 SetError(this.mChargeStateTextBox, NO_ERROR_MESSAGE);
-            } 
-            catch (Exception ex) 
+            }
+            catch (Exception ex)
             {
-                SetError(this.mChargeStateTextBox, 
+                SetError(this.mChargeStateTextBox,
                     frmMercury.CHARGE_STATE_ERROR_MESSAGE + "\n(" + ex.Message + ")");
             }
-            finally 
+            finally
             {
                 this.UpdatePreviewDistribution();
             }
@@ -1986,20 +1984,20 @@ namespace Decon2LS
             UpdateFormulaAndPreview(false);
         }
 
-        private void UpdateFormulaAndPreview(bool force) 
+        private void UpdateFormulaAndPreview(bool force)
         {
-            try 
+            try
             {
-                mErrorProvider.Dispose() ; 
+                mErrorProvider.Dispose() ;
                 this.mMolecularFormula = MolecularFormula.Parse(this.mMolecularFormulaTextBox.Text);
                 this.UpdateResolutionAndFWHM();
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
-                SetError(this.mMolecularFormulaTextBox, 
+                SetError(this.mMolecularFormulaTextBox,
                     frmMercury.MOLECULAR_FORMULA_ERROR_MESSAGE + "\n" + ex.Message + ")");
             }
-            finally  
+            finally
             {
                 this.UpdatePreviewDistribution(force);
             }
@@ -2007,17 +2005,17 @@ namespace Decon2LS
 
         private void mFWHMTextBox_Validating(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            try 
+            try
             {
                 mFWHM = double.Parse(this.mFWHMTextBox.Text);
                 SetError(this.mFWHMTextBox, NO_ERROR_MESSAGE);
-            } 
-            catch (Exception ex) 
+            }
+            catch (Exception ex)
             {
-                SetError(this.mFWHMTextBox, 
+                SetError(this.mFWHMTextBox,
                     frmMercury.RESOLUTION_ERROR_MESSAGE + "\n(" + ex.Message + ")");
             }
-            finally 
+            finally
             {
                 this.UpdateResolutionAndFWHM();
                 this.UpdatePreviewDistribution();
@@ -2026,19 +2024,19 @@ namespace Decon2LS
 
         private void mResolutionTextBox_Validating(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            try 
+            try
             {
                 var resolution = double.Parse(this.mResolutionTextBox.Text);
                 this.mMercuryIsotopeDistribution.Resolution = resolution;
                 this.LoadResolutionFromMercuryIsotopeDistribution();
                 SetError(this.mResolutionTextBox, NO_ERROR_MESSAGE);
-            } 
-            catch (Exception ex) 
+            }
+            catch (Exception ex)
             {
-                SetError(this.mResolutionTextBox, 
+                SetError(this.mResolutionTextBox,
                     frmMercury.RESOLUTION_ERROR_MESSAGE + "\n(" + ex.Message + ")");
             }
-            finally 
+            finally
             {
                 this.UpdateResolutionAndFWHM();
                 this.UpdatePreviewDistribution();
@@ -2046,18 +2044,18 @@ namespace Decon2LS
         }
         #endregion
 
-        // These functions respond to GUI operations that do not require any 
+        // These functions respond to GUI operations that do not require any
         // validation of the input data, such as check boxes changing, buttons pressed, etc.
         #region "Event Responders"
         private void btnCopyToClipboard_Click(object sender, System.EventArgs e)
         {
-            this.CopyDataFromPreviewToClipboard(); 
-        
+            this.CopyDataFromPreviewToClipboard();
+
         }
-        
+
         private void frmMercury_VisibleChanged(object sender, System.EventArgs e)
         {
-            if (Visible) 
+            if (Visible)
             {
                 this.LoadControlDataFromMercuryIsotopeDistribution();
                 this.SyncDetails();
@@ -2073,21 +2071,21 @@ namespace Decon2LS
 
         private void mSimplifyFormulaButton_Click(object sender, System.EventArgs e)
         {
-            try 
+            try
             {
                 mMolecularFormula = MolecularFormula.Parse(
                     MolecularFormula.Parse(mMolecularFormulaTextBox.Text).ToSimpleOrganicElementalString());
                 mMolecularFormulaTextBox.Text = mMolecularFormula.ToString();
                 SyncDetails();
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
-                Console.WriteLine(ex.Message + ex.StackTrace) ; 
+                Console.WriteLine(ex.Message + ex.StackTrace) ;
             }
         }
 
         /// <summary>
-        /// Update the resolution mode to FWHM and change the color of the resolution 
+        /// Update the resolution mode to FWHM and change the color of the resolution
         /// text box to make it look disabled.
         /// </summary>
         /// <param name="sender"></param>
@@ -2104,7 +2102,7 @@ namespace Decon2LS
 
 
         /// <summary>
-        /// Update the resolution mode to Resolution and change the color of the 
+        /// Update the resolution mode to Resolution and change the color of the
         /// FWHM text box to make it look disabled.
         /// </summary>
         /// <param name="sender"></param>
@@ -2121,7 +2119,7 @@ namespace Decon2LS
 
         private void mApodizationTypeOptLorentzian_CheckedChanged(object sender, System.EventArgs e)
         {
-            if (this.mApodizationTypeOptLorentzian.Checked) 
+            if (this.mApodizationTypeOptLorentzian.Checked)
             {
                 this.mMercuryIsotopeDistribution.ApodizationType = DeconToolsV2.ApodizationType.Lorentzian;
             }
@@ -2130,7 +2128,7 @@ namespace Decon2LS
 
         private void mApodizationTypeOptGaussian_CheckedChanged(object sender, System.EventArgs e)
         {
-            if (this.mApodizationTypeOptGaussian.Checked) 
+            if (this.mApodizationTypeOptGaussian.Checked)
             {
                 this.mMercuryIsotopeDistribution.ApodizationType = DeconToolsV2.ApodizationType.Gaussian;
             }
@@ -2151,7 +2149,7 @@ namespace Decon2LS
         /// <summary>
         /// Sets the categorized form details to reflect the current form state.
         /// </summary>
-        private void SyncDetails() 
+        private void SyncDetails()
         {
             var details = new PNNL.Controls.DetailInfo[1];
             details[0] = new PNNL.Controls.DetailInfo(frmMercury.DetailFormula + this.mMolecularFormula.ToString());
@@ -2163,11 +2161,11 @@ namespace Decon2LS
             this.UpdateFormulaFromProteinOrDNA(false);
         }
 
-        private void UpdateFormulaFromProteinOrDNA(bool updatePreview) 
+        private void UpdateFormulaFromProteinOrDNA(bool updatePreview)
         {
-            try 
+            try
             {
-                if (this.mProteinOrDNATab.SelectedTab == this.mProteinEditorTab) 
+                if (this.mProteinOrDNATab.SelectedTab == this.mProteinEditorTab)
                 {
                     // update using protein translation
                     var translator = mProteinTranslator;
@@ -2177,32 +2175,32 @@ namespace Decon2LS
                     mf = mf.Add(nEnd, 1).Add(cEnd, 1);
 
                     SetFormula(mf, updatePreview);
-                } 
-                else 
+                }
+                else
                 {
                     // update using DNA translation
                     var translator = mDNATranslator;
                     var input = this.mProteinDNAEditorTextBox.Text;
-                    if (this.mComplementCheckBox.Checked) 
+                    if (this.mComplementCheckBox.Checked)
                     {
                         var original = input;
                         input = "";
-                        foreach (var ch in original.ToCharArray()) 
+                        foreach (var ch in original.ToCharArray())
                         {
                             var c = ch;
-                            if (c == 'A') 
+                            if (c == 'A')
                             {
                                 c = 'T';
-                            } 
-                            else if (c == 'T') 
+                            }
+                            else if (c == 'T')
                             {
                                 c = 'A';
                             }
-                            else if (c == 'G') 
+                            else if (c == 'G')
                             {
                                 c = 'C';
-                            } 
-                            else if (c == 'C') 
+                            }
+                            else if (c == 'C')
                             {
                                 c = 'G';
                             }
@@ -2214,24 +2212,24 @@ namespace Decon2LS
                     mf = mf.Add(MolecularFormula.Hydrogen, -1 * (numBases - 1), true);
                     mf = mf.Add(MolecularFormula.Phosphorus, (numBases - 1));
                     mf = mf.Add(MolecularFormula.Oxygen, 2 * (numBases - 1));
-                    if (this.mDNARNACombo.SelectedItem.Equals("RNA")) 
+                    if (this.mDNARNACombo.SelectedItem.Equals("RNA"))
                     {
                         mf = mf.Add(MolecularFormula.Oxygen, numBases);
                     }
-                    if (this.mDNARNACombo.SelectedItem.Equals("Phosphorothioate")) 
+                    if (this.mDNARNACombo.SelectedItem.Equals("Phosphorothioate"))
                     {
                         mf = mf.Add(MolecularFormula.Oxygen, -1 * (numBases - 1), true);
                         mf = mf.Add(MolecularFormula.Sulphur, (numBases - 1));
                     }
-                    if (this.mTermPhosCheckBox.Checked) 
+                    if (this.mTermPhosCheckBox.Checked)
                     {
                         mf = mf.Add(MolecularFormula.Parse("H1 P1 O3"), 1);
                     }
-                    if (this.mCyclicPhosCheckBox.Checked) 
+                    if (this.mCyclicPhosCheckBox.Checked)
                     {
                         mf = mf.Add(MolecularFormula.Parse("H-1 P1 O2", null, true), 1);
                     }
-                    if (this.mTrisphosCheckBox.Checked) 
+                    if (this.mTrisphosCheckBox.Checked)
                     {
                         mf = mf.Add(MolecularFormula.Parse("H3 P3 O9"), 1);
                     }
@@ -2239,23 +2237,23 @@ namespace Decon2LS
                     SetFormula(mf, updatePreview);
                 }
                 this.mErrorProvider.SetError(this.mProteinDNAEditorTextBox, "");
-            } 
-            catch (Exception e) 
+            }
+            catch (Exception e)
             {
                 this.mErrorProvider.SetError(this.mProteinDNAEditorTextBox, "Input error");
-                Console.WriteLine(e.Message + e.StackTrace) ; 
+                Console.WriteLine(e.Message + e.StackTrace) ;
             }
         }
 
-        public MolecularFormula Formula 
+        public MolecularFormula Formula
         {
-            get 
+            get
             {
                 return mMolecularFormula;
             }
-            set 
+            set
             {
-                if (value == null) 
+                if (value == null)
                 {
                     throw new ArgumentNullException("formula");
                 }
@@ -2267,26 +2265,26 @@ namespace Decon2LS
         {
             set
             {
-                mMercuryIsotopeDistribution.ElementIsotopes = value ; 
+                mMercuryIsotopeDistribution.ElementIsotopes = value ;
             }
         }
 
-        private void SetFormula(MolecularFormula formula, bool updatePreview) 
+        private void SetFormula(MolecularFormula formula, bool updatePreview)
         {
-            if (formula == null) 
+            if (formula == null)
             {
                 throw new ArgumentNullException("formula");
             }
             this.mMolecularFormula = formula;
             this.mMolecularFormulaTextBox.Text = mMolecularFormula.ToSimpleOrganicElementalString();
             this.UpdateResolutionAndFWHM();
-            if (updatePreview) 
+            if (updatePreview)
             {
                 this.UpdatePreviewDistribution();
             }
         }
 
-        private void ProteinOrDNAButtonClickHandler(object sender, EventArgs args) 
+        private void ProteinOrDNAButtonClickHandler(object sender, EventArgs args)
         {
             var source = (Button) sender;
             // Get the amino acid abbreviation from the tag of the button
@@ -2300,18 +2298,18 @@ namespace Decon2LS
             UpdateFormulaFromProteinOrDNA(true);
         }
 
-        
+
         private void CopyDataFromPreviewToClipboard()
         {
             clsClipboardUtility.CopyXYValuesToClipboard(this.mPreviewSeriesDataProvider.xs,this.mPreviewSeriesDataProvider.ys);
-            
+
         }
 
 
     }
 
     /// <summary>
-    /// Custom clsSeries for mercury.  When copied to another chart enables the height 
+    /// Custom clsSeries for mercury.  When copied to another chart enables the height
     /// multiplier and mz shift menu items.  Copying also enables its being deleted.
     /// </summary>
     internal class clsMercurySeries : PNNL.Controls.clsSeries
@@ -2321,15 +2319,15 @@ namespace Decon2LS
         private MenuItem menuItemScaleHeight;
         private MenuItem menuItemMzOffset;
 
-        internal clsMercurySeries(MercuryDataProvider dataProvider, PNNL.Controls.clsPlotParams plotParams, 
-            PNNL.Controls.ctlChartBase initiallyIn) 
+        internal clsMercurySeries(MercuryDataProvider dataProvider, PNNL.Controls.clsPlotParams plotParams,
+            PNNL.Controls.ctlChartBase initiallyIn)
             : base(dataProvider, plotParams)
         {
             this.mChartInitiallyIn = initiallyIn;
             CreateMenuItems();
         }
 
-        private void CreateMenuItems() 
+        private void CreateMenuItems()
         {
             menuItemScaleHeight = new MenuItem("Adjust Scale Height");
             menuItemMzOffset = new MenuItem("Adjust m/z Offset");
@@ -2357,14 +2355,14 @@ namespace Decon2LS
 
         protected override PNNL.Controls.IChartDataProvider CloneChartDataProvider()
         {
-            return new MercuryDataProvider((float[]) ((MercuryDataProvider) this.DataProvider).xs.Clone(), 
+            return new MercuryDataProvider((float[]) ((MercuryDataProvider) this.DataProvider).xs.Clone(),
                 (float[]) ((MercuryDataProvider) this.DataProvider).ys.Clone());
         }
 
 
         public override MenuItem[] GetCustomMenuItems(PNNL.Controls.ctlChartBase chartFor)
         {
-            if (chartFor != this.mChartInitiallyIn) 
+            if (chartFor != this.mChartInitiallyIn)
             {
                 return new MenuItem[] {menuItemScaleHeight, menuItemMzOffset};
             }
@@ -2378,26 +2376,26 @@ namespace Decon2LS
         public override PNNL.Controls.clsSeries CopySeries()
         {
             var newSeries = new clsMercurySeries(
-                (MercuryDataProvider) this.CloneChartDataProvider(), 
+                (MercuryDataProvider) this.CloneChartDataProvider(),
                 (PNNL.Controls.clsPlotParams) this.PlotParams.Clone(), null);
-            
+
             return newSeries;
         }
 
         private void menuItemScaleHeight_Click(object sender, EventArgs e)
         {
-            try 
+            try
             {
                 var form = new frmFloatDialog();
                 form.Text = "Adjust Height Multiplier";
                 form.Prompt = "Multiplier";
                 form.EditingValue = ((MercuryDataProvider) this.DataProvider).HeightMultiplier;
-                if (form.ShowDialog() == DialogResult.OK) 
+                if (form.ShowDialog() == DialogResult.OK)
                 {
                     ((MercuryDataProvider) this.DataProvider).HeightMultiplier = form.EditingValue;
                 }
-            } 
-            catch (Exception ex) 
+            }
+            catch (Exception ex)
             {
                 MessageBox.Show("Setting of scale height failed: " + ex.Message);
             }
@@ -2406,25 +2404,25 @@ namespace Decon2LS
         private void menuItemMzOffset_Click(object sender, EventArgs e)
         {
             Console.WriteLine("Changing Mercury Series {0} {1}", this, this.GetHashCode());
-            try 
+            try
             {
                 var form = new frmFloatDialog();
                 form.Text = "Adjust m/z Offset";
                 form.Prompt = "m/z Offset";
                 form.EditingValue = ((MercuryDataProvider) this.DataProvider).MZOffset;
-                if (form.ShowDialog() == DialogResult.OK) 
+                if (form.ShowDialog() == DialogResult.OK)
                 {
                     ((MercuryDataProvider) this.DataProvider).MZOffset = form.EditingValue;
                 }
-            } 
-            catch (Exception ex) 
+            }
+            catch (Exception ex)
             {
                 MessageBox.Show("Setting of scale height failed: " + ex.Message);
             }
         }
     }
 
-    internal class MercuryDataProvider : PNNL.Controls.ArrayChartDataProvider 
+    internal class MercuryDataProvider : PNNL.Controls.ArrayChartDataProvider
     {
         internal float heightMult = 1;
         internal float mzOffset = 0;
@@ -2435,15 +2433,15 @@ namespace Decon2LS
         {
         }
 
-        internal float HeightMultiplier 
+        internal float HeightMultiplier
         {
-            get 
+            get
             {
                 return this.heightMult;
             }
-            set 
+            set
             {
-                if (value <= 0) 
+                if (value <= 0)
                 {
                     throw new ArgumentOutOfRangeException("HeightMultiplier", value, "Must be > 0");
                 }
@@ -2452,13 +2450,13 @@ namespace Decon2LS
             }
         }
 
-        internal float MZOffset 
+        internal float MZOffset
         {
-            get 
+            get
             {
                 return this.mzOffset;
             }
-            set 
+            set
             {
                 this.mzOffset = value;
                 this.SetData(xs, ys);
@@ -2476,14 +2474,14 @@ namespace Decon2LS
             xs = (float[]) x.Clone();
             ys = (float[]) y.Clone();
             Console.WriteLine("New mercury provider");
-//			for (int i = 0; i < x.Length; i++) 
+//			for (int i = 0; i < x.Length; i++)
 //			{
 //			}
-            for (var i = 0; i < x.Length; i++) 
+            for (var i = 0; i < x.Length; i++)
             {
                 x[i] = x[i] + this.MZOffset;
                 y[i] = y[i] * this.HeightMultiplier;
-                if (i % 1000 == 0) 
+                if (i % 1000 == 0)
                 {
                     Console.WriteLine("Point {0} {1}", x[i], y[i]);
                 }

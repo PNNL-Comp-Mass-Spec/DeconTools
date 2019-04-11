@@ -18,7 +18,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
         #region Constructors
 
         protected ChromatogramCorrelatorBase(int numPointsInSmoother, double minRelativeIntensityForChromCorr,
-            double chromTolerance, Globals.ToleranceUnit toleranceUnit= Globals.ToleranceUnit.PPM)
+            double chromTolerance, Globals.ToleranceUnit toleranceUnit = Globals.ToleranceUnit.PPM)
         {
             SavitzkyGolaySmoothingOrder = 2;
             NumPointsInSmoother = numPointsInSmoother;
@@ -32,7 +32,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
                                                          Globals.IsotopicProfileType.UNLABELLED, toleranceUnit);
 
 
-            Smoother = new SavitzkyGolaySmoother(NumPointsInSmoother, SavitzkyGolaySmoothingOrder, false);
+            Smoother = new SavitzkyGolaySmoother(NumPointsInSmoother, SavitzkyGolaySmoothingOrder);
         }
 
 
@@ -48,7 +48,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             {
                 _chromTolerance = value;
 
-                if (PeakChromGen!=null)
+                if (PeakChromGen != null)
                 {
                     PeakChromGen = new PeakChromatogramGenerator(ChromTolerance, Globals.ChromatogramGeneratorMode.MOST_ABUNDANT_PEAK,
                                                                  Globals.IsotopicProfileType.UNLABELLED, ChromToleranceUnit);
@@ -59,11 +59,9 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
         }
 
         /// <summary>
-        /// Tolerence unit for chromatogram. Either PPM (default) or MZ. Can only be set in the class constructor
+        /// Tolerance unit for chromatogram. Either PPM (default) or MZ. Can only be set in the class constructor
         /// </summary>
         public Globals.ToleranceUnit ChromToleranceUnit { get; }
-
-
 
         public double MinimumRelativeIntensityForChromCorr { get; set; }
 
@@ -98,7 +96,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
                 {
                     _savitzkyGolaySmoothingOrder = value;
 
-                    if (Smoother!=null)
+                    if (Smoother != null)
                     {
                         Smoother = new SavitzkyGolaySmoother(NumPointsInSmoother, _savitzkyGolaySmoothingOrder);
                     }
@@ -112,11 +110,11 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 
         #region Public Methods
 
-        public void GetElutionCorrelationData(XYData chromData1, XYData chromData2, out double slope, out double intercept, out double rsquaredVal)
+        public void GetElutionCorrelationData(XYData chromData1, XYData chromData2, out double slope, out double intercept, out double rSquaredVal)
         {
             slope = -9999;
             intercept = -9999;
-            rsquaredVal = -1;
+            rSquaredVal = -1;
 
             Check.Require(chromData1?.Xvalues != null, "Chromatogram1 intensities are null");
             if (chromData1?.Xvalues == null)
@@ -128,14 +126,14 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 
             Check.Require(Math.Abs(chromData1.Xvalues[0] - chromData2.Xvalues[0]) < float.Epsilon, "Correlation failed. Chromatograms being correlated do not have the same scan values!");
 
-            GetElutionCorrelationData(chromData1.Yvalues, chromData2.Yvalues, out slope, out intercept, out rsquaredVal);
+            GetElutionCorrelationData(chromData1.Yvalues, chromData2.Yvalues, out slope, out intercept, out rSquaredVal);
         }
 
-        public void GetElutionCorrelationData(double[] chromIntensities1, double[] chromIntensities2, out double slope, out double intercept, out double rsquaredVal)
+        public void GetElutionCorrelationData(double[] chromIntensities1, double[] chromIntensities2, out double slope, out double intercept, out double rSquaredVal)
         {
             slope = -9999;
             intercept = -9999;
-            rsquaredVal = -1;
+            rSquaredVal = -1;
 
             Check.Require(chromIntensities1 != null, "Chromatogram1 intensities are null");
             if (chromIntensities1 == null)
@@ -149,7 +147,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 
             try
             {
-                MathUtils.GetLinearRegression(chromIntensities1, chromIntensities2, out slope, out intercept, out rsquaredVal);
+                MathUtils.GetLinearRegression(chromIntensities1, chromIntensities2, out slope, out intercept, out rSquaredVal);
             }
             catch (Exception ex)
             {
@@ -211,7 +209,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             var basePeakChromXYData = GetBaseChromXYData(run, startScan, stopScan, baseMZValue);
 
             var baseChromDataIsOK = basePeakChromXYData?.Xvalues != null;
-                //&&basePeakChromXYData.Xvalues.Length > 3;
+            //&&basePeakChromXYData.Xvalues.Length > 3;
 
 
             var minIntensity = iso.Peaklist[indexMostAbundantPeak].Height *
@@ -240,7 +238,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
                     var chromPeakXYData = GetCorrelatedChromPeakXYData(run, startScan, stopScan, basePeakChromXYData, correlatedMZValue);
 
                     var chromDataIsOK = chromPeakXYData?.Xvalues != null;
-                        //&&chromPeakXYData.Xvalues.Length > 3;
+                    //&&chromPeakXYData.Xvalues.Length > 3;
 
                     if (chromDataIsOK)
                     {
@@ -248,9 +246,9 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
                         chromPeakXYData = FillInAnyMissingValuesInChromatogram(basePeakChromXYData, chromPeakXYData);
 
                         GetElutionCorrelationData(basePeakChromXYData, chromPeakXYData,
-                                                                          out var slope, out var intercept, out var rsquaredVal);
+                                                                          out var slope, out var intercept, out var rSquaredVal);
 
-                        correlationData.AddCorrelationData(slope, intercept, rsquaredVal);
+                        correlationData.AddCorrelationData(slope, intercept, rSquaredVal);
 
                     }
                     else
@@ -271,17 +269,12 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             return correlationData;
         }
 
-
-
-
-
-
         protected XYData GetCorrelatedChromPeakXYData(Run run, int startScan, int stopScan, XYData basePeakChromXYData, double correlatedMZValue)
         {
-            var xydata= PeakChromGen.GenerateChromatogram(run, startScan, stopScan, correlatedMZValue, ChromTolerance,ChromToleranceUnit);
+            var xyData = PeakChromGen.GenerateChromatogram(run, startScan, stopScan, correlatedMZValue, ChromTolerance, ChromToleranceUnit);
 
             XYData chromPeakXYData;
-            if (xydata == null || xydata.Xvalues.Length == 0)
+            if (xyData == null || xyData.Xvalues.Length == 0)
             {
                 chromPeakXYData = new XYData
                 {
@@ -291,7 +284,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             }
             else
             {
-                chromPeakXYData = Smoother.Smooth(xydata);
+                chromPeakXYData = Smoother.Smooth(xyData);
             }
 
 
@@ -306,11 +299,11 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 
         protected XYData GetBaseChromXYData(Run run, int startScan, int stopScan, double baseMZValue)
         {
-            var xydata=   PeakChromGen.GenerateChromatogram(run, startScan, stopScan, baseMZValue, ChromTolerance,ChromToleranceUnit);
+            var xyData = PeakChromGen.GenerateChromatogram(run, startScan, stopScan, baseMZValue, ChromTolerance, ChromToleranceUnit);
 
-            if (xydata == null || xydata.Xvalues.Length < 3) return null;
+            if (xyData == null || xyData.Xvalues.Length < 3) return null;
 
-            var basePeakChromXYData = Smoother.Smooth(xydata);
+            var basePeakChromXYData = Smoother.Smooth(xyData);
 
             var baseChromDataIsOK = basePeakChromXYData?.Xvalues != null && basePeakChromXYData.Xvalues.Length > 3;
 
@@ -351,9 +344,9 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
                 }
             }
 
-            var xydata = new XYData { Xvalues = basePeakChromXYData.Xvalues, Yvalues = filledInData.Values.ToArray() };
+            var xyData = new XYData { Xvalues = basePeakChromXYData.Xvalues, Yvalues = filledInData.Values.ToArray() };
 
-            return xydata;
+            return xyData;
 
 
         }

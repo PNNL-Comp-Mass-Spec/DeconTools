@@ -9,9 +9,9 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
 {
     public class JoshTheorFeatureGenerator:ITheorFeatureGenerator
     {
-        IsotopicDistributionCalculator _isotopicDistCalculator = IsotopicDistributionCalculator.Instance;
-        N15IsotopeProfileGenerator _N15IsotopicProfileGenerator = new N15IsotopeProfileGenerator();
-        DeuteriumIsotopeProfileGenerator _DeuteriumIsotopicProfileGenerator = new DeuteriumIsotopeProfileGenerator();
+        readonly IsotopicDistributionCalculator _isotopicDistCalculator = IsotopicDistributionCalculator.Instance;
+        readonly N15IsotopeProfileGenerator _N15IsotopicProfileGenerator = new N15IsotopeProfileGenerator();
+        readonly DeuteriumIsotopeProfileGenerator _DeuteriumIsotopicProfileGenerator = new DeuteriumIsotopeProfileGenerator();
 
         #region Constructors
         public JoshTheorFeatureGenerator()
@@ -54,7 +54,7 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
         public double LowPeakCutOff { get; set; }
 
         /// <summary>
-        /// how the two samples were mixed together.  0.5 means 1:1 ratio.  Range is 0 to 1.  .25 ia 
+        /// how the two samples were mixed together.  0.5 means 1:1 ratio.  Range is 0 to 1.  .25 ia
         /// </summary>
         public double MolarMixingFraction { get; set; }
 
@@ -99,12 +99,12 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
                 case Globals.LabellingType.Deuterium:
                     //mt.IsotopicProfile = GetUnlabelledIsotopicProfile(mt);
                     //mt.IsotopicProfileLabelled = _DeuteriumIsotopicProfileGenerator.GetDHIsotopicProfile2(mt, LowPeakCutOff, FractionLabeling, MolarMixingFraction);
-                    
+
                     //swap so we can keep the normal in labeled box and use the D/H for generall processing
                     mt.IsotopicProfile = GetUnlabelledIsotopicProfile(mt);//needed for _DeuteriumIsotopicProfileGenerator
                     mt.IsotopicProfile = _DeuteriumIsotopicProfileGenerator.GetDHIsotopicProfile2(mt, LowPeakCutOff, FractionLabeling, MolarMixingFraction);
                     mt.IsotopicProfileLabelled = GetUnlabelledIsotopicProfile(mt);
-                    
+
                     break;
                 default:
                     throw new NotImplementedException();
@@ -126,10 +126,10 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
 
             try
             {
-                //empirical formula may contain non-integer values for 
+                //empirical formula may contain non-integer values for
 
 
-                
+
                 iso = _isotopicDistCalculator.GetIsotopePattern(mt.EmpiricalFormula);
             }
             catch (Exception ex)
@@ -140,12 +140,12 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
             PeakUtilities.TrimIsotopicProfile(iso, LowPeakCutOff);
             iso.ChargeState = mt.ChargeState;
 
-         
+
             if (iso.ChargeState != 0) calculateMassesForIsotopicProfile(iso, mt.MonoIsotopicMass,mt.ChargeState);
 
             return iso;
 
-            
+
         }
 
         #endregion
@@ -170,6 +170,6 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
             //
         }
 
-      
+
     }
 }

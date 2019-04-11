@@ -13,23 +13,20 @@ namespace DeconTools.Backend.Utilities
 
         #region Public Methods
 
-        public static XYData NormalizeXYData(XYData xydata)
+        public static XYData NormalizeXYData(XYData xyData)
         {
-            var normalized = new XYData();
+            var normalized = new XYData
+            {
+                Xvalues = xyData.Xvalues,
+                Yvalues = xyData.Yvalues
+            };
 
-            normalized.Xvalues = xydata.Xvalues;
-            normalized.Yvalues = xydata.Yvalues;
 
             var maxYValue = double.MinValue;
 
-
-
-
-            for (var i = 0; i < normalized.Yvalues.Length; i++)
+            foreach (var currentVal in normalized.Yvalues)
             {
-                var currentVal = normalized.Yvalues[i];
-
-                if (currentVal>maxYValue)
+                if (currentVal > maxYValue)
                 {
                     maxYValue = currentVal;
                 }
@@ -38,7 +35,7 @@ namespace DeconTools.Backend.Utilities
 
             for (var i = 0; i < normalized.Yvalues.Length; i++)
             {
-                normalized.Yvalues[i] = normalized.Yvalues[i]/maxYValue;
+                normalized.Yvalues[i] = normalized.Yvalues[i] / maxYValue;
             }
 
 
@@ -49,35 +46,31 @@ namespace DeconTools.Backend.Utilities
         }
 
 
-        public static XYData SubtractXYData(XYData xydata1, XYData xydata2, double minX, double maxX, double tolerance)
+        public static XYData SubtractXYData(XYData xyData1, XYData xyData2, double minX, double maxX, double tolerance)
         {
 
-            var startIndex1 = MathUtils.GetClosest(xydata1.Xvalues, minX, tolerance);
-            var stopIndex1 = MathUtils.GetClosest(xydata1.Xvalues, maxX, tolerance);
+            var startIndex1 = MathUtils.GetClosest(xyData1.Xvalues, minX, tolerance);
+            var stopIndex1 = MathUtils.GetClosest(xyData1.Xvalues, maxX, tolerance);
 
-            var startIndex2 = MathUtils.GetClosest(xydata2.Xvalues, minX, tolerance);
-            var stopIndex2 = MathUtils.GetClosest(xydata2.Xvalues, maxX, tolerance);
+            var startIndex2 = MathUtils.GetClosest(xyData2.Xvalues, minX, tolerance);
+            var stopIndex2 = MathUtils.GetClosest(xyData2.Xvalues, maxX, tolerance);
 
-
-            var subtracted = new XYData();
-            subtracted.Xvalues = xydata1.Xvalues;
-            subtracted.Yvalues = xydata1.Yvalues;
-
+            var subtracted = new XYData
+            {
+                Xvalues = xyData1.Xvalues,
+                Yvalues = xyData1.Yvalues
+            };
 
             for (var i = startIndex1; i <= stopIndex1; i++)
             {
                 var currentXVal = subtracted.Xvalues[i];
 
-                var indexOfClosest = MathUtils.GetClosest(xydata2.Xvalues, currentXVal, tolerance);
-                subtracted.Yvalues[i] = subtracted.Yvalues[i] - xydata2.Yvalues[indexOfClosest];
-
-
+                var indexOfClosest = MathUtils.GetClosest(xyData2.Xvalues, currentXVal, tolerance);
+                subtracted.Yvalues[i] = subtracted.Yvalues[i] - xyData2.Yvalues[indexOfClosest];
             }
             return subtracted;
 
         }
-
-
 
         #endregion
 

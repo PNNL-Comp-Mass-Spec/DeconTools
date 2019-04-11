@@ -6,13 +6,13 @@ namespace DeconTools.Backend.Utilities
 {
     public class SerializerGeneric
     {
-        private readonly FileMode filemode;
+        private readonly FileMode fileMode;
 
         public SerializerGeneric(string outputFilename, FileMode mode, bool deletePrevious)
         {
 
             OutputFilename = outputFilename;
-            filemode = mode;
+            fileMode = mode;
 
             try
             {
@@ -37,7 +37,7 @@ namespace DeconTools.Backend.Utilities
 
         public void Serialize(Object o)
         {
-            using (Stream stream = File.Open(OutputFilename, filemode))
+            using (Stream stream = File.Open(OutputFilename, fileMode))
             {
                 var b = new BinaryFormatter();
                 b.Serialize(stream, o);

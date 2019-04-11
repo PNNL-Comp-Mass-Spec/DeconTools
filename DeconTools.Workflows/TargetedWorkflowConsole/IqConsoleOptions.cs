@@ -30,7 +30,7 @@ namespace IQ.Console
             OutputGraphs = false;
         }
 
-        [Option("I", "InputFile", ArgPosition = 1, Required = true, HelpText = "Input dataset or a text file containing a list of datasets. Can be a path to a thermo .Raw file, or a DMS dataset name")]
+        [Option("I", "InputFile", ArgPosition = 1, Required = true, HelpText = "Input dataset or a text file containing a list of datasets. Can be a path to a Thermo .Raw file, or a DMS dataset name")]
         public string InputFile { get; set; }
 
         [Option("T", "TargetsFile", ArgPosition = 3, HelpText = "A text file containing a list of IQ targets (overrides targets file defined in the WorkflowParameterFile .xml file). Supported formats= .txt, .mgf")]

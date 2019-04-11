@@ -18,12 +18,10 @@ namespace DeconTools.Backend.ProcessingTasks.Smoothers
     {
         DenseMatrix _smoothingFilters;
 
-        public SavitzkyGolaySmoother(int pointsForSmoothing, int polynomialOrder, bool allowNegativeValues = true)
+        public SavitzkyGolaySmoother(int pointsForSmoothing, int polynomialOrder)
         {
             PointsForSmoothing = pointsForSmoothing;
             PolynomialOrder = polynomialOrder;
-
-
         }
 
         public int PointsForSmoothing { get; set; }
@@ -42,10 +40,10 @@ namespace DeconTools.Backend.ProcessingTasks.Smoothers
         public double[] Smooth(double[] inputValues)
         {
             if (PointsForSmoothing < 3)
-                throw new ArgumentOutOfRangeException("savGolayPoints must be an odd number 3 or higher");
+                throw new ArgumentOutOfRangeException(nameof(PointsForSmoothing), "PointsForSmoothing must be an odd number 3 or higher");
 
             if (PointsForSmoothing % 2 == 0)
-                throw new ArgumentOutOfRangeException("savGolayPoints must be an odd number 3 or higher");
+                throw new ArgumentOutOfRangeException(nameof(PointsForSmoothing), "PointsForSmoothing must be an odd number 3 or higher");
 
             var colCount = inputValues.Length;
             var returnYValues = new double[colCount];
@@ -116,14 +114,13 @@ namespace DeconTools.Backend.ProcessingTasks.Smoothers
 
             var smoothedData = Smooth(xyData.Yvalues);
 
-            var returnVals = new XYData();
-            returnVals.Xvalues = xyData.Xvalues;
-            returnVals.Yvalues = smoothedData;
+            var returnVals = new XYData {
+                Xvalues = xyData.Xvalues,
+                Yvalues = smoothedData
+            };
 
             return returnVals;
         }
-
-
 
         private DenseMatrix CalculateSmoothingFilters(int polynomialOrder, int filterLength)
         {

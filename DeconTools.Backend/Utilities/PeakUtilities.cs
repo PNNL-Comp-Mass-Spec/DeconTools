@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using DeconTools.Backend.Core;
-using DeconTools.Backend.DTO;
 
 namespace DeconTools.Backend.Utilities
 {
     public class PeakUtilities
     {
-        //TODO: I'm duplicating code here to make room for List<MSPeak>;  not good... there has to be a better way... 
+        //TODO: I'm duplicating code here to make room for List<MSPeak>;  not good... there has to be a better way...
         public static List<MSPeak> GetMSPeaksWithinTolerance(List<MSPeak> inputList, double targetVal, double toleranceInMZ)
         {
             var outputList = new List<MSPeak>();
@@ -29,15 +28,11 @@ namespace DeconTools.Backend.Utilities
                     }
                 }
             }
-            else
-            {
-
-            }
 
             // add the center peak
             outputList.Add(inputList[targetIndex]);
 
-            // look to the right for other peaks within the tolerance. 
+            // look to the right for other peaks within the tolerance.
             if (targetIndex < inputList.Count - 1)   // ensure we aren't at the end of the peak list
             {
                 for (var i = (targetIndex + 1); i < inputList.Count; i++)
@@ -53,17 +48,17 @@ namespace DeconTools.Backend.Utilities
             return outputList;
         }
 
-        public static List<Peak> CreatePeakDataFromXYData(XYData xydata, double peakWidth)
+        public static List<Peak> CreatePeakDataFromXYData(XYData xyData, double peakWidth)
         {
-            var mspeakList = new List<Peak>();
+            var msPeakList = new List<Peak>();
 
-            for (var i = 0; i < xydata.Xvalues.Length; i++)
+            for (var i = 0; i < xyData.Xvalues.Length; i++)
             {
-                var peak = new MSPeak(xydata.Xvalues[i], (float)xydata.Yvalues[i], (float)peakWidth, 0);
-                mspeakList.Add(peak);
+                var peak = new MSPeak(xyData.Xvalues[i], (float)xyData.Yvalues[i], (float)peakWidth, 0);
+                msPeakList.Add(peak);
             }
 
-            return mspeakList;
+            return msPeakList;
 
         }
 
@@ -71,7 +66,7 @@ namespace DeconTools.Backend.Utilities
 
         public static List<Peak> GetPeaksWithinTolerance(List<Peak> inputList, double targetVal, double toleranceInMZ)
         {
-            // assuming peaklist is in order 
+            // assuming inputList is in order
 
             var outputList = new List<Peak>();
 
@@ -96,7 +91,7 @@ namespace DeconTools.Backend.Utilities
             // add the center peak
             outputList.Add(inputList[targetIndex]);
 
-            // look to the right for other peaks within the tolerance. 
+            // look to the right for other peaks within the tolerance.
             if (targetIndex < inputList.Count - 1)   // ensure we aren't at the end of the peak list
             {
                 for (var i = (targetIndex + 1); i < inputList.Count; i++)
@@ -118,10 +113,9 @@ namespace DeconTools.Backend.Utilities
         {
             if (peakList == null || peakList.Count == 0) return new Peak();
 
-            Peak maxPeak;
             if (!(peakList[0] is MSPeak)) return null;
-            maxPeak = peakList[0];
 
+            var maxPeak = peakList[0];
 
             foreach (var peak in peakList)
             {
@@ -147,19 +141,18 @@ namespace DeconTools.Backend.Utilities
                 {
                     return middle;
                 }
-                else if (targetVal < xValue)
+
+                if (targetVal < xValue)
                 {
                     return getIndexOfClosestValue(inputList, targetVal, leftIndex, middle - 1, toleranceInMZ);
                 }
-                else
-                {
-                    return getIndexOfClosestValue(inputList, targetVal, middle + 1, rightIndex, toleranceInMZ);
-                }
+
+                return getIndexOfClosestValue(inputList, targetVal, middle + 1, rightIndex, toleranceInMZ);
             }
             return -1;
         }
 
-        //TODO:  fix this.  I'm duplicating above code.  There should be a better way.... 
+        //TODO:  fix this.  I'm duplicating above code.  There should be a better way....
         //TODO: there is a bug here; need to unit test this and fix it.
         public static int getIndexOfClosestValue(List<MSPeak> inputList, double targetVal, int leftIndex, int rightIndex, double toleranceInMZ)
         {
@@ -171,14 +164,13 @@ namespace DeconTools.Backend.Utilities
                 {
                     return middle;
                 }
-                else if (targetVal < inputList[middle].XValue)
+
+                if (targetVal < inputList[middle].XValue)
                 {
                     return getIndexOfClosestValue(inputList, targetVal, leftIndex, middle - 1, toleranceInMZ);
                 }
-                else
-                {
-                    return getIndexOfClosestValue(inputList, targetVal, middle + 1, rightIndex, toleranceInMZ);
-                }
+
+                return getIndexOfClosestValue(inputList, targetVal, middle + 1, rightIndex, toleranceInMZ);
             }
             return -1;
         }
@@ -186,7 +178,7 @@ namespace DeconTools.Backend.Utilities
 
         public static void TrimIsotopicProfile(IsotopicProfile isotopicProfile, double cutOff, bool neverTrimLeft = false, bool neverTrimRight = false)
         {
-            if (isotopicProfile == null || isotopicProfile.Peaklist == null || isotopicProfile.Peaklist.Count == 0) return;
+            if (isotopicProfile?.Peaklist == null || isotopicProfile.Peaklist.Count == 0) return;
 
             var indexOfMaxPeak = isotopicProfile.GetIndexOfMostIntensePeak();
             var trimmedPeakList = new List<MSPeak>();
@@ -227,9 +219,10 @@ namespace DeconTools.Backend.Utilities
         public static List<MSPeak> OrderPeaksByIntensityDesc(List<MSPeak> inputList)
         {
             if (inputList == null || inputList.Count == 0) return null;
-            var outputList = new List<MSPeak>();
+            var outputList = new List<MSPeak> {
+                inputList[0]
+            };
 
-            outputList.Add(inputList[0]);
             if (inputList.Count > 1)
             {
                 for (var i = 1; i < inputList.Count; i++)
@@ -258,9 +251,9 @@ namespace DeconTools.Backend.Utilities
         {
             double sum = 0;
 
-            for (var i = 0; i < inputPeaks.Count; i++)
+            foreach (var peakIntensity in inputPeaks)
             {
-                sum += inputPeaks[i].Height - backgroundIntensity;
+                sum += peakIntensity.Height - backgroundIntensity;
             }
 
             return sum;
@@ -268,10 +261,10 @@ namespace DeconTools.Backend.Utilities
         }
 
 
-        public static XYData GetChromatogram(List<DeconTools.Backend.DTO.MSPeakResult> peakList, double targetMZ, double toleranceInMZ)
+        public static XYData GetChromatogram(List<DTO.MSPeakResult> peakList, double targetMZ, double toleranceInMZ)
         {
 
-            var xydata = new XYData();
+            var xyData = new XYData();
 
             var lowerMZ = targetMZ - toleranceInMZ;
             var upperMZ = targetMZ + toleranceInMZ;
@@ -279,7 +272,7 @@ namespace DeconTools.Backend.Utilities
 
             var filteredPeakList = peakList.Where(p => p.MSPeak.XValue >= lowerMZ && p.MSPeak.XValue <= upperMZ).ToList();
 
-            if (filteredPeakList == null || filteredPeakList.Count == 0)
+            if (filteredPeakList.Count == 0)
             {
                 return null;
             }
@@ -296,22 +289,20 @@ namespace DeconTools.Backend.Utilities
 
             }
 
-            for (var i = 0; i < filteredPeakList.Count; i++)
+            foreach (var peakResult in filteredPeakList)
             {
-                var pr = filteredPeakList[i];
+                var storedIntensity = scanAndIntensityList[peakResult.Scan_num];
 
-                var storedIntensity = scanAndIntensityList[pr.Scan_num];
-
-                if (pr.MSPeak.Height > storedIntensity)
+                if (peakResult.MSPeak.Height > storedIntensity)
                 {
-                    scanAndIntensityList[pr.Scan_num] = pr.MSPeak.Height;
+                    scanAndIntensityList[peakResult.Scan_num] = peakResult.MSPeak.Height;
                 }
             }
 
-            xydata.Xvalues = XYData.ConvertIntsToDouble(scanAndIntensityList.Keys.ToArray());
-            xydata.Yvalues = scanAndIntensityList.Values.ToArray();
+            xyData.Xvalues = XYData.ConvertIntsToDouble(scanAndIntensityList.Keys.ToArray());
+            xyData.Yvalues = scanAndIntensityList.Values.ToArray();
 
-            return xydata;
+            return xyData;
         }
     }
 }

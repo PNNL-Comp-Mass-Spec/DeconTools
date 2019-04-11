@@ -117,10 +117,10 @@ namespace DeconTools.Backend.Workflows
         {
             Logger.Instance.AddEntry("Finished file processing", true);
 
-            var formattedOverallprocessingTime = string.Format("{0:00}:{1:00}:{2:00}",
+            var formattedOverallProcessingTime = string.Format("{0:00}:{1:00}:{2:00}",
                 WorkflowStats.ElapsedTime.Hours, WorkflowStats.ElapsedTime.Minutes, WorkflowStats.ElapsedTime.Seconds);
 
-            Logger.Instance.AddEntry("total processing time = " + formattedOverallprocessingTime);
+            Logger.Instance.AddEntry("total processing time = " + formattedOverallProcessingTime);
             Logger.Instance.AddEntry("total features = " + WorkflowStats.NumFeatures);
             Logger.Instance.AddEntry("Peak data written to: " + PeakListOutputFileName, true);
             Logger.Instance.Close();
@@ -129,16 +129,13 @@ namespace DeconTools.Backend.Workflows
 
         protected override void IterateOverScans()
         {
-            foreach (var scanset in Run.ScanSetCollection.ScanSetList)
+            foreach (var scanSet in Run.ScanSetCollection.ScanSetList)
             {
                 Run.ResultCollection.MSPeakResultList.Clear();
 
-                Run.CurrentScanSet = scanset;
-
+                Run.CurrentScanSet = scanSet;
 
                 ExecuteProcessingTasks();
-
-
 
                 if (BackgroundWorker != null)
                 {
@@ -201,14 +198,14 @@ namespace DeconTools.Backend.Workflows
         {
             if (Run.ScanSetCollection == null || Run.ScanSetCollection.ScanSetList.Count == 0) return;
 
-            var userstate = new ScanBasedProgressInfo(Run, Run.CurrentScanSet);
+            var userState = new ScanBasedProgressInfo(Run, Run.CurrentScanSet);
 
             var percentDone = (_datasetCounter+1) / (float)(DatasetFileNameList.Count()) * 100;
-            userstate.PercentDone = percentDone;
+            userState.PercentDone = percentDone;
 
             var logText = "Dataset= \t" + Run.DatasetName + "; PercentComplete= \t" + percentDone.ToString("0.0") + "; Total peaks= \t" + _peaksProcessedInLastDataset;
 
-            BackgroundWorker?.ReportProgress((int)percentDone, userstate);
+            BackgroundWorker?.ReportProgress((int)percentDone, userState);
 
             if (_datasetCounter % NumScansBetweenProgress == 0)
             {

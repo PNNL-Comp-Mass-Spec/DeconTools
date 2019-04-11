@@ -38,7 +38,7 @@ namespace DeconTools.Backend.Workflows
         private double _currentMS1TICIntensity;
         private const int NumScansBetweenProgress = 500;
 
-        private string _delimiter = "\t";
+         private readonly string _delimiter = "\t";
 
         #region Constructors
 
@@ -219,10 +219,10 @@ namespace DeconTools.Backend.Workflows
                             var numSummed = attemptNum * 2 + 3;
                             var ms1Scan = precursorInfo.PrecursorScan;
 
-                            var ms1scanset = new ScanSetFactory().CreateScanSet(Run, ms1Scan, numSummed);
+                            var ms1ScanSet = new ScanSetFactory().CreateScanSet(Run, ms1Scan, numSummed);
 
                             //get MS1 mass spectrum again. This time sum spectra
-                            Run.CurrentScanSet = ms1scanset;
+                            Run.CurrentScanSet = ms1ScanSet;
                             MSGenerator.Execute(Run.ResultCollection);
 
                             //run MS1 peak detector, with greater sensitivity
@@ -372,12 +372,12 @@ namespace DeconTools.Backend.Workflows
 
         protected override void CreateOutputFileNames()
         {
-            var basefileName = GetBaseFileName(Run);
+            var baseFileName = GetBaseFileName(Run);
 
-            Logger.Instance.OutputFilename = basefileName + "_log.txt";
-            _outputFileName = basefileName + ".mgf";
-            _outputSummaryFilename = basefileName + "_DeconMSn_log.txt";
-            _outputParentProfileDataFilename = basefileName + "_profile.txt";
+            Logger.Instance.OutputFilename = baseFileName + "_log.txt";
+            _outputFileName = baseFileName + ".mgf";
+            _outputSummaryFilename = baseFileName + "_DeconMSn_log.txt";
+            _outputParentProfileDataFilename = baseFileName + "_profile.txt";
 
             if (File.Exists(_outputFileName)) File.Delete(_outputFileName);
             if (File.Exists(_outputSummaryFilename)) File.Delete(_outputSummaryFilename);
@@ -393,15 +393,15 @@ namespace DeconTools.Backend.Workflows
         {
             if (Run.ScanSetCollection == null || Run.ScanSetCollection.ScanSetList.Count == 0) return;
 
-            var userstate = new ScanBasedProgressInfo(Run, Run.CurrentScanSet);
+            var userState = new ScanBasedProgressInfo(Run, Run.CurrentScanSet);
 
             var percentDone = _scanCounter / (float)(Run.ScanSetCollection.ScanSetList.Count) * 100;
-            userstate.PercentDone = percentDone;
+            userState.PercentDone = percentDone;
 
             var logText = "Scan= " + Run.GetCurrentScanOrFrame() + "; PercentComplete= " +
                              percentDone.ToString("0.0");
 
-            BackgroundWorker?.ReportProgress((int)percentDone, userstate);
+            BackgroundWorker?.ReportProgress((int)percentDone, userState);
 
             if (_scanCounter % NumScansBetweenProgress == 0)
             {
@@ -558,10 +558,10 @@ namespace DeconTools.Backend.Workflows
         {
             Logger.Instance.AddEntry("Finished file processing", true);
 
-            var formattedOverallprocessingTime = string.Format("{0:00}:{1:00}:{2:00}",
+            var formattedOverallProcessingTime = string.Format("{0:00}:{1:00}:{2:00}",
                 WorkflowStats.ElapsedTime.Hours, WorkflowStats.ElapsedTime.Minutes, WorkflowStats.ElapsedTime.Seconds);
 
-            Logger.Instance.AddEntry("total processing time = " + formattedOverallprocessingTime, true);
+            Logger.Instance.AddEntry("total processing time = " + formattedOverallProcessingTime, true);
             Logger.Instance.Close();
         }
 
@@ -572,9 +572,9 @@ namespace DeconTools.Backend.Workflows
             var candidateMS1Features = new List<IsotopicProfile>();
             var ms1Features = ((ThrashDeconvolutorV2)Deconvolutor).PerformThrash(_currentMS1XYValues, filteredMS1Peaks, 0, 0, 0);
 
-            foreach (var msfeature in ms1Features)
+            foreach (var msFeature in ms1Features)
             {
-                foreach (var peak in msfeature.Peaklist)
+                foreach (var peak in msFeature.Peaklist)
                 {
                     var currentDiff = Math.Abs(peak.XValue - inaccurateParentMZ);
 
@@ -582,13 +582,12 @@ namespace DeconTools.Backend.Workflows
 
                     if (currentDiff < toleranceInMZ)
                     {
-                        candidateMS1Features.Add(msfeature);
+                        candidateMS1Features.Add(msFeature);
                     }
                 }
             }
             return candidateMS1Features;
         }
-
 
     }
 }

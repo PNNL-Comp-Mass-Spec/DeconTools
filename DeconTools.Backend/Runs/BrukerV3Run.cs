@@ -14,7 +14,7 @@ namespace DeconTools.Backend.Runs
 
         readonly DataReader m_rawDataReader;
 
-        internal class brukerNameValuePair
+        internal class BrukerNameValuePair
         {
             internal string Name { get; set; }
             internal string Value { get; set; }
@@ -24,7 +24,7 @@ namespace DeconTools.Backend.Runs
         #region Constructors
         public BrukerV3Run()
         {
-            xyData = new XYData();
+            XYData = new XYData();
             IsDataThresholded = true;
             MSFileType = Globals.MSFileType.Bruker;
             ContainsMSMSData = false;
@@ -33,7 +33,7 @@ namespace DeconTools.Backend.Runs
         public BrukerV3Run(string folderName)
             : this()
         {
-            validateSelectionIsFolder(folderName);
+            ValidateSelectionIsFolder(folderName);
             Filename = folderName;
 
             m_serFileInfo = findSerFile();
@@ -76,7 +76,7 @@ namespace DeconTools.Backend.Runs
                 SettingsFilePath = fiSettingsFile.FullName;
             }
 
-            // Intantiate the BrukerDataReader
+            // Instantiate the BrukerDataReader
             // It will read the settings file and define the parameters
             // Parameters are: CalA, CalB, sampleRate, numValueInScan
 
@@ -84,8 +84,8 @@ namespace DeconTools.Backend.Runs
 
             m_rawDataReader.Parameters.Display();
 
-            DatasetName = getDatasetName(Filename);
-            DataSetPath = getDatasetfolderName(Filename);
+            DatasetName = GetDatasetName(Filename);
+            DataSetPath = GetDatasetFolderName(Filename);
 
             MinLCScan = GetMinPossibleLCScanNum();
             MaxLCScan = GetMaxPossibleLCScanNum();
@@ -106,12 +106,7 @@ namespace DeconTools.Backend.Runs
         #region Properties
 
         [field: NonSerialized]
-        private XYData xyData;
-        public override XYData XYData
-        {
-            get => xyData;
-            set => xyData = value;
-        }
+        public override XYData XYData { get; set; }
 
         /// <summary>
         /// File path to the Bruker Solarix 'apexAcquisition.method' file or to the acqus file
@@ -152,10 +147,10 @@ namespace DeconTools.Backend.Runs
             return 1;
         }
 
-        public override XYData GetMassSpectrum(ScanSet scanset, double minMZ, double maxMZ)
+        public override XYData GetMassSpectrum(ScanSet scanSet, double minMZ, double maxMZ)
         {
 
-            var scanValues = scanset.IndexValues.ToArray();
+            var scanValues = scanSet.IndexValues.ToArray();
 
             var maximumMzToUse = maxMZ;
 
@@ -164,31 +159,31 @@ namespace DeconTools.Backend.Runs
                 maximumMzToUse = m_rawDataReader.Parameters.AcquiredMZMaximum;
             }
 
-            m_rawDataReader.GetMassSpectrum(scanValues, (float)minMZ, (float)maximumMzToUse, out var xvals, out var yvals);
+            m_rawDataReader.GetMassSpectrum(scanValues, (float)minMZ, (float)maximumMzToUse, out var xVals, out var yVals);
 
-            var xydata = new XYData
+            var xyData = new XYData
             {
-                Yvalues = yvals.Select(p => (double)p).ToArray(),
-                Xvalues = xvals.Select(p => (double)p).ToArray()
+                Yvalues = yVals.Select(p => (double)p).ToArray(),
+                Xvalues = xVals.Select(p => (double)p).ToArray()
             };
 
-            return xydata;
+            return xyData;
 
         }
 
-        public override XYData GetMassSpectrum(ScanSet scanset)
+        public override XYData GetMassSpectrum(ScanSet scanSet)
         {
 
-            var scanValues = scanset.IndexValues.ToArray();
+            var scanValues = scanSet.IndexValues.ToArray();
 
-            m_rawDataReader.GetMassSpectrum(scanValues, out var xvals, out var yvals);
-            var xydata = new XYData
+            m_rawDataReader.GetMassSpectrum(scanValues, out var xVals, out var yVals);
+            var xyData = new XYData
             {
-                Yvalues = yvals.Select(p => (double)p).ToArray(),
-                Xvalues = xvals.Select(p => (double)p).ToArray()
+                Yvalues = yVals.Select(p => (double)p).ToArray(),
+                Xvalues = xVals.Select(p => (double)p).ToArray()
             };
 
-            return xydata;
+            return xyData;
 
         }
 
@@ -196,7 +191,7 @@ namespace DeconTools.Backend.Runs
 
         #region Private Methods
 
-        private string getDatasetName(string fullFolderPath)
+        private string GetDatasetName(string fullFolderPath)
         {
 
             var dirInfo = new DirectoryInfo(fullFolderPath);
@@ -209,12 +204,12 @@ namespace DeconTools.Backend.Runs
             return dirInfo.Name;
         }
 
-        private string getDatasetfolderName(string fullFolderPath)
+        private string GetDatasetFolderName(string fullFolderPath)
         {
             var dirInfo = new DirectoryInfo(fullFolderPath);
             return dirInfo.FullName;
         }
-        private void validateSelectionIsFolder(string folderName)
+        private void ValidateSelectionIsFolder(string folderName)
         {
             bool isDirectory;
 
@@ -290,16 +285,16 @@ namespace DeconTools.Backend.Runs
                 return null;
             }
 
-            var acquistionMethodFiles = dotMethodFiles.Where(p => p.EndsWith("apexAcquisition.method", StringComparison.OrdinalIgnoreCase)).ToList();
+            var acquisitionMethodFiles = dotMethodFiles.Where(p => p.EndsWith("apexAcquisition.method", StringComparison.OrdinalIgnoreCase)).ToList();
 
-            if (acquistionMethodFiles.Count == 0)
+            if (acquisitionMethodFiles.Count == 0)
             {
                 return null;
             }
 
-            if (acquistionMethodFiles.Count == 1)
+            if (acquisitionMethodFiles.Count == 1)
             {
-                return new FileInfo(acquistionMethodFiles[0]);
+                return new FileInfo(acquisitionMethodFiles[0]);
             }
 
             throw new NotImplementedException("Run initialization failed. Multiple 'apexAcquisition.method' files were found within the dataset folder structure. \nNot sure which one to pick for the settings file.");

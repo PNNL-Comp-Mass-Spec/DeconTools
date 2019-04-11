@@ -126,10 +126,10 @@ namespace DeconTools.Backend.Runs
 
         public override int GetMaxPossibleLCScanNum()
         {
-            var maxpossibleScanIndex = GetNumMSScans();           // RAW files are 1 based, so we don't subtract 1 here.
-            if (maxpossibleScanIndex < 1) maxpossibleScanIndex = 1;
+            var maxPossibleScanIndex = GetNumMSScans();           // RAW files are 1 based, so we don't subtract 1 here.
+            if (maxPossibleScanIndex < 1) maxPossibleScanIndex = 1;
 
-            return maxpossibleScanIndex;
+            return maxPossibleScanIndex;
         }
 
         public override int GetMSLevelFromRawData(int scanNum)
@@ -391,8 +391,8 @@ namespace DeconTools.Backend.Runs
 
             var length = vals.GetLength(1);
 
-            var xvals = new List<double>();
-            var yvals = new List<double>();
+            var xVals = new List<double>();
+            var yVals = new List<double>();
 
             // Note from MEM (October 2013)
             // GetMassListFromScanNum generally returns the data sorted by m/z ascending
@@ -414,20 +414,20 @@ namespace DeconTools.Backend.Runs
                     sortRequired = true;
                 }
 
-                xvals.Add(xValue);
-                yvals.Add(yValue);
+                xVals.Add(xValue);
+                yVals.Add(yValue);
             }
 
-            var xydata = new XYData
+            var xyData = new XYData
             {
-                Xvalues = xvals.ToArray(),
-                Yvalues = yvals.ToArray()
+                Xvalues = xVals.ToArray(),
+                Yvalues = yVals.ToArray()
             };
 
             if (sortRequired)
-                Array.Sort(xydata.Xvalues, xydata.Yvalues);
+                Array.Sort(xyData.Xvalues, xyData.Yvalues);
 
-            return xydata;
+            return xyData;
         }
 
         public override string GetScanInfo(int scanNum)

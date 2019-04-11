@@ -5,30 +5,30 @@ namespace DeconTools.Utilities
     public class XYDataLoaderFromTextFile
     {
 
-        public void loadDataFromFile(string filename, out float[] xdata, out float[] ydata)
+        public void LoadDataFromFile(string filename, out float[] xdata, out float[] yData)
         {
             var sr = new System.IO.StreamReader(filename);
 
-            var xvals = new List<float>();
-            var yvals = new List<float>();
+            var xVals = new List<float>();
+            var yVals = new List<float>();
 
             while (!sr.EndOfStream)
             {
                 var line = sr.ReadLine();
                 var vals = processLine(line);
 
-                xvals.Add(parseFloatField(vals[0]));
-                yvals.Add(parseFloatField(vals[1]));
+                xVals.Add(parseFloatField(vals[0]));
+                yVals.Add(parseFloatField(vals[1]));
             }
 
-            xdata = xvals.ToArray();
-            ydata = yvals.ToArray();
+            xdata = xVals.ToArray();
+            yData = yVals.ToArray();
 
         }
 
-        private float parseFloatField(string inputstring)
+        private float parseFloatField(string inputString)
         {
-            if (float.TryParse(inputstring, out var result))
+            if (float.TryParse(inputString, out var result))
                 return result;
             return float.NaN;
         }

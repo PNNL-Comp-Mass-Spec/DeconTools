@@ -220,19 +220,19 @@ namespace DeconTools.Backend.Utilities
                 var alignmentDirInfo = new DirectoryInfo(basePath);
                 var umcFileInfo = alignmentDirInfo.GetFiles("*_umcs.txt");
 
-                var umcFileCount = umcFileInfo.Count();
+                var umcFileCount = umcFileInfo.Length;
 
                 if (umcFileCount == 1)
                 {
                     var targetUmcFileName = umcFileInfo.First().FullName;
 
                     var importer = new UMCFileImporter(targetUmcFileName, '\t');
-                    var umcs = importer.Import();
+                    var umcList = importer.Import();
 
-                    var scannetPairs = umcs.GetScanNETLookupTable();
+                    var scanNetPairs = umcList.GetScanNETLookupTable();
 
                     NetAlignmentInfo netAlignmentInfo = new NetAlignmentInfoBasic(run.MinLCScan, run.MaxLCScan);
-                    netAlignmentInfo.SetScanToNETAlignmentData(scannetPairs);
+                    netAlignmentInfo.SetScanToNETAlignmentData(scanNetPairs);
 
                     run.NetAlignmentInfo = netAlignmentInfo;
 
@@ -247,12 +247,12 @@ namespace DeconTools.Backend.Utilities
                     if (File.Exists(expectedUMCName))
                     {
                         var importer = new UMCFileImporter(expectedUMCName, '\t');
-                        var umcs = importer.Import();
+                        var umcList = importer.Import();
 
-                        var scannetPairs = umcs.GetScanNETLookupTable();
+                        var scanNetPairs = umcList.GetScanNETLookupTable();
 
                         NetAlignmentInfo netAlignmentInfo = new NetAlignmentInfoBasic(run.MinLCScan, run.MaxLCScan);
-                        netAlignmentInfo.SetScanToNETAlignmentData(scannetPairs);
+                        netAlignmentInfo.SetScanToNETAlignmentData(scanNetPairs);
 
                         run.NetAlignmentInfo = netAlignmentInfo;
 
@@ -278,7 +278,6 @@ namespace DeconTools.Backend.Utilities
             //mass is still not aligned... use data in viper output file: _MassAndGANETErrors_BeforeRefinement.txt
             if (run.MassIsAligned==false)
             {
-
                 var expectedViperMassAlignmentFile = Path.Combine(basePath, run.DatasetName + "_MassAndGANETErrors_BeforeRefinement.txt");
 
                 if (File.Exists(expectedViperMassAlignmentFile))
@@ -303,7 +302,6 @@ namespace DeconTools.Backend.Utilities
 
             }
 
-
             return alignmentSuccessful;
         }
 
@@ -316,12 +314,12 @@ namespace DeconTools.Backend.Utilities
             var fileExists = File.Exists(filename);
 
 
-            Check.Require(folderExists||fileExists, "Dataset file not found error when RunUtilites tried to create Run.");
+            Check.Require(folderExists||fileExists, "Dataset file not found error when RunUtilities tried to create Run.");
 
             var rf = new RunFactory();
             var run = rf.CreateRun(filename);
 
-            Check.Ensure(run != null, "RunUtilites could not create run. Run is null.");
+            Check.Ensure(run != null, "RunUtilities could not create run. Run is null.");
 
             //Console.WriteLine(run.DatasetName + " loaded.");
 
@@ -346,16 +344,16 @@ namespace DeconTools.Backend.Utilities
             return run;
         }
 
-        public static Run CreateAndLoadPeaks(string rawdataFilename)
+        public static Run CreateAndLoadPeaks(string rawDataFilename)
         {
-            return CreateAndLoadPeaks(rawdataFilename, string.Empty);
+            return CreateAndLoadPeaks(rawDataFilename, string.Empty);
         }
 
 
-        public static Run CreateAndLoadPeaks(string rawdataFilename, string peaksTestFile, BackgroundWorker bw = null)
+        public static Run CreateAndLoadPeaks(string rawDataFilename, string peaksTestFile, BackgroundWorker bw = null)
         {
             var rf = new RunFactory();
-            var run = rf.CreateRun(rawdataFilename);
+            var run = rf.CreateRun(rawDataFilename);
 
             //Console.WriteLine(run.DatasetName + " loaded.");
 

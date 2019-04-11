@@ -9,10 +9,8 @@ namespace DeconTools.Backend.Runs
     {
 
         private char m_delimiter;
-        private readonly int m_xvalsColumnIndex = 0;
-        private readonly int m_yvalsColumnIndex = 1;
-
-
+        private readonly int m_xValsColumnIndex = 0;
+        private readonly int m_yValsColumnIndex = 1;
 
         public MSScanFromTextFileRun(string fileName)
         {
@@ -37,12 +35,12 @@ namespace DeconTools.Backend.Runs
 
 
         public MSScanFromTextFileRun(string fileName, char delimiter,
-            int xvalsColumnIndex, int yvalsColumnIndex)
+            int xValsColumnIndex, int yValsColumnIndex)
             : this(fileName)
         {
             m_delimiter = delimiter;
-            m_xvalsColumnIndex = xvalsColumnIndex;
-            m_yvalsColumnIndex = yvalsColumnIndex;
+            m_xValsColumnIndex = xValsColumnIndex;
+            m_yValsColumnIndex = yValsColumnIndex;
         }
 
         internal XYData loadDataFromFile(string filename)
@@ -51,8 +49,8 @@ namespace DeconTools.Backend.Runs
 
             var sr = new StreamReader(filename);
 
-            var xvals = new List<double>();
-            var yvals = new List<double>();
+            var xVals = new List<double>();
+            var yVals = new List<double>();
 
             var foundStartOfXYData = false;
 
@@ -79,7 +77,7 @@ namespace DeconTools.Backend.Runs
 
                 var vals = processLine(line);
 
-                if (m_yvalsColumnIndex >= vals.Count)
+                if (m_yValsColumnIndex >= vals.Count)
                 {
                     using (var tempSr = sr)
                     {
@@ -92,34 +90,34 @@ namespace DeconTools.Backend.Runs
                             // Ignore errors here
                         }
                     }
-                    throw new InvalidOperationException("XY importer error. Cannot find y-values in column " + (m_yvalsColumnIndex + 1).ToString());
+                    throw new InvalidOperationException("XY importer error. Cannot find y-values in column " + (m_yValsColumnIndex + 1).ToString());
                 }
 
 
-                xvals.Add(parseDoubleField(vals[m_xvalsColumnIndex]));
-                yvals.Add(parseDoubleField(vals[m_yvalsColumnIndex]));
+                xVals.Add(ParseDoubleField(vals[m_xValsColumnIndex]));
+                yVals.Add(ParseDoubleField(vals[m_yValsColumnIndex]));
             }
 
-            var xydata = new XYData
+            var xyData = new XYData
             {
-                Xvalues = xvals.ToArray(),
-                Yvalues = yvals.ToArray()
+                Xvalues = xVals.ToArray(),
+                Yvalues = yVals.ToArray()
             };
 
-            return xydata;
+            return xyData;
 
         }
-        private double parseDoubleField(string inputstring)
+        private double ParseDoubleField(string inputString)
         {
-            if (double.TryParse(inputstring, out var result))
+            if (double.TryParse(inputString, out var result))
                 return result;
 
             return double.NaN;
         }
 
-        private float parseFloatField(string inputstring)
+        private float ParseFloatField(string inputString)
         {
-            if (float.TryParse(inputstring, out var result))
+            if (float.TryParse(inputString, out var result))
                 return result;
 
             return float.NaN;
@@ -155,6 +153,9 @@ namespace DeconTools.Backend.Runs
                     var line = sr.ReadLine();
                     counter++;
 
+                    if (string.IsNullOrWhiteSpace(line))
+                        continue;
+
                     if (!foundStartOfXYData)
                     {
                         var match = Regex.Match(line, @"^\d+");
@@ -171,39 +172,35 @@ namespace DeconTools.Backend.Runs
                     }
 
                     //we found the start of the data, now figure out the delimiter
-                    var linematch = Regex.Match(line, @"^[0-9\.-]+(?<delim>\D+)[0-9\.-]+");
+                    var lineMatch = Regex.Match(line, @"^[0-9\.-]+(?<delim>\D+)[0-9\.-]+");
 
-                    if (linematch.Success)
+                    if (lineMatch.Success)
                     {
-                        var matchedString = linematch.Groups["delim"].Value;
+                        var matchedString = lineMatch.Groups["delim"].Value;
 
                         if (matchedString.Length > 0)
                         {
-                            var delim = matchedString[0];
+                            var delimiter = matchedString[0];
 
-                            if (!delimiterCount.ContainsKey(delim))
+                            if (!delimiterCount.ContainsKey(delimiter))
                             {
-                                delimiterCount.Add(delim, 0);
+                                delimiterCount.Add(delimiter, 0);
 
                             }
-                            delimiterCount[delim]++;   //adds one to the count of occurances for this delimiter.
+                            delimiterCount[delimiter]++;   //adds one to the count of occurrences for this delimiter.
 
                         }
                     }
-
-
-
-
                 }
 
                 var mostCommonDelimiter = '\t';
-                var delimCounter = 0;
+                var delimiterCounter = 0;
 
                 foreach (var item in delimiterCount)
                 {
-                    if (item.Value > delimCounter)
+                    if (item.Value > delimiterCounter)
                     {
-                        delimCounter = item.Value;
+                        delimiterCounter = item.Value;
                         mostCommonDelimiter = item.Key;
                     }
 
@@ -219,13 +216,13 @@ namespace DeconTools.Backend.Runs
 
 
 
-        public override XYData GetMassSpectrum(Core.ScanSet scanset, double minMZ, double maxMZ)
+        public override XYData GetMassSpectrum(Core.ScanSet scanSet, double minMZ, double maxMZ)
         {
-            XYData xydata;
+            XYData xyData;
 
             try
             {
-                xydata = loadDataFromFile(Filename);
+                xyData = loadDataFromFile(Filename);
             }
             catch (Exception ex)
             {
@@ -233,9 +230,9 @@ namespace DeconTools.Backend.Runs
                 throw new IOException("There was an error reading file " + Utilities.DiagnosticUtilities.GetFullPathSafe(Filename) + "\n\n" + ex.Message);
             }
 
-            xydata = xydata.TrimData(minMZ, maxMZ);
+            xyData = xyData.TrimData(minMZ, maxMZ);
 
-            return xydata;
+            return xyData;
         }
 
         public override double GetTime(int scanNum)

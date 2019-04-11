@@ -4,10 +4,10 @@ namespace DeconTools.Backend.Runs
     public sealed class ConcreteXYDataRun:XYDataRun
     {
 
-        public ConcreteXYDataRun(double[]xvals, double[] yvals)
+        public ConcreteXYDataRun(double[]xVals, double[] yVals)
         {
-            XYData.Xvalues = xvals;
-            XYData.Yvalues = yvals;
+            XYData.Xvalues = xVals;
+            XYData.Yvalues = yVals;
         }
 
         public override double GetTime(int scanNum)
@@ -15,7 +15,7 @@ namespace DeconTools.Backend.Runs
             return -1;
         }
 
-        public override XYData GetMassSpectrum(Core.ScanSet scanset)
+        public override XYData GetMassSpectrum(Core.ScanSet scanSet)
         {
             return XYData;
         }

@@ -30,11 +30,9 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
             Check.Require(resultList.Run.CurrentMassTag != null, "Theoretical feature generator failed. No target mass tag was provided");
 
             LoadRunRelatedInfo(resultList);
-            
+
             GenerateTheorFeature(resultList.Run.CurrentMassTag);
         }
 
-
-        
     }
 }

@@ -36,16 +36,12 @@ namespace DeconTools.Backend.Utilities
 
         #region Public Methods
 
-
-
-
-
         public void Get3DElutionProfileFromPeakLevelData(Run run, int minScan, int maxScan, double minMZ, double maxMZ, out int[] scans, out double[] mzBins, out float[] intensities, double binWidth = 0.01, bool applyLogTransform = false)
         {
             var msPeakList = run.ResultCollection.MSPeakResultList;
             Check.Require(msPeakList != null && msPeakList.Count > 0, "Run is missing peaks. Elution profile is based on peak-level info");
 
-            Check.Require(binWidth > 0, "Binwidth must be greater than 0");
+            Check.Require(binWidth > 0, "BinWidth must be greater than 0");
 
 
             var scanSetCollection = new ScanSetCollection();

@@ -38,7 +38,6 @@ namespace DeconTools.Backend.Workflows
 
         public double SigNoiseThreshold { get; set; }
 
-
         /// <summary>
         /// For MS2 peak detection for data in profile mode. Otherwise, this does not need to be defined.
         /// </summary>
@@ -92,13 +91,7 @@ namespace DeconTools.Backend.Workflows
 
         public bool ProcessMSMS { get; set; }
 
-
-
         #endregion
-
-
-
-
 
     }
 }

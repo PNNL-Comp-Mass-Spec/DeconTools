@@ -59,8 +59,6 @@ namespace DeconTools.Backend.Runs
 
         }
 
-
-
         private void OpenDataset()
         {
             m_reader = new MassSpecDataReader();
@@ -92,8 +90,8 @@ namespace DeconTools.Backend.Runs
         public override int GetNumMSScans()
         {
             //m_reader=new MassSpecDataReader();
-            var msscan = m_reader.FileInformation.MSScanFileInformation;
-            return (int)msscan.TotalScansPresent;
+            var msScan = m_reader.FileInformation.MSScanFileInformation;
+            return (int)msScan.TotalScansPresent;
         }
 
         public override double GetTime(int scanNum)
@@ -196,8 +194,6 @@ namespace DeconTools.Backend.Runs
             return precursor;
         }
 
-
-
         public override XYData GetMassSpectrum(ScanSet scanSet, double minMZ, double maxMZ)
         {
             Check.Require(scanSet != null, "Can't get mass spectrum; inputted set of scans is null");
@@ -205,57 +201,57 @@ namespace DeconTools.Backend.Runs
 
             if (scanSet == null) return null;
 
-            var xydata = new XYData();
+            var xyData = new XYData();
             if (scanSet.IndexValues.Count == 1)            //this is the case of only wanting one MS spectrum
             {
                 getAgilentSpectrum(scanSet.PrimaryScanNumber);
 
-                var xvals = m_spec.XArray;
-                var yvals = m_spec.YArray;
+                var xVals = m_spec.XArray;
+                var yVals = m_spec.YArray;
 
-                FilterMassRange(minMZ, maxMZ, ref xvals, ref yvals, filterMassRange: true);
+                FilterMassRange(minMZ, maxMZ, ref xVals, ref yVals, filterMassRange: true);
 
 
-                xydata.Xvalues = xvals;
-                xydata.Yvalues = yvals.Select(p=>(double)p).ToArray();
+                xyData.Xvalues = xVals;
+                xyData.Yvalues = yVals.Select(p=>(double)p).ToArray();
             }
             else
             {
                 //throw new NotImplementedException("Summing isn't supported for Agilent.D files - yet");
 
                 //this is an implementation of Anuj's summing algorithm 4-2-2012.
-                double[] xvals = null;
-                float[] yvals = null;
+                double[] xVals = null;
+                float[] yVals = null;
 
-                getSummedSpectrum(scanSet, ref xvals, ref yvals, minMZ, maxMZ);
+                getSummedSpectrum(scanSet, ref xVals, ref yVals, minMZ, maxMZ);
 
-                FilterMassRange(minMZ, maxMZ, ref xvals, ref yvals, filterMassRange: true);
+                FilterMassRange(minMZ, maxMZ, ref xVals, ref yVals, filterMassRange: true);
 
-                xydata.Xvalues = xvals;
-                xydata.Yvalues = yvals.Select(p => (double)p).ToArray();
+                xyData.Xvalues = xVals;
+                xyData.Yvalues = yVals.Select(p => (double)p).ToArray();
             }
 
-            return xydata;
+            return xyData;
 
         }
 
-        private static void FilterMassRange(double minMZ, double maxMZ, ref double[] xvals, ref float[] yvals, bool filterMassRange)
+        private static void FilterMassRange(double minMZ, double maxMZ, ref double[] xVals, ref float[] yVals, bool filterMassRange)
         {
             if (filterMassRange)
             {
-                var xvalsShortened = new List<double>();
-                var yvalsShortened = new List<float>();
-                for (var i = 0; i < xvals.Length; i++)
+                var xValsShortened = new List<double>();
+                var yValsShortened = new List<float>();
+                for (var i = 0; i < xVals.Length; i++)
                 {
-                    var tempMass = xvals[i];
+                    var tempMass = xVals[i];
                     if (tempMass > minMZ && tempMass < maxMZ)
                     {
-                        xvalsShortened.Add(xvals[i]);
-                        yvalsShortened.Add(yvals[i]);
+                        xValsShortened.Add(xVals[i]);
+                        yValsShortened.Add(yVals[i]);
                     }
                 }
-                xvals = xvalsShortened.ToArray();
-                yvals = yvalsShortened.ToArray();
+                xVals = xValsShortened.ToArray();
+                yVals = yValsShortened.ToArray();
             }
         }
 
@@ -266,14 +262,14 @@ namespace DeconTools.Backend.Runs
 
             if (scanSet == null) return null;
 
-            var xydata=new XYData();
+            var xyData=new XYData();
 
             if (scanSet.IndexValues.Count == 1)            //this is the case of only wanting one MS spectrum
             {
                 getAgilentSpectrum(scanSet.PrimaryScanNumber);
 
-                xydata.Xvalues = m_spec.XArray;
-                xydata.Yvalues = m_spec.YArray.Select(p=>(double)p).ToArray();
+                xyData.Xvalues = m_spec.XArray;
+                xyData.Yvalues = m_spec.YArray.Select(p=>(double)p).ToArray();
 
             }
             else
@@ -281,23 +277,23 @@ namespace DeconTools.Backend.Runs
                 //throw new NotImplementedException("Summing isn't supported for Agilent.D files - yet");
 
                 //this is an implementation of Anuj's summing algorithm 4-2-2012.
-                double[] xvals = null;
-                float[] yvals = null;
+                double[] xVals = null;
+                float[] yVals = null;
                 double minMZ = 0; double maxMZ = 0;
-                getSummedSpectrum(scanSet, ref xvals, ref yvals, minMZ, maxMZ);
-                xydata.Xvalues = xvals;
-                xydata.Yvalues = yvals.Select(p => (double)p).ToArray();
+                getSummedSpectrum(scanSet, ref xVals, ref yVals, minMZ, maxMZ);
+                xyData.Xvalues = xVals;
+                xyData.Yvalues = yVals.Select(p => (double)p).ToArray();
 
             }
 
-            return xydata;
+            return xyData;
         }
 
         #endregion
 
         #region scott
 
-        public void getSummedSpectrum(ScanSet scanSet, ref double[] xvals, ref float[] yvals, double minMZ, double maxMZ)
+        public void getSummedSpectrum(ScanSet scanSet, ref double[] xVals, ref float[] yVals, double minMZ, double maxMZ)
         {
             // [gord] idea borrowed from Anuj! Jan 2010 [scott] brought back for agilent data that is evenly spaced
 
@@ -338,12 +334,12 @@ namespace DeconTools.Backend.Runs
             if (mz_intensityPair.Count == 0) return;
 
             var summedXVals = mz_intensityPair.Keys.ToList();
-            xvals = new double[summedXVals.Count];
-            yvals = mz_intensityPair.Values.ToArray();
+            xVals = new double[summedXVals.Count];
+            yVals = mz_intensityPair.Values.ToArray();
 
             for (var i = 0; i < summedXVals.Count; i++)
             {
-                xvals[i] = summedXVals[i] / precision;
+                xVals[i] = summedXVals[i] / precision;
             }
         }
 

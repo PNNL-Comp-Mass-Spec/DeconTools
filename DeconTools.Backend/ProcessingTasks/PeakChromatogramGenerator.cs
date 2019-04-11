@@ -92,7 +92,7 @@ namespace DeconTools.Backend.ProcessingTasks
             if (resultList.Run.CurrentMassTag == null)
                 return;
 
-            Check.Require(Math.Abs(resultList.Run.CurrentMassTag.MZ) > float.Epsilon, "PeakChromatorgramGenerator failed. MassTag's MZ hasn't been specified.");
+            Check.Require(Math.Abs(resultList.Run.CurrentMassTag.MZ) > float.Epsilon, "PeakChromatogramGenerator failed. MassTag's MZ hasn't been specified.");
 
             Check.Require(resultList.Run.MaxLCScan > 0, "PeakChromatogramGenerator failed.  Problem with 'MaxScan'");
 
@@ -459,12 +459,12 @@ namespace DeconTools.Backend.ProcessingTasks
                 var centerScanPtr = msScanList.IndexOf(peak.Scan_num);
 
                 var leftScanPtr = centerScanPtr - maxZerosToAdd;
-                var rightScanptr = centerScanPtr + maxZerosToAdd;
+                var rightScanPtr = centerScanPtr + maxZerosToAdd;
 
                 //handle the rare case of having a point at the end of the scan list
-                if (rightScanptr >= msScanList.Count)
+                if (rightScanPtr >= msScanList.Count)
                 {
-                    rightScanptr = msScanList.Count - 1;
+                    rightScanPtr = msScanList.Count - 1;
                 }
 
                 //case of being at the beginning of the scan list
@@ -509,7 +509,7 @@ namespace DeconTools.Backend.ProcessingTasks
                 }
 
                 //add zeros to the right of a peak
-                for (var i = centerScanPtr; i <= rightScanptr; i++)
+                for (var i = centerScanPtr; i <= rightScanPtr; i++)
                 {
                     if (i >= msScanList.Count)
                     {
@@ -538,12 +538,12 @@ namespace DeconTools.Backend.ProcessingTasks
         }
 
         [Obsolete("Unused")]
-        private XYData getChromValues2(IReadOnlyList<MSPeakResult> filteredPeakList, Run run)
+        private XYData GetChromValues2(IReadOnlyList<MSPeakResult> filteredPeakList, Run run)
         {
-            var xydata = new XYData();
+            var xyData = new XYData();
 
-            var leftZeroPadding = 200;   //number of scans to the left of the minscan for which zeros will be added
-            var rightZeroPadding = 200;   //number of scans to the left of the minscan for which zeros will be added
+            var leftZeroPadding = 200;   //number of scans to the left of the min scan for which zeros will be added
+            var rightZeroPadding = 200;   //number of scans to the left of the min scan for which zeros will be added
 
             var peakListMinScan = filteredPeakList[0].Scan_num;
             var peakListMaxScan = filteredPeakList[filteredPeakList.Count - 1].Scan_num;
@@ -590,10 +590,10 @@ namespace DeconTools.Backend.ProcessingTasks
                 }
             }
 
-            xydata.Xvalues = XYData.ConvertIntsToDouble(xyValues.Keys.ToArray());
-            xydata.Yvalues = xyValues.Values.ToArray();
+            xyData.Xvalues = XYData.ConvertIntsToDouble(xyValues.Keys.ToArray());
+            xyData.Yvalues = xyValues.Values.ToArray();
 
-            return xydata;
+            return xyData;
         }
 
         //private XYData getPeakChromValues(List<MSPeakResult> filteredPeakList, Run run)
@@ -659,7 +659,7 @@ namespace DeconTools.Backend.ProcessingTasks
         //    return data;
 
         //}
-        
+
         #endregion
 
     }

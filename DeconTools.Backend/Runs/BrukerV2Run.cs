@@ -70,8 +70,8 @@ namespace DeconTools.Backend.Runs
 
             SettingsFilePath = settingsfileInfo.FullName;
 
-            DatasetName = getDatasetName(Filename);
-            DataSetPath = getDatasetfolderName(Filename);
+            DatasetName = GetDatasetName(Filename);
+            DataSetPath = GetDatasetFolderName(Filename);
 
             loadSettings(SettingsFilePath);
 
@@ -131,16 +131,16 @@ namespace DeconTools.Backend.Runs
                 return null;
             }
 
-            var acquistionMethodFiles = dotMethodFiles.Where(p => p.EndsWith("apexAcquisition.method", StringComparison.OrdinalIgnoreCase)).ToList();
+            var acquisitionMethodFiles = dotMethodFiles.Where(p => p.EndsWith("apexAcquisition.method", StringComparison.OrdinalIgnoreCase)).ToList();
 
-            if (acquistionMethodFiles.Count == 0)
+            if (acquisitionMethodFiles.Count == 0)
             {
                 return null;
             }
 
-            if (acquistionMethodFiles.Count == 1)
+            if (acquisitionMethodFiles.Count == 1)
             {
-                return new FileInfo(acquistionMethodFiles[0]);
+                return new FileInfo(acquisitionMethodFiles[0]);
             }
 
             throw new NotImplementedException("Run initialization failed. Multiple 'apexAcquisition.method' files were found within the dataset folder structure. \nNot sure which one to pick for the settings file.");
@@ -362,14 +362,14 @@ namespace DeconTools.Backend.Runs
             return settingsFilePath;
         }
 
-        private string getDatasetName(string fullFolderPath)
+        private string GetDatasetName(string fullFolderPath)
         {
 
             var dirInfo = new DirectoryInfo(fullFolderPath);
             return dirInfo.Name;
         }
 
-        private string getDatasetfolderName(string fullFolderPath)
+        private string GetDatasetFolderName(string fullFolderPath)
         {
             var dirInfo = new DirectoryInfo(fullFolderPath);
             return dirInfo.FullName;
@@ -407,7 +407,7 @@ namespace DeconTools.Backend.Runs
 
             if (CalibrationData.SampleRate > CalibrationData.FR_Low)
             {
-                CalibrationData.FR_Low = 0;        // from ICR2LS.   Not sure why this is done. It has dramatic effects on BrukerSolerix Data.  TODO: understand and document this parameter
+                CalibrationData.FR_Low = 0;        // from ICR2LS.   Not sure why this is done. It has dramatic effects on BrukerSolarix Data.  TODO: understand and document this parameter
             }
 
             CalibrationData.Display();

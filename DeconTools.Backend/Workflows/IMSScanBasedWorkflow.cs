@@ -74,8 +74,8 @@ namespace DeconTools.Backend.Workflows
                 var centerScan = (uimfRun.MinIMSScan + uimfRun.MaxIMSScan + 1) / 2;
 
                 uimfRun.IMSScanSetCollection.ScanSetList.Clear();
-                var scanset = new IMSScanSet(centerScan, uimfRun.MinIMSScan, uimfRun.MaxIMSScan);
-                uimfRun.IMSScanSetCollection.ScanSetList.Add(scanset);
+                var scanSet = new IMSScanSet(centerScan, uimfRun.MinIMSScan, uimfRun.MaxIMSScan);
+                uimfRun.IMSScanSetCollection.ScanSetList.Add(scanSet);
             }
             else
             {
@@ -111,12 +111,12 @@ namespace DeconTools.Backend.Workflows
         {
             var uimfRun = (UIMFRun)Run;
 
-            foreach (var frameset in uimfRun.ScanSetCollection.ScanSetList)
+            foreach (var frameSet in uimfRun.ScanSetCollection.ScanSetList)
             {
                 foreach (var scanSet in uimfRun.IMSScanSetCollection.ScanSetList)
                 {
                     var imsScanSet = (IMSScanSet)scanSet;
-                    uimfRun.CurrentScanSet = frameset;
+                    uimfRun.CurrentScanSet = frameSet;
                     uimfRun.CurrentIMSScanSet = imsScanSet;
                     ReportProgress();
                     ExecuteProcessingTasks();
@@ -137,16 +137,16 @@ namespace DeconTools.Backend.Workflows
             var uimfRun = (UIMFRun)Run;
             if (uimfRun.ScanSetCollection == null || uimfRun.ScanSetCollection.ScanSetList.Count == 0) return;
 
-            var userstate = new ScanBasedProgressInfo(Run, uimfRun.CurrentScanSet, uimfRun.CurrentIMSScanSet);
-            var framenum = uimfRun.ScanSetCollection.ScanSetList.IndexOf(uimfRun.CurrentScanSet);
+            var userState = new ScanBasedProgressInfo(Run, uimfRun.CurrentScanSet, uimfRun.CurrentIMSScanSet);
+            var frameNum = uimfRun.ScanSetCollection.ScanSetList.IndexOf(uimfRun.CurrentScanSet);
 
             var scanNum = uimfRun.IMSScanSetCollection.ScanSetList.IndexOf(uimfRun.CurrentIMSScanSet);
             var scanTotal = uimfRun.IMSScanSetCollection.ScanSetList.Count;
 
             var frameTotal = uimfRun.ScanSetCollection.ScanSetList.Count;
 
-            var percentDone = (framenum / (double)frameTotal + (scanNum / (double)scanTotal) / frameTotal) * 100;
-            userstate.PercentDone = (float)percentDone;
+            var percentDone = (frameNum / (double)frameTotal + (scanNum / (double)scanTotal) / frameTotal) * 100;
+            userState.PercentDone = (float)percentDone;
 
             var logText = "Scan/Frame= " + Run.GetCurrentScanOrFrame() + "; PercentComplete= " + percentDone.ToString("0.0") + "; AccumulatedFeatures= " + Run.ResultCollection.getTotalIsotopicProfiles();
 
@@ -162,7 +162,7 @@ namespace DeconTools.Backend.Workflows
             if (BackgroundWorker != null && scanNum % numScansBetweenProgress == 0)
             {
 
-                BackgroundWorker.ReportProgress((int)percentDone, userstate);
+                BackgroundWorker.ReportProgress((int)percentDone, userState);
             }
 
         }

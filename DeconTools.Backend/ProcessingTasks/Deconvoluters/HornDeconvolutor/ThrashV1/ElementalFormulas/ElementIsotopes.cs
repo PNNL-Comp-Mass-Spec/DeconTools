@@ -260,7 +260,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             ElementalIsotopesList.Add(new ElementData
             {
                 Symbol = "Al",
-                Name = "Almunium",
+                Name = "Aluminum",
                 AverageMass = 26.981539,
                 MassVariance = 0.000000,
                 Atomicity = 13,

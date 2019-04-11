@@ -32,10 +32,5 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
         #endregion
 
-
-
-
-
-
     }
 }

@@ -154,7 +154,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             MSPeakDetector.MaxX = theorIso.MonoPeakMZ + 20;
 
 
-            //start with high PeakBR and rachet it down, so as to detect more peaks with each pass.  Stop when you find the isotopic profile.
+            //start with high PeakBR and ratchet it down, so as to detect more peaks with each pass.  Stop when you find the isotopic profile.
             peakList = new List<Peak>();
 
             for (var d = PeakDetectorPeakBR; d >= PeakBRMin; d = d - PeakBRStep)
