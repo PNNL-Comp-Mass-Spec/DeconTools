@@ -7,7 +7,7 @@ namespace DeconTools.Backend.FileIO
 {
     public sealed class MSFeatureToSQLiteExporterBasic:SQLiteExporter<IsosResult>
     {
-        const string m_TABLENAME = "T_MSFeatures";
+        const string TABLE_NAME = "T_MSFeatures";
         List<Field> m_fieldList;
 
 
@@ -23,7 +23,7 @@ namespace DeconTools.Backend.FileIO
         #endregion
 
         #region Properties
-        public override string TableName => m_TABLENAME;
+        public override string TableName => TABLE_NAME;
 
         public override List<Field> FieldList => m_fieldList ?? (m_fieldList = CreateFieldList());
 

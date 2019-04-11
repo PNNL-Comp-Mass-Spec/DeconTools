@@ -79,6 +79,5 @@ namespace DeconTools.Backend.Parameters
         }
         #endregion
 
-
     }
 }

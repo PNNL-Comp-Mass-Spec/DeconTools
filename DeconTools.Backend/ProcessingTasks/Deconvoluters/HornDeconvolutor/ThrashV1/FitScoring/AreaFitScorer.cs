@@ -4,7 +4,7 @@ using DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.ThrashV1
 namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.ThrashV1.FitScoring
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <seealso cref="DeconTools.Backend.ProcessingTasks.FitScoreCalculators.AreaFitter"/>
     /// <seealso cref="DeconTools.Backend.ProcessingTasks.FitScoreCalculators.DeconToolsFitScoreCalculator"/>
@@ -77,7 +77,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         /// </param>
         /// <param name="mzDelta">
         ///     specifies the mass delta between theoretical and observed m/z. The we are looking to score
-        ///     against the feature in the observed data at theoeretical m/z + mz_delta
+        ///     against the feature in the observed data at theoretical m/z + mz_delta
         /// </param>
         /// <param name="minIntensityForScore">minimum intensity for score</param>
         /// <param name="debug">prints debugging information if this is set to true.</param>

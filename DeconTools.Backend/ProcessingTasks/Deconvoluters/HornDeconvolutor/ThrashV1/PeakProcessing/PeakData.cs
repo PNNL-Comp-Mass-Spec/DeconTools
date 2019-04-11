@@ -5,7 +5,7 @@ using System.Linq;
 namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.ThrashV1.PeakProcessing
 {
     /// <summary>
-    ///     Used to store and retreive information about peaks that were found in the raw data.
+    ///     Used to store and retrieve information about peaks that were found in the raw data.
     /// </summary>
     /// <remarks>
     ///     This class stores all the information about peaks in the data. Additionally it is used in processing extensively.
@@ -129,7 +129,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         }
 
         /// <summary>
-        ///     Clears auxillary data structures and initializes them at the start of processing.
+        ///     Clears auxiliary data structures and initializes them at the start of processing.
         /// </summary>
         /// <remarks>
         ///     We track which peaks are unprocessed through the following variables:
@@ -159,7 +159,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                     if (!_peakMzToIndexDict.ContainsKey(mz))
                     {
                         // Sometimes we do have duplicate m/zs in the same scan; the C++ code ignored
-                        // all but the first occurrance, as does this code.
+                        // all but the first occurrence, as does this code.
                         _peakMzToIndexDict.Add(mz, i);
                     }
                     AddIntensityToPeakMapping(intensity, i);
@@ -402,7 +402,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         ///     Gets the most intense peak(whether or not it is processed) in the m/z range (mz - width to mz + width).
         /// </summary>
         /// <param name="startMz">minimum m/z of the Peak.</param>
-        /// <param name="stopMz">mimum m/z of the Peak.</param>
+        /// <param name="stopMz">maximum m/z of the Peak.</param>
         /// <param name="peak">is set to the peak that was found.</param>
         /// <returns>returns true if a peak was found in the window (mz - width to mz + width) and false if not found.</returns>
         /// <remarks>The returned peak can have an intensity of 0 because it was already processed and removed.</remarks>
@@ -435,7 +435,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         ///     Gets the most intense peak(whether or not it is processed) in the m/z range (mz - width to mz + width).
         /// </summary>
         /// <param name="startMz">minimum m/z of the Peak.</param>
-        /// <param name="stopMz">mimum m/z of the Peak.</param>
+        /// <param name="stopMz">maximum m/z of the Peak.</param>
         /// <param name="peak">is set to the peak that was found.</param>
         /// <param name="excludeMass">is the mass we need to exclude in this search.</param>
         /// <returns>returns true if a peak was found in the window (mz - width to mz + width) and false if not found.</returns>
@@ -472,7 +472,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         ///     intensity returned is the intensity in the original raw data in <see cref="IntensityList" />
         /// </summary>
         /// <param name="startMz">minimum m/z of the Peak.</param>
-        /// <param name="stopMz">mimum m/z of the Peak.</param>
+        /// <param name="stopMz">maximum m/z of the Peak.</param>
         /// <param name="peak">is set to the peak that was found.</param>
         /// <param name="excludeMass">is the mass we need to exclude in this search.</param>
         /// <returns>returns true if a peak was found in the window (mz - width to mz + width) and false if not found.</returns>
@@ -637,7 +637,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         }
 
         /// <summary>
-        ///     Filters the peak list and removes peaks that do not have any neighbouring peaks in the specified window.
+        ///     Filters the peak list and removes peaks that do not have any neighboring peaks in the specified window.
         /// </summary>
         /// <param name="tolerance">is the window around a peak in which we look for neighbors.</param>
         public void FilterList(double tolerance)
@@ -653,10 +653,10 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             {
                 // look for a peak behind.
                 var mz = peakTop.Mz;
-                var inback = GetPeak(mz - tolerance, mz - 0.00001, out var nextPeak);
-                var infront = GetPeak(mz + 0.00001, mz + tolerance, out nextPeak);
+                var inBack = GetPeak(mz - tolerance, mz - 0.00001, out _);
+                var inFront = GetPeak(mz + 0.00001, mz + tolerance, out _);
 
-                if (inback || infront)
+                if (inBack || inFront)
                     tempPeakTops.Add(peakTop);
             }
             PeakTops.Clear();
@@ -695,7 +695,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             // Anoop : modified from original FindPEak so as to return peaks only
             // and not shoulders, eliminates all the +ve Da DelM regions
             peak = new ThrashV1Peak(-1);
-            
+
             var width = (stopMz - startMz) / 2;
             var foundExistingPeak = GetClosestPeak(startMz + width, width, out peak);
             if (foundExistingPeak)
@@ -752,7 +752,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         public void FindPeak(double startMz, double stopMz, out ThrashV1Peak peak)
         {
             peak = new ThrashV1Peak(-1);
-            
+
             var width = (stopMz - startMz) / 2;
             var foundExistingPeak = GetClosestPeak(startMz + width, width, out peak);
             if (foundExistingPeak)

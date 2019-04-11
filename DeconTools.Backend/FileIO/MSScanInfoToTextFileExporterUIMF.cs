@@ -10,6 +10,7 @@ namespace DeconTools.Backend.FileIO
         public MSScanInfoToTextFileExporterUIMF(string fileName) : base(fileName, ',') { }
 
         public MSScanInfoToTextFileExporterUIMF(string fileName, char delimiter) : base(fileName, delimiter) { }
+
         #endregion
 
 

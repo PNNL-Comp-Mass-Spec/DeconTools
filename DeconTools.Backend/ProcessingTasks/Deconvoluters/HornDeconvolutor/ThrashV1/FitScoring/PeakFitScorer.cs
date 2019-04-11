@@ -91,7 +91,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         /// </param>
         /// <param name="mzDelta">
         ///     specifies the mass delta between theoretical and observed m/z. The we are looking to score
-        ///     against the feature in the observed data at theoeretical m/z + mzDelta
+        ///     against the feature in the observed data at theoretical m/z + mzDelta
         /// </param>
         /// <param name="minIntensityForScore">minimum intensity for score</param>
         /// <param name="debug">prints debugging information if this is set to true.</param>

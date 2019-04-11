@@ -9,10 +9,10 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         private double _intensity;
         private double _signalToNoise;
 
-        /// <summary>
-        ///     index in mzs, intensity vectors that were used to create the peaks in
-        ///     <see cref="PeakProcessor.DiscoverPeaks" />.
-        /// </summary>
+        // <summary>
+        // index in mzs, intensity vectors that were used to create the peaks in
+        // <see cref="PeakProcessor.DiscoverPeaks" />.
+        // </summary>
         //public int DataIndex;
 
         /// <summary>

@@ -77,7 +77,7 @@ namespace DeconTools.Backend.Data.Structures
                 var balance = getBalance(parentNode);
                 if (Math.Abs(balance) == 2) //-2 or 2 is unbalanced
                 {
-                    //Rebalance tree
+                    // Rebalance tree
                     balanceAt(parentNode, balance);
                 }
 

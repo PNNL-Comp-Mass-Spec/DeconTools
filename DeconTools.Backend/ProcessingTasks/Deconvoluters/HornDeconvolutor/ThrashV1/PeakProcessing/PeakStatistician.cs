@@ -15,7 +15,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         /// <param name="yValue">is intensity at specified index.</param>
         /// <param name="intensities">is List of intensities.</param>
         /// <param name="index">is position of point at which we want to calculate signal to noise.</param>
-        /// <returns>returns computed signal to nosie value.</returns>
+        /// <returns>returns computed signal to noise value.</returns>
         /// <remarks>
         ///     Looks for local minima on the left and the right hand sides and calculates signal to noise of peak relative to
         ///     the minimum of these shoulders.
@@ -82,7 +82,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         /// <remarks>
         ///     Looks for half height locations at left and right side, and uses twice of that value as the FWHM value. If half
         ///     height
-        ///     locations cannot be found (because of say an overlapping neighbouring peak), we perform interpolations.
+        ///     locations cannot be found (because of say an overlapping neighboring peak), we perform interpolations.
         /// </remarks>
         public double FindFwhm(List<double> mzs, List<double> intensities, int dataIndex,
             double signalToNoise = 0.0)
@@ -137,11 +137,14 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                                 mzTempList.Add(mzs[dataIndex - j]);
                                 intensityTempList.Add(intensities[dataIndex - j]);
                             }
-                            for (j = 0; j < points && intensityTempList[0].Equals(intensityTempList[j]); j++) ;
+                            for (j = 0; j < points && intensityTempList[0].Equals(intensityTempList[j]); j++)
+                            {
+                            }
+
                             if (j == points)
                                 return 0.0;
                             // coe is coefficients found by curve regression.
-                            var iStat = CurvReg(intensityTempList, mzTempList, points, out var coe, 1, out var mse);
+                            var iStat = CurveReg(intensityTempList, mzTempList, points, out var coe, 1, out _);
                             // only if successful calculation of peak was done, should we change upper.
                             if (iStat != -1)
                                 upper = coe[1] * peakHalf + coe[0];
@@ -187,11 +190,14 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                                 intensityTempList.Add(intensities[index - k]);
                             }
                             int j;
-                            for (j = 0; j < points && intensityTempList[0].Equals(intensityTempList[j]); j++) ;
+                            for (j = 0; j < points && intensityTempList[0].Equals(intensityTempList[j]); j++)
+                            {
+                            }
+
                             if (j == points)
                                 return 0.0;
                             // coe is coefficients found by curve regression.
-                            var iStat = CurvReg(intensityTempList, mzTempList, points, out var coe, 1, out var mse);
+                            var iStat = CurveReg(intensityTempList, mzTempList, points, out var coe, 1, out _);
                             // only if successful calculation of peak was done, should we change lower.
                             if (iStat != -1)
                                 lower = coe[1] * peakHalf + coe[0];
@@ -209,7 +215,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         }
 
         /// <summary>
-        ///     Calculate Least Square error mapping y = f(x).  [GORD] This is linear regression - that's it!
+        /// Calculate Least Square error mapping y = f(x).  [GORD] This is linear regression - that's it!
         /// </summary>
         /// <param name="x">List of x values.</param>
         /// <param name="y">List of y values.</param>
@@ -218,7 +224,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         /// <param name="nTerms">order of the function y = f(x).</param>
         /// <param name="mse">minimum square error value.</param>
         /// <returns>returns 0 if successful an -1 if not.</returns>
-        public int CurvReg(List<double> x, List<double> y, int n, out double[] terms, int nTerms, out double mse)
+        public int CurveReg(List<double> x, List<double> y, int n, out double[] terms, int nTerms, out double mse)
         {
             // weights
             var w = new double[n];
@@ -261,17 +267,17 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             for (var i = 0; i < n; i++)
             {
                 terms[0] = b[0, 0];
-                var yfit = b[0, 0];
-                var xpow = x[i];
+                var yFit = b[0, 0];
+                var xPow = x[i];
                 for (var j = 1; j <= nTerms; j++)
                 {
                     terms[j] = b[j, 0];
-                    yfit += b[j, 0] * xpow;
-                    xpow = xpow * x[i];
+                    yFit += b[j, 0] * xPow;
+                    xPow = xPow * x[i];
                 }
-                outA[0, i] = yfit;
-                outA[1, i] = y[i] - yfit;
-                mse += y[i] - yfit;
+                outA[0, i] = yFit;
+                outA[1, i] = y[i] - yFit;
+                mse += y[i] - yFit;
             }
             return 0;
         }

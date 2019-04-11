@@ -16,14 +16,14 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         private const int MaxCharge = 25;
 
         /// <summary>
-        ///     Calculate the autocorrelation values for the an input.
+        ///     Calculate the auto correlation values for the an input.
         /// </summary>
-        /// <param name="iv">function for which we want to calculate autocorrelation.</param>
-        /// <returns>autocorrelation values. ov[i] is the autocorrelation at distance i.</returns>
+        /// <param name="iv">function for which we want to calculate auto correlation.</param>
+        /// <returns>auto correlation values. ov[i] is the auto correlation at distance i.</returns>
         /// <remarks>It is assumed that the x values for this function are equally spaced.</remarks>
-        private static List<double> ACss(double[] iv)
+        private static List<double> ACss(IReadOnlyList<double> iv)
         {
-            var ivN = iv.Length;
+            var ivN = iv.Count;
             var ov = new List<double>(ivN);
 
             var average = iv.Average();
@@ -52,6 +52,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         /// </summary>
         /// <param name="peak">is the peak whose charge we want to detect.</param>
         /// <param name="peakData">is the PeakData object containing raw data, peaks, etc which are used in the process.</param>
+        /// <param name="debug"></param>
         /// <returns>Returns the charge of the feature.</returns>
         public static int GetChargeState(ThrashV1Peak peak, PeakData peakData, bool debug)
         {
@@ -104,30 +105,29 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                 }
             }
 
-            // List to store the autocorrelation values at the points in the region.
-            var autocorrelationScores = ACss(iv.ToArray());
+            // List to store the auto correlation values at the points in the region.
+            var autoCorrelationScores = ACss(iv.ToArray());
             if (debug)
             {
                 Console.Error.WriteLine("AutoCorrelation values");
-                for (var i = 0; i < autocorrelationScores.Count; i++)
+                for (var i = 0; i < autoCorrelationScores.Count; i++)
                 {
-                    var score = autocorrelationScores[i];
+                    var score = autoCorrelationScores[i];
                     Console.Error.WriteLine((maxMz - minMz) * i / numL + "," + score);
                 }
             }
 
             var minN = 0;
-            while (minN < numL - 1 && autocorrelationScores[minN] > autocorrelationScores[minN + 1])
+            while (minN < numL - 1 && autoCorrelationScores[minN] > autoCorrelationScores[minN + 1])
                 minN++;
-            var success = HighestChargeStatePeak(minMz, maxMz, minN, autocorrelationScores, MaxCharge, out var bestAcScore,
-                out var bestChargeState);
+            var success = HighestChargeStatePeak(minMz, maxMz, minN, autoCorrelationScores, MaxCharge, out var bestAcScore, out _);
 
             if (!success)
                 return -1; // Didn't find anything
 
-            // List to temporarily store charge list. These charges are calculated at peak values of autocorrelation.
+            // List to temporarily store charge list. These charges are calculated at peak values of auto correlation.
             // Now go back through the CS peaks and make a list of all CS that are at least 10% of the highest
-            var charges = GenerateChargeStates(minMz, maxMz, minN, autocorrelationScores, MaxCharge, bestAcScore);
+            var charges = GenerateChargeStates(minMz, maxMz, minN, autoCorrelationScores, MaxCharge, bestAcScore);
 
             // Get the final CS value to be returned
             var returnChargeStateVal = -1;
@@ -154,8 +154,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                 if (tempChargeState > 0)
                 {
                     var peakA = peak.Mz + 1.0 / tempChargeState;
-                    var found = true;
-                    found = peakData.GetPeakFromAllOriginalIntensity(peakA - fwhm, peakA + fwhm, out var isoPeak);
+                    var found = peakData.GetPeakFromAllOriginalIntensity(peakA - fwhm, peakA + fwhm, out var isoPeak);
                     if (found)
                     {
                         returnChargeStateVal = tempChargeState;
@@ -184,42 +183,42 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         }
 
         /// <summary>
-        ///     Generates the list of possible charge states from the autocorrelation scores and the best score.
+        ///     Generates the list of possible charge states from the auto correlation scores and the best score.
         /// </summary>
         /// <param name="minMz">minimum mz.</param>
         /// <param name="maxMz">maximum mz.</param>
-        /// <param name="minN">the number of points at the start that we will skip in looking for high autocorrelation scores.</param>
-        /// <param name="autocorrelationScores">List of autocorrelation scores.</param>
+        /// <param name="minN">the number of points at the start that we will skip in looking for high auto correlation scores.</param>
+        /// <param name="autoCorrelationScores">List of auto correlation scores.</param>
         /// <param name="maxChargeState">maximum charge state to look for.</param>
-        /// <param name="bestAcScore">best autocorrelation score.</param>
+        /// <param name="bestAcScore">best auto correlation score.</param>
         /// <returns>List of charge states generated.</returns>
         /// <remarks>
-        ///     The list of charge states is generated by finding out what are the locally maximum autocorrelation scores and using
+        ///     The list of charge states is generated by finding out what are the locally maximum auto correlation scores and using
         ///     the corresponding
-        ///     distance to figure out the charge. Obviously, a high autocorrleation score at 0.48 implies a charge of 2, at at
+        ///     distance to figure out the charge. Obviously, a high auto correlation score at 0.48 implies a charge of 2, at at
         ///     0.31 implies charge 3 etc.
-        ///     Keep in mind that the autocorrelation score is not going to be perfectly at 0.5, or 0.33 etc, but approximately at
+        ///     Keep in mind that the auto correlation score is not going to be perfectly at 0.5, or 0.33 etc, but approximately at
         ///     those points.
         /// </remarks>
-        private static List<int> GenerateChargeStates(double minMz, double maxMz, int minN, List<double> autocorrelationScores,
+        private static List<int> GenerateChargeStates(double minMz, double maxMz, int minN, IReadOnlyList<double> autoCorrelationScores,
             double maxChargeState, double bestAcScore)
         {
             var chargeStates = new List<int>();
             // Preparation...
             var wasGoingUp = false;
 
-            var numPts = autocorrelationScores.Count;
+            var numPts = autoCorrelationScores.Count;
             // First determine the highest CS peak...
             for (var i = minN; i < numPts; i++)
             {
                 if (i < 2)
                     continue;
-                var goingUp = autocorrelationScores[i] > autocorrelationScores[i - 1];
+                var goingUp = autoCorrelationScores[i] > autoCorrelationScores[i - 1];
 
                 if (wasGoingUp && !goingUp)
                 {
                     var chargeState = numPts / ((maxMz - minMz) * (i - 1));
-                    var currentAutoCorScore = autocorrelationScores[i - 1];
+                    var currentAutoCorScore = autoCorrelationScores[i - 1];
                     // TODO: PattersonChargeStateCalculator uses chargeState < maxChargeState
                     if ((currentAutoCorScore > bestAcScore * 0.1) && (chargeState <= maxChargeState))
                     {
@@ -236,22 +235,22 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         }
 
         /// <summary>
-        ///     Gets the best autocorrelation score, and the charge state corresponding to the distance.
+        ///     Gets the best auto correlation score, and the charge state corresponding to the distance.
         /// </summary>
         /// <param name="minMz">minimum m/z value of the chosen range</param>
         /// <param name="maxMz">maximum m/z value of the chose range</param>
-        /// <param name="minN">the number of points at the start that we will skip in looking for high autocorrelation scores.</param>
-        /// <param name="autocorrelationScores">List of autocorrelation scores.</param>
+        /// <param name="minN">the number of points at the start that we will skip in looking for high auto correlation scores.</param>
+        /// <param name="autoCorrelationScores">List of auto correlation scores.</param>
         /// <param name="maxChargeState">maximum charge state that we are looking for.</param>
-        /// <param name="bestAutoCorrelationScore">returns the best autocorrelation score, or -1 if none found.</param>
-        /// <param name="bestChargeState">returns the charge state at the best autocorrelation score distance, or -1 if none found.</param>
+        /// <param name="bestAutoCorrelationScore">returns the best auto correlation score, or -1 if none found.</param>
+        /// <param name="bestChargeState">returns the charge state at the best auto correlation score distance, or -1 if none found.</param>
         /// <returns>true is successful, false otherwise</returns>
-        private static bool HighestChargeStatePeak(double minMz, double maxMz, int minN, List<double> autocorrelationScores,
+        private static bool HighestChargeStatePeak(double minMz, double maxMz, int minN, IReadOnlyList<double> autoCorrelationScores,
             int maxChargeState, out double bestAutoCorrelationScore, out int bestChargeState)
         {
             bestAutoCorrelationScore = -1;
             bestChargeState = -1;
-            var numPts = autocorrelationScores.Count;
+            var numPts = autoCorrelationScores.Count;
 
             // Preparation...
             var wasGoingUp = false;
@@ -261,12 +260,12 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             {
                 if (i < 2)
                     continue;
-                var goingUp = autocorrelationScores[i] - autocorrelationScores[i - 1] > 0;
+                var goingUp = autoCorrelationScores[i] - autoCorrelationScores[i - 1] > 0;
                 if (wasGoingUp && !goingUp)
                 {
                     var chargeState = (int) (0.5 + numPts / ((maxMz - minMz) * (i - 1)));
-                    var currentAutoCorScore = autocorrelationScores[i - 1];
-                    if ((Math.Abs(currentAutoCorScore / autocorrelationScores[0]) > 0.05) && chargeState <= maxChargeState)
+                    var currentAutoCorScore = autoCorrelationScores[i - 1];
+                    if ((Math.Abs(currentAutoCorScore / autoCorrelationScores[0]) > 0.05) && chargeState <= maxChargeState)
                     {
                         if (Math.Abs(currentAutoCorScore) > bestAutoCorrelationScore)
                         {

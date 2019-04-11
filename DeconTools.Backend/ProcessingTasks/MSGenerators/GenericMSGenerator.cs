@@ -20,7 +20,7 @@ namespace DeconTools.Backend.ProcessingTasks.MSGenerators
             IsTICRequested = isTicRequested;
         }
 
-        public override XYData GenerateMS(Run run, ScanSet lcScanset, ScanSet imsscanset = null)
+        public override XYData GenerateMS(Run run, ScanSet lcScanSet, ScanSet imsScanSet = null)
         {
             Check.Require(run != null, "MS_Generator failed;  'Run' has not yet been defined");
             if (run == null)
@@ -28,17 +28,17 @@ namespace DeconTools.Backend.ProcessingTasks.MSGenerators
 
             Check.Require(!(run is UIMFRun), "MS Generator failed; You tried to use the 'Generic_MS_Generator.' Try using the 'UIMF_MSGenerator' instead");
 
-            if (lcScanset == null) return null;
+            if (lcScanSet == null) return null;
 
-            var xydata = run.GetMassSpectrum(lcScanset, MinMZ, MaxMZ);
+            var xyData = run.GetMassSpectrum(lcScanSet, MinMZ, MaxMZ);
 
             //TODO: this doesn't really belong here!
             if (IsTICRequested)
             {
-                lcScanset.TICValue = GetTIC(xydata, MinMZ, MaxMZ);
+                lcScanSet.TICValue = GetTIC(xyData, MinMZ, MaxMZ);
             }
 
-            return xydata;
+            return xyData;
 
 
         }

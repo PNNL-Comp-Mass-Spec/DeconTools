@@ -6,7 +6,7 @@ namespace DeconTools.Backend.FileIO
 {
     public sealed class MSScanInfoToSQLiteExporterBasic : SQLiteExporter<ScanResult>
     {
-        const string m_TABLENAME = "T_MS_ScanSummary";
+        const string TABLE_NAME = "T_MS_ScanSummary";
         List<Field> m_fieldList;
 
 
@@ -28,7 +28,7 @@ namespace DeconTools.Backend.FileIO
 
         #region Private Methods
         #endregion
-        public override string TableName => m_TABLENAME;
+        public override string TableName => TABLE_NAME;
 
         public override List<Field> FieldList => m_fieldList ?? (m_fieldList = CreateFieldList());
 

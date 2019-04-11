@@ -68,7 +68,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             var nextVal = vec[nextIndex];
             var bestDistance = Math.Abs(mzVal - nextVal);
 
-            // we've gone back too far, posibly. Move pas the mz_val and return that value.
+            // we've gone back too far, possibly. Move past the mz_val and return that value.
             while (nextVal < mzVal)
             {
                 nextIndex++;

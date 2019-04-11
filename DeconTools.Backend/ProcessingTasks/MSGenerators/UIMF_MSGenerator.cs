@@ -44,22 +44,22 @@ namespace DeconTools.Backend.ProcessingTasks
         }
 
 
-        public override XYData GenerateMS(Run run, ScanSet lcscanSet, ScanSet imsScanset = null)
+        public override XYData GenerateMS(Run run, ScanSet lcScanSet, ScanSet imsScanSet = null)
         {
             Check.Require(run is UIMFRun, "UIMF_MSGenerator can only be used with UIMF files");
             var uimfRun = (UIMFRun)(run);
 
-            if (lcscanSet == null || imsScanset == null) return null;
+            if (lcScanSet == null || imsScanSet == null) return null;
 
-            var xydata = uimfRun.GetMassSpectrum(lcscanSet, imsScanset,MinMZ,MaxMZ);
+            var xyData = uimfRun.GetMassSpectrum(lcScanSet, imsScanSet, MinMZ,MaxMZ);
 
-            if (xydata.Xvalues == null || xydata.Xvalues.Length == 0)
+            if (xyData.Xvalues == null || xyData.Xvalues.Length == 0)
             {
-                xydata.Xvalues = new double[1];
-                xydata.Yvalues = new double[1];
+                xyData.Xvalues = new double[1];
+                xyData.Yvalues = new double[1];
             }
 
-            return xydata;
+            return xyData;
 
         }
 

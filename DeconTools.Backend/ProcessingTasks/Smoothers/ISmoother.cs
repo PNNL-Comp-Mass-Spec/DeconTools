@@ -12,7 +12,7 @@ namespace DeconTools.Backend.ProcessingTasks.Smoothers
             resultList.Run.XYData = Smooth(resultList.Run.XYData);
         }
 
-        public abstract XYData Smooth(XYData xYData)
+        public abstract XYData Smooth(XYData xYData);
 
     }
 }

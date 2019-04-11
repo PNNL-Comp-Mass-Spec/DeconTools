@@ -12,22 +12,19 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
     public class PartialLabelingQuantifier
     {
 
-        private List<IsotopicProfile> _theorLabeledProfiles;
+        private readonly List<IsotopicProfile> _theorLabeledProfiles;
         readonly PeakLeastSquaresFitter _leastSquaresFitter = new PeakLeastSquaresFitter();
-        private IterativeTFF _iterativeTff;
+        private readonly IterativeTFF _iterativeTff;
 
         private readonly LabeledIsotopicProfileUtilities _isoCreator = new LabeledIsotopicProfileUtilities();
         private IsotopicProfileFitScoreCalculator _fitScoreCalculator = new IsotopicProfileFitScoreCalculator();
 
+        private readonly string _elementLabeled;
+        private readonly int _lightIsotope;
+        private readonly int _heavyIsotope;
+        private readonly double _toleranceInPPM = 30;
 
-
-
-        private string _elementLabeled;
-        private int _lightIsotope;
-        private int _heavyIsotope;
-        private double _toleranceInPPM = 30;
-
-        //TODO: for testing. delete later 
+        //TODO: for testing. delete later
         public Dictionary<decimal, double> FitScoreData = new Dictionary<decimal, double>();
 
         public PartialLabelingQuantifier(string element, int lightIsotope, int heavyIsotope, int numLeftZeroPads = 1, int numRightZeroPads = 1, bool isTheorProfileTrimmed = false)
@@ -42,8 +39,10 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
 
             _theorLabeledProfiles = new List<IsotopicProfile>();
 
-            var tffParameters = new IterativeTFFParameters();
-            tffParameters.ToleranceInPPM = 30;
+            var tffParameters = new IterativeTFFParameters {
+                ToleranceInPPM = 30
+            };
+
             _iterativeTff = new IterativeTFF(tffParameters);
 
             NumLeftZeroPads = numLeftZeroPads;
@@ -64,8 +63,8 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
         public int LightIsotope { get; set; }
 
         /// <summary>
-        /// Default = false.  If true, the theoretical is trimmed such that it has only +/- 1 peak more than the observed. 
-        /// This helps with low intensity obs data, which might have several '0' peaks on the left and 
+        /// Default = false.  If true, the theoretical is trimmed such that it has only +/- 1 peak more than the observed.
+        /// This helps with low intensity obs data, which might have several '0' peaks on the left and
         /// right edges of the isotopic profile, resulting in a poor fit score
         /// </summary>
         public bool IsTheoreticalTrimmedDownToObserved { get; set; }
@@ -99,7 +98,7 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
                                                                                      _heavyIsotope, labelAmount,
                                                                                      target.ChargeState);
 
-                
+
 
                 var indexOfMostAbundantTheorPeak = theorIso.GetIndexOfMostIntensePeak();
                 var indexOfCorrespondingObservedPeak = PeakUtilities.getIndexOfClosestValue(massSpectrumPeakList,
@@ -159,8 +158,9 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
                     if (massSpectrumXYData == null)
                     {
 
-                        bestIso = new IsotopicProfile();
-                        bestIso.Peaklist = new List<MSPeak>();
+                        bestIso = new IsotopicProfile {
+                            Peaklist = new List<MSPeak>()
+                        };
 
                         foreach (var peak in obsPeakListForFitter)
                         {
@@ -222,7 +222,7 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
 
         }
 
-        private void AddRightZeroPads(List<Peak> theorPeakListForFitter, int numRightZeroPads, int chargeState)
+        private void AddRightZeroPads(ICollection<Peak> theorPeakListForFitter, int numRightZeroPads, int chargeState)
         {
             var mzInitial = theorPeakListForFitter.Last().XValue;
 
@@ -235,7 +235,7 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
 
         }
 
-        private void AddLeftZeroPads(List<Peak> theorPeakListForFitter, int numLeftZeroPads, int chargeState)
+        private void AddLeftZeroPads(IList<Peak> theorPeakListForFitter, int numLeftZeroPads, int chargeState)
         {
             var mzInitial = theorPeakListForFitter.First().XValue;
 

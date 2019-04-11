@@ -62,9 +62,9 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
         public double PeakToBackgroundRatio { get; set; }
 
 
-        public virtual Peak CreatePeak(double xvalue, float height, float width = 0, float signalToNoise = 0)
+        public virtual Peak CreatePeak(double xValue, float height, float width = 0, float signalToNoise = 0)
         {
-            return new MSPeak(xvalue, height, width, signalToNoise);
+            return new MSPeak(xValue, height, width, signalToNoise);
         }
 
 
@@ -72,29 +72,29 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
 
         #region Public Methods
 
-        public override List<Peak> FindPeaks(XYData xydata, double minX = 0, double maxX = 0)
+        public override List<Peak> FindPeaks(XYData xyData, double minX = 0, double maxX = 0)
         {
-            if (xydata == null) return new List<Peak>();
+            if (xyData == null) return new List<Peak>();
 
-            return FindPeaks(xydata.Xvalues, xydata.Yvalues, minX, maxX);
+            return FindPeaks(xyData.Xvalues, xyData.Yvalues, minX, maxX);
         }
 
-        public List<Peak> FindPeaks(double[] xvalues, double[] yvalues, double minXValue = 0, double maxXValue = 0)
+        public List<Peak> FindPeaks(double[] xValues, double[] yValues, double minXValue = 0, double maxXValue = 0)
         {
             var peakList = new List<Peak>();
 
-            if (xvalues == null || yvalues == null || xvalues.Length < 3)
+            if (xValues == null || yValues == null || xValues.Length < 3)
             {
                 return peakList;
             }
 
             if (Math.Abs(minXValue) < float.Epsilon && Math.Abs(maxXValue) < float.Epsilon)
             {
-                maxXValue = xvalues[xvalues.Length - 1];
+                maxXValue = xValues[xValues.Length - 1];
             }
 
             //Get background intensity
-            BackgroundIntensity = GetBackgroundIntensity(yvalues, xvalues);
+            BackgroundIntensity = GetBackgroundIntensity(yValues, xValues);
 
             _intensityThreshold = BackgroundIntensity * PeakToBackgroundRatio;
 
@@ -115,10 +115,10 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
             }
 
             //Find start index in raw data
-            var startIndex = MathUtils.GetClosest(xvalues, minXValue);
+            var startIndex = MathUtils.GetClosest(xValues, minXValue);
 
             //Find stop index in raw data
-            var stopIndex = MathUtils.GetClosest(xvalues, maxXValue);
+            var stopIndex = MathUtils.GetClosest(xValues, maxXValue);
 
             switch (RawDataType)
             {
@@ -132,16 +132,16 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
                     while (currentIndex < stopIndex)
                     {
                         var nextIndex = currentIndex + 1;
-                        if (yvalues[currentIndex] > 0)
+                        if (yValues[currentIndex] > 0)
                         {
-                            while (nextIndex < stopIndex && Math.Abs(yvalues[nextIndex]) < float.Epsilon)
+                            while (nextIndex < stopIndex && Math.Abs(yValues[nextIndex]) < float.Epsilon)
                             {
                                 nextIndex += 1;
                             }
 
-                            if (yvalues[nextIndex] > 0)
+                            if (yValues[nextIndex] > 0)
                             {
-                                double currentWidth = (float)(xvalues[nextIndex] - xvalues[currentIndex]);
+                                double currentWidth = (float)(xValues[nextIndex] - xValues[currentIndex]);
                                 if (currentWidth < 0.2)
                                     peakWidths.Add(currentWidth);
                             }
@@ -157,7 +157,7 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
 
                     for (var index = startIndex; index <= stopIndex; index++)
                     {
-                        var currentIntensity = yvalues[index];
+                        var currentIntensity = yValues[index];
 
                         double signalToNoise;
                         if (IsDataThresholded)
@@ -169,10 +169,10 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
                         }
                         else
                         {
-                            signalToNoise = CalculateSignalToNoise(yvalues, index);
+                            signalToNoise = CalculateSignalToNoise(yValues, index);
                         }
 
-                        var peak = CreatePeak(xvalues[index], (float)yvalues[index], peakWidth, (float)signalToNoise);
+                        var peak = CreatePeak(xValues[index], (float)yValues[index], peakWidth, (float)signalToNoise);
                         peak.DataIndex = index;
                         peakList.Add(peak);
 
@@ -188,17 +188,17 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
                     }
 
                     //adjust stop index if necessary
-                    if (stopIndex >= xvalues.Length - 2)
+                    if (stopIndex >= xValues.Length - 2)
                     {
-                        stopIndex = xvalues.Length - 2;
+                        stopIndex = xValues.Length - 2;
                     }
 
                     for (var index = startIndex; index <= stopIndex; index++)
                     {
                         // double fwhm = -1;
-                        var currentIntensity = yvalues[index];
-                        var lastIntensity = yvalues[index - 1];
-                        var nextIntensity = yvalues[index + 1];
+                        var currentIntensity = yValues[index];
+                        var lastIntensity = yValues[index - 1];
+                        var nextIntensity = yValues[index + 1];
 
                         var peakApexFound = currentIntensity >= lastIntensity && currentIntensity >= nextIntensity;
 
@@ -213,14 +213,14 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
                             }
                             else
                             {
-                                signalToNoise = CalculateSignalToNoise(yvalues, index);
+                                signalToNoise = CalculateSignalToNoise(yValues, index);
                             }
                         }
 
                         if (signalToNoise > SignalToNoiseThreshold)
                         {
-                            var calculatedXValue = CalculateFittedValue(xvalues, yvalues, index);
-                            var width = CalculateFWHM(xvalues, yvalues, index);
+                            var calculatedXValue = CalculateFittedValue(xValues, yValues, index);
+                            var width = CalculateFWHM(xValues, yValues, index);
 
                             var peak = CreatePeak(calculatedXValue, (float)currentIntensity, (float)width, (float)signalToNoise);
                             peak.DataIndex = index;
@@ -256,13 +256,13 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
             return _intensityThreshold;
         }
 
-        protected override double GetBackgroundIntensity(double[] yvalues, double[]xvalues=null)
+        protected override double GetBackgroundIntensity(double[] yValues, double[] xValues = null)
         {
             double thresholdMultiplier = 5;
 
-            var firstAverage = GetAverageIntensity(yvalues);
+            var firstAverage = GetAverageIntensity(yValues);
 
-            var secondAverage = GetAverageIntensity(yvalues, firstAverage * thresholdMultiplier);
+            var secondAverage = GetAverageIntensity(yValues, firstAverage * thresholdMultiplier);
 
             return secondAverage;
         }
@@ -271,15 +271,15 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
         /// <summary>
         /// Calculate full width half maximum of a peak
         /// </summary>
-        /// <param name="xvalues"></param>
-        /// <param name="yvalues"></param>
+        /// <param name="xValues"></param>
+        /// <param name="yValues"></param>
         /// <param name="index">index of point in array that is the apex or max of the peak</param>
         /// <exception cref="ArgumentOutOfRangeException"></exception>
         /// <returns></returns>
-        private double CalculateFWHM(IReadOnlyList<double> xvalues, IReadOnlyList<double> yvalues, int index)
+        private double CalculateFWHM(IReadOnlyList<double> xValues, IReadOnlyList<double> yValues, int index)
         {
 
-            var numPoints = xvalues.Count;
+            var numPoints = xValues.Count;
             if (index >= numPoints || index < 0)
             {
                 throw new ArgumentOutOfRangeException(
@@ -288,7 +288,7 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
             }
 
 
-            var peakApexIntensity = yvalues[index];
+            var peakApexIntensity = yValues[index];
             var halfHeightIntensity = peakApexIntensity / 2;
 
             double x1, x2, y1, y2;
@@ -303,62 +303,62 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
             //will find the first point whose intensity is below the peakHalf
             for (var i = index; i >= 0; i--)
             {
-                y1 = yvalues[i];
+                y1 = yValues[i];
 
                 if (y1 >= halfHeightIntensity) continue;
 
-                x1 = xvalues[i];
-                x2 = xvalues[i + 1];
-                y2 = yvalues[i + 1];
+                x1 = xValues[i];
+                x2 = xValues[i + 1];
+                y2 = yValues[i + 1];
 
                 if (Math.Abs(y2 - y1) > float.Epsilon)
                 {
                     var slope = (y2 - y1) / (x2 - x1);
-                    var yintercept = y1 - (slope * x1);
+                    var yIntercept = y1 - (slope * x1);
 
-                    interpolatedX1 = (halfHeightIntensity - yintercept) / slope;
+                    interpolatedX1 = (halfHeightIntensity - yIntercept) / slope;
                     break;
                 }
             }
 
-            if(Math.Abs(interpolatedX1) < float.Epsilon)
+            if (Math.Abs(interpolatedX1) < float.Epsilon)
             {
-                if (index > 0) interpolatedX1 = xvalues[index - 1];
-                else interpolatedX1 = xvalues[index];
+                if (index > 0) interpolatedX1 = xValues[index - 1];
+                else interpolatedX1 = xValues[index];
             }
 
             //moving to the right of the peak apex
             for (var i = index; i < numPoints; i++)
             {
-                y2 = yvalues[i];
+                y2 = yValues[i];
 
                 if (y2 >= halfHeightIntensity) continue;
 
-                x1 = xvalues[i - 1];
-                y1 = yvalues[i - 1];
+                x1 = xValues[i - 1];
+                y1 = yValues[i - 1];
 
-                x2 = xvalues[i];
+                x2 = xValues[i];
 
                 if (Math.Abs(y2 - y1) > float.Epsilon)
                 {
                     var slope = (y2 - y1) / (x2 - x1);
-                    var yintercept = y1 - (slope * x1);
+                    var yIntercept = y1 - (slope * x1);
 
-                    interpolatedX2 = (halfHeightIntensity - yintercept) / slope;
+                    interpolatedX2 = (halfHeightIntensity - yIntercept) / slope;
                     break;
                 }
             }
 
             if (Math.Abs(interpolatedX2) < float.Epsilon)
             {
-                if (index < xvalues.Count - 1) interpolatedX2 = xvalues[index + 1];
-                else interpolatedX2 = xvalues[index];
+                if (index < xValues.Count - 1) interpolatedX2 = xValues[index + 1];
+                else interpolatedX2 = xValues[index];
             }
 
             return interpolatedX2 - interpolatedX1;   //return the width
         }
 
-        private double CalculateFittedValue(IReadOnlyList<double> xvalues, IReadOnlyList<double> yvalues, int index)
+        private double CalculateFittedValue(IReadOnlyList<double> xValues, IReadOnlyList<double> yValues, int index)
         {
             switch (PeakFitType)
             {
@@ -366,7 +366,7 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
                     throw new NotImplementedException();
 
                 case Globals.PeakFitType.APEX:
-                    return xvalues[index];
+                    return xValues[index];
 
                 case Globals.PeakFitType.LORENTZIAN:
                     throw new NotImplementedException();
@@ -374,7 +374,7 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
 
                 case Globals.PeakFitType.QUADRATIC:
 
-                    return CalculateQuadraticFittedValue(xvalues, yvalues, index);
+                    return CalculateQuadraticFittedValue(xValues, yValues, index);
 
 
                 default:
@@ -387,23 +387,23 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
         /// <summary>
         /// Examine the 3 data points surrounding the given data point to compute an interpolated x value for where the peak apex most likely lies
         /// </summary>
-        /// <param name="xvalues"></param>
-        /// <param name="yvalues"></param>
+        /// <param name="xValues"></param>
+        /// <param name="yValues"></param>
         /// <param name="index"></param>
         /// <returns>The interpolated x value</returns>
-        private double CalculateQuadraticFittedValue(IReadOnlyList<double> xvalues, IReadOnlyList<double> yvalues, int index)
+        private double CalculateQuadraticFittedValue(IReadOnlyList<double> xValues, IReadOnlyList<double> yValues, int index)
         {
             if (index < 1)
-                return xvalues[0];
-            if (index >= xvalues.Count - 1)
-                return xvalues.Last();
+                return xValues[0];
+            if (index >= xValues.Count - 1)
+                return xValues.Last();
 
-            var x1 = xvalues[index - 1];
-            var x2 = xvalues[index];
-            var x3 = xvalues[index + 1];
-            var y1 = yvalues[index - 1];
-            var y2 = yvalues[index];
-            var y3 = yvalues[index + 1];
+            var x1 = xValues[index - 1];
+            var x2 = xValues[index];
+            var x3 = xValues[index + 1];
+            var y1 = yValues[index - 1];
+            var y2 = yValues[index];
+            var y3 = yValues[index + 1];
 
             var calculatedVal = (y2 - y1) * (x3 - x2) - (y3 - y2) * (x2 - x1);
             if (Math.Abs(calculatedVal) < float.Epsilon)
@@ -438,27 +438,27 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
         /// <summary>
         ///
         /// </summary>
-        /// <param name="yvalues"></param>
+        /// <param name="yValues"></param>
         /// <param name="index"></param>
         /// <returns></returns>
-        private double CalculateSignalToNoise(IReadOnlyList<double> yvalues, int index)
+        private double CalculateSignalToNoise(IReadOnlyList<double> yValues, int index)
         {
             double minIntensityLeft = 0;
             double minIntensityRight = 0;
 
-            var numPoints = yvalues.Count;
+            var numPoints = yValues.Count;
             if (index <= 0 || index >= numPoints - 1) return 0;
 
-            var currentIntensity = yvalues[index];
+            var currentIntensity = yValues[index];
             if (Math.Abs(currentIntensity - 0) < double.Epsilon) return 0;
 
             //Find the local minimum as we move down the m/z range
             var found = false;
             for (var i = index; i > 0; i--)
             {
-                var yValue = yvalues[i];
+                var yValue = yValues[i];
 
-                if (yvalues[i + 1] >= yValue && yvalues[i - 1] > yValue)
+                if (yValues[i + 1] >= yValue && yValues[i - 1] > yValue)
                 {
                     minIntensityLeft = yValue;
 
@@ -467,15 +467,15 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
                 }
             }
 
-            if (!found) minIntensityLeft = yvalues[0];
+            if (!found) minIntensityLeft = yValues[0];
 
             //Find the local minimum as we move up the m/z range
             found = false;
             for (var i = index; i < numPoints - 1; i++)
             {
-                var yValue = yvalues[i];
+                var yValue = yValues[i];
 
-                if (yvalues[i + 1] >= yValue && yvalues[i - 1] > yValue)
+                if (yValues[i + 1] >= yValue && yValues[i - 1] > yValue)
                 {
                     minIntensityRight = yValue;
                     found = true;
@@ -483,7 +483,7 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
                 }
             }
 
-            if (!found) minIntensityRight = yvalues[numPoints - 1];
+            if (!found) minIntensityRight = yValues[numPoints - 1];
 
             if (Math.Abs(minIntensityLeft) < float.Epsilon)
             {

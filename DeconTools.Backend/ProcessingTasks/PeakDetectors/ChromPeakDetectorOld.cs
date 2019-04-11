@@ -47,39 +47,39 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
         #region Public Methods
 
         //TODO: remove code duplication (see DeconToolsPeakDetector)
-        public override List<Peak> FindPeaks(XYData xydata, double xMin = 0, double xMax = 0)
+        public override List<Peak> FindPeaks(XYData xyData, double xMin = 0, double xMax = 0)
         {
             var peakList = new List<Peak>();
 
-            if (xydata == null)
+            if (xyData == null)
             {
                 return peakList;
             }
 
             if (UseNewPeakDetector)
             {
-                _peakDetectorV2.FindPeaks(xydata, xMin, xMax);
+                _peakDetectorV2.FindPeaks(xyData, xMin, xMax);
 
             }
             else
             {
-                var xvals = xydata.Xvalues.ToList();
-                var yvals = xydata.Yvalues.ToList();
+                var xVals = xyData.Xvalues.ToList();
+                var yVals = xyData.Yvalues.ToList();
 
                 if (_oldPeakProcessor==null)
                 {
                     _oldPeakProcessor = new PeakProcessor();
                 }
 
-                BackgroundIntensity = _oldPeakProcessor.GetBackgroundIntensity(yvals);
+                BackgroundIntensity = _oldPeakProcessor.GetBackgroundIntensity(yVals);
                 _oldPeakProcessor.SetOptions(SigNoise, BackgroundIntensity * PeakBackgroundRatio, false, PeakFitType.Quadratic);
 
                 //Find peaks using DeconEngine
-                var largestXValue = xydata.Xvalues[xydata.Xvalues.Length - 1];
+                var largestXValue = xyData.Xvalues[xyData.Xvalues.Length - 1];
 
                 try
                 {
-                    _oldPeakProcessor.DiscoverPeaks(xvals, yvals, 0, largestXValue);
+                    _oldPeakProcessor.DiscoverPeaks(xVals, yVals, 0, largestXValue);
                 }
                 catch (Exception ex)
                 {
@@ -119,7 +119,7 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
             }
         }
 
-        protected override double GetBackgroundIntensity(double[] yvalues, double[] xvalues = null)
+        protected override double GetBackgroundIntensity(double[] yValues, double[] xValues = null)
         {
             return 0;
         }

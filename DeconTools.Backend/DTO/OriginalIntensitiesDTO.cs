@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using DeconTools.Backend.Core;
+﻿using DeconTools.Backend.Core;
 
 namespace DeconTools.Backend.DTO
 {
@@ -16,8 +12,7 @@ namespace DeconTools.Backend.DTO
         {
             this.isosResult = isosResult;
         }
-        
-        
+
         public double originalIntensity { get; set; }
 
         public double totIsotopicOrginalIntens { get; set; }

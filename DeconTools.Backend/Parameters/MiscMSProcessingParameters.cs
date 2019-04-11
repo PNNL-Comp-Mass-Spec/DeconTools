@@ -54,7 +54,7 @@ namespace DeconTools.Backend.Parameters
 
         public override void LoadParameters(XElement xElement)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public override void LoadParametersV2(XElement xElement)

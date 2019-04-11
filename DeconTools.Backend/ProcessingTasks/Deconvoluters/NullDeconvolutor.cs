@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
+﻿
 namespace DeconTools.Backend.ProcessingTasks.Deconvoluters
 {
     //this functions to do nothing   :)    The purpose of this was to
@@ -23,7 +19,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters
         public override void Deconvolute(DeconTools.Backend.Core.ResultCollection resultList)
         {
             //do nothing
-           
+
         }
     }
 }

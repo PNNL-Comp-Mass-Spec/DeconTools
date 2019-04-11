@@ -28,7 +28,6 @@ namespace DeconTools.Backend.Core
 
         #endregion
 
-
         #region Properties
 
         public virtual double XValue { get; set; }

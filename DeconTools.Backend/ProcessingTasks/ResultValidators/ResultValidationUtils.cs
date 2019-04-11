@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using DeconTools.Backend.Core;
 
 namespace DeconTools.Backend.ProcessingTasks.ResultValidators
@@ -18,7 +15,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
         public static int GetFlagCode(IList<ResultFlag>resultFlags)
         {
             if (resultFlags == null || resultFlags.Count == 0) return -1;
-            
+
 
             //TODO: add code later, but for now, will return 1;
             return 1;
@@ -36,11 +33,10 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
         public static string GetStringFlagCode(IList<ResultFlag> resultFlags)
         {
             var flagCode =  GetFlagCode(resultFlags);
-            if (flagCode == -1) return string.Empty;
-            else
-            {
-                return flagCode.ToString();
-            }
+            if (flagCode == -1)
+                return string.Empty;
+
+            return flagCode.ToString();
         }
     }
 }

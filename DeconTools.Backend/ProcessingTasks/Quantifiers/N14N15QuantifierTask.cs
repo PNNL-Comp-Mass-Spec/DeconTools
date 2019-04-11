@@ -8,8 +8,7 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
 {
     public class N14N15QuantifierTask : Task
     {
-
-        N15IsotopeProfileGenerator _N15IsotopicProfileGenerator = new N15IsotopeProfileGenerator();
+        readonly N15IsotopeProfileGenerator _N15IsotopicProfileGenerator = new N15IsotopeProfileGenerator();
 
 
         #region Constructors
@@ -20,9 +19,10 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="numPeaksUsedInRatioCalc">Number of peaks used in the ratio calculation</param>
+        /// <param name="msToleranceInPPM"></param>
         public N14N15QuantifierTask(int numPeaksUsedInRatioCalc, double msToleranceInPPM)
         {
             this.NumPeaksUsedInRatioCalc = numPeaksUsedInRatioCalc;

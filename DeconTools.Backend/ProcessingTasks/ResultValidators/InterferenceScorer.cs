@@ -39,7 +39,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
 
             var leftBoundary = observedIso.getMonoPeak().XValue - 1.1;
             var rightMostPeak = observedIso.Peaklist[observedIso.Peaklist.Count - 1];
-            var rightBoundary = rightMostPeak.XValue + rightMostPeak.Width/2.35 *2;  // 2 * sigma
+            var rightBoundary = rightMostPeak.XValue + rightMostPeak.Width / 2.35 * 2;  // 2 * sigma
 
             return GetInterferenceScore(observedIso, observedMSPeaks, leftBoundary, rightBoundary);
 
@@ -52,27 +52,24 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
             if (observedIso == null) return 1.0;
 
             if (!observedMSPeaks.Any()) return 1.0;
-            
-            var scanPeaks = observedMSPeaks.Select<Peak, MSPeak>(i => (MSPeak)i).ToList();
+
+            var scanPeaks = observedMSPeaks.Select(i => (MSPeak)i).ToList();
 
             return GetInterferenceScore(scanPeaks, observedIso.Peaklist, minMz, maxMz);
         }
 
-
-
-
         /// <summary>
-        /// 
+        ///
         /// </summary>
-        /// <param name="xydata">the raw data including noise and non-noise</param>
+        /// <param name="xyData">the raw data including noise and non-noise</param>
         /// <param name="peakList">the peak list representing the non-noise</param>
-        /// <param name="leftBoundary">the left most xvalue to be considered</param>
-        /// <param name="rightBoundary">the right most xvalue to be considered</param>
-        /// <param name="startIndex">the index of the xydata from which to begin searching - for improving performance. Default is '0'</param>
+        /// <param name="leftBoundary">the left most x value to be considered</param>
+        /// <param name="rightBoundary">the right most x value to be considered</param>
+        /// <param name="startIndex">the index of the xyData from which to begin searching - for improving performance. Default is '0'</param>
         /// <returns></returns>
-        public double GetInterferenceScore(XYData xydata, List<MSPeak> peakList, double leftBoundary, double rightBoundary, int startIndex = 0)
+        public double GetInterferenceScore(XYData xyData, List<MSPeak> peakList, double leftBoundary, double rightBoundary, int startIndex = 0)
         {
-            
+
             var currentIndex = startIndex;
             if (currentIndex < 0)
             {
@@ -83,14 +80,14 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
             double sumPeakIntensities = 0;
             var currentPeakIndex = 0;
 
-            while (xydata.Xvalues[currentIndex] < rightBoundary && currentPeakIndex < peakList.Count)
+            while (xyData.Xvalues[currentIndex] < rightBoundary && currentPeakIndex < peakList.Count)
             {
 
-                var isWithinRange = (!(xydata.Xvalues[currentIndex] < leftBoundary));
+                var isWithinRange = (!(xyData.Xvalues[currentIndex] < leftBoundary));
 
                 if (isWithinRange)
                 {
-                    sumIntensities += xydata.Yvalues[currentIndex];
+                    sumIntensities += xyData.Yvalues[currentIndex];
 
                     var sigma = peakList[currentPeakIndex].Width / 2.35;
                     var threeSigma = sigma * 3;
@@ -98,26 +95,26 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
                     var leftPeakValue = peakList[currentPeakIndex].XValue - threeSigma;
                     var rightPeakValue = peakList[currentPeakIndex].XValue + threeSigma;
 
-                    if (xydata.Xvalues[currentIndex] > leftPeakValue)
+                    if (xyData.Xvalues[currentIndex] > leftPeakValue)
                     {
 
-                        var wentPastPeak = (xydata.Xvalues[currentIndex] > rightPeakValue);
+                        var wentPastPeak = (xyData.Xvalues[currentIndex] > rightPeakValue);
                         if (wentPastPeak)
                         {
                             currentPeakIndex++;
                         }
                         else
                         {
-                            sumPeakIntensities += xydata.Yvalues[currentIndex];
+                            sumPeakIntensities += xyData.Yvalues[currentIndex];
                         }
 
                     }
-                    
+
                 }
-              
+
 
                 currentIndex++;
-                if (currentIndex >= xydata.Xvalues.Length) break;
+                if (currentIndex >= xyData.Xvalues.Length) break;
             }
 
             var interferenceScore = 1 - (sumPeakIntensities / sumIntensities);
@@ -126,11 +123,11 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
 
         /// <summary>
         /// This calculates a score:  1- (I1/I2) where:
-        /// I1= sum of intensities of target peaks.
+        /// I1 = sum of intensities of target peaks.
         /// I2 = sum of intensities of all peaks.
         /// </summary>
         /// <param name="allPeaks">all peaks, including noise and non-noise</param>
-        /// <param name="nonNoisePeaks">target peaks. </param>
+        /// <param name="targetPeaks">target peaks. </param>
         /// <param name="leftBoundary">the left-most x-value boundary. If any peak is less than this value, it isn't considered</param>
         /// <param name="rightBoundary">the right-most x-value boundary. If any peak is greater than this value, it isn't considered</param>
         /// <returns></returns>
@@ -140,74 +137,66 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
             double sumTargetPeakIntensities = 0;
 
             var maxPeak = GetMaxPeak(targetPeaks);
- 
+
             if (maxPeak == null) return -1;
 
 
-            for (var i = 0; i < allPeaks.Count; i++)
+            foreach (var currentPeak in allPeaks)
             {
-                var currentPeak = allPeaks[i];
+                if (currentPeak.XValue <= leftBoundary || currentPeak.XValue >= rightBoundary)
+                    continue;
 
-                if (currentPeak.XValue > leftBoundary && currentPeak.XValue < rightBoundary)
+                var currentRelIntensity = currentPeak.Height / maxPeak.Height;
+                if (currentRelIntensity >= MinRelativeIntensity)
                 {
-                    var currentRelIntensity = currentPeak.Height/maxPeak.Height;
-                    if (currentRelIntensity >= MinRelativeIntensity)
-                    {
-                        sumAllPeakIntensities += currentPeak.Height; 
-                    }
-                    
-                    
+                    sumAllPeakIntensities += currentPeak.Height;
                 }
-                
+
             }
 
-            foreach (var peak in targetPeaks)
+            foreach (var currentPeak in targetPeaks)
             {
+                if (currentPeak.XValue <= leftBoundary || currentPeak.XValue >= rightBoundary)
+                    continue;
 
-                if (peak.XValue > leftBoundary && peak.XValue < rightBoundary)
+                var currentRelIntensity = currentPeak.Height / maxPeak.Height;
+                if (currentRelIntensity >= MinRelativeIntensity)
                 {
-                    var currentRelIntensity = peak.Height / maxPeak.Height;
-                    if (currentRelIntensity >= MinRelativeIntensity)
-                    {
-                        sumTargetPeakIntensities += peak.Height;
-                    }
-                    
+                    sumTargetPeakIntensities += currentPeak.Height;
                 }
-                
+
             }
 
             var interferenceScore = 1 - (sumTargetPeakIntensities / sumAllPeakIntensities);
             return interferenceScore;
         }
 
-       
+
         #endregion
 
         #region Private Methods
 
-        private MSPeak GetMaxPeak (IEnumerable<MSPeak>mspeakList)
+        private MSPeak GetMaxPeak(IEnumerable<MSPeak> msPeakList)
         {
 
-            MSPeak maxMsPeak=null;
-            
-            foreach (var msPeak in mspeakList)
+            MSPeak maxMsPeak = null;
+
+            foreach (var msPeak in msPeakList)
             {
-                if (maxMsPeak==null)
+                if (maxMsPeak == null)
                 {
                     maxMsPeak = msPeak;
                     continue;
-                    
+
                 }
 
-                if (msPeak.Height>maxMsPeak.Height)
+                if (msPeak.Height > maxMsPeak.Height)
                 {
                     maxMsPeak = msPeak;
                 }
             }
 
             return maxMsPeak;
-
-
 
         }
 

@@ -14,7 +14,7 @@ namespace DeconTools.Backend.FileIO
 
         #region Constructors
 
-        string m_filename;
+        readonly string m_filename;
         private List<string> _headers;
 
         public MassTagFromTextFileImporter(string filename)
@@ -70,8 +70,7 @@ namespace DeconTools.Backend.FileIO
                     PeptideTarget massTag;
                     try
                     {
-                        massTag = convertTextToMassTag(lineData);
-
+                        massTag = ConvertTextToMassTag(lineData);
 
                         if (filterOnTargetIDs)
                         {
@@ -128,9 +127,11 @@ namespace DeconTools.Backend.FileIO
                             var calcMZ = massTag.MonoIsotopicMass / chargeState + Globals.PROTON_MASS;
                             if (calcMZ > minMZToConsider && calcMZ < maxMZToConsider)
                             {
-                                var copiedMassTag = new PeptideTarget(massTag);    //we need to create multiple mass tags
-                                copiedMassTag.ChargeState = (short)chargeState;
-                                copiedMassTag.MZ = calcMZ;
+                                //we need to create multiple mass tags
+                                var copiedMassTag = new PeptideTarget(massTag)
+                                {
+                                    ChargeState = (short)chargeState, MZ = calcMZ
+                                };
 
                                 targetList.Add(copiedMassTag);
                             }
@@ -170,19 +171,24 @@ namespace DeconTools.Backend.FileIO
             return data;
         }
 
-        private PeptideTarget convertTextToMassTag(List<string> lineData)
+        private PeptideTarget ConvertTextToMassTag(IReadOnlyList<string> lineData)
         {
 
-            var mt = new PeptideTarget();
-            mt.ChargeState = (short)parseIntField(getValue(new string[] { "z", "charge_state" ,"charge"}, lineData, "0"));
+            // ReSharper disable StringLiteralTypo
+            var mt = new PeptideTarget
+            {
+                ChargeState = (short)parseIntField(getValue(new[] {"z", "charge_state", "charge"}, lineData, "0")),
+                ID = parseIntField(getValue(new[] {"id", "targetid", "target_id", "mass_tag_id", "massTagid"}, lineData, "-1")),
+                Code = getValue(new[] {"peptide", "sequence"}, lineData, "")
+            };
 
-            mt.ID = parseIntField(getValue(new string[] { "id", "targetid", "target_id", "mass_tag_id", "massTagid" }, lineData, "-1"));
-            mt.Code = getValue(new string[] { "peptide", "sequence" }, lineData, "");
 
-            var scanNum = parseIntField(getValue(new string[] { "scannum", "scan" ,"scanNum"}, lineData, "-1"));
-            mt.NormalizedElutionTime = parseFloatField(getValue(new string[] { "net", "avg_ganet", "ElutionTimeTheor" }, lineData, "-1"));
+            var scanNum = parseIntField(getValue(new[] { "scannum", "scan" ,"scanNum"}, lineData, "-1"));
+            mt.NormalizedElutionTime = parseFloatField(getValue(new[] { "net", "avg_ganet", "ElutionTimeTheor" }, lineData, "-1"));
 
-            var neitherScanOrNETIsProvided = mt.NormalizedElutionTime == -1 && scanNum == -1;
+            // ReSharper restore StringLiteralTypo
+
+            var neitherScanOrNETIsProvided = Math.Abs(mt.NormalizedElutionTime + 1) < float.Epsilon && scanNum == -1;
             if (neitherScanOrNETIsProvided)
             {
                 mt.ElutionTimeUnit = Globals.ElutionTimeUnit.NormalizedElutionTime;
@@ -197,36 +203,38 @@ namespace DeconTools.Backend.FileIO
                 mt.ElutionTimeUnit = Globals.ElutionTimeUnit.ScanNum;
             }
 
+            // ReSharper disable StringLiteralTypo
 
+            mt.ObsCount = parseIntField(getValue(new[] { "obs", "obscount" }, lineData, "-1"));
+            mt.MonoIsotopicMass = parseDoubleField(getValue(new[] { "mass", "monoisotopicmass", "monoisotopic_mass" }, lineData, "0"));
+            mt.EmpiricalFormula = getValue(new[] { "formula", "empirical_formula", "empiricalformula"}, lineData, "");
+            mt.ModCount = parseShortField(getValue(new[] { "modCount", "mod_count" }, lineData, "0"));
+            mt.ModDescription = getValue(new[] { "mod", "mod_description" }, lineData, "");
+            // ReSharper restore StringLiteralTypo
 
-            mt.ObsCount = parseIntField(getValue(new string[] { "obs", "obscount" }, lineData, "-1"));
-            mt.MonoIsotopicMass = parseDoubleField(getValue(new string[] { "mass", "monoisotopicmass", "monoisotopic_mass" }, lineData, "0"));
-            mt.EmpiricalFormula = getValue(new string[] { "formula", "empirical_formula", "empiricalformula"}, lineData, "");
-            mt.ModCount = parseShortField(getValue(new string[] { "modCount", "mod_count" }, lineData, "0"));
-            mt.ModDescription = getValue(new string[] { "mod", "mod_description" }, lineData, "");
             if (mt.ChargeState == 0)
             {
 
             }
             else
             {
-                mt.MZ = parseDoubleField(getValue(new string[] { "mz" }, lineData, "0"));
-                if (mt.MZ == 0 || mt.MZ == double.NaN)
+                mt.MZ = parseDoubleField(getValue(new[] { "mz" }, lineData, "0"));
+                if (Math.Abs(mt.MZ) < float.Epsilon || double.IsNaN(mt.MZ))
                 {
                     mt.MZ = mt.MonoIsotopicMass / mt.ChargeState + Globals.PROTON_MASS;
                 }
             }
 
-            mt.GeneReference = getValue(new string[] {"reference"}, lineData, "");
+            mt.GeneReference = getValue(new[] {"reference"}, lineData, "");
 
-            mt.RefID = parseIntField(getValue(new string[] { "ref_id" }, lineData, "-1"));
-            mt.ProteinDescription = getValue(new string[] { "description" ,"protein" }, lineData, "");
+            mt.RefID = parseIntField(getValue(new[] { "ref_id" }, lineData, "-1"));
+            mt.ProteinDescription = getValue(new[] { "description" ,"protein" }, lineData, "");
 
             return mt;
 
         }
 
-        private string getValue(string[] possibleHeaders, List<string> lineData, string defaultVal)
+        private string getValue(string[] possibleHeaders, IReadOnlyList<string> lineData, string defaultVal)
         {
             foreach (var possibleHeader in possibleHeaders)
             {
@@ -247,7 +255,7 @@ namespace DeconTools.Backend.FileIO
 
         private List<string> getHeaders(string headerLine)
         {
-            var processedLine = headerLine.Split(new char[] { delimiter }, StringSplitOptions.RemoveEmptyEntries).ToList();
+            var processedLine = headerLine.Split(new[] { delimiter }, StringSplitOptions.RemoveEmptyEntries).ToList();
             return processedLine;
         }
     }

@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using DeconTools.Utilities;
 using DeconTools.Backend.Core;
 
@@ -17,7 +14,7 @@ namespace DeconTools.Backend.FileIO
         #endregion
 
         #region Public Methods
-        public static ExporterBase<ScanResult> CreateMSScanInfoExporterFactory(Globals.ExporterType exporterType, 
+        public static ExporterBase<ScanResult> CreateMSScanInfoExporterFactory(Globals.ExporterType exporterType,
             Globals.MSFileType msFileType, string outputFileName)
         {
             Check.Assert(!string.IsNullOrEmpty(outputFileName), "MSScanInfoExporterFactory cannot work. OutputFileName is empty - which is bad.");

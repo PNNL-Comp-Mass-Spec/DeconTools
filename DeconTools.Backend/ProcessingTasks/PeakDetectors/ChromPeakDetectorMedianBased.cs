@@ -6,22 +6,24 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
 {
     public class ChromPeakDetectorMedianBased : ChromPeakDetector
     {
-        private ChromPeakDetector _chromPeakDetector;
+        private readonly ChromPeakDetector _chromPeakDetector;
 
         #region Constructors
 
         public ChromPeakDetectorMedianBased()
         {
-            //set up the peak detector that is used for removing highest intensity peak. 
-            _chromPeakDetector = new ChromPeakDetector();
-            _chromPeakDetector.PeakToBackgroundRatio = 2;
-            _chromPeakDetector.SignalToNoiseThreshold = 2;
+            //set up the peak detector that is used for removing highest intensity peak.
+            _chromPeakDetector = new ChromPeakDetector
+            {
+                PeakToBackgroundRatio = 2,
+                SignalToNoiseThreshold = 2
+            };
 
             IsDataThresholded = false;
 
         }
 
-        public ChromPeakDetectorMedianBased(double chromPeakDetectorPeakBr, double chromPeakDetectorSigNoise):this()
+        public ChromPeakDetectorMedianBased(double chromPeakDetectorPeakBr, double chromPeakDetectorSigNoise) : this()
         {
             PeakToBackgroundRatio = chromPeakDetectorPeakBr;
             SignalToNoiseThreshold = chromPeakDetectorSigNoise;
@@ -40,17 +42,17 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
         #region Private Methods
 
         #endregion
-        
 
-        protected override double GetBackgroundIntensity(double[] yvalues, double[]xvalues=null)
+
+        protected override double GetBackgroundIntensity(double[] yValues, double[] xValues = null)
         {
-            var copiedYValues = new double[yvalues.Length];
-            Array.Copy(yvalues, copiedYValues, yvalues.Length);
+            var copiedYValues = new double[yValues.Length];
+            Array.Copy(yValues, copiedYValues, yValues.Length);
 
-            if (xvalues!=null)
+            if (xValues != null)
             {
                 //use a peak detector to find the largest peak
-                var peaklist=  _chromPeakDetector.FindPeaks(xvalues, copiedYValues);
+                var peaklist = _chromPeakDetector.FindPeaks(xValues, copiedYValues);
 
                 var largestPeaks = peaklist.OrderByDescending(p => p.Height).Take(3);
 
@@ -64,12 +66,12 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
                         var valuePeakStart = peak.XValue - widthAtBase;
                         var valuePeakEnd = peak.XValue + widthAtBase;
 
-                        var indexOfStartOfPeak = MathUtils.GetClosest(xvalues, valuePeakStart, 1);
-                        var indexOfEndOfPeak = MathUtils.GetClosest(xvalues, valuePeakEnd, 1);
+                        var indexOfStartOfPeak = MathUtils.GetClosest(xValues, valuePeakStart, 1);
+                        var indexOfEndOfPeak = MathUtils.GetClosest(xValues, valuePeakEnd, 1);
 
                         for (var index = indexOfStartOfPeak; index < indexOfEndOfPeak; index++)
                         {
-                            copiedYValues[index] = 0;     //zero-out the intensities of the largest peak. 
+                            copiedYValues[index] = 0;     //zero-out the intensities of the largest peak.
                         }
 
                     }
@@ -81,7 +83,7 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
 
 
             double medianIntensity = 0;
-            if (valuesAboveZero.Count>0)
+            if (valuesAboveZero.Count > 0)
             {
                 medianIntensity = MathUtils.GetMedian(valuesAboveZero);
             }

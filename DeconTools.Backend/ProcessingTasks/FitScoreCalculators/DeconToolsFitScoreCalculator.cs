@@ -29,7 +29,7 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
 
             foreach (var result in isosResults)
             {
-                //create a temporary mass tag, as a data object for storing relevent info, and using the CalculateMassesForIsotopicProfile() method.
+                //create a temporary mass tag, as a data object for storing relevant info, and using the CalculateMassesForIsotopicProfile() method.
                 var mt = new PeptideTarget
                 {
                     ChargeState = (short)result.IsotopicProfile.ChargeState,
@@ -50,21 +50,20 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
 
                 offsetDistribution(theorXYData, mt.IsotopicProfile, result.IsotopicProfile);
 
-                // Obsolete Classwide variable: MercuryDistributionCreator distributionCreator;
+                // Obsolete Class-wide variable: MercuryDistributionCreator distributionCreator;
                 //
                 //double resolution = result.IsotopicProfile.GetMZofMostAbundantPeak() / result.IsotopicProfile.GetFWHM();
                 //distributionCreator.CreateDistribution(result.IsotopicProfile.MonoIsotopicMass, result.IsotopicProfile.ChargeState, resolution);
                 //distributionCreator.OffsetDistribution(result.IsotopicProfile);
                 //XYData theorXYData = distributionCreator.Data;
 
-                var areafitter = new AreaFitter();
-                var fitval = areafitter.GetFit(theorXYData, result.Run.XYData, 0.1, out var _);
+                var areaFitter = new AreaFitter();
+                var fitVal = areaFitter.GetFit(theorXYData, result.Run.XYData, 0.1, out var _);
 
-                if (double.IsNaN(fitval) || fitval > 1) fitval = 1;
-
-                result.IsotopicProfile.Score = fitval;
-
-
+                if (double.IsNaN(fitVal) || fitVal > 1)
+                    result.IsotopicProfile.Score = 1;
+                else
+                    result.IsotopicProfile.Score = fitVal;
             }
         }
 

@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using System.Collections.Generic;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.Data;
 using DeconTools.Utilities;
@@ -48,14 +47,12 @@ namespace DeconTools.Backend.ProcessingTasks.NETAlignment
             var importer = new UMCFileImporter(m_targetUMCFileStoringAlignmentInfo, '\t');
             umcs = importer.Import();
 
-            var scannetPairs = umcs.GetScanNETLookupTable();
+            var scanNetPairs = umcs.GetScanNETLookupTable();
 
             run.NetAlignmentInfo = new NetAlignmentInfoBasic(run.MinLCScan, run.MaxLCScan);
-            run.NetAlignmentInfo.SetScanToNETAlignmentData(scannetPairs);
-            
+            run.NetAlignmentInfo.SetScanToNETAlignmentData(scanNetPairs);
+
         }
-
-
 
         #endregion
 

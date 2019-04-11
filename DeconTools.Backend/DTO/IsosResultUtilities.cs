@@ -140,14 +140,14 @@ namespace DeconTools.Backend.DTO
 
         public List<IsosResult> getUIMFResults(string uimfInputFile, int minFrame, int maxFrame)
         {
-            var uimfisoUtil = new IsosResultUtilities();
-            uimfisoUtil.LoadResults(uimfInputFile, Globals.MSFileType.PNNL_UIMF, minFrame, maxFrame);
+            var uimfIsoUtil = new IsosResultUtilities();
+            uimfIsoUtil.LoadResults(uimfInputFile, Globals.MSFileType.PNNL_UIMF, minFrame, maxFrame);
 
             // List<IsosResult> filteredIsos = new List<IsosResult>();
 
 
 
-            //foreach (IsosResult result in uimfisoUtil.Results)
+            //foreach (IsosResult result in uimfIsoUtil.Results)
             //{
             //    UIMFIsosResult uimfResult = (UIMFIsosResult)result;
             //    if (uimfResult.FrameSet.PrimaryFrame >= minFrame && uimfResult.FrameSet.PrimaryFrame <= maxFrame)
@@ -155,7 +155,7 @@ namespace DeconTools.Backend.DTO
             //        filteredIsos.Add(result);
             //    }
             //}
-            return uimfisoUtil.Results;
+            return uimfIsoUtil.Results;
         }
 
         public List<UIMFIsosResult> convertToUIMFIsosResults(List<IsosResult> inputList, int minFrame, int maxFrame)
@@ -185,13 +185,13 @@ namespace DeconTools.Backend.DTO
                 var currentFrame = getFrameFromFilename(file.Name);
                 if (currentFrame >= minFrame && currentFrame <= maxFrame)
                 {
-                    var isoutil = new IsosResultUtilities();
+                    var isoUtil = new IsosResultUtilities();
 
                     var isosFileName = file.FullName;
                     //string isosFileName = Path.Combine(Path.GetDirectoryName(file.FullName), Path.GetFileNameWithoutExtension(file.FullName) + "_isos.csv");
-                    isoutil.LoadResults(isosFileName, Globals.MSFileType.PNNL_IMS);
+                    isoUtil.LoadResults(isosFileName, Globals.MSFileType.PNNL_IMS);
 
-                    var isosResultsForFrame = convertIMFResultsToUIMFResults(currentFrame, isoutil.Results);
+                    var isosResultsForFrame = convertIMFResultsToUIMFResults(currentFrame, isoUtil.Results);
 
                     returnedResults.AddRange(isosResultsForFrame);
 
@@ -240,20 +240,20 @@ namespace DeconTools.Backend.DTO
         }
 
 
-        public List<IsosResult> getIsosResults(string isosInputFile, Globals.MSFileType filetype, int minScan, int maxScan)
+        public List<IsosResult> getIsosResults(string isosInputFile, Globals.MSFileType fileType, int minScan, int maxScan)
         {
-            var isoutil = new IsosResultUtilities();
-            isoutil.LoadResults(isosInputFile, filetype);
-            return isoutil.Results.Where(p => p.ScanSet.PrimaryScanNumber >= minScan && p.ScanSet.PrimaryScanNumber <= maxScan).ToList();
+            var isoUtil = new IsosResultUtilities();
+            isoUtil.LoadResults(isosInputFile, fileType);
+            return isoUtil.Results.Where(p => p.ScanSet.PrimaryScanNumber >= minScan && p.ScanSet.PrimaryScanNumber <= maxScan).ToList();
 
         }
 
 
-        public List<IsosResult> getIsosResults(string isosInputFile, Globals.MSFileType filetype)
+        public List<IsosResult> getIsosResults(string isosInputFile, Globals.MSFileType fileType)
         {
-            var isoutil = new IsosResultUtilities();
-            isoutil.LoadResults(isosInputFile, filetype);
-            return isoutil.Results;
+            var isoUtil = new IsosResultUtilities();
+            isoUtil.LoadResults(isosInputFile, fileType);
+            return isoUtil.Results;
 
         }
 
@@ -272,10 +272,10 @@ namespace DeconTools.Backend.DTO
 
             var query = from n in inputList select n.ScanSet.PrimaryScanNumber;
 
-            var scanNums = query.ToArray();
+            var scanNumList = query.ToArray();
 
 
-            var indexOfScanNum = MathUtils.BinarySearch(scanNums, scanNum, 0, scanNums.Length - 1);
+            var indexOfScanNum = MathUtils.BinarySearch(scanNumList, scanNum, 0, scanNumList.Length - 1);
             if (indexOfScanNum == -1) return results;
 
             //the found index might point to a isos result line that is mid way through the scan list.  So need to find the starting index

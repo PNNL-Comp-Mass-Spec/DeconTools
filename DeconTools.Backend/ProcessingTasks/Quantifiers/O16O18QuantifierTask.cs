@@ -6,21 +6,18 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
 {
     public class O16O18QuantifierTask:Task
     {
-
-        BasicO16O18Quantifier _quantifier;
+        readonly BasicO16O18Quantifier _quantifier;
 
         #region Constructors
         public O16O18QuantifierTask()
         {
             _quantifier = new BasicO16O18Quantifier();
-            
+
 
 
         }
 
         #endregion
-
-      
 
         public override void Execute(ResultCollection resultList)
         {

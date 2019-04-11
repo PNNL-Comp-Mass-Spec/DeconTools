@@ -42,14 +42,14 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         {
             peakTopMzs = new List<double>();
             peakTopIntensities = new List<double>();
-            // Now go through each isotope, figure out its peaktop and the intensity at the peak top.
+            // Now go through each isotope, figure out its peak top and the intensity at the peak top.
             // remember that this is nothing but a sampling issue. The peak tops might not be sampled.
-            for (var i = 0; i < isotopeIndices.Count; i++)
+            foreach (var index in isotopeIndices)
             {
-                var index = isotopeIndices[i];
                 // for really high masses, some of the first few isotopes will not be present at all.
                 if (index == -1)
                     continue;
+
                 var mz1 = mzs[index];
                 var int1 = intensities[index];
                 double mz2, int2;
@@ -106,7 +106,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             }
 
             // Find peaks and return their indices. In doing so, however, recognize that the input might be a bunch of
-            // separated peaks. So if there is a peak with just point point in it, there will be a discontinuous stretch on the xaxis.
+            // separated peaks. So if there is a peak with just point point in it, there will be a discontinuous stretch on the x axis.
             // estimate that by using two times the expected mz spacing.
             if (mzs[1] - mzs[0] > 2 * mzSpacing && intensities[0] > threshold)
                 peakIndex.Add(0);
@@ -181,7 +181,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             {
                 _cachedIsotopeDistValues.Add(key, new List<int> {position});
             }
-            //var amuperval = 1.0 / num_pts_per_amu;
+            //var amuPerValue = 1.0 / num_pts_per_amu;
             var dist = new IsotopicDistribution
             {
                 Charge = charge,
@@ -214,7 +214,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             var numIsotopes = _isotopicDistributions[position].NumIsotopes;
 
             var massRange = (int) (Math.Sqrt(1 + massVariance) * 10.0 / charge);
-            /* +/- 5 sd's : Multiply charged */
+            /* +/- 5 standard deviations : Multiply charged */
             /* Set to nearest (upper) power of 2 */
             for (var i = 1024; i > 0; i /= 2)
             {
@@ -226,7 +226,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             }
             if (massRange <= 0)
                 massRange = 1;
-            var pointsPerAmu = MercurySize / massRange; /* Use maximum of 2048 real, 2048 imag points */
+            var pointsPerAmu = MercurySize / massRange; /* Use maximum of 2048 real, 2048 imaginary points */
             var amuPerPoint = 1.0 / pointsPerAmu;
 
             var numPts = 0;

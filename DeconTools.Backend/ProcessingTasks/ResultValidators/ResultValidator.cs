@@ -17,6 +17,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
 
         #region Private Methods
         #endregion
+
         public override void Execute(ResultCollection resultList)
         {
             ValidateResult(resultList, this.CurrentResult);

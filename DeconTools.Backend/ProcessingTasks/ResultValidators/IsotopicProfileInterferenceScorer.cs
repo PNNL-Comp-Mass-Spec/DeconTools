@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.Utilities;
 using DeconTools.Utilities;
@@ -9,10 +7,10 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
 {
     public class IsotopicProfileInterferenceScorer : ResultValidator
     {
-        InterferenceScorer m_scorer;
+        readonly InterferenceScorer m_scorer;
 
         #region Constructors
-      
+
         public IsotopicProfileInterferenceScorer(double minRelIntensityForScore = 0.025,  bool usePeakBasedInterferenceValue=true)
         {
             m_scorer = new InterferenceScorer(minRelIntensityForScore);
@@ -27,9 +25,9 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
 
         #region Public Methods
 
-        public override DeconTools.Backend.Core.IsosResult CurrentResult { get; set; }
+        public override IsosResult CurrentResult { get; set; }
 
-        public override void ValidateResult(DeconTools.Backend.Core.ResultCollection resultColl, DeconTools.Backend.Core.IsosResult currentResult)
+        public override void ValidateResult(ResultCollection resultColl, IsosResult currentResult)
         {
 
             if (currentResult.IsotopicProfile == null) return;
@@ -41,17 +39,17 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
                 return;
             }
 
-            
+
             var monoPeak = currentResult.IsotopicProfile.getMonoPeak();
             var lastPeak = currentResult.IsotopicProfile.Peaklist[currentResult.IsotopicProfile.Peaklist.Count - 1];
 
             var leftMZBoundary = monoPeak.XValue - 1.1;
             var rightMZBoundary = lastPeak.XValue + lastPeak.Width / 2.35 * 2;      // 2 sigma
 
-            double interferenceVal = -1;
+            double interferenceVal;
             if (UsePeakBasedInterferenceValue)
             {
-                var scanPeaks = resultColl.Run.PeakList.Select<Peak, MSPeak>(i => (MSPeak)i).ToList();
+                var scanPeaks = resultColl.Run.PeakList.Select(i => (MSPeak)i).ToList();
                 interferenceVal = m_scorer.GetInterferenceScore(scanPeaks, currentResult.IsotopicProfile.Peaklist, leftMZBoundary, rightMZBoundary);
             }
             else
@@ -79,6 +77,6 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
         #endregion
 
 
-        
+
     }
 }

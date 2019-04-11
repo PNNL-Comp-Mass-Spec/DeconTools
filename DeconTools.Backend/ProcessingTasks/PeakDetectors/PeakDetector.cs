@@ -12,7 +12,7 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
     {
         private readonly PeakUtilities _peakUtilities = new PeakUtilities();
 
-        public abstract List<Peak> FindPeaks(XYData xydata, double minX = 0, double maxX = 0);
+        public abstract List<Peak> FindPeaks(XYData xyData, double minX = 0, double maxX = 0);
 
         public double MinX { get; set; }
 
@@ -57,9 +57,9 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
                     sb.Append(counter);
                     sb.Append("; PeakDetector is throwing an error; ");
                     sb.Append(frameAndScanInfo);
-                    sb.Append("; RawXYData counts: xvals = ");
+                    sb.Append("; RawXYData counts: xVals = ");
                     sb.Append(resultList.Run.XYData.Xvalues.Length);
-                    sb.Append("; yvals = ");
+                    sb.Append("; yVals = ");
                     sb.Append(resultList.Run.XYData.Yvalues.Length);
                     sb.Append("; additional details: ");
                     sb.Append(ex.Message);
@@ -93,28 +93,26 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
         protected void GatherPeakStatistics(Run run)
         {
 
-            ScanSet currentScanset;
+            ScanSet currentScanSet;
 
             if (run is UIMFRun uimfRun)
             {
-                currentScanset = uimfRun.CurrentIMSScanSet;
+                currentScanSet = uimfRun.CurrentIMSScanSet;
             }
             else
             {
-                currentScanset = run.CurrentScanSet;
+                currentScanSet = run.CurrentScanSet;
             }
 
-            Check.Require(currentScanset != null, "the CurrentScanSet for the Run is null. This needs to be set.");
+            Check.Require(currentScanSet != null, "the CurrentScanSet for the Run is null. This needs to be set.");
 
-            if (currentScanset == null) return;
+            if (currentScanSet == null) return;
 
-            currentScanset.BackgroundIntensity = BackgroundIntensity;
-            currentScanset.NumPeaks = run.PeakList.Count; //used in ScanResult
-            currentScanset.BasePeak = _peakUtilities.GetBasePeak(run.PeakList); //Used in ScanResult
+            currentScanSet.BackgroundIntensity = BackgroundIntensity;
+            currentScanSet.NumPeaks = run.PeakList.Count; //used in ScanResult
+            currentScanSet.BasePeak = _peakUtilities.GetBasePeak(run.PeakList); //Used in ScanResult
         }
 
-
-
-        protected abstract double GetBackgroundIntensity(double[] yvalues, double[] xvalues = null);
+        protected abstract double GetBackgroundIntensity(double[] yValues, double[] xValues = null);
     }
 }

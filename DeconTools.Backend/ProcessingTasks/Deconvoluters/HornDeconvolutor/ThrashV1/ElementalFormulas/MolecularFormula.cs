@@ -40,7 +40,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
 
         public override string ToString()
         {
-            var data = " monomw =" + MonoisotopicMass + " averagemw=" + AverageMass + "\n";
+            var data = " MonoMW=" + MonoisotopicMass + " AverageMW=" + AverageMass + "\n";
             foreach (var atomicCount in ElementalComposition)
             {
                 data += atomicCount.Index + " Num Atoms = " +
@@ -96,9 +96,10 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                 var elementIndex = atomicInformation.GetElementIndex(atomicSymbol);
                 if (elementIndex == -1)
                 {
-                    // theres an error. two decimals.
+                    // there is an error. two decimals.
                     var errorStr =
                         "Molecular Formula specified was incorrect. Symbol in formula was not recognize from elements provided: ";
+
                     errorStr += atomicSymbol;
                     throw new Exception(errorStr);
                 }
@@ -159,7 +160,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                     {
                         if (decimalFound)
                         {
-                            // theres an error. two decimals.
+                            // there is an error. two decimals.
                             var errorStr = "Molecular Formula specified was incorrect at position: " +
                                            (stopIndex + 1) + ". Two decimal points present";
                             throw new Exception(errorStr);
@@ -181,7 +182,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                 var elementIndex = atomicInformation.GetElementIndex(atomicSymbol);
                 if (elementIndex == -1)
                 {
-                    // theres an error. two decimals.
+                    // there is an error. two decimals.
                     var errorStr =
                         "Molecular Formula specified was incorrect. Symbol in formula was not recognize from elements provided: ";
                     errorStr += atomicSymbol;

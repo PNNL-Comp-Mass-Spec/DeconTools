@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.Utilities;
@@ -68,7 +67,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
 
             var foundLeftOfMonoPeaks = PeakUtilities.GetPeaksWithinTolerance(peakList, targetMZ, mzTol);
 
-            //if found a peak to the left, will return that peak. If 
+            //if found a peak to the left, will return that peak. If
 
             if (foundLeftOfMonoPeaks.Count == 0)
             {

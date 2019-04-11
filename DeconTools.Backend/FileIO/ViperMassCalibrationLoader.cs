@@ -9,9 +9,6 @@ namespace DeconTools.Backend.FileIO
     public class ViperMassCalibrationLoader
     {
 
-
-
-
         #region Constructors
 
         public ViperMassCalibrationLoader(string filename)

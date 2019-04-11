@@ -5,54 +5,54 @@ using System.Linq;
 namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.ThrashV1.PeakProcessing
 {
     /// <summary>
-    ///     class that does the processing of peaks.
+    /// class that does the processing of peaks.
     /// </summary>
     internal class PeakProcessor
     {
         /// <summary>
-        ///     This variable helps find the m/z value of a peak using the specified fit function.
+        /// This variable helps find the m/z value of a peak using the specified fit function.
         /// </summary>
         private readonly PeakFitter _peakFit = new PeakFitter();
 
         /// <summary>
-        ///     True if peaks are centroided
+        /// True if peaks are centroided
         /// </summary>
         private bool _arePeaksCentroided;
 
         /// <summary>
-        ///     background intensity. When user sets min signal to noise, and min intensity, this value is set as min intensity /
-        ///     min signal to noise.
+        /// background intensity. When user sets min signal to noise, and min intensity, this value is set as min intensity /
+        /// min signal to noise.
         /// </summary>
         private double _backgroundIntensity;
 
         /// <summary>
-        ///     if the data is thresholded, the ratio is taken as the ratio to background intensity.
+        /// if the data is thresholded, the ratio is taken as the ratio to background intensity.
         /// </summary>
         private bool _isDataThresholded;
 
         /// <summary>
-        ///     minimum intensity for a point to be considered a peak.
+        /// minimum intensity for a point to be considered a peak.
         /// </summary>
         private double _peakIntensityThreshold;
 
         /// <summary>
-        ///     signal to noise threshold for a peak to be considered as a peak.
+        /// signal to noise threshold for a peak to be considered as a peak.
         /// </summary>
         private double _signalToNoiseThreshold;
 
         /// <summary>
-        ///     PeakData instance that stores the peaks found by an instance of this PeakProcessor.
+        /// PeakData instance that stores the peaks found by an instance of this PeakProcessor.
         /// </summary>
         public PeakData PeakData;
 
         /// <summary>
-        ///     PeakStatistician instance that is used to calculate signal to noise and full width at half maximum for the peaks in
-        ///     the raw data.
+        /// PeakStatistician instance that is used to calculate signal to noise and full width at half maximum for the peaks in
+        /// the raw data.
         /// </summary>
         public PeakStatistician PeakStatistician = new PeakStatistician();
 
         /// <summary>
-        ///     default constructor.
+        /// default constructor.
         /// </summary>
         public PeakProcessor()
         {
@@ -62,13 +62,13 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         }
 
         /// <summary>
-        ///     sets the threshold for signal to noise for a peak to be considered as real.
+        /// sets the threshold for signal to noise for a peak to be considered as real.
         /// </summary>
         /// <param name="signalToNoise">is the signal to noise threshold value.</param>
         /// <remarks>
-        ///     For a peak to be considered real it has to pass two criterias:
-        ///     - Its signal to noise must be greater than the threshold <see cref="_signalToNoiseThreshold" />
-        ///     - Its intensity needs to be greater than the threshold <see cref="_peakIntensityThreshold" />
+        /// For a peak to be considered real it has to pass two criteria:
+        /// - Its signal to noise must be greater than the threshold <see cref="_signalToNoiseThreshold" />
+        /// - Its intensity needs to be greater than the threshold <see cref="_peakIntensityThreshold" />
         /// </remarks>
         public void SetSignalToNoiseThreshold(double signalToNoise)
         {
@@ -83,18 +83,18 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         }
 
         /// <summary>
-        ///     sets the threshold intensity for a peak to be considered a peak.
+        /// sets the threshold intensity for a peak to be considered a peak.
         /// </summary>
         /// <param name="threshold">is the threshold peak intensity.</param>
         /// <remarks>
-        ///     If threshold is less than zero, then the Math.Abs value of the threshold is used as the cutoff intensity.
-        ///     However, if threshold is greater than equal to zero, otherwise it is proportional to threshold * background
-        ///     intensity in scan.
+        /// If threshold is less than zero, then the Math.Abs value of the threshold is used as the cutoff intensity.
+        /// However, if threshold is greater than equal to zero, otherwise it is proportional to threshold * background
+        /// intensity in scan.
         /// </remarks>
         /// <remarks>
-        ///     For a peak to be considered real it has to pass two criterias:
-        ///     - Its signal to noise must be greater than the threshold (PeakProcessor.mdbl_signal_2_noise_threshold)
-        ///     - Its intensity needs to be greater than the threshold (PeakProcessor.mdbl_peak_intensity_threshold)
+        /// For a peak to be considered real it has to pass two criteria:
+        /// - Its signal to noise must be greater than the threshold (PeakProcessor.signal_2_noise_threshold)
+        /// - Its intensity needs to be greater than the threshold (PeakProcessor.peak_intensity_threshold)
         /// </remarks>
         public void SetPeakIntensityThreshold(double threshold)
         {
@@ -111,7 +111,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         }
 
         /// <summary>
-        ///     sets the type of peak fitting used to find m/z values for peaks.
+        /// sets the type of peak fitting used to find m/z values for peaks.
         /// </summary>
         /// <param name="type">specifies the type of peak fitting.</param>
         public void SetPeakFitType(PeakFitType type)
@@ -121,7 +121,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
 
 #if !Disable_Obsolete
         /// <summary>
-        ///     sets the type of profile
+        /// sets the type of profile
         /// </summary>
         /// <param name="profile">is a boolean, true if profile data, false if centroided</param>
         [Obsolete("Only used by Decon2LS.UI", false)]
@@ -132,7 +132,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
 #endif
 
         /// <summary>
-        ///     sets the options for this instance.
+        /// sets the options for this instance.
         /// </summary>
         /// <param name="signalToNoise">sets the threshold signal to noise value.</param>
         /// <param name="thresh">sets the peak intensity threshold.</param>
@@ -148,7 +148,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         }
 
         /// <summary>
-        ///     Function discovers peaks in the m/z and intensity vectors supplied within the supplied m/z window.
+        /// Function discovers peaks in the m/z and intensity vectors supplied within the supplied m/z window.
         /// </summary>
         /// <param name="mzList">is the pointer to List of m/z values</param>
         /// <param name="intensityList">is the pointer to List of intensity values</param>
@@ -156,12 +156,12 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         /// <param name="stopMz">maximum m/z of the peak.</param>
         /// <returns>returns the number of peaks that were found in the vectors.</returns>
         /// <remarks>
-        ///     The function uses <see cref="PeakStatistician.FindFwhm" />, and
-        ///     <see cref="PeakStatistician.FindSignalToNoise" />
-        ///     to discover the full width at half maximum and signal to noise values for a peak. The signal to noise of a
-        ///     peak is tested against the threshold value before its accepted as a peak. All peaks are used during the process,
-        ///     but once generated only those which are above <see cref="_peakIntensityThreshold" /> are tested for peptidicity by
-        ///     Deconvolution.HornMassTransform
+        /// The function uses <see cref="PeakStatistician.FindFwhm" />, and
+        /// <see cref="PeakStatistician.FindSignalToNoise" />
+        /// to discover the full width at half maximum and signal to noise values for a peak. The signal to noise of a
+        /// peak is tested against the threshold value before its accepted as a peak. All peaks are used during the process,
+        /// but once generated only those which are above <see cref="_peakIntensityThreshold" /> are tested for peptidicity by
+        /// Deconvolution.HornMassTransform
         /// </remarks>
         public int DiscoverPeaks(List<double> mzList, List<double> intensityList, double startMz, double stopMz)
         {
@@ -219,11 +219,11 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                             fwhm = PeakStatistician.FindFwhm(mzList, intensityList, index, signalToNoise);
                             if (fwhm > 0 && fwhm < 0.5)
                             {
-                                var ilow = PeakIndex.GetNearestBinary(mzList, currentMz - fwhm, 0, index);
-                                var ihigh = PeakIndex.GetNearestBinary(mzList, currentMz + fwhm, index, stopIndex);
+                                var iLow = PeakIndex.GetNearestBinary(mzList, currentMz - fwhm, 0, index);
+                                var iHigh = PeakIndex.GetNearestBinary(mzList, currentMz + fwhm, index, stopIndex);
 
-                                var lowIntensity = intensityList[ilow];
-                                var highIntensity = intensityList[ihigh];
+                                var lowIntensity = intensityList[iLow];
+                                var highIntensity = intensityList[iHigh];
 
                                 var sumIntensity = lowIntensity + highIntensity;
                                 if (sumIntensity > 0)
@@ -269,7 +269,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         }
 
         /// <summary>
-        ///     Gets the closest to peakMz among the peak list mzList
+        /// Gets the closest to peakMz among the peak list mzList
         /// </summary>
         /// <param name="peakMz"></param>
         /// <param name="peak"></param>
@@ -307,18 +307,18 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         }
 
         /// <summary>
-        ///     Function discovers peaks in the m/z and intensity vectors supplied.
+        /// Function discovers peaks in the m/z and intensity vectors supplied.
         /// </summary>
         /// <param name="mzList">is the pointer to List of m/z values</param>
         /// <param name="intensityList">is the pointer to List of intensity values</param>
         /// <returns>returns the number of peaks that were found in the vectors.</returns>
         /// <remarks>
-        ///     The function uses <see cref="Engine.PeakProcessing.PeakStatistician.FindFwhm" />, and
-        ///     <see cref="Engine.PeakProcessing.PeakStatistician.FindSignalToNoise" /> functions
-        ///     to discover the full width at half maximum and signal to noise values for a peak. The signal to noise of a
-        ///     peak is tested against the threshold value before its accepted as a peak. All peaks are used during the process,
-        ///     but once generated only those which are above <see cref="_peakIntensityThreshold" /> are tested for peptidicity by
-        ///     Deconvolution.HornMassTransform
+        /// The function uses <see cref="Engine.PeakProcessing.PeakStatistician.FindFwhm" />, and
+        /// <see cref="Engine.PeakProcessing.PeakStatistician.FindSignalToNoise" /> functions
+        /// to discover the full width at half maximum and signal to noise values for a peak. The signal to noise of a
+        /// peak is tested against the threshold value before its accepted as a peak. All peaks are used during the process,
+        /// but once generated only those which are above <see cref="_peakIntensityThreshold" /> are tested for peptidicity by
+        /// Deconvolution.HornMassTransform
         /// </remarks>
         public int DiscoverPeaks(List<double> mzList, List<double> intensityList)
         {
@@ -330,7 +330,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         }
 
         /// <summary>
-        ///     clears the PeakData member variable <see cref="PeakProcessor.PeakData" />
+        /// clears the PeakData member variable <see cref="PeakProcessor.PeakData" />
         /// </summary>
         public void Clear()
         {
@@ -338,16 +338,16 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         }
 
         /// <summary>
-        ///     Removes peaks from unprocessed list that do not have any neighbour peaks within the specified tolerance window.
+        /// Removes peaks from unprocessed list that do not have any neighbor peaks within the specified tolerance window.
         /// </summary>
-        /// <param name="tolerance">the tolerance in looking for neighbouring peaks.</param>
+        /// <param name="tolerance">the tolerance in looking for neighboring peaks.</param>
         public void FilterPeakList(double tolerance)
         {
             PeakData.FilterList(tolerance);
         }
 
         /// <summary>
-        ///     Gets the FWHM for a point.
+        /// Gets the FWHM for a point.
         /// </summary>
         /// <param name="mzList">is List of m/z values.</param>
         /// <param name="intensityList">is List of intensity values.</param>
@@ -361,7 +361,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         }
 
         /// <summary>
-        ///     Gets the FWHM for a point.
+        /// Gets the FWHM for a point.
         /// </summary>
         /// <param name="mzList">is List of m/z values.</param>
         /// <param name="intensityList">is List of intensity values.</param>
@@ -374,7 +374,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         }
 
         /// <summary>
-        ///     Gets the signal to noise for a point.
+        /// Gets the signal to noise for a point.
         /// </summary>
         /// <param name="intensityList">is List of intensity values.</param>
         /// <param name="dataIndex">is the index of the point at which we want to find SN.</param>
@@ -385,7 +385,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         }
 
         /// <summary>
-        ///     Gets the signal to noise for a point.
+        /// Gets the signal to noise for a point.
         /// </summary>
         /// <param name="mzList">is List of m/z values.</param>
         /// <param name="intensityList">is List of intensity values.</param>
@@ -399,8 +399,8 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
 
         public double GetBackgroundIntensity(List<double> intensities)
         {
-            var thres = intensities.Average();
-            return intensities.Where(x => x > 0 && x <= 5 * thres).Average();
+            var threshold = intensities.Average();
+            return intensities.Where(x => x > 0 && x <= 5 * threshold).Average();
         }
     }
 }

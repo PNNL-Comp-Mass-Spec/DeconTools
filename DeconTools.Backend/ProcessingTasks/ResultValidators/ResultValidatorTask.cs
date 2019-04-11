@@ -16,7 +16,6 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
                 new IsotopicProfileInterferenceScorer(minRelIntensityForScore, usePeakBasedInterferenceValue)
             };
 
-
         }
         #endregion
 

@@ -105,16 +105,16 @@ namespace DeconTools.Backend.ProcessingTasks
         /// <summary>
         /// Finds peaks in XY Data within the specified range of X values. Optionally, to use all XY data points, enter 0 for both min and max values
         /// </summary>
-        /// <param name="xydata"></param>
+        /// <param name="xyData"></param>
         /// <param name="minX"></param>
         /// <param name="maxX"></param>
         /// <returns></returns>
-        public override List<Peak> FindPeaks(XYData xydata, double minX = 0, double maxX = 0)
+        public override List<Peak> FindPeaks(XYData xyData, double minX = 0, double maxX = 0)
         {
-            if (xydata?.Xvalues == null || xydata.Xvalues.Length == 0) return null;
+            if (xyData?.Xvalues == null || xyData.Xvalues.Length == 0) return null;
 
-            var xvals = xydata.Xvalues.ToList();
-            var yvals = xydata.Yvalues.ToList();
+            var xVals = xyData.Xvalues.ToList();
+            var yVals = xyData.Yvalues.ToList();
 
             //initialize DeconEngine's peakFinding class
             peakProcessor = new PeakProcessor();
@@ -124,19 +124,19 @@ namespace DeconTools.Backend.ProcessingTasks
             //this.isDataThresholded = resultList.Run.IsDataThresholded;   [commented out:  2010_04_05 by gord]
             UpdateDeconEngineParameters();
 
-            BackgroundIntensity = peakProcessor.GetBackgroundIntensity(yvals);
+            BackgroundIntensity = peakProcessor.GetBackgroundIntensity(yVals);
             peakProcessor.SetOptions(SignalToNoiseThreshold, BackgroundIntensity * PeakToBackgroundRatio, IsDataThresholded, GetDeconPeakFitType(PeakFitType));
 
             //Find peaks using DeconEngine
             if (Math.Abs(minX) < float.Epsilon && Math.Abs(maxX) < float.Epsilon)
             {
-                minX = xydata.Xvalues.First();
-                maxX = xydata.Xvalues.Last();
+                minX = xyData.Xvalues.First();
+                maxX = xyData.Xvalues.Last();
             }
 
             try
             {
-                peakProcessor.DiscoverPeaks(xvals, yvals, minX, maxX);
+                peakProcessor.DiscoverPeaks(xVals, yVals, minX, maxX);
             }
             catch (Exception ex)
             {
@@ -169,7 +169,7 @@ namespace DeconTools.Backend.ProcessingTasks
             }
         }
 
-        protected override double GetBackgroundIntensity(double[] yvalues, double[] xvalues = null)
+        protected override double GetBackgroundIntensity(double[] yValues, double[] xValues = null)
         {
             return 0;
         }

@@ -84,7 +84,7 @@ namespace DeconTools.Backend.FileIO
             var columnIndex = GetColumnIndexForHeader(targetColumn);
             if (columnIndex == -1)
             {
-              return DEFAULT_RETURN_STRING;
+                return DEFAULT_RETURN_STRING;
             }
 
             return row[columnIndex];
@@ -126,15 +126,15 @@ namespace DeconTools.Backend.FileIO
 
 
 
-        protected bool ParseBoolField(string inputstring)
+        protected bool ParseBoolField(string inputString)
         {
-            if (bool.TryParse(inputstring, out var result))
+            if (bool.TryParse(inputString, out var result))
                 return result;
 
             return false;
         }
 
-        protected bool ParseBoolField(List<string>rowData, string[]headers, bool defaultVal = false)
+        protected bool ParseBoolField(List<string> rowData, string[] headers, bool defaultVal = false)
         {
             var rowValueString = LookupData(rowData, headers, string.Empty).ToLower();
 
@@ -143,13 +143,13 @@ namespace DeconTools.Backend.FileIO
                 return defaultVal;
             }
 
-            if (rowValueString=="1" || rowValueString=="true")
+            if (rowValueString == "1" || rowValueString == "true")
             {
                 return true;
 
             }
 
-            if (rowValueString=="0"|| rowValueString=="false")
+            if (rowValueString == "0" || rowValueString == "false")
             {
                 return false;
             }
@@ -159,16 +159,16 @@ namespace DeconTools.Backend.FileIO
 
         }
 
-        protected short ParseShortField(string inputstring)
+        protected short ParseShortField(string inputString)
         {
-            if (Int16.TryParse(inputstring, out var result))
+            if (Int16.TryParse(inputString, out var result))
                 return result;
 
             return 0;
         }
 
 
-        protected short ParseShortField(List<string>rowData, string[]headers, short defaultVal = -1)
+        protected short ParseShortField(List<string> rowData, string[] headers, short defaultVal = -1)
         {
             var rowValueString = LookupData(rowData, headers, string.Empty).ToLower();
 
@@ -190,15 +190,15 @@ namespace DeconTools.Backend.FileIO
 
 
 
-        protected double ParseDoubleField(string inputstring)
+        protected double ParseDoubleField(string inputString)
         {
-            if (double.TryParse(inputstring, out var result))
+            if (double.TryParse(inputString, out var result))
                 return result;
 
             return double.NaN;
         }
 
-        protected double ParseDoubleField(List<string>rowData, string[]headers, double defaultVal = double.NaN)
+        protected double ParseDoubleField(List<string> rowData, string[] headers, double defaultVal = double.NaN)
         {
             var rowValueString = LookupData(rowData, headers, string.Empty).ToLower();
 
@@ -218,9 +218,9 @@ namespace DeconTools.Backend.FileIO
 
 
 
-        protected float ParseFloatField(string inputstring)
+        protected float ParseFloatField(string inputString)
         {
-            if (float.TryParse(inputstring, out var result))
+            if (float.TryParse(inputString, out var result))
                 return result;
 
             return float.NaN;
@@ -247,13 +247,13 @@ namespace DeconTools.Backend.FileIO
 
 
 
-        protected int ParseIntField(string inputstring)
+        protected int ParseIntField(string inputString)
         {
-            if (Int32.TryParse(inputstring, out var result))
+            if (Int32.TryParse(inputString, out var result))
                 return result;
 
-            var secondAttempt = ParseDoubleField(inputstring);
-            if (secondAttempt != double.NaN)
+            var secondAttempt = ParseDoubleField(inputString);
+            if (!double.IsNaN(secondAttempt))
             {
                 return Convert.ToInt32(secondAttempt);
             }
@@ -279,9 +279,9 @@ namespace DeconTools.Backend.FileIO
         }
 
 
-        protected long ParseLongField(string inputstring)
+        protected long ParseLongField(string inputString)
         {
-            if (Int64.TryParse(inputstring, out var result))
+            if (Int64.TryParse(inputString, out var result))
                 return result;
 
             return -1;

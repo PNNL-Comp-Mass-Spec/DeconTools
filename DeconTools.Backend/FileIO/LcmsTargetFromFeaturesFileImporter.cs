@@ -8,29 +8,28 @@ namespace DeconTools.Backend.FileIO
 
     public class LcmsTargetFromFeaturesFileImporter : ImporterBase<TargetCollection>
     {
-        private string _filename;
+        private readonly string _filename;
 
         public LcmsTargetFromFeaturesFileImporter(string fileName)
         {
             _filename = fileName;
         }
 
-
-        private string[] datasetHeaders = {"dataset"};
-        private string[] chargeStateHeaders = { "chargestate", "z", "charge_state", "ClassStatsChargeBasis", "Charge", "Class_Stats_Charge_Basis" };
-        private string[] chargeStateLowerHeaders = {"ChargeStateMin"};
-        private string[] chargeStateUpperHeaders = {"ChargeStateMax"};
-        private string[] targetIDHeaders = {"index", "UMCIndex","TargetID", "FeatureID", "UMC_Ind"};
-        private string[] featureToMassTagIDHeaders = { "MassTagID", "MatchedMassTagID", "ReferenceID", "Mass_Tag_ID" };
-        private string[] empiricalFormulaHeaders= {"formula","empirical_formula","empiricalFormula","molecular_formula","molecularFormula" };
-        private string[] monomassHeaders = {"MonoisotopicMass", "UMCMonoMW", "MonoMassIso1"};
+        private readonly string[] datasetHeaders = {"dataset"};
+        private readonly string[] chargeStateHeaders = { "chargestate", "z", "charge_state", "ClassStatsChargeBasis", "Charge", "Class_Stats_Charge_Basis" };
+        private readonly string[] chargeStateLowerHeaders = {"ChargeStateMin"};
+        private readonly string[] chargeStateUpperHeaders = {"ChargeStateMax"};
+        private readonly string[] targetIDHeaders = {"index", "UMCIndex","TargetID", "FeatureID", "UMC_Ind"};
+        private readonly string[] featureToMassTagIDHeaders = { "MassTagID", "MatchedMassTagID", "ReferenceID", "Mass_Tag_ID" };
+        private readonly string[] empiricalFormulaHeaders= {"formula","empirical_formula","empiricalFormula","molecular_formula","molecularFormula" };
+        private readonly string[] monomassHeaders = {"MonoisotopicMass", "UMCMonoMW", "MonoMassIso1"};
 
         private string[] mzHeaders = {"MonoMZ", "UMCMZForChargeBasis"};
-        private string[] scanHeaders = { "scan", "scanClassRep", "Scan_Max_Abundance","ScanNum" };
+        private readonly string[] scanHeaders = { "scan", "scanClassRep", "Scan_Max_Abundance","ScanNum" };
         private string[] scanEndHeaders = {"scanEnd", "scan_end"};
         private string[] scanStartHeaders = {"scanStart", "scan_start"};
         private string[] netHeaders = {"net", "NETClassRep", "ElutionTime"};
-        private string[] peptideSequenceHeaders = {"peptide", "peptidesequence", "sequence", "code"};
+        private readonly string[] peptideSequenceHeaders = {"peptide", "peptidesequence", "sequence", "code"};
 
         public override TargetCollection Import()
         {

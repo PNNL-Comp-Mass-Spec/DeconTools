@@ -233,10 +233,10 @@ namespace DeconTools.Backend.FileIO
             }
         }
 
-        private void GetModDataFromDB(TargetCollection data, IReadOnlyList<long> massTagsToBeRetrivedList)
+        private void GetModDataFromDB(TargetCollection data, IReadOnlyList<long> massTagsToBeRetrievedList)
         {
             var fact = DbProviderFactories.GetFactory("System.Data.SqlClient");
-            var queryString = createQueryString(ImporterMode, massTagsToBeRetrivedList);
+            var queryString = createQueryString(ImporterMode, massTagsToBeRetrievedList);
             //Console.WriteLine(queryString);
 
             var modContainingPeptides = (from n in data.TargetList where n.ModCount > 0 select n).ToList();
@@ -302,7 +302,7 @@ namespace DeconTools.Backend.FileIO
 
         }
 
-        private void GetMassTagDataFromDB(TargetCollection data, IReadOnlyCollection<long> massTagsToBeRetrivedList)
+        private void GetMassTagDataFromDB(TargetCollection data, IReadOnlyCollection<long> massTagsToBeRetrievedList)
         {
             var fact = DbProviderFactories.GetFactory("System.Data.SqlClient");
 
@@ -319,9 +319,9 @@ namespace DeconTools.Backend.FileIO
                 cnn.Open();
 
                 var progressCounter = 0;
-                while (currentListPos < massTagsToBeRetrivedList.Count )
+                while (currentListPos < massTagsToBeRetrievedList.Count )
                 {
-                    var nextGroupOfMassTagIDs = massTagsToBeRetrivedList.Skip(currentListPos).Take(ChunkSize).ToList();// GetRange(currentIndex, 5000);
+                    var nextGroupOfMassTagIDs = massTagsToBeRetrievedList.Skip(currentListPos).Take(ChunkSize).ToList();// GetRange(currentIndex, 5000);
                     currentListPos += (ChunkSize-1);
 
                     var queryString = createQueryString(ImporterMode,nextGroupOfMassTagIDs);

@@ -5,12 +5,12 @@ using DeconTools.Backend.Core;
 
 namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
 {
-    public class ChromPeakDetector:DeconToolsPeakDetectorV2
+    public class ChromPeakDetector : DeconToolsPeakDetectorV2
     {
 
         #region Constructors
 
-        public ChromPeakDetector():base()
+        public ChromPeakDetector() : base()
         {
             IsDataThresholded = false;
         }
@@ -29,15 +29,16 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
 
         #region Public Methods
 
-        public override Core.Peak CreatePeak(double xvalue, float height, float width = 0, float signalToNoise = 0)
+        public override Core.Peak CreatePeak(double xValue, float height, float width = 0, float signalToNoise = 0)
         {
-            return new ChromPeak(xvalue, height, width, signalToNoise);
+            return new ChromPeak(xValue, height, width, signalToNoise);
         }
 
         public void CalculateElutionTimes(Run run, List<Peak> peakList)
         {
-            foreach (ChromPeak chromPeak in peakList)
+            foreach (var peak in peakList)
             {
+                var chromPeak = (ChromPeak)peak;
                 chromPeak.NETValue = run.NetAlignmentInfo.GetNETValueForScan((int)Math.Round(chromPeak.XValue));
             }
         }
@@ -45,29 +46,28 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
         public void FilterPeaksOnNET(double chromNetTolerance, double elutionTime, List<Peak> peakList)
         {
             var outOfRange = new List<Peak>();
-            foreach (ChromPeak peak in peakList)
+            foreach (var peak in peakList)
             {
-                if (Math.Abs(peak.NETValue - elutionTime) >= chromNetTolerance)
+                var chromPeak = (ChromPeak)peak;
+                if (Math.Abs(chromPeak.NETValue - elutionTime) >= chromNetTolerance)
                 //peak.NETValue was determined by the ChromPeakDetector or a future ChromAligner Task
                 {
-                    outOfRange.Add(peak);
+                    outOfRange.Add(chromPeak);
                 }
             }
 
-            foreach (ChromPeak peak in outOfRange)
+            foreach (var peak in outOfRange)
             {
-                peakList.Remove(peak);
+                var chromPeak = (ChromPeak)peak;
+                peakList.Remove(chromPeak);
             }
         }
-
 
         #endregion
         protected override void ExecutePostProcessingHook(Run run)
         {
             CalculateElutionTimes(run, run.PeakList);
         }
-
-      
 
     }
 }

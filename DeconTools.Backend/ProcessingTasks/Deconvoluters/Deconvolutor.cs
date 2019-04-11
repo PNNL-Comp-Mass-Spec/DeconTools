@@ -66,16 +66,15 @@ namespace DeconTools.Backend.ProcessingTasks
         {
             if (resultList.IsosResultBin == null || resultList.IsosResultBin.Count == 0) return;
 
-            foreach (var msfeature in resultList.IsosResultBin)
+            foreach (var msFeature in resultList.IsosResultBin)
             {
-                foreach (var peak in msfeature.IsotopicProfile.Peaklist)
+                foreach (var peak in msFeature.IsotopicProfile.Peaklist)
                 {
-                    peak.MSFeatureID = msfeature.MSFeatureID;
+                    peak.MSFeatureID = msFeature.MSFeatureID;
 
                 }
 
             }
-
 
 
         }

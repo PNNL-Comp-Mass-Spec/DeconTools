@@ -11,9 +11,9 @@ namespace DeconTools.Backend.FileIO
 
         protected string[] scanHeaders = { "scan", "scanClassRep" };
         protected string[] netHeaders = { "net", "NETClassRep" };
-        private string _filename;
+        private readonly string _filename;
 
-        private List<ScanNETPair> _scanNETPairs = new List<ScanNETPair>();
+        private readonly List<ScanNETPair> _scanNETPairs = new List<ScanNETPair>();
 
         #region Constructors
 

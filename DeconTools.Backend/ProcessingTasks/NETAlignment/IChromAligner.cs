@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using DeconTools.Backend.Core;
-
+﻿
 namespace DeconTools.Backend.ProcessingTasks.NETAlignment
 {
     public abstract class IChromAligner
@@ -19,6 +14,6 @@ namespace DeconTools.Backend.ProcessingTasks.NETAlignment
 
         #region Private Methods
         #endregion
-       
+
     }
 }

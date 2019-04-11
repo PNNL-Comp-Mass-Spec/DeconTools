@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using DeconTools.Backend.Core;
 using DeconTools.Utilities;
 
@@ -10,15 +7,15 @@ namespace DeconTools.Backend.FileIO
 
     /// <summary>
     /// This helper class will create the appropriate MS Feature (isosResult) Exporter when given info on
-    /// fileType and dataset type. 
+    /// fileType and dataset type.
     /// </summary>
     public class MSFeatureExporterFactory
     {
-     
+
         #region Constructors
         public MSFeatureExporterFactory()
         {
-            
+
         }
 
         #endregion
@@ -36,7 +33,7 @@ namespace DeconTools.Backend.FileIO
             {
                 case Globals.ExporterType.Text:
 
-                    //IMS and UIMF filetypes have their own special export formats. All others will use a standard format. 
+                    //IMS and UIMF file types have their own special export formats. All others will use a standard format.
                     switch (msFileType)
                     {
                         case Globals.MSFileType.PNNL_IMS:

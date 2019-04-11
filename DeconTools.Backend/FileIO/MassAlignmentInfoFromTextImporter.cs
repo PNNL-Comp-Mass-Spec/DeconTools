@@ -7,16 +7,12 @@ namespace DeconTools.Backend.FileIO
 {
     public class MassAlignmentInfoFromTextImporter : ImporterBase<List<MassAlignmentDataItem>>
     {
-
-        List<MassAlignmentDataItem> _massAndTimeCorrectionData = new List<MassAlignmentDataItem>();
-        private string[] mzHeaders = { "mz" };
-        private string[] mzPPMCorrectionHeaders = { "mzPPMCorrection" };
-        private string[] scanHeaders= { "scan" };
-        private string[] scanPPMCorrectionHeaders = { "scanPPMCorrection" };
-        private string _filename;
-
-     
-
+        readonly List<MassAlignmentDataItem> _massAndTimeCorrectionData = new List<MassAlignmentDataItem>();
+        private readonly string[] mzHeaders = { "mz" };
+        private readonly string[] mzPPMCorrectionHeaders = { "mzPPMCorrection" };
+        private readonly string[] scanHeaders= { "scan" };
+        private readonly string[] scanPPMCorrectionHeaders = { "scanPPMCorrection" };
+        private readonly string _filename;
 
         #region Constructors
         public MassAlignmentInfoFromTextImporter(string filename)
@@ -76,7 +72,7 @@ namespace DeconTools.Backend.FileIO
                 }
 
 
-                var lineCounter = 1;   //used for tracking which line is being processed. 
+                var lineCounter = 1;   //used for tracking which line is being processed.
 
                 //read and process each line of the file
                 while (!sr.EndOfStream)

@@ -10,7 +10,7 @@ namespace DeconTools.Backend.ProcessingTasks.MSGenerators
 
         public virtual double MaxMZ { get; set; }
 
-        public abstract XYData GenerateMS(Run run, ScanSet lcScanSet, ScanSet imsScanset=null);
+        public abstract XYData GenerateMS(Run run, ScanSet lcScanSet, ScanSet imsScanSet = null);
 
         //protected abstract void createNewScanResult(ResultCollection resultList, ScanSet scanSet);
 
@@ -19,12 +19,12 @@ namespace DeconTools.Backend.ProcessingTasks.MSGenerators
             resultList.Run.XYData = GenerateMS(resultList.Run, resultList.Run.CurrentScanSet);
         }
 
-        public float GetTIC(XYData xydata, double minMZ, double maxMZ)
+        public float GetTIC(XYData xyData, double minMZ, double maxMZ)
         {
-            if (xydata == null) return -1;
+            if (xyData == null) return -1;
 
-            var xValues = xydata.Xvalues;
-            var yValues = xydata.Yvalues;
+            var xValues = xyData.Xvalues;
+            var yValues = xyData.Yvalues;
 
             if (xValues == null || yValues == null) return -1;
 

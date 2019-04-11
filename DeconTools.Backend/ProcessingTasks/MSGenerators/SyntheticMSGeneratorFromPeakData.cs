@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using DeconTools.Utilities;
 using DeconTools.Backend.Core;
-using DeconTools.Backend.Utilities.IsotopeDistributionCalculation;
 
 namespace DeconTools.Backend.ProcessingTasks.MSGenerators
 {
@@ -47,42 +43,52 @@ namespace DeconTools.Backend.ProcessingTasks.MSGenerators
 
         #region Private Methods
         #endregion
-        public override XYData GenerateMS(DeconTools.Backend.Core.Run run, ScanSet lcScanset, ScanSet imsScanset=null)
+
+        public override XYData GenerateMS(DeconTools.Backend.Core.Run run, ScanSet lcScanSet, ScanSet imsScanSet = null)
         {
             Check.Require(run != null, string.Format("{0} failed. Run has not been defined.", this.Name));
+            if (run == null)
+                return new XYData();
+
             Check.Require(run.PeakList != null && run.PeakList.Count > 0, string.Format("{0} failed. Run has not been defined.", this.Name));
+            if (run.PeakList == null)
+                return new XYData();
 
             var syntheticMSData = new XYData();
-            var xvals = new List<double>();
-            var yvals = new List<double>();
+            var xVals = new List<double>();
+            var yVals = new List<double>();
 
-            foreach (MSPeak peak in run.PeakList)
+            foreach (var peak in run.PeakList)
             {
+                var msPeak = (MSPeak)peak;
+
                 XYData generatedXYData;
 
                 switch (ModeOfPeakWidthCalculation)
                 {
                     case SyntheticMSGeneratorFromPeakDataMode.WidthsCalculatedFromSingleValue:
-                        generatedXYData = peak.GetTheorPeakData(this.PeakWidthForAllPeaks, 11);
+                        generatedXYData = msPeak.GetTheorPeakData(this.PeakWidthForAllPeaks, 11);
                         break;
                     case SyntheticMSGeneratorFromPeakDataMode.WidthsCalculatedOnAPerPeakBasis:
-                        generatedXYData = peak.GetTheorPeakData(peak.Width, 11);
+                        generatedXYData = msPeak.GetTheorPeakData(msPeak.Width, 11);
                         break;
                     default:
-                        generatedXYData = peak.GetTheorPeakData(this.PeakWidthForAllPeaks, 11);
+                        generatedXYData = msPeak.GetTheorPeakData(this.PeakWidthForAllPeaks, 11);
                         break;
                 }
 
-                xvals.AddRange(generatedXYData.Xvalues);
-                yvals.AddRange(generatedXYData.Yvalues);
+                xVals.AddRange(generatedXYData.Xvalues);
+                yVals.AddRange(generatedXYData.Yvalues);
             }
 
-            var xydata=new XYData();
-            xydata.Xvalues = xvals.ToArray();
-            xydata.Yvalues = yvals.ToArray();
-            return xydata;
+            var xyData = new XYData {
+                Xvalues = xVals.ToArray(),
+                Yvalues = yVals.ToArray()
+            };
+
+            return xyData;
         }
 
-        
+
     }
 }

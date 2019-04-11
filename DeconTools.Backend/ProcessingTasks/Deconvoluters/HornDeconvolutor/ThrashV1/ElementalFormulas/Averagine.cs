@@ -18,7 +18,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
 
         /// <summary>
         ///     If a chemical labelling tag is applied to the molecular formula, it needs to be necessarily added to the molecular
-        ///     formula (after substraction by its mass).
+        ///     formula (after subtraction by its mass).
         /// </summary>
         private bool _useTag;
 
@@ -144,31 +144,31 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                 }
             }
 
-            // now whatever's left over in mass, is assigned to hydrogen because it is not expected to cause
+            // now whatever is left over in mass, is assigned to hydrogen because it is not expected to cause
             // much of a distortion in the isotope profile.
             var remainderMass = mw - averageMass;
             if (_useTag)
                 remainderMass += _tagMass;
-            var numHydrogens =
+            var hydrogenCount =
                 (int)
                     (remainderMass / _elementIsotopeAbundance.ElementalIsotopesList[_hydrogenElementIndex].AverageMass +
                      0.5);
 
-            averageMass += numHydrogens *
+            averageMass += hydrogenCount *
                            _elementIsotopeAbundance.ElementalIsotopesList[_hydrogenElementIndex].AverageMass;
-            monoMass += numHydrogens *
+            monoMass += hydrogenCount *
                         _elementIsotopeAbundance.ElementalIsotopesList[_hydrogenElementIndex].Isotopes[0].Mass;
-            totalAtomCount += numHydrogens;
+            totalAtomCount += hydrogenCount;
 
-            if (numHydrogens > 0)
+            if (hydrogenCount > 0)
             {
                 if (hydrogenIndex != -1)
                 {
-                    empiricalFormula.ElementalComposition[hydrogenIndex].NumCopies += numHydrogens;
+                    empiricalFormula.ElementalComposition[hydrogenIndex].NumCopies += hydrogenCount;
                 }
                 else
                 {
-                    empiricalFormula.ElementalComposition.Add(new AtomicCount(_hydrogenElementIndex, numHydrogens));
+                    empiricalFormula.ElementalComposition.Add(new AtomicCount(_hydrogenElementIndex, hydrogenCount));
                 }
             }
             empiricalFormula.MonoisotopicMass = monoMass;

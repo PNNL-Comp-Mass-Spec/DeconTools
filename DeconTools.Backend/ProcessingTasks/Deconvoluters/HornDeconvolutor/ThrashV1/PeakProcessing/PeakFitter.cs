@@ -4,28 +4,28 @@ using System.Collections.Generic;
 namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.ThrashV1.PeakProcessing
 {
     /// <summary>
-    ///     enumeration for type of fit.
+    /// enumeration for type of fit.
     /// </summary>
     internal enum PeakFitType
     {
         /// <summary>
-        ///     The peak is the m/z value higher than the points before and after it
+        /// The peak is the m/z value higher than the points before and after it
         /// </summary>
         Apex = 0,
 
         /// <summary>
-        ///     The peak is the m/z value which is a quadratic fit of the three points around the apex
+        /// The peak is the m/z value which is a quadratic fit of the three points around the apex
         /// </summary>
         Quadratic,
 
         /// <summary>
-        ///     The peak is the m/z value which is a lorentzian fit of the three points around the apex
+        /// The peak is the m/z value which is a lorentzian fit of the three points around the apex
         /// </summary>
         Lorentzian
     }
 
     /// <summary>
-    ///     Used for detecting peaks in the data.
+    /// Used for detecting peaks in the data.
     /// </summary>
     /// <seealso cref="DeconTools.Backend.ProcessingTasks.FitScoreCalculators.PeakLeastSquaresFitter"/> TODO: Verify this
     internal class PeakFitter
@@ -36,7 +36,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         private PeakFitType _peakFitType;
 
         /// <summary>
-        ///     Default constructor.
+        /// Default constructor.
         /// </summary>
         /// <remarks>By default uses Quadratic fit.</remarks>
         public PeakFitter()
@@ -45,7 +45,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         }
 
         /// <summary>
-        ///     Sets the type of fit.
+        /// Sets the type of fit.
         /// </summary>
         /// <param name="type">sets the type of fit function that this instance uses.</param>
         public void SetOptions(PeakFitType type)
@@ -54,7 +54,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         }
 
         /// <summary>
-        ///     Gets the peak that fits the point at a given index by the specified peak fit function.
+        /// Gets the peak that fits the point at a given index by the specified peak fit function.
         /// </summary>
         /// <param name="index">index of the point in the m/z vectors which is the apex of the peak.</param>
         /// <param name="mzs">List of raw data of m\zs.</param>
@@ -77,13 +77,13 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         }
 
         /// <summary>
-        ///     Gets the peak that fits the point at a given index with a quadratic fit.
+        /// Gets the peak that fits the point at a given index with a quadratic fit.
         /// </summary>
         /// <param name="index">index of the point in the m/z vectors which is the apex of the peak.</param>
         /// <param name="mzs">List of raw data of m\zs.</param>
         /// <param name="intensities">List of raw data of intensities.</param>
         /// <returns>returns the m/z of the peak.</returns>
-        private double QuadraticFit(List<double> mzs, List<double> intensities, int index)
+        private double QuadraticFit(IReadOnlyList<double> mzs, IReadOnlyList<double> intensities, int index)
         {
             if (index < 1)
                 return mzs[0];
@@ -105,14 +105,14 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         }
 
         /// <summary>
-        ///     Gets the peak that fits the point at a given index with a Lorentzian fit.
+        /// Gets the peak that fits the point at a given index with a Lorentzian fit.
         /// </summary>
         /// <param name="index">index of the point in the m/z vectors which is the apex of the peak.</param>
         /// <param name="mzs">List of raw data of m\zs.</param>
         /// <param name="intensities">List of raw data of intensities.</param>
         /// <param name="fwhm"></param>
         /// <returns>returns the m/z of the peak.</returns>
-        private double LorentzianFit(List<double> mzs, List<double> intensities, int index, double fwhm)
+        private double LorentzianFit(List<double> mzs, IReadOnlyList<double> intensities, int index, double fwhm)
         {
             var a = intensities[index];
             var vo = mzs[index];
@@ -123,26 +123,26 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             if (index == mzs.Count)
                 return mzs[index];
 
-            var lstart = PeakIndex.GetNearest(mzs, vo + fwhm, index) + 1;
-            var lstop = PeakIndex.GetNearest(mzs, vo - fwhm, index) - 1;
+            var leftStart = PeakIndex.GetNearest(mzs, vo + fwhm, index) + 1;
+            var leftStop = PeakIndex.GetNearest(mzs, vo - fwhm, index) - 1;
 
-            var currentE = LorentzianLS(mzs, intensities, a, fwhm, vo, lstart, lstop);
+            var currentE = LorentzianLS(mzs, intensities, a, fwhm, vo, leftStart, leftStop);
             for (var i = 0; i < 50; i++)
             {
                 var lastE = currentE;
                 vo = vo + e;
-                currentE = LorentzianLS(mzs, intensities, a, fwhm, vo, lstart, lstop);
+                currentE = LorentzianLS(mzs, intensities, a, fwhm, vo, leftStart, leftStop);
                 if (currentE > lastE)
                     break;
             }
 
             vo = vo - e;
-            currentE = LorentzianLS(mzs, intensities, a, fwhm, vo, lstart, lstop);
+            currentE = LorentzianLS(mzs, intensities, a, fwhm, vo, leftStart, leftStop);
             for (var i = 0; i < 50; i++)
             {
                 var lastE = currentE;
                 vo = vo - e;
-                currentE = LorentzianLS(mzs, intensities, a, fwhm, vo, lstart, lstop);
+                currentE = LorentzianLS(mzs, intensities, a, fwhm, vo, leftStart, leftStop);
                 if (currentE > lastE)
                     break;
             }
@@ -151,24 +151,24 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         }
 
         /// <summary>
-        ///     Gets the peak that fits the point at a given index with a Lorentzian least square fit.
+        /// Gets the peak that fits the point at a given index with a Lorentzian least square fit.
         /// </summary>
         /// <param name="mzs">List of raw data of m\zs.</param>
         /// <param name="intensities">List of raw data of intensities.</param>
         /// <param name="a"></param>
         /// <param name="fwhm"></param>
         /// <param name="vo"></param>
-        /// <param name="lstart"></param>
-        /// <param name="lstop"></param>
+        /// <param name="leftStart"></param>
+        /// <param name="leftStop"></param>
         /// <returns>returns the m/z of the fit peak.</returns>
-        private double LorentzianLS(List<double> mzs, List<double> intensities, double a, double fwhm, double vo,
-            int lstart, int lstop)
+        private double LorentzianLS(IReadOnlyList<double> mzs, IReadOnlyList<double> intensities, double a, double fwhm, double vo,
+            int leftStart, int leftStop)
         {
             double rmsError = 0;
-            for (var index = lstart; index <= lstop; index++)
+            for (var index = leftStart; index <= leftStop; index++)
             {
                 var u = 2 / fwhm * (mzs[index] - vo);
-                double y1 = (int) (a / (1 + u * u));
+                double y1 = (int)(a / (1 + u * u));
                 var y2 = intensities[index];
                 rmsError = rmsError + (y1 - y2) * (y1 - y2);
             }

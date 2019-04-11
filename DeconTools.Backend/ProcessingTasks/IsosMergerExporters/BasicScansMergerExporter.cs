@@ -52,18 +52,18 @@ namespace DeconTools.Backend.ProcessingTasks.IsosMergerExporters
             Check.Require(resultList != null, "Scans merger failed. ResultCollection is null");
             Check.Require(resultList.ScanResultList != null && resultList.ScanResultList.Count > 0, "Scans merger failed... there's a problem in the ScanResult List");
 
-            var scanresult = resultList.ScanResultList[0];   // we only take the first one since we delete each scanResult after writing it out to file
+            var scanResult = resultList.ScanResultList[0];   // we only take the first one since we delete each scanResult after writing it out to file
 
             var data = new List<string>
             {
-                getScanNumber(scanresult.ScanSet.PrimaryScanNumber).ToString(),
-                DblToString(scanresult.ScanTime, 4),
-                scanresult.SpectrumType.ToString(),
-                DblToString(scanresult.BasePeak.Height, 4, true),
-                DblToString(scanresult.BasePeak.XValue, 5),
-                DblToString(scanresult.ScanSet.TICValue, 4, true),
-                scanresult.NumPeaks.ToString(),
-                scanresult.NumIsotopicProfiles.ToString()
+                getScanNumber(scanResult.ScanSet.PrimaryScanNumber).ToString(),
+                DblToString(scanResult.ScanTime, 4),
+                scanResult.SpectrumType.ToString(),
+                DblToString(scanResult.BasePeak.Height, 4, true),
+                DblToString(scanResult.BasePeak.XValue, 5),
+                DblToString(scanResult.ScanSet.TICValue, 4, true),
+                scanResult.NumPeaks.ToString(),
+                scanResult.NumIsotopicProfiles.ToString()
             };
 
             sw.WriteLine(string.Join(DELIMITER.ToString(), data));

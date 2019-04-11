@@ -13,7 +13,6 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
     public class AreaFitter:LeastSquaresFitter
     {
 
-
         public double GetFit(XYData theorXYData, XYData observedXYData, double minIntensityForScore, double offset = 0)
         {
             return GetFit(theorXYData, observedXYData, minIntensityForScore, out var ionCountUsed, offset);

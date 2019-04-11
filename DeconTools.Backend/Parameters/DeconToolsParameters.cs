@@ -43,14 +43,14 @@ namespace DeconTools.Backend.Parameters
         public DeconToolsParameters Clone()
         {
             var newParams = DeconTools.Backend.Utilities.ObjectCopier.Clone(this);
-        
+
             return newParams;
         }
 
         public void LoadFromOldDeconToolsParameterFile(string xmlFilename)
         {
-            var xdocument = XDocument.Load(xmlFilename);
-            var parameterBaseElement = xdocument.Element("parameters");
+            var xDocument = XDocument.Load(xmlFilename);
+            var parameterBaseElement = xDocument.Element("parameters");
 
             if (parameterBaseElement == null)
             {
@@ -61,7 +61,7 @@ namespace DeconTools.Backend.Parameters
 
             var peakDetectionElement = parameterBaseElement.Element("PeakParameters");
             PeakDetectorParameters.LoadParametersV2(peakDetectionElement);
-            
+
             var thrashElement = parameterBaseElement.Element("HornTransformParameters");
             ThrashParameters.LoadParametersV2(thrashElement);
 
@@ -69,7 +69,6 @@ namespace DeconTools.Backend.Parameters
             MiscMSProcessingParameters.LoadParametersV2(miscElement);
 
             var elements = parameterBaseElement.Elements();
-
 
             //MSGenerator parameters are found in the old DeconTools parameter file under the 'HornTransformParameters' and the 'Miscellaneous' parameters
             MSGeneratorParameters.LoadParametersV2(thrashElement);
@@ -81,7 +80,7 @@ namespace DeconTools.Backend.Parameters
             ScanBasedWorkflowParameters.LoadParametersV2(peakDetectionElement);
         }
 
-    
+
         public void Save(string xmlFilename)
         {
             throw new NotImplementedException();
