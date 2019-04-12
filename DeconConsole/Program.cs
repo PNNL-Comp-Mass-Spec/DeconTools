@@ -7,15 +7,32 @@ namespace DeconConsole
     public class Program
     {
 
-        public const string PROGRAM_DATE = "September 21, 2018";
+        public const string PROGRAM_DATE = "April 11, 2019";
 
         public static int Main(string[] args)
         {
             Console.WriteLine("Starting..............");
 
-            if (args.Length < 2 || args.Length > 3)
+            if (args == null || args.Length == 0)
             {
                 ReportSyntax();
+                System.Threading.Thread.Sleep(1500);
+                return 1;
+            }
+
+            if (args.Length < 2)
+            {
+                Console.WriteLine("Not enough command line arguments; expecting 2 or 3");
+                ReportSyntax();
+                System.Threading.Thread.Sleep(1500);
+                return 1;
+            }
+
+            if (args.Length > 3)
+            {
+                Console.WriteLine("Too many command line arguments; expecting 2 or 3");
+                ReportSyntax();
+                System.Threading.Thread.Sleep(1500);
                 return 1;
             }
 
