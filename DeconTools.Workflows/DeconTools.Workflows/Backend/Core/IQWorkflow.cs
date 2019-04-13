@@ -196,15 +196,15 @@ namespace DeconTools.Workflows.Backend.Core
         public virtual ChromPeakSelectorBase CreateChromPeakSelector(TargetedWorkflowParameters workflowParameters)
         {
             ChromPeakSelectorBase chromPeakSelector;
-            var chromPeakSelectorParameters = new ChromPeakSelectorParameters();
-            chromPeakSelectorParameters.NETTolerance = (float)workflowParameters.ChromNETTolerance;
-            chromPeakSelectorParameters.NumScansToSum = workflowParameters.NumMSScansToSum;
-            chromPeakSelectorParameters.PeakSelectorMode = workflowParameters.ChromPeakSelectorMode;
-            chromPeakSelectorParameters.SummingMode = workflowParameters.SummingMode;
-            chromPeakSelectorParameters.AreaOfPeakToSumInDynamicSumming = workflowParameters.AreaOfPeakToSumInDynamicSumming;
-            chromPeakSelectorParameters.MaxScansSummedInDynamicSumming = workflowParameters.MaxScansSummedInDynamicSumming;
-
-
+            var chromPeakSelectorParameters = new ChromPeakSelectorParameters
+            {
+                NETTolerance = (float)workflowParameters.ChromNETTolerance,
+                NumScansToSum = workflowParameters.NumMSScansToSum,
+                PeakSelectorMode = workflowParameters.ChromPeakSelectorMode,
+                SummingMode = workflowParameters.SummingMode,
+                AreaOfPeakToSumInDynamicSumming = workflowParameters.AreaOfPeakToSumInDynamicSumming,
+                MaxScansSummedInDynamicSumming = workflowParameters.MaxScansSummedInDynamicSumming
+            };
 
             switch (workflowParameters.ChromPeakSelectorMode)
             {
@@ -217,29 +217,33 @@ namespace DeconTools.Workflows.Backend.Core
 
                 case DeconTools.Backend.Globals.PeakSelectorMode.Smart:
 
-                    var smartchrompeakSelectorParameters = new SmartChromPeakSelectorParameters(chromPeakSelectorParameters);
-                    smartchrompeakSelectorParameters.MSFeatureFinderType = DeconTools.Backend.Globals.TargetedFeatureFinderType.ITERATIVE;
-                    smartchrompeakSelectorParameters.MSPeakDetectorPeakBR = workflowParameters.MSPeakDetectorPeakBR;
-                    smartchrompeakSelectorParameters.MSPeakDetectorSigNoiseThresh = workflowParameters.MSPeakDetectorSigNoise;
-                    smartchrompeakSelectorParameters.MSToleranceInPPM = workflowParameters.MSToleranceInPPM;
-                    smartchrompeakSelectorParameters.NumChromPeaksAllowed = workflowParameters.NumChromPeaksAllowedDuringSelection;
-                    smartchrompeakSelectorParameters.MultipleHighQualityMatchesAreAllowed = workflowParameters.MultipleHighQualityMatchesAreAllowed;
-                    smartchrompeakSelectorParameters.IterativeTffMinRelIntensityForPeakInclusion = 0.66;
+                    var smartChromPeakSelectorParameters = new SmartChromPeakSelectorParameters(chromPeakSelectorParameters)
+                    {
+                        MSFeatureFinderType = DeconTools.Backend.Globals.TargetedFeatureFinderType.ITERATIVE,
+                        MSPeakDetectorPeakBR = workflowParameters.MSPeakDetectorPeakBR,
+                        MSPeakDetectorSigNoiseThresh = workflowParameters.MSPeakDetectorSigNoise,
+                        MSToleranceInPPM = workflowParameters.MSToleranceInPPM,
+                        NumChromPeaksAllowed = workflowParameters.NumChromPeaksAllowedDuringSelection,
+                        MultipleHighQualityMatchesAreAllowed = workflowParameters.MultipleHighQualityMatchesAreAllowed,
+                        IterativeTffMinRelIntensityForPeakInclusion = 0.66
+                    };
 
-                    chromPeakSelector = new SmartChromPeakSelector(smartchrompeakSelectorParameters);
+                    chromPeakSelector = new SmartChromPeakSelector(smartChromPeakSelectorParameters);
 
                     break;
                 case DeconTools.Backend.Globals.PeakSelectorMode.SmartUIMF:
-                    var smartUIMFchrompeakSelectorParameters = new SmartChromPeakSelectorParameters(chromPeakSelectorParameters);
-                    smartUIMFchrompeakSelectorParameters.MSFeatureFinderType = DeconTools.Backend.Globals.TargetedFeatureFinderType.ITERATIVE;
-                    smartUIMFchrompeakSelectorParameters.MSPeakDetectorPeakBR = workflowParameters.MSPeakDetectorPeakBR;
-                    smartUIMFchrompeakSelectorParameters.MSPeakDetectorSigNoiseThresh = workflowParameters.MSPeakDetectorSigNoise;
-                    smartUIMFchrompeakSelectorParameters.MSToleranceInPPM = workflowParameters.MSToleranceInPPM;
-                    smartUIMFchrompeakSelectorParameters.NumChromPeaksAllowed = workflowParameters.NumChromPeaksAllowedDuringSelection;
-                    smartUIMFchrompeakSelectorParameters.MultipleHighQualityMatchesAreAllowed = workflowParameters.MultipleHighQualityMatchesAreAllowed;
-                    smartUIMFchrompeakSelectorParameters.IterativeTffMinRelIntensityForPeakInclusion = 0.66;
+                    var smartUIMFChromPeakSelectorParameters = new SmartChromPeakSelectorParameters(chromPeakSelectorParameters)
+                    {
+                        MSFeatureFinderType = DeconTools.Backend.Globals.TargetedFeatureFinderType.ITERATIVE,
+                        MSPeakDetectorPeakBR = workflowParameters.MSPeakDetectorPeakBR,
+                        MSPeakDetectorSigNoiseThresh = workflowParameters.MSPeakDetectorSigNoise,
+                        MSToleranceInPPM = workflowParameters.MSToleranceInPPM,
+                        NumChromPeaksAllowed = workflowParameters.NumChromPeaksAllowedDuringSelection,
+                        MultipleHighQualityMatchesAreAllowed = workflowParameters.MultipleHighQualityMatchesAreAllowed,
+                        IterativeTffMinRelIntensityForPeakInclusion = 0.66
+                    };
 
-                    chromPeakSelector = new SmartChromPeakSelectorUIMF(smartUIMFchrompeakSelectorParameters);
+                    chromPeakSelector = new SmartChromPeakSelectorUIMF(smartUIMFChromPeakSelectorParameters);
 
                     break;
                 default:
@@ -362,29 +366,28 @@ namespace DeconTools.Workflows.Backend.Core
             result.LCScanSetSelected = ChromPeakUtilities.GetLCScanSetForChromPeak(result.ChromPeakSelected, Run,
                                                                                  WorkflowParameters.NumMSScansToSum);
 
-            result.LcScanObs = result.LCScanSetSelected == null ? -1 : result.LCScanSetSelected.PrimaryScanNumber;
+            result.LcScanObs = result.LCScanSetSelected?.PrimaryScanNumber ?? -1;
 
             result.IqResultDetail.MassSpectrum = MSGenerator.GenerateMS(Run, result.LCScanSetSelected);
 
             TrimData(result.IqResultDetail.MassSpectrum, result.Target.MZTheor, MsLeftTrimAmount, MsRightTrimAmount);
 
-            List<Peak> mspeakList;
-            result.ObservedIsotopicProfile = MsfeatureFinder.IterativelyFindMSFeature(result.IqResultDetail.MassSpectrum, result.Target.TheorIsotopicProfile, out mspeakList);
+            result.ObservedIsotopicProfile = MsFeatureFinder.IterativelyFindMSFeature(result.IqResultDetail.MassSpectrum, result.Target.TheorIsotopicProfile, out var msPeakList);
 
 
             result.FitScore = FitScoreCalc.CalculateFitScore(result.Target.TheorIsotopicProfile, result.ObservedIsotopicProfile,
                                                               result.IqResultDetail.MassSpectrum);
 
-            result.InterferenceScore = InterferenceScorer.GetInterferenceScore(result.ObservedIsotopicProfile, mspeakList);
+            result.InterferenceScore = InterferenceScorer.GetInterferenceScore(result.ObservedIsotopicProfile, msPeakList);
 
             //if (_workflowParameters.ChromatogramCorrelationIsPerformed)
             //{
             //    ExecuteTask(_chromatogramCorrelator);
             //}
 
-            result.MonoMassObs = result.ObservedIsotopicProfile == null ? 0 : result.ObservedIsotopicProfile.MonoIsotopicMass;
+            result.MonoMassObs = result.ObservedIsotopicProfile?.MonoIsotopicMass ?? 0;
 
-            result.MZObs = result.ObservedIsotopicProfile == null ? 0 : result.ObservedIsotopicProfile.MonoPeakMZ;
+            result.MZObs = result.ObservedIsotopicProfile?.MonoPeakMZ ?? 0;
 
             result.MZObsCalibrated = result.ObservedIsotopicProfile == null ? 0 : Run.GetAlignedMZ(result.ObservedIsotopicProfile.MonoPeakMZ, result.LcScanObs);
             result.MonoMassObsCalibrated = result.ObservedIsotopicProfile == null
@@ -392,7 +395,7 @@ namespace DeconTools.Workflows.Backend.Core
                                                : (result.MZObsCalibrated - DeconTools.Backend.Globals.PROTON_MASS) * result.Target.ChargeState;
 
 
-            var elutionTime = result.ChromPeakSelected == null ? 0d : ((ChromPeak)result.ChromPeakSelected).NETValue;
+            var elutionTime = ((ChromPeak)result.ChromPeakSelected)?.NETValue ?? 0d;
             result.ElutionTimeObs = elutionTime;
 
             result.Abundance = GetAbundance(result);
@@ -427,7 +430,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         protected virtual XYData TrimData(XYData xyData, double targetVal, double leftTrimAmount, double rightTrimAmount)
         {
-            if (xyData == null) return xyData;
+            if (xyData == null) return null;
 
             if (xyData.Xvalues == null || xyData.Xvalues.Length == 0) return xyData;
 
