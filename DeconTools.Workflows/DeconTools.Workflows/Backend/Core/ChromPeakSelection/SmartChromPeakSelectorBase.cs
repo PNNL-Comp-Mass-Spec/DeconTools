@@ -16,7 +16,7 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
 
     public abstract class SmartChromPeakSelectorBase : ChromPeakSelectorBase
     {
-        protected MSGenerator msgen;
+        protected MSGenerator msGen;
         protected ResultValidatorTask resultValidator;
         protected IsotopicProfileFitScoreCalculator fitScoreCalc;
         protected InterferenceScorer InterferenceScorer;

@@ -72,15 +72,15 @@ namespace DeconTools.Workflows.Backend.Core
 
             //Sums Scan
 
-            var lcscanset =_chromPeakUtilities.GetLCScanSetForChromPeak(target.ChromPeak, Run, WorkflowParameters.NumMSScansToSum);
+            var lcScanSet =_chromPeakUtilities.GetLCScanSetForChromPeak(target.ChromPeak, Run, WorkflowParameters.NumMSScansToSum);
 
             //Generate a mass spectrum
-            var massSpectrumXYData = MSGenerator.GenerateMS(Run, lcscanset);
+            var massSpectrumXYData = MSGenerator.GenerateMS(Run, lcScanSet);
 
             //massSpectrumXYData = massSpectrumXYData.TrimData(result.Target.MZTheor - 5, result.Target.MZTheor + 15);
 
             //Find isotopic profile
-            result.ObservedIsotopicProfile = TargetedMSFeatureFinder.IterativelyFindMSFeature(massSpectrumXYData, target.TheorIsotopicProfile, out var mspeakList);
+            result.ObservedIsotopicProfile = TargetedMSFeatureFinder.IterativelyFindMSFeature(massSpectrumXYData, target.TheorIsotopicProfile, out var msPeakList);
 
 
             //Get NET Error
@@ -88,9 +88,9 @@ namespace DeconTools.Workflows.Backend.Core
 
 
             var leftOfMonoPeakLooker = new LeftOfMonoPeakLooker();
-            var peakToTheLeft = leftOfMonoPeakLooker.LookforPeakToTheLeftOfMonoPeak(target.TheorIsotopicProfile.getMonoPeak(), target.ChargeState, mspeakList);
+            var peakToTheLeft = leftOfMonoPeakLooker.LookforPeakToTheLeftOfMonoPeak(target.TheorIsotopicProfile.getMonoPeak(), target.ChargeState, msPeakList);
 
-            var hasPeakTotheLeft = peakToTheLeft != null;
+            var hasPeakToTheLeft = peakToTheLeft != null;
 
             if (result.ObservedIsotopicProfile == null)
             {
@@ -105,14 +105,14 @@ namespace DeconTools.Workflows.Backend.Core
                 var fitScore = PeakFitter.GetFit(target.TheorIsotopicProfile.Peaklist.Select(p => (Peak)p).ToList(), observedIsoList, minIntensityForScore, WorkflowParameters.MSToleranceInPPM);
 
                 //get i_score
-                var iscore = InterferenceScorer.GetInterferenceScore(result.ObservedIsotopicProfile, mspeakList);
+                var iScore = InterferenceScorer.GetInterferenceScore(result.ObservedIsotopicProfile, msPeakList);
 
                 //get ppm error
                 var massErrorInDaltons = TheorMostIntensePeakMassError(target.TheorIsotopicProfile, result.ObservedIsotopicProfile, target.ChargeState);
                 var ppmError = (massErrorInDaltons/target.MonoMassTheor)*1e6;
 
                 //Get Isotope Correlation
-                var scan = lcscanset.PrimaryScanNumber;
+                var scan = lcScanSet.PrimaryScanNumber;
                 double chromScanWindowWidth = target.ChromPeak.Width * 2;
 
                 //Determines where to start and stop chromatogram correlation
@@ -120,13 +120,13 @@ namespace DeconTools.Workflows.Backend.Core
                 var stopScan = scan + (int)Math.Round(chromScanWindowWidth / 2, 0);
 
                 result.CorrelationData = ChromatogramCorrelator.CorrelateData(Run, result, startScan, stopScan);
-                result.LcScanObs = lcscanset.PrimaryScanNumber;
+                result.LcScanObs = lcScanSet.PrimaryScanNumber;
                 result.ChromPeakSelected = target.ChromPeak;
-                result.LCScanSetSelected = new ScanSet(lcscanset.PrimaryScanNumber);
+                result.LCScanSetSelected = new ScanSet(lcScanSet.PrimaryScanNumber);
                 result.IsotopicProfileFound = true;
                 result.FitScore = fitScore;
-                result.InterferenceScore = iscore;
-                result.IsIsotopicProfileFlagged = hasPeakTotheLeft;
+                result.InterferenceScore = iScore;
+                result.IsIsotopicProfileFlagged = hasPeakToTheLeft;
                 result.NETError = netError;
                 result.MassErrorBefore = ppmError;
                 result.IqResultDetail.MassSpectrum = massSpectrumXYData;

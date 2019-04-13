@@ -26,7 +26,7 @@ namespace DeconTools.Workflows.Backend.Core
         protected SavitzkyGolaySmoother ChromSmoother;
         protected ChromPeakDetector ChromPeakDetector;
         protected ChromPeakSelectorBase ChromPeakSelector;
-        protected IterativeTFF MsfeatureFinder;
+        protected IterativeTFF MsFeatureFinder;
         protected IsotopicProfileFitScoreCalculator FitScoreCalc;
         protected ResultValidatorTask ResultValidator;
         protected IqChromCorrelatorBase ChromatogramCorrelator;
@@ -176,7 +176,7 @@ namespace DeconTools.Workflows.Backend.Core
                 ToleranceInPPM = WorkflowParameters.MSToleranceInPPM
             };
 
-            MsfeatureFinder = new IterativeTFF(IterativeTffParameters);
+            MsFeatureFinder = new IterativeTFF(IterativeTffParameters);
             FitScoreCalc = new IsotopicProfileFitScoreCalculator();
 
             InterferenceScorer = new InterferenceScorer();

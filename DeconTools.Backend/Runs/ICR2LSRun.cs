@@ -8,7 +8,7 @@ namespace DeconTools.Backend.Runs
 {
     public class ICR2LSRun : DeconToolsRun
     {
-        #region Constructors
+#region Constructors
         public ICR2LSRun()
         {
             IsDataThresholded = false;   //TODO: check this
@@ -38,9 +38,9 @@ namespace DeconTools.Backend.Runs
         {
             throw new NotImplementedException("Can't define scanRange yet - needs further development");
         }
-        #endregion
+#endregion
 
-        #region Public Methods
+#region Public Methods
 
         public override int GetMinPossibleLCScanNum()
         {
@@ -52,24 +52,24 @@ namespace DeconTools.Backend.Runs
             return GetNumMSScans();
         }
 
-        public override XYData GetMassSpectrum(ScanSet scanset, double minMZ, double maxMZ)
+        public override XYData GetMassSpectrum(ScanSet scanSet, double minMZ, double maxMZ)
         {
-            Check.Require(scanset != null, "Can't get mass spectrum; inputted set of scans is null");
-            if (scanset == null)
+            Check.Require(scanSet != null, "Can't get mass spectrum; inputted set of scans is null");
+            if (scanSet == null)
                 return new XYData();
 
-            Check.Require(scanset.IndexValues.Count > 0, "Can't get mass spectrum; no scan numbers inputted");
+            Check.Require(scanSet.IndexValues.Count > 0, "Can't get mass spectrum; no scan numbers inputted");
 
             // Unused: var totScans = GetNumMSScans();
 
             var xvals = new double[0];
             var yvals = new double[0];
 
-            if (scanset.IndexValues.Count == 1)            //this is the case of only wanting one MS spectrum
+            if (scanSet.IndexValues.Count == 1)            //this is the case of only wanting one MS spectrum
             {
 
                 //TODO:  Old DeconTools reference!!
-                RawData.GetSpectrum(scanset.IndexValues[0], ref xvals, ref yvals, false);
+                RawData.GetSpectrum(scanSet.IndexValues[0], ref xvals, ref yvals, false);
             }
             else
             {
@@ -86,7 +86,7 @@ namespace DeconTools.Backend.Runs
             xydata = xydata.TrimData(minMZ, maxMZ);
             return xydata;
         }
-        #endregion
+#endregion
     }
 }
 #endif

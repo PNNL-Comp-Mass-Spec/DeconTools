@@ -12,7 +12,7 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
     {
         #region Constructors
 
-        public IqChargeCorrelator(int numPointsInSmoother, double minRelativeIntensityForChromCorr = 0.01, double chromToleranceInPPM = 20, DeconTools.Backend.Globals.ToleranceUnit toleranceUnit = DeconTools.Backend.Globals.ToleranceUnit.PPM) 
+        public IqChargeCorrelator(int numPointsInSmoother, double minRelativeIntensityForChromCorr = 0.01, double chromToleranceInPPM = 20, DeconTools.Backend.Globals.ToleranceUnit toleranceUnit = DeconTools.Backend.Globals.ToleranceUnit.PPM)
             : base(numPointsInSmoother, minRelativeIntensityForChromCorr, chromToleranceInPPM, toleranceUnit)
         {
             _chromGen = new PeakChromatogramGenerator();
@@ -54,8 +54,7 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
                 var referenceCorrelationData = new ChargeCorrelationItem(referenceTarget);
 
                 //Gets the ChromPeaks base width in scans for correlation
-                int startScan, stopScan;
-                GetBaseScanRange(referenceTarget.ChromPeak, out startScan, out stopScan);
+                GetBaseScanRange(referenceTarget.ChromPeak, out var startScan, out var stopScan);
 
                 //Generates an array of XICs for the reference peak
                 var referenceMZList = IsotopicProfileUtilities.GetTopNMZValues(referenceTarget.TheorIsotopicProfile.Peaklist, peaksToCorrelate);
@@ -70,7 +69,7 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
                     //Checks if the peak to be correlated has an XValue that falls within the base peak range of the reference peak
                     if (correlatingTarget.ChromPeak.XValue > startScan && correlatingTarget.ChromPeak.XValue < stopScan)
                     {
-                        //Generates an XIC array for the peak being correlated. 
+                        //Generates an XIC array for the peak being correlated.
                         var correlationMZList =
                             IsotopicProfileUtilities.GetTopNMZValues(
                                 correlatingTarget.TheorIsotopicProfile.Peaklist, peaksToCorrelate);
@@ -83,11 +82,10 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
                             //Checks if either of the XICs are null
                             if (referenceXIC[i] != null && correlationXIC[i] != null)
                             {
-                                double slope, intercept, rsquaredval;
                                 GetElutionCorrelationData(referenceXIC[i],
-                                                          FillInAnyMissingValuesInChromatogram(referenceXIC[i].Xvalues, correlationXIC[i]), out slope,
-                                                          out intercept, out rsquaredval);
-                                correlationData.AddCorrelationData(slope, intercept, rsquaredval);
+                                                          FillInAnyMissingValuesInChromatogram(referenceXIC[i].Xvalues, correlationXIC[i]), out var slope,
+                                                          out var intercept, out var rSquaredVal);
+                                correlationData.AddCorrelationData(slope, intercept, rSquaredVal);
                             }
                             else
                             {
@@ -110,11 +108,12 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
                 availableTargets.Remove(referenceTarget);
                 correlationList.Add(referenceCorrelationData);
             }
-            var chargeCorrelationData = new ChargeCorrelationData();
-            chargeCorrelationData.CorrelationData = correlationList;
+
+            var chargeCorrelationData = new ChargeCorrelationData {
+                CorrelationData = correlationList
+            };
             return chargeCorrelationData;
         }
-
 
 
         /// <summary>
@@ -122,12 +121,13 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
         /// </summary>
         /// <param name="referenceTarget"></param>
         /// <param name="compTarget"></param>
+        /// <param name="run"></param>
+        /// <param name="peaksToCorrelate"></param>
         /// <returns></returns>
         public double PairWiseChargeCorrelation(ChromPeakIqTarget referenceTarget, ChromPeakIqTarget compTarget, Run run, int peaksToCorrelate)
         {
             //Gets the ChromPeaks base width in scans for correlation
-            int startScan, stopScan;
-            GetBaseScanRange(referenceTarget.ChromPeak, out startScan, out stopScan);
+            GetBaseScanRange(referenceTarget.ChromPeak, out var startScan, out var stopScan);
 
             //Generates an array of XICs for the reference peak
             var referenceMZList = IsotopicProfileUtilities.GetTopNMZValues(referenceTarget.TheorIsotopicProfile.Peaklist, peaksToCorrelate);
@@ -135,28 +135,31 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
 
             if (compTarget.ChromPeak.XValue > startScan && compTarget.ChromPeak.XValue < stopScan)
             {
-                //Generates an XIC array for the peak being correlated. 
+                //Generates an XIC array for the peak being correlated.
                 var correlationMZList = IsotopicProfileUtilities.GetTopNMZValues(compTarget.TheorIsotopicProfile.Peaklist, peaksToCorrelate);
                 var correlationXIC = GetCorrelationXICs(peaksToCorrelate, correlationMZList, run, startScan, stopScan);
 
                 //Generates new correlation data item for current correlation
-                var rsquaredVals = new double[peaksToCorrelate];
+                var rSquaredVals = new double[peaksToCorrelate];
                 for (var i = 0; i < peaksToCorrelate; i++)
                 {
                     //Checks if either of the XICs are null
                     if (referenceXIC[i] != null && correlationXIC[i] != null)
                     {
-                        double slope, intercept, rsquaredval;
-                        GetElutionCorrelationData(referenceXIC[i], FillInAnyMissingValuesInChromatogram(referenceXIC[i].Xvalues, correlationXIC[i]), out slope, out intercept, out rsquaredval);
-                        rsquaredVals[i] = rsquaredval;
+                        GetElutionCorrelationData(referenceXIC[i], FillInAnyMissingValuesInChromatogram(
+                                                      referenceXIC[i].Xvalues, correlationXIC[i]),
+                                                  out _, out _,
+                                                  out var rSquaredVal);
+
+                        rSquaredVals[i] = rSquaredVal;
                     }
                     else
                     {
                         //A placeholder to show that the data was poor
-                        rsquaredVals[i] = 0;
+                        rSquaredVals[i] = 0;
                     }
                 }
-                return MathUtils.GetMedian(rsquaredVals);
+                return MathUtils.GetMedian(rSquaredVals);
             }
             return 0;
         }
@@ -167,12 +170,12 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
 
 
         /// <summary>
-        /// Gets the scan range for the peaks that need to be correlated together 
+        /// Gets the scan range for the peaks that need to be correlated together
         /// </summary>
         /// <param name="referencePeak"></param>
         /// <param name="startScan"></param>
         /// <param name="stopScan"></param>
-        private void GetBaseScanRange(ChromPeak referencePeak, out int startScan, out int stopScan)
+        private void GetBaseScanRange(Peak referencePeak, out int startScan, out int stopScan)
         {
             var baseWidth = (4 * (referencePeak.Width / 2.35));
             startScan = Convert.ToInt32(Math.Floor(referencePeak.XValue - (0.5 * baseWidth)));

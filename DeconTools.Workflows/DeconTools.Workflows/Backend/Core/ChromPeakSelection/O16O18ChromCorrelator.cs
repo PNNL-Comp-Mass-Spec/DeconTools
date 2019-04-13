@@ -23,15 +23,14 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
             var o18SingleLabelChromXyData = GetBaseChromXYData(run, startScan, stopScan, o18SingleLabelMzValue);
             var o18DoubleLabelChromXyData = GetBaseChromXYData(run, startScan, stopScan, o18DoubleLabelMzValue);
 
-            double slope, intercept, rsquaredVal;
-            GetElutionCorrelationData(o16ChromXyData, o18SingleLabelChromXyData, out slope, out intercept, out rsquaredVal);
-            correlationData.AddCorrelationData(slope, intercept, rsquaredVal);
+            GetElutionCorrelationData(o16ChromXyData, o18SingleLabelChromXyData, out var slope, out var intercept, out var rSquaredVal);
+            correlationData.AddCorrelationData(slope, intercept, rSquaredVal);
 
-            GetElutionCorrelationData(o16ChromXyData, o18DoubleLabelChromXyData, out slope, out intercept, out rsquaredVal);
-            correlationData.AddCorrelationData(slope, intercept, rsquaredVal);
+            GetElutionCorrelationData(o16ChromXyData, o18DoubleLabelChromXyData, out slope, out intercept, out rSquaredVal);
+            correlationData.AddCorrelationData(slope, intercept, rSquaredVal);
 
-            GetElutionCorrelationData(o18SingleLabelChromXyData, o18DoubleLabelChromXyData, out slope, out intercept, out rsquaredVal);
-            correlationData.AddCorrelationData(slope, intercept, rsquaredVal);
+            GetElutionCorrelationData(o18SingleLabelChromXyData, o18DoubleLabelChromXyData, out slope, out intercept, out rSquaredVal);
+            correlationData.AddCorrelationData(slope, intercept, rSquaredVal);
 
             return correlationData;
         }

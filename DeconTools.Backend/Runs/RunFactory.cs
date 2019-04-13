@@ -104,17 +104,17 @@ namespace DeconTools.Backend.Runs
             return run;
         }
 
-        public Run CreateRun(Globals.MSFileType filetype, string f)
+        public Run CreateRun(Globals.MSFileType fileType, string f)
         {
             Run run;
-            if (filetype == Globals.MSFileType.MZXML_Rawdata)
+            if (fileType == Globals.MSFileType.MZXML_Rawdata)
             {
                 pwiz.ProteowizardWrapper.DependencyLoader.AddAssemblyResolver();
             }
 
             var fileName = getFullPath(f);
 
-            switch (filetype)
+            switch (fileType)
             {
                 case Globals.MSFileType.Undefined:
                     run = null;

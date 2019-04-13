@@ -20,7 +20,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         protected PeakLeastSquaresFitter PeakFitter;
 
-        private readonly DeconToolsPeakDetectorV2 _mspeakDetector;
+        private readonly DeconToolsPeakDetectorV2 _msPeakDetector;
         private bool _headerLogged;
         private BasicGraphControl _graphGenerator;
 
@@ -29,8 +29,8 @@ namespace DeconTools.Workflows.Backend.Core
         public O16O18ParentIqWorkflow(Run run, TargetedWorkflowParameters parameters)
             : base(run, parameters)
         {
-            PeakFitter=new PeakLeastSquaresFitter();
-            _mspeakDetector = new DeconToolsPeakDetectorV2(parameters.MSPeakDetectorPeakBR,
+            PeakFitter = new PeakLeastSquaresFitter();
+            _msPeakDetector = new DeconToolsPeakDetectorV2(parameters.MSPeakDetectorPeakBR,
                                                            parameters.MSPeakDetectorSigNoise,
                                                            DeconTools.Backend.Globals.PeakFitType.QUADRATIC,
                                                            run.IsDataThresholded);
@@ -61,7 +61,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         protected override void DoPostInitialization()
         {
-            MsfeatureFinder = new O16O18IterativeTff(IterativeTffParameters);
+            MsFeatureFinder = new O16O18IterativeTff(IterativeTffParameters);
             ChromatogramCorrelator = new O16O18ChromCorrelator(WorkflowParameters.ChromSmootherNumPointsInSmooth, 0.025,
                                                                WorkflowParameters.ChromGenTolerance,
                                                                WorkflowParameters.ChromGenToleranceUnit);
@@ -90,10 +90,9 @@ namespace DeconTools.Workflows.Backend.Core
 
             var favResult = result.FavoriteChild;
 
-            double? rsquaredVal, slope;
-            getRsquaredVal(result, out rsquaredVal, out slope);
-            var favChargeState = result.FavoriteChild == null ? 0 : result.FavoriteChild.Target.ChargeState;
-            var favMz = result.FavoriteChild == null ? 0 : result.FavoriteChild.Target.MZTheor;
+            getRSquaredVal(result, out var rSquaredVal, out var slope);
+            var favChargeState = result.FavoriteChild?.Target.ChargeState ?? 0;
+            var favMz = result.FavoriteChild?.Target.MZTheor ?? 0;
 
             if (!_headerLogged)
             {
@@ -101,32 +100,32 @@ namespace DeconTools.Workflows.Backend.Core
                 IqLogger.LogMessage("\t" + "TargetID" + "\t\t\t" + "M/Z" + "\t" + "Charge" + "\t" + "LCScan" + "\t" + "RSquared" + "\t" + "Slope");
             }
 
-            IqLogger.LogMessage("\t" + result.Target.ID + "\t\t\t" + favMz.ToString("0.000") + "\t" + favChargeState + "\t" + result.LcScanObs + "\t" + rsquaredVal + "\t" + slope);
+            IqLogger.LogMessage("\t" + result.Target.ID + "\t\t\t" + favMz.ToString("0.000") + "\t" + favChargeState + "\t" + result.LcScanObs + "\t" + rSquaredVal + "\t" + slope);
 
             //now get the mass spectrum given the info from the favorite child charge state result
 
-            if (favResult!=null)
+            if (favResult != null)
             {
-                var scanset = new ScanSetFactory().CreateScanSet(Run, favResult.LCScanSetSelected.PrimaryScanNumber,
+                var scanSet = new ScanSetFactory().CreateScanSet(Run, favResult.LCScanSetSelected.PrimaryScanNumber,
                                                                      WorkflowParameters.NumMSScansToSum);
 
                 var selectedChromPeak = favResult.ChromPeakSelected;
-                var sigma = selectedChromPeak.Width/2.35;
+                var sigma = selectedChromPeak.Width / 2.35;
                 var chromScanWindowWidth = 4 * sigma;
 
                 //Determines where to start and stop chromatogram correlation
-                var startScan = scanset.PrimaryScanNumber - (int)Math.Round(chromScanWindowWidth / 2, 0);
-                var stopScan = scanset.PrimaryScanNumber + (int)Math.Round(chromScanWindowWidth / 2, 0);
+                var startScan = scanSet.PrimaryScanNumber - (int)Math.Round(chromScanWindowWidth / 2, 0);
+                var stopScan = scanSet.PrimaryScanNumber + (int)Math.Round(chromScanWindowWidth / 2, 0);
 
-                var massSpectrum=   MSGenerator.GenerateMS(Run, scanset);
+                var massSpectrum = MSGenerator.GenerateMS(Run, scanSet);
 
                 foreach (var iqTarget in children)
                 {
-                    var childStateIqResult = (O16O18IqResult) iqTarget.GetResult();
+                    var childStateIqResult = (O16O18IqResult)iqTarget.GetResult();
 
                     childStateIqResult.IqResultDetail.MassSpectrum = massSpectrum.TrimData(iqTarget.MZTheor - 3, iqTarget.MZTheor + 8);
 
-                    var mspeakList = _mspeakDetector.FindPeaks(childStateIqResult.IqResultDetail.MassSpectrum.Xvalues,
+                    var msPeakList = _msPeakDetector.FindPeaks(childStateIqResult.IqResultDetail.MassSpectrum.Xvalues,
                                                                       childStateIqResult.IqResultDetail.MassSpectrum.Yvalues);
 
 
@@ -141,14 +140,15 @@ namespace DeconTools.Workflows.Backend.Core
                     childStateIqResult.RatioO16O18SingleLabel = childStateIqResult.GetRatioO16O18SingleLabel();
                     childStateIqResult.RatioSingleToDoubleLabel = childStateIqResult.GetRatioSingleToDoubleLabel();
 
-                    childStateIqResult.ObservedIsotopicProfile=  MsfeatureFinder.IterativelyFindMSFeature(childStateIqResult.IqResultDetail.MassSpectrum,
-                                                             iqTarget.TheorIsotopicProfile);
+                    childStateIqResult.ObservedIsotopicProfile = MsFeatureFinder.IterativelyFindMSFeature(
+                        childStateIqResult.IqResultDetail.MassSpectrum,
+                        iqTarget.TheorIsotopicProfile);
 
 
-                    if (childStateIqResult.ObservedIsotopicProfile!=null)
+                    if (childStateIqResult.ObservedIsotopicProfile != null)
                     {
                         var observedIsoList = childStateIqResult.ObservedIsotopicProfile.Peaklist.Cast<Peak>().Take(4).ToList();    //first 4 peaks excludes the O18 double label peak (fifth peak)
-                        var theorPeakList = iqTarget.TheorIsotopicProfile.Peaklist.Select(p => (Peak) p).Take(4).ToList();
+                        var theorPeakList = iqTarget.TheorIsotopicProfile.Peaklist.Select(p => (Peak)p).Take(4).ToList();
                         childStateIqResult.FitScore = PeakFitter.GetFit(theorPeakList, observedIsoList, 0.05, WorkflowParameters.MSToleranceInPPM);
 
                         var o18Iso = childStateIqResult.ConvertO16ProfileToO18(iqTarget.TheorIsotopicProfile, 4);
@@ -158,12 +158,12 @@ namespace DeconTools.Workflows.Backend.Core
 
 
 
-                        childStateIqResult.InterferenceScore = InterferenceScorer.GetInterferenceScore(childStateIqResult.ObservedIsotopicProfile, mspeakList);
+                        childStateIqResult.InterferenceScore = InterferenceScorer.GetInterferenceScore(childStateIqResult.ObservedIsotopicProfile, msPeakList);
                         childStateIqResult.MZObs = childStateIqResult.ObservedIsotopicProfile.MonoPeakMZ;
                         childStateIqResult.MonoMassObs = childStateIqResult.ObservedIsotopicProfile.MonoIsotopicMass;
                         childStateIqResult.MZObsCalibrated = Run.GetAlignedMZ(childStateIqResult.MZObs);
                         childStateIqResult.MonoMassObsCalibrated = (childStateIqResult.MZObsCalibrated - DeconTools.Backend.Globals.PROTON_MASS) * childStateIqResult.Target.ChargeState;
-                        childStateIqResult.ElutionTimeObs = ((ChromPeak) favResult.ChromPeakSelected).NETValue;
+                        childStateIqResult.ElutionTimeObs = ((ChromPeak)favResult.ChromPeakSelected).NETValue;
 
 
                     }
@@ -174,9 +174,9 @@ namespace DeconTools.Workflows.Backend.Core
                     }
 
 
-                    getRsquaredVal(childStateIqResult, out rsquaredVal, out slope);
+                    getRSquaredVal(childStateIqResult, out rSquaredVal, out slope);
                     IqLogger.LogMessage("\t\t\t" + childStateIqResult.Target.ID + "\t" + childStateIqResult.Target.MZTheor.ToString("0.000") + "\t" + childStateIqResult.Target.ChargeState
-                        + "\t" + childStateIqResult.LcScanObs + "\t" + childStateIqResult.FitScore.ToString("0.000") + "\t" + rsquaredVal + "\t" + slope);
+                        + "\t" + childStateIqResult.LcScanObs + "\t" + childStateIqResult.FitScore.ToString("0.000") + "\t" + rSquaredVal + "\t" + slope);
 
 
                     childStateIqResult.LCScanSetSelected = favResult.LCScanSetSelected;
@@ -184,7 +184,7 @@ namespace DeconTools.Workflows.Backend.Core
 
                     if (GraphsAreOutputted)
                     {
-                        if (_graphGenerator==null) _graphGenerator=new BasicGraphControl();
+                        if (_graphGenerator == null) _graphGenerator = new BasicGraphControl();
 
                         ExportGraphs(childStateIqResult);
                     }
@@ -256,7 +256,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         private void ExportChromGraph(IqResult result)
         {
-            if (result.IqResultDetail.Chromatogram==null)
+            if (result.IqResultDetail.Chromatogram == null)
             {
                 return;
             }
@@ -311,18 +311,18 @@ namespace DeconTools.Workflows.Backend.Core
 
 
 
-        private void getRsquaredVal(IqResult result, out double? rsquaredVal, out double? slope)
+        private void getRSquaredVal(IqResult result, out double? rSquaredVal, out double? slope)
         {
-            if (result.CorrelationData!=null && result.CorrelationData.CorrelationDataItems.Count>0)
+            if (result.CorrelationData != null && result.CorrelationData.CorrelationDataItems.Count > 0)
             {
-                rsquaredVal = result.CorrelationData.RSquaredValsMedian;
+                rSquaredVal = result.CorrelationData.RSquaredValsMedian;
 
                 slope = result.CorrelationData.CorrelationDataItems.First().CorrelationSlope;
 
             }
             else
             {
-                rsquaredVal = -1;
+                rSquaredVal = -1;
                 slope = -1;
             }
 
@@ -362,7 +362,7 @@ namespace DeconTools.Workflows.Backend.Core
                 result.MonoMassObs = fav.MonoMassObs;
                 result.MonoMassObsCalibrated = fav.MonoMassObsCalibrated;
                 result.ElutionTimeObs = fav.ElutionTimeObs;
-                result.Abundance = fav.ChromPeakSelected == null ? 0f : fav.ChromPeakSelected.Height;
+                result.Abundance = fav.ChromPeakSelected?.Height ?? 0f;
 
 
             }
@@ -400,7 +400,8 @@ namespace DeconTools.Workflows.Backend.Core
             {
                 return filter2.First();
             }
-            else if (filter2.Count > 1)
+
+            if (filter2.Count > 1)
             {
                 //if we reached here, there are multiple charge state results with good correlation scores.  Take the one of highest intensity.
                 return filter2.OrderByDescending(p => p.Abundance).First();
@@ -413,10 +414,11 @@ namespace DeconTools.Workflows.Backend.Core
 
         }
 
-        private IqResult SelectBestChromPeakIqResult(IqResult childResult, List<IqResult> filteredChromPeakResults)
+        private IqResult SelectBestChromPeakIqResult(IqResult childResult, IReadOnlyCollection<IqResult> filteredChromPeakResults)
         {
             var numCandidateResults = filteredChromPeakResults.Count;
-            IqResult bestChromPeakResult=null;
+            IqResult bestChromPeakResult;
+
             if (numCandidateResults == 0)
             {
                 bestChromPeakResult = null;
@@ -430,14 +432,15 @@ namespace DeconTools.Workflows.Backend.Core
 
                 var furtherFilteredResults = new List<IqResult>();
                 double lowestFit = 1;
-                foreach (O16O18IqResult r in filteredChromPeakResults)
+                foreach (var iqResult in filteredChromPeakResults)
                 {
+                    var r = (O16O18IqResult)iqResult;
                     var currentLowFitVal = Math.Min(r.FitScore, r.FitScoreO18Profile);
-                    if (currentLowFitVal<lowestFit)
+                    if (currentLowFitVal < lowestFit)
                     {
                         lowestFit = currentLowFitVal;
 
-                        if (lowestFit<0.2)
+                        if (lowestFit < 0.2)
                         {
                             furtherFilteredResults.Add(r);
                         }
@@ -450,7 +453,7 @@ namespace DeconTools.Workflows.Backend.Core
                 {
                     bestChromPeakResult = filteredChromPeakResults.OrderBy(p => p.FitScore).Take(3).OrderByDescending(p => p.Abundance).FirstOrDefault();
                 }
-                else if (furtherFilteredResults.Count==1)
+                else if (furtherFilteredResults.Count == 1)
                 {
                     bestChromPeakResult = furtherFilteredResults.First();
                 }
@@ -459,11 +462,13 @@ namespace DeconTools.Workflows.Backend.Core
                     var currentBestChromPeakResult = furtherFilteredResults.OrderByDescending(p => p.Abundance).FirstOrDefault();
                     var level3FilteredResults = new List<IqResult>();
 
-                    foreach (O16O18IqResult furtherFilteredResult in furtherFilteredResults)
+                    foreach (var iqResult in furtherFilteredResults)
                     {
+                        var furtherFilteredResult = (O16O18IqResult)iqResult;
+
                         var currentCorrVal = Math.Max(furtherFilteredResult.GetCorrelationO16O18DoubleLabel(), furtherFilteredResult.GetCorrelationBetweenSingleAndDoubleLabel());
 
-                        if (currentCorrVal>0.7)
+                        if (currentCorrVal > 0.7)
                         {
                             level3FilteredResults.Add(furtherFilteredResult);
                         }
@@ -471,11 +476,11 @@ namespace DeconTools.Workflows.Backend.Core
                     }
 
 
-                    if (level3FilteredResults.Count==0)
+                    if (level3FilteredResults.Count == 0)
                     {
                         bestChromPeakResult = currentBestChromPeakResult;
                     }
-                    else if (level3FilteredResults.Count==1)
+                    else if (level3FilteredResults.Count == 1)
                     {
                         bestChromPeakResult = level3FilteredResults.First();
                     }

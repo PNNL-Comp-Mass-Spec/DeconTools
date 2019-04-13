@@ -17,18 +17,18 @@ namespace DeconTools.Backend.Utilities.Converters
         #region Public Methods
         public static List<MSPeak> ConvertToMSPeaks(List<Peak> peakList)
         {
-            var mspeakList = new List<MSPeak>();
+            var msPeakList = new List<MSPeak>();
 
             foreach (var peak in peakList)
             {
                 if (peak is MSPeak)
                 {
-                    mspeakList.Add((MSPeak)peak);
+                    msPeakList.Add((MSPeak)peak);
                 }
 
                 
             }
-            return mspeakList;
+            return msPeakList;
 
         }
 

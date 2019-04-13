@@ -37,17 +37,17 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
 
             var currentResult = resultList.GetTargetedResult(resultList.Run.CurrentMassTag);
 
-            if (msgen == null)
+            if (msGen == null)
             {
-                msgen = MSGeneratorFactory.CreateMSGenerator(resultList.Run.MSFileType);
-                msgen.IsTICRequested = false;
+                msGen = MSGeneratorFactory.CreateMSGenerator(resultList.Run.MSFileType);
+                msGen.IsTICRequested = false;
             }
 
             var currentTarget = resultList.Run.CurrentMassTag;
 
-            // Set the MS Generator to use a window around the target so that we do not grab a lot of unecessary data from the UIMF file
-            msgen.MinMZ = currentTarget.MZ - 10;
-            msgen.MaxMZ = currentTarget.MZ + 10;
+            // Set the MS Generator to use a window around the target so that we do not grab a lot of unnecessary data from the UIMF file
+            msGen.MinMZ = currentTarget.MZ - 10;
+            msGen.MaxMZ = currentTarget.MZ + 10;
 
             float normalizedElutionTime;
 
@@ -108,7 +108,7 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
                     currentResult.ResetResult();
 
                     // Generate a mass spectrum
-                    msgen.Execute(resultList);
+                    msGen.Execute(resultList);
 
                     // Find isotopic profile
                     TargetedMSFeatureFinder.Execute(resultList);
@@ -149,19 +149,19 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
                                  n.FitScore < 1 && n.InterferenceScore < 1
                                  select n).ToList();
 
-            ChromPeak bestpeak;
+            ChromPeak bestPeak;
 
             currentResult.NumQualityChromPeaks = filteredList1.Count;
 
             if (filteredList1.Count == 0)
             {
-                bestpeak = null;
+                bestPeak = null;
                 currentResult.FailedResult = true;
                 currentResult.FailureType = DeconTools.Backend.Globals.TargetedResultFailureType.ChrompeakNotFoundWithinTolerances;
             }
             else if (filteredList1.Count == 1)
             {
-                bestpeak = filteredList1[0].Peak;
+                bestPeak = filteredList1[0].Peak;
             }
             else
             {
@@ -177,35 +177,35 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
 
                         if (filteredList1[0].Abundance >= filteredList1[1].Abundance)
                         {
-                            bestpeak = filteredList1[0].Peak;
+                            bestPeak = filteredList1[0].Peak;
                         }
                         else
                         {
-                            bestpeak = filteredList1[1].Peak;
+                            bestPeak = filteredList1[1].Peak;
                         }
                     }
                     else
                     {
-                        bestpeak = null;
+                        bestPeak = null;
                         currentResult.FailedResult = true;
                         currentResult.FailureType = DeconTools.Backend.Globals.TargetedResultFailureType.TooManyHighQualityChrompeaks;
                     }
                 }
                 else
                 {
-                    bestpeak = filteredList1[0].Peak;
+                    bestPeak = filteredList1[0].Peak;
                 }
             }
 
             // If any of the peaks were good, then we want to make sure to not consider the result an error.
             // I added this because if the last peak checked had an error, the entire result was still flagged as having an error.
-            if (bestpeak != null)
+            if (bestPeak != null)
             {
                 currentResult.FailedResult = false;
                 currentResult.FailureType = DeconTools.Backend.Globals.TargetedResultFailureType.None;
             }
 
-            return bestpeak;
+            return bestPeak;
         }
 
     }

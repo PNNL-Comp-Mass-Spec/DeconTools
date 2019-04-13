@@ -13,12 +13,12 @@ namespace DeconTools.Backend.Runs
     public sealed class XCaliburRun2 : Run
     {
 
-        private readonly MSFileReaderLib.MSFileReader_XRawfile _msfileReader;
+        private readonly MSFileReaderLib.MSFileReader_XRawfile _msFileReader;
 
         #region Constructors
         public XCaliburRun2()
         {
-            _msfileReader = new MSFileReaderLib.MSFileReader_XRawfile();
+            _msFileReader = new MSFileReaderLib.MSFileReader_XRawfile();
 
             IsDataThresholded = true;
             IsMsAbundanceReportedAsAverage = true;
@@ -43,8 +43,8 @@ namespace DeconTools.Backend.Runs
             DatasetName = baseFilename.Substring(0, baseFilename.LastIndexOf('.'));
             DataSetPath = Path.GetDirectoryName(filename);
 
-            _msfileReader.Open(Filename);
-            _msfileReader.SetCurrentController(0, 1);
+            _msFileReader.Open(Filename);
+            _msFileReader.SetCurrentController(0, 1);
 
             MinLCScan = 1;
             MaxLCScan = GetNumMSScans();
@@ -65,7 +65,7 @@ namespace DeconTools.Backend.Runs
         public override bool IsDataCentroided(int scanNum)
         {
             var isCentroided = 0;
-            _msfileReader.IsCentroidScanForScanNum(scanNum, ref isCentroided);
+            _msFileReader.IsCentroidScanForScanNum(scanNum, ref isCentroided);
 
             return isCentroided != 0;
         }
@@ -76,13 +76,13 @@ namespace DeconTools.Backend.Runs
             try
             {
                 object value = null;
-                _msfileReader.GetTrailerExtraValueForScanNum(scanNum, "Ion Injection Time (ms):", ref value);
+                _msFileReader.GetTrailerExtraValueForScanNum(scanNum, "Ion Injection Time (ms):", ref value);
 
                 return Convert.ToDouble(value);
             }
             catch (AccessViolationException ex)
             {
-                Console.WriteLine("Warning: Exception calling _msfileReader.GetTrailerExtraValueForScanNum for scan " + scanNum + ": " + ex.Message);
+                Console.WriteLine("Warning: Exception calling _msFileReader.GetTrailerExtraValueForScanNum for scan " + scanNum + ": " + ex.Message);
                 return 0;
             }
         }
@@ -93,13 +93,13 @@ namespace DeconTools.Backend.Runs
             try
             {
                 object value = null;
-                _msfileReader.GetTrailerExtraValueForScanNum(scanNum, "MS2 Isolation Width:", ref value);
+                _msFileReader.GetTrailerExtraValueForScanNum(scanNum, "MS2 Isolation Width:", ref value);
 
                 return Convert.ToDouble(value);
             }
             catch (AccessViolationException ex)
             {
-                Console.WriteLine("Warning: Exception calling _msfileReader.GetTrailerExtraValueForScanNum for scan " + scanNum + ": " + ex.Message);
+                Console.WriteLine("Warning: Exception calling _msFileReader.GetTrailerExtraValueForScanNum for scan " + scanNum + ": " + ex.Message);
                 return 0;
             }
         }
@@ -108,14 +108,14 @@ namespace DeconTools.Backend.Runs
         {
             var numSpectra = 0;
 
-            _msfileReader.GetNumSpectra(ref numSpectra);
+            _msFileReader.GetNumSpectra(ref numSpectra);
             return numSpectra;
         }
 
         public override double GetTime(int scanNum)
         {
             double rtForAGivenScan = 0;
-            _msfileReader.RTFromScanNum(scanNum, ref rtForAGivenScan);
+            _msFileReader.RTFromScanNum(scanNum, ref rtForAGivenScan);
             return rtForAGivenScan;
         }
 
@@ -143,7 +143,7 @@ namespace DeconTools.Backend.Runs
             // ITMS + c NSI d Full ms2 408.25@cid35.00 [100.00-420.00]
 
             string filter = null;
-            _msfileReader.GetFilterForScanNum(scanNum, ref filter);
+            _msFileReader.GetFilterForScanNum(scanNum, ref filter);
 
             if (string.IsNullOrWhiteSpace(filter))
             {
@@ -168,7 +168,7 @@ namespace DeconTools.Backend.Runs
         {
             int pnNumPackets = 0, pnNumChannels = 0, pbUniformTime = 0;
             double pdStartTime = 0, pdLowMass = 0, pdHighMass = 0, pdTIC = 0, pdBasePeakMass = 0, pdBasePeakIntensity = 0, pdFrequency = 0;
-            _msfileReader.GetScanHeaderInfoForScanNum(scanNum, ref pnNumPackets, ref pdStartTime, ref pdLowMass, ref pdHighMass, ref pdTIC,
+            _msFileReader.GetScanHeaderInfoForScanNum(scanNum, ref pnNumPackets, ref pdStartTime, ref pdLowMass, ref pdHighMass, ref pdTIC,
                                                       ref pdBasePeakMass, ref pdBasePeakIntensity, ref pnNumChannels, ref pbUniformTime,
                                                       ref pdFrequency);
 
@@ -181,9 +181,12 @@ namespace DeconTools.Backend.Runs
             try
             {
 
+                // ReSharper disable IdentifierTypo
                 object pvarLabels = null, pvarValues = null;
+                // ReSharper restore IdentifierTypo
+
                 var pnArraySize = 0;
-                _msfileReader.GetTuneData(0, ref pvarLabels, ref pvarValues, ref pnArraySize);
+                _msFileReader.GetTuneData(0, ref pvarLabels, ref pvarValues, ref pnArraySize);
 
                 var labels = (string[])pvarLabels;
                 var values = (string[])pvarValues;
@@ -200,7 +203,7 @@ namespace DeconTools.Backend.Runs
             }
             catch (AccessViolationException ex)
             {
-                Console.WriteLine("Warning: Exception calling _msfileReader.GetTuneData: " + ex.Message);
+                Console.WriteLine("Warning: Exception calling _msFileReader.GetTuneData: " + ex.Message);
                 return string.Empty;
             }
 
@@ -277,30 +280,30 @@ namespace DeconTools.Backend.Runs
         }
 
         [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
-        public override XYData GetMassSpectrum(ScanSet scanset, double minMZ, double maxMZ)
+        public override XYData GetMassSpectrum(ScanSet scanSet, double minMZ, double maxMZ)
         {
             // Note that we're using function attribute HandleProcessCorruptedStateExceptions
-            // to force .NET to properly catch critical errors thrown by the XRawfile DLL
+            // to force .NET to properly catch critical errors thrown by the XRawFile DLL
 
-            Check.Require(scanset != null, "Can't get mass spectrum; inputted set of scans is null");
-            if (scanset == null)
+            Check.Require(scanSet != null, "Can't get mass spectrum; inputted set of scans is null");
+            if (scanSet == null)
                 return null;
 
-            Check.Require(scanset.IndexValues.Count > 0, "Can't get mass spectrum; no scan numbers inputted");
+            Check.Require(scanSet.IndexValues.Count > 0, "Can't get mass spectrum; no scan numbers inputted");
 
             double[,] vals = null;
-            var spectraAreSummed = scanset.IndexValues.Count > 1;
-            var scanNumFirst = scanset.IndexValues[0];
-            var scanNumLast = scanset.IndexValues[scanset.IndexValues.Count - 1];
+            var spectraAreSummed = scanSet.IndexValues.Count > 1;
+            var scanNumFirst = scanSet.IndexValues[0];
+            var scanNumLast = scanSet.IndexValues[scanSet.IndexValues.Count - 1];
 
             string scanDescription;
             if (spectraAreSummed)
             {
-                scanDescription = "scan " + scanset.PrimaryScanNumber + "( summing scans " + scanNumFirst + " to " + scanNumLast + ")";
+                scanDescription = "scan " + scanSet.PrimaryScanNumber + "( summing scans " + scanNumFirst + " to " + scanNumLast + ")";
             }
             else
             {
-                scanDescription = "scan " + scanset.PrimaryScanNumber;
+                scanDescription = "scan " + scanSet.PrimaryScanNumber;
             }
 
             try
@@ -324,7 +327,7 @@ namespace DeconTools.Backend.Runs
                     object peakFlags = null;
                     var arraySize = 0;
 
-                    _msfileReader.GetAverageMassList(
+                    _msFileReader.GetAverageMassList(
                         ref scanNumFirst,
                         ref scanNumLast,
                         ref backgroundScan1First,
@@ -345,7 +348,7 @@ namespace DeconTools.Backend.Runs
                 }
                 else
                 {
-                    var scanNum = scanset.PrimaryScanNumber;
+                    var scanNum = scanSet.PrimaryScanNumber;
 
                     const int intensityCutoffType = 0;
                     const int intensityCutoffValue = 0;
@@ -357,7 +360,7 @@ namespace DeconTools.Backend.Runs
                     object peakFlags = null;
                     var arraySize = 0;
 
-                    _msfileReader.GetMassListFromScanNum(
+                    _msFileReader.GetMassListFromScanNum(
                         ref scanNum,
                         null,
                         intensityCutoffType,
@@ -397,7 +400,7 @@ namespace DeconTools.Backend.Runs
             // Note from MEM (October 2013)
             // GetMassListFromScanNum generally returns the data sorted by m/z ascending
             // However, there are edge cases for certain spectra in certain datasets where adjacent data points are out of order and need to be swapped
-            // Therefore, we must validate that the data is truly sorted, and if we find a discrepancy, sort it after populating xydata.Xvalues and xydata.Yvalues
+            // Therefore, we must validate that the data is truly sorted, and if we find a discrepancy, sort it after populating xyData.Xvalues and xyData.Yvalues
             var sortRequired = false;
 
             for (var i = 0; i < length; i++)
@@ -433,7 +436,7 @@ namespace DeconTools.Backend.Runs
         public override string GetScanInfo(int scanNum)
         {
             string filter = null;
-            _msfileReader.GetFilterForScanNum(scanNum, ref filter);
+            _msFileReader.GetFilterForScanNum(scanNum, ref filter);
             return filter;
         }
 
@@ -465,7 +468,7 @@ namespace DeconTools.Backend.Runs
         {
             try
             {
-                _msfileReader.Close();
+                _msFileReader.Close();
             }
             catch (AccessViolationException)
             {

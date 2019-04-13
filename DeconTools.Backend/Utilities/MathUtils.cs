@@ -197,7 +197,7 @@ namespace DeconTools.Backend.Utilities
         }
 
 
-        public static void GetLinearRegression(double[] xvals, double[] yvals, out double slope, out double intercept, out double rsquaredVal)
+        public static void GetLinearRegression(double[] xvals, double[] yvals, out double slope, out double intercept, out double rSquaredVal)
         {
             var inputData = new double[xvals.Length, 2];
 
@@ -226,7 +226,7 @@ namespace DeconTools.Backend.Utilities
 
                 slope = -99999999;
                 intercept = -9999999;
-                rsquaredVal = -9999999;
+                rSquaredVal = -9999999;
                 return;
             }
 
@@ -256,11 +256,11 @@ namespace DeconTools.Backend.Utilities
             //check for sum=0
             if (Math.Abs(sumSquaredMeanResiduals) < double.Epsilon)
             {
-                rsquaredVal = 0;
+                rSquaredVal = 0;
             }
             else
             {
-                rsquaredVal = 1.0d - (squaredResiduals.Sum() / sumSquaredMeanResiduals);
+                rSquaredVal = 1.0d - (squaredResiduals.Sum() / sumSquaredMeanResiduals);
             }
 
 

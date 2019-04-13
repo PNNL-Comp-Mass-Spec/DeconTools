@@ -21,7 +21,7 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
         protected IterativeTFF TargetedMSFeatureFinder;
 
 
-        private ChromPeakUtilities _chromPeakUtilities = new ChromPeakUtilities();
+        private readonly ChromPeakUtilities _chromPeakUtilities = new ChromPeakUtilities();
 
         #region Constructors
 
@@ -80,34 +80,31 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
             //target.NumChromPeaksWithinTolerance = peaksWithinTol.Count;
 
 
-            foreach (ChromPeak chromPeak in chromPeakList)
+            foreach (var peak in chromPeakList)
             {
+                var chromPeak = (ChromPeak)peak;
+
                 // TODO: Currently hard-coded to sum only 1 scan
-                var lcscanset =_chromPeakUtilities.GetLCScanSetForChromPeak(chromPeak, run, 1);
+                var lcScanSet =_chromPeakUtilities.GetLCScanSetForChromPeak(chromPeak, run, 1);
 
                 //generate a mass spectrum
-                var massSpectrumXYData = MSGenerator.GenerateMS(run, lcscanset);
+                var massSpectrumXYData = MSGenerator.GenerateMS(run, lcScanSet);
 
                 //find isotopic profile
-                var mspeakList = new List<Peak>();
-                var observedIso = TargetedMSFeatureFinder.IterativelyFindMSFeature(massSpectrumXYData, target.TheorIsotopicProfile, out mspeakList);
-
-                double fitScore = 1;
-
-                double iscore = 1;
+                var observedIso = TargetedMSFeatureFinder.IterativelyFindMSFeature(massSpectrumXYData, target.TheorIsotopicProfile, out var msPeakList);
 
                 //get fit score
-                fitScore = FitScoreCalc.CalculateFitScore(target.TheorIsotopicProfile, observedIso, massSpectrumXYData);
+                var fitScore = FitScoreCalc.CalculateFitScore(target.TheorIsotopicProfile, observedIso, massSpectrumXYData);
 
                 //get i_score
-                iscore = InterferenceScorer.GetInterferenceScore(target.TheorIsotopicProfile, mspeakList);
+                var iScore = InterferenceScorer.GetInterferenceScore(target.TheorIsotopicProfile, msPeakList);
 
                 var leftOfMonoPeakLooker = new LeftOfMonoPeakLooker();
                 var peakToTheLeft = leftOfMonoPeakLooker.LookforPeakToTheLeftOfMonoPeak(target.TheorIsotopicProfile.getMonoPeak(), target.ChargeState,
-                                                                    mspeakList);
+                                                                                        msPeakList);
 
 
-                var hasPeakTotheLeft = peakToTheLeft != null;
+                var hasPeakToTheLeft = peakToTheLeft != null;
 
                 //collect the results together
 
@@ -124,10 +121,10 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
                     pq.IsotopicProfileFound = true;
                     pq.Abundance = observedIso.IntensityMostAbundant;
                     pq.FitScore = fitScore;
-                    pq.InterferenceScore = iscore;
+                    pq.InterferenceScore = iScore;
                     pq.IsotopicProfile = observedIso;
-                    pq.IsIsotopicProfileFlagged = hasPeakTotheLeft;
-                    pq.ScanLc = lcscanset.PrimaryScanNumber;
+                    pq.IsIsotopicProfileFlagged = hasPeakToTheLeft;
+                    pq.ScanLc = lcScanSet.PrimaryScanNumber;
                 }
 
                 peakQualityList.Add(pq);

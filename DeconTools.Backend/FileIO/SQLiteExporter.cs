@@ -57,9 +57,9 @@ namespace DeconTools.Backend.FileIO
             {
                 using (var myCommand = m_dbConnection.CreateCommand())
                 {
-                    createParameterList(myCommand);
+                    CreateParameterList(myCommand);
 
-                    myCommand.CommandText = createInsertionCommandString();
+                    myCommand.CommandText = CreateInsertionCommandString();
                     Console.WriteLine(myCommand.CommandText);
                     foreach (var result in resultList)
                     {
@@ -97,21 +97,21 @@ namespace DeconTools.Backend.FileIO
                 throw;
             }
 
-            buildTable();
+            BuildTable();
 
         }
 
-        protected virtual void buildTable()
+        protected virtual void BuildTable()
         {
             var command = m_dbConnection.CreateCommand();
-            command.CommandText = buildCreateTableSQLiteCommandString();
+            command.CommandText = BuildCreateTableSQLiteCommandString();
             command.ExecuteNonQuery();
         }
 
         protected abstract List<Field> CreateFieldList();
 
 
-        private string createInsertionCommandString()
+        private string CreateInsertionCommandString()
         {
             //for example..."INSERT INTO T_MSFeatures ([feature_id],[scan_num],[charge],[abundance],[mz],[fit],[average_mw],[monoisotopic_mw],[mostabundant_mw],[fwhm],[signal_noise],[mono_abundance],[mono_plus2_abundance],[flag]) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
@@ -152,7 +152,7 @@ namespace DeconTools.Backend.FileIO
 
         protected abstract void AddResults(DbParameterCollection dbParameters, T result);
 
-        protected virtual string buildCreateTableSQLiteCommandString()
+        protected virtual string BuildCreateTableSQLiteCommandString()
         {
             Check.Assert(!string.IsNullOrEmpty(TableName), string.Format("SQLite TableName has not been declared within {0}.", Name));
             Check.Assert(FieldList != null && FieldList.Count > 0, string.Format("SQLite Table fields have not been declared within {0}.", Name));
@@ -184,7 +184,7 @@ namespace DeconTools.Backend.FileIO
 
         }
 
-        private void createParameterList(DbCommand cmd)
+        private void CreateParameterList(DbCommand cmd)
         {
             foreach (var unused in FieldList)
             {

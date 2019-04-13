@@ -58,7 +58,7 @@ namespace DeconTools.Backend.Runs
             }
         }
 
-        public override XYData GetMassSpectrum(ScanSet scanset, double minMZ, double maxMZ)
+        public override XYData GetMassSpectrum(ScanSet scanSet, double minMZ, double maxMZ)
         {
             throw new NotImplementedException();
         }
