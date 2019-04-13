@@ -60,6 +60,7 @@ namespace DeconTools.Backend.Runs
             switch (extension)
             {
                 case ".raw":
+                    // Warning: as of April 2019, this only works with 64-bit DeconTools
                     run = new XCaliburRun2(fullFileName);
                     break;
 #if !Disable_DeconToolsV2

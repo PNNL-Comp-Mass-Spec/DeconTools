@@ -104,13 +104,13 @@ namespace DeconTools.Workflows.Backend.Core
         public string Name => ToString();
 
         /// <summary>
-        /// For trimming the final mass spectrum. A value of '2' means 
+        /// For trimming the final mass spectrum. A value of '2' means
         /// that the mass spectrum will be trimmed -2 to the given m/z value.
         /// </summary>
         public double MsLeftTrimAmount { get; set; }
 
         /// <summary>
-        /// For trimming the final mass spectrum. A value of '10' means 
+        /// For trimming the final mass spectrum. A value of '10' means
         /// that the mass spectrum will be trimmed +10 to the given m/z value.
         /// </summary>
         public double MsRightTrimAmount { get; set; }
@@ -127,7 +127,7 @@ namespace DeconTools.Workflows.Backend.Core
             var pointsInSmoothIsEvenNumber = (WorkflowParameters.ChromSmootherNumPointsInSmooth % 2 == 0);
             if (pointsInSmoothIsEvenNumber)
             {
-                throw new ArgumentOutOfRangeException("Points in chrom smoother is an even number, but must be an odd number.");
+                throw new Exception("Points in chrom smoother is an even number, but must be an odd number (abstract class IqWorkflow).");
             }
         }
 
@@ -440,9 +440,9 @@ namespace DeconTools.Workflows.Backend.Core
         }
 
         /// <summary>
-        /// Calculates mass error based on the theoretical most intense peak. 
+        /// Calculates mass error based on the theoretical most intense peak.
         /// </summary>
-        /// <returns> This returns the mass error between a theoretical and observed peak.  Nota bene the is MASS, not m/z
+        /// <returns> This returns the mass error between a theoretical and observed peak.  NOTE: this is MASS, not m/z
         /// If no peak is detected, we return the mass error 999999.  This should be interpreted as a null value.</returns>
         protected double TheorMostIntensePeakMassError(IsotopicProfile theoreticalIso, IsotopicProfile observedIso, int chargeState)
         {

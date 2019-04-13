@@ -118,10 +118,10 @@ namespace DMSDeconToolsV2
 
         public void CreateTIC()
         {
-            // in the old version of Decon2LS,  the clsProcRunner was re-run solely to extract the _scans data. 
-            // here is the line:  				mobj_proc_runner.CreateTransformResultWithPeaksOnly() ; 
+            // in the old version of Decon2LS,  the clsProcRunner was re-run solely to extract the _scans data.
+            // here is the line:  				mobj_proc_runner.CreateTransformResultWithPeaksOnly() ;
             // In this version, the _scans results are exported as part of the Deconvolute() method
-            // and there is no need to re-execute the same methods. 
+            // and there is no need to re-execute the same methods.
         }
 
         public void ResetState()
