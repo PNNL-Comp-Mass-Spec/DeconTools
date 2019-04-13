@@ -55,55 +55,45 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
                 filteredList1 = filteredList1.Where(p => p.IsIsotopicProfileFlagged == false).ToList();
             }
 
-            ChromPeak bestpeak;
-
             //target.NumQualityChromPeaks = filteredList1.Count;
 
             if (filteredList1.Count == 0)
             {
-                bestpeak = null;
+                return null;
                 //currentResult.FailedResult = true;
                 //currentResult.FailureType = Globals.TargetedResultFailureType.ChrompeakNotFoundWithinTolerances;
             }
-            else if (filteredList1.Count == 1)
+
+            if (filteredList1.Count == 1)
             {
-                bestpeak = filteredList1[0].Peak;
-            }
-            else
-            {
-                filteredList1 = filteredList1.OrderBy(p => p.FitScore).ToList();
-
-                var diffFirstAndSecondFitScores = Math.Abs(filteredList1[0].FitScore - filteredList1[1].FitScore);
-
-                var differenceIsSmall = (diffFirstAndSecondFitScores < 0.05);
-                if (differenceIsSmall)
-                {
-                    if (_parameters.MultipleHighQualityMatchesAreAllowed)
-                    {
-
-                        if (filteredList1[0].Abundance >= filteredList1[1].Abundance)
-                        {
-                            bestpeak = filteredList1[0].Peak;
-                        }
-                        else
-                        {
-                            bestpeak = filteredList1[1].Peak;
-                        }
-                    }
-                    else
-                    {
-                        bestpeak = null;
-                        //currentResult.FailedResult = true;
-                        //currentResult.FailureType = Globals.TargetedResultFailureType.TooManyHighQualityChrompeaks;
-                    }
-                }
-                else
-                {
-                    bestpeak = filteredList1[0].Peak;
-                }
+                return filteredList1[0].Peak;
             }
 
-            return bestpeak;
+            filteredList1 = filteredList1.OrderBy(p => p.FitScore).ToList();
+
+            var diffFirstAndSecondFitScores = Math.Abs(filteredList1[0].FitScore - filteredList1[1].FitScore);
+
+            var differenceIsSmall = (diffFirstAndSecondFitScores < 0.05);
+            if (differenceIsSmall)
+            {
+                if (_parameters.MultipleHighQualityMatchesAreAllowed)
+                {
+
+                    if (filteredList1[0].Abundance >= filteredList1[1].Abundance)
+                    {
+                        return filteredList1[0].Peak;
+                    }
+
+                    return filteredList1[1].Peak;
+                }
+
+                return null;
+                //currentResult.FailedResult = true;
+                //currentResult.FailureType = Globals.TargetedResultFailureType.TooManyHighQualityChrompeaks;
+            }
+
+            return filteredList1[0].Peak;
+
         }
 
         /// <summary>
@@ -119,10 +109,10 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
 
             var currentResult = resultList.GetTargetedResult(massTag);
 
-            if (msgen == null)
+            if (msGen == null)
             {
-                msgen = MSGeneratorFactory.CreateMSGenerator(resultList.Run.MSFileType);
-                msgen.IsTICRequested = false;
+                msGen = MSGeneratorFactory.CreateMSGenerator(resultList.Run.MSFileType);
+                msGen.IsTICRequested = false;
             }
 
             float normalizedElutionTime;
@@ -175,14 +165,14 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
                     var pq = new ChromPeakQualityData(chromPeak);
                     peakQualityList.Add(pq);
 
-                    var lcscanSet= ChromPeakUtilities.GetLCScanSetForChromPeak(chromPeak, resultList.Run, _parameters.NumMSSummedInSmartSelector);
-                    resultList.Run.CurrentScanSet = lcscanSet;
+                    var lcScanSet = ChromPeakUtilities.GetLCScanSetForChromPeak(chromPeak, resultList.Run, _parameters.NumMSSummedInSmartSelector);
+                    resultList.Run.CurrentScanSet = lcScanSet;
 
                     //This resets the flags and the scores on a given result
                     currentResult.ResetResult();
 
                     //generate a mass spectrum
-                    msgen.Execute(resultList);
+                    msGen.Execute(resultList);
 
                     //find isotopic profile
                     TargetedMSFeatureFinder.Execute(resultList);
@@ -217,7 +207,7 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
 
             currentResult.ChromPeakQualityList = peakQualityList;
 
-            if (Parameters.SummingMode==SummingModeEnum.SUMMINGMODE_STATIC)
+            if (Parameters.SummingMode == SummingModeEnum.SUMMINGMODE_STATIC)
             {
                 resultList.Run.CurrentScanSet = ChromPeakUtilities.GetLCScanSetForChromPeak(bestChromPeak, resultList.Run, Parameters.NumScansToSum);
             }
@@ -285,59 +275,49 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
                 filteredList1 = filteredList1.Where(p => p.IsIsotopicProfileFlagged == false).ToList();
             }
 
-            ChromPeak bestpeak;
-
             currentResult.NumQualityChromPeaks = filteredList1.Count;
 
             if (filteredList1.Count == 0)
             {
-                bestpeak = null;
                 currentResult.FailedResult = true;
                 currentResult.FailureType = DeconTools.Backend.Globals.TargetedResultFailureType.ChrompeakNotFoundWithinTolerances;
+                return null;
             }
-            else if (filteredList1.Count == 1)
+
+            if (filteredList1.Count == 1)
             {
-                bestpeak = filteredList1[0].Peak;
+                return filteredList1[0].Peak;
             }
-            else
+
+            filteredList1 = filteredList1.OrderBy(p => p.FitScore).ToList();
+
+            var numCandidatesWithLowFitScores = filteredList1.Count(p => p.FitScore < _parameters.UpperLimitOfGoodFitScore);
+            currentResult.NumQualityChromPeaks = numCandidatesWithLowFitScores;
+
+
+            var diffFirstAndSecondFitScores = Math.Abs(filteredList1[0].FitScore - filteredList1[1].FitScore);
+
+            var differenceIsSmall = (diffFirstAndSecondFitScores < 0.05);
+            if (differenceIsSmall)
             {
-                filteredList1 = filteredList1.OrderBy(p => p.FitScore).ToList();
-
-                var numCandidatesWithLowFitScores = filteredList1.Count(p => p.FitScore < _parameters.UpperLimitOfGoodFitScore);
-                currentResult.NumQualityChromPeaks = numCandidatesWithLowFitScores;
-
-
-                var diffFirstAndSecondFitScores = Math.Abs(filteredList1[0].FitScore - filteredList1[1].FitScore);
-
-                var differenceIsSmall = (diffFirstAndSecondFitScores < 0.05);
-                if (differenceIsSmall)
+                if (_parameters.MultipleHighQualityMatchesAreAllowed)
                 {
-                    if (_parameters.MultipleHighQualityMatchesAreAllowed)
-                    {
 
-                        if (filteredList1[0].Abundance >= filteredList1[1].Abundance)
-                        {
-                            bestpeak = filteredList1[0].Peak;
-                        }
-                        else
-                        {
-                            bestpeak = filteredList1[1].Peak;
-                        }
-                    }
-                    else
+                    if (filteredList1[0].Abundance >= filteredList1[1].Abundance)
                     {
-                        bestpeak = null;
-                        currentResult.FailedResult = true;
-                        currentResult.FailureType = DeconTools.Backend.Globals.TargetedResultFailureType.TooManyHighQualityChrompeaks;
+                        return filteredList1[0].Peak;
                     }
+
+                    return filteredList1[1].Peak;
                 }
-                else
-                {
-                    bestpeak = filteredList1[0].Peak;
-                }
+
+                currentResult.FailedResult = true;
+                currentResult.FailureType = DeconTools.Backend.Globals.TargetedResultFailureType.TooManyHighQualityChrompeaks;
+                return null;
             }
 
-            return bestpeak;
+            return filteredList1[0].Peak;
+
         }
 
 
