@@ -289,13 +289,8 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             if (run.CurrentMassTag == null)
                 return null;
 
-            Check.Require(run.CurrentMassTag.IsotopicProfile != null, "Run's 'CurrentMassTag' has not been declared");
-            Check.Require(run.CurrentMassTag.IsotopicProfileLabelled != null, "Run's 'CurrentMassTag' has not been declared");
-
+            Check.Require(run.CurrentMassTag.IsotopicProfile != null, "Run's 'IsotopicProfile' has not been declared");
             if (run.CurrentMassTag?.IsotopicProfile == null)
-                return null;
-
-            if (run.CurrentMassTag?.IsotopicProfileLabelled == null)
                 return null;
 
             switch (IsotopicProfileType)
@@ -304,10 +299,15 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
                     Check.Require(run.CurrentMassTag.IsotopicProfile!=null,"Target's theoretical isotopic profile has not been established");
                     iso = run.CurrentMassTag.IsotopicProfile.CloneIsotopicProfile();
                     break;
+
                 case Globals.IsotopicProfileType.LABELLED:
                     Check.Require(run.CurrentMassTag.IsotopicProfileLabelled != null, "Target's labelled theoretical isotopic profile has not been established");
+                    if (run.CurrentMassTag?.IsotopicProfileLabelled == null)
+                        return null;
+
                     iso = run.CurrentMassTag.IsotopicProfileLabelled.CloneIsotopicProfile();
                     break;
+
                 default:
                     iso = run.CurrentMassTag.IsotopicProfile.CloneIsotopicProfile();
                     break;
@@ -321,7 +321,6 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
                     peak.XValue = run.GetTargetMZAligned(peak.XValue);
                 }
             }
-
 
             return iso;
 
