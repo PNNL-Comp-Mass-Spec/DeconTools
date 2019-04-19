@@ -41,7 +41,7 @@ namespace DeconTools.Workflows.Backend.FileIO
         private const string TopPIC_PRSM_ID_HEADER = "Prsm ID";
         private const string TopPIC_SCAN_HEADER = SCAN_HEADER;
         private const string TopPIC_CHARGE_HEADER = CHARGE_HEADER;
-        private const string TopPIC_PROTEIN_NAME_HEADER = "Protein name";
+        private const string TopPIC_PROTEIN_NAME_HEADER = "Protein accession";
         private const string TopPIC_PROTEIN_MASS_HEADER = "Adjusted precursor mass";
         private const string TopPIC_PEPTIDE_HEADER = "Proteoform";
         private const string TopPIC_E_VALUE_HEADER = E_VALUE_HEADER;
