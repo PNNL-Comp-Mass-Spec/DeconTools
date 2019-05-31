@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TargetedWorkflowConsoleDMS_
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeconToolsAutoProcessV1_x64", "DeconToolsAutoProcessV1\DeconToolsAutoProcessV1_x64.csproj", "{BBDDF8AA-5E55-44A8-879F-BB6108503845}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IQ", "IQ\IQ.csproj", "{CFE90075-DA17-4B3A-BF55-EB490CE08B33}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug DLLs|Any CPU = Debug DLLs|Any CPU
@@ -185,6 +187,35 @@ Global
 		{BBDDF8AA-5E55-44A8-879F-BB6108503845}.Release|x64.ActiveCfg = Release|x64
 		{BBDDF8AA-5E55-44A8-879F-BB6108503845}.Release|x64.Build.0 = Release|x64
 		{BBDDF8AA-5E55-44A8-879F-BB6108503845}.Release|x86.ActiveCfg = Release|x64
+		{CFE90075-DA17-4B3A-BF55-EB490CE08B33}.Debug DLLs|Any CPU.ActiveCfg = NeDeconEngine_Debug|x86
+		{CFE90075-DA17-4B3A-BF55-EB490CE08B33}.Debug DLLs|Any CPU.Build.0 = NeDeconEngine_Debug|x86
+		{CFE90075-DA17-4B3A-BF55-EB490CE08B33}.Debug DLLs|x64.ActiveCfg = NeDeconEngine_Debug|x86
+		{CFE90075-DA17-4B3A-BF55-EB490CE08B33}.Debug DLLs|x64.Build.0 = NeDeconEngine_Debug|x86
+		{CFE90075-DA17-4B3A-BF55-EB490CE08B33}.Debug DLLs|x86.ActiveCfg = Debug|x86
+		{CFE90075-DA17-4B3A-BF55-EB490CE08B33}.Debug DLLs|x86.Build.0 = Debug|x86
+		{CFE90075-DA17-4B3A-BF55-EB490CE08B33}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{CFE90075-DA17-4B3A-BF55-EB490CE08B33}.Debug|x64.ActiveCfg = Debug|x64
+		{CFE90075-DA17-4B3A-BF55-EB490CE08B33}.Debug|x64.Build.0 = Debug|x64
+		{CFE90075-DA17-4B3A-BF55-EB490CE08B33}.Debug|x86.ActiveCfg = Debug|x86
+		{CFE90075-DA17-4B3A-BF55-EB490CE08B33}.Debug|x86.Build.0 = Debug|x86
+		{CFE90075-DA17-4B3A-BF55-EB490CE08B33}.NeDeconEngine_Debug|Any CPU.ActiveCfg = NeDeconEngine_Debug|x86
+		{CFE90075-DA17-4B3A-BF55-EB490CE08B33}.NeDeconEngine_Debug|x64.ActiveCfg = NeDeconEngine_Debug|x86
+		{CFE90075-DA17-4B3A-BF55-EB490CE08B33}.NeDeconEngine_Debug|x86.ActiveCfg = NeDeconEngine_Debug|x86
+		{CFE90075-DA17-4B3A-BF55-EB490CE08B33}.NeDeconEngine_Debug|x86.Build.0 = NeDeconEngine_Debug|x86
+		{CFE90075-DA17-4B3A-BF55-EB490CE08B33}.NoDeconEngine_Debug|Any CPU.ActiveCfg = NeDeconEngine_Debug|x86
+		{CFE90075-DA17-4B3A-BF55-EB490CE08B33}.NoDeconEngine_Debug|Any CPU.Build.0 = NeDeconEngine_Debug|x86
+		{CFE90075-DA17-4B3A-BF55-EB490CE08B33}.NoDeconEngine_Debug|x64.ActiveCfg = NeDeconEngine_Debug|x86
+		{CFE90075-DA17-4B3A-BF55-EB490CE08B33}.NoDeconEngine_Debug|x64.Build.0 = NeDeconEngine_Debug|x86
+		{CFE90075-DA17-4B3A-BF55-EB490CE08B33}.NoDeconEngine_Debug|x86.ActiveCfg = NoDeconEngine_Release|x86
+		{CFE90075-DA17-4B3A-BF55-EB490CE08B33}.NoDeconEngine_Debug|x86.Build.0 = NoDeconEngine_Release|x86
+		{CFE90075-DA17-4B3A-BF55-EB490CE08B33}.NoDeconEngine_Release|Any CPU.ActiveCfg = NoDeconEngine_Release|x86
+		{CFE90075-DA17-4B3A-BF55-EB490CE08B33}.NoDeconEngine_Release|x64.ActiveCfg = NoDeconEngine_Release|x86
+		{CFE90075-DA17-4B3A-BF55-EB490CE08B33}.NoDeconEngine_Release|x86.ActiveCfg = NoDeconEngine_Release|x86
+		{CFE90075-DA17-4B3A-BF55-EB490CE08B33}.NoDeconEngine_Release|x86.Build.0 = NoDeconEngine_Release|x86
+		{CFE90075-DA17-4B3A-BF55-EB490CE08B33}.Release|Any CPU.ActiveCfg = Release|x86
+		{CFE90075-DA17-4B3A-BF55-EB490CE08B33}.Release|x64.ActiveCfg = Release|x86
+		{CFE90075-DA17-4B3A-BF55-EB490CE08B33}.Release|x86.ActiveCfg = Release|x86
+		{CFE90075-DA17-4B3A-BF55-EB490CE08B33}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
