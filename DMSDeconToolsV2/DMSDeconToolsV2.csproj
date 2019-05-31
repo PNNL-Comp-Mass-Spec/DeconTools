@@ -67,7 +67,7 @@
   <ItemGroup>
     <PackageReference Include="System.Data.SQLite.Core" Version="1.0.97" />
     <PackageReference Include="UIMFLibrary">
-      <Version>3.6.7</Version>
+      <Version>3.6.9</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
