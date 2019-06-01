@@ -167,19 +167,21 @@ namespace DeconTools.Workflows.Backend.FileIO
 
         protected void EnumerateSections()
         {
-            var sectionsToCheck = new Dictionary<HeaderSection, string[]>();
+            var sectionsToCheck = new Dictionary<HeaderSection, string[]>
+            {
+                {HeaderSection.DatasetName, DatasetHeaders},
+                {HeaderSection.EmpiricalFormula, EmpiricalFormulaHeaders},
+                {HeaderSection.PeptideSequence, CodeHeaders},
+                {HeaderSection.TargetID, TargetIDHeaders},
+                {HeaderSection.MonoMass, MonomassHeaders},
+                {HeaderSection.AlternateID, AlternateIDHeader},
+                {HeaderSection.MZ, MzHeaders},
+                {HeaderSection.Scan, ScanHeaders},
+                {HeaderSection.NET, NETHeaders},
+                {HeaderSection.Quality, QualityScoreHeaders},
+                {HeaderSection.Charge, ChargeStateHeaders}
+            };
 
-            sectionsToCheck.Add(HeaderSection.DatasetName, DatasetHeaders);
-            sectionsToCheck.Add(HeaderSection.EmpiricalFormula, EmpiricalFormulaHeaders);
-            sectionsToCheck.Add(HeaderSection.PeptideSequence, CodeHeaders);
-            sectionsToCheck.Add(HeaderSection.TargetID, TargetIDHeaders);
-            sectionsToCheck.Add(HeaderSection.MonoMass, MonomassHeaders);
-            sectionsToCheck.Add(HeaderSection.AlternateID, AlternateIDHeader);
-            sectionsToCheck.Add(HeaderSection.MZ, MzHeaders);
-            sectionsToCheck.Add(HeaderSection.Scan, ScanHeaders);
-            sectionsToCheck.Add(HeaderSection.NET, NETHeaders);
-            sectionsToCheck.Add(HeaderSection.Quality, QualityScoreHeaders);
-            sectionsToCheck.Add(HeaderSection.Charge, ChargeStateHeaders);
 
             var dummyData = new List<string>();
             for (var i = 0; i < m_columnHeaders.Count; i++)
