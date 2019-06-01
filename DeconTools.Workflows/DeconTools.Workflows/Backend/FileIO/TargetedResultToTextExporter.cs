@@ -67,8 +67,12 @@ namespace DeconTools.Workflows.Backend.FileIO
 
             sb.Append(addBasicTargetedResult(result));
 
-            sb.Append(addAdditionalInfo(result));
+            var additionalInfo = addAdditionalInfo(result);
+            if (string.IsNullOrEmpty(additionalInfo))
+                return sb.ToString();
 
+            sb.Append(Delimiter);
+            sb.Append(addAdditionalInfo(result));
             return sb.ToString();
 
         }
