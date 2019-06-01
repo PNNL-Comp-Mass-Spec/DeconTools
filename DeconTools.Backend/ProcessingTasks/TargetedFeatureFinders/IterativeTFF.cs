@@ -84,9 +84,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
             result.Run.PeakList = msPeakList;     //this is important for subsequent tasks that use the peaks that were detected here.
 
-
             AddFeatureToResult(result, iso);
-
 
             var isoIsGood = (iso?.Peaklist != null && iso.Peaklist.Count > 0);
             if (isoIsGood)
@@ -101,7 +99,6 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             }
 
             resultList.IsosResultBin.Add(result);
-
 
         }
 

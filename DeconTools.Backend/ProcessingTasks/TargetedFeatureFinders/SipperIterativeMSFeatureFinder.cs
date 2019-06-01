@@ -76,9 +76,6 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
                 iso.Peaklist.Add(newPeak);
             }
 
-
-
-
             //adjust the target m/z based on the alignment information
             if (run.MassIsAligned)
             {
