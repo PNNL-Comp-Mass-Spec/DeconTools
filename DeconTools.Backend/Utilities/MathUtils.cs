@@ -91,6 +91,13 @@ namespace DeconTools.Backend.Utilities
 
         }
 
+        /// <summary>
+        /// Find the value in data that is closest to targetVal, within +/-tolerance
+        /// </summary>
+        /// <param name="data">List of values to search (must be sorted)</param>
+        /// <param name="targetVal"></param>
+        /// <param name="tolerance"></param>
+        /// <returns></returns>
         public static int GetClosest(double[] data, double targetVal, double tolerance = 0.1)
         {
             if (data.Length == 0) return -1;
@@ -149,7 +156,16 @@ namespace DeconTools.Backend.Utilities
 
         }
 
-
+        /// <summary>
+        /// Use a binary search to find a value in data that is within +/-tolerance of the target value
+        /// </summary>
+        /// <param name="data">List of values to search (must be sorted)</param>
+        /// <param name="targetVal"></param>
+        /// <param name="leftIndex"></param>
+        /// <param name="rightIndex"></param>
+        /// <param name="tolerance"></param>
+        /// <returns>Index of the matched value, or -1 if no match</returns>
+        /// <remarks>Returns the first value found within tolerance of the targetValue, not necessarily the closest value</remarks>
         public static int BinarySearchWithTolerance(double[] data, double targetVal, int leftIndex, int rightIndex, double tolerance)
         {
             if (leftIndex <= rightIndex)
