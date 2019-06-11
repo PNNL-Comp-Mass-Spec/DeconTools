@@ -909,6 +909,24 @@
             Data Dependent ZoomScan Map
             </summary>
         </member>
+        <member name="P:ThermoRawFileReader.ThermoReaderOptions.LoadMSMethodInfo">
+            <summary>
+            MS Method Information
+            </summary>
+            <remarks>
+            Set this to false when using the ThermoRawFileReader on Linux systems;
+            CommonCore.RawFileReader raises an exception due to a null value when accessing
+            get_StorageDescriptions from get_InstrumentMethodsCount; stack trace:
+              ThermoRawFileReader.XRawFileIO.FillFileInfo
+              ThermoFisher.CommonCore.RawFileReader.RawFileAccessBase.get_InstrumentMethodsCount
+              ThermoFisher.CommonCore.RawFileReader.StructWrappers.Method.get_StorageDescriptions
+            </remarks>
+        </member>
+        <member name="P:ThermoRawFileReader.ThermoReaderOptions.LoadMSTuneInfo">
+            <summary>
+            MS Tune Information
+            </summary>
+        </member>
         <member name="T:ThermoRawFileReader.XRawFileIO">
             <summary>
             Class for reading Thermo .raw files
@@ -935,21 +953,6 @@
             allowing for quickly determining the oldest scan added to the cache when the cache limit is reached
             </summary>
         </member>
-        <member name="F:ThermoRawFileReader.XRawFileIO.mFileInfo">
-            <summary>
-            File info for the currently loaded .raw file
-            </summary>
-        </member>
-        <member name="F:ThermoRawFileReader.XRawFileIO.mLoadMSMethodInfo">
-            <summary>
-            MS Method Information
-            </summary>
-        </member>
-        <member name="F:ThermoRawFileReader.XRawFileIO.mLoadMSTuneInfo">
-            <summary>
-            MS Tune Information
-            </summary>
-        </member>
         <member name="F:ThermoRawFileReader.XRawFileIO.mXRawFile">
             <summary>
             Reader that implements ThermoFisher.CommonCore.Data.Interfaces.IRawDataPlus
@@ -962,17 +965,12 @@
         </member>
         <member name="P:ThermoRawFileReader.XRawFileIO.FileInfo">
             <summary>
-            Get FileInfo about the currently loaded .raw file
+            File info for the currently loaded .raw file
             </summary>
         </member>
-        <member name="P:ThermoRawFileReader.XRawFileIO.LoadMSMethodInfo">
+        <member name="P:ThermoRawFileReader.XRawFileIO.Options">
             <summary>
-            MS Method information
-            </summary>
-        </member>
-        <member name="P:ThermoRawFileReader.XRawFileIO.LoadMSTuneInfo">
-            <summary>
-            MS Tune Info
+            Thermo reader options
             </summary>
         </member>
         <member name="P:ThermoRawFileReader.XRawFileIO.ScanInfoCacheMaxSize">
@@ -980,6 +978,16 @@
             Maximum number of scan metadata cached; defaults to 50000
             </summary>
             <remarks>Set to 0 to disable caching</remarks>
+        </member>
+        <member name="P:ThermoRawFileReader.XRawFileIO.ScanStart">
+            <summary>
+            First scan number in the .Raw file
+            </summary>
+        </member>
+        <member name="P:ThermoRawFileReader.XRawFileIO.ScanEnd">
+            <summary>
+            Last scan number in the .Raw file
+            </summary>
         </member>
         <member name="P:ThermoRawFileReader.XRawFileIO.TraceMode">
             <summary>
@@ -1312,11 +1320,26 @@
             </summary>
             <remarks></remarks>
         </member>
+        <member name="M:ThermoRawFileReader.XRawFileIO.#ctor(ThermoRawFileReader.ThermoReaderOptions)">
+            <summary>
+            Constructor with an options parameter
+            </summary>
+            <param name="options">Thermo reader options</param>
+            <remarks></remarks>
+        </member>
         <member name="M:ThermoRawFileReader.XRawFileIO.#ctor(System.String,System.Boolean)">
             <summary>
-            Constructor
+            Constructor with a file path parameter
             </summary>
-            <param name="rawFilePath">Optional .raw file to open</param>
+            <param name="rawFilePath">Thermo .raw file to open (empty string to not open a file)</param>
+            <param name="traceMode">When true, additional messages are reported via Debug events</param>
+        </member>
+        <member name="M:ThermoRawFileReader.XRawFileIO.#ctor(System.String,ThermoRawFileReader.ThermoReaderOptions,System.Boolean)">
+            <summary>
+            Constructor with file path, options, and optionally a trace flag
+            </summary>
+            <param name="rawFilePath">Thermo .raw file to open (empty string to not open a file)</param>
+            <param name="options">Thermo reader options</param>
             <param name="traceMode">When true, additional messages are reported via Debug events</param>
         </member>
         <member name="M:ThermoRawFileReader.XRawFileIO.Dispose">
@@ -1402,28 +1425,6 @@
             <summary>
             Container for metadata relating to a single scan
             </summary>
-        </member>
-        <member name="F:ThermoRawFileReader.clsScanInfo.mCacheDateUTC">
-            <summary>
-            UTC Time that this scan info was cached
-            </summary>
-        </member>
-        <member name="F:ThermoRawFileReader.clsScanInfo.mScanNumber">
-            <summary>
-            Scan number
-            </summary>
-        </member>
-        <member name="F:ThermoRawFileReader.clsScanInfo.mScanEvents">
-            <summary>
-            Scan event data
-            </summary>
-            <remarks>Ignores scan events with a blank or null event name</remarks>
-        </member>
-        <member name="F:ThermoRawFileReader.clsScanInfo.mStatusLog">
-            <summary>
-            Status Log data
-            </summary>
-            <remarks>Includes blank events that separate log sections</remarks>
         </member>
         <member name="P:ThermoRawFileReader.clsScanInfo.CacheDateUTC">
             <summary>
@@ -1560,12 +1561,12 @@
         </member>
         <member name="P:ThermoRawFileReader.clsScanInfo.IsolationWindowTargetMZ">
             <summary>
-            The monoisotopic parent ion m/z, as determined by the thermo software
+            The monoisotopic parent ion m/z, as determined by the Thermo software
             </summary>
         </member>
         <member name="P:ThermoRawFileReader.clsScanInfo.ChargeState">
             <summary>
-            The parent ion charge state, as determined by the thermo software
+            The parent ion charge state, as determined by the Thermo software
             </summary>
         </member>
         <member name="P:ThermoRawFileReader.clsScanInfo.ActivationType">
@@ -1646,7 +1647,7 @@
             </summary>
             <value></value>
             <returns>List of key/value pairs</returns>
-            <remarks></remarks>
+            <remarks>Ignores scan events with a blank or null event name</remarks>
         </member>
         <member name="P:ThermoRawFileReader.clsScanInfo.StatusLog">
             <summary>
@@ -1654,7 +1655,7 @@
             </summary>
             <value></value>
             <returns>List of key/value pairs</returns>
-            <remarks></remarks>
+            <remarks>Includes blank events that separate log sections</remarks>
         </member>
         <member name="M:ThermoRawFileReader.clsScanInfo.#ctor(System.Int32)">
             <summary>
