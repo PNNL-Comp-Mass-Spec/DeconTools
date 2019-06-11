@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeconToolsAutoProcessV1_x64
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IQ", "IQ\IQ.csproj", "{CFE90075-DA17-4B3A-BF55-EB490CE08B33}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeconTools.UnitTesting2_x64", "DeconTools.UnitTesting2\DeconTools.UnitTesting2_x64.csproj", "{A3328211-C5BC-4A42-9B84-CB97DAAE8FC7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug DLLs|Any CPU = Debug DLLs|Any CPU
@@ -216,6 +218,38 @@ Global
 		{CFE90075-DA17-4B3A-BF55-EB490CE08B33}.Release|x64.ActiveCfg = Release|x86
 		{CFE90075-DA17-4B3A-BF55-EB490CE08B33}.Release|x86.ActiveCfg = Release|x86
 		{CFE90075-DA17-4B3A-BF55-EB490CE08B33}.Release|x86.Build.0 = Release|x86
+		{A3328211-C5BC-4A42-9B84-CB97DAAE8FC7}.Debug DLLs|Any CPU.ActiveCfg = Release|x64
+		{A3328211-C5BC-4A42-9B84-CB97DAAE8FC7}.Debug DLLs|Any CPU.Build.0 = Release|x64
+		{A3328211-C5BC-4A42-9B84-CB97DAAE8FC7}.Debug DLLs|x64.ActiveCfg = Debug|x64
+		{A3328211-C5BC-4A42-9B84-CB97DAAE8FC7}.Debug DLLs|x64.Build.0 = Debug|x64
+		{A3328211-C5BC-4A42-9B84-CB97DAAE8FC7}.Debug DLLs|x86.ActiveCfg = Release|x64
+		{A3328211-C5BC-4A42-9B84-CB97DAAE8FC7}.Debug DLLs|x86.Build.0 = Release|x64
+		{A3328211-C5BC-4A42-9B84-CB97DAAE8FC7}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{A3328211-C5BC-4A42-9B84-CB97DAAE8FC7}.Debug|x64.ActiveCfg = Debug|x64
+		{A3328211-C5BC-4A42-9B84-CB97DAAE8FC7}.Debug|x64.Build.0 = Debug|x64
+		{A3328211-C5BC-4A42-9B84-CB97DAAE8FC7}.Debug|x86.ActiveCfg = Debug|x64
+		{A3328211-C5BC-4A42-9B84-CB97DAAE8FC7}.NeDeconEngine_Debug|Any CPU.ActiveCfg = Release|x64
+		{A3328211-C5BC-4A42-9B84-CB97DAAE8FC7}.NeDeconEngine_Debug|Any CPU.Build.0 = Release|x64
+		{A3328211-C5BC-4A42-9B84-CB97DAAE8FC7}.NeDeconEngine_Debug|x64.ActiveCfg = Debug|x64
+		{A3328211-C5BC-4A42-9B84-CB97DAAE8FC7}.NeDeconEngine_Debug|x64.Build.0 = Debug|x64
+		{A3328211-C5BC-4A42-9B84-CB97DAAE8FC7}.NeDeconEngine_Debug|x86.ActiveCfg = Release|x64
+		{A3328211-C5BC-4A42-9B84-CB97DAAE8FC7}.NeDeconEngine_Debug|x86.Build.0 = Release|x64
+		{A3328211-C5BC-4A42-9B84-CB97DAAE8FC7}.NoDeconEngine_Debug|Any CPU.ActiveCfg = Release|x64
+		{A3328211-C5BC-4A42-9B84-CB97DAAE8FC7}.NoDeconEngine_Debug|Any CPU.Build.0 = Release|x64
+		{A3328211-C5BC-4A42-9B84-CB97DAAE8FC7}.NoDeconEngine_Debug|x64.ActiveCfg = Debug|x64
+		{A3328211-C5BC-4A42-9B84-CB97DAAE8FC7}.NoDeconEngine_Debug|x64.Build.0 = Debug|x64
+		{A3328211-C5BC-4A42-9B84-CB97DAAE8FC7}.NoDeconEngine_Debug|x86.ActiveCfg = Release|x64
+		{A3328211-C5BC-4A42-9B84-CB97DAAE8FC7}.NoDeconEngine_Debug|x86.Build.0 = Release|x64
+		{A3328211-C5BC-4A42-9B84-CB97DAAE8FC7}.NoDeconEngine_Release|Any CPU.ActiveCfg = Release|x64
+		{A3328211-C5BC-4A42-9B84-CB97DAAE8FC7}.NoDeconEngine_Release|Any CPU.Build.0 = Release|x64
+		{A3328211-C5BC-4A42-9B84-CB97DAAE8FC7}.NoDeconEngine_Release|x64.ActiveCfg = Release|x64
+		{A3328211-C5BC-4A42-9B84-CB97DAAE8FC7}.NoDeconEngine_Release|x64.Build.0 = Release|x64
+		{A3328211-C5BC-4A42-9B84-CB97DAAE8FC7}.NoDeconEngine_Release|x86.ActiveCfg = Release|x64
+		{A3328211-C5BC-4A42-9B84-CB97DAAE8FC7}.NoDeconEngine_Release|x86.Build.0 = Release|x64
+		{A3328211-C5BC-4A42-9B84-CB97DAAE8FC7}.Release|Any CPU.ActiveCfg = Release|x64
+		{A3328211-C5BC-4A42-9B84-CB97DAAE8FC7}.Release|x64.ActiveCfg = Release|x64
+		{A3328211-C5BC-4A42-9B84-CB97DAAE8FC7}.Release|x64.Build.0 = Release|x64
+		{A3328211-C5BC-4A42-9B84-CB97DAAE8FC7}.Release|x86.ActiveCfg = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

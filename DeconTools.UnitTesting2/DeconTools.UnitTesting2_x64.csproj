@@ -1,0 +1,192 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{A3328211-C5BC-4A42-9B84-CB97DAAE8FC7}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DeconTools.UnitTesting2</RootNamespace>
+    <AssemblyName>DeconTools.UnitTesting2</AssemblyName>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;Disable_DeconToolsV2</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE;Disable_DeconToolsV2</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="GWSGraphLibrary">
+      <HintPath>..\Library\GWSGraphLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="MultiAlignEngine">
+      <HintPath>..\Library\x64\MultiAlignEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="PNNLOmics">
+      <HintPath>..\Library\PNNLOmics.dll</HintPath>
+    </Reference>
+    <Reference Include="ProteowizardWrapper">
+      <HintPath>..\Library\ProteowizardWrapper.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="ThermoFisher.CommonCore.BackgroundSubtraction">
+      <HintPath>..\Library\ThermoFisher.CommonCore.BackgroundSubtraction.dll</HintPath>
+    </Reference>
+    <Reference Include="ThermoFisher.CommonCore.Data">
+      <HintPath>..\Library\ThermoFisher.CommonCore.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="ThermoFisher.CommonCore.MassPrecisionEstimator">
+      <HintPath>..\Library\ThermoFisher.CommonCore.MassPrecisionEstimator.dll</HintPath>
+    </Reference>
+    <Reference Include="ThermoFisher.CommonCore.RawFileReader">
+      <HintPath>..\Library\ThermoFisher.CommonCore.RawFileReader.dll</HintPath>
+    </Reference>
+    <Reference Include="ThermoRawFileReader">
+      <HintPath>..\Library\ThermoRawFileReader.dll</HintPath>
+    </Reference>
+    <Reference Include="YafmsLibrary">
+      <HintPath>..\Library\YafmsLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="ZedGraph">
+      <HintPath>..\Library\ZedGraph.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Algorithm_tests\LabelingDistributionCalculatorTests.cs" />
+    <Compile Include="Algorithm_tests\LoessTests.cs" />
+    <Compile Include="Algorithm_tests\PattersonAlgorithmTests.cs" />
+    <Compile Include="DeconEngineClasses\OldDecon2LSParameters.cs" />
+    <Compile Include="DeconEngineClasses\PeakImporterFromOldPeakDatFile.cs" />
+    <Compile Include="Demos_basic_API_usage\Demo1_ReadingRawData.cs" />
+    <Compile Include="Demos_basic_API_usage\DemoTests.cs" />
+    <Compile Include="FileIO_Tests\DeconToolsParameterTests.cs" />
+    <Compile Include="FileIO_Tests\IsosImporterTests.cs" />
+    <Compile Include="FileIO_Tests\LcmsTargetFromFeatureTextImporterTests.cs" />
+    <Compile Include="FileIO_Tests\MassTagFromDBImporterTests.cs" />
+    <Compile Include="FileIO_Tests\MassTagFromTextFileImporterTests.cs" />
+    <Compile Include="FileIO_Tests\MassTagTextFileExporterTests.cs" />
+    <Compile Include="FileIO_Tests\MSFeatureExporterTests.cs" />
+    <Compile Include="FileIO_Tests\MSFeatureExporterFactoryTests.cs" />
+    <Compile Include="FileIO_Tests\MSScanInfoExporterTests.cs" />
+    <Compile Include="FileIO_Tests\PeakExporterTests.cs" />
+    <Compile Include="FileIO_Tests\PeakImporterFromOldDecon2LSDatFileTests.cs" />
+    <Compile Include="FileIO_Tests\PeakImporterTests.cs" />
+    <Compile Include="FileIO_Tests\ViperMassCalibrationLoaderTests.cs" />
+    <Compile Include="ProcessingRelated_Tests\ChromatogramRelatedTests\ChromatogramCorrelatorTests.cs" />
+    <Compile Include="ProcessingRelated_Tests\ChromatogramRelatedTests\ChromatogramPeakDetectorTests.cs" />
+    <Compile Include="ProcessingRelated_Tests\FitCalculationRelatedTests\AreaFitTests.cs" />
+    <Compile Include="ProcessingRelated_Tests\FitCalculationRelatedTests\PeakBasedLeastSquaresFitterTests.cs" />
+    <Compile Include="ProcessingRelated_Tests\IsotopicProfileQualityScoringTests\InterferenceScorerTests.cs" />
+    <Compile Include="ProcessingRelated_Tests\MSFeatureFinderTests\RAPIDMSFeatureFinderTests.cs" />
+    <Compile Include="ProcessingRelated_Tests\MSFeatureFinderTests\THRASHMSFeatureFinderTests.cs" />
+    <Compile Include="ProcessingRelated_Tests\MSFeatureFinderTests\ThrashV2Tests.cs" />
+    <Compile Include="ProcessingRelated_Tests\MSGeneratorTests\MSGeneratorTests.cs" />
+    <Compile Include="ProcessingRelated_Tests\MSGeneratorTests\UIMFMSGeneratorTests.cs" />
+    <Compile Include="ProcessingRelated_Tests\MSPeakDetectionTests\ChromPeakDetectorTests.cs" />
+    <Compile Include="ProcessingRelated_Tests\MSPeakDetectionTests\DeconToolsPeakDetectorV2Tests.cs" />
+    <Compile Include="ProcessingRelated_Tests\O16O18TraditionalProcessingTests\O16O18TraditionalProcessingTests.cs" />
+    <Compile Include="ProcessingRelated_Tests\PaulsTests\ChargeStateDeciderTests.cs" />
+    <Compile Include="ProcessingRelated_Tests\Post_MSFeatureDetectionTests\PeakToMSFeatureAssociatorTests.cs" />
+    <Compile Include="ProcessingRelated_Tests\QuantificationTests\PartialLabelingQuantifierTests.cs" />
+    <Compile Include="ProcessingRelated_Tests\ResultValidatorTests\ResultValidatorTasks_Tests.cs" />
+    <Compile Include="ProcessingRelated_Tests\SaturationDetectorTests.cs" />
+    <Compile Include="Run_relatedTests\BrukerMaxisRun_Tests.cs" />
+    <Compile Include="Run_relatedTests\MzRun_Tests.cs" />
+    <Compile Include="ScanSetFrameSetRelatedTests\ScanSetCollectionForUIMF_Tests.cs" />
+    <Compile Include="ScanSetFrameSetRelatedTests\ScanSetCollectionTests.cs" />
+    <Compile Include="ScanSetFrameSetRelatedTests\ScanSetFactory_tests.cs" />
+    <Compile Include="ProcessingRelated_Tests\SmoothingTests\DeconToolsSavitzkyGolaySmootherTests.cs" />
+    <Compile Include="ProcessingRelated_Tests\ZeroFillingTests\DeconToolsZeroFillerTests.cs" />
+    <Compile Include="Run_relatedTests\AgilentD_Run_Tests.cs" />
+    <Compile Include="Run_relatedTests\BrukerV3Tests.cs" />
+    <Compile Include="Run_relatedTests\IMFRun_tests.cs" />
+    <Compile Include="Run_relatedTests\MSDataFromTextFileTests.cs" />
+    <Compile Include="ProcessingRelated_Tests\ChromatogramRelatedTests\PeakChromatogramOnUIMFData_Tests.cs" />
+    <Compile Include="ProcessingRelated_Tests\ChromatogramRelatedTests\PeakChromatogramRelatedTests.cs" />
+    <Compile Include="ProcessingRelated_Tests\MSGeneratorTests\SyntheticMSGeneratorTests.cs" />
+    <Compile Include="ProcessingRelated_Tests\MSPeakDetectionTests\MSPeakDetectionTests.cs" />
+    <Compile Include="ProcessingRelated_Tests\QuantificationTests\N14N15QuantificationTesting.cs" />
+    <Compile Include="ProcessingRelated_Tests\QuantificationTests\N14N15TestingUtilities.cs" />
+    <Compile Include="ProcessingRelated_Tests\TargetedFeatureFinderTests\TFFTests.cs" />
+    <Compile Include="Run_relatedTests\RunFactory_tests.cs" />
+    <Compile Include="Run_relatedTests\XCaliburRun2_Tests.cs" />
+    <Compile Include="Scripts\ChromatogramAnalysisScripts.cs" />
+    <Compile Include="Scripts\ChromScripts.cs" />
+    <Compile Include="Scripts\UIMFChromatogramScripts.cs" />
+    <Compile Include="TargetedProcessing_Tests\MassTagInitializationTests.cs" />
+    <Compile Include="TargetedProcessing_Tests\SmartChromPeakSelectorTests.cs" />
+    <Compile Include="TargetedProcessing_Tests\TargetedProcessingOrbiDataTests.cs" />
+    <Compile Include="TestUtilities\FileRefs.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Run_relatedTests\UIMFRun_Tests.cs" />
+    <Compile Include="TestUtilities\TestDataCreationUtilities.cs" />
+    <Compile Include="TestUtilities\TestUtilities.cs" />
+    <Compile Include="TheoreticalIsotopicProfileTests\BinomialIsoDistCalcTests.cs" />
+    <Compile Include="TheoreticalIsotopicProfileTests\IsotopicDistCalculatorUnitTests.cs" />
+    <Compile Include="TheoreticalIsotopicProfileTests\IsotopicProfileGeneratorTests.cs" />
+    <Compile Include="TheoreticalIsotopicProfileTests\LabeledIsotopicProfileUtilitiesTests.cs" />
+    <Compile Include="TheoreticalIsotopicProfileTests\MercuryDistributionTesting.cs" />
+    <Compile Include="Utilities\DllTests.cs" />
+    <Compile Include="Utilities\EmpiricalFormulaUtilitiesTests.cs" />
+    <Compile Include="Utilities\IsotopicProfileElutionExtractorTests.cs" />
+    <Compile Include="Utilities\MathUtilsTests.cs" />
+    <Compile Include="Utilities\PeptideUtilsTests.cs" />
+    <Compile Include="Utilities\XYDataUtilitiesTests.cs" />
+    <Compile Include="Workflow_Tests\DeconMSnWorkflowTests.cs" />
+    <Compile Include="Workflow_Tests\RunMergingPeakExportingWorkflowTests.cs" />
+    <Compile Include="Workflow_Tests\SaturationIMSWorkflowTests.cs" />
+    <Compile Include="Workflow_Tests\ScanBasedWorkflowTests.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="NUnit">
+      <Version>3.11.0</Version>
+    </PackageReference>
+    <PackageReference Include="PRISM-Library">
+      <Version>2.5.21</Version>
+    </PackageReference>
+    <PackageReference Include="System.Data.SQLite.Core" Version="1.0.97" />
+    <PackageReference Include="UIMFLibrary">
+      <Version>3.6.9</Version>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DeconTools.Backend\DeconTools.Backend_x64.csproj">
+      <Project>{479f410f-0456-4d09-9b3e-e69002f8d619}</Project>
+      <Name>DeconTools.Backend_x64</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DeconTools.Workflows\DeconTools.Workflows\DeconTools.Workflows_x64.csproj">
+      <Project>{3041d403-9165-4018-8f83-ffbaa8528b79}</Project>
+      <Name>DeconTools.Workflows_x64</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
