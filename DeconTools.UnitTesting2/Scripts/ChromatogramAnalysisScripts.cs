@@ -17,7 +17,7 @@ namespace DeconTools.UnitTesting2.Scripts
     public class ChromatogramAnalysisScripts
     {
 
-        
+
 
 
 
@@ -147,7 +147,7 @@ namespace DeconTools.UnitTesting2.Scripts
                         outputGraphFilename =  baseFilename + "_chrom.png";
                     }
 
-                    
+
                     graphGenerator.SaveGraph(outputGraphFilename);
                     TestUtilities.WriteToFile(run.XYData, outputXYData);
 
@@ -291,7 +291,7 @@ namespace DeconTools.UnitTesting2.Scripts
 
                     var outputGraphFilename = Path.Combine(currentOutputFolder,
                                                               scanSet.PrimaryScanNumber.ToString().PadLeft(5, '0') + "_mz" + precursorInfo.PrecursorMZ + "_chrom_smoothed.png");
-                                                              
+
                     graphGenerator.SaveGraph(outputGraphFilename);
 
 

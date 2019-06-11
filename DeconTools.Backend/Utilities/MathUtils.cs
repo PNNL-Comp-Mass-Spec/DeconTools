@@ -74,11 +74,11 @@ namespace DeconTools.Backend.Utilities
 
             var sortedVals = values.OrderBy(d => d).ToList();
 
-            var middleIndex = (sortedVals.Count-1)/2;
+            var middleIndex = (sortedVals.Count - 1) / 2;
 
             double medianVal;
 
-            if (sortedVals.Count%2==0)
+            if (sortedVals.Count % 2 == 0)
             {
                 medianVal = (sortedVals[middleIndex] + sortedVals[middleIndex + 1]) / 2;
             }
@@ -178,7 +178,7 @@ namespace DeconTools.Backend.Utilities
             if (leftIndex <= rightIndex)
             {
                 var middle = (leftIndex + rightIndex) / 2;
-                if (targetVal== data[middle] )
+                if (targetVal == data[middle])
                 {
                     return middle;
                 }
