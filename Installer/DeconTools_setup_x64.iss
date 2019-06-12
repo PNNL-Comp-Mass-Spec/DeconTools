@@ -5,53 +5,59 @@
 
 [CustomMessages]
 AppName=DeconTools
+
 [Messages]
 WelcomeLabel2=This will install [name/ver] on your computer.%n%n%n%nNOTICE:%nSome source files require access to a 64-bit ProteoWizard installation. Please install 64-bit ProteoWizard before using the program to avoid errors.%n%n
 ; Example with multiple lines:
 ; WelcomeLabel2=Welcome message%n%nAdditional sentence
+
 [Files]
-Source: DeconConsole\bin\x64\Release\DeconConsole.exe                                                                                             ; DestDir: {app}
-Source: DeconConsole\bin\x64\Release\DeconConsole.exe.config                                                                                      ; DestDir: {app}
+Source: DeconConsole\bin\x64\Release\DeconConsole.exe                                     ; DestDir: {app}
+Source: DeconConsole\bin\x64\Release\DeconConsole.exe.config                              ; DestDir: {app}
 
-Source: DeconTools.Backend\bin\x64\Release\DeconTools.Backend.dll                                                                                 ; DestDir: {app}
-Source: DeconTools.Backend\bin\x64\Release\MathNet.Numerics.dll                                                                                   ; DestDir: {app}
+Source: DeconTools.Backend\bin\x64\Release\DeconTools.Backend.dll                         ; DestDir: {app}
+Source: DeconTools.Backend\bin\x64\Release\MathNet.Numerics.dll                           ; DestDir: {app}
 
-Source: DeconToolsAutoProcessV1\bin\x64\Release\DeconToolsAutoProcessV1.exe                                                                       ; DestDir: {app}
-Source: DeconToolsAutoProcessV1\bin\x64\Release\DeconToolsAutoProcessV1.exe.config                                                                ; DestDir: {app}
+Source: DeconToolsAutoProcessV1\bin\x64\Release\DeconToolsAutoProcessV1.exe               ; DestDir: {app}
+Source: DeconToolsAutoProcessV1\bin\x64\Release\DeconToolsAutoProcessV1.exe.config        ; DestDir: {app}
 
-Source: DeconTools.Backend\bin\x64\Release\x64\SQLite.Interop.dll                                                                                 ; DestDir: {app}\x64
-Source: DeconTools.Backend\bin\x64\Release\x86\SQLite.Interop.dll                                                                                 ; DestDir: {app}\x86
-Source: DeconTools.Backend\bin\x64\Release\System.Data.SQLite.dll                                                                                 ; DestDir: {app}
-Source: DeconTools.Backend\bin\x64\Release\UIMFLibrary.dll                                                                                        ; DestDir: {app}
-Source: DeconTools.Backend\bin\x64\Release\PRISM.dll                                                                                              ; DestDir: {app}
+Source: DeconTools.Backend\bin\x64\Release\x64\SQLite.Interop.dll                         ; DestDir: {app}\x64
+Source: DeconTools.Backend\bin\x64\Release\x86\SQLite.Interop.dll                         ; DestDir: {app}\x86
+Source: DeconTools.Backend\bin\x64\Release\System.Data.SQLite.dll                         ; DestDir: {app}
+Source: DeconTools.Backend\bin\x64\Release\UIMFLibrary.dll                                ; DestDir: {app}
+Source: DeconTools.Backend\bin\x64\Release\PRISM.dll                                      ; DestDir: {app}
 
-Source: Library\alglibnet2.dll                                                                                                                    ; DestDir: {app}
-Source: Library\BrukerDataReader.dll                                                                                                              ; DestDir: {app}
+Source: Library\alglibnet2.dll                                                            ; DestDir: {app}
+Source: Library\BrukerDataReader.dll                                                      ; DestDir: {app}
 
-Source: Library\GWSFileUtilities.dll                                                                                                              ; DestDir: {app}
-Source: Library\DLLsToBeCopied_x64\Interop.EDAL.SxS.manifest                                                                                                     ; DestDir: {app}
-Source: Library\DLLsToBeCopied\Interop.HSREADWRITELib.SxS.manifest                                                                                ; DestDir: {app}
-Source: Library\Mapack.dll                                                                                                                        ; DestDir: {app}
-Source: Library\DLLsToBeCopied_x64\MassLynxRaw.dll                                                                                                                   ; DestDir: {app}
-Source: Library\MSDBLibrary.dll                                                                                                                   ; DestDir: {app}
-Source: Library\DLLsToBeCopied\MSFileReader.XRawfile2.SxS.manifest                                                                                ; DestDir: {app}
-Source: Library\x64\MultiAlignEngine.dll                                                                                                          ; DestDir: {app}
-Source: Library\PNNLOmics.dll                                                                                                                     ; DestDir: {app}
-Source: Library\PNNLOmicsElementData.xml                                                                                                          ; DestDir: {app}
-Source: Library\ProteowizardWrapper.dll                                                                                                           ; DestDir: {app}
-Source: Library\ThermoRawFileReader.dll                                                                                                           ; DestDir: {app}
-Source: Library\YafmsLibrary.dll                                                                                                                  ; DestDir: {app}
+Source: Library\GWSFileUtilities.dll                                                      ; DestDir: {app}
+Source: Library\DLLsToBeCopied_x64\Interop.EDAL.SxS.manifest                              ; DestDir: {app}
+Source: Library\DLLsToBeCopied\Interop.HSREADWRITELib.SxS.manifest                        ; DestDir: {app}
+Source: Library\Mapack.dll                                                                ; DestDir: {app}
+Source: Library\DLLsToBeCopied_x64\MassLynxRaw.dll                                        ; DestDir: {app}
+Source: Library\MSDBLibrary.dll                                                           ; DestDir: {app}
+Source: Library\DLLsToBeCopied\MSFileReader.XRawfile2.SxS.manifest                        ; DestDir: {app}
+Source: Library\x64\MultiAlignEngine.dll                                                  ; DestDir: {app}
+Source: Library\PNNLOmics.dll                                                             ; DestDir: {app}
+Source: Library\PNNLOmicsElementData.xml                                                  ; DestDir: {app}
+Source: Library\ProteowizardWrapper.dll                                                   ; DestDir: {app}
+Source: Library\ThermoRawFileReader.dll                                                   ; DestDir: {app}
+Source: Library\ThermoFisher.CommonCore.MassPrecisionEstimator.dll                        ; DestDir: {app}
+Source: Library\ThermoFisher.CommonCore.RawFileReader.dll                                 ; DestDir: {app}
+Source: Library\ThermoFisher.CommonCore.BackgroundSubtraction.dll                         ; DestDir: {app}
+Source: Library\ThermoFisher.CommonCore.Data.dll                                          ; DestDir: {app}
+Source: Library\RawFileReaderLicense.doc                                                  ; DestDir: {app}
 
-Source: "Library\Agilent_D\MassHunter DataAccess Component MHDAC B.06.00\MassHunterDataAccessAssembly_64bit\bin\agtsampleinforw.dll"              ; DestDir: {app}
-Source: "Library\Agilent_D\MassHunter DataAccess Component MHDAC B.06.00\MassHunterDataAccessAssembly_64bit\bin\BaseCommon.dll"                   ; DestDir: {app}
-Source: "Library\Agilent_D\MassHunter DataAccess Component MHDAC B.06.00\MassHunterDataAccessAssembly_64bit\bin\BaseDataAccess.dll"               ; DestDir: {app}
-Source: "Library\Agilent_D\MassHunter DataAccess Component MHDAC B.06.00\MassHunterDataAccessAssembly_64bit\bin\BaseTof.dll"                      ; DestDir: {app}
-Source: "Library\Agilent_D\MassHunter DataAccess Component MHDAC B.06.00\MassHunterDataAccessAssembly_64bit\bin\MassSpecDataReader.dll"           ; DestDir: {app}
+Source: "Library\Agilent_D\MassHunter DataAccess Component MHDAC B.06.00\MassHunterDataAccessAssembly_64bit\bin\agtsampleinforw.dll"    ; DestDir: {app}
+Source: "Library\Agilent_D\MassHunter DataAccess Component MHDAC B.06.00\MassHunterDataAccessAssembly_64bit\bin\BaseCommon.dll"         ; DestDir: {app}
+Source: "Library\Agilent_D\MassHunter DataAccess Component MHDAC B.06.00\MassHunterDataAccessAssembly_64bit\bin\BaseDataAccess.dll"     ; DestDir: {app}
+Source: "Library\Agilent_D\MassHunter DataAccess Component MHDAC B.06.00\MassHunterDataAccessAssembly_64bit\bin\BaseTof.dll"            ; DestDir: {app}
+Source: "Library\Agilent_D\MassHunter DataAccess Component MHDAC B.06.00\MassHunterDataAccessAssembly_64bit\bin\MassSpecDataReader.dll" ; DestDir: {app}
 
-Source: Readme.md                                                                                                                                 ; DestDir: {app}
-Source: RevisionHistory.txt                                                                                                                       ; DestDir: {app}
-Source: Parameter_Files\SampleParameterFile.xml                                                                                                   ; DestDir: {app}
-Source: Parameter_Files\SampleParameterFileIMS.xml                                                                                                ; DestDir: {app}
+Source: Readme.md                                                                            ; DestDir: {app}
+Source: RevisionHistory.txt                                                                  ; DestDir: {app}
+Source: Parameter_Files\SampleParameterFile.xml                                              ; DestDir: {app}
+Source: Parameter_Files\SampleParameterFileIMS.xml                                           ; DestDir: {app}
 
 [Dirs]
 Name: {commonappdata}\DeconTools; Flags: uninsalwaysuninstall
