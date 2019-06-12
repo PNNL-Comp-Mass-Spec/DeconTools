@@ -45,8 +45,8 @@ namespace DeconTools.UnitTesting2.Utilities
         public void GetInterpolatedValue(double x1, double y1, double x2, double y2, double targetX, double mathUtilsExpectedY, double mathNetExpectedY)
         {
 
-            // If x1 and x2 are the same, getInterpolatedValue returns y2
-            var mathUtilsResult = MathUtils.getInterpolatedValue(x1, x2, y1, y2, targetX);
+            // If x1 and x2 are the same, GetInterpolatedValue returns y2
+            var mathUtilsResult = MathUtils.GetInterpolatedValue(x1, x2, y1, y2, targetX);
 
             var points = new List<double> { x1, x2 };
 
