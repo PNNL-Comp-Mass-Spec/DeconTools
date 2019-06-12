@@ -20,75 +20,35 @@ namespace DeconTools.Backend.Utilities
 
         public static double GetAverage(List<double> values)
         {
-            return GetAverage(values.ToArray());
+            return MathNet.Numerics.Statistics.Statistics.Mean(values);
         }
 
         public static double GetAverage(double[] values)
         {
-            if (values == null || values.Length == 0) return double.NaN;
-            double sum = 0;
-            foreach (var val in values)
-            {
-                sum += val;
-            }
-            return (sum / values.Length);
-
+            return MathNet.Numerics.Statistics.Statistics.Mean(values);
         }
 
         public static double GetStDev(List<double> values)
         {
-            return GetStDev(values.ToArray());
+            return MathNet.Numerics.Statistics.Statistics.StandardDeviation(values);
         }
 
         public static double GetStDev(double[] values)
         {
-            if (values.Length < 3)
-            {
-                return double.NaN;
-            }
-
-            var average = GetAverage(values);
-
-            double sum = 0;
-
-            foreach (var val in values)
-            {
-                sum += ((average - val) * (average - val));
-            }
-
-            return Math.Sqrt((sum / (values.GetLength(0) - 1)));
-
+            return MathNet.Numerics.Statistics.Statistics.StandardDeviation(values);
         }
 
 
         public static double GetMedian(double[] values)
         {
-            return GetMedian(values.ToList());
+            return MathNet.Numerics.Statistics.Statistics.Median(values);
         }
 
 
 
         public static double GetMedian(List<double> values)
         {
-            if (values.Count == 0) return double.NaN;
-
-            var sortedVals = values.OrderBy(d => d).ToList();
-
-            var middleIndex = (sortedVals.Count - 1) / 2;
-
-            double medianVal;
-
-            if (sortedVals.Count % 2 == 0)
-            {
-                medianVal = (sortedVals[middleIndex] + sortedVals[middleIndex + 1]) / 2;
-            }
-            else
-            {
-                medianVal = sortedVals[middleIndex];
-            }
-
-            return medianVal;
-
+            return MathNet.Numerics.Statistics.Statistics.Median(values);
         }
 
         /// <summary>
@@ -209,7 +169,14 @@ namespace DeconTools.Backend.Utilities
 
             return -1;
 
+        public static void GetLinearRegression(double[] xVals, double[] yVals, out double slope, out double intercept, out double rSquaredVal)
+        {
 
+            var fitResult = MathNet.Numerics.Fit.Line(xVals.ToArray(), yVals.ToArray());
+            slope = fitResult.Item2;
+            intercept = fitResult.Item1;
+
+            rSquaredVal = MathNet.Numerics.GoodnessOfFit.RSquared(xVals.Select(x => fitResult.Item1 + fitResult.Item2 * x), yVals);
         }
 
         [Obsolete("Use GetLinearRegression which uses MathNet.Numerics")]
