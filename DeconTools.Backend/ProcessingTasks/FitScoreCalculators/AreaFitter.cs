@@ -112,12 +112,12 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
                     }
 
 
-                    var interopolatedIntensity = MathUtils.getInterpolatedValue(mz1, mz2, intensity1, intensity2, currentTheorMZ);
+                    var interpolatedIntensity = MathUtils.GetInterpolatedValue(mz1, mz2, intensity1, intensity2, currentTheorMZ);
 
-                    interpolatedValues.Add(interopolatedIntensity);
+                    interpolatedValues.Add(interpolatedIntensity);
                     theoreticalValues.Add(theorXYData.Yvalues[i]);
 
-                    //double normalizedObservedIntensity = interopolatedIntensity / maxIntensity;
+                    //double normalizedObservedIntensity = interpolatedIntensity / maxIntensity;
 
                     //double normalizedTheorIntensity = theorXYData.YValues[i]/maxTheorIntensity;
 
