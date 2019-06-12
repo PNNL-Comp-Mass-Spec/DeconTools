@@ -57,6 +57,7 @@ Source: "Library\Agilent_D\MassHunter DataAccess Component MHDAC B.06.00\MassHun
 Source: Readme.md                                                                            ; DestDir: {app}
 Source: RevisionHistory.txt                                                                  ; DestDir: {app}
 Source: Parameter_Files\SampleParameterFile.xml                                              ; DestDir: {app}
+Source: Parameter_Files\SampleParameterFile_SmallMolecule.xml                                ; DestDir: {app}
 Source: Parameter_Files\SampleParameterFileIMS.xml                                           ; DestDir: {app}
 
 [Dirs]
