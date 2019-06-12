@@ -12,6 +12,7 @@ namespace DeconTools.UnitTesting2.Utilities
         [Test]
         public void MedianTest1()
         {
+            // ReSharper disable once CollectionNeverUpdated.Local
             var testValsEmpty = new List<double>();
             var median = MathUtils.GetMedian(testValsEmpty);
             Assert.AreEqual(double.NaN, median);
@@ -114,6 +115,10 @@ namespace DeconTools.UnitTesting2.Utilities
         }
 
         [Test]
+        [TestCase(5, 1, double.NaN)]
+        [TestCase(5, 2, 0.17452651)]
+        [TestCase(5, 3, 0.16567731)]
+        [TestCase(5, 4, 0.19725679)]
         [TestCase(5, 10, 0.66639264)]
         [TestCase(5, 100, 16.763137)]
         [TestCase(5, 1000, 1.9075839E+010)]
@@ -139,16 +144,19 @@ namespace DeconTools.UnitTesting2.Utilities
         }
 
         [Test]
+        [TestCase(5, 0, double.NaN)]
+        [TestCase(5, 1, 5.19194798)]
+        [TestCase(5, 2, 5.31535686)]
         [TestCase(5, 10, 6.084867)]
         [TestCase(5, 100, 19.969399)]
         [TestCase(5, 1000, 900130.207205)]
         [TestCase(5, 10000, 1.03286E+54)]
         [TestCase(1500, 50, 3278.2780185)]
         [TestCase(1500, 100000, 3.4077159E+155)]
-        [TestCase(43248398, 100000, 4.899073E+157d)]
-        [TestCase(1E+50, 100000, 6.13832008E+178d)]
+        [TestCase(43248398, 100000, 4.899073E+157)]
+        [TestCase(1E+50, 100000, 6.13832008E+178)]
         [TestCase(1E+200, 100000, 1.0036869E+254)]
-        [TestCase(1E+307, 100000, 4.607478E+307d)]
+        [TestCase(1E+307, 100000, 4.607478E+307)]
         public void ComputeMedian(double startValue, int dataCount, double expectedMedian)
         {
             var values = GetLargeValuesList(startValue, dataCount);
