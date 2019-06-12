@@ -61,10 +61,7 @@ namespace DeconTools.UnitTesting2.Utilities
                               targetX, mathUtilsResult, mathNetResult);
             Console.WriteLine();
 
-            if (!double.IsNaN(mathUtilsExpectedY))
-            {
-                Assert.AreEqual(mathUtilsExpectedY, mathUtilsResult, Math.Abs(mathUtilsExpectedY / 10000.0));
-            }
+            Assert.AreEqual(mathUtilsExpectedY, mathUtilsResult, Math.Abs(mathUtilsExpectedY / 10000.0));
 
             if (double.IsNaN(mathNetExpectedY)) return;
 
@@ -110,15 +107,9 @@ namespace DeconTools.UnitTesting2.Utilities
                               mathUtilsAvgFromList, mathUtilsAvgFromArray, mathNetAvg, avgFromLinq);
             Console.WriteLine();
 
-            if (!double.IsNaN(mathUtilsExpectedAverage))
-            {
-                Assert.AreEqual(mathUtilsExpectedAverage, mathUtilsAvgFromList, mathUtilsExpectedAverage / 10000.0);
-            }
+            Assert.AreEqual(mathUtilsExpectedAverage, mathUtilsAvgFromList, mathUtilsExpectedAverage / 10000.0);
 
-            if (!double.IsNaN(mathNetExpectedAverage))
-            {
-                Assert.AreEqual(mathNetExpectedAverage, mathNetAvg, mathNetExpectedAverage / 10000.0);
-            }
+            Assert.AreEqual(mathNetExpectedAverage, mathNetAvg, mathNetExpectedAverage / 10000.0);
 
         }
 
@@ -141,8 +132,6 @@ namespace DeconTools.UnitTesting2.Utilities
             Console.WriteLine("List:    {0,10:E7}\nArray:   {1,10:E7}\nMathNet: {2,10:E7}",
                               mathUtilsStDevFromList, mathUtilsStDevFromArray, mathNetStDev);
             Console.WriteLine();
-
-            if (double.IsNaN(expectedStDev)) return;
 
             Assert.AreEqual(expectedStDev, mathUtilsStDevFromList, expectedStDev / 10000.0);
             Assert.AreEqual(expectedStDev, mathNetStDev, expectedStDev / 10000.0);
@@ -171,11 +160,8 @@ namespace DeconTools.UnitTesting2.Utilities
                               mathUtilsMedianFromList, mathUtilsMedianFromArray, mathNetMedian);
             Console.WriteLine();
 
-            if (double.IsNaN(expectedMedian)) return;
-
             Assert.AreEqual(expectedMedian, mathUtilsMedianFromList, expectedMedian / 10000.0);
             Assert.AreEqual(expectedMedian, mathNetMedian, expectedMedian / 10000.0);
-
         }
 
         [Test]
@@ -210,8 +196,6 @@ namespace DeconTools.UnitTesting2.Utilities
             Console.WriteLine("Index of value {0} is\n  {1} via GetClosest and\n  {2} via BinarySearchWithTolerance",
                               targetValue, closestValueIndex1, closestValueIndex2);
             Console.WriteLine();
-
-            if (double.IsNaN(expectedClosestValueIndex)) return;
 
             Assert.AreEqual(expectedClosestValueIndex, closestValueIndex1);
             Assert.AreEqual(expectedBinarySearchIndex, closestValueIndex2);
@@ -290,8 +274,6 @@ namespace DeconTools.UnitTesting2.Utilities
             Console.WriteLine("MathNet:\nSlope:     {0,8:G6}\nIntercept: {1,8:G6}\nRSquared:  {2,8:G6}",
                               mathNetSlope, mathNetIntercept, mathNetRSquared);
             Console.WriteLine();
-
-            if (double.IsNaN(expectedSlope) || double.IsNaN(expectedIntercept)) return;
 
             Assert.AreEqual(expectedSlope, mathUtilsSlope, Math.Abs(expectedSlope / 1000.0));
             Assert.AreEqual(expectedSlope, mathNetSlope, Math.Abs(expectedSlope / 1000.0));
