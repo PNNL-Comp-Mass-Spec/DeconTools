@@ -1,5 +1,8 @@
 DeconTools DeconConsole / AutoProcessor Revision History
 
+Version 1.1.7101; June 11, 2019 mem
+	- Use MathNet.Numerics.Statistics methods to compute average, median, standard deviation, and linear regression
+
 Version 1.1.6946; January 7, 2019 mem
 	- New version of ThermoRawFileReader.dll that uses ThermoFisher.CommonCore.RawFileReader.dll
 
