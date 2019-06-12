@@ -83,11 +83,11 @@ namespace DeconTools.UnitTesting2.Utilities
         [TestCase(5, 1000, 5.6784198E+009, 5.6784198E+009)]
         [TestCase(5, 10000, 1.260347168E+105, 1.260347168E+105)]
         [TestCase(1500, 50, 3384.10223, 3384.10223)]
-        [TestCase(1500, 100000, double.PositiveInfinity, 2.84932984E+305)]
-        [TestCase(43248398, 100000, double.PositiveInfinity, 2.526209E+305)]
-        [TestCase(1E+50, 100000, double.PositiveInfinity, double.NaN)]
-        [TestCase(1E+200, 100000, double.PositiveInfinity, double.NaN)]
-        [TestCase(1E+307, 100000, double.PositiveInfinity, double.NaN)]
+        [TestCase(1500, 100000, 2.84932984E+305, 2.84932984E+305)]
+        [TestCase(43248398, 100000, 2.526209E+305, 2.526209E+305)]
+        [TestCase(1E+50, 100000, 3.054249E+305, 3.054249E+305)]
+        [TestCase(1E+200, 100000, 7.29530036E+305, 7.29530036E+305)]
+        [TestCase(1E+307, 100000, 6.06371026E+307, 6.06371026E+307)]
         public void ComputeAverage(double startValue, int dataCount, double mathUtilsExpectedAverage, double mathNetExpectedAverage)
         {
             var values = GetLargeValuesList(startValue, dataCount);
