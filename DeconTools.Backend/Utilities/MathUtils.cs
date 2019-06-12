@@ -18,7 +18,7 @@ namespace DeconTools.Backend.Utilities
             return interpolatedVal;
         }
 
-        public static double GetAverage(List<double> values)
+        public static double GetAverage(IEnumerable<double> values)
         {
             return MathNet.Numerics.Statistics.Statistics.Mean(values);
         }
@@ -28,7 +28,7 @@ namespace DeconTools.Backend.Utilities
             return MathNet.Numerics.Statistics.Statistics.Mean(values);
         }
 
-        public static double GetStDev(List<double> values)
+        public static double GetStDev(IEnumerable<double> values)
         {
             return MathNet.Numerics.Statistics.Statistics.StandardDeviation(values);
         }
@@ -39,14 +39,14 @@ namespace DeconTools.Backend.Utilities
         }
 
 
-        public static double GetMedian(double[] values)
+        public static double GetMedian(IEnumerable<double> values)
         {
             return MathNet.Numerics.Statistics.Statistics.Median(values);
         }
 
 
 
-        public static double GetMedian(List<double> values)
+        public static double GetMedian(double[] values)
         {
             return MathNet.Numerics.Statistics.Statistics.Median(values);
         }
