@@ -7,6 +7,15 @@ namespace DeconTools.Backend.Utilities
     public class MathUtils
     {
 
+        /// <summary>
+        /// Fit a line between the two points, then compute the y value for the given target x value
+        /// </summary>
+        /// <param name="x1"></param>
+        /// <param name="x2"></param>
+        /// <param name="y1"></param>
+        /// <param name="y2"></param>
+        /// <param name="targetXValue"></param>
+        /// <returns>Interpolated y value for the given target x value</returns>
         public static double GetInterpolatedValue(double x1, double x2, double y1, double y2, double targetXValue)
         {
 
@@ -18,46 +27,73 @@ namespace DeconTools.Backend.Utilities
             return interpolatedVal;
         }
 
+        /// <summary>
+        /// Compute the average of the values in the list
+        /// </summary>
+        /// <param name="values"></param>
+        /// <returns>Average (mean)</returns>
         public static double GetAverage(IEnumerable<double> values)
         {
             return MathNet.Numerics.Statistics.Statistics.Mean(values);
         }
 
+        /// <summary>
+        /// Compute the average of the values in the array
+        /// </summary>
+        /// <param name="values"></param>
+        /// <returns>Average (mean)</returns>
         public static double GetAverage(double[] values)
         {
             return MathNet.Numerics.Statistics.Statistics.Mean(values);
         }
 
+        /// <summary>
+        /// Compute the standard deviation of the values in the list
+        /// </summary>
+        /// <param name="values"></param>
+        /// <returns>Standard deviation</returns>
         public static double GetStDev(IEnumerable<double> values)
         {
             return MathNet.Numerics.Statistics.Statistics.StandardDeviation(values);
         }
 
+        /// <summary>
+        /// Compute the standard deviation of the values in the array
+        /// </summary>
+        /// <param name="values"></param>
+        /// <returns>Standard deviation</returns>
         public static double GetStDev(double[] values)
         {
             return MathNet.Numerics.Statistics.Statistics.StandardDeviation(values);
         }
 
-
+        /// <summary>
+        /// Compute the median of the values in the list
+        /// </summary>
+        /// <param name="values"></param>
+        /// <returns>Median</returns>
         public static double GetMedian(IEnumerable<double> values)
         {
             return MathNet.Numerics.Statistics.Statistics.Median(values);
         }
 
-
-
+        /// <summary>
+        /// Compute the median of the values in the array
+        /// </summary>
+        /// <param name="values"></param>
+        /// <returns>Median</returns>
         public static double GetMedian(double[] values)
         {
             return MathNet.Numerics.Statistics.Statistics.Median(values);
         }
 
         /// <summary>
-        /// Find the value in data that is closest to targetVal, within +/-tolerance
+        /// Find the point in the data array that is closest to the target value, requiring the point to be within +/-tolerance
         /// </summary>
         /// <param name="data">List of values to search (must be sorted)</param>
         /// <param name="targetVal"></param>
         /// <param name="tolerance"></param>
-        /// <returns></returns>
+        /// <returns>Index of the closest data point, or -1 if no match</returns>
         public static int GetClosest(double[] data, double targetVal, double tolerance = 0.1)
         {
             if (data.Length == 0) return -1;
@@ -68,7 +104,6 @@ namespace DeconTools.Backend.Utilities
             var indexIsBelowTarget = (data[binarySearchIndex] < targetVal);
 
             var indexOfClosest = -1;
-
 
             if (indexIsBelowTarget)
             {
@@ -85,9 +120,6 @@ namespace DeconTools.Backend.Utilities
                     {
                         break;
                     }
-
-
-
                 }
             }
             else
@@ -105,26 +137,21 @@ namespace DeconTools.Backend.Utilities
                     {
                         break;
                     }
-
-
                 }
-
-
             }
+
             return indexOfClosest;
-
-
         }
 
         /// <summary>
-        /// Use a binary search to find a value in data that is within +/-tolerance of the target value
+        /// Use a binary search to find a point in the data array that is within +/-tolerance of the target value
         /// </summary>
         /// <param name="data">List of values to search (must be sorted)</param>
         /// <param name="targetVal"></param>
         /// <param name="leftIndex"></param>
         /// <param name="rightIndex"></param>
         /// <param name="tolerance"></param>
-        /// <returns>Index of the matched value, or -1 if no match</returns>
+        /// <returns>Index of the closest data point, or -1 if no match</returns>
         /// <remarks>Returns the first value found within tolerance of the targetValue, not necessarily the closest value</remarks>
         public static int BinarySearchWithTolerance(double[] data, double targetVal, int leftIndex, int rightIndex, double tolerance)
         {
@@ -148,7 +175,14 @@ namespace DeconTools.Backend.Utilities
 
         }
 
-
+        /// <summary>
+        /// Use a binary search to find the target integer value in the data
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="targetVal"></param>
+        /// <param name="leftIndex"></param>
+        /// <param name="rightIndex"></param>
+        /// <returns>Index of the matching data point, or -1 if no match</returns>
         public static int BinarySearch(int[] data, int targetVal, int leftIndex, int rightIndex)
         {
             if (leftIndex <= rightIndex)
@@ -168,7 +202,16 @@ namespace DeconTools.Backend.Utilities
             }
 
             return -1;
+        }
 
+        /// <summary>
+        /// Fit a line to the data points, computing the slope, intercept, and R-squared value
+        /// </summary>
+        /// <param name="xVals"></param>
+        /// <param name="yVals"></param>
+        /// <param name="slope"></param>
+        /// <param name="intercept"></param>
+        /// <param name="rSquaredVal"></param>
         public static void GetLinearRegression(double[] xVals, double[] yVals, out double slope, out double intercept, out double rSquaredVal)
         {
 
