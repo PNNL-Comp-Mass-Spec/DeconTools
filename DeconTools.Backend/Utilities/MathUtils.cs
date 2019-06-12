@@ -7,14 +7,14 @@ namespace DeconTools.Backend.Utilities
     public class MathUtils
     {
 
-        public static double getInterpolatedValue(double x1, double x2, double y1, double y2, double targetXvalue)
+        public static double GetInterpolatedValue(double x1, double x2, double y1, double y2, double targetXValue)
         {
 
             if (Math.Abs(x1 - x2) < double.Epsilon) return y1;
 
             var slope = (y2 - y1) / (x2 - x1);
-            var yintercept = y1 - (slope * x1);
-            var interpolatedVal = targetXvalue * slope + yintercept;
+            var yIntercept = y1 - (slope * x1);
+            var interpolatedVal = targetXValue * slope + yIntercept;
             return interpolatedVal;
         }
 
@@ -212,19 +212,19 @@ namespace DeconTools.Backend.Utilities
 
         }
 
-
-        public static void GetLinearRegression(double[] xvals, double[] yvals, out double slope, out double intercept, out double rSquaredVal)
+        [Obsolete("Use GetLinearRegression which uses MathNet.Numerics")]
+        public static void GetLinearRegression_Manual(double[] xVals, double[] yVals, out double slope, out double intercept, out double rSquaredVal)
         {
-            var inputData = new double[xvals.Length, 2];
+            var inputData = new double[xVals.Length, 2];
 
-            for (var i = 0; i < xvals.Length; i++)
+            for (var i = 0; i < xVals.Length; i++)
             {
-                inputData[i, 0] = xvals[i];
-                inputData[i, 1] = yvals[i];
+                inputData[i, 0] = xVals[i];
+                inputData[i, 1] = yVals[i];
             }
 
             var numIndependentVariables = 1;
-            var numPoints = yvals.Length;
+            var numPoints = yVals.Length;
             alglib.lrbuild(inputData, numPoints, numIndependentVariables, out var _, out var linearModel, out var regressionReport);
 
             double[] regressionLineInfo;
@@ -237,8 +237,8 @@ namespace DeconTools.Backend.Utilities
             catch (Exception ex)
             {
                 IqLogger.IqLogger.LogError(
-                    "----> FATAL error occurred during linear regression. xval length= " +
-                    xvals.Length + "; yval length= " + yvals.Length + "; " + regressionReport.cvavgerror + ", " + ex.Message, ex);
+                    "----> FATAL error occurred during linear regression. xVals length= " +
+                    xVals.Length + "; yVals length= " + yVals.Length + "; " + regressionReport.cvavgerror + ", " + ex.Message, ex);
 
                 slope = -99999999;
                 intercept = -9999999;
@@ -252,18 +252,18 @@ namespace DeconTools.Backend.Utilities
             var squaredResiduals = new List<double>();
             var squaredMeanResiduals = new List<double>();
 
-            var averageY = yvals.Average();
+            var averageY = yVals.Average();
 
 
-            for (var i = 0; i < xvals.Length; i++)
+            for (var i = 0; i < xVals.Length; i++)
             {
-                var calcYVal = alglib.lrprocess(linearModel, new[] { xvals[i] });
+                var calcYVal = alglib.lrprocess(linearModel, new[] { xVals[i] });
                 new List<double>().Add(calcYVal);
 
-                var residual = yvals[i] - calcYVal;
+                var residual = yVals[i] - calcYVal;
                 squaredResiduals.Add(residual * residual);
 
-                var meanResidual = yvals[i] - averageY;
+                var meanResidual = yVals[i] - averageY;
                 squaredMeanResiduals.Add(meanResidual * meanResidual);
             }
 
