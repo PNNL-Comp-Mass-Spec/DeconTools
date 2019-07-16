@@ -16,11 +16,12 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
 
             try
             {
-                if (File.Exists(_filename)) File.Delete(_filename);
+                if (File.Exists(_filename))
+                    File.Delete(_filename);
             }
             catch (Exception ex)
             {
-                throw new Exception("Error creating file " + _filename + ": " + ex.Message);
+                throw new Exception(string.Format("Error creating file {0}: {1}", _filename, ex.Message), ex);
             }
 
             if (!string.Equals(PNNLOmics.Utilities.StringUtilities.DblToString(3.14159, 4, false, 0.001, false), DblToString(3.14159, 4)))
@@ -57,31 +58,79 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
 
         public override void ExportScanResults(ResultCollection resultList)
         {
-            using (var sw = new StreamWriter(new FileStream(_filename, FileMode.Append,
-                        FileAccess.Write, FileShare.Read)))
+            const int MAX_ATTEMPTS = 4;
+
+            var iteration = 1;
+            while (iteration <= MAX_ATTEMPTS)
             {
-                sw.AutoFlush = true;
-
-                foreach (var scanResult in resultList.ScanResultList)
+                try
                 {
-                    var output = buildScansResultOutput(scanResult);
-                    sw.WriteLine(output);
+                    using (var sw = new StreamWriter(new FileStream(_filename, FileMode.Append, FileAccess.Write, FileShare.Read)))
+                    {
+                        sw.AutoFlush = true;
 
+                        foreach (var scanResult in resultList.ScanResultList)
+                        {
+                            var output = buildScansResultOutput(scanResult);
+                            sw.WriteLine(output);
+                        }
+
+                    }
+
+                    break;
                 }
-
+                catch (IOException ex)
+                {
+                    if (iteration < MAX_ATTEMPTS)
+                    {
+                        System.Threading.Thread.Sleep(iteration * 1000);
+                        iteration++;
+                    }
+                    else
+                    {
+                        throw new IOException(string.Format(
+                                                  "Unable to append to {0} after {1} attempts: {2}",
+                                                  _filename, MAX_ATTEMPTS, ex.Message), ex);
+                    }
+                }
             }
+
+
         }
 
         public override void ExportScanResult(ScanResult scanResult)
         {
-            using (var sw = new StreamWriter(new FileStream(_filename, FileMode.Append,
-                         FileAccess.Write, FileShare.Read)))
+            const int MAX_ATTEMPTS = 4;
+
+            var iteration = 1;
+            while (iteration <= MAX_ATTEMPTS)
             {
-                sw.AutoFlush = true;
+                try
+                {
+                    using (var sw = new StreamWriter(new FileStream(_filename, FileMode.Append, FileAccess.Write, FileShare.Read)))
+                    {
+                        sw.AutoFlush = true;
 
-                var output = buildScansResultOutput(scanResult);
-                sw.WriteLine(output);
+                        var output = buildScansResultOutput(scanResult);
+                        sw.WriteLine(output);
+                    }
 
+                    break;
+                }
+                catch (IOException ex)
+                {
+                    if (iteration < MAX_ATTEMPTS)
+                    {
+                        System.Threading.Thread.Sleep(iteration * 1000);
+                        iteration++;
+                    }
+                    else
+                    {
+                        throw new IOException(string.Format(
+                                                  "Unable to append to {0} after {1} attempts: {2}",
+                                                  _filename, MAX_ATTEMPTS, ex.Message), ex);
+                    }
+                }
             }
         }
 
