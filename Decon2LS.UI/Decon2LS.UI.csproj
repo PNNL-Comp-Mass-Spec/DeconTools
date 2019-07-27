@@ -372,7 +372,7 @@
       <Version>2.5.24</Version>
     </PackageReference>
     <PackageReference Include="System.Data.SQLite.Core">
-      <Version>1.0.97</Version>
+      <Version>1.0.111</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
