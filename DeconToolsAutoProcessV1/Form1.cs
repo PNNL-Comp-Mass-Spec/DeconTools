@@ -314,9 +314,7 @@ namespace DeconToolsAutoProcessV1
                     "A 'COMException' has occurred. This can happen when the vendor library has not been installed.\n\n";
 
                 errorMessage +=
-                    "If you are trying to read Thermo .raw files, please install Thermo's MSFileReader library. ";
-
-                errorMessage += "To do so, Google 'thermo msfilereader' and you should find it. If not, contact us.\n\n";
+                    "If you are trying to read Thermo .raw files, this error should no longer occur, since this software now uses ThermoRawFileReader.dll and ThermoFisher.CommonCore DLLs. \n";
 
                 errorMessage += "Full error details below:\n";
 
