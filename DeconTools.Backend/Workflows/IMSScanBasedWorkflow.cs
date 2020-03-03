@@ -16,16 +16,19 @@ namespace DeconTools.Backend.Workflows
         protected UIMF_TICExtractor UimfTicExtractor;
         protected SaturationDetector SaturationDetector;
 
+        private string mCachedProgressMessage;
+        private ScanBasedProgressInfo mCachedUserState;
+        private DateTime mLastProgress;
+
         #region Constructors
 
         internal IMSScanBasedWorkflow(DeconToolsParameters parameters, Run run, string outputDirectoryPath = null, BackgroundWorker backgroundWorker = null)
             : base(parameters, run, outputDirectoryPath, backgroundWorker)
         {
             DeconTools.Utilities.Check.Require(run is UIMFRun, "Cannot create workflow. Run is required to be a UIMFRun for this type of workflow");
-
+            mCachedProgressMessage = string.Empty;
+            mCachedUserState = new ScanBasedProgressInfo(Run, new ScanSet(), new IMSScanSet(0));
         }
-
-
 
         #endregion
 
@@ -35,6 +38,8 @@ namespace DeconTools.Backend.Workflows
             UimfDriftTimeExtractor = new UIMFDriftTimeExtractor();
             UimfTicExtractor = new UIMF_TICExtractor();
             SaturationDetector = new SaturationDetector();
+            mCachedProgressMessage = string.Empty;
+            mLastProgress = DateTime.UtcNow;
         }
 
         protected override void CreateTargetMassSpectra()
@@ -65,8 +70,6 @@ namespace DeconTools.Backend.Workflows
                 uimfRun.ScanSetCollection.Create(uimfRun, numFramesSummed, 1);
             }
 
-
-
             var sumAllIMSScansInAFrame = (NewDeconToolsParameters.MSGeneratorParameters.SumAllSpectra);
             if (sumAllIMSScansInAFrame)
             {
@@ -96,8 +99,6 @@ namespace DeconTools.Backend.Workflows
 
             }
 
-
-
         }
 
         protected override void ExecutePreprocessHook()
@@ -109,6 +110,9 @@ namespace DeconTools.Backend.Workflows
 
         protected override void IterateOverScans()
         {
+            mCachedProgressMessage = string.Empty;
+            mLastProgress = DateTime.UtcNow;
+
             var uimfRun = (UIMFRun)Run;
 
             foreach (var frameSet in uimfRun.ScanSetCollection.ScanSetList)
@@ -132,38 +136,52 @@ namespace DeconTools.Backend.Workflows
             ExecuteTask(SaturationDetector);
         }
 
+        protected override string GetProgressMessage(double percentDone)
+        {
+            var progressMessage = base.GetProgressMessage(percentDone);
+
+            var elapsedTimeMinutes = Math.Max(DateTime.UtcNow.Subtract(WorkflowStats.TimeStarted).TotalMinutes, 0.1);
+            var framesPerMinute = Run.GetCurrentScanOrFrame() / elapsedTimeMinutes;
+
+            return string.Format("{0}; FramesPerMinute= {1:F1}", progressMessage, framesPerMinute);
+        }
+
         public override void ReportProgress()
         {
             var uimfRun = (UIMFRun)Run;
-            if (uimfRun.ScanSetCollection == null || uimfRun.ScanSetCollection.ScanSetList.Count == 0) return;
-
-            var userState = new ScanBasedProgressInfo(Run, uimfRun.CurrentScanSet, uimfRun.CurrentIMSScanSet);
-            var frameNum = uimfRun.ScanSetCollection.ScanSetList.IndexOf(uimfRun.CurrentScanSet);
-
-            var scanNum = uimfRun.IMSScanSetCollection.ScanSetList.IndexOf(uimfRun.CurrentIMSScanSet);
-            var scanTotal = uimfRun.IMSScanSetCollection.ScanSetList.Count;
-
-            var frameTotal = uimfRun.ScanSetCollection.ScanSetList.Count;
-
-            var percentDone = (frameNum / (double)frameTotal + scanNum / (double)scanTotal / frameTotal) * 100;
-            userState.PercentDone = (float)percentDone;
-
-            var progressMessage = GetProgressMessage(percentDone);
-
-            var numScansBetweenProgress = 1;
-
             var imsScanIsLastInFrame = uimfRun.IMSScanSetCollection.GetLastScanSet() == uimfRun.CurrentIMSScanSet.PrimaryScanNumber;
+
+            if (imsScanIsLastInFrame ||
+                string.IsNullOrWhiteSpace(mCachedProgressMessage) ||
+                DateTime.UtcNow.Subtract(mLastProgress).TotalSeconds >= 3)
+            {
+                if (uimfRun.ScanSetCollection == null || uimfRun.ScanSetCollection.ScanSetList.Count == 0) return;
+
+                mCachedUserState = new ScanBasedProgressInfo(Run, uimfRun.CurrentScanSet, uimfRun.CurrentIMSScanSet);
+                var frameNum = uimfRun.ScanSetCollection.ScanSetList.IndexOf(uimfRun.CurrentScanSet);
+
+                var scanNum = uimfRun.IMSScanSetCollection.ScanSetList.IndexOf(uimfRun.CurrentIMSScanSet);
+                var scanTotal = uimfRun.IMSScanSetCollection.ScanSetList.Count;
+
+                var frameTotal = uimfRun.ScanSetCollection.ScanSetList.Count;
+
+                var percentDone = (frameNum / (double)frameTotal + scanNum / (double)scanTotal / frameTotal) * 100;
+                mCachedUserState.PercentDone = (float)percentDone;
+
+                mCachedProgressMessage = GetProgressMessage(percentDone);
+                mLastProgress = DateTime.UtcNow;
+            }
+            else
+            {
+            }
+
             if (imsScanIsLastInFrame)
             {
-                Logger.Instance.AddEntry(progressMessage, true);
-                Console.WriteLine(DateTime.Now + "\t" + progressMessage);
+                Logger.Instance.AddEntry(mCachedProgressMessage, true);
+                Console.WriteLine(DateTime.Now + "\t" + mCachedProgressMessage);
             }
 
-            if (BackgroundWorker != null && scanNum % numScansBetweenProgress == 0)
-            {
-
-                BackgroundWorker.ReportProgress((int)percentDone, userState);
-            }
+            BackgroundWorker?.ReportProgress((int)mCachedUserState.PercentDone, mCachedUserState);
 
         }
 
