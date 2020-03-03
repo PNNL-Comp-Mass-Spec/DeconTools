@@ -1,0 +1,1 @@
+peak_index	scan_num	mz	intensity	fwhm	signal_noise	MSFeatureID

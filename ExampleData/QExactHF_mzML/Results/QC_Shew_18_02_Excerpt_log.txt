@@ -1,0 +1,30 @@
+03/02/2020 16:02:23	DeconTools.Backend.dll version = v2.0.7366.28605
+03/02/2020 16:02:23	ParameterFile = LTQ_Orb_SN2_PeakBR2_PeptideBR1_Thrash_Sum3.xml
+03/02/2020 16:02:23	UIMFLibrary version = v3.7.3.0
+03/02/2020 16:02:30	Scan/Frame= 117; PercentComplete= 12.7; AccumulatedFeatures= 82; ScansProcessed= 9; ScansPerMinute= 72.2
+03/02/2020 16:02:32	Scan/Frame= 241; PercentComplete= 25.3; AccumulatedFeatures= 171; ScansProcessed= 19; ScansPerMinute= 130.8
+03/02/2020 16:02:33	Scan/Frame= 371; PercentComplete= 38.0; AccumulatedFeatures= 247; ScansProcessed= 29; ScansPerMinute= 180.8
+03/02/2020 16:02:33	Scan/Frame= 487; PercentComplete= 50.6; AccumulatedFeatures= 298; ScansProcessed= 39; ScansPerMinute= 225.9
+03/02/2020 16:02:35	Scan/Frame= 617; PercentComplete= 63.3; AccumulatedFeatures= 393; ScansProcessed= 49; ScansPerMinute= 251.0
+03/02/2020 16:02:36	Scan/Frame= 747; PercentComplete= 75.9; AccumulatedFeatures= 472; ScansProcessed= 59; ScansPerMinute= 274.9
+03/02/2020 16:02:37	Scan/Frame= 877; PercentComplete= 88.6; AccumulatedFeatures= 562; ScansProcessed= 69; ScansPerMinute= 297.1
+03/02/2020 16:02:37	Finished file processing
+03/02/2020 16:02:37	total processing time = 00:00:14
+03/02/2020 16:02:37	total scans processed = 78
+03/02/2020 16:02:37	processing rate = 326 scans/minute
+03/02/2020 16:02:37	total features = 594
+03/02/2020 18:28:44	DeconTools.Backend.dll version = v2.0.7366.33259
+03/02/2020 18:28:44	ParameterFile = LTQ_Orb_SN2_PeakBR2_PeptideBR1_Thrash_Sum3.xml
+03/02/2020 18:28:44	UIMFLibrary version = v3.7.3.0
+03/02/2020 18:28:46	Scan/Frame= 117; PercentComplete= 12.7; AccumulatedFeatures= 82; ScansProcessed= 9; ScansPerMinute= 90.0
+03/02/2020 18:28:47	Scan/Frame= 241; PercentComplete= 25.3; AccumulatedFeatures= 171; ScansProcessed= 19; ScansPerMinute= 190.0
+03/02/2020 18:28:48	Scan/Frame= 371; PercentComplete= 38.0; AccumulatedFeatures= 247; ScansProcessed= 29; ScansPerMinute= 290.0
+03/02/2020 18:28:48	Scan/Frame= 487; PercentComplete= 50.6; AccumulatedFeatures= 298; ScansProcessed= 39; ScansPerMinute= 390.0
+03/02/2020 18:28:50	Scan/Frame= 617; PercentComplete= 63.3; AccumulatedFeatures= 393; ScansProcessed= 49; ScansPerMinute= 490.0
+03/02/2020 18:28:51	Scan/Frame= 747; PercentComplete= 75.9; AccumulatedFeatures= 472; ScansProcessed= 59; ScansPerMinute= 533.9
+03/02/2020 18:28:52	Scan/Frame= 877; PercentComplete= 88.6; AccumulatedFeatures= 562; ScansProcessed= 69; ScansPerMinute= 539.2
+03/02/2020 18:28:52	Finished file processing
+03/02/2020 18:28:52	total processing time = 00:00:08
+03/02/2020 18:28:52	total scans processed = 78
+03/02/2020 18:28:52	processing rate = 580 scans/minute
+03/02/2020 18:28:52	total features = 594
