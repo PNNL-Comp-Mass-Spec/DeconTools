@@ -1,4 +1,6 @@
 ﻿
+using System.Collections.Generic;
+
 namespace DeconTools.Backend.Core
 {
     public class IMSScanSet : ScanSet
@@ -10,7 +12,7 @@ namespace DeconTools.Backend.Core
 
         }
 
-        public IMSScanSet(int primaryScanNum, int[] indexArray)
+        public IMSScanSet(int primaryScanNum, IEnumerable<int> indexArray)
             : base(primaryScanNum, indexArray)
         {
 
