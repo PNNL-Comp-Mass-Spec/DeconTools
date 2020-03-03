@@ -340,7 +340,7 @@ namespace DeconTools.Backend.Workflows
 
             WorkflowStats = new WorkflowStats
             {
-                TimeStarted = DateTime.Now
+                TimeStarted = DateTime.UtcNow
             };
 
             try
@@ -354,7 +354,7 @@ namespace DeconTools.Backend.Workflows
                 throw new ApplicationException(simpleErrorMessage, ex);
             }
 
-            WorkflowStats.TimeFinished = DateTime.Now;
+            WorkflowStats.TimeFinished = DateTime.UtcNow;
             WorkflowStats.NumFeatures = Run.ResultCollection.MSFeatureCounter;
 
             WriteOutSummaryToLogfile();

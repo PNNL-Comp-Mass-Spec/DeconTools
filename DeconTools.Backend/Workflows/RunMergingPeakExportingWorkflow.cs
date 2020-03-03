@@ -78,7 +78,9 @@ namespace DeconTools.Backend.Workflows
             _peaksProcessedInLastDataset = 0;
             _totalPeaksProcessed = 0;
 
-            WorkflowStats = new WorkflowStats {TimeStarted = DateTime.Now};
+            WorkflowStats = new WorkflowStats {
+                TimeStarted = DateTime.UtcNow
+            };
 
             foreach (var datasetFileName in DatasetFileNameList)
             {
@@ -104,7 +106,7 @@ namespace DeconTools.Backend.Workflows
 
             }
 
-            WorkflowStats.TimeFinished = DateTime.Now;
+            WorkflowStats.TimeFinished = DateTime.UtcNow;
             WorkflowStats.NumFeatures = _totalPeaksProcessed;
 
             WriteOutSummaryToLogfile();
