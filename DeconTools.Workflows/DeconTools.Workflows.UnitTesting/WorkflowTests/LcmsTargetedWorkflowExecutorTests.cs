@@ -21,7 +21,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             var testDatasetPath = FileRefs.SipperRawDataFile;
             var testDatasetName = "Yellow_C13_070_23Mar10_Griffin_10-01-28";
 
-            var expectedResultsFilename = executorParameters.OutputFolderBase+ "\\Results" + "\\" + testDatasetName + "_results.txt";
+            var expectedResultsFilename = executorParameters.OutputDirectoryBase+ "\\Results" + "\\" + testDatasetName + "_results.txt";
             if (File.Exists(expectedResultsFilename))
             {
                 File.Delete(expectedResultsFilename);

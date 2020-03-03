@@ -13,8 +13,7 @@ namespace DeconTools.Backend.Workflows
             PeakFitType = Globals.PeakFitType.QUADRATIC;
             IsDataThresholded = false;
 
-            //and empty OutputFolder
-            OutputFolder = string.Empty;
+            OutputDirectory = string.Empty;
 
             IMSScanMax = -1;
             IMSScanMin = -1;
@@ -27,7 +26,6 @@ namespace DeconTools.Backend.Workflows
             MS2PeakDetectorPeakBR = PeakBR;
             MS2PeakDetectorSigNoiseThreshold = SigNoiseThreshold;
             MS2PeakDetectorDataIsThresholded = IsDataThresholded;
-
         }
 
         #endregion
@@ -53,13 +51,17 @@ namespace DeconTools.Backend.Workflows
         /// </summary>
         public bool MS2PeakDetectorDataIsThresholded { get; set; }
 
-
         public Globals.PeakFitType PeakFitType { get; set; }
 
+        /// <summary>
+        /// Should be set to True if the instrument thresholds the data when saving to disk
+        /// </summary>
         public bool IsDataThresholded { get; set; }
 
-
-        public string OutputFolder { get; set; }
+        /// <summary>
+        /// Output directory
+        /// </summary>
+        public string OutputDirectory { get; set; }
 
         public int Num_LC_TimePointsSummed { get; set; }
 
@@ -67,7 +69,6 @@ namespace DeconTools.Backend.Workflows
         /// Number of IMS Scans summed. -1 means all IMSScans are summed in a single Frame
         /// </summary>
         public int NumIMSScansSummed { get; set; }
-
 
         /// <summary>
         /// Minimum LC scan to process. A value of -1 is interpreted as 'all LC scans'
@@ -89,6 +90,9 @@ namespace DeconTools.Backend.Workflows
         /// </summary>
         public int IMSScanMax { get; set; }
 
+        /// <summary>
+        /// If true, process MS/MS spectra
+        /// </summary>
         public bool ProcessMSMS { get; set; }
 
         #endregion

@@ -35,12 +35,28 @@ namespace DeconTools.Backend.Core
             set => _deconToolsPeakList = value;
         }
 
-        public string Filename { get; set; }
+        /// <summary>
+        /// Path to the dataset file or directory
+        /// </summary>
+        [ObsoleteAttribute("Use DatasetFileOrDirectoryPath")]
+        public string Filename
+        {
+            get => DatasetFileOrDirectoryPath;
+            set => DatasetFileOrDirectoryPath = value;
+        }
+
+        /// <summary>
+        /// Path to the dataset file or directory
+        /// </summary>
+        public string DatasetFileOrDirectoryPath { get; set; }
 
         public string DatasetName { get; set; }
 
-        // Directory containing the dataset file
-        public string DataSetPath { get; set; }
+        /// <summary>
+        /// Directory containing the dataset file
+        /// If the dataset is directory-based, will be the same as DatasetFileOrDirectoryPath
+        /// </summary>
+        public string DatasetDirectoryPath { get; set; }
 
         /// <summary>
         /// Contains the LCMSWarp mass and NET alignment information needed for Targeted workflows
@@ -95,6 +111,7 @@ namespace DeconTools.Backend.Core
             get => currentScanSet;
             set => currentScanSet = value;
         }
+
         public bool IsDataThresholded { get; set; }
 
         private MultiAlignEngine.Alignment.clsAlignmentFunction _alignmentInfo;
@@ -120,8 +137,6 @@ namespace DeconTools.Backend.Core
         public abstract int GetNumMSScans();
         public abstract double GetTime(int scanNum);
         public abstract int GetMSLevelFromRawData(int scanNum);
-
-
 
         /// <summary>
         /// Returns Scan information.

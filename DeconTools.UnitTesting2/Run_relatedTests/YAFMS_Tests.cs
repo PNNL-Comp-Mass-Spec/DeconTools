@@ -22,7 +22,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
 
             Assert.AreEqual(FileRefs.RawDataMSFiles.YAFMSStandardFile1, run.Filename);
             Assert.AreEqual("QC_Shew_09_01_pt5_a_20Mar09_Earth_09-01-01", run.DatasetName);
-            Assert.AreEqual(FileRefs.RawDataBasePath.TrimEnd('\\'), run.DataSetPath);
+            Assert.AreEqual(FileRefs.RawDataBasePath.TrimEnd('\\'), run.DatasetDirectoryPath);
         }
 
         [Test]

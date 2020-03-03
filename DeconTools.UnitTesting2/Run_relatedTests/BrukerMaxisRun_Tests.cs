@@ -20,7 +20,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
 
             Assert.IsNotNull(run);
             Assert.AreEqual("2012_05_15_MN9_A_000001", run.DatasetName);
-            Assert.AreEqual(path, run.DataSetPath);
+            Assert.AreEqual(path, run.DatasetDirectoryPath);
 
         }
 

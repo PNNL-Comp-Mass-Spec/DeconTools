@@ -98,7 +98,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChargeStateDeciders
         {
             if (_run.ResultCollection.MSPeakResultList.Count == 0)
             {
-                var expectedPeaksFile = Path.Combine(_run.DataSetPath, _run.DatasetName + "_peaks.txt");
+                var expectedPeaksFile = Path.Combine(_run.DatasetDirectoryPath, _run.DatasetName + "_peaks.txt");
                 if (!File.Exists(expectedPeaksFile))
                 {
                     var ex = new Exception("No Peaks file found.");
@@ -462,7 +462,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChargeStateDeciders
             //PeakDetectAndExportWorkflowParameters parameters = new PeakDetectAndExportWorkflowParameters();
             //parameters.LCScanMin = 5500;
             //parameters.LCScanMax = 6500;
-            //parameters.OutputFolder = outputFolder;
+            //parameters.OutputDirectory = outputDirectory;
 
             //PeakDetectAndExportWorkflow workflow = new PeakDetectAndExportWorkflow(run, parameters);
             //workflow.Execute();

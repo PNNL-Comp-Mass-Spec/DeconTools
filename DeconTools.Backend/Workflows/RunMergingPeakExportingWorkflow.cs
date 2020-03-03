@@ -23,7 +23,7 @@ namespace DeconTools.Backend.Workflows
 
 
 
-        public RunMergingPeakExportingWorkflow(DeconToolsParameters parameters, IEnumerable<string> datasetFileNameList, string outputFolderPath = null, BackgroundWorker backgroundWorker = null)
+        public RunMergingPeakExportingWorkflow(DeconToolsParameters parameters, IEnumerable<string> datasetFileNameList, string outputDirectoryPath = null, BackgroundWorker backgroundWorker = null)
             : base(null, null)
         {
             NewDeconToolsParameters = parameters;
@@ -31,7 +31,7 @@ namespace DeconTools.Backend.Workflows
 
             DatasetFileNameList = datasetFileNameList;
 
-            OutputFolderPath = outputFolderPath;
+            OutputDirectoryPath = outputDirectoryPath;
 
             BackgroundWorker = backgroundWorker;
 

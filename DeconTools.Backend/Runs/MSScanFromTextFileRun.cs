@@ -12,14 +12,14 @@ namespace DeconTools.Backend.Runs
         private readonly int m_xValsColumnIndex = 0;
         private readonly int m_yValsColumnIndex = 1;
 
-        public MSScanFromTextFileRun(string fileName)
+        public MSScanFromTextFileRun(string filePath)
         {
-            Filename = Path.GetFullPath(fileName);
+            DatasetFileOrDirectoryPath = Path.GetFullPath(filePath);
 
             MSFileType = Globals.MSFileType.Ascii;
-            var baseFilename = Path.GetFileName(Filename);
+            var baseFilename = Path.GetFileName(DatasetFileOrDirectoryPath);
             DatasetName = baseFilename.Substring(0, baseFilename.LastIndexOf('.'));
-            DataSetPath = Path.GetDirectoryName(Filename);
+            DatasetDirectoryPath = Path.GetDirectoryName(DatasetFileOrDirectoryPath);
             XYData = new XYData();
             CurrentScanSet = new Core.ScanSet(0);    //
 
@@ -222,12 +222,12 @@ namespace DeconTools.Backend.Runs
 
             try
             {
-                xyData = loadDataFromFile(Filename);
+                xyData = loadDataFromFile(DatasetFileOrDirectoryPath);
             }
             catch (Exception ex)
             {
 
-                throw new IOException("There was an error reading file " + Utilities.DiagnosticUtilities.GetFullPathSafe(Filename) + "\n\n" + ex.Message);
+                throw new IOException("There was an error reading file " + Utilities.DiagnosticUtilities.GetFullPathSafe(DatasetFileOrDirectoryPath) + "\n\n" + ex.Message);
             }
 
             xyData = xyData.TrimData(minMZ, maxMZ);

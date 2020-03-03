@@ -26,7 +26,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             var parameters = new SipperWorkflowExecutorParameters();
             parameters.LoadParameters(paramFile);
             parameters.CopyRawFileLocal = false;
-            //parameters.FolderPathForCopiedRawDataset = @"D:\data\temp";
+            //parameters.LocalDirectoryPathForCopiedRawDataset = @"D:\data\temp";
 
 
             var testDataset =
@@ -84,7 +84,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             var parameters = new BasicTargetedWorkflowExecutorParameters();
             parameters.LoadParameters(paramFile);
             parameters.CopyRawFileLocal = false;
-            //parameters.FolderPathForCopiedRawDataset = @"D:\data\temp";
+            //parameters.LocalDirectoryPathForCopiedRawDataset = @"D:\data\temp";
 
             
 
@@ -162,7 +162,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             var parameters = new BasicTargetedWorkflowExecutorParameters();
             parameters.LoadParameters(paramFile);
             parameters.CopyRawFileLocal = false;
-            parameters.FolderPathForCopiedRawDataset = @"D:\Data\Sipper\HLP_Ana";
+            parameters.LocalDirectoryPathForCopiedRawDataset = @"D:\Data\Sipper\HLP_Ana";
 
 
             var testDataset =
@@ -539,7 +539,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             var parameters = new SipperWorkflowExecutorParameters();
             parameters.LoadParameters(paramFile);
 
-            parameters.FolderPathForCopiedRawDataset = @"D:\data\temp";
+            parameters.LocalDirectoryPathForCopiedRawDataset = @"D:\data\temp";
 
 
             var testDataset =

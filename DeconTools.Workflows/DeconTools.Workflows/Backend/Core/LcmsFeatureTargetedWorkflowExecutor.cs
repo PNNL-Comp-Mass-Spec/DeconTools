@@ -6,17 +6,17 @@ namespace DeconTools.Workflows.Backend.Core
 {
     public class LcmsFeatureTargetedWorkflowExecutor : TargetedWorkflowExecutor
     {
-       
+
 
         #region Constructors
         public LcmsFeatureTargetedWorkflowExecutor(WorkflowExecutorBaseParameters parameters, string datasetPath) : base(parameters, datasetPath)
         {
-            
+
         }
         #endregion
 
         #region Properties
-     
+
         #endregion
 
         #region Public Methods
@@ -25,9 +25,9 @@ namespace DeconTools.Workflows.Backend.Core
         {
             var executorParams = (LcmsFeatureTargetedWorkflowExecutorParameters) ExecutorParameters;
 
-            //_loggingFileName = GetLogFileName(ExecutorParameters.LoggingFolder);
-            _resultsFolder = GetResultsFolder(ExecutorParameters.OutputFolderBase);
-            
+            //_loggingFileName = GetLogFileName(ExecutorParameters.LoggingDirectory);
+            _resultsDirectory = GetResultsDirectory(ExecutorParameters.OutputDirectoryBase);
+
             Targets = GetLcmsFeatureTargets(ExecutorParameters.TargetsFilePath);
 
             MassTagsForReference = GetMassTagTargets(executorParams.MassTagsForReference);
@@ -68,7 +68,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         }
 
-      
+
 
         #endregion
 

@@ -101,7 +101,7 @@ namespace DeconTools.Workflows.Backend.Core
     //        MasterPeakListPeakDetector.IsDataThresholded = false;
     //        MasterPeakListPeakDetector.StorePeakData = true;
 
-           
+
     //        msgen = MSGeneratorFactory.CreateMSGenerator(DeconTools.Backend.Globals.MSFileType.PNNL_UIMF);
     //        this.DriftTimeProfileExtractionPPMTolerance = 15;
 
@@ -202,7 +202,7 @@ namespace DeconTools.Workflows.Backend.Core
 
     //    public override void Execute()
     //    {
-    //        this.rawdataFile = this.Run.Filename;
+    //        this.rawdataFile = this.Run.DatasetFileOrDirectoryPath;
     //        this.outputFeatureFile = getOutputFileName();
     //        this.logFile = GetlogFileName();
 
@@ -305,7 +305,7 @@ namespace DeconTools.Workflows.Backend.Core
 
 
     //                    logFileWriter.WriteLine(progressString);
-                        
+
 
     //                    logFileWriter.Flush();
 

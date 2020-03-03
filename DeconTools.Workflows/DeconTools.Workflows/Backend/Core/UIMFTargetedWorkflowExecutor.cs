@@ -5,12 +5,14 @@ namespace DeconTools.Workflows.Backend.Core
 {
     public class UIMFTargetedWorkflowExecutor : TargetedWorkflowExecutor
     {
-        public UIMFTargetedWorkflowExecutor(WorkflowExecutorBaseParameters parameters, string datasetPath) : base(parameters, datasetPath) { }
-        public UIMFTargetedWorkflowExecutor(WorkflowExecutorBaseParameters workflowExecutorParameters, WorkflowParameters workflowParameters, string datasetPath) : base(workflowExecutorParameters, workflowParameters, datasetPath) { }
+        public UIMFTargetedWorkflowExecutor(WorkflowParameters parameters, string datasetPath) : base(parameters, datasetPath) { }
+        public UIMFTargetedWorkflowExecutor(WorkflowParameters workflowExecutorParameters, WorkflowParameters workflowParameters, string datasetPath) : base(workflowExecutorParameters, workflowParameters, datasetPath) { }
 
         public new void InitializeWorkflow()
         {
-            _resultsFolder = string.IsNullOrEmpty(ExecutorParameters.OutputFolderBase) ? RunUtilities.GetDatasetParentFolder(DatasetPath) : GetResultsFolder(ExecutorParameters.OutputFolderBase);
+            _resultsDirectory = string.IsNullOrEmpty(ExecutorParameters.OutputDirectoryBase) ?
+                                    RunUtilities.GetDatasetParentDirectory(DatasetPath) :
+                                    GetResultsDirectory(ExecutorParameters.OutputDirectoryBase);
 
             MassTagsForTargetedAlignment = GetMassTagTargets(GetTargetFilePathForIqAlignment());
 

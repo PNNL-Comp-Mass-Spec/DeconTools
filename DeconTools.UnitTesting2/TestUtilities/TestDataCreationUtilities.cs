@@ -52,7 +52,7 @@ namespace DeconTools.UnitTesting2
         {
 
             Run run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
-            Console.WriteLine("Opening " + run.Filename);
+            Console.WriteLine("Opening " + run.DatasetFileOrDirectoryPath);
 
             run.ScanSetCollection.Create(run, 6000, 6005, 1, 1, false);
 

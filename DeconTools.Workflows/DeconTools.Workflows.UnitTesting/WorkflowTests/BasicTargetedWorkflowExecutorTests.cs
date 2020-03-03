@@ -22,7 +22,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             {
                 CopyRawFileLocal = false,
                 DeleteLocalDatasetAfterProcessing = true,
-                FolderPathForCopiedRawDataset = @"\\protoapps\UserData\Slysz\IQ_Demo\RawData",
+                LocalDirectoryPathForCopiedRawDataset = @"\\protoapps\UserData\Slysz\IQ_Demo\RawData",
                 TargetType = Globals.TargetType.DatabaseTarget,
                 TargetsBaseFolder = "",
 #pragma warning disable 618
@@ -358,7 +358,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
 
 
-            var resultsFolderLocation = executorParameters.OutputFolderBase+ "\\Results";
+            var resultsFolderLocation = executorParameters.OutputDirectoryBase+ "\\Results";
             var testDatasetPath = baseFolder + @"\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
             var testDatasetName = "QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18";
 
@@ -418,7 +418,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             var executorParameterFile = baseFolder + @"\Parameters\QCShew_OrbiStandard_workflowExecutorParameters.xml";
             var executorParameters = new BasicTargetedWorkflowExecutorParameters();
             executorParameters.LoadParameters(executorParameterFile);
-            var resultsFolderLocation = Path.Combine(executorParameters.OutputFolderBase, "Results");
+            var resultsFolderLocation = Path.Combine(executorParameters.OutputDirectoryBase, "Results");
             var testDatasetPath = baseFolder + @"\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
             var testDatasetName = "QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18";
 
@@ -447,7 +447,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             var executorParameters = new BasicTargetedWorkflowExecutorParameters();
             executorParameters.LoadParameters(executorParameterFile);
 
-            var resultsFolderLocation = Path.Combine(executorParameters.OutputFolderBase, "Results");
+            var resultsFolderLocation = Path.Combine(executorParameters.OutputDirectoryBase, "Results");
             var testDatasetPath = baseFolder + @"\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
             var testDatasetName = "QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18";
 
@@ -516,7 +516,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
 
 
-            var expectedResultsFilename = Path.Combine(executorParameters.OutputFolderBase, "Results", testDatasetName + "_results.txt");
+            var expectedResultsFilename = Path.Combine(executorParameters.OutputDirectoryBase, "Results", testDatasetName + "_results.txt");
             if (File.Exists(expectedResultsFilename))
             {
                 File.Delete(expectedResultsFilename);

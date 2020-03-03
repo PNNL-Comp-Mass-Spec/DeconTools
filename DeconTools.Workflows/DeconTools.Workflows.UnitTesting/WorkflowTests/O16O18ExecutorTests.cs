@@ -29,7 +29,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             var executorParameters = new BasicTargetedWorkflowExecutorParameters();
             executorParameters.LoadParameters(executorParametersFile);
 
-            executorParameters.OutputFolderBase =
+            executorParameters.OutputDirectoryBase =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\O16O18_standard_testing\Test1_VladAlz";
 
             var testDatasetPath =
@@ -42,7 +42,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\O16O18_standard_testing\Test1_VladAlz\Targets\MT_Human_ALZ_O18_P836\MassTags_PMT2.txt";
 
 
-            var expectedResultsFilename = Path.Combine(executorParameters.OutputFolderBase, "IqResults", RunUtilities.GetDatasetName(testDatasetPath) + "_iqResults.txt");
+            var expectedResultsFilename = Path.Combine(executorParameters.OutputDirectoryBase, "IqResults", RunUtilities.GetDatasetName(testDatasetPath) + "_iqResults.txt");
             if (File.Exists(expectedResultsFilename)) File.Delete(expectedResultsFilename);
 
 
@@ -157,7 +157,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             var autoSavedExecutorParametersFile =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\O16O18_standard_testing\Test1_VladAlz\Parameters\ExecutorParameters1_autosaved.xml";
             executorParameters.SaveParametersToXML(autoSavedExecutorParametersFile);
-            executorParameters.OutputFolderBase =
+            executorParameters.OutputDirectoryBase =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\O16O18_standard_testing\Test1_VladAlz";
 
             TargetedWorkflowExecutor executor = new BasicTargetedWorkflowExecutor(executorParameters, testDatasetPath);
@@ -183,7 +183,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             executor.Execute();
 
-            var expectedResultsFilename = Path.Combine(executorParameters.OutputFolderBase, 
+            var expectedResultsFilename = Path.Combine(executorParameters.OutputDirectoryBase, 
                                                           "Results",
                                                           executor.TargetedWorkflow.Run.DatasetName + "_Results.txt");
 
@@ -265,7 +265,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             executor.Execute();
 
-            var expectedResultsFilename = Path.Combine(executorParameters.OutputFolderBase, 
+            var expectedResultsFilename = Path.Combine(executorParameters.OutputDirectoryBase, 
                                                           "Results",
                                                           executor.TargetedWorkflow.Run.DatasetName + "_results.txt");
 
@@ -307,7 +307,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             executor.Execute();
 
-            var expectedResultsFilename = Path.Combine(executorParameters.OutputFolderBase, "Results",
+            var expectedResultsFilename = Path.Combine(executorParameters.OutputDirectoryBase, "Results",
                                              executor.TargetedWorkflow.Run.DatasetName + "_results.txt");
 
             var importer = new O16O18TargetedResultFromTextImporter(expectedResultsFilename);

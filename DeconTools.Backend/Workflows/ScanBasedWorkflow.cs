@@ -62,7 +62,7 @@ namespace DeconTools.Backend.Workflows
         public DeconToolsParameters NewDeconToolsParameters { get; set; }
 
         #region Factory methods
-        public static ScanBasedWorkflow CreateWorkflow(string datasetFileName, string parameterFile, string outputFolderPath = null, BackgroundWorker backgroundWorker = null, bool useNewDeconToolsParameterObjects = true)
+        public static ScanBasedWorkflow CreateWorkflow(string datasetFileName, string parameterFile, string outputDirectoryPath = null, BackgroundWorker backgroundWorker = null, bool useNewDeconToolsParameterObjects = true)
         {
             var datasetFile = new FileInfo(datasetFileName);
             if (!datasetFile.Exists)
@@ -113,7 +113,7 @@ namespace DeconTools.Backend.Workflows
 
             try
             {
-                return CreateWorkflow(run, newParameters, outputFolderPath, backgroundWorker);
+                return CreateWorkflow(run, newParameters, outputDirectoryPath, backgroundWorker);
             }
             catch (Exception ex)
             {
@@ -124,29 +124,29 @@ namespace DeconTools.Backend.Workflows
 
         }
 
-        public static ScanBasedWorkflow CreateWorkflow(Run run, DeconToolsParameters parameters, string outputFolderPath = null, BackgroundWorker backgroundWorker = null)
+        public static ScanBasedWorkflow CreateWorkflow(Run run, DeconToolsParameters parameters, string outputDirectoryPath = null, BackgroundWorker backgroundWorker = null)
         {
             switch (parameters.ScanBasedWorkflowParameters.ScanBasedWorkflowName.ToLower())
             {
                 case "uimf_saturation_repair":
-                    return new SaturationIMSScanBasedWorkflow(parameters, run, outputFolderPath, backgroundWorker);
+                    return new SaturationIMSScanBasedWorkflow(parameters, run, outputDirectoryPath, backgroundWorker);
 
                 case "uimf_standard":
-                    return new StandardIMSScanBasedWorkflow(parameters, run, outputFolderPath, backgroundWorker);
+                    return new StandardIMSScanBasedWorkflow(parameters, run, outputDirectoryPath, backgroundWorker);
 
                 case "standard":
                     if (run is UIMFRun)
                     {
-                        return new StandardIMSScanBasedWorkflow(parameters, run, outputFolderPath, backgroundWorker);
+                        return new StandardIMSScanBasedWorkflow(parameters, run, outputDirectoryPath, backgroundWorker);
                     }
-                    return new TraditionalScanBasedWorkflow(parameters, run, outputFolderPath, backgroundWorker);
+                    return new TraditionalScanBasedWorkflow(parameters, run, outputDirectoryPath, backgroundWorker);
 
                 case "run_merging_with_peak_export":
-                    return new RunMergingPeakExportingWorkflow(parameters, null, outputFolderPath, backgroundWorker);
+                    return new RunMergingPeakExportingWorkflow(parameters, null, outputDirectoryPath, backgroundWorker);
 
                 // ReSharper disable once StringLiteralTypo
                 case "deconmsn":
-                    return new DeconMSnWorkflow(parameters, run, outputFolderPath, backgroundWorker);
+                    return new DeconMSnWorkflow(parameters, run, outputDirectoryPath, backgroundWorker);
 
                 default:
                     throw new Exception("ScanBasedWorkflowName is unknown: " + parameters.ScanBasedWorkflowParameters.ScanBasedWorkflowName);
@@ -159,17 +159,15 @@ namespace DeconTools.Backend.Workflows
 
         #region Constructors
 
-        protected ScanBasedWorkflow(DeconToolsParameters parameters, Run run, string outputFolderPath = null, BackgroundWorker backgroundWorker = null)
+        protected ScanBasedWorkflow(DeconToolsParameters parameters, Run run, string outputDirectoryPath = null, BackgroundWorker backgroundWorker = null)
         {
             NewDeconToolsParameters = parameters;
             Run = run;
-            OutputFolderPath = outputFolderPath;    //path is null unless specified
+            OutputDirectoryPath = outputDirectoryPath;    //path is null unless specified
             BackgroundWorker = backgroundWorker;   //null unless specified
 
             ExportData = true;
         }
-
-
 
         #endregion
 
@@ -179,7 +177,7 @@ namespace DeconTools.Backend.Workflows
 
         public bool CanInitializeWorkflow => (Run != null);
 
-        public string OutputFolderPath { get; set; }
+        public string OutputDirectoryPath { get; set; }
 
         public Globals.ExporterType ExporterType { get; set; }
 
@@ -220,15 +218,15 @@ namespace DeconTools.Backend.Workflows
             if (_deconvolutorRequiresPeaksFile)
             {
                 //new iThrash deconvolutor uses the _peaks.txt file. So need to check for it and create it if necessary
-                var peaksFileExists = CheckForPeaksFile(OutputFolderPath);
+                var peaksFileExists = CheckForPeaksFile(OutputDirectoryPath);
                 if (!peaksFileExists)
                 {
                     IqLogger.LogMessage("Creating _peaks.txt file. Takes 1 to 5 minutes.");
-                    CreatePeaksFile(NewDeconToolsParameters.PeakDetectorParameters, OutputFolderPath);
+                    CreatePeaksFile(NewDeconToolsParameters.PeakDetectorParameters, OutputDirectoryPath);
                 }
 
                 IqLogger.LogMessage("Loading _peaks.txt file into memory. Takes 0 - 30 seconds" + Environment.NewLine);
-                LoadPeaks(OutputFolderPath);
+                LoadPeaks(OutputDirectoryPath);
 
             }
 
@@ -369,36 +367,36 @@ namespace DeconTools.Backend.Workflows
             Logger.Instance.AddEntry(PRISM.StackTraceFormatter.GetExceptionStackTraceMultiLine(ex), true);
         }
 
-        private void LoadPeaks(string userProvidedOutputFolderPath = null)
+        private void LoadPeaks(string userProvidedOutputDirectoryPath = null)
         {
-            string outputFolderPath;
-            if (string.IsNullOrEmpty(userProvidedOutputFolderPath))
+            string outputDirectoryPath;
+            if (string.IsNullOrEmpty(userProvidedOutputDirectoryPath))
             {
-                outputFolderPath = Run.DataSetPath;
+                outputDirectoryPath = Run.DatasetDirectoryPath;
             }
             else
             {
-                outputFolderPath = userProvidedOutputFolderPath;
+                outputDirectoryPath = userProvidedOutputDirectoryPath;
             }
 
-            var expectedPeaksFile = Path.Combine(outputFolderPath, Run.DatasetName + "_peaks.txt");
+            var expectedPeaksFile = Path.Combine(outputDirectoryPath, Run.DatasetName + "_peaks.txt");
             RunUtilities.GetPeaks(Run, expectedPeaksFile);
         }
 
 
-        private bool CheckForPeaksFile(string userProvidedOutputFolderPath = null)
+        private bool CheckForPeaksFile(string userProvidedOutputDirectoryPath = null)
         {
-            string outputFolderPath;
-            if (string.IsNullOrEmpty(userProvidedOutputFolderPath))
+            string outputDirectoryPath;
+            if (string.IsNullOrEmpty(userProvidedOutputDirectoryPath))
             {
-                outputFolderPath = Run.DataSetPath;
+                outputDirectoryPath = Run.DatasetDirectoryPath;
             }
             else
             {
-                outputFolderPath = userProvidedOutputFolderPath;
+                outputDirectoryPath = userProvidedOutputDirectoryPath;
             }
 
-            var expectedPeaksFile = Path.Combine(outputFolderPath, Run.DatasetName + "_peaks.txt");
+            var expectedPeaksFile = Path.Combine(outputDirectoryPath, Run.DatasetName + "_peaks.txt");
 
             if (!File.Exists(expectedPeaksFile))
                 return false;
@@ -560,13 +558,13 @@ namespace DeconTools.Backend.Workflows
 
         #region Private Methods
 
-        private void CreatePeaksFile(PeakDetectorParameters peakDetectorParameters, string outputFolderPath)
+        private void CreatePeaksFile(PeakDetectorParameters peakDetectorParameters, string outputDirectoryPath)
         {
 
 
             var parameters = new PeakDetectAndExportWorkflowParameters
             {
-                OutputFolder = outputFolderPath,
+                OutputDirectory = outputDirectoryPath,
                 LCScanMin = Run.MinLCScan,
                 LCScanMax = Run.MaxLCScan,
                 IsDataThresholded = Run.IsDataThresholded,
@@ -635,35 +633,35 @@ namespace DeconTools.Backend.Workflows
         {
             //outputFilePath will be null if outputFilePath wasn't set using a constructor
             //So if null, will create the default outputPath
-            if (OutputFolderPath == null)
+            if (OutputDirectoryPath == null)
             {
-                return Path.Combine(run.DataSetPath, run.DatasetName);
+                return Path.Combine(run.DatasetDirectoryPath, run.DatasetName);
             }
 
-            if (Directory.Exists(OutputFolderPath))
+            if (Directory.Exists(OutputDirectoryPath))
             {
-                return Path.Combine(OutputFolderPath, run.DatasetName);
+                return Path.Combine(OutputDirectoryPath, run.DatasetName);
             }
 
             try
             {
-                Directory.CreateDirectory(OutputFolderPath);
+                Directory.CreateDirectory(OutputDirectoryPath);
             }
             catch (Exception ex)
             {
                 var errorMessage =
-                    "Output folder does not exist. When we tried to create it there was an error: " + ex.Message;
+                    "Output directory does not exist. When we tried to create it there was an error: " + ex.Message;
 
                 Logger.Instance.AddEntry(errorMessage);
                 Logger.Instance.AddEntry(PRISM.StackTraceFormatter.GetExceptionStackTraceMultiLine(ex), true);
 
                 throw new DirectoryNotFoundException(
-                    "Output folder does not exist. When we tried to create it there was an error: " + ex.Message,
+                    "Output directory does not exist. When we tried to create it there was an error: " + ex.Message,
                     ex);
 
             }
 
-            return Path.Combine(OutputFolderPath, run.DatasetName);
+            return Path.Combine(OutputDirectoryPath, run.DatasetName);
         }
 
 

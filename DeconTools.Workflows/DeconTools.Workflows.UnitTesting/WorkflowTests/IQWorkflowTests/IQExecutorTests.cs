@@ -91,9 +91,9 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
             executorBaseParameters.ChromGenSourceDataPeakBR = 3;
             executorBaseParameters.ChromGenSourceDataSigNoise = 2;
             executorBaseParameters.TargetsFilePath = targetsFile;
-            executorBaseParameters.OutputFolderBase = @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Unlabelled";
+            executorBaseParameters.OutputDirectoryBase = @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Unlabelled";
 
-            var expectedResultsFilename = Path.Combine(executorBaseParameters.OutputFolderBase,
+            var expectedResultsFilename = Path.Combine(executorBaseParameters.OutputDirectoryBase,
                                                           "IqResults",
                                                           RunUtilities.GetDatasetName(testFile) + "_iqResults.txt");
             if (File.Exists(expectedResultsFilename)) File.Delete(expectedResultsFilename);
@@ -165,11 +165,11 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
             executorBaseParameters.ChromGenSourceDataPeakBR = 3;
             executorBaseParameters.ChromGenSourceDataSigNoise = 2;
             executorBaseParameters.TargetsFilePath = targetsFile;
-            executorBaseParameters.OutputFolderBase = @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Unlabelled";
+            executorBaseParameters.OutputDirectoryBase = @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Unlabelled";
             executorBaseParameters.IsMassAlignmentPerformed = true;
             executorBaseParameters.IsNetAlignmentPerformed = true;
 
-            var expectedResultsFilename = Path.Combine(executorBaseParameters.OutputFolderBase,
+            var expectedResultsFilename = Path.Combine(executorBaseParameters.OutputDirectoryBase,
                                                           "IqResults",
                                                           RunUtilities.GetDatasetName(testFile) + "_iqResults.txt");
             if (File.Exists(expectedResultsFilename)) File.Delete(expectedResultsFilename);
@@ -245,10 +245,10 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
             executorBaseParameters.ChromGenSourceDataPeakBR = 3;
             executorBaseParameters.ChromGenSourceDataSigNoise = 2;
             executorBaseParameters.TargetsFilePath = targetsFile;
-            executorBaseParameters.OutputFolderBase = @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Unlabelled";
+            executorBaseParameters.OutputDirectoryBase = @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Unlabelled";
 
 
-            var expectedResultsFilename = Path.Combine(executorBaseParameters.OutputFolderBase,
+            var expectedResultsFilename = Path.Combine(executorBaseParameters.OutputDirectoryBase,
                                                           "IqResults",
                                                           RunUtilities.GetDatasetName(testFile) + "_iqResults.txt");
             if (File.Exists(expectedResultsFilename)) File.Delete(expectedResultsFilename);
@@ -320,11 +320,11 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
             executorBaseParameters.TargetsFilePath = targetsFile;
             executorBaseParameters.IsMassAlignmentPerformed = true;
             executorBaseParameters.IsNetAlignmentPerformed = true;
-            executorBaseParameters.OutputFolderBase = @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Unlabelled";
+            executorBaseParameters.OutputDirectoryBase = @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Unlabelled";
             var run = new RunFactory().CreateRun(testFile);
 
 
-            var expectedResultsFilename = executorBaseParameters.OutputFolderBase  +"\\IqResults\\" + RunUtilities.GetDatasetName(testFile) + "_iqResults.txt";
+            var expectedResultsFilename = executorBaseParameters.OutputDirectoryBase  +"\\IqResults\\" + RunUtilities.GetDatasetName(testFile) + "_iqResults.txt";
             if (File.Exists(expectedResultsFilename)) File.Delete(expectedResultsFilename);
 
 

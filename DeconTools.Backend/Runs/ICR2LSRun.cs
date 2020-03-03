@@ -17,7 +17,7 @@ namespace DeconTools.Backend.Runs
         public ICR2LSRun(string filename)
             : this()
         {
-            Filename = filename;
+            DatasetFileOrDirectoryPath = filename;
 
             try
             {

@@ -20,7 +20,7 @@ namespace DeconTools.Workflows.Backend.Core
         private readonly IqTargetUtilities _targetUtilities = new IqTargetUtilities();
         // Unused: private RunFactory _runFactory = new RunFactory();
 
-        private string _resultsFolder;
+        private string _resultsDirectory;
         private string _alignmentFolder;
 
         #region Constructors
@@ -120,7 +120,7 @@ namespace DeconTools.Workflows.Backend.Core
         {
             WorkflowExecutorBaseParameters massNetAlignerParameters = new BasicTargetedWorkflowExecutorParameters
             {
-                OutputFolderBase = Parameters.OutputFolderBase
+                OutputDirectoryBase = Parameters.OutputDirectoryBase
             };
 
             IqMassAndNetAligner = new IqMassAndNetAligner(massNetAlignerParameters, Run)
@@ -358,7 +358,7 @@ namespace DeconTools.Workflows.Backend.Core
                 resultsFileName = Run.DatasetName + "_iqResults.txt";
             }
 
-            IqResultExporter.WriteOutResults(Path.Combine(_resultsFolder, resultsFileName), exportedResults);
+            IqResultExporter.WriteOutResults(Path.Combine(_resultsDirectory, resultsFileName), exportedResults);
         }
 
         private void SetupAlignmentFolder(string alignmentFolder = "")
@@ -367,13 +367,13 @@ namespace DeconTools.Workflows.Backend.Core
             {
                 _alignmentFolder = alignmentFolder;
             }
-            else if (string.IsNullOrEmpty(Parameters.OutputFolderBase))
+            else if (string.IsNullOrEmpty(Parameters.OutputDirectoryBase))
             {
-                _alignmentFolder = Path.Combine(GetDefaultOutputFolder(), "AlignmentInfo");
+                _alignmentFolder = Path.Combine(GetDefaultOutputDirectory(), "AlignmentInfo");
             }
             else
             {
-                _alignmentFolder = Path.Combine(Parameters.OutputFolderBase, "AlignmentInfo");
+                _alignmentFolder = Path.Combine(Parameters.OutputDirectoryBase, "AlignmentInfo");
             }
 
             if (!Directory.Exists(_alignmentFolder)) Directory.CreateDirectory(_alignmentFolder);
@@ -426,16 +426,16 @@ namespace DeconTools.Workflows.Backend.Core
 
         private void SetupResultsFolder()
         {
-            if (string.IsNullOrEmpty(Parameters.OutputFolderBase))
+            if (string.IsNullOrEmpty(Parameters.OutputDirectoryBase))
             {
-                _resultsFolder = GetDefaultOutputFolder();
+                _resultsDirectory = GetDefaultOutputDirectory();
             }
             else
             {
-                _resultsFolder = Path.Combine(Parameters.OutputFolderBase, "IqResults");
+                _resultsDirectory = Path.Combine(Parameters.OutputDirectoryBase, "IqResults");
             }
 
-            if (!Directory.Exists(_resultsFolder)) Directory.CreateDirectory(_resultsFolder);
+            if (!Directory.Exists(_resultsDirectory)) Directory.CreateDirectory(_resultsDirectory);
 
 
         }
@@ -462,7 +462,7 @@ namespace DeconTools.Workflows.Backend.Core
             var peakCreator = new PeakDetectAndExportWorkflow(Run, parameters, _backgroundWorker);
             peakCreator.Execute();
 
-            var peaksFilename = Path.Combine(Run.DataSetPath, Run.DatasetName + "_peaks.txt");
+            var peaksFilename = Path.Combine(Run.DatasetDirectoryPath, Run.DatasetName + "_peaks.txt");
             return peaksFilename;
 
         }
@@ -470,7 +470,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         private string GetPossiblePeaksFile()
         {
-            var baseFileName = Path.Combine(Run.DataSetPath, Run.DatasetName);
+            var baseFileName = Path.Combine(Run.DatasetDirectoryPath, Run.DatasetName);
 
             var possibleFilename1 = baseFileName + "_peaks.txt";
 
@@ -493,7 +493,7 @@ namespace DeconTools.Workflows.Backend.Core
 
             if (string.IsNullOrEmpty(ChromSourceDataFilePath))
             {
-                Console.WriteLine("Creating _Peaks.txt file for " + Run.DatasetName + " at " + Run.DataSetPath);
+                Console.WriteLine("Creating _Peaks.txt file for " + Run.DatasetName + " at " + Run.DatasetDirectoryPath);
                 IqLogger.LogMessage("Creating _Peaks.txt");
                 ChromSourceDataFilePath = CreatePeaksForChromSourceData();
             }
@@ -514,27 +514,27 @@ namespace DeconTools.Workflows.Backend.Core
 
         private void SetupLogging()
         {
-            string loggingFolder;
-            if (string.IsNullOrEmpty(Parameters.OutputFolderBase))
+            string loggingDirectory;
+            if (string.IsNullOrEmpty(Parameters.OutputDirectoryBase))
             {
-                loggingFolder = GetDefaultOutputFolder();
+                loggingDirectory = GetDefaultOutputDirectory();
             }
             else
             {
-                loggingFolder = Path.Combine(Parameters.OutputFolderBase, "IqLogs");
+                loggingDirectory = Path.Combine(Parameters.OutputDirectoryBase, "IqLogs");
             }
 
 
-            if (!Directory.Exists(loggingFolder))
-                Directory.CreateDirectory(loggingFolder);
+            if (!Directory.Exists(loggingDirectory))
+                Directory.CreateDirectory(loggingDirectory);
 
-            IqLogger.InitializeIqLog(_run.DatasetName, loggingFolder);
+            IqLogger.InitializeIqLog(_run.DatasetName, loggingDirectory);
         }
 
-        private string GetDefaultOutputFolder()
+        private string GetDefaultOutputDirectory()
         {
-            var defaultOutputFolder = _run.DataSetPath;
-            return defaultOutputFolder;
+            var defaultOutputDirectory = _run.DatasetDirectoryPath;
+            return defaultOutputDirectory;
         }
 
         #endregion

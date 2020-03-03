@@ -16,22 +16,22 @@ namespace DeconTools.Backend.Runs
             MSFileType = Globals.MSFileType.PNNL_IMS;
         }
 
-        public IMFRun(string filename)
+        public IMFRun(string filePath)
             : this()
         {
-            Check.Require(File.Exists(filename),"File does not exist");
+            Check.Require(File.Exists(filePath),"File does not exist");
 
-            Filename = filename;
+            DatasetFileOrDirectoryPath = filePath;
 
-            var baseFilename = Path.GetFileName(Filename);
+            var baseFilename = Path.GetFileName(DatasetFileOrDirectoryPath);
             if (baseFilename == null)
                 throw new Exception("Could not determine the path to the input file");
 
             DatasetName = baseFilename.Substring(0, baseFilename.LastIndexOf('.'));
-            DataSetPath = Path.GetDirectoryName(filename);
+            DatasetDirectoryPath = Path.GetDirectoryName(filePath);
 
 #pragma warning disable 618
-            RawData = new clsRawData(filename, FileType.PNNL_IMS);
+            RawData = new clsRawData(filePath, FileType.PNNL_IMS);
 #pragma warning restore 618
             MinLCScan = GetMinPossibleLCScanNum();
             MaxLCScan = GetMaxPossibleLCScanNum();

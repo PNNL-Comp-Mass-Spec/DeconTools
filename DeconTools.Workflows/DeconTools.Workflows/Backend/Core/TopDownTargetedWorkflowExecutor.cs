@@ -184,7 +184,7 @@ namespace DeconTools.Workflows.Backend.Core
 
                 }
 
-                var outputDebugFolder = Path.Combine(ExecutorParameters.OutputFolderBase, "Testing");
+                var outputDebugFolder = Path.Combine(ExecutorParameters.OutputDirectoryBase, "Testing");
                 if (!Directory.Exists(outputDebugFolder)) Directory.CreateDirectory(outputDebugFolder);
 
                 var chromDataFilename = Path.Combine(outputDebugFolder, "chromData_" + counter.ToString("0").PadLeft(4, '0') + ".txt");
@@ -211,13 +211,13 @@ namespace DeconTools.Workflows.Backend.Core
         {
             string resultsDirectoryPath;
 
-            if (string.IsNullOrEmpty(ExecutorParameters.OutputFolderBase))
+            if (string.IsNullOrEmpty(ExecutorParameters.OutputDirectoryBase))
             {
-                resultsDirectoryPath = RunUtilities.GetDatasetParentFolder(DatasetPath);
+                resultsDirectoryPath = RunUtilities.GetDatasetParentDirectory(DatasetPath);
             }
             else
             {
-                resultsDirectoryPath = Path.Combine(ExecutorParameters.OutputFolderBase, "IqResults");
+                resultsDirectoryPath = Path.Combine(ExecutorParameters.OutputDirectoryBase, "IqResults");
             }
 
             if (!Directory.Exists(resultsDirectoryPath)) Directory.CreateDirectory(resultsDirectoryPath);

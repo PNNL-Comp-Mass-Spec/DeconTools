@@ -24,25 +24,25 @@ namespace DeconTools.Backend.Runs
         }
 
         /// <summary>
-        /// Agilent XCT .D datafolder
+        /// Agilent XCT .D directory
         /// </summary>
-        /// <param name="dataFileName">The name of the Agilent data folder. Folder has a '.d' suffix</param>
+        /// <param name="dataFileName">The name of the Agilent data directory; it has a '.d' suffix</param>
         public AgilentDRun(string dataFileName)
             : this()
         {
             var dirInfo = new DirectoryInfo(dataFileName);
             var fileInfo = new FileInfo(dataFileName);
 
-            Check.Require(!fileInfo.Exists, "Dataset's inputted name refers to a file, but should refer to a Folder");
+            Check.Require(!fileInfo.Exists, "Dataset's inputted name refers to a file, but should refer to a directory");
             Check.Require(dirInfo.Exists, "Dataset not found.");
 
-            Check.Require(dirInfo.FullName.EndsWith("d", StringComparison.OrdinalIgnoreCase), "Agilent_D dataset folders must end with with the suffix '.d'. Check your folder name.");
+            Check.Require(dirInfo.FullName.EndsWith("d", StringComparison.OrdinalIgnoreCase), "Agilent_D dataset directories must end with with the suffix '.d'. Check your directory name.");
 
 
-            Filename = dirInfo.FullName;
+            DatasetFileOrDirectoryPath = dirInfo.FullName;
             DatasetName = dirInfo.Name.Substring(0, dirInfo.Name.LastIndexOf(".d", StringComparison.OrdinalIgnoreCase));
             //get dataset name without .d extension
-            DataSetPath = dirInfo.FullName;
+            DatasetDirectoryPath = dirInfo.FullName;
 
             OpenDataset();
 
@@ -62,11 +62,8 @@ namespace DeconTools.Backend.Runs
         private void OpenDataset()
         {
             m_reader = new MassSpecDataReader();
-            m_reader.OpenDataFile(Filename);
+            m_reader.OpenDataFile(DatasetFileOrDirectoryPath);
         }
-
-
-
 
         #endregion
 

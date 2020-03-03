@@ -20,39 +20,38 @@ namespace DeconTools.Backend.Runs
         }
 
 
-        public BrukerTOF(string folderName)
+        public BrukerTOF(string directoryPath)
             : this()
         {
 
-            if (!Directory.Exists(folderName))
+            if (!Directory.Exists(directoryPath))
             {
                 throw new DirectoryNotFoundException(
-                    "Could not create Bruker dataset. Folder path does not exist. Ensure you are pointing to parent folder that contains the raw MS files (eg analysis.baf)");
+                    "Could not create Bruker dataset.  Path " + directoryPath + " does not exist. Ensure you are pointing to a directory that contains the raw MS files (e.g. analysis.baf)");
 
             }
 
-            bool isDir;
+            bool isDirectory;
 
             try
             {
-                isDir = (File.GetAttributes(folderName) & FileAttributes.Directory) == FileAttributes.Directory;
+                isDirectory = (File.GetAttributes(directoryPath) & FileAttributes.Directory) == FileAttributes.Directory;
 
             }
             catch (Exception exception)
             {
 
-                throw new IOException("Could not create Bruker dataset. Folder path " + folderName + " does not exist. Ensure you are pointing to parent folder that contains the raw MS files (eg analysis.baf)", exception);
+                throw new IOException("Could not create Bruker dataset. Path " + directoryPath + " does not exist. Ensure you are pointing to a directory that contains the raw MS files (e.g. analysis.baf)", exception);
 
             }
 
-
             _msAnalysis = new MSAnalysis();
-            _msAnalysis.Open(folderName);
+            _msAnalysis.Open(directoryPath);
 
-            Filename = folderName;
+            DatasetFileOrDirectoryPath = directoryPath;
             _spectrumCollection = _msAnalysis.MSSpectrumCollection;
-            DatasetName = GetDatasetName(Filename);
-            DataSetPath = GetDatasetFolderName(Filename);
+            DatasetName = GetDatasetName(DatasetFileOrDirectoryPath);
+            DatasetDirectoryPath = GetDatasetDirectoryPath(DatasetFileOrDirectoryPath);
 
             MinLCScan = GetMinPossibleLCScanNum();
             MaxLCScan = GetMaxPossibleLCScanNum();
@@ -141,7 +140,7 @@ namespace DeconTools.Backend.Runs
             return dirInfo.Name;
         }
 
-        private string GetDatasetFolderName(string fullFolderPath)
+        private string GetDatasetDirectoryPath(string fullFolderPath)
         {
             var dirInfo = new DirectoryInfo(fullFolderPath);
             return dirInfo.FullName;

@@ -68,7 +68,7 @@ namespace DeconTools.Backend.FileIO
                 throw;
             }
 
-            PossiblyCreateFolder(FileName);
+            PossiblyCreateDirectory(FileName);
 
             using (var writer = File.AppendText(FileName))
             {
@@ -106,7 +106,7 @@ namespace DeconTools.Backend.FileIO
         #region Private Methods
 
 
-        private void PossiblyCreateFolder(string filePath)
+        private void PossiblyCreateDirectory(string filePath)
         {
             var fiFile = new FileInfo(filePath);
             var diDirectory = fiFile.Directory;

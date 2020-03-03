@@ -34,8 +34,8 @@ namespace DeconTools.Backend.Workflows
 
         #region Constructors
 
-        public SaturationIMSScanBasedWorkflow(DeconToolsParameters parameters, Run run, string outputFolderPath = null, BackgroundWorker backgroundWorker = null)
-            : base(parameters, run, outputFolderPath, backgroundWorker)
+        public SaturationIMSScanBasedWorkflow(DeconToolsParameters parameters, Run run, string outputDirectoryPath = null, BackgroundWorker backgroundWorker = null)
+            : base(parameters, run, outputDirectoryPath, backgroundWorker)
         {
             Check.Require(run is UIMFRun, "Cannot create workflow. Run is required to be a UIMFRun for this type of workflow");
 
@@ -174,10 +174,9 @@ namespace DeconTools.Backend.Workflows
 
                     // Note: the deconvolutor automatically increases the MSFeatureCounter.
                     // Here, we don't want this, since this data is used only for saturation correction,
-                    // not for generating the official MSFeatures list. So we need to
-                    // correct the MSFeatureCounter value.
-                    Run.ResultCollection.MSFeatureCounter = Run.ResultCollection.MSFeatureCounter -
-                                                            Run.ResultCollection.IsosResultBin.Count;
+                    // not for generating the official MSFeatures list.
+                    // Thus, we need to correct the MSFeatureCounter value.
+                    Run.ResultCollection.MSFeatureCounter -= Run.ResultCollection.IsosResultBin.Count;
 
                     _unsummedMSFeatures.AddRange(Run.ResultCollection.IsosResultBin);
 

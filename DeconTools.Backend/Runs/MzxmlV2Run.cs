@@ -13,15 +13,12 @@ namespace DeconTools.Backend.Runs
 
         }
 
-
-        public MzxmlV2Run(string fileName)
+        public MzxmlV2Run(string datasetFilePath)
             : this()
         {
             MSFileType = Globals.MSFileType.MZXML_Rawdata;
 
-
-            Filename = fileName;
-
+            DatasetFileOrDirectoryPath = datasetFilePath;
 
             MinLCScan = GetMinPossibleLCScanNum();
             MaxLCScan = GetMaxPossibleLCScanNum();

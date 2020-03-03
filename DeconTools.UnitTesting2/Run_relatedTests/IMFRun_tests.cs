@@ -16,7 +16,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         {
             Run run = new IMFRun(FileRefs.RawDataMSFiles.IMFStdFile1);
 
-            Assert.AreEqual(Path.GetDirectoryName(FileRefs.RawDataMSFiles.IMFStdFile1), run.DataSetPath);
+            Assert.AreEqual(Path.GetDirectoryName(FileRefs.RawDataMSFiles.IMFStdFile1), run.DatasetDirectoryPath);
             Assert.AreEqual("50ugpmlBSA_CID_QS_16V_0000.Accum_1", run.DatasetName);
         }
 

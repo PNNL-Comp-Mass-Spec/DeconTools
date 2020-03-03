@@ -145,7 +145,7 @@ namespace DeconTools.UnitTesting2
             var yvals = resultCollection.Run.XYData.Yvalues;
 
             var sb = new StringBuilder();
-            sb.Append("--------- XYData found in Run " + resultCollection.Run.Filename + "-----------------\n");
+            sb.Append("--------- XYData found in Run " + resultCollection.Run.DatasetFileOrDirectoryPath + "-----------------\n");
             for (var i = 0; i < xvals.Length; i++)
             {
                 if (xvals[i] >= lowerX && xvals[i] <= upperX)
@@ -252,7 +252,7 @@ namespace DeconTools.UnitTesting2
 
             sb.Append("Dataset name = " + run.DatasetName);
             sb.Append(delim);
-            sb.Append("Datatset path = " + run.DataSetPath);
+            sb.Append("Datatset path = " + run.DatasetDirectoryPath);
             sb.Append(delim);
             sb.Append("MinScan = " + run.MinLCScan);
             sb.Append(delim);

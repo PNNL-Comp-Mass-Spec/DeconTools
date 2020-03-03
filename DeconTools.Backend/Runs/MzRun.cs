@@ -25,17 +25,17 @@ namespace DeconTools.Backend.Runs
             XYData = new XYData();
         }
 
-        public MzRun(string fileName)
+        public MzRun(string datasetFilePath)
             : this()
         {
-            var fileInfo = new FileInfo(fileName);
+            var fileInfo = new FileInfo(datasetFilePath);
 
             if (!fileInfo.Exists)
             {
-                throw new FileNotFoundException("Cannot initialize Run. File not found: " + fileName);
+                throw new FileNotFoundException("Cannot initialize Run. File not found: " + datasetFilePath);
             }
 
-            var fileExtension = Path.GetExtension(fileName).ToLower();
+            var fileExtension = Path.GetExtension(datasetFilePath).ToLower();
 
             switch (fileExtension)
             {
@@ -52,12 +52,12 @@ namespace DeconTools.Backend.Runs
                     throw new IOException("Cannot initialize Run. File extension " + fileExtension + " isn't supported. The following file extensions are supported: mzXML, mzML, and mz5");
             }
 
-            Filename = fileName;
-            var baseFilename = Path.GetFileName(Filename);
+            DatasetFileOrDirectoryPath = datasetFilePath;
+            var baseFilename = Path.GetFileName(DatasetFileOrDirectoryPath);
             DatasetName = baseFilename.Substring(0, baseFilename.LastIndexOf('.'));
-            DataSetPath = Path.GetDirectoryName(Filename);
+            DatasetDirectoryPath = Path.GetDirectoryName(DatasetFileOrDirectoryPath);
 
-            _reader = new pwiz.ProteowizardWrapper.MSDataFileReader(fileName);
+            _reader = new pwiz.ProteowizardWrapper.MSDataFileReader(datasetFilePath);
 
             MinLCScan = GetMinPossibleLCScanNum();
             MaxLCScan = GetMaxPossibleLCScanNum();

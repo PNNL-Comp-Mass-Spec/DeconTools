@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data;
 using System.Data.Common;
 using System.IO;
 using System.Linq;
@@ -13,8 +14,6 @@ namespace DeconTools.Workflows.Backend.Core
 {
     public sealed class SipperWorkflowExecutor : TargetedWorkflowExecutor
     {
-
-
 
         #region Properties
 
@@ -32,7 +31,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         #endregion
 
-        public SipperWorkflowExecutor(WorkflowExecutorBaseParameters parameters, string datasetPath, BackgroundWorker backgroundWorker = null)
+        public SipperWorkflowExecutor(WorkflowParameters parameters, string datasetPath, BackgroundWorker backgroundWorker = null)
             : base(parameters, datasetPath, backgroundWorker)
         {
 
@@ -55,7 +54,7 @@ namespace DeconTools.Workflows.Backend.Core
             var massTagIDsForFiltering =
                 GetMassTagsToFilterOn(((SipperWorkflowExecutorParameters)WorkflowParameters).TargetsToFilterOn).Distinct().ToList();
 
-            _loggingFileName = Path.Combine(ExecutorParameters.OutputFolderBase, "Logs", RunUtilities.GetDatasetName(DatasetPath) + "_log.txt");
+            _loggingFileName = Path.Combine(ExecutorParameters.OutputDirectoryBase, "Logs", RunUtilities.GetDatasetName(DatasetPath) + "_log.txt");
 
 
             TargetsAreFromPeakMatchingDataBase = (!string.IsNullOrEmpty(db) && !string.IsNullOrEmpty(server));
@@ -106,18 +105,18 @@ namespace DeconTools.Workflows.Backend.Core
 
 
 
-            MassTagIDsinTargets = Targets.TargetList.Select(p => (long)((LcmsFeatureTarget)p).FeatureToMassTagID).Where(n => n > 0).ToList();
+            MassTagIDsInTargets = Targets.TargetList.Select(p => (long)((LcmsFeatureTarget)p).FeatureToMassTagID).Where(n => n > 0).ToList();
 
             if (TargetsAreFromPeakMatchingDataBase)
             {
-                var mtImporter = new MassTagFromSqlDbImporter(db, server, MassTagIDsinTargets);
+                var mtImporter = new MassTagFromSqlDbImporter(db, server, MassTagIDsInTargets);
                 MassTagsForReference = mtImporter.Import();
             }
             else
             {
 
 
-                MassTagsForReference = GetMassTagTargets(((SipperWorkflowExecutorParameters)WorkflowParameters).ReferenceDataForTargets, MassTagIDsinTargets.Select(p => (int)p).ToList());
+                MassTagsForReference = GetMassTagTargets(((SipperWorkflowExecutorParameters)WorkflowParameters).ReferenceDataForTargets, MassTagIDsInTargets.Select(p => (int)p).ToList());
             }
 
             MassTagsForReference.TargetList = (from n in MassTagsForReference.TargetList
@@ -136,8 +135,7 @@ namespace DeconTools.Workflows.Backend.Core
             UpdateTargetMissingInfo();
 
 
-            _resultsFolder = GetResultsFolder(ExecutorParameters.OutputFolderBase);
-
+            _resultsDirectory = GetResultsDirectory(ExecutorParameters.OutputDirectoryBase);
 
             _workflowParameters = WorkflowParameters.CreateParameters(ExecutorParameters.WorkflowParameterFile);
             _workflowParameters.LoadParameters(ExecutorParameters.WorkflowParameterFile);
@@ -152,7 +150,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         private List<int> GetMassTagsToFilterOn(string fileRefForMassTagsToFilterOn)
         {
-            var masstagList = new List<int>();
+            var massTagList = new List<int>();
 
             var fileRefIsOk = !string.IsNullOrEmpty(fileRefForMassTagsToFilterOn) &&
                                File.Exists(fileRefForMassTagsToFilterOn);
@@ -163,21 +161,21 @@ namespace DeconTools.Workflows.Backend.Core
                     while (!reader.EndOfStream)
                     {
                         var line = reader.ReadLine();
-                        var parsedOK = Int32.TryParse(line, out var mtid);
+                        var parsedOK = int.TryParse(line, out var massTagID);
 
                         if (parsedOK)
                         {
-                            masstagList.Add(mtid);
+                            massTagList.Add(massTagID);
                         }
                         else
                         {
-                            masstagList.Add(-1);
+                            massTagList.Add(-1);
                         }
                     }
                 }
             }
 
-            return masstagList;
+            return massTagList;
         }
 
 
@@ -200,9 +198,7 @@ namespace DeconTools.Workflows.Backend.Core
 
                 using (var command = cnn.CreateCommand())
                 {
-                    string queryString;
-
-                    queryString =
+                    var queryString =
                         @"SELECT * FROM " + table + " ORDER BY Dataset,UMC_Ind";
 
                     command.CommandText = queryString;
@@ -240,9 +236,7 @@ namespace DeconTools.Workflows.Backend.Core
 
                 using (var command = cnn.CreateCommand())
                 {
-                    string queryString;
-
-                    queryString =
+                    var queryString =
                         @"SELECT * FROM " + table + " where Dataset = '" +
                         datasetName + "' ORDER BY UMC_Ind";
 
@@ -259,12 +253,7 @@ namespace DeconTools.Workflows.Backend.Core
             }
 
             return targetCollection;
-
-
         }
-
-
-
 
         private string buildConnectionString()
         {
@@ -272,17 +261,19 @@ namespace DeconTools.Workflows.Backend.Core
             var server = ((SipperWorkflowExecutorParameters)WorkflowParameters).DbServer;
 
 
-            var builder = new System.Data.SqlClient.SqlConnectionStringBuilder();
-            builder.UserID = "mtuser";
-            builder.DataSource = server;
-            builder.Password = "mt4fun";
-            builder.InitialCatalog = db;
-            builder.ConnectTimeout = 5;
+            var builder = new System.Data.SqlClient.SqlConnectionStringBuilder
+            {
+                UserID = "mtuser",
+                DataSource = server,
+                Password = "mt4fun",
+                InitialCatalog = db,
+                ConnectTimeout = 5
+            };
 
             return builder.ConnectionString;
         }
 
-        private double readDouble(DbDataReader reader, string columnName, double defaultVal = 0)
+        private double readDouble(IDataRecord reader, string columnName, double defaultVal = 0)
         {
             if (!reader[columnName].Equals(DBNull.Value))
             {
@@ -294,7 +285,7 @@ namespace DeconTools.Workflows.Backend.Core
             }
         }
 
-        private float readFloat(DbDataReader reader, string columnName, float defaultVal = 0f)
+        private float readFloat(IDataRecord reader, string columnName, float defaultVal = 0f)
         {
             if (!reader[columnName].Equals(DBNull.Value))
             {
@@ -306,7 +297,7 @@ namespace DeconTools.Workflows.Backend.Core
             }
         }
 
-        private string readString(DbDataReader reader, string columnName, string defaultVal = "")
+        private string readString(IDataRecord reader, string columnName, string defaultVal = "")
         {
 
             if (!reader[columnName].Equals(DBNull.Value))
@@ -319,7 +310,7 @@ namespace DeconTools.Workflows.Backend.Core
             }
         }
 
-        private int readInt(DbDataReader reader, string columnName, int defaultVal = 0)
+        private int readInt(IDataRecord reader, string columnName, int defaultVal = 0)
         {
 
             if (!reader[columnName].Equals(DBNull.Value))
@@ -337,15 +328,13 @@ namespace DeconTools.Workflows.Backend.Core
 
             while (reader.Read())
             {
-                var result = new LcmsFeatureTarget();
-
-
-                result.ID = readInt(reader, "UMC_Ind");
-                result.FeatureToMassTagID = readInt(reader, "Mass_Tag_ID");
-
-                result.ChargeState = (short)readInt(reader, "Class_Stats_Charge_Basis");
-
-                result.MonoIsotopicMass = readDouble(reader, "Class_Mass");
+                var result = new LcmsFeatureTarget
+                {
+                    ID = readInt(reader, "UMC_Ind"),
+                    FeatureToMassTagID = readInt(reader, "Mass_Tag_ID"),
+                    ChargeState = (short)readInt(reader, "Class_Stats_Charge_Basis"),
+                    MonoIsotopicMass = readDouble(reader, "Class_Mass")
+                };
 
                 result.MZ = result.MonoIsotopicMass / result.ChargeState + 1.00727649;
                 result.NormalizedElutionTime = readFloat(reader, "ElutionTime");
@@ -356,11 +345,6 @@ namespace DeconTools.Workflows.Backend.Core
                 targetCollection.TargetList.Add(result);
             }
         }
-
-
-
-
-
 
     }
 }

@@ -16,7 +16,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             var parameters = new SipperWorkflowExecutorParameters
             {
                 DeleteLocalDatasetAfterProcessing = false,
-                FolderPathForCopiedRawDataset = string.Empty,
+                LocalDirectoryPathForCopiedRawDataset = string.Empty,
                 ReferenceDataForTargets = @"C:\Sipper\SipperDemo\SipperInputs\Sample_ReferenceDataForTargets.txt",
 #pragma warning disable 618
                 TargetedAlignmentIsPerformed = false,

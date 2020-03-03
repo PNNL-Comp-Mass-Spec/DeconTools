@@ -30,8 +30,8 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             Assert.AreEqual("Sarc_MS2_90_6Apr11_Cheetah_11-02-19", uimfRun.DatasetName);
 
             var currentUIMFFilePath = Path.GetDirectoryName(fileName);
-            Assert.AreEqual(currentUIMFFilePath, uimfRun.DataSetPath);
-            Assert.AreEqual(fileName, uimfRun.Filename);
+            Assert.AreEqual(currentUIMFFilePath, uimfRun.DatasetDirectoryPath);
+            Assert.AreEqual(fileName, uimfRun.DatasetFileOrDirectoryPath);
 
         }
 

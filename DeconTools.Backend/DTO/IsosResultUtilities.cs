@@ -173,12 +173,12 @@ namespace DeconTools.Backend.DTO
             return returnedResults;
         }
 
-        public List<IsosResult> getIMFResults(string imfInputFolder, int minFrame, int maxFrame)
+        public List<IsosResult> getIMFResults(string imfInputDirectory, int minFrame, int maxFrame)
         {
             var returnedResults = new List<IsosResult>();
 
-            var imfFolder = new DirectoryInfo(imfInputFolder);
-            var files = imfFolder.GetFiles("*_isos.csv");
+            var imfDirectory = new DirectoryInfo(imfInputDirectory);
+            var files = imfDirectory.GetFiles("*_isos.csv");
 
             foreach (var file in files)
             {

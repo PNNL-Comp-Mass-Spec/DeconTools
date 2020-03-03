@@ -29,11 +29,11 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
             executorBaseParameters.ChromGenSourceDataPeakBR = 3;
             executorBaseParameters.ChromGenSourceDataSigNoise = 2;
             executorBaseParameters.TargetsFilePath = targetsFile;
-            executorBaseParameters.OutputFolderBase =
+            executorBaseParameters.OutputDirectoryBase =
                 @"\\protoapps\UserData\Fujimoto\SangtaeBottomUp\Results";
 
 
-            var expectedResultsFilename = Path.Combine(executorBaseParameters.OutputFolderBase,
+            var expectedResultsFilename = Path.Combine(executorBaseParameters.OutputDirectoryBase,
                                                           "IqResults",
                                                           RunUtilities.GetDatasetName(testFile) + "_iqResults.txt");
             if (File.Exists(expectedResultsFilename)) File.Delete(expectedResultsFilename);

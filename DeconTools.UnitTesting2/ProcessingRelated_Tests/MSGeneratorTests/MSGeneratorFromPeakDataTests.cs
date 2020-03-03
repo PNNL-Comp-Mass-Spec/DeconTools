@@ -19,8 +19,8 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSGeneratorTests
         public void GenerateSyntheticMSBasedOnPeakDataTest1()
         {
 
-            var fileOutput_xyvalsBefore = FileRefs.OutputFolderPath + "MENDData_scan311_before.txt";
-            var fileOutput_xyvalsAfter = FileRefs.OutputFolderPath + "MENDData_scan311_after.txt";
+            var fileOutput_xyvalsBefore = FileRefs.OutputDirectoryPath + "MENDData_scan311_before.txt";
+            var fileOutput_xyvalsAfter = FileRefs.OutputDirectoryPath + "MENDData_scan311_after.txt";
 
             Run run = new YAFMSRun(m_testFile);
 

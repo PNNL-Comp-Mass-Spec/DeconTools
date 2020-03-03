@@ -66,12 +66,12 @@ namespace DeconTools.Backend.Utilities
 
 
         /// <summary>
-        /// Returns 'true' if Dataset is stored as a windows Folder/Directory  (e.g. Agilent.D mass spec data)
-        /// Returns 'false' if Dataset is started as a standard Windows file  (e.g. Thermo .raw file)
+        /// Returns 'true' if Dataset is stored as directory  (e.g. Agilent.D mass spec data)
+        /// Returns 'false' if Dataset is started as a file  (e.g. Thermo .raw file)
         /// </summary>
         /// <param name="datasetPath"></param>
         /// <returns></returns>
-        public static bool DatasetIsFolderStyle(string datasetPath)
+        public static bool DatasetIsDirectoryStyle(string datasetPath)
         {
             var attr = File.GetAttributes(datasetPath);
 
@@ -106,27 +106,25 @@ namespace DeconTools.Backend.Utilities
             return File.Exists(datasetPath);
         }
 
-        public static string GetDatasetParentFolder(string datasetPath)
+        public static string GetDatasetParentDirectory(string datasetPath)
         {
-            string datasetFolderPath;
+            string datasetDirectoryPath;
 
             var attr = File.GetAttributes(datasetPath);
 
             if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
             {
                 var sourceDirInfo = new DirectoryInfo(datasetPath);
-                datasetFolderPath = sourceDirInfo.FullName;
+                datasetDirectoryPath = sourceDirInfo.FullName;
             }
             else
             {
-                datasetFolderPath = Path.GetDirectoryName(datasetPath);
+                datasetDirectoryPath = Path.GetDirectoryName(datasetPath);
             }
 
-            return datasetFolderPath;
+            return datasetDirectoryPath;
 
         }
-
-
 
         public static Run CreateAndAlignRun(string filename)
         {
@@ -159,31 +157,31 @@ namespace DeconTools.Backend.Utilities
 
         #endregion
 
-        public static bool AlignRunUsingAlignmentInfoInFiles(Run run, string alignmentDataFolder="")
+        public static bool AlignRunUsingAlignmentInfoInFiles(Run run, string alignmentDataDirectory = "")
         {
             bool alignmentSuccessful;
 
 
             string basePath;
-            if (string.IsNullOrEmpty(alignmentDataFolder))
+            if (string.IsNullOrEmpty(alignmentDataDirectory))
             {
-                basePath= run.DataSetPath;
+                basePath = run.DatasetDirectoryPath;
             }
             else
             {
-                if (Directory.Exists(alignmentDataFolder))
+                if (Directory.Exists(alignmentDataDirectory))
                 {
-                    basePath = alignmentDataFolder;
+                    basePath = alignmentDataDirectory;
                 }
                 else
                 {
                     throw new DirectoryNotFoundException(
-                        "Cannot align dataset. Source alignment folder does not exist. Alignment folder = " +
-                        alignmentDataFolder);
+                        "Cannot align dataset. Source alignment directory does not exist. Alignment directory = " +
+                        alignmentDataDirectory);
                 }
             }
 
-            var expectedMZAlignmentFile = Path.Combine(basePath,  run.DatasetName + "_MZAlignment.txt");
+            var expectedMZAlignmentFile = Path.Combine(basePath, run.DatasetName + "_MZAlignment.txt");
             var expectedNETAlignmentFile = Path.Combine(basePath, run.DatasetName + "_NETAlignment.txt");
 
             //first will try to load the multiAlign alignment info
@@ -207,7 +205,7 @@ namespace DeconTools.Backend.Utilities
                 netAlignmentInfo.SetScanToNETAlignmentData(scanNETList);
 
                 run.NetAlignmentInfo = netAlignmentInfo;
-                }
+            }
 
             //if still not aligned, try to get the NET alignment from UMCs file. (this is the older way to do it)
             if (run.NETIsAligned)
@@ -240,7 +238,7 @@ namespace DeconTools.Backend.Utilities
                     Console.WriteLine(run.DatasetName + " aligned.");
                     alignmentSuccessful = true;
                 }
-                else if (umcFileCount>1)
+                else if (umcFileCount > 1)
                 {
                     var expectedUMCName = Path.Combine(basePath, run.DatasetName + "_UMCs.txt");
 
@@ -276,7 +274,7 @@ namespace DeconTools.Backend.Utilities
             }
 
             //mass is still not aligned... use data in viper output file: _MassAndGANETErrors_BeforeRefinement.txt
-            if (run.MassIsAligned==false)
+            if (run.MassIsAligned == false)
             {
                 var expectedViperMassAlignmentFile = Path.Combine(basePath, run.DatasetName + "_MassAndGANETErrors_BeforeRefinement.txt");
 
@@ -307,17 +305,16 @@ namespace DeconTools.Backend.Utilities
 
 
 
-        public static Run CreateAndAlignRun(string filename, string peaksFile)
+        public static Run CreateAndAlignRun(string fileOrDirectoryPath, string peaksFile)
         {
 
-            var folderExists = Directory.Exists(filename);
-            var fileExists = File.Exists(filename);
+            var directoryExists = Directory.Exists(fileOrDirectoryPath);
+            var fileExists = File.Exists(fileOrDirectoryPath);
 
-
-            Check.Require(folderExists||fileExists, "Dataset file not found error when RunUtilities tried to create Run.");
+            Check.Require(directoryExists || fileExists, "Dataset file (or directory) not found error when RunUtilities tried to create Run.");
 
             var rf = new RunFactory();
-            var run = rf.CreateRun(filename);
+            var run = rf.CreateRun(fileOrDirectoryPath);
 
             Check.Ensure(run != null, "RunUtilities could not create run. Run is null.");
 
@@ -331,7 +328,7 @@ namespace DeconTools.Backend.Utilities
             if (string.IsNullOrEmpty(peaksFile))
             {
                 // ReSharper disable once PossibleNullReferenceException (already checked for null above)
-                sourcePeaksFile = Path.Combine(run.DataSetPath, run.DatasetName + "_peaks.txt");
+                sourcePeaksFile = Path.Combine(run.DatasetDirectoryPath, run.DatasetName + "_peaks.txt");
             }
             else
             {
@@ -361,7 +358,7 @@ namespace DeconTools.Backend.Utilities
             string sourcePeaksFile;
             if (string.IsNullOrEmpty(peaksTestFile))
             {
-                sourcePeaksFile = Path.Combine(run.DataSetPath, run.DatasetName + "_peaks.txt");
+                sourcePeaksFile = Path.Combine(run.DatasetDirectoryPath, run.DatasetName + "_peaks.txt");
             }
             else
             {

@@ -32,7 +32,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             Assert.AreEqual(18504, run.MaxLCScan);
 
             Assert.AreEqual("QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18", run.DatasetName);
-            Assert.AreEqual(@"\\proto-2\unitTest_Files\DeconTools_TestFiles\mzXML", run.DataSetPath);
+            Assert.AreEqual(@"\\proto-2\unitTest_Files\DeconTools_TestFiles\mzXML", run.DatasetDirectoryPath);
 
         }
 

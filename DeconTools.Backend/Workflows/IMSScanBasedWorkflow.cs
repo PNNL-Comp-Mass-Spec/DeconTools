@@ -18,8 +18,8 @@ namespace DeconTools.Backend.Workflows
 
         #region Constructors
 
-        internal IMSScanBasedWorkflow(DeconToolsParameters parameters, Run run, string outputFolderPath = null, BackgroundWorker backgroundWorker = null)
-            : base(parameters, run, outputFolderPath, backgroundWorker)
+        internal IMSScanBasedWorkflow(DeconToolsParameters parameters, Run run, string outputDirectoryPath = null, BackgroundWorker backgroundWorker = null)
+            : base(parameters, run, outputDirectoryPath, backgroundWorker)
         {
             DeconTools.Utilities.Check.Require(run is UIMFRun, "Cannot create workflow. Run is required to be a UIMFRun for this type of workflow");
 

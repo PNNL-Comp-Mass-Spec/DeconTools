@@ -36,35 +36,33 @@ namespace DeconConsole
                 return 1;
             }
 
-            var filename = args[0];
-            var parameterFilename = args[1];
+            var datasetFileOrDirectoryPath = args[0];
+            var parameterFilePath = args[1];
 
-            string outputFolder = null;
+            string outputDirectory = null;
             if (args.Length == 3)
             {
-                outputFolder = args[2];
+                outputDirectory = args[2];
 
-                if (string.IsNullOrWhiteSpace(outputFolder))
+                if (string.IsNullOrWhiteSpace(outputDirectory))
                 {
                     return 2;
                 }
 
-                if (!Directory.Exists(outputFolder))
+                if (!Directory.Exists(outputDirectory))
                 {
-
-                    Console.WriteLine("Output folder doesn't exist. Will try to create one...");
+                    Console.WriteLine("Output directory doesn't exist. Will try to create one...");
                     try
                     {
-                        Directory.CreateDirectory(outputFolder);
-                        Console.WriteLine("Output folder created. " + outputFolder);
+                        Directory.CreateDirectory(outputDirectory);
+                        Console.WriteLine("Output directory created. " + outputDirectory);
 
                     }
                     catch (Exception exception)
                     {
 
-                        Console.WriteLine("ERROR! Couldn't create output folder (" + outputFolder + "): " + exception.Message);
+                        Console.WriteLine("ERROR! Couldn't create output directory (" + outputDirectory + "): " + exception.Message);
                         return 3;
-
                     }
                 }
 
@@ -86,7 +84,7 @@ namespace DeconConsole
 
             try
             {
-                var workflow = ScanBasedWorkflow.CreateWorkflow(filename, parameterFilename, outputFolder);
+                var workflow = ScanBasedWorkflow.CreateWorkflow(datasetFileOrDirectoryPath, parameterFilePath, outputDirectory);
                 workflow.Execute();
             }
             catch (Exception ex)
@@ -121,35 +119,43 @@ namespace DeconConsole
             return 0;
         }
 
-        private static void ReportFileProblem(string filename, string fileDescription)
+        private static void ReportFileProblem(string fileOrDirectoryPath, string fileDescription)
         {
             Console.WriteLine("------------- ERROR! ---------------------");
-            Console.WriteLine(string.IsNullOrEmpty(filename)
+            Console.WriteLine(string.IsNullOrEmpty(fileOrDirectoryPath)
                                   ? "The path of your " + fileDescription + " has no characters!"
-                                  : fileDescription + " not found: " + filename);
+                                  : fileDescription + " not found: " + fileOrDirectoryPath);
             Console.WriteLine();
 
             System.Threading.Thread.Sleep(1500);
         }
 
-        private static bool IsFileValid(string filename)
+        private static bool IsFileValid(string datasetFileOrDirectoryPath, out FileSystemInfo fileOrDirectory)
         {
             try
             {
-                var fiFile = new FileInfo(filename);
-                var diFolder = new DirectoryInfo(filename);
+                var candidateFile = new FileInfo(datasetFileOrDirectoryPath);
+                var candidateDirectory = new DirectoryInfo(datasetFileOrDirectoryPath);
 
-                if (fiFile.Exists)
+                if (candidateFile.Exists)
+                {
+                    fileOrDirectory = candidateFile;
                     return true;
+                }
 
-                if (diFolder.Exists)
+                if (candidateDirectory.Exists)
+                {
+                    fileOrDirectory = candidateDirectory;
                     return true;
+                }
 
+                fileOrDirectory = null;
                 return false;
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Filename validation error: " + ex.Message);
+                Console.WriteLine("Dataset file/directory validation error: " + ex.Message);
+                fileOrDirectory = null;
                 return false;
             }
         }
@@ -165,9 +171,9 @@ namespace DeconConsole
 
             Console.WriteLine();
             Console.WriteLine("This program will accept 2 or 3 arguments (with spaces between).");
-            Console.WriteLine("  Arg1 = filename");
+            Console.WriteLine("  Arg1 = instrument data filename");
             Console.WriteLine("  Arg2 = parameter filename");
-            Console.WriteLine("  Arg3 = [optional] output folder  [Default = same as raw data folder]");
+            Console.WriteLine("  Arg3 = [optional] output directory  [Default = same as directory with the instrument data]");
             Console.WriteLine();
             Console.WriteLine("Example usage:");
             Console.WriteLine("  " + exeName + " QCDataset.raw SampleParameterFile.xml");

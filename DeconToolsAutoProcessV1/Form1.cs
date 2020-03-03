@@ -17,7 +17,7 @@ namespace DeconToolsAutoProcessV1
     {
         string[] _inputFileList;
         string _parameterFileName;
-        string _startingFolderPath;
+        string _startingDirectoryPath;
         private string _outputPath;
         BackgroundWorker _bw;
         bool _isRunMergingModeUsed;
@@ -45,12 +45,12 @@ namespace DeconToolsAutoProcessV1
         {
             try
             {
-                _startingFolderPath = Properties.Settings.Default.startingFolder;
+                _startingDirectoryPath = Properties.Settings.Default.startingFolder;
             }
             catch (Exception)
             {
 
-                _startingFolderPath = "";
+                _startingDirectoryPath = "";
             }
 
             _isRunMergingModeUsed = Properties.Settings.Default.MergeRuns;
@@ -109,7 +109,7 @@ namespace DeconToolsAutoProcessV1
 
         private string[] getInputFilenames()
         {
-            var frm = new MultiFileSelectionForm(_startingFolderPath, "*.*")
+            var frm = new MultiFileSelectionForm(_startingDirectoryPath, "*.*")
             {
                 Text = "Select files for processing...",
                 StartPosition = FormStartPosition.Manual,
@@ -118,8 +118,9 @@ namespace DeconToolsAutoProcessV1
 
             if (frm.ShowDialog() == DialogResult.OK)
             {
-                _startingFolderPath = frm.StartingFolderPath;
-                if (_startingFolderPath != null) Properties.Settings.Default.startingFolder = _startingFolderPath;
+                _startingDirectoryPath = frm.StartingFolderPath;
+                if (_startingDirectoryPath != null)
+                    Properties.Settings.Default.startingFolder = _startingDirectoryPath;
 
                 return frm.SelectedFileList.ToArray();
             }
@@ -156,7 +157,7 @@ namespace DeconToolsAutoProcessV1
 
             try
             {
-                TrySetOutputFolder();
+                TrySetOutputDirectory();
             }
             catch (Exception ex)
             {
@@ -236,7 +237,7 @@ namespace DeconToolsAutoProcessV1
 
             var currentState = (ScanBasedProgressInfo)(e.UserState);
 
-            txtFile.Text = Path.GetFileName(currentState.CurrentRun.Filename);
+            txtFile.Text = Path.GetFileName(currentState.CurrentRun.DatasetFileOrDirectoryPath);
 
             var numIsotopicProfilesFoundInScan = currentState.CurrentRun.ResultCollection.IsosResultBin.Count;
             progressBar2.Value = setProgress2Value(numIsotopicProfilesFoundInScan);
@@ -307,7 +308,7 @@ namespace DeconToolsAutoProcessV1
             }
             catch (COMException ex)
             {
-               // bool isFile =   RunUtilities.RunIsFileOrFolder(_currentFile);
+               // bool isFile =   RunUtilities.RunIsFileOrDirectory(_currentFile);
 
                 var errorMessage =
                     "A 'COMException' has occurred. This can happen when the vendor library has not been installed.\n\n";
@@ -364,7 +365,9 @@ namespace DeconToolsAutoProcessV1
         private void saveSettings()
         {
 
-            if (_startingFolderPath != null) Properties.Settings.Default.startingFolder = _startingFolderPath;
+            if (_startingDirectoryPath != null)
+                Properties.Settings.Default.startingFolder = _startingDirectoryPath;
+
             Properties.Settings.Default.MergeRuns = _isRunMergingModeUsed;
 
             Properties.Settings.Default.Save();
@@ -435,7 +438,7 @@ namespace DeconToolsAutoProcessV1
         }
 
 
-        private void TrySetOutputFolder()
+        private void TrySetOutputDirectory()
         {
             if (string.IsNullOrEmpty(txtOutputPath.Text))
             {

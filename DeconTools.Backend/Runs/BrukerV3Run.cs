@@ -30,11 +30,11 @@ namespace DeconTools.Backend.Runs
             ContainsMSMSData = false;
         }
 
-        public BrukerV3Run(string folderName)
+        public BrukerV3Run(string directoryPath)
             : this()
         {
-            ValidateSelectionIsFolder(folderName);
-            Filename = folderName;
+            ValidateSelectionIsFolder(directoryPath);
+            DatasetFileOrDirectoryPath = directoryPath;
 
             m_serFileInfo = findSerFile();
             m_fidFileInfo = findFIDFile();
@@ -84,8 +84,8 @@ namespace DeconTools.Backend.Runs
 
             m_rawDataReader.Parameters.Display();
 
-            DatasetName = GetDatasetName(Filename);
-            DataSetPath = GetDatasetFolderName(Filename);
+            DatasetName = GetDatasetName(DatasetFileOrDirectoryPath);
+            DatasetDirectoryPath = GetDatasetFolderName(DatasetFileOrDirectoryPath);
 
             MinLCScan = GetMinPossibleLCScanNum();
             MaxLCScan = GetMaxPossibleLCScanNum();
@@ -231,7 +231,7 @@ namespace DeconTools.Backend.Runs
         }
         private FileInfo findFIDFile()
         {
-            var fidFiles = Directory.GetFiles(Filename, "fid", SearchOption.AllDirectories);
+            var fidFiles = Directory.GetFiles(DatasetFileOrDirectoryPath, "fid", SearchOption.AllDirectories);
 
             if (fidFiles == null || fidFiles.Length == 0)
             {
@@ -248,7 +248,7 @@ namespace DeconTools.Backend.Runs
         }
         private FileInfo findSerFile()
         {
-            var serFiles = Directory.GetFiles(Filename, "ser", SearchOption.AllDirectories);
+            var serFiles = Directory.GetFiles(DatasetFileOrDirectoryPath, "ser", SearchOption.AllDirectories);
 
             if (serFiles == null || serFiles.Length == 0)
             {
@@ -278,7 +278,7 @@ namespace DeconTools.Backend.Runs
 
         private FileInfo findSettingsFile()
         {
-            var dotMethodFiles = Directory.GetFiles(Filename, "*.method", SearchOption.AllDirectories);
+            var dotMethodFiles = Directory.GetFiles(DatasetFileOrDirectoryPath, "*.method", SearchOption.AllDirectories);
 
             if (dotMethodFiles == null || dotMethodFiles.Length == 0)
             {
@@ -302,7 +302,7 @@ namespace DeconTools.Backend.Runs
 
         private FileInfo findAcqusFile()
         {
-            var acqusFiles = Directory.GetFiles(Filename, "acqus", SearchOption.AllDirectories);
+            var acqusFiles = Directory.GetFiles(DatasetFileOrDirectoryPath, "acqus", SearchOption.AllDirectories);
 
             if (acqusFiles == null || acqusFiles.Length == 0)
             {

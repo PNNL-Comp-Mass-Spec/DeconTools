@@ -37,19 +37,19 @@ namespace DeconTools.Workflows.Backend.Core
 
         public bool CopyRawFileLocal { get; set; }
         public bool DeleteLocalDatasetAfterProcessing { get; set; }
-        public string FolderPathForCopiedRawDataset { get; set; }
+        public string LocalDirectoryPathForCopiedRawDataset { get; set; }
 
-        protected string mOutputFolderBase;
-        public string OutputFolderBase
+        protected string mOutputDirectoryBase;
+        public string OutputDirectoryBase
         {
             get
             {
-                if (string.IsNullOrWhiteSpace(mOutputFolderBase))
+                if (string.IsNullOrWhiteSpace(mOutputDirectoryBase))
                     return string.Empty;
 
-                return mOutputFolderBase;
+                return mOutputDirectoryBase;
             }
-            set => mOutputFolderBase = value;
+            set => mOutputDirectoryBase = value;
         }
 
         /// <summary>

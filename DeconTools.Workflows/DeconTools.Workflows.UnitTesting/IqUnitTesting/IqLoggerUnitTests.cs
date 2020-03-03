@@ -28,7 +28,7 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
                 ChromGenSourceDataPeakBR = 3,
                 ChromGenSourceDataSigNoise = 2,
                 TargetsFilePath = targetsFile,
-                OutputFolderBase = resultsFolder
+                OutputDirectoryBase = resultsFolder
             };
 
             var run = new RunFactory().CreateRun(testFile);

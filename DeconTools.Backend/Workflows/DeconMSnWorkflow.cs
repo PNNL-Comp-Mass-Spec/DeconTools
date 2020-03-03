@@ -42,8 +42,8 @@ namespace DeconTools.Backend.Workflows
 
         #region Constructors
 
-        public DeconMSnWorkflow(DeconToolsParameters parameters, Run run, string outputFolderPath = null, BackgroundWorker backgroundWorker = null)
-            : base(parameters, run, outputFolderPath, backgroundWorker)
+        public DeconMSnWorkflow(DeconToolsParameters parameters, Run run, string outputDirectoryPath = null, BackgroundWorker backgroundWorker = null)
+            : base(parameters, run, outputDirectoryPath, backgroundWorker)
         {
             ToleranceInPPM = 30;
             NumMaxAttemptsAtLowIntensitySpecies = 4;

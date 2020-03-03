@@ -30,20 +30,20 @@ namespace DeconTools.Backend.Runs
 
         }
 
-        public XCaliburRun2(string filename)
+        public XCaliburRun2(string rawfilePath)
             : this()
         {
-            Check.Require(File.Exists(filename), "Run not initialized. File not found: " + filename);
+            Check.Require(File.Exists(rawfilePath), "Run not initialized. File not found: " + rawfilePath);
 
-            Filename = filename;
-            var baseFilename = Path.GetFileName(Filename);
+            DatasetFileOrDirectoryPath = rawfilePath;
+            var baseFilename = Path.GetFileName(DatasetFileOrDirectoryPath);
             if (baseFilename == null)
-                throw new FileNotFoundException("Unable to determine the filename for " + Filename);
+                throw new FileNotFoundException("Unable to determine the filename for " + rawfilePath);
 
             DatasetName = baseFilename.Substring(0, baseFilename.LastIndexOf('.'));
-            DataSetPath = Path.GetDirectoryName(filename);
+            DatasetDirectoryPath = Path.GetDirectoryName(rawfilePath);
 
-            _msFileReader.Open(Filename);
+            _msFileReader.Open(DatasetFileOrDirectoryPath);
             _msFileReader.SetCurrentController(0, 1);
 
             MinLCScan = 1;

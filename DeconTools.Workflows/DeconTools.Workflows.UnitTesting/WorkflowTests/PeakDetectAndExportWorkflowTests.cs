@@ -21,10 +21,10 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             parameters.LCScanMin = 5500;
             parameters.LCScanMax = 6500;
 
-            parameters.OutputFolder = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\TempOutput";
+            parameters.OutputDirectory = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\TempOutput";
 
 
-            var expectedPeaksFile = Path.Combine(parameters.OutputFolder, run.DatasetName + "_peaks.txt");
+            var expectedPeaksFile = Path.Combine(parameters.OutputDirectory, run.DatasetName + "_peaks.txt");
             if (File.Exists(expectedPeaksFile)) File.Delete(expectedPeaksFile);
 
 
@@ -89,7 +89,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             
 
 
-            var expectedPeaksFile = Path.Combine(run.DataSetPath, run.DatasetName + "_peaks.txt");
+            var expectedPeaksFile = Path.Combine(run.DatasetDirectoryPath, run.DatasetName + "_peaks.txt");
             if (File.Exists(expectedPeaksFile)) File.Delete(expectedPeaksFile);
 
 

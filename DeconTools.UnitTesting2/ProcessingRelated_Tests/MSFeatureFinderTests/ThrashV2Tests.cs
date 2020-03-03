@@ -296,11 +296,11 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
             Console.WriteLine("\n--------------Unique to new ------------------");
             TestUtilities.DisplayMSFeatures(uniqueToNew);
 
-            var diOutputFolder = new DirectoryInfo(@"C:\Temp\ThrashTesting");
-            if (!diOutputFolder.Exists)
-                diOutputFolder.Create();
+            var outputDirectory = new DirectoryInfo(@"C:\Temp\ThrashTesting");
+            if (!outputDirectory.Exists)
+                outputDirectory.Create();
 
-            var outputFilename = Path.Combine(diOutputFolder.FullName,  "exportedIsos.csv");
+            var outputFilename = Path.Combine(outputDirectory.FullName,  "exportedIsos.csv");
             var exporter = IsosExporterFactory.CreateIsosExporter(run.ResultCollection.ResultType, Globals.ExporterType.Text, outputFilename);
 
             exporter.ExportIsosResults(uniqueToNew);

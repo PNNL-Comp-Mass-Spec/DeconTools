@@ -100,7 +100,7 @@ namespace DeconTools.Backend.Workflows
             LcScanSetCollection = CreateLcScanSetCollection();
 
 
-            PrepareOutputFolder(WorkflowParameters.OutputFolder);
+            PrepareOutputDirectory(WorkflowParameters.OutputDirectory);
 
             var outputPeaksFilePath = getOutputPeaksFilename();
 
@@ -209,23 +209,23 @@ namespace DeconTools.Backend.Workflows
 
         protected IMSScanSetCollection IMSScanSetCollection { get; set; }
 
-        private void PrepareOutputFolder(string outputFolder)
+        private void PrepareOutputDirectory(string outputDirectoryPath)
         {
-            if (string.IsNullOrEmpty(outputFolder))
+            if (string.IsNullOrEmpty(outputDirectoryPath))
             {
                 return;
             }
 
-            if (!Directory.Exists(outputFolder))
+            if (!Directory.Exists(outputDirectoryPath))
             {
                 try
                 {
-                    Directory.CreateDirectory(outputFolder);
+                    Directory.CreateDirectory(outputDirectoryPath);
                 }
                 catch (Exception ex)
                 {
 
-                    throw new DirectoryNotFoundException("PeakExporter cannot create output folder.\n\nDetails: " + ex.Message, ex);
+                    throw new DirectoryNotFoundException("PeakExporter cannot create output directory.\n\nDetails: " + ex.Message, ex);
 
                 }
             }
@@ -249,13 +249,13 @@ namespace DeconTools.Backend.Workflows
         {
             string expectedPeaksFilename;
 
-            if (string.IsNullOrEmpty(WorkflowParameters.OutputFolder))
+            if (string.IsNullOrEmpty(WorkflowParameters.OutputDirectory))
             {
-                expectedPeaksFilename = Path.Combine(Run.DataSetPath, Run.DatasetName + "_peaks.txt");
+                expectedPeaksFilename = Path.Combine(Run.DatasetDirectoryPath, Run.DatasetName + "_peaks.txt");
             }
             else
             {
-                expectedPeaksFilename = Path.Combine(WorkflowParameters.OutputFolder, Run.DatasetName + "_peaks.txt");
+                expectedPeaksFilename = Path.Combine(WorkflowParameters.OutputDirectory, Run.DatasetName + "_peaks.txt");
             }
 
             return expectedPeaksFilename;

@@ -403,7 +403,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters
 
         private void LoadPeaks(Run run)
         {
-            var sourcePeaksFile = Path.Combine(run.DataSetPath, run.DatasetName + "_peaks.txt");    //FULL.txt";
+            var sourcePeaksFile = Path.Combine(run.DatasetDirectoryPath, run.DatasetName + "_peaks.txt");    //FULL.txt";
 
             RunUtilities.GetPeaks(run, sourcePeaksFile);
 

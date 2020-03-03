@@ -44,7 +44,7 @@ namespace DeconTools.UnitTesting2.Utilities
 
             var run = RunUtilities.CreateAndLoadPeaks(orbiFile, peaksFile);
 
-            var outputFile = Path.Combine(run.DataSetPath, run.DatasetName + "_sample3DelutionProfile.txt");
+            var outputFile = Path.Combine(run.DatasetDirectoryPath, run.DatasetName + "_sample3DelutionProfile.txt");
 
 
             Assert.IsNotNull(run);

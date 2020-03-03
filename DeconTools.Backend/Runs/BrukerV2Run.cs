@@ -21,7 +21,7 @@ namespace DeconTools.Backend.Runs
 
         //C++ engine calibration settings
 
-        #region Constructors
+#region Constructors
 
         public BrukerV2Run()
         {
@@ -36,7 +36,7 @@ namespace DeconTools.Backend.Runs
             : this()
         {
             validateSelectionIsFolder(folderName);
-            Filename = folderName;
+            DatasetFileOrDirectoryPath = folderName;
 
             var serFileInfo = findSerFile();
             var fidFileInfo = findFIDFile();
@@ -70,8 +70,8 @@ namespace DeconTools.Backend.Runs
 
             SettingsFilePath = settingsfileInfo.FullName;
 
-            DatasetName = GetDatasetName(Filename);
-            DataSetPath = GetDatasetFolderName(Filename);
+            DatasetName = GetDatasetName(DatasetFileOrDirectoryPath);
+            DatasetDirectoryPath = GetDatasetFolderName(DatasetFileOrDirectoryPath);
 
             loadSettings(SettingsFilePath);
 
@@ -106,7 +106,7 @@ namespace DeconTools.Backend.Runs
 
         private FileInfo findFIDFile()
         {
-            var fidFiles = Directory.GetFiles(Filename, "fid", SearchOption.AllDirectories);
+            var fidFiles = Directory.GetFiles(DatasetFileOrDirectoryPath, "fid", SearchOption.AllDirectories);
 
             if (fidFiles == null || fidFiles.Length == 0)
             {
@@ -124,7 +124,7 @@ namespace DeconTools.Backend.Runs
 
         private FileInfo findSettingsFile()
         {
-            var dotMethodFiles = Directory.GetFiles(Filename, "*.method", SearchOption.AllDirectories);
+            var dotMethodFiles = Directory.GetFiles(DatasetFileOrDirectoryPath, "*.method", SearchOption.AllDirectories);
 
             if (dotMethodFiles == null || dotMethodFiles.Length == 0)
             {
@@ -148,7 +148,7 @@ namespace DeconTools.Backend.Runs
 
         private FileInfo findSerFile()
         {
-            var serFiles = Directory.GetFiles(Filename, "ser", SearchOption.AllDirectories);
+            var serFiles = Directory.GetFiles(DatasetFileOrDirectoryPath, "ser", SearchOption.AllDirectories);
 
             if (serFiles == null || serFiles.Length == 0)
             {
@@ -164,9 +164,9 @@ namespace DeconTools.Backend.Runs
             throw new NotSupportedException("Multiple ser files were found within the dataset folder structure. This is not yet supported.");
         }
 
-        #endregion
+#endregion
 
-        #region Properties
+#region Properties
 
         /// <summary>
         /// .NET framework Calibration settings
@@ -194,9 +194,9 @@ namespace DeconTools.Backend.Runs
             set => rawData = value;
         }
 
-        #endregion
+#endregion
 
-        #region Public Methods
+#region Public Methods
 
         //NOTE: code duplication here... see BrukerRun too
         public override XYData GetMassSpectrum(ScanSet scanSet, double minMZ, double maxMZ)
@@ -279,9 +279,9 @@ namespace DeconTools.Backend.Runs
             return mslevel;
         }
 
-        #endregion
+#endregion
 
-        #region Private Methods
+#region Private Methods
         private void applySettings()
         {
             var deconEngineCalibrationSettings = convertCalibrationSettingsToDeconEngineSettings(CalibrationData);
@@ -329,7 +329,7 @@ namespace DeconTools.Backend.Runs
         [Obsolete("Unused")]
         private string validateDataFolderStructureAndFindSettingsFilePath()
         {
-            var fi = new FileInfo(Filename);
+            var fi = new FileInfo(DatasetFileOrDirectoryPath);
             var parentDirInfo = fi.Directory;
 
             var folderList = parentDirInfo.GetDirectories();
@@ -465,7 +465,7 @@ namespace DeconTools.Backend.Runs
             return valueString;
         }
 
-        #endregion
+#endregion
     }
 }
 #endif

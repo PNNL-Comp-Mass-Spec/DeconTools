@@ -17,7 +17,7 @@ namespace DeconTools.Workflows.Backend.Core
         private readonly IqTargetUtilities _targetUtilities = new IqTargetUtilities();
         private readonly IqResultUtilities _iqResultUtilities = new IqResultUtilities();
 
-        private string _resultsFolder;
+        private string _resultsDirectory;
 
         #region constructors
 
@@ -43,7 +43,7 @@ namespace DeconTools.Workflows.Backend.Core
             }
 
             Targets = TargetImporter.Import();
-    
+
             foreach (TopDownIqTarget target in Targets)
             {
                 setParentNetFromChildren(target);
@@ -104,7 +104,7 @@ namespace DeconTools.Workflows.Backend.Core
 
             SetupResultsFolder();
 
-            IqResultExporter.WriteOutResults(Path.Combine(_resultsFolder, Run.DatasetName), exportedResults);
+            IqResultExporter.WriteOutResults(Path.Combine(_resultsDirectory, Run.DatasetName), exportedResults);
         }
 
 
@@ -113,25 +113,25 @@ namespace DeconTools.Workflows.Backend.Core
 
         private void SetupResultsFolder()
         {
-            if (string.IsNullOrEmpty(Parameters.OutputFolderBase))
+            if (string.IsNullOrEmpty(Parameters.OutputDirectoryBase))
             {
-                _resultsFolder = GetDefaultOutputFolder();
+                _resultsDirectory = GetDefaultOutputDirectory();
             }
             else
             {
-                _resultsFolder = Path.Combine(Parameters.OutputFolderBase, "IqResults");
+                _resultsDirectory = Path.Combine(Parameters.OutputDirectoryBase, "IqResults");
             }
 
-            if (!Directory.Exists(_resultsFolder)) Directory.CreateDirectory(_resultsFolder);
+            if (!Directory.Exists(_resultsDirectory)) Directory.CreateDirectory(_resultsDirectory);
 
 
         }
 
 
-        private string GetDefaultOutputFolder()
+        private string GetDefaultOutputDirectory()
         {
-            var defaultOutputFolder = Run.DataSetPath;
-            return defaultOutputFolder;
+            var defaultOutputDirectory = Run.DatasetDirectoryPath;
+            return defaultOutputDirectory;
         }
 
 

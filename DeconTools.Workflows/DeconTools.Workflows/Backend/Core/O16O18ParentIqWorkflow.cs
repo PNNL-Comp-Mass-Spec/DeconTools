@@ -51,7 +51,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         #region Properties
 
-        public string OutputFolderForGraphs { get; set; }
+        public string OutputDirectoryForGraphs { get; set; }
 
         public bool GraphsAreOutputted { get; set; }
 
@@ -201,12 +201,12 @@ namespace DeconTools.Workflows.Backend.Core
 
         private void ExportGraphs(IqResult result)
         {
-            if (string.IsNullOrEmpty(OutputFolderForGraphs))
+            if (string.IsNullOrEmpty(OutputDirectoryForGraphs))
             {
-                OutputFolderForGraphs = Path.Combine(Run.DataSetPath, "OutputGraphs");
+                OutputDirectoryForGraphs = Path.Combine(Run.DatasetDirectoryPath, "OutputGraphs");
             }
 
-            if (!Directory.Exists(OutputFolderForGraphs)) Directory.CreateDirectory(OutputFolderForGraphs);
+            if (!Directory.Exists(OutputDirectoryForGraphs)) Directory.CreateDirectory(OutputDirectoryForGraphs);
 
             ExportMassSpectrumGraph(result);
             ExportChromGraph(result);
@@ -239,10 +239,10 @@ namespace DeconTools.Workflows.Backend.Core
 
 
             _graphGenerator.GraphPane.XAxis.Scale.FontSpec.Size = 12;
-            var outputGraphFilename = Path.Combine(OutputFolderForGraphs,
-                                                      result.Target.ID + "_" +
-                                                      result.Target.ChargeState + "_" +
-                                                      result.Target.MZTheor.ToString("0.000") + "_MS.png");
+            var outputGraphFilename = Path.Combine(OutputDirectoryForGraphs,
+                                                  result.Target.ID + "_" +
+                                                  result.Target.ChargeState + "_" +
+                                                  result.Target.MZTheor.ToString("0.000") + "_MS.png");
 
 
             var graphInfoText = "ID= " + result.Target.ID + "; z= " + result.Target.ChargeState + "; m/z= " +
@@ -294,10 +294,10 @@ namespace DeconTools.Workflows.Backend.Core
             _graphGenerator.GraphPane.XAxis.Scale.Max = maxScan;
 
             _graphGenerator.GraphPane.XAxis.Scale.FontSpec.Size = 12;
-            var outputGraphFilename = Path.Combine(OutputFolderForGraphs,
-                                                      result.Target.ID + "_" +
-                                                      result.Target.ChargeState + "_" +
-                                                      result.Target.MZTheor.ToString("0.000") + "_chrom.png");
+            var outputGraphFilename = Path.Combine(OutputDirectoryForGraphs,
+                                                   result.Target.ID + "_" +
+                                                   result.Target.ChargeState + "_" +
+                                                   result.Target.MZTheor.ToString("0.000") + "_chrom.png");
 
             var graphInfoText = "ID= " + result.Target.ID + "; z= " + result.Target.ChargeState + "; m/z= " +
                                    result.Target.MZTheor.ToString("0.000") + "; ScanLC= " + result.LcScanObs;

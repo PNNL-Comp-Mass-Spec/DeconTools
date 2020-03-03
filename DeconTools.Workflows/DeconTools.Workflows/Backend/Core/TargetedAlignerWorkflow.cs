@@ -14,20 +14,18 @@ using DeconTools.Workflows.Backend.Utilities;
 namespace DeconTools.Workflows.Backend.Core
 {
     /// <summary>
-    /// This is a controller class that handles execution of targeted alignment. 
-    /// 
+    /// This is a controller class that handles execution of targeted alignment.
+    ///
     /// </summary>
     public class TargetedAlignerWorkflow : TargetedWorkflow
     {
         private TargetedAlignerWorkflowParameters AlignerParameters => WorkflowParameters as TargetedAlignerWorkflowParameters;
 
-        private List<NETGrouping> _netGroupings;
+        private readonly List<NETGrouping> _netGroupings;
         private BasicTargetedWorkflow _workflow;
         private TargetedResultRepository _targetedResultRepository;
 
-
-        private BackgroundWorker _backgroundWorker;
-
+        private readonly BackgroundWorker _backgroundWorker;
 
         #region Constructors
 
@@ -76,7 +74,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         public NETAndMassAligner Aligner { get; set; }
 
-        
+
         public List<TargetBase> MassTagList { get; set; }
 
         public bool outputToConsole { get; set; }
@@ -138,7 +136,7 @@ namespace DeconTools.Workflows.Backend.Core
                     firstPassResults.AddRange(thirdPassResults);
 
                 }
-                
+
                 var ppmErrors = getMassErrors(firstPassResults);
                 var filteredUsingGrubbsPPMErrors = MathUtilities.filterWithGrubbsApplied(ppmErrors);
 
@@ -249,7 +247,7 @@ namespace DeconTools.Workflows.Backend.Core
             var workflowParameters = _workflow.WorkflowParameters as TargetedWorkflowParameters;
             workflowParameters.ChromGenTolerance = chromTolerance;
 
-            
+
 
             var resultsPassingCriteria = new List<TargetedResultBase>();
 
@@ -419,19 +417,19 @@ namespace DeconTools.Workflows.Backend.Core
 
         #region Private Methods
 
-        public void SaveFeaturesToTextfile(string outputFolder)
+        public void SaveFeaturesToTextFile(string outputDirectory)
         {
-            var exportTargetedFeaturesFile = Path.Combine(outputFolder, Run.DatasetName + "_alignedFeatures.txt");
+            var exportTargetedFeaturesFile = Path.Combine(outputDirectory, Run.DatasetName + "_alignedFeatures.txt");
 
             var exporter = new UnlabelledTargetedResultToTextExporter(exportTargetedFeaturesFile);
             exporter.ExportResults(_targetedResultRepository.Results);
         }
 
-        public void SaveAlignmentData(string outputFolder)
+        public void SaveAlignmentData(string outputDirectory)
         {
 
-            var exportNETAlignmentFilename = Path.Combine(outputFolder, Run.DatasetName + "_NETAlignment.txt");
-            var exportMZAlignmentFilename = Path.Combine(outputFolder, Run.DatasetName + "_MZAlignment.txt");
+            var exportNETAlignmentFilename = Path.Combine(outputDirectory, Run.DatasetName + "_NETAlignment.txt");
+            var exportMZAlignmentFilename = Path.Combine(outputDirectory, Run.DatasetName + "_MZAlignment.txt");
 
             var mzAlignmentExporter = new MassAlignmentInfoToTextExporter(exportMZAlignmentFilename);
             mzAlignmentExporter.ExportAlignmentInfo(Run.AlignmentInfo);

@@ -19,9 +19,9 @@ namespace DeconTools.UnitTesting2.Utilities
             var hintPath = @"..\Library\DeconEngineV2.dll";
             var specificVersion = "False";
 
-            var outputFolder = @"C:\temp\DeconToolsDllTesting";
-            if (!Directory.Exists(outputFolder))
-                Directory.CreateDirectory(outputFolder);
+            var outputDirectoryPath = @"C:\temp\DeconToolsDllTesting";
+            if (!Directory.Exists(outputDirectoryPath))
+                Directory.CreateDirectory(outputDirectoryPath);
 
 
             var directoryInfo = new DirectoryInfo(baseFolder);
@@ -86,7 +86,7 @@ namespace DeconTools.UnitTesting2.Utilities
 
                 //foreach (var file in fileList)
                 //{
-                //    string newProjectFile = Path.Combine(outputFolder, Path.GetFileName(file));
+                //    string newProjectFile = Path.Combine(outputDirectoryPath, Path.GetFileName(file));
 
                 //    File.Copy(newProjectFile, file, true);
 
@@ -97,9 +97,9 @@ namespace DeconTools.UnitTesting2.Utilities
 
         }
 
-        public static List<FileInfo> GetFileList(string fileSearchPattern, string rootFolderPath, bool includeSubdirectories = true)
+        public static List<FileInfo> GetFileList(string fileSearchPattern, string rootDirectoryPath, bool includeSubdirectories = true)
         {
-            var directory = new DirectoryInfo(rootFolderPath);
+            var directory = new DirectoryInfo(rootDirectoryPath);
             if (!directory.Exists)
                 return new List<FileInfo>();
 

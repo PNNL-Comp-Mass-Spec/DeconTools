@@ -33,7 +33,7 @@ namespace DeconTools.Backend.Runs
             Filename = filename;
             var baseFilename = Path.GetFileName(Filename);
             DatasetName = baseFilename.Substring(0, baseFilename.LastIndexOf('.'));
-            DataSetPath = Path.GetDirectoryName(filename);
+            DatasetDirectoryPath = Path.GetDirectoryName(filename);
 
             m_reader = new YafmsReader();
             try

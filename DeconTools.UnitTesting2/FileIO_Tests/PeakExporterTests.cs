@@ -12,7 +12,7 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
         [Test]
         public void ExportPeakDataToTextFileTest1()
         {
-            var outputFile = FileRefs.OutputFolderPath + "ExportPeakDataToTextFileTest1.txt";
+            var outputFile = FileRefs.OutputDirectoryPath + "ExportPeakDataToTextFileTest1.txt";
 
             if (File.Exists(outputFile))
             {
