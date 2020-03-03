@@ -70,7 +70,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             {
                 Console.WriteLine(fitScoreDataItem.Key + "\t" + fitScoreDataItem.Value);
             }
-            
+
 
         }
 
@@ -86,7 +86,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             parameters.CopyRawFileLocal = false;
             //parameters.LocalDirectoryPathForCopiedRawDataset = @"D:\data\temp";
 
-            
+
 
             var testDataset =
                 @"\\protoapps\DataPkgs\Public\2012\601_Sipper_paper_data_processing_and_analysis\RawData\Yellow_C13_070_23Mar10_Griffin_10-01-28.raw";
@@ -102,7 +102,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
 
             var executor = new BasicTargetedWorkflowExecutor(parameters, testDataset);
-            
+
 
             var targetsOfInterest = new int[] { 5555 };
 
@@ -128,7 +128,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
                 @"\\protoapps\DataPkgs\Public\2012\601_Sipper_paper_data_processing_and_analysis\Parameters\SipperTargetedWorkflowParameters_Sum5 - copy.xml");
 
 
-            
+
 
             var result = workflow.Result as SipperLcmsTargetedResult;
 
@@ -174,7 +174,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             parameters.SaveParametersToXML(outputParameterFile);
 
 
-            
+
             var executor = new BasicTargetedWorkflowExecutor(parameters, testDataset);
             executor.Targets.TargetList = executor.Targets.TargetList.Take(10).ToList();
 
@@ -285,7 +285,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\SIPPER_standard_testing\Yellow_C13_070_23Mar10_Griffin_10-01-28.raw";
 
             var executor = new SipperWorkflowExecutor(parameters, testDataset);
-            
+
 
             Assert.IsTrue(executor.ExecutorParameters.WorkflowType ==
                           Globals.TargetedWorkflowTypes.SipperWorkflowExecutor1);
@@ -404,7 +404,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             var parameters = new SipperWorkflowExecutorParameters();
             parameters.LoadParameters(paramFile);
-           
+
             var testDataset =
                @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\SIPPER_standard_testing\Yellow_C13_070_23Mar10_Griffin_10-01-28.raw";
 
@@ -491,7 +491,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             parameters.CopyRawFileLocal = false;
 
             parameters.ReferenceDataForTargets = @"\\protoapps\DataPkgs\Public\2012\548_YSIP_C12_C13_data_analysis\massTag_reference_file.txt";
-          
+
             parameters.TargetsFilePath = @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\SIPPER_standard_testing\Targets\Yellow_C13_070_23Mar10_Griffin_10-01-28_10practice_targets.txt";
 
             var testDataset = @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\SIPPER_standard_testing\Yellow_C13_070_23Mar10_Griffin_10-01-28.raw";
@@ -520,7 +520,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             parameters.TargetsFilePath =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\SIPPER_standard_testing\Targets\Yellow_C13_070_23Mar10_Griffin_10-01-28_10practice_targets_empFormula_noMonoMass.txt";
 
-            
+
             var testDataset =
                @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\SIPPER_standard_testing\Yellow_C13_070_23Mar10_Griffin_10-01-28.raw";
 

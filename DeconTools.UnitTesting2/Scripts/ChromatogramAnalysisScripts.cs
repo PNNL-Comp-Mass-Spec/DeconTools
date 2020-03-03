@@ -291,32 +291,10 @@ namespace DeconTools.UnitTesting2.Scripts
                                                            scanSet.PrimaryScanNumber.ToString().PadLeft(5, '0') + "_mz" + precursorInfo.PrecursorMZ + "_chrom_smoothed.png");
 
                     graphGenerator.SaveGraph(outputGraphFilename);
-
-
-
-
-
-
-
-
                 }
-
-
-
-
-
-
             }
 
             Console.WriteLine(sb.ToString());
-
-
-
-
-
-
-
-
         }
 
 

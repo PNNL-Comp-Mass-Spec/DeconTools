@@ -37,7 +37,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
         }
 
-    
+
         [Test]
         public void UIMFTest1()
         {
@@ -84,9 +84,9 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             parameters.LCScanMax = 20;
             parameters.ProcessMSMS = true;
             parameters.IsDataThresholded = true;
-            
+
             parameters.MS2PeakDetectorDataIsThresholded = true;
-            
+
 
 
             var expectedPeaksFile = Path.Combine(run.DatasetDirectoryPath, run.DatasetName + "_peaks.txt");
@@ -98,7 +98,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             var fileinfo = new FileInfo(expectedPeaksFile);
             Assert.IsTrue(fileinfo.Exists);
-            
+
 
         }
 

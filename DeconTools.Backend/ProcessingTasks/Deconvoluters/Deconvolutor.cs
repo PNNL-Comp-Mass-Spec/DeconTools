@@ -103,8 +103,6 @@ namespace DeconTools.Backend.ProcessingTasks
                 }
             }
 
-
-
         }
 
         private void addCurrentScanIsosResultsToOverallList(ResultCollection resultList)

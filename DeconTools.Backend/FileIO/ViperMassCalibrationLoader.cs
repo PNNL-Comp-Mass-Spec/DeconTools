@@ -53,7 +53,7 @@ namespace DeconTools.Backend.FileIO
                     var parsedLine = line.Split('\t');
 
                     var rowData = new ViperMassCalibrationDataItem();
-                    if (parsedLine.Length>2)
+                    if (parsedLine.Length > 2)
                     {
                         rowData.MassErrorPpm = double.Parse(parsedLine[0]);
 
@@ -62,7 +62,7 @@ namespace DeconTools.Backend.FileIO
                         rowData.SmoothedCount = double.Parse(parsedLine[2]);
                     }
 
-                    if (parsedLine.Length>3)
+                    if (parsedLine.Length > 3)
                     {
                         rowData.Comment = parsedLine[3];
                     }
