@@ -28,7 +28,7 @@ namespace DeconTools.Backend.ProcessingTasks
                 case Globals.MSFileType.Bruker_Ascii:
                     msGenerator = new GenericMSGenerator();
                     break;
-                case Globals.MSFileType.Finnigan:
+                case Globals.MSFileType.Thermo_Raw:
                     msGenerator = new GenericMSGenerator();
                     break;
                 case Globals.MSFileType.ICR2LS_Rawdata:

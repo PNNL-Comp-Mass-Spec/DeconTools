@@ -20,7 +20,7 @@ namespace DeconTools.Backend.Runs
         public MzRun()
         {
             IsDataThresholded = true;  //TODO:  this should not be hardcoded, but should be put in parameter file. This property is used by the peak detector
-            MSFileType = Globals.MSFileType.Finnigan;
+            MSFileType = Globals.MSFileType.Thermo_Raw;
             ContainsMSMSData = true;
             XYData = new XYData();
         }

@@ -41,7 +41,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             parameters.MSGeneratorParameters.UseLCScanRange = true;
             parameters.MSGeneratorParameters.MinLCScan = 6000;// run.GetMinPossibleLCScanNum();
             parameters.MSGeneratorParameters.MaxLCScan = 6050;// run.GetMaxPossibleLCScanNum();
-            
+
 
             var workflow = ScanBasedWorkflow.CreateWorkflow(run, parameters);
             workflow.Execute();
@@ -57,10 +57,10 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             //TODO: still report
 
             Console.WriteLine("Num MSfeatures = " + isos.Count);
-            
+
             var sumIntensities = isos.Select(p => p.IntensityAggregate).Sum();
            // Assert.AreEqual(266185816d, Math.Round(sumIntensities));
-            
+
         }
 
 
@@ -88,14 +88,14 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             parameters.MSGeneratorParameters.MinLCScan = 6005;
             parameters.MSGeneratorParameters.MaxLCScan = 6005;
 
-           
+
             var workflow = ScanBasedWorkflow.CreateWorkflow(run, parameters);
             workflow.Execute();
 
             Assert.IsTrue(File.Exists(expectedIsosFile), "Isos file was not created.");
             Assert.IsTrue(File.Exists(expectedScansFile), "Scans file was not created.");
             Assert.IsTrue(File.Exists(expectedPeaksFile), "Peaks file was not created.");
-            
+
             var isosImporter = new IsosImporter(expectedIsosFile, run.MSFileType);
             var isos = isosImporter.Import();
 
@@ -135,7 +135,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             var parameters = new DeconToolsParameters();
             parameters.LoadFromOldDeconToolsParameterFile(parameterFile);
             parameters.ScanBasedWorkflowParameters.DeconvolutionType = Globals.DeconvolutionType.ThrashV2;
-            
+
             parameters.MSGeneratorParameters.MinLCScan = 6005;
             parameters.MSGeneratorParameters.MaxLCScan = 6050;
 
@@ -203,9 +203,9 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
 
             Assert.AreEqual(0, isos.Count);
 
-            
 
-            
+
+
         }
 
 
@@ -409,11 +409,11 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             Assert.That(File.Exists(expectedPeaksFileOutput));
 
             Console.WriteLine(percentDiff);
-            
 
-           
 
-            var importer = new IsosImporter(expectedIsosOutput, Globals.MSFileType.Finnigan);
+
+
+            var importer = new IsosImporter(expectedIsosOutput, Globals.MSFileType.Thermo_Raw);
 
             var results = new List<IsosResult>();
             results = importer.Import();
@@ -423,7 +423,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             //Assert.AreEqual(1340, results.Count);
             //Assert.AreEqual(2006580356, results.Sum(p => p.IntensityAggregate));
 
-           
+
 
 
         }
@@ -467,7 +467,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             Assert.That(File.Exists(expectedPeaksFileOutput));
 
 
-            var importer = new IsosImporter(expectedIsosOutput, Globals.MSFileType.Finnigan);
+            var importer = new IsosImporter(expectedIsosOutput, Globals.MSFileType.Thermo_Raw);
 
             var results = new List<IsosResult>();
             results = importer.Import();
@@ -478,7 +478,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             //Assert.AreEqual(2006580356, results.Sum(p => p.IntensityAggregate));
         }
 
-        
+
         [Test]
         public void processUIMF_demultiplexedUIMF()
         {
@@ -556,7 +556,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
         public void processUIMF_Frames800_802()
         {
             var testFile = FileRefs.RawDataMSFiles.UIMFStdFile3;
-            
+
             var expectedIsosOutput = Path.Combine(Path.GetDirectoryName(testFile), Path.GetFileNameWithoutExtension(testFile) + "_isos.csv");
 
             if (File.Exists(expectedIsosOutput))
@@ -613,7 +613,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             parameters.MSGeneratorParameters.UseLCScanRange = true;
             parameters.MSGeneratorParameters.SumAllSpectra = true;
             parameters.MiscMSProcessingParameters.UseZeroFilling = true;
-            
+
 
 
 
@@ -658,7 +658,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             parameters.MSGeneratorParameters.MinLCScan = 1;    //min frame
             parameters.MSGeneratorParameters.MaxLCScan = 15;    //max frame
 
-           
+
             var workflow = ScanBasedWorkflow.CreateWorkflow(run, parameters);
             workflow.Execute();
 
@@ -755,7 +755,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             var datasetName = dirInfo.Name;
 
             var expectedIsosOutput = Path.Combine(testFile, datasetName + "_isos.csv");
-            
+
             if (File.Exists(expectedIsosOutput))
             {
                 File.Delete(expectedIsosOutput);
@@ -793,14 +793,14 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             }
 
             var workflow = ScanBasedWorkflow.CreateWorkflow(testFile, parameterFile);
-           
+
             workflow.Execute();
 
             Assert.That(File.Exists(expectedIsosOutput));
             Assert.That(File.Exists(expectedPeaksFileOutput));
 
 
-            var importer = new IsosImporter(expectedIsosOutput, Globals.MSFileType.Finnigan);
+            var importer = new IsosImporter(expectedIsosOutput, Globals.MSFileType.Thermo_Raw);
 
             var results = new List<IsosResult>();
             results = importer.Import();
@@ -825,7 +825,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             //return;
 
             string expectedIsosOutput=null;
-            var importer = new IsosImporter(expectedIsosOutput, Globals.MSFileType.Finnigan);
+            var importer = new IsosImporter(expectedIsosOutput, Globals.MSFileType.Thermo_Raw);
 
             var results = new List<IsosResult>();
             results = importer.Import();

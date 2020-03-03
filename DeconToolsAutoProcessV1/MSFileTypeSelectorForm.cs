@@ -73,7 +73,7 @@ namespace DeconToolsAutoProcessV1
                     case ".d":
                         return Globals.MSFileType.Agilent_D;
                     case ".raw":
-                        return Globals.MSFileType.Finnigan;
+                        return Globals.MSFileType.Thermo_Raw;
                     case ".imf":
                         return Globals.MSFileType.PNNL_IMS;
                     case ".uimf":

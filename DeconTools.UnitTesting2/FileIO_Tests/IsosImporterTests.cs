@@ -11,7 +11,7 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
         public void importOrbitrapData_test1()
         {
             var testMSFeatureFile = FileRefs.RawDataBasePath + @"\Output\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_Scans6000_6050_isos.csv";
-            var importer = new IsosImporter(testMSFeatureFile, Backend.Globals.MSFileType.Finnigan);
+            var importer = new IsosImporter(testMSFeatureFile, Backend.Globals.MSFileType.Thermo_Raw);
 
             var results = importer.Import();
 

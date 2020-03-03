@@ -22,7 +22,7 @@ namespace DeconTools.Backend
             Ascii,
             Bruker,
             Bruker_Ascii,
-            Finnigan,
+            Thermo_Raw,
             ICR2LS_Rawdata,
             Micromass_Rawdata,
             MZXML_Rawdata,

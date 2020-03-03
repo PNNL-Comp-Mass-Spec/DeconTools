@@ -62,7 +62,7 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
 
             var exporter = MSFeatureExporterFactory.CreateMSFeatureExporter(
                 Backend.Globals.ExporterType.Text,
-                Backend.Globals.MSFileType.Finnigan, x);
+                Backend.Globals.MSFileType.Thermo_Raw, x);
 
             Assert.AreEqual(typeof(MSFeatureToTextFileExporterBasic), exporter.GetType());
 

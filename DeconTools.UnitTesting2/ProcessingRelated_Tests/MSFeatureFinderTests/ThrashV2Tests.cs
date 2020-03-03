@@ -653,10 +653,10 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
             var oldResultsFile =
                 @"C:\Users\d3x720\Documents\PNNL\My_DataAnalysis\Standard_Testing\DeconTools\Orbitrap\Test_Results\Version_1.0.4745_Dec28_AfterThrashRefactor\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_isos.csv";
 
-            var importer = new IsosImporter(newResultsFile, Globals.MSFileType.Finnigan);
+            var importer = new IsosImporter(newResultsFile, Globals.MSFileType.Thermo_Raw);
             var newResults = importer.Import();
 
-            importer = new IsosImporter(oldResultsFile, Globals.MSFileType.Finnigan);
+            importer = new IsosImporter(oldResultsFile, Globals.MSFileType.Thermo_Raw);
             var oldResults = importer.Import();
 
             //newResults = newResults.Where(p => p.ScanSet.PrimaryScanNumber == 6005).ToList();

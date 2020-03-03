@@ -201,7 +201,7 @@ namespace DeconTools.Backend.Data
                     break;
                 case Globals.MSFileType.Bruker_Ascii:
                     break;
-                case Globals.MSFileType.Finnigan:
+                case Globals.MSFileType.Thermo_Raw:
                     replacementExtension = ".RAW";
                     break;
                 case Globals.MSFileType.ICR2LS_Rawdata:

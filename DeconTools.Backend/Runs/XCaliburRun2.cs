@@ -22,7 +22,7 @@ namespace DeconTools.Backend.Runs
 
             IsDataThresholded = true;
             IsMsAbundanceReportedAsAverage = true;
-            MSFileType = Globals.MSFileType.Finnigan;
+            MSFileType = Globals.MSFileType.Thermo_Raw;
             ContainsMSMSData = true;
             XYData = new XYData();
 

@@ -22,7 +22,7 @@ namespace DeconTools.Backend.Utilities.Converters
                 case DeconToolsV2.Readers.FileType.BRUKER_ASCII:
                     return Globals.MSFileType.Bruker_Ascii;
                 case DeconToolsV2.Readers.FileType.FINNIGAN:
-                    return Globals.MSFileType.Finnigan;
+                    return Globals.MSFileType.Thermo_Raw;
                 case DeconToolsV2.Readers.FileType.ICR2LSRAWDATA:
                     return Globals.MSFileType.ICR2LS_Rawdata;
                 case DeconToolsV2.Readers.FileType.MICROMASSRAWDATA:

@@ -143,7 +143,7 @@ namespace DeconTools.Backend.Runs
                 case Globals.MSFileType.Bruker_Ascii:
                     run = null;
                     break;
-                case Globals.MSFileType.Finnigan:
+                case Globals.MSFileType.Thermo_Raw:
                     run = new XCaliburRun2(fileName);
                     break;
                 case Globals.MSFileType.ICR2LS_Rawdata:
