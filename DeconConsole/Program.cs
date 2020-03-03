@@ -7,7 +7,7 @@ namespace DeconConsole
     public class Program
     {
 
-        public const string PROGRAM_DATE = "February 24, 2020";
+        public const string PROGRAM_DATE = "March 2, 2020";
 
         public static int Main(string[] args)
         {
@@ -68,19 +68,25 @@ namespace DeconConsole
 
             }
 
-            if (!IsFileValid(filename))
+            if (!IsFileValid(datasetFileOrDirectoryPath, out var datasetFileOrDirectory))
             {
-                ReportFileProblem(filename, "Dataset file (or folder)");
+                ReportFileProblem(datasetFileOrDirectoryPath, "Dataset file (or directory)");
                 return 4;
             }
 
-            if (!IsFileValid(parameterFilename))
+            if (!IsFileValid(parameterFilePath, out var parameterFile))
             {
-                ReportFileProblem(parameterFilename, "Parameter file");
+                ReportFileProblem(parameterFilePath, "Parameter file");
                 return 4;
             }
 
-            Console.WriteLine("Dataset = " + filename);
+            Console.WriteLine("{0,-15} {1}", "Dataset:", PRISM.PathUtils.CompactPathString(datasetFileOrDirectoryPath, 120));
+            if (!Path.IsPathRooted(datasetFileOrDirectoryPath))
+            {
+                Console.WriteLine("{0,-15} {1}", "Full path:", PRISM.PathUtils.CompactPathString(datasetFileOrDirectory.FullName, 120));
+            }
+
+            Console.WriteLine("{0,-15} {1}", "Parameter file:",  PRISM.PathUtils.CompactPathString(parameterFile.FullName, 120));
 
             try
             {
