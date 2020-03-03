@@ -10,26 +10,26 @@ namespace DeconTools.Backend.Data
         private readonly StreamReader reader;
 
         #region Constructors
-        public UMCFileImporter(string filename, char colDelimiter)
+        public UMCFileImporter(string filePath, char colDelimiter)
         {
             delimiter = colDelimiter;
-            Filename = filename;
+            FilePath = filePath;
 
             try
             {
-                reader = new StreamReader(filename);
+                reader = new StreamReader(filePath);
             }
             catch (Exception ex)
             {
 
-                throw new IOException("There was a problem reading UMC data file " + Filename + ": " + ex.Message);
+                throw new IOException("There was a problem reading UMC data file " + FilePath + ": " + ex.Message);
             }
         }
         #endregion
 
         #region Properties
 
-        public string Filename { get; set; }
+        public string FilePath { get; set; }
 
         #endregion
 
@@ -57,7 +57,7 @@ namespace DeconTools.Backend.Data
                 if (sr.EndOfStream)
                 {
                     sr.Close();
-                    throw new InvalidDataException("There is no data in UMC data file " + Filename);
+                    throw new InvalidDataException("There is no data in UMC data file " + FilePath);
 
                 }
                 var headerLine = sr.ReadLine();
@@ -65,7 +65,7 @@ namespace DeconTools.Backend.Data
 
                 if (!validateHeaders(headers))
                 {
-                    throw new InvalidDataException("There is a problem with the column headers in UMC data file " + Filename);
+                    throw new InvalidDataException("There is a problem with the column headers in UMC data file " + FilePath);
 
                 }
 
@@ -77,7 +77,7 @@ namespace DeconTools.Backend.Data
                     var processedData = processLine(line);
                     if (processedData.Count != headers.Count) // new line is in the wrong format... could be blank
                     {
-                        throw new InvalidDataException("Data in UMC row #" + counter + "is invalid - \nThe number of columns does not match that of the header line; see " + Filename);
+                        throw new InvalidDataException("Data in UMC row #" + counter + "is invalid - \nThe number of columns does not match that of the header line; see " + FilePath);
                     }
 
                     var row = convertTextToUMCData(processedData, headers);

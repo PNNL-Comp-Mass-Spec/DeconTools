@@ -7,12 +7,12 @@ namespace DeconTools.Workflows.Backend.FileIO
     {
 
         /// <summary>
-        /// Constructo
+        /// Constructor
         /// </summary>
-        /// <param name="filename">Name or full path to the file to import</param>
-        public BasicIqTargetImporter(string filename)
+        /// <param name="iqFilePath">Name or full path to the file to import</param>
+        public BasicIqTargetImporter(string iqFilePath)
         {
-            Filename = filename;
+            IqFilePath = iqFilePath;
         }
 
         protected override IqTarget ConvertTextToIqTarget(List<string> processedRow)

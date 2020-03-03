@@ -11,16 +11,16 @@ namespace DeconTools.Backend.FileIO
 
         #region Constructors
 
-        public ViperMassCalibrationLoader(string filename)
+        public ViperMassCalibrationLoader(string filePath)
         {
-            Filename = filename;
+            FilePath = filePath;
         }
 
 
         #endregion
 
         #region Properties
-        protected string Filename { get; set; }
+        protected string FilePath { get; set; }
 
         #endregion
 
@@ -36,11 +36,11 @@ namespace DeconTools.Backend.FileIO
 
             var massCalibrationDataItems = new List<ViperMassCalibrationDataItem>();
 
-            using (var reader=new StreamReader(Filename))
+            using (var reader = new StreamReader(FilePath))
             {
                 var headerLine = reader.ReadLine();
 
-                Check.Require(headerLine == "MassErrorPPM\tCount\tSmoothed_Count\tComment","Error reading Viper's mass calibration data. Header line is weird. Header= " + headerLine);
+                Check.Require(headerLine == "MassErrorPPM\tCount\tSmoothed_Count\tComment", "Error reading Viper's mass calibration data. Header line is weird. Header= " + headerLine);
 
                 while (!reader.EndOfStream)
                 {

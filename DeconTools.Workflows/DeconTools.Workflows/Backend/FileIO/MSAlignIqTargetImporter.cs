@@ -35,9 +35,9 @@ namespace DeconTools.Workflows.Backend.FileIO
 
         #region public methods
 
-        public MSAlignIqTargetImporter(string filename)
+        public MSAlignIqTargetImporter(string iqFilePath)
         {
-            Filename = filename;
+            IqFilePath = iqFilePath;
         }
 
 
@@ -47,18 +47,18 @@ namespace DeconTools.Workflows.Backend.FileIO
 
             StreamReader reader;
 
-            if (!File.Exists(Filename))
+            if (!File.Exists(IqFilePath))
             {
-                throw new IOException("Cannot import. File does not exist: " + Filename);
+                throw new IOException("Cannot import. File does not exist: " + IqFilePath);
             }
 
             try
             {
-                reader = new StreamReader(Filename);
+                reader = new StreamReader(IqFilePath);
             }
             catch (Exception ex)
             {
-                throw new IOException("There was a problem importing from file " + PRISM.PathUtils.CompactPathString(Filename, 60) + ": " + ex.Message);
+                throw new IOException("There was a problem importing from file " + PRISM.PathUtils.CompactPathString(IqFilePath, 60) + ": " + ex.Message);
             }
 
             //Sequence is the key and processed line is the value
@@ -69,7 +69,7 @@ namespace DeconTools.Workflows.Backend.FileIO
                 if (sr.EndOfStream)
                 {
                     sr.Close();
-                    throw new InvalidDataException("There is no data in file " + PRISM.PathUtils.CompactPathString(Filename, 60));
+                    throw new InvalidDataException("There is no data in file " + PRISM.PathUtils.CompactPathString(IqFilePath, 60));
 
                 }
 
@@ -87,7 +87,7 @@ namespace DeconTools.Workflows.Backend.FileIO
                     //ensure that processed line is the same size as the header line
                     if (processedData.Count != m_columnHeaders.Count)
                     {
-                        throw new InvalidDataException("In File: " + PRISM.PathUtils.CompactPathString(Filename, 60) +
+                        throw new InvalidDataException("In File: " + PRISM.PathUtils.CompactPathString(IqFilePath, 60) +
                                                        "; Data in row # " + lineCounter + " is NOT valid - \n" +
                                                        "The number of columns does not match that of the header line");
                     }

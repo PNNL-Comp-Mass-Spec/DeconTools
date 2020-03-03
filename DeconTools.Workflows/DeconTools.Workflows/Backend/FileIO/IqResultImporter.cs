@@ -37,14 +37,14 @@ namespace DeconTools.Workflows.Backend.FileIO
 
         #region Constructors
 
-        protected IqResultImporter (string filename)
+        protected IqResultImporter (string iqResultFilePath)
         {
-            Filename = filename;
+            IqResultFilePath = iqResultFilePath;
         }
         #endregion
 
         #region Properties
-        protected string Filename { get; set; }
+        protected string IqResultFilePath { get; set; }
 
         #endregion
 
@@ -54,18 +54,18 @@ namespace DeconTools.Workflows.Backend.FileIO
             var resultList = new List<IqResult>();
 
             StreamReader reader;
-            if (!File.Exists(Filename))
+            if (!File.Exists(IqResultFilePath))
             {
-                throw new IOException("Cannot import. File does not exist: " + Filename);
+                throw new IOException("Cannot import. File does not exist: " + IqResultFilePath);
             }
 
             try
             {
-                reader = new StreamReader(Filename);
+                reader = new StreamReader(IqResultFilePath);
             }
             catch (Exception ex)
             {
-                throw new IOException("There was a problem importing from file " + PRISM.PathUtils.CompactPathString(Filename, 60) + ": " + ex.Message);
+                throw new IOException("There was a problem importing from file " + PRISM.PathUtils.CompactPathString(IqResultFilePath, 60) + ": " + ex.Message);
             }
 
             using (var sr = reader)
@@ -73,7 +73,7 @@ namespace DeconTools.Workflows.Backend.FileIO
                 if (sr.EndOfStream)
                 {
                     sr.Close();
-                    throw new InvalidDataException("There is no data in file " + PRISM.PathUtils.CompactPathString(Filename, 60));
+                    throw new InvalidDataException("There is no data in file " + PRISM.PathUtils.CompactPathString(IqResultFilePath, 60));
 
                 }
 
@@ -84,7 +84,7 @@ namespace DeconTools.Workflows.Backend.FileIO
 
                 if (!areHeadersValid)
                 {
-                    throw new InvalidDataException("There is a problem with the column headers in file " + PRISM.PathUtils.CompactPathString(Filename, 60));
+                    throw new InvalidDataException("There is a problem with the column headers in file " + PRISM.PathUtils.CompactPathString(IqResultFilePath, 60));
                 }
 
 
@@ -99,7 +99,7 @@ namespace DeconTools.Workflows.Backend.FileIO
                     //ensure that processed line is the same size as the header line
                     if (processedData.Count != _columnHeaders.Count)
                     {
-                        throw new InvalidDataException("In File: " + PRISM.PathUtils.CompactPathString(Filename, 60) +
+                        throw new InvalidDataException("In File: " + PRISM.PathUtils.CompactPathString(IqResultFilePath, 60) +
                                                        "; Data in row # " + lineCounter + " is NOT valid - \n" +
                                                        "The number of columns does not match that of the header line");
                     }
@@ -157,7 +157,7 @@ namespace DeconTools.Workflows.Backend.FileIO
 
         protected virtual string TryGetDatasetNameFromFileName()
         {
-            var fileName = Path.GetFileName(Filename);
+            var fileName = Path.GetFileName(IqResultFilePath);
             if (fileName != null)
             {
                 var datasetName = fileName.Replace("_iqResults.txt", string.Empty);

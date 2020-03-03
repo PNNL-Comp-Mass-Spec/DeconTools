@@ -40,13 +40,13 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         {
             var test = new UIMFRun();
             var uimfRun = new UIMFRun(FileRefs.RawDataMSFiles.UIMFStdFile3);
-            var numframes = uimfRun.GetNumFrames();
+            var numFrames = uimfRun.GetNumFrames();
             var numScans = uimfRun.GetNumMSScans();
 
 
-            Console.WriteLine("Number of frames = " + numframes);
+            Console.WriteLine("Number of frames = " + numFrames);
             Console.WriteLine("Number of scans = " + numScans);
-            Assert.AreEqual(1175, numframes);
+            Assert.AreEqual(1175, numFrames);
             Assert.AreEqual(423000, numScans);
 
 

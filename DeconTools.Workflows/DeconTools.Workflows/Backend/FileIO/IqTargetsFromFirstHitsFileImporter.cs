@@ -9,9 +9,9 @@ namespace DeconTools.Workflows.Backend.FileIO
         #region Constructors
 
 
-        public IqTargetsFromFirstHitsFileImporter(string filename):base()
+        public IqTargetsFromFirstHitsFileImporter(string iqFilePath) : base()
         {
-            Filename = filename;
+            IqFilePath = iqFilePath;
 
             TargetIDHeaders = new[] {"ResultID"};
             ScanHeaders = new[] { "ScanLC", "LCScan", "Scan", "scanClassRep", "ScanNum" };

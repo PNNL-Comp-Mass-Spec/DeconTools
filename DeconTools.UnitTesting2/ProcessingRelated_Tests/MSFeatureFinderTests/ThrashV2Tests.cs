@@ -322,15 +322,15 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
                 var oldResults = allOldResults.Where(p => p.ScanSet.PrimaryScanNumber == scan).ToList();
 
 
-                foreach (var newresult in newResults)
+                foreach (var newResult in newResults)
                 {
                     var foundMatch = false;
                     for (var i = 0; i < oldResults.Count; i++)
                     {
                         var oldResult = oldResults[i];
 
-                        if (Math.Abs(newresult.IsotopicProfile.MonoIsotopicMass - oldResult.IsotopicProfile.MonoIsotopicMass) < 0.01 &&
-                            newresult.IsotopicProfile.ChargeState == oldResult.IsotopicProfile.ChargeState)
+                        if (Math.Abs(newResult.IsotopicProfile.MonoIsotopicMass - oldResult.IsotopicProfile.MonoIsotopicMass) < 0.01 &&
+                            newResult.IsotopicProfile.ChargeState == oldResult.IsotopicProfile.ChargeState)
                         {
                             foundMatch = true;
                         }
@@ -338,11 +338,11 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
 
                     if (foundMatch)
                     {
-                        sharedIsos.Add(newresult);
+                        sharedIsos.Add(newResult);
                     }
                     else
                     {
-                        uniqueToNew.Add(newresult);
+                        uniqueToNew.Add(newResult);
                     }
                 }
 
@@ -351,10 +351,10 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
                     var foundMatch = false;
                     for (var i = 0; i < newResults.Count; i++)
                     {
-                        var newresult = newResults[i];
+                        var newResult = newResults[i];
 
-                        if (Math.Abs(newresult.IsotopicProfile.MonoIsotopicMass - oldResult.IsotopicProfile.MonoIsotopicMass) < 0.01 &&
-                            newresult.IsotopicProfile.ChargeState == oldResult.IsotopicProfile.ChargeState)
+                        if (Math.Abs(newResult.IsotopicProfile.MonoIsotopicMass - oldResult.IsotopicProfile.MonoIsotopicMass) < 0.01 &&
+                            newResult.IsotopicProfile.ChargeState == oldResult.IsotopicProfile.ChargeState)
                         {
                             foundMatch = true;
                         }
