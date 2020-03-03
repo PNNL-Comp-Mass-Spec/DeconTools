@@ -311,7 +311,12 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
 
         }
 
-        private void GetComparisons(List<IsosResult> allNewResults, List<IsosResult> allOldResults, List<IsosResult> sharedIsos, List<IsosResult> uniqueToNew, List<IsosResult> uniqueToOld)
+        private void GetComparisons(
+            IReadOnlyCollection<IsosResult> allNewResults,
+            IReadOnlyCollection<IsosResult> allOldResults,
+            ICollection<IsosResult> sharedIsos,
+            ICollection<IsosResult> uniqueToNew,
+            ICollection<IsosResult> uniqueToOld)
         {
 
             var scans = allNewResults.Select(p => p.ScanSet.PrimaryScanNumber).Distinct().OrderBy(p => p).ToList();
@@ -511,7 +516,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
 
         }
 
-        private void DisplayPPMErrorsForeachPeakOfMSFeature(List<IsosResult> newResults)
+        private void DisplayPPMErrorsForeachPeakOfMSFeature(IEnumerable<IsosResult> newResults)
         {
 
             var sb = new StringBuilder();
