@@ -10,6 +10,7 @@ namespace DeconTools.Backend.Core
     {
 
         #region Constructors
+
         public ScanSet()
         {
             BasePeak = new MSPeak(0);
@@ -45,7 +46,6 @@ namespace DeconTools.Backend.Core
 
         }
 
-
         #endregion
 
         public int NumPeaks { get; set; }
@@ -58,10 +58,20 @@ namespace DeconTools.Backend.Core
 
         public float NETValue { get; set; }
 
+        /// <summary>
+        /// Scan numbers (or frame numbers) in this ScanSet
+        /// </summary>
         public List<int> IndexValues { get; set; }
 
+        /// <summary>
+        /// Primary scan number (or frame number)
+        /// </summary>
         public int PrimaryScanNumber { get; set; }
 
+        /// <summary>
+        /// Add a scan (or frame) to the ScanSet
+        /// </summary>
+        /// <param name="scanNumber"></param>
         public void AddScan(int scanNumber)
         {
             if (IndexValues != null)
@@ -106,33 +116,31 @@ namespace DeconTools.Backend.Core
             return highVal;
         }
 
-
         public override string ToString()
         {
             var sb = new StringBuilder();
             sb.Append(PrimaryScanNumber);
 
-            if (IndexValues.Count > 1)    //if there is summing, will show these scans in the string
+            if (IndexValues.Count <= 1)
+                return sb.ToString();
+
+            // Summing multiple scans (or frames); show them
+            sb.Append(" {");
+            for (var i = 0; i < IndexValues.Count; i++)
             {
-                sb.Append(" {");
-                for (var i = 0; i < IndexValues.Count; i++)
+                var isLast = (i == IndexValues.Count - 1);
+                sb.Append(IndexValues[i]);
+                if (isLast)
                 {
-                    var isLast = (i == IndexValues.Count - 1);
-                    sb.Append(IndexValues[i]);
-                    if (isLast)
-                    {
-                        sb.Append("}");
-                    }
-                    else
-                    {
-                        sb.Append(", ");
-                    }
+                    sb.Append("}");
+                }
+                else
+                {
+                    sb.Append(", ");
                 }
             }
             return sb.ToString();
-
         }
-
 
         internal int GetScanCount()
         {

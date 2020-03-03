@@ -17,8 +17,6 @@ namespace DeconTools.Backend.Workflows
                     throw new NullReferenceException("ScanBasedProgressInfo error. You need to provide a valid IMSScanSet");
                 uimfRun.CurrentIMSScanSet = imsScanSet;
             }
-
-
         }
 
         public float PercentDone { get; set; }

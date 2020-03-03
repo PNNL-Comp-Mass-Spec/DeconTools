@@ -362,7 +362,12 @@ namespace DeconTools.Backend.Workflows
 
         }
 
-        protected string GetProgressMessage(double percentDone)
+        /// <summary>
+        /// Get a progress message showing processing stats
+        /// </summary>
+        /// <param name="percentDone">Percent complete</param>
+        /// <returns></returns>
+        protected virtual string GetProgressMessage(double percentDone)
         {
             var elapsedTimeMinutes = Math.Max(DateTime.UtcNow.Subtract(WorkflowStats.TimeStarted).TotalMinutes, 0.1);
             var scansPerMinute = Run.ResultCollection.MSScanCounter / elapsedTimeMinutes;
