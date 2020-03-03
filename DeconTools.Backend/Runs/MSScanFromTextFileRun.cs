@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 
 namespace DeconTools.Backend.Runs
 {
-    public class MSScanFromTextFileRun : XYDataRun
+    public sealed class MSScanFromTextFileRun : XYDataRun
     {
 
         private char m_delimiter;
