@@ -817,10 +817,9 @@ namespace DeconTools.Backend.ProcessingTasks
             int maxProcessingTimeMinutes)
         {
             ScanSet currentScanSet;
-            var currentRun = resultList.Run as UIMFRun;
             bool processingUIMF;
 
-            if (currentRun != null)
+            if (resultList.Run is UIMFRun currentRun)
             {
                 currentScanSet = currentRun.CurrentIMSScanSet;
                 processingUIMF = true;
