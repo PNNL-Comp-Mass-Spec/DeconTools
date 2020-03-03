@@ -155,8 +155,11 @@ namespace DeconTools.Backend.Utilities
         /// <remarks>Returns the first value found within tolerance of the targetValue, not necessarily the closest value</remarks>
         public static int BinarySearchWithTolerance(double[] data, double targetVal, int leftIndex, int rightIndex, double tolerance)
         {
-            if (leftIndex <= rightIndex)
+            while (true)
             {
+                if (leftIndex > rightIndex)
+                    return -1;
+
                 var middle = (leftIndex + rightIndex) / 2;
                 if (Math.Abs(targetVal - data[middle]) <= tolerance)
                 {
@@ -165,14 +168,12 @@ namespace DeconTools.Backend.Utilities
 
                 if (targetVal < data[middle])
                 {
-                    return BinarySearchWithTolerance(data, targetVal, leftIndex, middle - 1, tolerance);
+                    rightIndex = middle - 1;
+                    continue;
                 }
 
-                return BinarySearchWithTolerance(data, targetVal, middle + 1, rightIndex, tolerance);
+                leftIndex = middle + 1;
             }
-
-            return -1;
-
         }
 
         /// <summary>
@@ -185,8 +186,11 @@ namespace DeconTools.Backend.Utilities
         /// <returns>Index of the matching data point, or -1 if no match</returns>
         public static int BinarySearch(int[] data, int targetVal, int leftIndex, int rightIndex)
         {
-            if (leftIndex <= rightIndex)
+            while (true)
             {
+                if (leftIndex > rightIndex)
+                    return -1;
+
                 var middle = (leftIndex + rightIndex) / 2;
                 if (targetVal == data[middle])
                 {
@@ -195,13 +199,12 @@ namespace DeconTools.Backend.Utilities
 
                 if (targetVal < data[middle])
                 {
-                    return BinarySearch(data, targetVal, leftIndex, middle - 1);
+                    rightIndex = middle - 1;
+                    continue;
                 }
 
-                return BinarySearch(data, targetVal, middle + 1, rightIndex);
+                leftIndex = middle + 1;
             }
-
-            return -1;
         }
 
         /// <summary>
@@ -289,10 +292,7 @@ namespace DeconTools.Backend.Utilities
                 rSquaredVal = 1.0d - (squaredResiduals.Sum() / sumSquaredMeanResiduals);
             }
 
-
         }
-
-
 
     }
 }
