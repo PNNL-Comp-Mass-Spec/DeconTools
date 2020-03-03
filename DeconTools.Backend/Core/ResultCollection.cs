@@ -52,7 +52,15 @@ namespace DeconTools.Backend.Core
         public List<string> LogMessageList { get; set; }
         public List<ElutingPeak> ElutingPeakCollection { get; set; }
 
+        /// <summary>
+        /// Keeps track of the number of deisotoped features that have been found
+        /// </summary>
         public int MSFeatureCounter { get; set; }
+
+        /// <summary>
+        /// Keeps track of the number of spectra that have been processed
+        /// </summary>
+        public int MSScanCounter { get; set; }
 
         //public Globals.IsosResultType ResultType { get; set; }
 
@@ -127,14 +135,16 @@ namespace DeconTools.Backend.Core
             return result;
         }
 
-        //This is the primary way to add an IsosResult
+        /// <summary>
+        /// Primary method for adding an IsosResult
+        /// </summary>
+        /// <param name="addedResult"></param>
         public void AddIsosResult(IsosResult addedResult)
         {
             addedResult.MSFeatureID = MSFeatureCounter;
-            MSFeatureCounter++;    // by placing it here, we make the MSFeatureID a zero-based ID, as Kevin requested in an email (Jan 20/2010)
+            MSFeatureCounter++;    // by placing it here, we make the MSFeatureID a zero-based ID
             IsosResultBin.Add(addedResult);
         }
-
 
         public void ClearAllResults()
         {

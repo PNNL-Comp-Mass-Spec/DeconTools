@@ -101,17 +101,17 @@ namespace DeconTools.Backend.Workflows
             var percentDone = _scanCounter / (float)(Run.ScanSetCollection.ScanSetList.Count) * 100;
             userState.PercentDone = percentDone;
 
-            var logText = "Scan/Frame= " + Run.GetCurrentScanOrFrame() + "; PercentComplete= " + percentDone.ToString("0.0") + "; AccumulatedFeatures= " + Run.ResultCollection.getTotalIsotopicProfiles();
+            var progressMessage = GetProgressMessage(percentDone);
 
             BackgroundWorker?.ReportProgress((int)percentDone, userState);
 
             if (_scanCounter % NumScansBetweenProgress == 0 || mShowTraceMessages)
             {
-                Logger.Instance.AddEntry(logText, true);
+                Logger.Instance.AddEntry(progressMessage, true);
 
                 if (BackgroundWorker == null)
                 {
-                    Console.WriteLine(DateTime.Now + "\t" + logText);
+                    Console.WriteLine(DateTime.Now + "\t" + progressMessage);
                 }
 
             }

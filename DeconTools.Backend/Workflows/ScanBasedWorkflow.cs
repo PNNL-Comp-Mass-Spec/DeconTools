@@ -356,9 +356,27 @@ namespace DeconTools.Backend.Workflows
 
             WorkflowStats.TimeFinished = DateTime.UtcNow;
             WorkflowStats.NumFeatures = Run.ResultCollection.MSFeatureCounter;
+            WorkflowStats.NumScans = Run.ResultCollection.MSScanCounter;
 
             WriteOutSummaryToLogfile();
 
+        }
+
+        protected string GetProgressMessage(double percentDone)
+        {
+            var elapsedTimeMinutes = Math.Max(DateTime.UtcNow.Subtract(WorkflowStats.TimeStarted).TotalMinutes, 0.1);
+            var scansPerMinute = Run.ResultCollection.MSScanCounter / elapsedTimeMinutes;
+
+            var progressMessage = string.Format(
+                "Scan/Frame= {0:N0}; PercentComplete= {1:F1}; AccumulatedFeatures= {2:N0}; ScansProcessed= {3:N0}; ScansPerMinute= {4:F1}",
+                Run.GetCurrentScanOrFrame(),
+                percentDone,
+                Run.ResultCollection.getTotalIsotopicProfiles(),
+                Run.ResultCollection.MSScanCounter,
+                scansPerMinute
+            );
+
+            return progressMessage;
         }
 
         private void LogError(Exception ex, string simpleErrorMessage)
@@ -424,11 +442,20 @@ namespace DeconTools.Backend.Workflows
         {
             Logger.Instance.AddEntry("Finished file processing", true);
 
+            if (WorkflowStats.TimeFinished < WorkflowStats.TimeStarted)
+            {
+                WorkflowStats.TimeFinished = DateTime.UtcNow;
+            }
+
             var formattedOverallProcessingTime = string.Format("{0:00}:{1:00}:{2:00}",
                 WorkflowStats.ElapsedTime.Hours, WorkflowStats.ElapsedTime.Minutes, WorkflowStats.ElapsedTime.Seconds);
 
+            var processingRate = WorkflowStats.NumScans / Math.Max(WorkflowStats.ElapsedTime.TotalMinutes, 0.1);
+
             Logger.Instance.AddEntry("total processing time = " + formattedOverallProcessingTime);
-            Logger.Instance.AddEntry("total features = " + WorkflowStats.NumFeatures, true);
+            Logger.Instance.AddEntry(string.Format("total scans processed = {0:N0}", WorkflowStats.NumScans));
+            Logger.Instance.AddEntry(string.Format("processing rate = {0:N0} scans/minute", processingRate));
+            Logger.Instance.AddEntry(string.Format("total features = {0:N0}", WorkflowStats.NumFeatures), true);
             Logger.Instance.Close();
         }
 

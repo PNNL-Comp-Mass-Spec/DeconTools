@@ -145,18 +145,18 @@ namespace DeconTools.Backend.Workflows
 
             var frameTotal = uimfRun.ScanSetCollection.ScanSetList.Count;
 
-            var percentDone = (frameNum / (double)frameTotal + (scanNum / (double)scanTotal) / frameTotal) * 100;
+            var percentDone = (frameNum / (double)frameTotal + scanNum / (double)scanTotal / frameTotal) * 100;
             userState.PercentDone = (float)percentDone;
 
-            var logText = "Scan/Frame= " + Run.GetCurrentScanOrFrame() + "; PercentComplete= " + percentDone.ToString("0.0") + "; AccumulatedFeatures= " + Run.ResultCollection.getTotalIsotopicProfiles();
+            var progressMessage = GetProgressMessage(percentDone);
 
             var numScansBetweenProgress = 1;
 
             var imsScanIsLastInFrame = uimfRun.IMSScanSetCollection.GetLastScanSet() == uimfRun.CurrentIMSScanSet.PrimaryScanNumber;
             if (imsScanIsLastInFrame)
             {
-                Logger.Instance.AddEntry(logText, true);
-                Console.WriteLine(DateTime.Now + "\t" + logText);
+                Logger.Instance.AddEntry(progressMessage, true);
+                Console.WriteLine(DateTime.Now + "\t" + progressMessage);
             }
 
             if (BackgroundWorker != null && scanNum % numScansBetweenProgress == 0)

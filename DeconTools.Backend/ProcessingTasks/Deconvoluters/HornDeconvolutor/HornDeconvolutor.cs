@@ -870,6 +870,8 @@ namespace DeconTools.Backend.ProcessingTasks
                 currentScanSet.NumIsotopicProfiles++;
             }
 
+            // Increment the scan counter
+            resultList.MSScanCounter++;
 
             if (!processingWasAborted)
                 return;
