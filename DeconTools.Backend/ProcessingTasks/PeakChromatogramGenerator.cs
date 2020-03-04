@@ -550,8 +550,8 @@ namespace DeconTools.Backend.ProcessingTasks
 
             //will pad min and max scans with zeros, and add zeros in between. This allows smoothing to execute properly
 
-            peakListMinScan = peakListMinScan - leftZeroPadding;
-            peakListMaxScan = peakListMaxScan + rightZeroPadding;
+            peakListMinScan -= leftZeroPadding;
+            peakListMaxScan += rightZeroPadding;
 
             if (peakListMinScan < run.MinLCScan) peakListMinScan = run.MinLCScan;
             if (peakListMaxScan > run.MaxLCScan) peakListMaxScan = run.MaxLCScan;

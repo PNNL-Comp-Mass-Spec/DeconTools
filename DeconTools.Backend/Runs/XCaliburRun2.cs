@@ -150,7 +150,7 @@ namespace DeconTools.Backend.Runs
                 return 1;
             }
 
-            if (XRawFileIO.ExtractMSLevel(filter, out var msLevel, out var _))
+            if (XRawFileIO.ExtractMSLevel(filter, out var msLevel, out _))
             {
                 return msLevel;
             }

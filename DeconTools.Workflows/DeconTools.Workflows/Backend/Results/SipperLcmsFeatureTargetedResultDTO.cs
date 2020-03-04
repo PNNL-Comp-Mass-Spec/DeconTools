@@ -5,9 +5,6 @@ namespace DeconTools.Workflows.Backend.Results
     public class SipperLcmsFeatureTargetedResultDTO : UnlabeledTargetedResultDTO
     {
 
-        #region Constructors
-        #endregion
-
         #region Properties
 
         public double AreaUnderRatioCurve { get; set; }

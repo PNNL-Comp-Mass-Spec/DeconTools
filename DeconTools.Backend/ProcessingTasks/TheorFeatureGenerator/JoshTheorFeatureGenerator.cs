@@ -19,26 +19,27 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
         {
         }
 
-        public JoshTheorFeatureGenerator(DeconTools.Backend.Globals.LabelingType labelingType, double lowPeakCutOff)
+        public JoshTheorFeatureGenerator(Globals.LabelingType labelingType, double lowPeakCutOff)
         {
-            this.LabelingType = labelingType;
-            this.LowPeakCutOff = lowPeakCutOff;
+            LabelingType = labelingType;
+            LowPeakCutOff = lowPeakCutOff;
         }
 
-        public JoshTheorFeatureGenerator(DeconTools.Backend.Globals.LabelingType labelingType, double fractionLabeling, double lowPeakCutOff)
+        public JoshTheorFeatureGenerator(Globals.LabelingType labelingType, double fractionLabeling, double lowPeakCutOff)
         {
-            this.LabelingType = labelingType;
-            this.LowPeakCutOff = lowPeakCutOff;
-            this.FractionLabeling = fractionLabeling;
+            LabelingType = labelingType;
+            LowPeakCutOff = lowPeakCutOff;
+            FractionLabeling = fractionLabeling;
         }
 
-        public JoshTheorFeatureGenerator(DeconTools.Backend.Globals.LabelingType labelingType, double fractionLabeling, double lowPeakCutOff, double molarMixingFraction)
+        public JoshTheorFeatureGenerator(Globals.LabelingType labelingType, double fractionLabeling, double lowPeakCutOff, double molarMixingFraction)
         {
-            this.LabelingType = labelingType;
-            this.LowPeakCutOff = lowPeakCutOff;
-            this.FractionLabeling = fractionLabeling;
-            this.MolarMixingFraction = molarMixingFraction;
-            var _DeuteriumIsotopicProfileGenerator = new DeuteriumIsotopeProfileGenerator(molarMixingFraction, 1 - molarMixingFraction);
+            LabelingType = labelingType;
+            LowPeakCutOff = lowPeakCutOff;
+            FractionLabeling = fractionLabeling;
+            MolarMixingFraction = molarMixingFraction;
+            // Unused:
+            // var _DeuteriumIsotopicProfileGenerator = new DeuteriumIsotopeProfileGenerator(molarMixingFraction, 1 - molarMixingFraction);
         }
 
         #endregion
@@ -63,23 +64,20 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
         #region Public Methods
 
 
-        public override IsotopicProfile GenerateTheorProfile (string empiricalFormula, int chargeState)
+        public override IsotopicProfile GenerateTheorProfile(string empiricalFormula, int chargeState)
         {
-            var  iso = _isotopicDistCalculator.GetIsotopePattern(empiricalFormula);
+            var iso = _isotopicDistCalculator.GetIsotopePattern(empiricalFormula);
             iso.ChargeState = chargeState;
 
-            var monoMass=  EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(empiricalFormula);
+            var monoMass = EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(empiricalFormula);
 
-            if (chargeState!=0)
+            if (chargeState != 0)
             {
-                calculateMassesForIsotopicProfile(iso, monoMass, chargeState);
-
+                CalculateMassesForIsotopicProfile(iso, monoMass, chargeState);
             }
 
             return iso;
-
         }
-
 
         public override void GenerateTheorFeature(TargetBase mt)
         {
@@ -115,21 +113,13 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
 
         #region Private Methods
 
-
-
-
-
         private IsotopicProfile GetUnlabeledIsotopicProfile(TargetBase mt)
         {
-
-            var iso = new IsotopicProfile();
+            IsotopicProfile iso;
 
             try
             {
                 //empirical formula may contain non-integer values for
-
-
-
                 iso = _isotopicDistCalculator.GetIsotopePattern(mt.EmpiricalFormula);
             }
             catch (Exception ex)
@@ -141,23 +131,22 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
             iso.ChargeState = mt.ChargeState;
 
 
-            if (iso.ChargeState != 0) calculateMassesForIsotopicProfile(iso, mt.MonoIsotopicMass,mt.ChargeState);
+            if (iso.ChargeState != 0)
+                CalculateMassesForIsotopicProfile(iso, mt.MonoIsotopicMass, mt.ChargeState);
 
             return iso;
-
-
         }
 
         #endregion
 
 
-        private void calculateMassesForIsotopicProfile(IsotopicProfile iso, double targetMonoMass, double targetChargeState)
+        private void CalculateMassesForIsotopicProfile(IsotopicProfile iso, double targetMonoMass, double targetChargeState)
         {
-            if (iso == null || iso.Peaklist == null) return;
+            if (iso?.Peaklist == null) return;
 
             for (var i = 0; i < iso.Peaklist.Count; i++)
             {
-                var calcMZ = targetMonoMass/ targetChargeState + Globals.PROTON_MASS + i * Globals.MASS_DIFF_BETWEEN_ISOTOPICPEAKS / targetChargeState;
+                var calcMZ = targetMonoMass / targetChargeState + Globals.PROTON_MASS + i * Globals.MASS_DIFF_BETWEEN_ISOTOPICPEAKS / targetChargeState;
                 iso.Peaklist[i].XValue = calcMZ;
             }
 

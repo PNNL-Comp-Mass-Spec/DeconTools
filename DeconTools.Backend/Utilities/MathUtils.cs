@@ -238,7 +238,7 @@ namespace DeconTools.Backend.Utilities
 
             var numIndependentVariables = 1;
             var numPoints = yVals.Length;
-            alglib.lrbuild(inputData, numPoints, numIndependentVariables, out var _, out var linearModel, out var regressionReport);
+            alglib.lrbuild(inputData, numPoints, numIndependentVariables, out _, out var linearModel, out var regressionReport);
 
             double[] regressionLineInfo;
 

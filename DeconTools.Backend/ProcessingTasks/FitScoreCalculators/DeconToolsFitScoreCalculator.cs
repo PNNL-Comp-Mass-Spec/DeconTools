@@ -58,7 +58,7 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
                 //XYData theorXYData = distributionCreator.Data;
 
                 var areaFitter = new AreaFitter();
-                var fitVal = areaFitter.GetFit(theorXYData, result.Run.XYData, 0.1, out var _);
+                var fitVal = areaFitter.GetFit(theorXYData, result.Run.XYData, 0.1, out _);
 
                 if (double.IsNaN(fitVal) || fitVal > 1)
                     result.IsotopicProfile.Score = 1;

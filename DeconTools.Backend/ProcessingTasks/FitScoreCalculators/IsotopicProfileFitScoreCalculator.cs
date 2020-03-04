@@ -88,7 +88,7 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
 
             var areaFitter = new AreaFitter();
 
-            var fitVal = areaFitter.GetFit(theorXYData, massSpecXYData, 0.1, out var _);
+            var fitVal = areaFitter.GetFit(theorXYData, massSpecXYData, 0.1, out _);
 
             if (double.IsNaN(fitVal) || fitVal > 1) fitVal = 1;
             return fitVal;

@@ -292,8 +292,8 @@ namespace DeconTools.Workflows.Backend.Core
             {
                 var errorMessage = " Error during 'ExecutePostWorkflowHook': " + ex.Message;
 
-                WorkflowStatusMessage = WorkflowStatusMessage + errorMessage;
-                Result.ErrorDescription = Result.ErrorDescription + errorMessage;
+                WorkflowStatusMessage += errorMessage;
+                Result.ErrorDescription += errorMessage;
             }
         }
 
@@ -308,7 +308,7 @@ namespace DeconTools.Workflows.Backend.Core
                 {
                     if (Result.IsotopicProfile != null)
                     {
-                        WorkflowStatusMessage = WorkflowStatusMessage + "; Target FOUND!";
+                        WorkflowStatusMessage += "; Target FOUND!";
                     }
                 }
                 else

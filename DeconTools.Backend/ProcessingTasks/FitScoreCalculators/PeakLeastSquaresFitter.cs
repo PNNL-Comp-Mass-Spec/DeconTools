@@ -23,7 +23,7 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
         public double GetFit(List<Peak> theorPeakList, List<Peak> observedPeakList, double minIntensityForScore, double toleranceInPPM)
         {
             const int numPeaksToTheLeftForScoring = 0;
-            return GetFit(theorPeakList, observedPeakList, minIntensityForScore, toleranceInPPM, numPeaksToTheLeftForScoring, out var _);
+            return GetFit(theorPeakList, observedPeakList, minIntensityForScore, toleranceInPPM, numPeaksToTheLeftForScoring, out _);
         }
 
         public double GetFit(

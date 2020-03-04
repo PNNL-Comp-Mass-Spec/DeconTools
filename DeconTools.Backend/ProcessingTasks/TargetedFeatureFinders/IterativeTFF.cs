@@ -154,7 +154,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             //start with high PeakBR and ratchet it down, so as to detect more peaks with each pass.  Stop when you find the isotopic profile.
             peakList = new List<Peak>();
 
-            for (var d = PeakDetectorPeakBR; d >= PeakBRMin; d = d - PeakBRStep)
+            for (var d = PeakDetectorPeakBR; d >= PeakBRMin; d -= PeakBRStep)
             {
                 MSPeakDetector.PeakToBackgroundRatio = d;
 

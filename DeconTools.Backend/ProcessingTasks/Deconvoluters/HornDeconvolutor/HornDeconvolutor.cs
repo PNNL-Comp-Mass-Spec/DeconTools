@@ -435,7 +435,7 @@ namespace DeconTools.Backend.ProcessingTasks
 
                         //set threshold at 20% less than the expected 'distance' to the next peak
                         var errorThreshold = 1.003 / transformRecord.ChargeState;
-                        errorThreshold = errorThreshold - errorThreshold * 0.2;
+                        errorThreshold -= errorThreshold * 0.2;
 
                         var calcMonoMz = transformRecord.MonoMw / transformRecord.ChargeState + 1.00727638;
 
@@ -551,7 +551,7 @@ namespace DeconTools.Backend.ProcessingTasks
             //  deleteThreshold = _deleteIntensityThreshold;
             var deleteThreshold = DeleteIntensityThreshold;
             var bestFit = _isotopeFitScorer.GetFitScore(peakData, chargeState, ref peak, out record, deleteThreshold,
-                MinIntensityForScore, LeftFitStringencyFactor, RightFitStringencyFactor, out var _,
+                MinIntensityForScore, LeftFitStringencyFactor, RightFitStringencyFactor, out _,
                 ShowTraceMessages);
             // When deleting an isotopic profile, this value is set to the last m/z to perform deletion at.
             _isotopeFitScorer.GetZeroingMassRange(out var zeroingStartMz, out var zeroingStopMz, record.DeltaMz, deleteThreshold,
@@ -563,7 +563,7 @@ namespace DeconTools.Backend.ProcessingTasks
             {
                 var bestFitCharge1 = _isotopeFitScorer.GetFitScore(peakData, 1, ref peakCharge1, out var recordCharge1,
                     deleteThreshold, MinIntensityForScore, LeftFitStringencyFactor,
-                    RightFitStringencyFactor, out var _, ShowTraceMessages);
+                    RightFitStringencyFactor, out _, ShowTraceMessages);
                 _isotopeFitScorer.GetZeroingMassRange(out var startMz1, out var stopMz1, record.DeltaMz, deleteThreshold,
                     ShowTraceMessages);
                 if (bestFit > MaxFitAllowed && bestFitCharge1 < MaxFitAllowed)

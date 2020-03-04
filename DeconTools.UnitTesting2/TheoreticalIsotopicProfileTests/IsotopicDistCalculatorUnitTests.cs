@@ -14,9 +14,9 @@ namespace DeconTools.UnitTesting2.TheoreticalIsotopicProfileTests
     [TestFixture]
     public class IsotopicDistributionCalculatorTests
     {
-        TomIsotopicPattern _tomIsotopicPatternGenerator = new TomIsotopicPattern();
-        IsotopicDistributionCalculator isotopicDistributionCalculator = IsotopicDistributionCalculator.Instance;
-        AminoAcidFormulaBuilder formBuild = new AminoAcidFormulaBuilder();
+        readonly TomIsotopicPattern _tomIsotopicPatternGenerator = new TomIsotopicPattern();
+        readonly IsotopicDistributionCalculator isotopicDistributionCalculator = IsotopicDistributionCalculator.Instance;
+        readonly AminoAcidFormulaBuilder formBuild = new AminoAcidFormulaBuilder();
 
 
         [Test]
