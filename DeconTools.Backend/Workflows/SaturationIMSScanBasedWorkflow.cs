@@ -422,7 +422,7 @@ namespace DeconTools.Backend.Workflows
         }
 
         [Obsolete("Unused")]
-        private void DisplayMSPeakResults(List<MSPeakResult> list)
+        private void DisplayMSPeakResults(IEnumerable<MSPeakResult> list)
         {
 
             var sb = new StringBuilder();
@@ -605,9 +605,13 @@ namespace DeconTools.Backend.Workflows
 
                     if (updatePeakMasses)
                     {
-                        iso.Peaklist[i].XValue = iso.Peaklist[indexOfPeakUsedInExtrapolation].XValue -              // formula is  MZ0 = MZ3 - (1.003/z)*n
-                                              ((Globals.MASS_DIFF_BETWEEN_ISOTOPICPEAKS) / iso.ChargeState *        // where MZ0 is the m/z of the saturated peak and MZ3 the m/z of the nonSaturated peak
-                                               (indexOfPeakUsedInExtrapolation - i));                               // and z is charge state and n is the difference in peak number
+                        // Formula is MZ0 = MZ3 - (1.00235/z)*n
+                        // where MZ0 is the m/z of the saturated peak and MZ3 the m/z of the nonSaturated peak,
+                        // z is charge state, and n is the difference in peak number
+
+                        iso.Peaklist[i].XValue = iso.Peaklist[indexOfPeakUsedInExtrapolation].XValue -
+                                                 Globals.MASS_DIFF_BETWEEN_ISOTOPICPEAKS / iso.ChargeState *
+                                                 (indexOfPeakUsedInExtrapolation - i);
                     }
 
                 }
