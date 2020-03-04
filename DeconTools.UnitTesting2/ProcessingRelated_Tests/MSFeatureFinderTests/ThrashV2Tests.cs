@@ -111,11 +111,18 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
             TestUtilities.DisplayMSFeatures(run.ResultCollection.ResultList);
 
             Assert.IsTrue(run.ResultCollection.ResultList.Count > 0);
-            Assert.AreEqual(33, run.ResultCollection.ResultList.Count);
+
+            // Previously 33, now 30
+            Assert.AreEqual(30, run.ResultCollection.ResultList.Count);
 
             var result1 = run.ResultCollection.ResultList[0];
-            Assert.AreEqual(13084442, (decimal)Math.Round(result1.IntensityAggregate));
-            Assert.AreEqual(960.53365m, (decimal)Math.Round(result1.IsotopicProfile.MonoIsotopicMass, 5));
+
+            // Previously 13084442, now 573290m
+            Assert.AreEqual(573290m, (decimal)Math.Round(result1.IntensityAggregate));
+
+            // Previously 960.53365m, now 1160.55077m
+            Assert.AreEqual(1160.55077m, (decimal)Math.Round(result1.IsotopicProfile.MonoIsotopicMass, 5));
+
             Assert.AreEqual(2, result1.IsotopicProfile.ChargeState);
 
         }
