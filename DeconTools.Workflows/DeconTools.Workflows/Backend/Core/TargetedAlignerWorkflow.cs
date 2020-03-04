@@ -475,16 +475,12 @@ namespace DeconTools.Workflows.Backend.Core
                     Console.WriteLine(DateTime.Now + "\t" + progressString);
 
                 }
-
             }
             else
             {
-
-
                 _backgroundWorker.ReportProgress(progressPercentage, progressString);
             }
         }
-
 
         private bool resultPassesStrictCriteria(TargetedResultBase result)
         {

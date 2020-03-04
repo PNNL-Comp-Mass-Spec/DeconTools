@@ -62,6 +62,7 @@ namespace DeconTools.Backend.Workflows
         public DeconToolsParameters NewDeconToolsParameters { get; set; }
 
         #region Factory methods
+
         public static ScanBasedWorkflow CreateWorkflow(string datasetFileName, string parameterFile, string outputDirectoryPath = null, BackgroundWorker backgroundWorker = null, bool useNewDeconToolsParameterObjects = true)
         {
             var datasetFile = new FileInfo(datasetFileName);
@@ -153,8 +154,6 @@ namespace DeconTools.Backend.Workflows
             }
         }
 
-
-
         #endregion
 
         #region Constructors
@@ -187,7 +186,6 @@ namespace DeconTools.Backend.Workflows
         /// Default = TRUE
         /// </summary>
         public bool ExportData { get; set; }
-
 
         #endregion
 
@@ -227,9 +225,7 @@ namespace DeconTools.Backend.Workflows
 
                 IqLogger.LogMessage("Loading _peaks.txt file into memory. Takes 0 - 30 seconds" + Environment.NewLine);
                 LoadPeaks(OutputDirectoryPath);
-
             }
-
 
         }
 
@@ -256,11 +252,9 @@ namespace DeconTools.Backend.Workflows
             ScanResultUpdater = new ScanResultUpdater(NewDeconToolsParameters.ScanBasedWorkflowParameters.ProcessMS2);
             ResultValidator = new ResultValidatorTask();
 
-            IsosResultExporter = IsosExporterFactory.CreateIsosExporter(Run.ResultCollection.ResultType, ExporterType,
-                                                                  IsosOutputFileName);
+            IsosResultExporter = IsosExporterFactory.CreateIsosExporter(Run.ResultCollection.ResultType, ExporterType, IsosOutputFileName);
 
-            ScanResultExporter = ScansExporterFactory.CreateScansExporter(Run.MSFileType, ExporterType,
-                                                                          ScansOutputFileName);
+            ScanResultExporter = ScansExporterFactory.CreateScansExporter(Run.MSFileType, ExporterType, ScansOutputFileName);
 
             if (!_deconvolutorRequiresPeaksFile)
             {
@@ -269,7 +263,6 @@ namespace DeconTools.Backend.Workflows
             }
 
             PeakToMSFeatureAssociator = new PeakToMSFeatureAssociator();
-
         }
 
         /// <summary>
@@ -286,7 +279,6 @@ namespace DeconTools.Backend.Workflows
                 return;
             }
 
-
             if (NewDeconToolsParameters.MSGeneratorParameters.UseLCScanRange)
             {
                 minScan = Math.Max(Run.MinLCScan, NewDeconToolsParameters.MSGeneratorParameters.MinLCScan);
@@ -298,7 +290,6 @@ namespace DeconTools.Backend.Workflows
                 maxScan = Run.MaxLCScan;
             }
 
-
             int numSummed;
             if (NewDeconToolsParameters.MSGeneratorParameters.SumSpectraAcrossLC)
             {
@@ -309,9 +300,9 @@ namespace DeconTools.Backend.Workflows
                 numSummed = 1;
             }
 
-            Run.ScanSetCollection.Create(Run, minScan, maxScan, numSummed, 1,
-                          NewDeconToolsParameters.ScanBasedWorkflowParameters.ProcessMS2);
-
+            Run.ScanSetCollection.Create(
+                Run, minScan, maxScan, numSummed, 1,
+                NewDeconToolsParameters.ScanBasedWorkflowParameters.ProcessMS2);
         }
 
         /// <summary>
@@ -359,7 +350,6 @@ namespace DeconTools.Backend.Workflows
             WorkflowStats.NumScans = Run.ResultCollection.MSScanCounter;
 
             WriteOutSummaryToLogfile();
-
         }
 
         /// <summary>
@@ -406,7 +396,6 @@ namespace DeconTools.Backend.Workflows
             RunUtilities.GetPeaks(Run, expectedPeaksFile);
         }
 
-
         private bool CheckForPeaksFile(string userProvidedOutputDirectoryPath = null)
         {
             string outputDirectoryPath;
@@ -441,7 +430,6 @@ namespace DeconTools.Backend.Workflows
 
             return (rowCount > 1);
         }
-
 
         protected virtual void WriteOutSummaryToLogfile()
         {

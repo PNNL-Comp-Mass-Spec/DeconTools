@@ -179,7 +179,6 @@ namespace DeconTools.Backend.Workflows
                 ExecuteTask(Smoother);
             }
 
-
             ExecuteTask(PeakDetector);
 
             foreach (var peak in Run.ResultCollection.MSPeakResultList)

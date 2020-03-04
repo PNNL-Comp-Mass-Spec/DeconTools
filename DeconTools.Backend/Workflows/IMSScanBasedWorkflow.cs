@@ -48,7 +48,6 @@ namespace DeconTools.Backend.Workflows
             uimfRun.ScanSetCollection = new ScanSetCollection();
             uimfRun.IMSScanSetCollection = new IMSScanSetCollection();
 
-
             int numFramesSummed;
             if (NewDeconToolsParameters.MSGeneratorParameters.SumSpectraAcrossLC)
             {
@@ -63,7 +62,6 @@ namespace DeconTools.Backend.Workflows
             {
                 uimfRun.ScanSetCollection.Create(uimfRun, NewDeconToolsParameters.MSGeneratorParameters.MinLCScan,
                    NewDeconToolsParameters.MSGeneratorParameters.MaxLCScan, numFramesSummed, 1, NewDeconToolsParameters.ScanBasedWorkflowParameters.ProcessMS2);
-
             }
             else
             {
@@ -73,7 +71,6 @@ namespace DeconTools.Backend.Workflows
             var sumAllIMSScansInAFrame = (NewDeconToolsParameters.MSGeneratorParameters.SumAllSpectra);
             if (sumAllIMSScansInAFrame)
             {
-
                 var centerScan = (uimfRun.MinIMSScan + uimfRun.MaxIMSScan + 1) / 2;
 
                 uimfRun.IMSScanSetCollection.ScanSetList.Clear();
@@ -171,9 +168,6 @@ namespace DeconTools.Backend.Workflows
                 mCachedProgressMessage = GetProgressMessage(percentDone);
                 mLastProgress = DateTime.UtcNow;
             }
-            else
-            {
-            }
 
             if (imsScanIsLastInFrame)
             {
@@ -184,7 +178,6 @@ namespace DeconTools.Backend.Workflows
             BackgroundWorker?.ReportProgress((int)mCachedUserState.PercentDone, mCachedUserState);
 
         }
-
 
     }
 }
