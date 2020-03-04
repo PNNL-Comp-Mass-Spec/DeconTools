@@ -20,11 +20,11 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
             run.CurrentScanSet = scanSet;
 
             
-            var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            var generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
             var peakDetector = new DeconToolsPeakDetectorV2(1.3, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
             var decon = new HornDeconvolutor();
 
-            msgen.Execute(run.ResultCollection);
+            generator.Execute(run.ResultCollection);
             peakDetector.Execute(run.ResultCollection);
             decon.Execute(run.ResultCollection);
 

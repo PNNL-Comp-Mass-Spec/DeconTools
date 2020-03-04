@@ -24,14 +24,14 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.IsotopicProfileQuality
             var scanSet = new ScanSet(6005);
             run.CurrentScanSet = scanSet;
 
-            var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            var generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
             var peakDetector = new DeconToolsPeakDetectorV2(1.3, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
 
             var decon = new HornDeconvolutor();
 
 
-            msgen.Execute(run.ResultCollection);
+            generator.Execute(run.ResultCollection);
             peakDetector.Execute(run.ResultCollection);
             decon.Execute(run.ResultCollection);
 
@@ -69,7 +69,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.IsotopicProfileQuality
             var scanSet = new ScanSet(6005);
             run.CurrentScanSet = scanSet;
 
-            Task msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            Task generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
 
             var peakDetector = new DeconToolsPeakDetectorV2(1.3, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
@@ -77,7 +77,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.IsotopicProfileQuality
             var decon = new HornDeconvolutor();
 
 
-            msgen.Execute(run.ResultCollection);
+            generator.Execute(run.ResultCollection);
             peakDetector.Execute(run.ResultCollection);
             decon.Execute(run.ResultCollection);
 
@@ -115,7 +115,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.IsotopicProfileQuality
             var scanSet = new ScanSet(6005);
             run.CurrentScanSet = scanSet;
 
-            Task msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            Task generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
 
             var peakDetector = new DeconToolsPeakDetectorV2(1.3, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
@@ -123,7 +123,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.IsotopicProfileQuality
             var decon = new HornDeconvolutor();
 
 
-            msgen.Execute(run.ResultCollection);
+            generator.Execute(run.ResultCollection);
             peakDetector.Execute(run.ResultCollection);
             decon.Execute(run.ResultCollection);
 
@@ -162,7 +162,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.IsotopicProfileQuality
 
             var scanSet = new ScanSet(6005);
             run.CurrentScanSet = scanSet;
-            Task msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            Task generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
 
             var peakDetector = new DeconToolsPeakDetectorV2(1.3, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
@@ -170,7 +170,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.IsotopicProfileQuality
             var decon = new HornDeconvolutor();
 
 
-            msgen.Execute(run.ResultCollection);
+            generator.Execute(run.ResultCollection);
             peakDetector.Execute(run.ResultCollection);
             decon.Execute(run.ResultCollection);
 
@@ -212,10 +212,10 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.IsotopicProfileQuality
             var scanSet = new ScanSet(0);
             run.CurrentScanSet = scanSet;
 
-            var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            var generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
-            msgen.MinMZ = 200;
-            msgen.MaxMZ = 2000;
+            generator.MinMZ = 200;
+            generator.MaxMZ = 2000;
 
             var peakDetector = new DeconToolsPeakDetectorV2(4, 3, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
 
@@ -230,7 +230,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.IsotopicProfileQuality
 
             var zeroFiller = new DeconToolsZeroFiller();
 
-            msgen.Execute(run.ResultCollection);
+            generator.Execute(run.ResultCollection);
             zeroFiller.Execute(run.ResultCollection);
 
             peakDetector.Execute(run.ResultCollection);
@@ -272,7 +272,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.IsotopicProfileQuality
             var scanSet = new ScanSet(6005);
             run.CurrentScanSet = scanSet;
 
-            Task msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            Task generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
 
             var peakDetector = new DeconToolsPeakDetectorV2(1.3, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
@@ -280,7 +280,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.IsotopicProfileQuality
             var decon = new HornDeconvolutor();
 
 
-            msgen.Execute(run.ResultCollection);
+            generator.Execute(run.ResultCollection);
             peakDetector.Execute(run.ResultCollection);
             decon.Execute(run.ResultCollection);
 

@@ -20,7 +20,7 @@ namespace DeconTools.UnitTesting2
 
             run.ScanSetCollection.Create(run, 6000, 6050, 1, 1, false);
 
-            Task msgen = new GenericMSGenerator();
+            Task generator = new GenericMSGenerator();
             var peakDetector = new DeconToolsPeakDetectorV2
             {
                 PeaksAreStored = true
@@ -38,7 +38,7 @@ namespace DeconTools.UnitTesting2
             foreach (var scan in run.ScanSetCollection.ScanSetList)
             {
                 run.CurrentScanSet = scan;
-                msgen.Execute(run.ResultCollection);
+                generator.Execute(run.ResultCollection);
                 peakDetector.Execute(run.ResultCollection);
             }
 
@@ -56,7 +56,7 @@ namespace DeconTools.UnitTesting2
 
             run.ScanSetCollection.Create(run, 6000, 6005, 1, 1, false);
 
-            Task msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            Task generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
             Task peakDetector = new DeconToolsPeakDetectorV2();
             Task msScanInfoCreator = new ScanResultUpdater();
             Task flagger = new ResultValidatorTask();
@@ -66,7 +66,7 @@ namespace DeconTools.UnitTesting2
                 Console.WriteLine("Deconvoluting scan " + scan);
 
                 run.CurrentScanSet = scan;
-                msgen.Execute(run.ResultCollection);
+                generator.Execute(run.ResultCollection);
                 peakDetector.Execute(run.ResultCollection);
 
                 Task decon = new ThrashDeconvolutorV2();
@@ -90,7 +90,7 @@ namespace DeconTools.UnitTesting2
 
             run.IMSScanSetCollection.Create(run, 250, 270, 9, 1);
 
-            Task msgen = new UIMF_MSGenerator();
+            Task generator = new UIMF_MSGenerator();
             Task peakDetector = new DeconToolsPeakDetectorV2();
             Task decon = new ThrashDeconvolutorV2();
             Task msScanInfoCreator = new ScanResultUpdater();
@@ -107,7 +107,7 @@ namespace DeconTools.UnitTesting2
                     var scan = (IMSScanSet)scanSet;
 
                     run.CurrentIMSScanSet = scan;
-                    msgen.Execute(run.ResultCollection);
+                    generator.Execute(run.ResultCollection);
                     peakDetector.Execute(run.ResultCollection);
                     decon.Execute(run.ResultCollection);
                     flagger.Execute(run.ResultCollection);

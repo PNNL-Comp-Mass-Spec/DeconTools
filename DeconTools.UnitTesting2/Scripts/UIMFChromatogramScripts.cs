@@ -33,7 +33,7 @@ namespace DeconTools.UnitTesting2.Scripts
             var imsScanSetCollection = new IMSScanSetCollection();
             imsScanSetCollection.Create(run, 60, 250, 1, 1);
 
-            var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            var generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
             var peakDet = new DeconToolsPeakDetectorV2
             {
@@ -67,7 +67,7 @@ namespace DeconTools.UnitTesting2.Scripts
 
                         try
                         {
-                            msgen.Execute(run.ResultCollection);
+                            generator.Execute(run.ResultCollection);
                             peakDet.Execute(run.ResultCollection);
 
                             basePeakIntensity = GetMaxPeak(run.PeakList);
@@ -126,7 +126,7 @@ namespace DeconTools.UnitTesting2.Scripts
             ((UIMFRun)run).IMSScanSetCollection = new IMSScanSetCollection();
             ((UIMFRun)run).IMSScanSetCollection.Create(run, 122, 122, 1, 1);
 
-            var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            var generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
             var peakDet = new DeconToolsPeakDetectorV2
             {
@@ -185,7 +185,7 @@ namespace DeconTools.UnitTesting2.Scripts
 
                         try
                         {
-                            msgen.Execute(run.ResultCollection);
+                            generator.Execute(run.ResultCollection);
 
                             _zeroFiller.Execute(run.ResultCollection);
 

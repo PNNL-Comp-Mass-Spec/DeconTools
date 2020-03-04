@@ -10,7 +10,6 @@ namespace DeconTools.Workflows.Backend.Results
         public static void CreateTargetedResult(TargetedResultBase result, TargetedResultDTO resultLight)
         {
             WriteStandardInfoToResult(resultLight, result);
-
         }
 
         public static TargetedResultDTO CreateTargetedResult(TargetedResultBase result)

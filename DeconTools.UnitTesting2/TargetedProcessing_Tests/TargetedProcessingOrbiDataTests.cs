@@ -58,7 +58,7 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
             Task chromPeakSel = new BasicChromPeakSelector(basicChromPeakSelParam);
 
 
-            Task msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            Task generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
 
             run.CurrentMassTag = massTagColl.TargetList.Find(p => p.ID == mtID);
@@ -86,7 +86,7 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
             TestUtilities.DisplayPeaks(run.PeakList);
 
             chromPeakSel.Execute(run.ResultCollection);
-            msgen.Execute(run.ResultCollection);
+            generator.Execute(run.ResultCollection);
             //TestUtilities.DisplayXYValues(run.ResultCollection);
             msPeakDet.Execute(run.ResultCollection);
             targetedFeatureFinder.Execute(run.ResultCollection);
@@ -137,7 +137,7 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
             basicChromPeakSelParam.PeakSelectorMode = Globals.PeakSelectorMode.ClosestToTarget;
             Task chromPeakSel = new BasicChromPeakSelector(basicChromPeakSelParam);
 
-            Task msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            Task generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
 
             run.CurrentMassTag = massTagColl.TargetList.Find(p => p.ID == mtID);
@@ -167,7 +167,7 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
             var result = run.ResultCollection.GetTargetedResult(run.CurrentMassTag);
 
             chromPeakSel.Execute(run.ResultCollection);
-            msgen.Execute(run.ResultCollection);
+            generator.Execute(run.ResultCollection);
             //TestUtilities.DisplayXYValues(run.ResultCollection);
             msPeakDet.Execute(run.ResultCollection);
             targetedFeatureFinder.Execute(run.ResultCollection);

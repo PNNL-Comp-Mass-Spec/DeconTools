@@ -21,8 +21,8 @@ namespace DeconTools.UnitTesting2.ProcessingTasksTests
         {
             Run run = new MSScanFromTextFileRun(FileRefs.RawDataMSFiles.TextFileMS_std1);
 
-            Task msGen = new GenericMSGenerator();
-            msGen.Execute(run.ResultCollection);
+            Task generator = new GenericMSGenerator();
+            generator.Execute(run.ResultCollection);
 
             var peakDetector = new DeconToolsPeakDetectorV2(3, 3, Globals.PeakFitType.QUADRATIC, true);
             peakDetector.Execute(run.ResultCollection);

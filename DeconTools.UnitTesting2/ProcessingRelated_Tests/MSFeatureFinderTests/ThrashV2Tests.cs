@@ -27,24 +27,26 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
             Run run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
             run.ScanSetCollection.Create(run, 6005, 6005, 1, 1, false);
 
-            var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
-            var peakDetector = new DeconToolsPeakDetectorV2(1.3, 2, Globals.PeakFitType.QUADRATIC, true);
-            peakDetector.IsDataThresholded = true;
+            var generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            var peakDetector = new DeconToolsPeakDetectorV2(1.3, 2, Globals.PeakFitType.QUADRATIC, true) {
+                IsDataThresholded = true
+            };
 
-            var parameters = new ThrashParameters();
-            parameters.MinMSFeatureToBackgroundRatio = 1;
-            parameters.MaxFit = 0.3;
+            var parameters = new ThrashParameters {
+                MinMSFeatureToBackgroundRatio = 1,
+                MaxFit = 0.3
+            };
 
             var deconvolutor = new ThrashDeconvolutorV2(parameters);
 
             var scan = new ScanSet(6005);
 
             run.CurrentScanSet = scan;
-            msgen.Execute(run.ResultCollection);
+            generator.Execute(run.ResultCollection);
             peakDetector.Execute(run.ResultCollection);
             deconvolutor.Execute(run.ResultCollection);
-            Console.WriteLine(run.ResultCollection.MSPeakResultList);
-            // TestUtilities.DisplayMSFeatures(run.ResultCollection.ResultList);
+
+            TestUtilities.DisplayMSFeatures(run.ResultCollection.ResultList);
 
             Assert.IsTrue(run.ResultCollection.ResultList.Count > 0);
             //Assert.AreEqual(187, run.ResultCollection.ResultList.Count);
@@ -63,7 +65,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
                 @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\UIMF\Sarc_MS2_90_6Apr11_Cheetah_11-02-19.uimf";
 
             var run = new RunFactory().CreateRun(uimfFile);
-            var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            var generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
             var peakDetector = new DeconToolsPeakDetectorV2(1.3, 2, Globals.PeakFitType.QUADRATIC, true);
             var zeroFiller = new DeconTools.Backend.ProcessingTasks.ZeroFillers.DeconToolsZeroFiller(3);
 
@@ -84,7 +86,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
             run.CurrentScanSet = scanSet;
             ((UIMFRun)run).CurrentIMSScanSet = new IMSScanSet(testIMSScan, lowerIMSScan, upperIMSScan);
 
-            msgen.Execute(run.ResultCollection);
+            generator.Execute(run.ResultCollection);
             zeroFiller.Execute(run.ResultCollection);
             peakDetector.Execute(run.ResultCollection);
             newDeconvolutor.Execute(run.ResultCollection);
@@ -107,25 +109,26 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
             Run run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
             run.ScanSetCollection.Create(run, 6005, 6005, 1, 1, false);
 
-            var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
-            var peakDetector = new DeconToolsPeakDetectorV2(0.5, 2, Globals.PeakFitType.QUADRATIC, true);
-            peakDetector.IsDataThresholded = true;
+            var generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            var peakDetector = new DeconToolsPeakDetectorV2(0.5, 2, Globals.PeakFitType.QUADRATIC, true) {
+                IsDataThresholded = true
+            };
 
-            var parameters = new ThrashParameters();
-            parameters.MinMSFeatureToBackgroundRatio = 1;
-            parameters.MaxFit = 0.3;
-            parameters.CheckAllPatternsAgainstChargeState1 = true;
+            var parameters = new ThrashParameters {
+                MinMSFeatureToBackgroundRatio = 1,
+                MaxFit = 0.3,
+                CheckAllPatternsAgainstChargeState1 = true
+            };
 
             var deconvolutor = new ThrashDeconvolutorV2(parameters);
 
             var scan = new ScanSet(6005);
 
             run.CurrentScanSet = scan;
-            msgen.Execute(run.ResultCollection);
+            generator.Execute(run.ResultCollection);
             peakDetector.Execute(run.ResultCollection);
 
             run.PeakList = run.PeakList.Where(p => p.XValue > 750 && p.XValue < 753).ToList();
-
 
             deconvolutor.Execute(run.ResultCollection);
 
@@ -168,7 +171,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
             run.ScanSetCollection.Create(run, 6005, 6200, 1, 1, false);
 
 
-            var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            var generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
             var peakDetector = new DeconToolsPeakDetectorV2(1.3, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
 
             var deconvolutor = new HornDeconvolutor();
@@ -183,7 +186,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
             foreach (var scanSet in run.ScanSetCollection.ScanSetList)
             {
                 run.CurrentScanSet = scanSet;
-                msgen.Execute(run.ResultCollection);
+                generator.Execute(run.ResultCollection);
                 peakDetector.Execute(run.ResultCollection);
 
                 run.CurrentScanSet.BackgroundIntensity = peakDetector.BackgroundIntensity;
@@ -227,7 +230,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
             run.ScanSetCollection.Create(run, 6005, 6005, 5, 1, false);
 
 
-            var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            var generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
             var peakDetector = new DeconToolsPeakDetectorV2(1.3, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
 
 
@@ -249,7 +252,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
             oldDeconvolutor.MinPeptideBackgroundRatio = 3;
             oldDeconvolutor.MaxFitAllowed = 0.4;
 
-            msgen.Execute(run.ResultCollection);
+            generator.Execute(run.ResultCollection);
             peakDetector.Execute(run.ResultCollection);
 
 
@@ -399,7 +402,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
             var scanSet = new ScanSetFactory().CreateScanSet(run, testLCScan, 1);
 
 
-            var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            var generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
             var peakDetector = new DeconToolsPeakDetectorV2(1.3, 2, Globals.PeakFitType.QUADRATIC, true);
             var zeroFiller = new DeconTools.Backend.ProcessingTasks.ZeroFillers.DeconToolsZeroFiller(3);
 
@@ -418,7 +421,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
             ((UIMFRun)run).CurrentIMSScanSet = new IMSScanSet(testIMSScan, lowerIMSScan, upperIMSScan);
 
 
-            msgen.Execute(run.ResultCollection);
+            generator.Execute(run.ResultCollection);
             zeroFiller.Execute(run.ResultCollection);
             //smoother.Execute(run.ResultCollection);
 
@@ -582,7 +585,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
             var scanSet = new ScanSetFactory().CreateScanSet(run, testLCScan, 1);
 
 
-            var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            var generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
             var peakDetector = new DeconToolsPeakDetectorV2(2, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
 
             var thrashParameters = new ThrashParameters();
@@ -595,7 +598,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
             run.CurrentScanSet = scanSet;
             ((UIMFRun)run).CurrentIMSScanSet = new IMSScanSet(testIMSScan, lowerIMSScan, upperIMSScan);
 
-            msgen.Execute(run.ResultCollection);
+            generator.Execute(run.ResultCollection);
             peakDetector.Execute(run.ResultCollection);
 
             //6	500	728.6907	729.69800	1	34678	0.252	0.000
@@ -624,12 +627,12 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
 
             var scanSet = new ScanSetFactory().CreateScanSet(run, 6005, 1);
 
-            var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            var generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
             var peakDetector = new DeconToolsPeakDetectorV2(1.3, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
 
             var deconvolutor = new HornDeconvolutor(parameters.GetDeconToolsParameters());
             run.CurrentScanSet = scanSet;
-            msgen.Execute(run.ResultCollection);
+            generator.Execute(run.ResultCollection);
             peakDetector.Execute(run.ResultCollection);
             deconvolutor.Execute(run.ResultCollection);
 

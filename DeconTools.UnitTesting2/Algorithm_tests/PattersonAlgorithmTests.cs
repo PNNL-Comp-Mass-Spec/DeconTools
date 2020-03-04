@@ -25,12 +25,12 @@ namespace DeconTools.UnitTesting2.AlgorithmTests
 
             Run run = new XCaliburRun2(xcaliburTestfile);
 
-            var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            var generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
             var peakDetector = new DeconToolsPeakDetectorV2 {PeakToBackgroundRatio = 1.3};
 
             run.CurrentScanSet = new ScanSet(6005);
 
-            msgen.Execute(run.ResultCollection);
+            generator.Execute(run.ResultCollection);
             peakDetector.Execute(run.ResultCollection);
 
             var peak = run.PeakList.First(n => n.XValue > 903.94 && n.XValue < 903.95);
@@ -47,12 +47,12 @@ namespace DeconTools.UnitTesting2.AlgorithmTests
 
             Run run = new XCaliburRun2(xcaliburTestfile);
 
-            var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            var generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
             var peakDetector = new DeconToolsPeakDetectorV2 {PeakToBackgroundRatio = 1.3};
 
             run.CurrentScanSet = new ScanSet(6005);
 
-            msgen.Execute(run.ResultCollection);
+            generator.Execute(run.ResultCollection);
             peakDetector.Execute(run.ResultCollection);
 
 

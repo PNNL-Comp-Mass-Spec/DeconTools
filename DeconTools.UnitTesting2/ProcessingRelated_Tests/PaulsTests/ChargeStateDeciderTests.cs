@@ -99,7 +99,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             var fileName = FileRefs.RawDataMSFiles.OrbitrapStdFile1;
             var run = new RunFactory().CreateRun(fileName);
             run.ScanSetCollection.Create(run, 5500, 5550, 1, 1, false);
-            var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            var generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
             var peakBr = 1.3;   //0.25;
             var peakDetector = new DeconToolsPeakDetectorV2(peakBr, 2, Globals.PeakFitType.QUADRATIC, true);
@@ -119,7 +119,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             foreach (var scanSet in run.ScanSetCollection.ScanSetList)
             {
                 run.CurrentScanSet = scanSet;
-                msgen.Execute(run.ResultCollection);
+                generator.Execute(run.ResultCollection);
                 peakDetector.Execute(run.ResultCollection);
                 run.CurrentScanSet.BackgroundIntensity = peakDetector.BackgroundIntensity;
                 newDeconvolutor.Execute(run.ResultCollection);
@@ -139,7 +139,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             var fileName = FileRefs.RawDataMSFiles.OrbitrapStdFile1;
             var run = new RunFactory().CreateRun(fileName);
             run.ScanSetCollection.Create(run, 5500, 5550, 1, 1, false);
-            var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            var generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
             var peakBr =1.3;
             var peakDetector = new DeconToolsPeakDetectorV2(peakBr, 2, Globals.PeakFitType.QUADRATIC, true);
@@ -162,7 +162,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             foreach (var scanSet in run.ScanSetCollection.ScanSetList)
             {
                 run.CurrentScanSet = scanSet;
-                msgen.Execute(run.ResultCollection);
+                generator.Execute(run.ResultCollection);
                 peakDetector.Execute(run.ResultCollection);
                 run.CurrentScanSet.BackgroundIntensity = peakDetector.BackgroundIntensity;
                 deconvolutor.Execute(run.ResultCollection);
@@ -184,7 +184,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             var fileName = FileRefs.RawDataMSFiles.OrbitrapStdFile1;
             var run = new RunFactory().CreateRun(fileName);
             run.ScanSetCollection.Create(run, 5509, 5509, 1, 1, false);
-            var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            var generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
             var peakBr = 1.9;//1.3;
             var peakDetector = new DeconToolsPeakDetectorV2(peakBr, 2, Globals.PeakFitType.QUADRATIC, true);
@@ -202,7 +202,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             var scanset = new ScanSet(5509);
             run.CurrentScanSet = scanset;
 
-            msgen.Execute(run.ResultCollection);
+            generator.Execute(run.ResultCollection);
             peakDetector.Execute(run.ResultCollection);
             run.CurrentScanSet.BackgroundIntensity = peakDetector.BackgroundIntensity;
             newDeconvolutor.Execute(run.ResultCollection);
@@ -264,7 +264,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             var fileName = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\Orbitrap\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.raw";
             var run = new RunFactory().CreateRun(fileName);
             run.ScanSetCollection.Create(run, 5509, 5509, 1, 1, false);
-            var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            var generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
             var peakBr = 0.5;
 
             var peakDetector = new DeconToolsPeakDetectorV2(peakBr, 2, Globals.PeakFitType.QUADRATIC, true);
@@ -294,7 +294,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
                 MaxFitAllowed = 0.4
             };
 
-            msgen.Execute(run.ResultCollection);
+            generator.Execute(run.ResultCollection);
             peakDetector.Execute(run.ResultCollection);
 
             //run.PeakList = run.PeakList.Where(p => p.XValue > 634 && p.XValue < 642).ToList();
@@ -433,7 +433,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             var run = new RunFactory().CreateRun(fileName);
             run.ScanSetCollection.Create(run, 6005, 6005, 1, 1, false);
 
-            var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            var generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
             var peakDetector = new DeconToolsPeakDetectorV2(1.3, 2, Globals.PeakFitType.QUADRATIC, true) {
                 IsDataThresholded = true
             };
@@ -452,7 +452,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             var scan = new ScanSet(6005);
 
             run.CurrentScanSet = scan;
-            msgen.Execute(run.ResultCollection);
+            generator.Execute(run.ResultCollection);
             peakDetector.Execute(run.ResultCollection);
             deconvolutor.Execute(run.ResultCollection);
             Console.WriteLine(run.ResultCollection.MSPeakResultList);
@@ -488,7 +488,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             //run.ScanSetCollection.Create(run, 6005, 6005, 5, 1, false);
 
 
-            var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            var generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
             var peakDetector = new DeconToolsPeakDetectorV2(1.3, 2, Globals.PeakFitType.QUADRATIC, true);
 
 
@@ -515,7 +515,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
                 MaxFitAllowed = 0.4
             };
 
-            msgen.Execute(run.ResultCollection);
+            generator.Execute(run.ResultCollection);
             peakDetector.Execute(run.ResultCollection);
 
 

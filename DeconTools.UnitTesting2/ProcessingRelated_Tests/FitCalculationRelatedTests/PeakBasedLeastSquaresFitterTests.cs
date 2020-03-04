@@ -30,7 +30,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.FitCalculationRelatedT
 
             var run = new RunFactory().CreateRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
-            var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            var generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
             var peakDetector = new DeconToolsPeakDetectorV2(1.3, 2, Globals.PeakFitType.QUADRATIC, true);
 
 
@@ -38,7 +38,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.FitCalculationRelatedT
             var scanSet = new ScanSet(9575);
             run.CurrentScanSet = scanSet;
 
-            msgen.Execute(run.ResultCollection);
+            generator.Execute(run.ResultCollection);
             peakDetector.Execute(run.ResultCollection);
 
             var selectedTarget = targets.First(p => p.ID == 635428 && p.ChargeState == 3);

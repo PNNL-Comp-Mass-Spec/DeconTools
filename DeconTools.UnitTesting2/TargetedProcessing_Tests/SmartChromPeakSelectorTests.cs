@@ -61,7 +61,7 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
 
 
 
-            var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            var generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
             var iterativeTff = new IterativeTFF(new IterativeTFFParameters());
 
@@ -97,7 +97,7 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
             smartChromPeakSelector.Parameters.NETTolerance = 0.025f;
             smartChromPeakSelector.Execute(run.ResultCollection);
 
-            msgen.Execute(run.ResultCollection);
+            generator.Execute(run.ResultCollection);
             iterativeTff.Execute(run.ResultCollection);
 
             TestUtilities.DisplayPeaks(run.PeakList);
@@ -140,7 +140,7 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
 
 
 
-            var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            var generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
             var iterativeTff = new IterativeTFF(new IterativeTFFParameters());
 
@@ -187,7 +187,7 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
 
             smartChromPeakSelector.Execute(run.ResultCollection);
 
-            msgen.Execute(run.ResultCollection);
+            generator.Execute(run.ResultCollection);
             iterativeTff.Execute(run.ResultCollection);
             fitscoreCalc.Execute(run.ResultCollection);
 
@@ -208,7 +208,7 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
 
             smartChromPeakSelector.Execute(run.ResultCollection);
 
-            msgen.Execute(run.ResultCollection);
+            generator.Execute(run.ResultCollection);
             iterativeTff.Execute(run.ResultCollection);
             fitscoreCalc.Execute(run.ResultCollection);
 

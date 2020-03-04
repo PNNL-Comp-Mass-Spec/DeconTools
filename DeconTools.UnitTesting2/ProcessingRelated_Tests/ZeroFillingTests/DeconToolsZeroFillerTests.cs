@@ -17,10 +17,10 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ZeroFillingTests
         public void ZeroFillerTest1()
         {
             Run run = new MSScanFromTextFileRun(FileRefs.RawDataMSFiles.TextFileMS_std1);
-            var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            var generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
             var zeroFiller = new DeconToolsZeroFiller(3);
 
-            msgen.Execute(run.ResultCollection);
+            generator.Execute(run.ResultCollection);
 
             // Delete data points such that we only retain 50% of the data
             var fractionToKeep = 0.50;
@@ -65,10 +65,10 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ZeroFillingTests
         {
 
             Run run = new MSScanFromTextFileRun(FileRefs.RawDataMSFiles.TextFileMS_std1);
-            var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            var generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
             var zeroFiller = new DeconToolsZeroFiller(3);
 
-            msgen.Execute(run.ResultCollection);
+            generator.Execute(run.ResultCollection);
             var numZerosToFill=3;
             var newZeroFilled=  zeroFiller.ZeroFill(run.XYData.Xvalues, run.XYData.Yvalues, numZerosToFill);
             // var oldZeroFilled = zeroFiller.ZeroFillOld(run.XYData.Xvalues, run.XYData.Yvalues, numZerosToFill);

@@ -18,13 +18,13 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ResultValidatorTests
             var scanSet = new ScanSet(6005);
             run.CurrentScanSet = scanSet;
 
-            var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            var generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
             var peakDetector = new DeconToolsPeakDetectorV2(1.3, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
             var decon = new HornDeconvolutor();
             var validator = new ResultValidatorTask();
 
-            msgen.Execute(run.ResultCollection);
+            generator.Execute(run.ResultCollection);
             peakDetector.Execute(run.ResultCollection);
             decon.Execute(run.ResultCollection);
             validator.Execute(run.ResultCollection);
@@ -48,13 +48,13 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ResultValidatorTests
             run.CurrentScanSet = scanSet;
 
             
-            MSGenerator msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            MSGenerator generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
             DeconToolsPeakDetectorV2 peakDetector = new DeconToolsPeakDetectorV2(1.3, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
             RapidDeconvolutor decon = new RapidDeconvolutor();
             ResultValidatorTask validator = new ResultValidatorTask();
 
-            msgen.Execute(run.ResultCollection);
+            generator.Execute(run.ResultCollection);
             peakDetector.Execute(run.ResultCollection);
             decon.Execute(run.ResultCollection);
             validator.Execute(run.ResultCollection);

@@ -23,17 +23,12 @@ namespace DeconTools.UnitTesting2.TheoreticalIsotopicProfileTests
         public void GetIsotopicProfileTest1()
         {
             var peptideUtils = new PeptideUtils();
-            var empFormula=  peptideUtils.GetEmpiricalFormulaForPeptideSequence("SAMPLERSAMPLER");
+            var empFormula = peptideUtils.GetEmpiricalFormulaForPeptideSequence("SamplerSampler".ToUpper());
 
             var isoCalc = IsotopicDistributionCalculator.Instance;
-            var iso=  isoCalc.GetIsotopePattern(empFormula);
-
+            var iso = isoCalc.GetIsotopePattern(empFormula);
 
             TestUtilities.DisplayIsotopicProfileData(iso);
-
-
-
-
         }
 
 
@@ -46,23 +41,15 @@ namespace DeconTools.UnitTesting2.TheoreticalIsotopicProfileTests
             var isoCalc = IsotopicDistributionCalculator.Instance;
             var iso = isoCalc.GetIsotopePattern(empFormula);
 
-
             TestUtilities.DisplayIsotopicProfileData(iso);
-
-
-
-
         }
-
-
-
 
         [Test]
         public void TestSingletonPattern()
         {
-            var myPatterner = IsotopicDistributionCalculator.Instance;
-            Assert.IsFalse(myPatterner.IsSetToLabeled);
-            myPatterner.GetAveraginePattern(2000);
+            var patternGenerator = IsotopicDistributionCalculator.Instance;
+            Assert.IsFalse(patternGenerator.IsSetToLabeled);
+            patternGenerator.GetAveraginePattern(2000);
         }
 
 
@@ -88,8 +75,6 @@ namespace DeconTools.UnitTesting2.TheoreticalIsotopicProfileTests
             }
 
             TestUtilities.DisplayIsotopicProfileData(iso1);
-
-
         }
 
         [Test]
@@ -102,10 +87,7 @@ namespace DeconTools.UnitTesting2.TheoreticalIsotopicProfileTests
             //string formula = utils.GetEmpiricalFormulaForPeptideSequence("SAMPLERPAMPLERSAMPLERPAMPLERSAMPLERPAMPLERSAMPLERPAMPLER");
             var formula = utils.GetEmpiricalFormulaForPeptideSequence("SAMPLERPAMPLERSAMPLERPAMPLER");
 
-
-
-            var numNitrogens = utils.GetNumAtomsForElement("N", formula);
-
+            var nitrogenCount = utils.GetNumAtomsForElement("N", formula);
 
             var iso1 = isotopicDistributionCalculator.GetIsotopePattern(formula);
 
@@ -136,11 +118,8 @@ namespace DeconTools.UnitTesting2.TheoreticalIsotopicProfileTests
             Console.WriteLine();
             TestUtilities.DisplayIsotopicProfileData(iso3);
 
-            Console.WriteLine("Num nitrogens= " + numNitrogens);
+            Console.WriteLine("Nitrogen Count= " + nitrogenCount);
         }
-
-
-
 
         [Test]
         public void TestIsotopeDict3()
@@ -155,8 +134,6 @@ namespace DeconTools.UnitTesting2.TheoreticalIsotopicProfileTests
             Console.Write(sb.ToString());
 
         }
-
-
         [Test]
         public void TestIsotopeDict2()
         {
@@ -250,7 +227,7 @@ namespace DeconTools.UnitTesting2.TheoreticalIsotopicProfileTests
         [Test]
         public void GetAveragineFormulaForGivenMass()
         {
-            var averagineEmpiricalFormula= isotopicDistributionCalculator.GetAveragineFormulaAsString(1979,true);
+            var averagineEmpiricalFormula = isotopicDistributionCalculator.GetAveragineFormulaAsString(1979, true);
 
             Console.WriteLine(averagineEmpiricalFormula);
 
@@ -334,7 +311,7 @@ namespace DeconTools.UnitTesting2.TheoreticalIsotopicProfileTests
 
             var iso = _tomIsotopicPatternGenerator.GetIsotopePattern(formula, _tomIsotopicPatternGenerator.aafIsos);
 
-            //   TestUtilities.DisplayIsotopicProfileData(iso);
+            TestUtilities.DisplayIsotopicProfileData(iso);
         }
 
 

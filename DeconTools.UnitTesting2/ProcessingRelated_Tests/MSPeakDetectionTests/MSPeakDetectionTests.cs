@@ -22,11 +22,11 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
 
             run.CurrentScanSet = testScan;
 
-            var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            var generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
             var peakDetector = new DeconToolsPeakDetectorV2();
 
-            msgen.Execute(run.ResultCollection);
+            generator.Execute(run.ResultCollection);
             peakDetector.Execute(run.ResultCollection);
 
             var sb = new StringBuilder();
@@ -54,11 +54,11 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
 
             Run run = new XCaliburRun2(testFile);
 
-            var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            var generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
             run.CurrentScanSet = new ScanSet(6005);
 
-            msgen.Execute(run.ResultCollection);
+            generator.Execute(run.ResultCollection);
 
             var peakDet = new DeconToolsPeakDetectorV2(peakBR, sigNoise, peakfitType, isThresholded);
             peakDet.PeaksAreStored = true;
@@ -89,7 +89,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
 
 
             //in the 'run' object there is now a list of scans : run.ScanSetCollection
-            var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            var generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
 
             var peakDet = new DeconToolsPeakDetectorV2(peakBR, sigNoise, peakfitType, isThresholded);
@@ -100,7 +100,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
                 //set the target scan:
                 run.CurrentScanSet = scan;
 
-                msgen.Execute(run.ResultCollection);
+                generator.Execute(run.ResultCollection);
                 peakDet.Execute(run.ResultCollection);
 
 

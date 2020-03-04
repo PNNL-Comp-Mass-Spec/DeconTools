@@ -30,8 +30,8 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.FitCalculationRelatedT
             var results = new ResultCollection(run);
             run.CurrentScanSet = new ScanSet(6067);
 
-            Task msGen = new GenericMSGenerator(1154, 1158, isTicRequested: false);
-            msGen.Execute(results);
+            Task generator = new GenericMSGenerator(1154, 1158, isTicRequested: false);
+            generator.Execute(results);
 
             Task peakDetector = new DeconToolsPeakDetectorV2(0.5, 3);
             peakDetector.Execute(results);
@@ -106,8 +106,8 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.FitCalculationRelatedT
             run.CurrentScanSet = new ScanSet(6067);
 
             bool isTicRequested = false;
-            Task msGen = new GenericMSGenerator(1154, 1158, isTicRequested);
-            msGen.Execute(results);
+            Task generator = new GenericMSGenerator(1154, 1158, isTicRequested);
+            generator.Execute(results);
 
             DeconToolsV2.Peaks.clsPeakProcessorParameters detectorParams = new DeconToolsV2.Peaks.clsPeakProcessorParameters();
             detectorParams.PeakBackgroundRatio = 0.5;
@@ -157,8 +157,8 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.FitCalculationRelatedT
             var results = new ResultCollection(run);
             run.CurrentScanSet = new ScanSet(6005);
 
-            Task msGen = new GenericMSGenerator(579, 582, isTicRequested: false);
-            msGen.Execute(results);
+            Task generator = new GenericMSGenerator(579, 582, isTicRequested: false);
+            generator.Execute(results);
 
             Task peakDetector = new DeconToolsPeakDetectorV2(0.5, 3);
             peakDetector.Execute(results);
@@ -212,8 +212,8 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.FitCalculationRelatedT
             var results = new ResultCollection(run);
             run.CurrentScanSet = new ScanSet(6005);
 
-            Task msGen = new GenericMSGenerator(1154, 1160, isTicRequested: false);
-            msGen.Execute(results);
+            Task generator = new GenericMSGenerator(1154, 1160, isTicRequested: false);
+            generator.Execute(results);
 
             Task peakDetector = new DeconToolsPeakDetectorV2(0.5, 3);
             peakDetector.Execute(results);

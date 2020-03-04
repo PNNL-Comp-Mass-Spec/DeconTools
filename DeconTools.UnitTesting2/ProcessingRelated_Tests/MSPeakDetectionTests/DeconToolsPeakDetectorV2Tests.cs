@@ -22,14 +22,14 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
             var scan = new ScanSet(6005);
 
 
-            var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            var generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
             var peakDetector = new DeconToolsPeakDetectorV2(1.3, 2, Globals.PeakFitType.QUADRATIC, true) {
                 IsDataThresholded = true
             };
 
             run.CurrentScanSet = scan;
 
-            msgen.Execute(run.ResultCollection);
+            generator.Execute(run.ResultCollection);
 
             var peaks = peakDetector.FindPeaks(run.XYData, 481.1, 481.4);
 
@@ -46,7 +46,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
 
             var scan = new ScanSet(6005);
 
-            var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            var generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
             var peakDetector = new DeconToolsPeakDetectorV2
             {
                 PeakToBackgroundRatio = 1.3,
@@ -56,7 +56,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
             };
 
             run.CurrentScanSet = scan;
-            msgen.Execute(run.ResultCollection);
+            generator.Execute(run.ResultCollection);
 
             var peaks = peakDetector.FindPeaks(run.XYData.Xvalues, run.XYData.Yvalues, 400, 1000);
             var expectedPeaks = new List<Peak>
@@ -118,7 +118,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
 
             var scan = new ScanSet(6005);
 
-            var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            var generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
             var peakDetector = new DeconToolsPeakDetectorV2
             {
                 PeakToBackgroundRatio = 1.3,
@@ -129,7 +129,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
 
             run.CurrentScanSet = scan;
 
-            msgen.Execute(run.ResultCollection);
+            generator.Execute(run.ResultCollection);
             peakDetector.Execute(run.ResultCollection);
 
             Assert.IsTrue(run.CurrentBackgroundIntensity > 0);
@@ -143,7 +143,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
 
             var scan = new ScanSet(6005);
 
-            var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            var generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
             var peakDetector = new DeconToolsPeakDetectorV2
             {
                 PeakToBackgroundRatio = 1.3,
@@ -157,7 +157,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
             peakDetector.IsDataThresholded = true;
 
             run.CurrentScanSet = scan;
-            msgen.Execute(run.ResultCollection);
+            generator.Execute(run.ResultCollection);
 
             peakDetector.Execute(run.ResultCollection);
             oldPeakDetector.Execute(run.ResultCollection);
@@ -172,7 +172,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
 
             var scan = new ScanSet(6005);
 
-            var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            var generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
             var peakDetector = new DeconToolsPeakDetectorV2
             {
                 PeakToBackgroundRatio = 1.3,
@@ -187,7 +187,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
 
             run.CurrentScanSet = scan;
 
-            msgen.Execute(run.ResultCollection);
+            generator.Execute(run.ResultCollection);
 
             var mzStart = 585.30;
 
@@ -212,7 +212,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
 
             var scan = new ScanSet(6005);
 
-            var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            var generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
             var peakDetector = new DeconToolsPeakDetectorV2
             {
                 PeakToBackgroundRatio = 1.3,
@@ -227,7 +227,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
 
             run.CurrentScanSet = scan;
 
-            msgen.Execute(run.ResultCollection);
+            generator.Execute(run.ResultCollection);
 
             var mzStart = 692.8;
 
@@ -252,7 +252,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
             var scan = new ScanSet(6006);   //this is a centroided MS2 scan
 
 
-            var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            var generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
             var peakDetector = new DeconToolsPeakDetectorV2(0, 0, Globals.PeakFitType.QUADRATIC, true)
             {
                 RawDataType = Globals.RawDataType.Centroided,
@@ -261,7 +261,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
 
             run.CurrentScanSet = scan;
 
-            msgen.Execute(run.ResultCollection);
+            generator.Execute(run.ResultCollection);
 
             peakDetector.Execute(run.ResultCollection);
 
@@ -283,7 +283,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
             var scan = new ScanSet(6006);   //this is a MS2 scan
 
 
-            var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            var generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
             // Note that setting the PeakFitType to Apex will not matter since RawDataType is Centroided
             // It would only matter if the RawDataType was Profile
@@ -298,7 +298,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
 
             run.CurrentScanSet = scan;
 
-            msgen.Execute(run.ResultCollection);
+            generator.Execute(run.ResultCollection);
 
             peakDetector.Execute(run.ResultCollection);
 

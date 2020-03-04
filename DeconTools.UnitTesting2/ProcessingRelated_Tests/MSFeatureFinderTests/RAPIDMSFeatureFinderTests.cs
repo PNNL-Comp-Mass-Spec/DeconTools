@@ -19,7 +19,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
             run.CurrentScanSet = scanSet;
 
 
-            MSGenerator msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            MSGenerator generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
             DeconToolsPeakDetectorV2 peakDetector = new DeconToolsPeakDetectorV2(1.3, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
             peakDetector.IsDataThresholded = true;
@@ -28,7 +28,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
             decon.IsNewFitCalculationPerformed = true;
 
 
-            msgen.Execute(run.ResultCollection);
+            generator.Execute(run.ResultCollection);
             peakDetector.Execute(run.ResultCollection);
             decon.Execute(run.ResultCollection);
 

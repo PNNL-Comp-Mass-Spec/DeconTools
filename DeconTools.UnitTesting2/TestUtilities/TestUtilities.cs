@@ -91,9 +91,9 @@ namespace DeconTools.UnitTesting2
         {
             Run run = new XCaliburRun2(xcaliburTestfile);
 
-            run.ScanSetCollection .Create(run, 6000, 6020, 1, 1);
-            
-            Task msgen = new GenericMSGenerator();
+            run.ScanSetCollection.Create(run, 6000, 6020, 1, 1);
+
+            Task generator = new GenericMSGenerator();
             Task peakDet = new DeconToolsPeakDetectorV2();
             Task decon = new HornDeconvolutor();
 
@@ -102,7 +102,7 @@ namespace DeconTools.UnitTesting2
             foreach (var scanset in run.ScanSetCollection.ScanSetList)
             {
                 run.CurrentScanSet = scanset;
-                msgen.Execute(run.ResultCollection);
+                generator.Execute(run.ResultCollection);
                 peakDet.Execute(run.ResultCollection);
                 decon.Execute(run.ResultCollection);
 
@@ -275,8 +275,6 @@ namespace DeconTools.UnitTesting2
             //MassTagID	MonoisotopicMass	NET	NETStDev	Obs	minMSGF	mod_count	mod_description	pmt_quality_score	peptide	peptideex	Multiple_Proteins
             //86963986	1516.791851	0.227147	0.007416702	3	1	0		2.00000	AAKEGISCEIIDLR	M.AAKEGISCEIIDLR.T	0
 
-
-
             IqTarget target = new IqChargeStateTarget(null);
             target.ID = 86963986;
             target.MonoMassTheor = 1516.791851;
@@ -284,24 +282,22 @@ namespace DeconTools.UnitTesting2
             target.Code = "AAKEGISCEIIDLR";
             target.ChargeState = 2;
             target.ElutionTimeTheor = 0.227147;
-            target.MZTheor = target.MonoMassTheor/target.ChargeState + Globals.PROTON_MASS;
+            target.MZTheor = target.MonoMassTheor / target.ChargeState + Globals.PROTON_MASS;
 
 
             var theorFeatureGenerator = new JoshTheorFeatureGenerator();
             target.TheorIsotopicProfile = theorFeatureGenerator.GenerateTheorProfile(target.EmpiricalFormula, target.ChargeState);
 
             return target;
-
-
         }
 
 
         public static PeptideTarget GetMassTagStandard(int standardNum)
         {
-            var mt = new PeptideTarget();
-            mt.ID = 86963986;
-            mt.MonoIsotopicMass = 1516.791851;
-            mt.Code = "AAKEGISCEIIDLR";
+            var mt = new PeptideTarget {
+                ID = 86963986,
+                MonoIsotopicMass = 1516.791851,
+                Code = "AAKEGISCEIIDLR"};
 
             mt.EmpiricalFormula = mt.GetEmpiricalFormulaFromTargetCode();
             mt.NormalizedElutionTime = 0.2284955f;
@@ -317,10 +313,11 @@ namespace DeconTools.UnitTesting2
         {
             var mtList = new List<PeptideTarget>();
 
-            var mt = new PeptideTarget();
-            mt.ID = 24769;
-            mt.MonoIsotopicMass = 2086.0595;
-            mt.ChargeState = 2;
+            var mt = new PeptideTarget {
+                ID = 24769,
+                MonoIsotopicMass = 2086.0595,
+                ChargeState = 2};
+
             mt.MZ = mt.MonoIsotopicMass / mt.ChargeState + Globals.PROTON_MASS;
             mt.Code = "DFNEALVHQVVVAYAANAR";
             mt.EmpiricalFormula = mt.GetEmpiricalFormulaFromTargetCode();
@@ -333,21 +330,18 @@ namespace DeconTools.UnitTesting2
         {
             var mtList = new List<PeptideTarget>();
 
-            var mt = new PeptideTarget();
-            mt.ID = 23085473;
-            mt.NormalizedElutionTime = 0.3807834F;
-            mt.MonoIsotopicMass = 2538.33284203802;
-            mt.ChargeState = 3;
+            var mt = new PeptideTarget {
+                ID = 23085473,
+                NormalizedElutionTime = 0.3807834F,
+                MonoIsotopicMass = 2538.33284203802,
+                ChargeState = 3};
+
             mt.MZ = mt.MonoIsotopicMass / mt.ChargeState + Globals.PROTON_MASS;
             mt.Code = "AIHQPAPTFAEQSTTSEILVTGIK";
             mt.EmpiricalFormula = mt.GetEmpiricalFormulaFromTargetCode();
             mtList.Add(mt);
             return mtList;
-
         }
-
-
-
 
         public static void DisplayXYValues(Run run)
         {
@@ -369,19 +363,15 @@ namespace DeconTools.UnitTesting2
             }
 
             Console.WriteLine(sb.ToString());
-
         }
 
-
-
-
-        public static void DisplayScanSetData(List<ScanSet> scanSetlist)
+        public static void DisplayScanSetData(List<ScanSet> scanSetList)
         {
             var sb = new StringBuilder();
 
             sb.Append("--------------- ScanSetCollection details ---------------------- \n");
 
-            foreach (var scan in scanSetlist)
+            foreach (var scan in scanSetList)
             {
                 sb.Append(scan.PrimaryScanNumber);
                 sb.Append("\t{");
@@ -404,26 +394,22 @@ namespace DeconTools.UnitTesting2
             }
             Console.WriteLine(sb.ToString());
 
-
-
-
         }
 
         public static List<Peak> GeneratePeakList(ScanSet scanSet)
         {
             Run run = new XCaliburRun2(xcaliburTestfile);
 
-            Task msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            Task generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
-
-            var peakDet = new DeconToolsPeakDetectorV2();
-            peakDet.PeakToBackgroundRatio = 1.3;
-            peakDet.SignalToNoiseThreshold = 2;
-            peakDet.IsDataThresholded = true;
+            var peakDet = new DeconToolsPeakDetectorV2 {
+                PeakToBackgroundRatio = 1.3,
+                SignalToNoiseThreshold = 2,
+                IsDataThresholded = true};
 
             run.CurrentScanSet = scanSet;
 
-            msgen.Execute(run.ResultCollection);
+            generator.Execute(run.ResultCollection);
 
             peakDet.Execute(run.ResultCollection);
 
@@ -445,25 +431,23 @@ namespace DeconTools.UnitTesting2
             sb.Append(Environment.NewLine);
 
             Console.Write(sb.ToString());
-
-
         }
 
         public static List<PeptideTarget> CreateO16O18TestMassTagList1()
         {
             var mtList = new List<PeptideTarget>();
 
-            var mt = new PeptideTarget();
-            mt.ID = 1142;
-            mt.MonoIsotopicMass = 921.4807035;
-            mt.ChargeState = 2;
+            var mt = new PeptideTarget {
+                ID = 1142,
+                MonoIsotopicMass = 921.4807035,
+                ChargeState = 2};
+
             mt.MZ = mt.MonoIsotopicMass / mt.ChargeState + Globals.PROTON_MASS;
             mt.Code = "AEFVEVTK";
             mt.EmpiricalFormula = mt.GetEmpiricalFormulaFromTargetCode();
             mtList.Add(mt);
             return mtList;
         }
-
 
         public static void WriteToFile(XYData xyData, string outputFile)
         {
@@ -477,12 +461,9 @@ namespace DeconTools.UnitTesting2
                     sw.Write(xyData.Yvalues[i]);
                     sw.Write(Environment.NewLine);
                 }
-
             }
 
-
         }
-
 
         public static void DisplayMSPeakResults(List<Backend.DTO.MSPeakResult> list)
         {
@@ -515,7 +496,7 @@ namespace DeconTools.UnitTesting2
         public static XYData LoadXYDataFromFile(string testChromatogramDataFile)
         {
             var tempRun = new MSScanFromTextFileRun(testChromatogramDataFile);
-            var xyData=   tempRun.GetMassSpectrum(new ScanSet(0));
+            var xyData = tempRun.GetMassSpectrum(new ScanSet(0));
 
             return xyData;
 

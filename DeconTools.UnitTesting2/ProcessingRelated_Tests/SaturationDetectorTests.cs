@@ -25,7 +25,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests
             var run = (UIMFRun)new RunFactory().CreateRun(testFile);
 
 
-            var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            var generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
             var zeroFiller = new DeconToolsZeroFiller();
          
 
@@ -54,7 +54,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests
                 run.CurrentScanSet = scan;
 
 
-                msgen.Execute(run.ResultCollection);
+                generator.Execute(run.ResultCollection);
 
                 zeroFiller.Execute(run.ResultCollection);
 

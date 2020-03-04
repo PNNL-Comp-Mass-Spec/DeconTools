@@ -21,7 +21,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
 
         string wrongFileExample1 = FileRefs.RawDataMSFiles.OrbitrapStdFile1;
 
-  
+
         [Test]
         public void ConstructorTest1()
         {
@@ -29,7 +29,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
 
             Assert.AreEqual("BSA_TOF4", run.DatasetName);
             Assert.AreEqual(@"\\protoapps\UserData\Slysz\DeconTools_TestFiles\AgilentD\BSA_TOF4\BSA_TOF4.D", run.DatasetDirectoryPath);
-           
+
             Assert.AreEqual(61, run.MaxLCScan);
             Assert.AreEqual(0, run.MinLCScan);
             Assert.AreEqual(Globals.MSFileType.Agilent_D, run.MSFileType);
@@ -49,13 +49,13 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
 
             var scanset = new ScanSet(25);
             var xyData = new XYData();
-            xyData =run.GetMassSpectrum(scanset, 0, 6000);
+            xyData = run.GetMassSpectrum(scanset, 0, 6000);
             //TestUtilities.DisplayXYValues(xyData);
             Console.WriteLine("numPoints = " + xyData.Xvalues.Length);
             Assert.AreEqual(156723, xyData.Xvalues.Length);
         }
 
-         [Ignore("Testing only")]
+        [Ignore("Testing only")]
         [Test]
         ///checks the length of a non-summed and summed spectra
         public void GetSummedSpectrumTest1()
@@ -64,7 +64,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
                @"\\proto-5\BionetXfer\People\ScottK\2012_01_12 SPIN QTOF3\GLY06_11JAN12_LYNX_SN7980_TOP4wList_75000_SPIN_2.d";
 
             var stopWatch = new Stopwatch();
-            
+
 
             Run run = new DeconTools.Backend.Runs.AgilentDRun(testfile);
 
@@ -72,8 +72,8 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
 
             stopWatch.Start();
 
-             var xyData = new XYData();
-            xyData =run.GetMassSpectrum(scanset);
+            var xyData = new XYData();
+            xyData = run.GetMassSpectrum(scanset);
 
             stopWatch.Stop();
             var singleSpectraLoadTime = stopWatch.Elapsed;
@@ -83,11 +83,11 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             Assert.AreEqual(258899, run.XYData.Xvalues.Length);
 
 
-            var scansetSum = new ScanSet(25,24,26);
+            var scansetSum = new ScanSet(25, 24, 26);
 
             stopWatch.Start();
 
-            xyData =run.GetMassSpectrum(scansetSum);
+            xyData = run.GetMassSpectrum(scansetSum);
 
             stopWatch.Stop();
             var threeScanSumSpectraLoadTime = stopWatch.Elapsed;
@@ -100,7 +100,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             Assert.AreEqual(258899, run.XYData.Xvalues.Length);
         }
 
-         [Ignore("Testing only")]
+        [Ignore("Testing only")]
         [Test]
         ///checks the length of a non-summed and summed spectra and restrict the mass range to 100Da
         public void GetSummedSpectrumTest2()
@@ -117,7 +117,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
 
             stopWatch.Start();
             var xyData = new XYData();
-            xyData =run.GetMassSpectrum(scanset, 1000,1100);
+            xyData = run.GetMassSpectrum(scanset, 1000, 1100);
 
             stopWatch.Stop();
             var singleSpectraLoadTime = stopWatch.Elapsed;
@@ -131,7 +131,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
 
             stopWatch.Start();
 
-            xyData =run.GetMassSpectrum(scansetSum, 1000,1100);
+            xyData = run.GetMassSpectrum(scansetSum, 1000, 1100);
 
             stopWatch.Stop();
             var threeScanSumSpectraLoadTime = stopWatch.Elapsed;
@@ -156,11 +156,11 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
 
             var primaryScan = 10000;
             //Scan A
-            var scansetA = new ScanSet(primaryScan-1);
+            var scansetA = new ScanSet(primaryScan - 1);
             var xyData = new XYData();
-            xyData =run.GetMassSpectrum(scansetA, 0, 6000);
+            xyData = run.GetMassSpectrum(scansetA, 0, 6000);
 
-            TestUtilities.WriteToFile(xyData,@"P:\ScanA.txt");
+            TestUtilities.WriteToFile(xyData, @"P:\ScanA.txt");
 
             TestUtilities.DisplayXYValues(xyData);
             Console.WriteLine("numPoints = " + run.XYData.Xvalues.Length);
@@ -169,7 +169,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             //Scan B
             var scansetB = new ScanSet(primaryScan);
 
-            xyData =run.GetMassSpectrum(scansetB, 0, 6000);
+            xyData = run.GetMassSpectrum(scansetB, 0, 6000);
 
             TestUtilities.WriteToFile(run.XYData, @"P:\ScanB.txt");
 
@@ -178,9 +178,9 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             Assert.AreEqual(258899, run.XYData.Xvalues.Length);
 
             //Scan C
-            var scansetC = new ScanSet(primaryScan+1);
+            var scansetC = new ScanSet(primaryScan + 1);
 
-            xyData =run.GetMassSpectrum(scansetC, 0, 6000);
+            xyData = run.GetMassSpectrum(scansetC, 0, 6000);
 
             TestUtilities.WriteToFile(run.XYData, @"P:\ScanC.txt");
 
@@ -189,9 +189,9 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             Assert.AreEqual(258899, run.XYData.Xvalues.Length);
 
             //Scan ABC summed
-            var scansetSum = new ScanSet(primaryScan, primaryScan-1, primaryScan+1);//primary, min, max
+            var scansetSum = new ScanSet(primaryScan, primaryScan - 1, primaryScan + 1);//primary, min, max
 
-            xyData =run.GetMassSpectrum(scansetSum, 0, 6000);
+            xyData = run.GetMassSpectrum(scansetSum, 0, 6000);
 
             TestUtilities.WriteToFile(run.XYData, @"P:\ScanABC.txt");
 
@@ -200,12 +200,12 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             Assert.AreEqual(258899, run.XYData.Xvalues.Length);
         }
 
-       
+
         [Test]
         public void getMSLevelTest1()
         {
             Run run = new DeconTools.Backend.Runs.AgilentDRun(agilentDataset1);
-            Assert.AreEqual(1, run.GetMSLevel(25)); 
+            Assert.AreEqual(1, run.GetMSLevel(25));
         }
 
         [Ignore("Testing only")]
@@ -231,11 +231,11 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             Console.WriteLine("Total time in milliseconds to get MSLevel for " + (scanStop - scanStart + 1) + " spectra = " +
                               stopwatch.ElapsedMilliseconds);
 
-            Console.WriteLine("Average time (ms) to get MSLevel = " + (double)stopwatch.ElapsedMilliseconds/(scanStop-scanStart+1));
+            Console.WriteLine("Average time (ms) to get MSLevel = " + (double)stopwatch.ElapsedMilliseconds / (scanStop - scanStart + 1));
 
 
             Assert.AreEqual(1, run.GetMSLevel(612));
-            Assert.AreEqual(2, run.GetMSLevel(613)); 
+            Assert.AreEqual(2, run.GetMSLevel(613));
         }
 
         [Ignore("Testing only")]
@@ -246,7 +246,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
                 @"\\proto-7\AgQTOF03\2012_3\GLY06_11JAN12_LYNX_SN7980_TOP4wList_75000_SPIN_2\GLY06_11JAN12_LYNX_SN7980_TOP4wList_75000_SPIN_2.d";
 
             Run run = new AgilentDRun(testfile);
-            
+
             var precursor = run.GetPrecursorInfo(612);
 
             Assert.AreEqual(1, precursor.MSLevel);
@@ -276,17 +276,17 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         {
             Run run = new DeconTools.Backend.Runs.AgilentDRun(agilentDataset1);
 
-            using (var disposedRun = run )
+            using (var disposedRun = run)
             {
                 Assert.AreEqual(62, disposedRun.GetNumMSScans());
-            }  
+            }
         }
 
-       
 
 
 
-   // ----------------------------- Exception tests -----------------------------------------
+
+        // ----------------------------- Exception tests -----------------------------------------
 
         [Test]
         public void ConstructorError_wrongKindOfInputTest1()
@@ -334,7 +334,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         }
 
 
-         [Ignore("Testing only")]
+        [Ignore("Testing only")]
         [Test]
         public void Test1()
         {
@@ -342,26 +342,17 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
 
             var run = new RunFactory().CreateRun(testfile);
             Assert.IsNotNull(run);
-            var info = TestUtilities.DisplayRunInformation(run);
+            TestUtilities.DisplayRunInformation(run);
 
-            Console.WriteLine(info);
-
-
-            var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            var generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
             var scanSet = new ScanSet(1000);
 
             run.CurrentScanSet = scanSet;
 
-            msgen.Execute(run.ResultCollection);
-
+            generator.Execute(run.ResultCollection);
 
             TestUtilities.DisplayXYValues(run.XYData);
-
-
-
-
-
 
         }
 

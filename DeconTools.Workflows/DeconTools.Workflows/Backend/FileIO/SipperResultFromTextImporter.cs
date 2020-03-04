@@ -63,15 +63,14 @@ namespace DeconTools.Workflows.Backend.FileIO
         {
             if (string.IsNullOrEmpty(labelDistString))return null;
 
-            var delim = ',';
-            var parsedLabelDistString = labelDistString.Split(delim);
+            var delimiter = ',';
+            var parsedLabelDistString = labelDistString.Split(delimiter);
 
             var labelDistVals = new List<double>();
 
             foreach (var s in parsedLabelDistString)
             {
-                double val;
-                var parsedOk = double.TryParse(s, out val);
+                var parsedOk = double.TryParse(s, out var val);
 
                 if (parsedOk)
                 {

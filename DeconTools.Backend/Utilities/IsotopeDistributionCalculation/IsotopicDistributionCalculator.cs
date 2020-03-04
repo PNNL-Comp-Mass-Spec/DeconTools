@@ -55,29 +55,29 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
         /// <summary>
         /// Assign the labeling and the efficiency
         /// </summary>
-        /// <param name="labeledElmentSymbol">element symbol for the label</param>
+        /// <param name="labeledElementSymbol">element symbol for the label</param>
         /// <param name="labeledLightIsoNum">the light isotope number</param>
         /// <param name="labeledLightIsoAbundance">the light isotope new abundance</param>
         /// <param name="labeledHeavyIsoNum">isotope number of the heavy version</param>
         /// <param name="labeledHeavyIsoAbundance">the heavy label abundance</param>
-        public void SetLabeling(string labeledElmentSymbol,
+        public void SetLabeling(string labeledElementSymbol,
             int labeledLightIsoNum, double labeledLightIsoAbundance,
             int labeledHeavyIsoNum, double labeledHeavyIsoAbundance)
         {
             IsSetToLabeled = true;
-            elementalSymbol = labeledElmentSymbol;
+            elementalSymbol = labeledElementSymbol;
 
-            naturalAbundanceHeavy = Constants.Elements[labeledElmentSymbol].IsotopeDictionary[
-                labeledElmentSymbol + labeledHeavyIsoNum].NaturalAbundance;
-            naturalAbundanceLight = Constants.Elements[labeledElmentSymbol].IsotopeDictionary[
-                labeledElmentSymbol + labeledLightIsoNum].NaturalAbundance;
+            naturalAbundanceHeavy = Constants.Elements[labeledElementSymbol].IsotopeDictionary[
+                labeledElementSymbol + labeledHeavyIsoNum].NaturalAbundance;
+            naturalAbundanceLight = Constants.Elements[labeledElementSymbol].IsotopeDictionary[
+                labeledElementSymbol + labeledLightIsoNum].NaturalAbundance;
 
 
             //TODO: we should never be messing with the Constants values. We should be only altering our own copy!!
 
-            Constants.Elements[labeledElmentSymbol].IsotopeDictionary[labeledElmentSymbol + labeledHeavyIsoNum].NaturalAbundance =
+            Constants.Elements[labeledElementSymbol].IsotopeDictionary[labeledElementSymbol + labeledHeavyIsoNum].NaturalAbundance =
                 labeledHeavyIsoAbundance;
-            Constants.Elements[labeledElmentSymbol].IsotopeDictionary[labeledElmentSymbol + labeledLightIsoNum].NaturalAbundance =
+            Constants.Elements[labeledElementSymbol].IsotopeDictionary[labeledElementSymbol + labeledLightIsoNum].NaturalAbundance =
                 labeledLightIsoAbundance;
             lightIsotopeNum = labeledLightIsoNum;
             heavyIsotopeNum = labeledHeavyIsoNum;
@@ -255,12 +255,13 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
         {
             var averagineDict = GetAveragineDictionary();
             var averagineUnitMass = GetBasePeakMass(averagineDict);
+
             // get closest pattern to mass
-            var numberOfAveraginesInInput = inputMass / averagineUnitMass;
+            var numberOfAveragineValuesInInput = inputMass / averagineUnitMass;
             var formula = new Dictionary<string, int>();
             foreach (var element in averagineDict.Keys)
             {
-                formula.Add(element, (int)Math.Round(averagineDict[element] * numberOfAveraginesInInput));
+                formula.Add(element, (int)Math.Round(averagineDict[element] * numberOfAveragineValuesInInput));
             }
 
             return formula;
@@ -270,12 +271,13 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
         {
             var averagineDict = GetAveragineDictionary();
             var averagineUnitMass = GetBasePeakMass(averagineDict);
+
             // get closest pattern to mass
-            var numberOfAveraginesInInput = inputMass / averagineUnitMass;
+            var numberOfAveragineValuesInInput = inputMass / averagineUnitMass;
             var formula = new Dictionary<string, double>();
             foreach (var element in averagineDict.Keys)
             {
-                formula.Add(element, (averagineDict[element] * numberOfAveraginesInInput));
+                formula.Add(element, (averagineDict[element] * numberOfAveragineValuesInInput));
             }
 
             return formula;
@@ -328,11 +330,11 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
                 return 1;
             }
 
-            var retval = y.NaturalAbundance.CompareTo(x.NaturalAbundance);
+            var returnValue = y.NaturalAbundance.CompareTo(x.NaturalAbundance);
 
-            if (retval != 0)
+            if (returnValue != 0)
             {
-                return retval;
+                return returnValue;
             }
 
             return y.Mass.CompareTo(x.Mass);
@@ -421,7 +423,7 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
         /// <summary>
         /// Resets the member variable probabilities to 0.  Begins the isotopic profile recursion
         /// </summary>
-        /// <param name="jaggedProbabilities">probabilities provided by getisotopepattern</param>
+        /// <param name="jaggedProbabilities">probabilities provided by GetIsotopePattern</param>
         private void RecursiveCalculator(double[][] jaggedProbabilities)
         {
             IonProbabilities = new double[300];
@@ -431,9 +433,9 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
         /// <summary>
         /// Calculate the probability of each isotope and stores these values in the probabilities member variable
         /// </summary>
-        /// <param name="jaggedProbabilities">probabilities provided by getisotopepattern</param>
+        /// <param name="jaggedProbabilities">probabilities provided by GetIsotopePattern</param>
         /// <param name="level">depth of recursion</param>
-        /// <param name="isotopeNum">the isotope indice to add the current probability</param>
+        /// <param name="isotopeNum">the isotope index to add the current probability</param>
         /// <param name="probabilitySet">list of current values accumulated in the recursion step</param>
         /// <returns></returns>
         private void ProbabilityCalculator(double[][] jaggedProbabilities, int level, int isotopeNum, ICollection<double> probabilitySet)

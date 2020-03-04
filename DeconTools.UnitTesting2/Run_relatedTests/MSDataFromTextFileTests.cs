@@ -57,9 +57,9 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         {
             Run run = new MSScanFromTextFileRun(FileRefs.RawDataMSFiles.TextFileMS_multipleDelimiters,' ');
 
-            var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            var generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
-            msgen.Execute(run.ResultCollection);
+            generator.Execute(run.ResultCollection);
 
             TestUtilities.DisplayXYValues(run.XYData);
 

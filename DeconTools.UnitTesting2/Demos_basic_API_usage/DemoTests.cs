@@ -19,7 +19,7 @@ namespace DeconTools.UnitTesting2.Demos_basic_API_usage
 
 
             //Create the task
-            var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            var generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
             //Create the target scan list (MS1 scans from 6005 - 6020).
             run.ScanSetCollection .Create(run, 6005, 6020, 1, 1);
@@ -31,7 +31,7 @@ namespace DeconTools.UnitTesting2.Demos_basic_API_usage
             {
                 Console.WriteLine("Working on Scan " + scan.PrimaryScanNumber);
                 run.CurrentScanSet = scan;
-                msgen.Execute(run.ResultCollection);
+                generator.Execute(run.ResultCollection);
 
                 Console.WriteLine("XYPair count = " + run.XYData.Xvalues.Length);
             }
@@ -51,7 +51,7 @@ namespace DeconTools.UnitTesting2.Demos_basic_API_usage
             var run = runFactory.CreateRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
             //Create the task
-            Task msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            Task generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
             var peakdetector = new DeconToolsPeakDetectorV2();
 
@@ -64,7 +64,7 @@ namespace DeconTools.UnitTesting2.Demos_basic_API_usage
                 {
                     var scanset = new ScanSet(i);
                     run.CurrentScanSet = scanset;
-                    msgen.Execute(run.ResultCollection);
+                    generator.Execute(run.ResultCollection);
                     peakdetector.Execute(run.ResultCollection);
 
                     Console.Write("Working on Scan " + scanset.PrimaryScanNumber);

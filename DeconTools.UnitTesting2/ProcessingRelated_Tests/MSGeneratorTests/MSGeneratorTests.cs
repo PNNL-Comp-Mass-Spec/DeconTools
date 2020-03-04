@@ -18,12 +18,12 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSGeneratorTests
         {
             var testfile = FileRefs.RawDataMSFiles.OrbitrapStdFile1;
             var run = new RunFactory().CreateRun(testfile);
-            var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            var generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
             var testLCScan=6005;
             var scanSet = new ScanSetFactory().CreateScanSet(run, testLCScan, 1);
 
-            var xyData= msgen.GenerateMS(run, scanSet);
+            var xyData= generator.GenerateMS(run, scanSet);
 
             Assert.IsNotNull(xyData);
             Assert.IsTrue(xyData.Xvalues.Length > 1000);
@@ -35,7 +35,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSGeneratorTests
             var uimfFile = FileRefs.RawDataMSFiles.UIMFStdFile3;
 
             var run = new RunFactory().CreateRun(uimfFile);
-            var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
+            var generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
             var peakDetector = new DeconToolsPeakDetectorV2(1.3, 2, Globals.PeakFitType.QUADRATIC, true);
             var zeroFiller = new DeconTools.Backend.ProcessingTasks.ZeroFillers.DeconToolsZeroFiller(3);
 
@@ -56,7 +56,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSGeneratorTests
             run.CurrentScanSet = scanSet;
             ((UIMFRun)run).CurrentIMSScanSet = new IMSScanSet(testIMSScan, lowerIMSScan, upperIMSScan);
 
-            msgen.Execute(run.ResultCollection);
+            generator.Execute(run.ResultCollection);
 
             Assert.IsTrue(run.XYData.Xvalues.Length > 100);
 

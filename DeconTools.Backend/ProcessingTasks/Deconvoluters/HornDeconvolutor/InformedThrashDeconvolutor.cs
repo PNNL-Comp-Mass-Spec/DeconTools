@@ -56,7 +56,6 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters
         /// </summary>
         public bool UseAutoCorrelationChargeDetermination { get; set; }
 
-
         #endregion
 
         #region Public Methods
@@ -122,19 +121,13 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters
         {
 
             var isotopicProfiles = new List<IsotopicProfile>();
-            #region Paul Addition
-            //var myIsotopicProfiles = new List<IsotopicProfile>();
-            //var otherIsotopicProfiles = new List<IsotopicProfile>();
-            #endregion
 
             if (Parameters.AreAllTheoreticalProfilesCachedBeforeStarting)
             {
                 CreateAllTheoreticalProfilesForMassRange();
             }
 
-
             var minMSFeatureIntensity = backgroundIntensity * minMSFeatureToBackgroundRatio;
-
 
             var xyData = new XYData
             {
@@ -142,9 +135,8 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters
                 Yvalues = originalXYData.Yvalues
             };
 
-            var sortedPeaklist = new List<Peak>(msPeakList).OrderByDescending(p => p.Height).ToList();
+            var sortedPeakList = new List<Peak>(msPeakList).OrderByDescending(p => p.Height).ToList();
             var peaksAlreadyProcessed = new HashSet<Peak>();
-
 
             var sb = new StringBuilder();
 
@@ -153,7 +145,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters
 
 
             var peakCounter = -1;
-            foreach (var msPeak in sortedPeaklist)
+            foreach (var msPeak in sortedPeakList)
             {
 
                 //if (msPeak.XValue > 579.53 && msPeak.XValue < 579.54)
@@ -279,7 +271,6 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters
                     }
                     sb.Append(Environment.NewLine);
 
-
                     if (Parameters.CheckAllPatternsAgainstChargeState1)
                     {
                         isoProfile = potentialMSFeaturesForGivenChargeState.FirstOrDefault(n => n.ChargeState == 1);
@@ -295,11 +286,10 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters
                         {
                             var peaksNotLoaded = _run.ResultCollection.MSPeakResultList == null ||
                                                   _run.ResultCollection.MSPeakResultList.Count == 0;
-                            if (peaksNotLoaded)// || !importedFULLPeaks)
+                            if (peaksNotLoaded)
                             {
                                 stopwatch.Start();
                                 LoadPeaks(_run);
-                                //importedFULLPeaks = true;
                                 stopwatch.Stop();
                                 IqLogger.LogDebug("stopwatch: " + stopwatch.Elapsed);
                             }
@@ -333,7 +323,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters
                         {
                             var reportString309 = "\nM/Z = " + isoProfile.MonoPeakMZ +
                                 "\nCHOSEN CHARGE: " + isoProfile.ChargeState + "\n\n";
-                            IqLogger.LogDebug(reportString309);
+                            IqLogger.LogTrace(reportString309);
 
                             //tabular output
                             //string reportString309 = "\tM/Z = \t" + isoProfile.MonoPeakMZ +
@@ -342,14 +332,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters
                         }
 
                         #endregion
-
-
-
                     }
-
-
-
-
 
                 }
 
@@ -403,7 +386,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters
 
         private void LoadPeaks(Run run)
         {
-            var sourcePeaksFile = Path.Combine(run.DatasetDirectoryPath, run.DatasetName + "_peaks.txt");    //FULL.txt";
+            var sourcePeaksFile = Path.Combine(run.DatasetDirectoryPath, run.DatasetName + "_peaks.txt");
 
             RunUtilities.GetPeaks(run, sourcePeaksFile);
 
@@ -569,15 +552,14 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters
             return msFeature;
         }
 
-
         public IsotopicProfile GetTheoreticalProfile(double mass)
         {
             var massUsedForLookup = (int)Math.Round(mass, 0);
 
             if (!_averagineProfileLookupTable.ContainsKey(massUsedForLookup))
             {
-                var newtheorIso = _isotopicDistCalculator.GetAveraginePattern(mass);
-                _averagineProfileLookupTable.Add(massUsedForLookup, newtheorIso);
+                var newIsotopicProfile = _isotopicDistCalculator.GetAveraginePattern(mass);
+                _averagineProfileLookupTable.Add(massUsedForLookup, newIsotopicProfile);
             }
 
             var theorIso = _averagineProfileLookupTable[massUsedForLookup].CloneIsotopicProfile();
@@ -594,11 +576,11 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters
         {
             if (!isotopicProfiles.Any()) return isotopicProfiles;
 
-            var lastindex = isotopicProfiles.Count - 1;
+            var lastIndex = isotopicProfiles.Count - 1;
 
             var sortedIsos = isotopicProfiles.OrderBy(p => p.MonoIsotopicMass).ThenBy(p => p.ChargeState).ThenBy(p => p.Score).ToList();
 
-            for (var i = lastindex; i > 0; i--)
+            for (var i = lastIndex; i > 0; i--)
             {
                 if (Math.Abs(sortedIsos[i].MonoIsotopicMass - sortedIsos[i - 1].MonoIsotopicMass) < double.Epsilon && sortedIsos[i].ChargeState == sortedIsos[i - 1].ChargeState)
                 {
@@ -610,9 +592,6 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters
 
         }
 
-
-
-
         private void PerformIterativeFittingAndGetAlignedProfile(XYData xyData, XYData theorXYData, int chargeState, ref IsotopicProfile theorIso, ref double bestFitVal)
         {
             if (xyData == null || xyData.Xvalues.Length == 0)
@@ -623,7 +602,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters
 
             double relIntensityUseForFitting = 0;
 
-            var fitVal = _areaFitter.GetFit(theorXYData, xyData, relIntensityUseForFitting, out var ionCountUsed);
+            var fitVal = _areaFitter.GetFit(theorXYData, xyData, relIntensityUseForFitting, out _);
 
             if (fitVal < bestFitVal)
             {
@@ -638,7 +617,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters
                 var offsetForTheorProfile = -1 * numPeaksToTheLeft * Globals.MASS_DIFF_BETWEEN_ISOTOPICPEAKS / chargeState;
                 //negative offset
 
-                fitVal = _areaFitter.GetFit(theorXYData, xyData, relIntensityUseForFitting, out ionCountUsed, offsetForTheorProfile);
+                fitVal = _areaFitter.GetFit(theorXYData, xyData, relIntensityUseForFitting, out _, offsetForTheorProfile);
 
                 if (fitVal > bestFitVal || fitVal >= 1 || double.IsNaN(fitVal))
                 {
@@ -654,7 +633,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters
             {
                 var offsetForTheorProfile = numPeaksToTheRight * Globals.MASS_DIFF_BETWEEN_ISOTOPICPEAKS / chargeState;
 
-                fitVal = _areaFitter.GetFit(theorXYData, xyData, relIntensityUseForFitting, out ionCountUsed, offsetForTheorProfile);
+                fitVal = _areaFitter.GetFit(theorXYData, xyData, relIntensityUseForFitting, out _, offsetForTheorProfile);
 
                 if (fitVal >= bestFitVal || fitVal >= 1 || double.IsNaN(fitVal))
                 {
