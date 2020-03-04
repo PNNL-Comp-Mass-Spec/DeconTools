@@ -14,17 +14,33 @@ namespace DeconTools.UnitTesting2.TheoreticalIsotopicProfileTests
         public void GenerateIsotopicProfileTest1()
         {
             var peptideUtils = new PeptideUtils();
+            var peptideSequenceA = "SamplePeptide".ToUpper();
+            var peptideSequenceB = "K." + peptideSequenceA + ".S";
 
+            var empiricalFormulaA = peptideUtils.GetEmpiricalFormulaForPeptideSequence(peptideSequenceA);
+            Console.WriteLine("Empirical formula for {0} is {1}", peptideSequenceA, empiricalFormulaA);
 
-            var empiricalFormula = peptideUtils.GetEmpiricalFormulaForPeptideSequence("SAMPLERSAMPLER");
+            var empiricalFormulaB = peptideUtils.GetEmpiricalFormulaForPeptideSequence(peptideSequenceB);
+            Console.WriteLine("Empirical formula for {0} is {1}", peptideSequenceB, empiricalFormulaB);
 
+            Assert.AreEqual(empiricalFormulaA, empiricalFormulaB, "Empirical formulas do not match");
 
             var featureGenerator = new JoshTheorFeatureGenerator();
+            var profile = featureGenerator.GenerateTheorProfile(empiricalFormulaA, 2);
 
+            const double fwhm = 0.5;
 
+            var xyData = profile.GetTheoreticalIsotopicProfileXYData(fwhm);
+            var xStart = xyData.Xvalues[0];
+
+            for (var i = 0; i < xyData.Xvalues.Length; i += 5)
+            {
+                if (xyData.Xvalues[i] > xStart + 2.5)
+                    break;
+
+                Console.WriteLine("{0}\t{1}", xyData.Xvalues[i], xyData.Yvalues[i]);
+            }
         }
-
-
 
         [Test]
         public void TomGenerateTheorProfileTest1()
