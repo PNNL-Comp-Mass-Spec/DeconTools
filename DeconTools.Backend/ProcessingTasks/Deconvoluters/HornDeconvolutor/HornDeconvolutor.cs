@@ -268,8 +268,8 @@ namespace DeconTools.Backend.ProcessingTasks
             IsMercuryCachingUsed = true;
             IsMSMSProcessed = false;
             IsMZRangeUsed = true;
-            MaxMZ = 400;
-            MinMZ = 2000;
+            MinMZ = 400;
+            MaxMZ = 2000;
             MinPeptideBackgroundRatio = 5;
             NumPeaksUsedInAbundance = 1;
 
