@@ -194,9 +194,9 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
                 var fLogAmtHeavy = Math.Log10(aafIsoLocal[i0][1]);
                 for (var i1 = 0; i1 <= formulaArray[i0]; i1++)
                 {
-                    fLogTotal = fLogAmtLight * (formulaArray[i0] - i1) + fLogAmtHeavy * i1;
-                    fLogTotal += (double)LogAChooseB(formulaArray[i0], i1);
-                    aafIons[i0, i1] = (double)(System.Math.Pow(10, fLogTotal));
+                    var fLogTotal = fLogAmtLight * (formulaArray[i0] - i1) + fLogAmtHeavy * i1;
+                    fLogTotal += IsotopicDistributionCalculator.LogAChooseB(formulaArray[i0], i1);
+                    aafIons[i0, i1] = System.Math.Pow(10, fLogTotal);
                     maxIndices[i0] = i1;
                     if (i1 > 1 && fLogTotalLast > fLogTotal && aafIons[i0, i1] < EPS)
                         break;
@@ -239,28 +239,7 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
             {
                 return 0;
             }
-
         }
 
-        public double LogAChooseB(int a, int b) // 10 choose 2 returns 10.9/1.2
-        {
-            if (a == 0) return 0.0f;
-            if (b == 0) return 0.0f;
-            if (a == b) return 0.0f;
-            var total = 0.0;
-            total += LogFactorial(a);
-            total -= LogFactorial(b);
-            total -= LogFactorial(a - b);
-            return (double)total;
-        }
-
-        public double LogFactorial(int n)
-        {
-            //log n! = 0.5log(2.pi) + 0.5logn + nlog(n/e) + log(1 + 1/(12n))
-            return (double)0.5 * (
-                System.Math.Log10(2 * System.Math.PI * n))
-                + n * (System.Math.Log10(n / System.Math.E))
-                + (System.Math.Log10(1.0 + 1.0 / (12 * n)));
-        }
     }
 }

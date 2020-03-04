@@ -378,16 +378,13 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
         /// <param name="a">Total number of observations</param>
         /// <param name="b">count of "successes" for an isotope showing up </param>
         /// <returns></returns>
-        private double LogAChooseB(int a, int b) // 10 choose 2 returns 10.9/1.2
+        public static double LogAChooseB(int a, int b) // 10 choose 2 returns 10.9/1.2
         {
             if (a == 0) return 0.0f;
             if (b == 0) return 0.0f;
             if (a == b) return 0.0f;
 
-            var total = 0.0;
-            total += LogFactorial(a);
-            total -= LogFactorial(b);
-            total -= LogFactorial(a - b);
+            var total = LogFactorial(a) - LogFactorial(b) - LogFactorial(a - b);
             return total;
         }
 
@@ -396,10 +393,12 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
         /// </summary>
         /// <param name="n">number of terms</param>
         /// <returns></returns>
-        private double LogFactorial(int n)
+        private static double LogFactorial(int n)
         {
-            //log n! = 0.5log(2.pi) + 0.5logn + nlog(n/e) + log(1 + 1/(12n))
-            return 0.5 * Math.Log10(2 * Math.PI * n)
+            // log n! = 0.5*log(2*pi) + 0.5*log(n) + n*log(n/e) + log(1 + 1/(12*n))
+            // log n! = 0.5*log(2*pi*n)            + n*log(n/e) + log(1 + 1/(12*n))
+            return
+                0.5 * Math.Log10(2 * Math.PI * n)
                 + n * Math.Log10(n / Math.E)
                 + Math.Log10(1.0 + 1.0 / (12 * n));
         }
