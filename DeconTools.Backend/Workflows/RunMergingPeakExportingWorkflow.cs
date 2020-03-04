@@ -192,11 +192,7 @@ namespace DeconTools.Backend.Workflows
             PeakListExporter.Execute(Run.ResultCollection);
         }
 
-
-
-
-
-        public override void ReportProgress()
+        public virtual void ReportProgress()
         {
             if (Run.ScanSetCollection == null || Run.ScanSetCollection.ScanSetList.Count == 0) return;
 

@@ -88,11 +88,9 @@ namespace DeconTools.Backend.Workflows
             {
                 ExecuteTask(_o16O18PeakDataAppender);
             }
-
-
         }
 
-        public override void ReportProgress()
+        public virtual void ReportProgress()
         {
             if (Run.ScanSetCollection == null || Run.ScanSetCollection.ScanSetList.Count == 0) return;
 

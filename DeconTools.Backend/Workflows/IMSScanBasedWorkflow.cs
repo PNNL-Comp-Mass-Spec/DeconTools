@@ -146,7 +146,7 @@ namespace DeconTools.Backend.Workflows
             return string.Format("{0}; FramesPerMinute= {1:F1}", progressMessage, framesPerMinute);
         }
 
-        public override void ReportProgress()
+        public virtual void ReportProgress()
         {
             var uimfRun = (UIMFRun)Run;
             var imsScanIsLastInFrame = uimfRun.IMSScanSetCollection.GetLastScanSet() == uimfRun.CurrentIMSScanSet.PrimaryScanNumber;

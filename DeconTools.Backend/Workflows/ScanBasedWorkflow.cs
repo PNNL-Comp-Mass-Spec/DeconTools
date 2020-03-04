@@ -464,10 +464,7 @@ namespace DeconTools.Backend.Workflows
             Logger.Instance.Close();
         }
 
-
         protected abstract void IterateOverScans();
-
-        public abstract void ReportProgress();
 
         /// <summary>
         /// Executes the processing tasks on a given scan (or frame).

@@ -362,11 +362,9 @@ namespace DeconTools.Backend.Workflows
                         "DeconMSn only works on MS1 and MS2 data; You are attempting MS3");
                 }
 
-
                 ReportProgress();
 
             }
-
 
         }
 
@@ -389,7 +387,7 @@ namespace DeconTools.Backend.Workflows
             return Globals.ResultType.DECON_MSN_RESULT;
         }
 
-        public override void ReportProgress()
+        public virtual void ReportProgress()
         {
             if (Run.ScanSetCollection == null || Run.ScanSetCollection.ScanSetList.Count == 0) return;
 
