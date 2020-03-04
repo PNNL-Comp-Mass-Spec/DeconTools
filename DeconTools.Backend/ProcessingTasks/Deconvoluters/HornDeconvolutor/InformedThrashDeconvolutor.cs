@@ -17,13 +17,14 @@ using System.IO;
 
 namespace DeconTools.Backend.ProcessingTasks.Deconvoluters
 {
-    [Obsolete("Implements Globals.DeconvolutionType.ThrashV2; use ThrashV1 instead (Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.ThrashDeconvolutorV2)")]
+    [Obsolete("Implements Globals.DeconvolutionType.ThrashV2; use ThrashDeconvolutorV2 instead (Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.ThrashDeconvolutorV2)")]
     public class InformedThrashDeconvolutor : Deconvolutor
     {
         #region Paul Addition
         public bool doPaulMethod = true;
         //bool importedFULLPeaks = false;
         #endregion
+
         private Run _run;
 
         readonly IsotopicDistributionCalculator _isotopicDistCalculator = IsotopicDistributionCalculator.Instance;

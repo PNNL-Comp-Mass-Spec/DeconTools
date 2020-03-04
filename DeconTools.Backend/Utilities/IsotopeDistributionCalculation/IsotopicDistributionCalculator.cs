@@ -1,6 +1,4 @@
-﻿//Written by Josh Aldrich, Tom Taverner, Gordon Slysz at PNNL
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using DeconTools.Backend.Core;
@@ -8,6 +6,12 @@ using PNNLOmics.Data.Constants;
 
 namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
 {
+    /// <summary>
+    /// Isotopic distribution calculator
+    /// </summary>
+    /// <remarks>
+    /// Written by Josh Aldrich, Tom Taverner, and Gordon Slysz at PNNL
+    /// </remarks>
     public sealed class IsotopicDistributionCalculator
     {
         #region Member Variables
@@ -102,14 +106,11 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
             heavyIsotopeNum = -1;
         }
 
-
-
         public IsotopicProfile GetIsotopePattern(string empiricalFormula)
         {
             var elementLookupTable = _peptideUtils.ParseEmpiricalFormulaString(empiricalFormula);
             return GetIsotopePattern(elementLookupTable);
         }
-
 
         /// <summary>
         /// Isotope pattern calculator
@@ -204,18 +205,17 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
 
         #endregion
 
-
         #region Private Methods
 
         /// <summary>
-        /// Provides an averaginedictionary
+        /// Provides an averagine dictionary
         /// </summary>
         /// <returns>Averagine formula</returns>
         private Dictionary<string, double> GetAveragineDictionary()
         {
-            //NOTE: these averagine values are the standard ones used
-            //in the DMS standard workflow for Orbi data
-            //see "\\gigasax\DMS_Parameter_Files\Decon2LS\LTQ_Orb_O18_SN2_PeakBR2_PeptideBR1_Thrash_Sum3.xml"
+            // NOTE: these averagine values are the standard ones used
+            // in the DMS standard workflow for Orbitrap data
+            // see "\\gigasax\DMS_Parameter_Files\Decon2LS\LTQ_Orb_O18_SN2_PeakBR2_PeptideBR1_Thrash_Sum3.xml"
 
             var averagineDict = new Dictionary<string, double>
             {
@@ -283,12 +283,8 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
             return formula;
         }
 
-
-
-
         public string GetAveragineFormulaAsString(double inputMass, bool roundToIntegers = true)
         {
-
             if (roundToIntegers)
             {
                 var formulaTable = GetAveragineFormulaAsTableRoundedToInteger(inputMass);
@@ -299,13 +295,7 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
                 var formulaTable = GetAveragineFormulaAsTable(inputMass);
                 return EmpiricalFormulaUtilities.GetEmpiricalFormulaFromElementTable(formulaTable);
             }
-
-
-
-
         }
-
-
 
         /// <summary>
         /// Comparison method to sort the isotopes by natural abundance
@@ -380,9 +370,7 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
             }
             s.Sort(CompareNumber);
             return s;
-
         }
-
 
         /// <summary>
         /// Solves for binomial coefficient using log10 factorials

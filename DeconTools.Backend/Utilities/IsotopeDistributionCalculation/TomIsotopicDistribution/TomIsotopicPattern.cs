@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using DeconTools.Backend.Core;
 
 namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopicDistribution
 {
 
     /// <summary>
-    /// Written by Tom Tavener
+    /// Written by Tom Taverner
     /// </summary>
     public class TomIsotopicPattern
     {
@@ -47,7 +48,7 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
 
         }
 
-        public double fNPerThLow; // lower and upper limits of how many 
+        public double fNPerThLow; // lower and upper limits of how many
         public double fNPerThHigh;  // nitrogen atoms are in most peptides
 
         public double fNn15a = 0.98f;//0.996337f;//  // this is our N15 abundance
@@ -133,7 +134,7 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
         public string GetClosestAvnFormula(double inputMass, bool hasLabel)
         {
             var fAvnMass = GetBasePeakMass(afAvn, hasLabel);
-            // get closest pattern to mass 
+            // get closest pattern to mass
             var fNumAvn = inputMass / fAvnMass;
             var averagineIntArray = new int[5];
             for (var i = 0; i < 5; i++)
@@ -149,7 +150,7 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
 
             return ("C" + averagineIntArray[0] + "H" + averagineIntArray[1] + "N" + averagineIntArray[2] + "O" + averagineIntArray[3] + "S" + averagineIntArray[4]);
 
-            
+
         }
 
         public IsotopicProfile GetAvnPattern(double fInputMass, bool bLabel)
@@ -162,8 +163,6 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
             else
                 return GetIsotopePattern(averagineFormula, aafN15Isos);
         }
-
-
 
         public IsotopicProfile GetIsotopePattern(string empiricalFormula)
         {
@@ -181,8 +180,6 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
             formulaArray[2] = getAtomCount(elementTable, "N");
             formulaArray[3] = getAtomCount(elementTable, "O");
             formulaArray[4] = getAtomCount(elementTable, "S");
-            
-
 
             double EPS = 0.001f;
 

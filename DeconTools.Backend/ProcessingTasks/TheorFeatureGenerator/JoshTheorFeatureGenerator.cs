@@ -7,7 +7,11 @@ using DeconTools.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
 {
-    public class JoshTheorFeatureGenerator:ITheorFeatureGenerator
+    /// <summary>
+    /// Theoretical isotopic pattern generator
+    /// </summary>
+    /// <remarks>Use IsotopicDistributionCalculator, developed by Josh Aldrich, Tom Taverner, and Gordon Slysz</remarks>
+    public class JoshTheorFeatureGenerator : ITheorFeatureGenerator
     {
         readonly IsotopicDistributionCalculator _isotopicDistCalculator = IsotopicDistributionCalculator.Instance;
         readonly N15IsotopeProfileGenerator _N15IsotopicProfileGenerator = new N15IsotopeProfileGenerator();
