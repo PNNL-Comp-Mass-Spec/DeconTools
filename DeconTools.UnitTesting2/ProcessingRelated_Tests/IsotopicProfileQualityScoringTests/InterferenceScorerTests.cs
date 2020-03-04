@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Linq;
+using DeconTools.Backend;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend.ProcessingTasks.PeakDetectors;
@@ -26,7 +27,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.IsotopicProfileQuality
 
             var generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
-            var peakDetector = new DeconToolsPeakDetectorV2(1.3, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
+            var peakDetector = new DeconToolsPeakDetectorV2(1.3, 2, Globals.PeakFitType.QUADRATIC, true);
 
             var decon = new HornDeconvolutor();
 
@@ -37,7 +38,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.IsotopicProfileQuality
 
             Assert.AreEqual(93, run.ResultCollection.ResultList.Count);
 
-            var testResult = run.ResultCollection.ResultList.Where(p => p.IsotopicProfile.MonoPeakMZ > 597 && p.IsotopicProfile.MonoPeakMZ < 598).First();
+            var testResult = run.ResultCollection.ResultList.First(p => p.IsotopicProfile.MonoPeakMZ > 597 && p.IsotopicProfile.MonoPeakMZ < 598);
 
             var monoPeak = testResult.IsotopicProfile.getMonoPeak();
             var lastPeak = testResult.IsotopicProfile.Peaklist[testResult.IsotopicProfile.Peaklist.Count - 1];
@@ -72,7 +73,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.IsotopicProfileQuality
             Task generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
 
-            var peakDetector = new DeconToolsPeakDetectorV2(1.3, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
+            var peakDetector = new DeconToolsPeakDetectorV2(1.3, 2, Globals.PeakFitType.QUADRATIC, true);
 
             var decon = new HornDeconvolutor();
 
@@ -83,7 +84,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.IsotopicProfileQuality
 
             Assert.AreEqual(93, run.ResultCollection.ResultList.Count);
 
-            var testResult = run.ResultCollection.ResultList.Where(p => p.IsotopicProfile.MonoPeakMZ > 903 && p.IsotopicProfile.MonoPeakMZ < 904).First();
+            var testResult = run.ResultCollection.ResultList.First(p => p.IsotopicProfile.MonoPeakMZ > 903 && p.IsotopicProfile.MonoPeakMZ < 904);
 
             var monoPeak = testResult.IsotopicProfile.getMonoPeak();
             var lastPeak = testResult.IsotopicProfile.Peaklist[testResult.IsotopicProfile.Peaklist.Count - 1];
@@ -118,7 +119,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.IsotopicProfileQuality
             Task generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
 
-            var peakDetector = new DeconToolsPeakDetectorV2(1.3, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
+            var peakDetector = new DeconToolsPeakDetectorV2(1.3, 2, Globals.PeakFitType.QUADRATIC, true);
 
             var decon = new HornDeconvolutor();
 
@@ -129,7 +130,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.IsotopicProfileQuality
 
             Assert.AreEqual(93, run.ResultCollection.ResultList.Count);
 
-            var testResult = run.ResultCollection.ResultList.Where(p => p.IsotopicProfile.MonoPeakMZ > 597 && p.IsotopicProfile.MonoPeakMZ < 598).First();
+            var testResult = run.ResultCollection.ResultList.First(p => p.IsotopicProfile.MonoPeakMZ > 597 && p.IsotopicProfile.MonoPeakMZ < 598);
 
             var monoPeak = testResult.IsotopicProfile.getMonoPeak();
             var lastPeak = testResult.IsotopicProfile.Peaklist[testResult.IsotopicProfile.Peaklist.Count - 1];
@@ -165,7 +166,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.IsotopicProfileQuality
             Task generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
 
-            var peakDetector = new DeconToolsPeakDetectorV2(1.3, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
+            var peakDetector = new DeconToolsPeakDetectorV2(1.3, 2, Globals.PeakFitType.QUADRATIC, true);
 
             var decon = new HornDeconvolutor();
 
@@ -176,7 +177,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.IsotopicProfileQuality
 
             Assert.AreEqual(93, run.ResultCollection.ResultList.Count);
 
-            var testResult = run.ResultCollection.ResultList.Where(p => p.IsotopicProfile.MonoPeakMZ > 903 && p.IsotopicProfile.MonoPeakMZ < 904).First();
+            var testResult = run.ResultCollection.ResultList.First(p => p.IsotopicProfile.MonoPeakMZ > 903 && p.IsotopicProfile.MonoPeakMZ < 904);
 
             var monoPeak = testResult.IsotopicProfile.getMonoPeak();
             var lastPeak = testResult.IsotopicProfile.Peaklist[testResult.IsotopicProfile.Peaklist.Count - 1];
@@ -191,7 +192,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.IsotopicProfileQuality
             stopwatch.Start();
             var scanPeaks = run.PeakList.Select<Peak, MSPeak>(i => (MSPeak)i).ToList();
             var interferenceScore = interferenceScorer.GetInterferenceScore(scanPeaks, testResult.IsotopicProfile.Peaklist, monoPeak.XValue - 1.1,
-    lastPeak.XValue + lastPeak.Width); 
+    lastPeak.XValue + lastPeak.Width);
             stopwatch.Stop();
 
             Console.WriteLine("interference= " + interferenceScore);
@@ -217,7 +218,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.IsotopicProfileQuality
             generator.MinMZ = 200;
             generator.MaxMZ = 2000;
 
-            var peakDetector = new DeconToolsPeakDetectorV2(4, 3, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
+            var peakDetector = new DeconToolsPeakDetectorV2(4, 3, Globals.PeakFitType.QUADRATIC, true);
 
             var decon = new HornDeconvolutor();
             decon.MinIntensityForScore = 10;
@@ -238,7 +239,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.IsotopicProfileQuality
 
             //Assert.AreEqual(93, run.ResultCollection.ResultList.Count);
 
-            var testResult = run.ResultCollection.ResultList.Where(p => p.IsotopicProfile.MonoPeakMZ > 428 && p.IsotopicProfile.MonoPeakMZ < 430).First();
+            var testResult = run.ResultCollection.ResultList.First(p => p.IsotopicProfile.MonoPeakMZ > 428 && p.IsotopicProfile.MonoPeakMZ < 430);
 
             var monoPeak = testResult.IsotopicProfile.getMonoPeak();
             var lastPeak = testResult.IsotopicProfile.Peaklist[testResult.IsotopicProfile.Peaklist.Count - 1];
@@ -275,7 +276,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.IsotopicProfileQuality
             Task generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
 
-            var peakDetector = new DeconToolsPeakDetectorV2(1.3, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
+            var peakDetector = new DeconToolsPeakDetectorV2(1.3, 2, Globals.PeakFitType.QUADRATIC, true);
 
             var decon = new HornDeconvolutor();
 

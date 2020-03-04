@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using DeconTools.Backend;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend.ProcessingTasks.PeakDetectors;
@@ -19,9 +20,9 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
             var scanSet = new ScanSet(6005);
             run.CurrentScanSet = scanSet;
 
-            
+
             var generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
-            var peakDetector = new DeconToolsPeakDetectorV2(1.3, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
+            var peakDetector = new DeconToolsPeakDetectorV2(1.3, 2, Globals.PeakFitType.QUADRATIC, true);
             var decon = new HornDeconvolutor();
 
             generator.Execute(run.ResultCollection);
@@ -30,7 +31,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
 
             Assert.AreEqual(93, run.ResultCollection.ResultList.Count);
 
-            //order and get the most intense msfeature
+            //order and get the most intense ms feature
             run.ResultCollection.ResultList = run.ResultCollection.ResultList.OrderByDescending(p => p.IntensityAggregate).ToList();
             var testIso = run.ResultCollection.ResultList[0];
             Assert.AreEqual(13084442, testIso.IntensityAggregate);
