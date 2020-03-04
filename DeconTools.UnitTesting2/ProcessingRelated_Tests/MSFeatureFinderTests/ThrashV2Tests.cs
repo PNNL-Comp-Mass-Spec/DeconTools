@@ -71,8 +71,12 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
 
             var run = new RunFactory().CreateRun(uimfFile);
             var generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
-            var peakDetector = new DeconToolsPeakDetectorV2(1.3, 2, Globals.PeakFitType.QUADRATIC, true);
-            var zeroFiller = new DeconTools.Backend.ProcessingTasks.ZeroFillers.DeconToolsZeroFiller(3);
+            var peakDetector = new DeconToolsPeakDetectorV2(1.3, 2, Globals.PeakFitType.QUADRATIC, true)
+            {
+                PeaksAreStored = true
+            };
+
+            var zeroFiller = new Backend.ProcessingTasks.ZeroFillers.DeconToolsZeroFiller(3);
 
             var thrashParameters = new ThrashParameters {
                 MinMSFeatureToBackgroundRatio = 1,
@@ -124,7 +128,8 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
 
             var generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
             var peakDetector = new DeconToolsPeakDetectorV2(0.5, 2, Globals.PeakFitType.QUADRATIC, true) {
-                IsDataThresholded = true
+                IsDataThresholded = true,
+                PeaksAreStored = true
             };
 
             var parameters = new ThrashParameters {
@@ -244,9 +249,10 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
             run.ScanSetCollection.Create(run, 6005, 6005, 5, 1, false);
 
             var generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
-            var peakDetector = new DeconToolsPeakDetectorV2(1.3, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
-
-
+            var peakDetector = new DeconToolsPeakDetectorV2(1.3, 2, Globals.PeakFitType.QUADRATIC, true)
+            {
+                PeaksAreStored = true
+            };
 
             var thrashParameters = new ThrashParameters {
                 MinMSFeatureToBackgroundRatio = 3,
@@ -406,10 +412,10 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
 
             var scanSet = new ScanSetFactory().CreateScanSet(run, testLCScan, 1);
 
-
             var generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
-            var peakDetector = new DeconToolsPeakDetectorV2(1.3, 2, Globals.PeakFitType.QUADRATIC, true);
-            var zeroFiller = new DeconTools.Backend.ProcessingTasks.ZeroFillers.DeconToolsZeroFiller(3);
+            var peakDetector = new DeconToolsPeakDetectorV2(1.3, 2, Globals.PeakFitType.QUADRATIC, true) {
+                PeaksAreStored = true
+            };
 
             var zeroFiller = new Backend.ProcessingTasks.ZeroFillers.DeconToolsZeroFiller(3);
 
@@ -594,7 +600,10 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
 
 
             var generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
-            var peakDetector = new DeconToolsPeakDetectorV2(2, 2, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, true);
+            var peakDetector = new DeconToolsPeakDetectorV2(2, 2, Globals.PeakFitType.QUADRATIC, true)
+            {
+                PeaksAreStored = true
+            };
 
             var thrashParameters = new ThrashParameters {
                 MinMSFeatureToBackgroundRatio = 2,
