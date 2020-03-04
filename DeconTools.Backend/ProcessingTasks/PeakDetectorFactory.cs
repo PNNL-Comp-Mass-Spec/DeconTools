@@ -17,11 +17,11 @@ namespace DeconTools.Backend.ProcessingTasks
             {
                 case Globals.PeakDetectorType.DeconTools:
 
-                     var peakDetector= new DeconToolsPeakDetectorV2(
-                        parameters.PeakDetectorParameters.PeakToBackgroundRatio,
-                        parameters.PeakDetectorParameters.SignalToNoiseThreshold,
-                        parameters.PeakDetectorParameters.PeakFitType,
-                        parameters.PeakDetectorParameters.IsDataThresholded);
+                    var peakDetector = new DeconToolsPeakDetectorV2(
+                       parameters.PeakDetectorParameters.PeakToBackgroundRatio,
+                       parameters.PeakDetectorParameters.SignalToNoiseThreshold,
+                       parameters.PeakDetectorParameters.PeakFitType,
+                       parameters.PeakDetectorParameters.IsDataThresholded);
 
                     peakDetector.PeaksAreStored = parameters.PeakDetectorParameters.PeaksAreStored;
 

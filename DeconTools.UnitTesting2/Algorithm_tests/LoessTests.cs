@@ -77,8 +77,6 @@ namespace DeconTools.UnitTesting2.Algorithm_tests
             Console.WriteLine(sb.ToString());
         }
 
-
-
         [Test]
         [Ignore("Local testing only")]
         public void LoessOnNETAlignmentData2()

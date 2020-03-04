@@ -27,6 +27,9 @@ namespace DeconTools.Backend.Parameters
 
         public double MaxX { get; set; }
 
+        /// <summary>
+        /// Set this to True if the peaks will be written to a text file (and thus should be stored in memory)
+        /// </summary>
         public bool PeaksAreStored { get; set; }
 
         public double PeakToBackgroundRatio { get; set; }

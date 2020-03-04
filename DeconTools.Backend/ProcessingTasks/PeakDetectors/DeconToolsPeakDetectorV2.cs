@@ -247,9 +247,7 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
             }
 
             GatherPeakStatistics(run);
-
         }
-
 
         public double GetCurrentBackgroundIntensity()
         {
@@ -266,7 +264,6 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
 
             return secondAverage;
         }
-
 
         /// <summary>
         /// Calculate full width half maximum of a peak
