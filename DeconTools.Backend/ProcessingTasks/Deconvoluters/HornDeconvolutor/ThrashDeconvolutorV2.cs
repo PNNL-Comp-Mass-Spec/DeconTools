@@ -461,8 +461,10 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
         {
             for (var i = startMass; i <= stopMass; i++)
             {
-                var profile = _isotopicDistCalculator.GetAveraginePattern(i);
+                if (_averagineProfileLookupTable.ContainsKey(i))
+                    continue;
 
+                var profile = _isotopicDistCalculator.GetAveraginePattern(i);
                 _averagineProfileLookupTable.Add(i, profile);
 
             }
