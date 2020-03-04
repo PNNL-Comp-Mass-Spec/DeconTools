@@ -280,7 +280,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChargeStateDeciders
             return false;
         }
 
-        private List<int> GetSet(int i, HashSet<int> indexesWhoAreFactorsOfMe, IReadOnlyList<int> chargeStates)
+        private List<int> GetSet(int i, IEnumerable<int> indexesWhoAreFactorsOfMe, IReadOnlyList<int> chargeStates)
         {
             var list = new List<int> { chargeStates[i] };
 
