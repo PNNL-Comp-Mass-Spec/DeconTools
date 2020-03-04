@@ -32,7 +32,7 @@ namespace DeconTools.Backend.ProcessingTasks
         }
 
         public PeakChromatogramGenerator(double tolerance, Globals.ChromatogramGeneratorMode chromMode)
-            : this(tolerance, chromMode, Globals.IsotopicProfileType.UNLABELLED)
+            : this(tolerance, chromMode, Globals.IsotopicProfileType.UNLABELED)
         {
 
         }
@@ -161,7 +161,7 @@ namespace DeconTools.Backend.ProcessingTasks
             var chromValues = _chromGen.GenerateChromatogram(resultList.MSPeakResultList, lowerScan, upperScan, targetMZList, Tolerance, ToleranceUnit);
 
             var result = resultList.GetTargetedResult(resultList.Run.CurrentMassTag);
-            //result.WasPreviouslyProcessed = true;     // set an indicator that the mass tag has been processed at least once. This indicator is used when the mass tag is processed again (i.e. for labelled data)
+            //result.WasPreviouslyProcessed = true;     // set an indicator that the mass tag has been processed at least once. This indicator is used when the mass tag is processed again (i.e. for labeled data)
 
             resultList.Run.XYData = chromValues;
 
@@ -440,7 +440,7 @@ namespace DeconTools.Backend.ProcessingTasks
         {
             var msPeakListAboveThreshold = IsotopicProfileUtilities.GetTopMSPeaks(iso.Peaklist, TopNPeaksLowerCutOff);
 
-            Check.Require(msPeakListAboveThreshold != null && msPeakListAboveThreshold.Count > 0, "PeakChromatogramGenerator failed. Attempted to generate chromatogram on unlabelled isotopic profile, but profile was never defined.");
+            Check.Require(msPeakListAboveThreshold != null && msPeakListAboveThreshold.Count > 0, "PeakChromatogramGenerator failed. Attempted to generate chromatogram on unlabeled isotopic profile, but profile was never defined.");
 
             var targetMZList = (from n in msPeakListAboveThreshold select n.XValue).ToList();
             return targetMZList;

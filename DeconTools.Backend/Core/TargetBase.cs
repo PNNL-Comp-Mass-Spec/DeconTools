@@ -27,7 +27,7 @@ namespace DeconTools.Backend.Core
             EmpiricalFormula = copiedTarget.EmpiricalFormula;
             ID = copiedTarget.ID;
             IsotopicProfile = copiedTarget.IsotopicProfile?.CloneIsotopicProfile();
-            IsotopicProfileLabelled = copiedTarget.IsotopicProfileLabelled?.CloneIsotopicProfile();
+            IsotopicProfileLabeled = copiedTarget.IsotopicProfileLabeled?.CloneIsotopicProfile();
             MZ = copiedTarget.MZ;
             ModCount = copiedTarget.ModCount;
             ModDescription = copiedTarget.ModDescription;
@@ -90,7 +90,7 @@ namespace DeconTools.Backend.Core
 
         public IsotopicProfile IsotopicProfile { get; set; }    // the theoretical isotopic profile
 
-        public IsotopicProfile IsotopicProfileLabelled { get; set; }  // an optional labelled isotopic profile (i.e used in N15-labelling)
+        public IsotopicProfile IsotopicProfileLabeled { get; set; }  // an optional labeled isotopic profile (i.e used in N15-labeling)
 
         public Dictionary<string, int> ElementLookupTable { get; private set; }
 

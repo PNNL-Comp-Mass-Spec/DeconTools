@@ -15,21 +15,21 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
         readonly N15IsotopeProfileGenerator _N15IsotopicProfileGenerator = new N15IsotopeProfileGenerator();
 
         public TomTheorFeatureGenerator()
-            : this(Globals.LabellingType.NONE,0.005)
+            : this(Globals.LabelingType.NONE,0.005)
         {
 
         }
 
-        public TomTheorFeatureGenerator(DeconTools.Backend.Globals.LabellingType labellingType, double lowPeakCutOff)
+        public TomTheorFeatureGenerator(Globals.LabelingType labelingType, double lowPeakCutOff)
         {
-            LabellingType = labellingType;
+            LabelingType = labelingType;
             LowPeakCutOff = lowPeakCutOff;
         }
         #endregion
 
         #region Properties
 
-        public Globals.LabellingType LabellingType { get; set; }
+        public Globals.LabelingType LabelingType { get; set; }
 
         /// <summary>
         /// Peaks below the cutoff will be trimmed out from the theoretical profile
@@ -49,16 +49,16 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
 
             Check.Require(mt.EmpiricalFormula != null, "Theoretical feature generator failed. Can't retrieve empirical formula from Mass Tag");
 
-            switch (LabellingType)
+            switch (LabelingType)
             {
-                case Globals.LabellingType.NONE:
+                case Globals.LabelingType.NONE:
 
-                    mt.IsotopicProfile = GetUnlabelledIsotopicProfile(mt);
+                    mt.IsotopicProfile = GetUnlabeledIsotopicProfile(mt);
                     break;
-                case Globals.LabellingType.O18:
+                case Globals.LabelingType.O18:
                     throw new NotImplementedException();
-                case Globals.LabellingType.N15:
-                    mt.IsotopicProfileLabelled = _N15IsotopicProfileGenerator.GetN15IsotopicProfile(mt, LowPeakCutOff);
+                case Globals.LabelingType.N15:
+                    mt.IsotopicProfileLabeled = _N15IsotopicProfileGenerator.GetN15IsotopicProfile(mt, LowPeakCutOff);
 
                     break;
                 default:
@@ -68,8 +68,7 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
         }
 
 
-
-        private IsotopicProfile GetUnlabelledIsotopicProfile(TargetBase mt)
+        private IsotopicProfile GetUnlabeledIsotopicProfile(TargetBase mt)
         {
 
             IsotopicProfile iso;

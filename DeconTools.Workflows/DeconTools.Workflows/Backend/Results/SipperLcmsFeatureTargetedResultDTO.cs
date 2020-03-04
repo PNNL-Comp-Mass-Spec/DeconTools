@@ -2,7 +2,7 @@
 
 namespace DeconTools.Workflows.Backend.Results
 {
-    public class SipperLcmsFeatureTargetedResultDTO : UnlabelledTargetedResultDTO
+    public class SipperLcmsFeatureTargetedResultDTO : UnlabeledTargetedResultDTO
     {
 
         #region Constructors
@@ -26,9 +26,9 @@ namespace DeconTools.Workflows.Backend.Results
 
         public double ChromCorrelationStdev { get; set; }
 
-        public double PercentPeptideLabelled { get; set; }
+        public double PercentPeptideLabeled { get; set; }
 
-        public double NumCarbonsLabelled { get; set; }
+        public double NumCarbonsLabeled { get; set; }
 
         public bool PassesFilter { get; set; }
 
@@ -43,7 +43,7 @@ namespace DeconTools.Workflows.Backend.Results
         /// <summary>
         /// Number of labeled carbons as a percent of the total number of carbons
         /// </summary>
-        public double PercentCarbonsLabelled { get; set; }
+        public double PercentCarbonsLabeled { get; set; }
 
         public int ContiguousnessScore { get; set; }
 
@@ -69,8 +69,8 @@ namespace DeconTools.Workflows.Backend.Results
                 IScore.ToString("0.0000"),
                 Intensity.ToString("0.0000"),
                 IntensityI0.ToString("0.0000"),
-                PercentCarbonsLabelled.ToString("0.000"),
-                PercentPeptideLabelled.ToString("0.000"),
+                PercentCarbonsLabeled.ToString("0.000"),
+                PercentPeptideLabeled.ToString("0.000"),
                 ContiguousnessScore.ToString()
             };
 

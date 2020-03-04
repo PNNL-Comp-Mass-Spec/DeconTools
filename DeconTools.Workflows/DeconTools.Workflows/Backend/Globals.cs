@@ -17,7 +17,7 @@ namespace DeconTools.Workflows.Backend
         public enum TargetedWorkflowTypes
         {
             Undefined,
-            UnlabelledTargeted1,
+            UnlabeledTargeted1,
             O16O18Targeted1,
             N14N15Targeted1,
             TargetedAlignerWorkflow1, 

@@ -151,11 +151,9 @@ namespace DeconTools.Backend
 
         public enum IsotopicProfileType
         {
-            UNLABELLED,
-            LABELLED
+            UNLABELED,
+            LABELED
         }
-
-
 
         public enum ProjectControllerType
         {
@@ -167,7 +165,7 @@ namespace DeconTools.Backend
             UIMF_MS_Only_TestController
         }
 
-        public enum LabellingType
+        public enum LabelingType
         {
             NONE,
             O18,

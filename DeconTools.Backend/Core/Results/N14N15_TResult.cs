@@ -58,8 +58,8 @@ namespace DeconTools.Backend.Core
         public override void AddSelectedChromPeakAndScanSet(ChromPeak bestPeak, ScanSet scanSet, Globals.IsotopicProfileType isotopicProfileType)
         {
             //if result was not previously processed, will do a standard add of selected chrom peak and scanSet
-            //if result was previously processed, add new data to the Labelled results
-            if (isotopicProfileType == Globals.IsotopicProfileType.UNLABELLED)
+            //if result was previously processed, add new data to the Labeled results
+            if (isotopicProfileType == Globals.IsotopicProfileType.UNLABELED)
             {
                 base.AddSelectedChromPeakAndScanSet(bestPeak, scanSet, isotopicProfileType);
             }
@@ -98,7 +98,7 @@ namespace DeconTools.Backend.Core
 
         }
 
-        public MSPeak GetMonoisotopicPeakForLabelledProfile()
+        public MSPeak GetMonoisotopicPeakForLabeledProfile()
         {
             if (Target == null ||
                 IsotopicProfile == null ||
@@ -109,36 +109,29 @@ namespace DeconTools.Backend.Core
 
             var nitrogenCount = Target.GetAtomCountForElement("N");
 
-            var monoPeakForUnlabelled = IsotopicProfile.getMonoPeak();
-            if (monoPeakForUnlabelled == null) return null;
+            var monoPeakForUnlabeled = IsotopicProfile.getMonoPeak();
+            if (monoPeakForUnlabeled == null) return null;
 
-            var expectedMZForLabelled = monoPeakForUnlabelled.XValue + (Globals.N15_MASS - Globals.N14_MASS) * nitrogenCount / IsotopicProfile.ChargeState;
+            var expectedMZForLabeled = monoPeakForUnlabeled.XValue + (Globals.N15_MASS - Globals.N14_MASS) * nitrogenCount / IsotopicProfile.ChargeState;
 
-            var monoPeakOfLabelled = Utilities.IsotopicProfileUtilities.GetPeakAtGivenMZ(IsotopicProfileLabeled, expectedMZForLabelled, 0.05);
+            var monoPeakOfLabeled = Utilities.IsotopicProfileUtilities.GetPeakAtGivenMZ(IsotopicProfileLabeled, expectedMZForLabeled, 0.05);
 
-            return monoPeakOfLabelled;
-
-
-
+            return monoPeakOfLabeled;
         }
-
-
-
-
 
         #endregion
 
         #region Private Methods
         #endregion
 
-        internal override void AddLabelledIso(IsotopicProfile labelledIso)
+        internal override void AddLabeledIso(IsotopicProfile labeledIso)
         {
-            IsotopicProfileLabeled = labelledIso;
+            IsotopicProfileLabeled = labeledIso;
         }
 
-        internal override void AddTheoreticalLabelledIsotopicProfile(IsotopicProfile theorLabelledIso)
+        internal override void AddTheoreticalLabeledIsotopicProfile(IsotopicProfile theorLabeledIso)
         {
-            TheorIsotopicProfileLabeled = theorLabelledIso;
+            TheorIsotopicProfileLabeled = theorLabeledIso;
         }
 
 

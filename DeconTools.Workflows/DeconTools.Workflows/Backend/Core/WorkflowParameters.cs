@@ -63,7 +63,7 @@ namespace DeconTools.Workflows.Backend.Core
                     case Globals.TargetedWorkflowTypes.Undefined:
                         workflowParameters = new BasicTargetedWorkflowParameters();
                         break;
-                    case Globals.TargetedWorkflowTypes.UnlabelledTargeted1:
+                    case Globals.TargetedWorkflowTypes.UnlabeledTargeted1:
                         workflowParameters = new BasicTargetedWorkflowParameters();
                         break;
                     case Globals.TargetedWorkflowTypes.O16O18Targeted1:

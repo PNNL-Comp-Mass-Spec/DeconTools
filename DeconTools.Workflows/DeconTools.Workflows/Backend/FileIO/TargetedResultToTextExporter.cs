@@ -17,10 +17,10 @@ namespace DeconTools.Workflows.Backend.FileIO
             switch (workflowParameters.WorkflowType)
             {
                 case Globals.TargetedWorkflowTypes.Undefined:
-                    exporter = new UnlabelledTargetedResultToTextExporter(outputFileName);
+                    exporter = new UnlabeledTargetedResultToTextExporter(outputFileName);
                     break;
-                case Globals.TargetedWorkflowTypes.UnlabelledTargeted1:
-                    exporter = new UnlabelledTargetedResultToTextExporter(outputFileName);
+                case Globals.TargetedWorkflowTypes.UnlabeledTargeted1:
+                    exporter = new UnlabeledTargetedResultToTextExporter(outputFileName);
                     break;
                 case Globals.TargetedWorkflowTypes.O16O18Targeted1:
                     exporter = new O16O18TargetedResultToTextExporter(outputFileName);
@@ -45,7 +45,7 @@ namespace DeconTools.Workflows.Backend.FileIO
                 case Globals.TargetedWorkflowTypes.BasicTargetedWorkflowExecutor1:
                     throw new NotImplementedException("Cannot create exporter for this type of workflow");
                 default:
-                    exporter = new UnlabelledTargetedResultToTextExporter(outputFileName);
+                    exporter = new UnlabeledTargetedResultToTextExporter(outputFileName);
                     break;
             }
 

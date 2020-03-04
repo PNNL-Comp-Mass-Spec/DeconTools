@@ -29,7 +29,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             ChromToleranceUnit = toleranceUnit;
 
             PeakChromGen = new PeakChromatogramGenerator(ChromTolerance, Globals.ChromatogramGeneratorMode.MOST_ABUNDANT_PEAK,
-                                                         Globals.IsotopicProfileType.UNLABELLED, toleranceUnit);
+                                                         Globals.IsotopicProfileType.UNLABELED, toleranceUnit);
 
 
             Smoother = new SavitzkyGolaySmoother(NumPointsInSmoother, SavitzkyGolaySmoothingOrder);
@@ -51,7 +51,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
                 if (PeakChromGen != null)
                 {
                     PeakChromGen = new PeakChromatogramGenerator(ChromTolerance, Globals.ChromatogramGeneratorMode.MOST_ABUNDANT_PEAK,
-                                                                 Globals.IsotopicProfileType.UNLABELLED, ChromToleranceUnit);
+                                                                 Globals.IsotopicProfileType.UNLABELED, ChromToleranceUnit);
                 }
 
 

@@ -43,7 +43,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.FitCalculationRelatedT
 
             var selectedTarget = targets.First(p => p.ID == 635428 && p.ChargeState == 3);
 
-            var theorFeatureGen = new JoshTheorFeatureGenerator(Backend.Globals.LabellingType.NONE, 0.005);
+            var theorFeatureGen = new JoshTheorFeatureGenerator(Backend.Globals.LabelingType.NONE, 0.005);
             theorFeatureGen.GenerateTheorFeature(selectedTarget);
 
 

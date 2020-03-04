@@ -9,7 +9,7 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
     {
         #region properties
         /// <summary>
-        /// score experimental profile to labelled or unlabelled theoretical profile
+        /// score experimental profile to labeled or unlabeled theoretical profile
         /// </summary>
         public Globals.IsotopicProfileType IsotopicProfileType { get; set; }
 
@@ -20,7 +20,7 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
 
         public IsotopicPeakFitScoreCalculator()
         {
-            IsotopicProfileType = Globals.IsotopicProfileType.UNLABELLED;
+            IsotopicProfileType = Globals.IsotopicProfileType.UNLABELED;
             NumberOfPeaksToLeftForPenalty = 0;
         }
 
@@ -32,7 +32,7 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
 
         public IsotopicPeakFitScoreCalculator(int numberOfPeaksToLeftForPenalty = 0)
         {
-            IsotopicProfileType = Globals.IsotopicProfileType.UNLABELLED;
+            IsotopicProfileType = Globals.IsotopicProfileType.UNLABELED;
             NumberOfPeaksToLeftForPenalty = numberOfPeaksToLeftForPenalty;
         }
 
@@ -53,14 +53,14 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
             IsotopicProfile theorProfile;
             switch (IsotopicProfileType)
             {
-                case Globals.IsotopicProfileType.UNLABELLED:
+                case Globals.IsotopicProfileType.UNLABELED:
                     Check.Require(resultList.Run.CurrentMassTag.IsotopicProfile != null, "Target's theoretical isotopic profile has not been established");
                     theorProfile = resultList.Run.CurrentMassTag.IsotopicProfile;
                     break;
-                case Globals.IsotopicProfileType.LABELLED:
-                    //Check.Require(resultList.Run.CurrentMassTag.IsotopicProfileLabelled != null, this.Name + " failed; Theor isotopic profile is empty. Run a TheorFeatureGenerator");
-                    Check.Require(resultList.Run.CurrentMassTag.IsotopicProfileLabelled != null, "Target's labelled theoretical isotopic profile has not been established");
-                    theorProfile = resultList.Run.CurrentMassTag.IsotopicProfileLabelled;
+                case Globals.IsotopicProfileType.LABELED:
+                    //Check.Require(resultList.Run.CurrentMassTag.IsotopicProfileLabeled != null, this.Name + " failed; Theor isotopic profile is empty. Run a TheorFeatureGenerator");
+                    Check.Require(resultList.Run.CurrentMassTag.IsotopicProfileLabeled != null, "Target's labeled theoretical isotopic profile has not been established");
+                    theorProfile = resultList.Run.CurrentMassTag.IsotopicProfileLabeled;
                     break;
                 default:
                     theorProfile = resultList.Run.CurrentMassTag.IsotopicProfile;

@@ -200,12 +200,12 @@ namespace DeconTools.Backend.Core
             return 0;
         }
 
-        internal virtual void AddLabelledIso(IsotopicProfile labelledIso)
+        internal virtual void AddLabeledIso(IsotopicProfile labeledIso)
         {
             throw new NotImplementedException();
         }
 
-        internal virtual void AddTheoreticalLabelledIsotopicProfile(IsotopicProfile theorLabelledIso)
+        internal virtual void AddTheoreticalLabeledIsotopicProfile(IsotopicProfile theorLabeledIso)
         {
             throw new NotImplementedException();
         }
@@ -213,7 +213,7 @@ namespace DeconTools.Backend.Core
         public virtual void AddSelectedChromPeakAndScanSet(ChromPeak bestPeak, ScanSet scanSet, Globals.IsotopicProfileType isotopicProfileType)
         {
 
-            if (isotopicProfileType== Globals.IsotopicProfileType.UNLABELLED)
+            if (isotopicProfileType== Globals.IsotopicProfileType.UNLABELED)
             {
 
                 ChromPeakSelected = bestPeak;

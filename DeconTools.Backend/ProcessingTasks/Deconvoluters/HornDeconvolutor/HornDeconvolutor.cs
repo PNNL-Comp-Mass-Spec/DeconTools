@@ -80,7 +80,7 @@ namespace DeconTools.Backend.ProcessingTasks
         }
 
         /// <summary>
-        /// Is the medium a mixture of O16 and O18 labelled peptides.
+        /// Is the medium a mixture of O16 and O18 labeled peptides.
         /// </summary>
         public bool IsO16O18Data { get; set; }
 

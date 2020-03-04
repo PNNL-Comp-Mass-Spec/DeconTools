@@ -11,7 +11,7 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
 
         protected ChromPeakSelectorBase()
         {
-            IsotopicProfileType= DeconTools.Backend.Globals.IsotopicProfileType.UNLABELLED;
+            IsotopicProfileType= DeconTools.Backend.Globals.IsotopicProfileType.UNLABELED;
         }
 
         #endregion
@@ -35,7 +35,7 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
         protected virtual void UpdateResultWithChromPeakAndLCScanInfo(TargetedResultBase result, ChromPeak bestPeak)
         {
             result.AddSelectedChromPeakAndScanSet(bestPeak, result.Run.CurrentScanSet, IsotopicProfileType);
-            result.WasPreviouslyProcessed = true;    //indicate that this result has been added to...  use this to help control the addition of labelled (N15) data
+            result.WasPreviouslyProcessed = true;    //indicate that this result has been added to...  use this to help control the addition of labeled (N15) data
         }
 
     }

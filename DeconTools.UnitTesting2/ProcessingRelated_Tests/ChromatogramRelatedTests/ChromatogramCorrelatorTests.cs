@@ -27,9 +27,8 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
             var mt = TestUtilities.GetMassTagStandard(1);
             run.CurrentMassTag = mt;
 
-            var unlabelledTheorGenerator = new JoshTheorFeatureGenerator();
-            unlabelledTheorGenerator.GenerateTheorFeature(mt);
-
+            var unlabeledTheorGenerator = new JoshTheorFeatureGenerator();
+            unlabeledTheorGenerator.GenerateTheorFeature(mt);
 
             double chromToleranceInPPM = 10;
             var startScan = 5460;
@@ -83,9 +82,8 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
             var mt = TestUtilities.GetMassTagStandard(1);
             run.CurrentMassTag = mt;
 
-            var unlabelledTheorGenerator = new JoshTheorFeatureGenerator();
-            unlabelledTheorGenerator.GenerateTheorFeature(mt);
-
+            var unlabeledTheorGenerator = new JoshTheorFeatureGenerator();
+            unlabeledTheorGenerator.GenerateTheorFeature(mt);
 
             double chromToleranceInPPM = 10;
             var startScan = 5460;

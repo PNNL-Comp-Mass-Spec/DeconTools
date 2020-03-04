@@ -25,7 +25,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
         public bool NeedMonoIsotopicPeak { get; set; }
 
         /// <summary>
-        /// Each MassTag has two possible isotopic profiles (unlabelled and labelled).
+        /// Each MassTag has two possible isotopic profiles (unlabeled and labeled).
         /// This property specifies which of the two are to be targeted in the real data.
         /// This property is mainly used in workflows that follow a Task-based implementation.
         /// </summary>
@@ -254,11 +254,11 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
             switch (IsotopicProfileType)
             {
-                case Globals.IsotopicProfileType.UNLABELLED:
+                case Globals.IsotopicProfileType.UNLABELED:
                     result.IsotopicProfile = iso;
                     break;
-                case Globals.IsotopicProfileType.LABELLED:
-                    result.AddLabelledIso(iso);
+                case Globals.IsotopicProfileType.LABELED:
+                    result.AddLabeledIso(iso);
                     break;
                 default:
                     result.IsotopicProfile = iso;
@@ -273,7 +273,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             }
             else
             {
-                result.FailedResult = true;     //note: for labelled isotopic profiles, this error will be assigned to the result if one of the two isotopic profiles is missing
+                result.FailedResult = true;     //note: for labeled isotopic profiles, this error will be assigned to the result if one of the two isotopic profiles is missing
                 result.FailureType = Globals.TargetedResultFailureType.MsfeatureNotFound;
             }
 
@@ -295,17 +295,17 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
             switch (IsotopicProfileType)
             {
-                case Globals.IsotopicProfileType.UNLABELLED:
+                case Globals.IsotopicProfileType.UNLABELED:
                     Check.Require(run.CurrentMassTag.IsotopicProfile!=null,"Target's theoretical isotopic profile has not been established");
                     iso = run.CurrentMassTag.IsotopicProfile.CloneIsotopicProfile();
                     break;
 
-                case Globals.IsotopicProfileType.LABELLED:
-                    Check.Require(run.CurrentMassTag.IsotopicProfileLabelled != null, "Target's labelled theoretical isotopic profile has not been established");
-                    if (run.CurrentMassTag?.IsotopicProfileLabelled == null)
+                case Globals.IsotopicProfileType.LABELED:
+                    Check.Require(run.CurrentMassTag.IsotopicProfileLabeled != null, "Target's labeled theoretical isotopic profile has not been established");
+                    if (run.CurrentMassTag?.IsotopicProfileLabeled == null)
                         return null;
 
-                    iso = run.CurrentMassTag.IsotopicProfileLabelled.CloneIsotopicProfile();
+                    iso = run.CurrentMassTag.IsotopicProfileLabeled.CloneIsotopicProfile();
                     break;
 
                 default:

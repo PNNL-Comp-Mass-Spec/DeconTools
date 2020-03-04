@@ -17,7 +17,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
         }
 
         public BasicTFF(double toleranceInPPM, bool requiresMonoPeak)
-            : this(toleranceInPPM, requiresMonoPeak, Globals.IsotopicProfileType.UNLABELLED)
+            : this(toleranceInPPM, requiresMonoPeak, Globals.IsotopicProfileType.UNLABELED)
         {
         }
 

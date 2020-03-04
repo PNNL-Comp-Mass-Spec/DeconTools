@@ -20,10 +20,10 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
         {
             var sumOfLabelingAmounts = (decimal)(Math.Round(N14LabelingAmount,2) + Math.Round(N15LabelingAmount,2));
 
-            Check.Require(sumOfLabelingAmounts == 1.00m, "N14 and N15 labelling amounts do not add up to 1.00 - which they should.");
+            Check.Require(sumOfLabelingAmounts == 1.00m, "N14 and N15 labeling amounts do not add up to 1.00 - which they should.");
 
-            this.N14LabellingAmount = N14LabelingAmount;
-            this.N15LabellingAmount = N15LabelingAmount;
+            this.N14LabelingAmount = N14LabelingAmount;
+            this.N15LabelingAmount = N15LabelingAmount;
 
         }
 
@@ -33,14 +33,14 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
         #region Properties
 
         /// <summary>
-        /// fractional amount (0-1) for amount of N14 labelling
+        /// fractional amount (0-1) for amount of N14 labeling
         /// </summary>
-        public double N14LabellingAmount { get; set; }
+        public double N14LabelingAmount { get; set; }
 
         /// <summary>
-        /// fractional amount (0-1) for amount of N15 labelling
+        /// fractional amount (0-1) for amount of N15 labeling
         /// </summary>
-        public double N15LabellingAmount { get; set; }
+        public double N15LabelingAmount { get; set; }
 
 
         #endregion
@@ -68,21 +68,21 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
 
 
 
-        public IsotopicProfile GetN15IsotopicProfile2(TargetBase mt, double lowpeakCutoff)
+        public IsotopicProfile GetN15IsotopicProfile2(TargetBase mt, double lowPeakCutoff)
         {
             Check.Require(mt != null, "Mass tag not defined");
             Check.Require(mt.IsotopicProfile != null, "Mass tag's theor isotopic profile not defined");
             Check.Require(mt.ChargeState != 0, "Can't have a charge state of '0'");
 
-            var numNitrogens = mt.GetAtomCountForElement("N");
+            var nitrogenCount = mt.GetAtomCountForElement("N");
 
-            _isotopicDistributionCalculator.SetLabeling("N", N14ISOTOPE_NUMBER, this.N14LabellingAmount, N15ISOTOPE_NUMBER, this.N15LabellingAmount);
+            _isotopicDistributionCalculator.SetLabeling("N", N14ISOTOPE_NUMBER, this.N14LabelingAmount, N15ISOTOPE_NUMBER, this.N15LabelingAmount);
             var labeledTheorProfile = _isotopicDistributionCalculator.GetIsotopePattern(mt.EmpiricalFormula);
-            addMZInfoToTheorProfile(mt.IsotopicProfile, labeledTheorProfile, numNitrogens, mt.ChargeState);
+            addMZInfoToTheorProfile(mt.IsotopicProfile, labeledTheorProfile, nitrogenCount, mt.ChargeState);
 
             _isotopicDistributionCalculator.ResetToUnlabeled();
 
-            PeakUtilities.TrimIsotopicProfile(labeledTheorProfile, lowpeakCutoff);
+            PeakUtilities.TrimIsotopicProfile(labeledTheorProfile, lowPeakCutoff);
 
             labeledTheorProfile.ChargeState = mt.ChargeState;
 

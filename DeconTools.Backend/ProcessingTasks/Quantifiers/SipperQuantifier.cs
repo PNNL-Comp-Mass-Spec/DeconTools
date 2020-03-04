@@ -170,14 +170,14 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
                 return;
             }
 
-            var theorUnlabelledIso = resultList.Run.CurrentMassTag.IsotopicProfile.CloneIsotopicProfile();
-            IsotopicProfileUtilities.NormalizeIsotopicProfile(theorUnlabelledIso);
+            var theorUnlabeledIso = resultList.Run.CurrentMassTag.IsotopicProfile.CloneIsotopicProfile();
+            IsotopicProfileUtilities.NormalizeIsotopicProfile(theorUnlabeledIso);
 
-            //PeakUtilities.TrimIsotopicProfile(unlabelledIso, 0.001);
+            //PeakUtilities.TrimIsotopicProfile(unlabeledIso, 0.001);
 
             var indexOfCorrespondingObservedPeak = PeakUtilities.getIndexOfClosestValue(
                 result.IsotopicProfile.Peaklist,
-                theorUnlabelledIso.getMostIntensePeak().XValue,
+                theorUnlabeledIso.getMostIntensePeak().XValue,
                 0, result.IsotopicProfile.Peaklist.Count - 1, 0.1);
 
             NormalizedIso = result.IsotopicProfile.CloneIsotopicProfile();
@@ -243,9 +243,9 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
                 var ratioData = NormalizedAdjustedIso.CloneIsotopicProfile();
                 for (var i = 0; i < NormalizedIso.Peaklist.Count; i++)
                 {
-                    if (i < theorUnlabelledIso.Peaklist.Count && theorUnlabelledIso.Peaklist[i].Height > MinimumRelativeIntensityForRatioCalc)
+                    if (i < theorUnlabeledIso.Peaklist.Count && theorUnlabeledIso.Peaklist[i].Height > MinimumRelativeIntensityForRatioCalc)
                     {
-                        ratioData.Peaklist[i].Height = (NormalizedIso.Peaklist[i].Height / theorUnlabelledIso.Peaklist[i].Height - 1);
+                        ratioData.Peaklist[i].Height = (NormalizedIso.Peaklist[i].Height / theorUnlabeledIso.Peaklist[i].Height - 1);
                     }
                     else
                     {
@@ -280,14 +280,14 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
 
 
 
-                //------------- subtract unlabelled profile from normalized profile ----------------------
+                //------------- subtract unlabeled profile from normalized profile ----------------------
                 var subtractedIsoData = NormalizedAdjustedIso.CloneIsotopicProfile();
                 for (var i = 0; i < subtractedIsoData.Peaklist.Count; i++)
                 {
                     float intensityTheorPeak = 0;
-                    if (i < theorUnlabelledIso.Peaklist.Count)
+                    if (i < theorUnlabeledIso.Peaklist.Count)
                     {
-                        intensityTheorPeak = theorUnlabelledIso.Peaklist[i].Height;
+                        intensityTheorPeak = theorUnlabeledIso.Peaklist[i].Height;
                     }
 
 
@@ -305,19 +305,19 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
 
 
 
-                //----------- get data for the subtracted, labelled isotopic profile------------------------
+                //----------- get data for the subtracted, labeled isotopic profile------------------------
 
-                // var peaksForLabelledIsoQuant = new List<Peak>(subtractedIsoData.Peaklist.Where(p => p.Height > 0));
+                // var peaksForLabeledIsoQuant = new List<Peak>(subtractedIsoData.Peaklist.Where(p => p.Height > 0));
 
 
-                // var isoFromPartialLabelingQuantifier = _partialLabelingQuantifier.FindBestLabelledProfile(result.Target, peaksForLabelledIsoQuant);
-                //FitScoreData = _partialLabellingQuantifier.FitScoreData;
+                // var isoFromPartialLabelingQuantifier = _partialLabelingQuantifier.FindBestLabeledProfile(result.Target, peaksForLabeledIsoQuant);
+                //FitScoreData = _partialLabelingQuantifier.FitScoreData;
 
-                //result.FitScoreLabelledProfile = isoFromPartialLabelingQuantifier.IsotopicProfile == null ? 1.00d : isoFromPartialLabelingQuantifier.IsotopicProfile.Score;
-                //result.PercentCarbonsLabelled = isoFromPartialLabelingQuantifier.PercentLabeling;
+                //result.FitScoreLabeledProfile = isoFromPartialLabelingQuantifier.IsotopicProfile == null ? 1.00d : isoFromPartialLabelingQuantifier.IsotopicProfile.Score;
+                //result.PercentCarbonsLabeled = isoFromPartialLabelingQuantifier.PercentLabeling;
 
                 //int numCarbons = result.Target.GetAtomCountForElement("C");
-                //result.NumCarbonsLabelled = result.PercentCarbonsLabelled * numCarbons / 100;
+                //result.NumCarbonsLabeled = result.PercentCarbonsLabeled * numCarbons / 100;
 
                 //StringBuilder sb = new StringBuilder();
                 //sb.Append(result.Target.ID + "\t" + result.Target.MZ.ToString("0.0000") + "\t" + result.Target.ChargeState +
@@ -350,10 +350,10 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
                 FitScoreData = _partialLabelingQuantifier.FitScoreData;
 
                 result.FitScoreLabeledProfile = isoFromPartialLabelingQuantifier.IsotopicProfile?.Score ?? 1.00d;
-                result.PercentCarbonsLabelled = isoFromPartialLabelingQuantifier.PercentLabeling;
+                result.PercentCarbonsLabeled = isoFromPartialLabelingQuantifier.PercentLabeling;
 
                 var numCarbons = result.Target.GetAtomCountForElement("C");
-                result.NumCarbonsLabelled = result.PercentCarbonsLabelled * numCarbons / 100;
+                result.NumCarbonsLabeled = result.PercentCarbonsLabeled * numCarbons / 100;
                 //end of section --------------------------------------------------------------------------
 
 
@@ -361,7 +361,7 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
                 // see Chik et al:           https://www.ncbi.nlm.nih.gov/pubmed/16383329 (DOI: 10.1021/ac050988l)
                 // see als the Sipper paper: https://www.ncbi.nlm.nih.gov/pubmed/24467184 (DOI: 10.1021/pr400633j)
 
-                var theorIntensityVals = theorUnlabelledIso.Peaklist.Select(p => (double)p.Height).ToList();
+                var theorIntensityVals = theorUnlabeledIso.Peaklist.Select(p => (double)p.Height).ToList();
 
                 if (isoFromPartialLabelingQuantifier.IsotopicProfile != null)
                 {
@@ -380,14 +380,14 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
 
 
                     _labelingDistributionCalculator.OutputLabelingInfo(result.LabelDistributionVals, out _,
-                                                                       out var distFractionLabelled,
+                                                                       out var distFractionLabeled,
                                                                        out _);
 
-                    result.PercentPeptideLabelled = distFractionLabelled * 100;
+                    result.PercentPeptideLabeled = distFractionLabeled * 100;
                 }
                 else
                 {
-                    result.PercentCarbonsLabelled = 0;
+                    result.PercentCarbonsLabeled = 0;
                 }
 
                 var highQualityRatioProfileData = GetIsoDataPassingChromCorrelation(result.ChromCorrelationData, ratioData);
@@ -429,10 +429,10 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
 
         public void ResetQuantifierData()
         {
-            AmountC13Labelling = 0;
+            AmountC13Labeling = 0;
             ChromatogramRSquaredVals = new List<double>();
             FitScoreData = new Dictionary<decimal, double>();
-            FractionLabelled = 0;
+            FractionLabeled = 0;
             HighQualitySubtractedProfile = new IsotopicProfile();
             NormalizedAdjustedIso = new IsotopicProfile();
             NormalizedIso = new IsotopicProfile();
@@ -601,18 +601,18 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
             return sumDotProducts / sumIntensities;
         }
 
-        private double GetNumCarbonsLabelledUsingAverageMassDifferences(IsotopicProfile theorUnlabeledIso, IsotopicProfile highQualitySubtractedProfile)
+        private double GetNumCarbonsLabeledUsingAverageMassDifferences(IsotopicProfile theorUnlabeledIso, IsotopicProfile highQualitySubtractedProfile)
         {
             var averageMassTheor = GetAverageMassIso(theorUnlabeledIso);
 
-            var averageMassLabelled = GetAverageMassIso(HighQualitySubtractedProfile);
+            var averageMassLabeled = GetAverageMassIso(HighQualitySubtractedProfile);
 
-            if (double.IsNaN(averageMassLabelled))
+            if (double.IsNaN(averageMassLabeled))
             {
                 return 0;
             }
 
-            return averageMassLabelled - averageMassTheor;
+            return averageMassLabeled - averageMassTheor;
         }
 
 
@@ -675,10 +675,9 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
 
         }
 
+        public float FractionLabeled { get; set; }
 
-        public float FractionLabelled { get; set; }
-
-        public double AmountC13Labelling { get; set; }
+        public double AmountC13Labeling { get; set; }
 
         private double GetAverageMassIso(IsotopicProfile isotopicProfile)
         {

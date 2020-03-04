@@ -206,11 +206,11 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
             switch (isotopicProfileType)
             {
-                case Globals.IsotopicProfileType.UNLABELLED:
+                case Globals.IsotopicProfileType.UNLABELED:
                     return massTag.IsotopicProfile;
 
-                case Globals.IsotopicProfileType.LABELLED:
-                    return massTag.IsotopicProfileLabelled;
+                case Globals.IsotopicProfileType.LABELED:
+                    return massTag.IsotopicProfileLabeled;
 
                 default:
                     return massTag.IsotopicProfile;

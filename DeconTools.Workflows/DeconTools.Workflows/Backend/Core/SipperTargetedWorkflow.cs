@@ -44,7 +44,7 @@ namespace DeconTools.Workflows.Backend.Core
             base.DoPostInitialization();
 
             //we want the theorFeature generator to generate even very low peaks
-            _theorFeatureGen = new JoshTheorFeatureGenerator(DeconTools.Backend.Globals.LabellingType.NONE, 0.00000001);
+            _theorFeatureGen = new JoshTheorFeatureGenerator(DeconTools.Backend.Globals.LabelingType.NONE, 0.00000001);
 
             //we want the MSFeature finder to dig way down low for any peaks
             _iterativeTFFParameters = new IterativeTFFParameters();

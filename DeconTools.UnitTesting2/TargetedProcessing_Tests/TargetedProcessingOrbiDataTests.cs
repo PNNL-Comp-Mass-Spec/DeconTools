@@ -65,7 +65,7 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
             var mt = run.CurrentMassTag;
             mt.MZ = mt.MonoIsotopicMass / mt.ChargeState + Globals.PROTON_MASS;
 
-            Task theorFeatureGen = new TomTheorFeatureGenerator(DeconTools.Backend.Globals.LabellingType.NONE, 0.005);
+            Task theorFeatureGen = new TomTheorFeatureGenerator(DeconTools.Backend.Globals.LabelingType.NONE, 0.005);
             Task targetedFeatureFinder = new BasicTFF();
             Task fitScoreCalc = new IsotopicProfileFitScoreCalculator();
 
@@ -144,7 +144,7 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
             var mt = run.CurrentMassTag;
             mt.MZ = mt.MonoIsotopicMass / mt.ChargeState + Globals.PROTON_MASS;
 
-            Task theorFeatureGen = new TomTheorFeatureGenerator(DeconTools.Backend.Globals.LabellingType.NONE, 0.005);
+            Task theorFeatureGen = new TomTheorFeatureGenerator(DeconTools.Backend.Globals.LabelingType.NONE, 0.005);
             Task targetedFeatureFinder = new BasicTFF();
             Task fitScoreCalc = new IsotopicProfileFitScoreCalculator();
 

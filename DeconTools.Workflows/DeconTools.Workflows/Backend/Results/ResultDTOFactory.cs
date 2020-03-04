@@ -18,7 +18,7 @@ namespace DeconTools.Workflows.Backend.Results
             TargetedResultDTO tr;
             if (result is MassTagResult mtResult)
             {
-                tr = new UnlabelledTargetedResultDTO();
+                tr = new UnlabeledTargetedResultDTO();
                 WriteStandardInfoToResult(tr, mtResult);
                 AddAdditionalInfo(tr, mtResult);
             }
@@ -75,9 +75,9 @@ namespace DeconTools.Workflows.Backend.Results
             r.ChromCorrelationAverage = result.ChromCorrelationAverage;
             r.ChromCorrelationMedian = result.ChromCorrelationMedian;
             r.ChromCorrelationStdev = result.ChromCorrelationStDev;
-            r.NumCarbonsLabelled = result.NumCarbonsLabelled;
-            r.PercentPeptideLabelled = result.PercentPeptideLabelled;
-            r.PercentCarbonsLabelled = result.PercentCarbonsLabelled;
+            r.NumCarbonsLabeled = result.NumCarbonsLabeled;
+            r.PercentPeptideLabeled = result.PercentPeptideLabeled;
+            r.PercentCarbonsLabeled = result.PercentCarbonsLabeled;
             r.NumHighQualityProfilePeaks = result.NumHighQualityProfilePeaks;
             r.LabelDistributionVals = result.LabelDistributionVals?.ToArray();
             r.FitScoreLabeledProfile = result.FitScoreLabeledProfile;
@@ -119,8 +119,12 @@ namespace DeconTools.Workflows.Backend.Results
             r.IScoreN15 = (float)result.InterferenceScoreN15;
             r.IntensityN15 = result.IsotopicProfileLabeled == null ? 0f : (float)result.IntensityAggregate;
             r.MonoMZN15 = result.IsotopicProfileLabeled?.MonoPeakMZ ?? 0;
-            r.MonoMassCalibratedN15 = result.IsotopicProfileLabeled == null ? 0d : -1 * ((result.Target.IsotopicProfileLabelled.MonoIsotopicMass * tr.MassErrorBeforeCalibration / 1e6) -
-                result.Target.IsotopicProfileLabelled.MonoIsotopicMass);   // massError= (theorMZ-alignedObsMZ)/theorMZ * 1e6
+
+            // massError= (theorMZ-alignedObsMZ)/theorMZ * 1e6
+            r.MonoMassCalibratedN15 = result.IsotopicProfileLabeled == null ? 0d :
+                                          -1 * (result.Target.IsotopicProfileLabeled.MonoIsotopicMass * tr.MassErrorBeforeCalibration / 1e6 -
+                                                result.Target.IsotopicProfileLabeled.MonoIsotopicMass);
+
             r.MonoMassN15 = result.IsotopicProfileLabeled?.MonoIsotopicMass ?? 0;
 
             r.NETN15 = (float)result.GetNETN15();

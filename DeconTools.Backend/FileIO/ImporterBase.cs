@@ -30,7 +30,6 @@ namespace DeconTools.Backend.FileIO
 
         #region Protected Methods
 
-
         /// <summary>
         /// This method retrieves a single cell of data (row, column) in the form of a string.
         /// </summary>
@@ -41,7 +40,6 @@ namespace DeconTools.Backend.FileIO
         {
             return LookupData(row, targetColumn, true);
         }
-
 
         protected string LookupData(List<string> row, string[] possibleColumnHeaders)
         {
@@ -58,8 +56,6 @@ namespace DeconTools.Backend.FileIO
             return DEFAULT_RETURN_STRING;
 
         }
-
-
 
         protected string LookupData(List<string> row, string[] possibleColumnHeaders, string defaultValue)
         {

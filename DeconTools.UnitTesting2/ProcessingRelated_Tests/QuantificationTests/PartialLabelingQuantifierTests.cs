@@ -19,7 +19,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.QuantificationTests
             var peptideSeq = "SAMPLERSAMPLER";
              var isoCreator = new LabeledIsotopicProfileUtilities();
 
-            var elementLabelled = "C";
+            var elementLabeled = "C";
 
             var target = new PeptideTarget();
             target.Code = peptideSeq;
@@ -28,8 +28,8 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.QuantificationTests
             target.CalculateMassesForIsotopicProfile(target.ChargeState);
 
 
-            target.IsotopicProfile=   isoCreator.CreateIsotopicProfileFromEmpiricalFormula(target.EmpiricalFormula, elementLabelled, 12, 13, 0, target.ChargeState);
-            
+            target.IsotopicProfile=   isoCreator.CreateIsotopicProfileFromEmpiricalFormula(target.EmpiricalFormula, elementLabeled, 12, 13, 0, target.ChargeState);
+
 
             double[] obsMZVals = {
                                        794.4027177, 794.9043951, 795.4060725, 795.9077499, 796.4094273, 796.9111047,
@@ -39,7 +39,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.QuantificationTests
                                        806.4429757, 806.9446531, 807.4463306, 807.948008, 808.4496854, 808.9513628,
                                        809.4530402, 809.9547176, 810.4563951
                                    };
-            
+
             double[] obsIntensities = {
                                                0.202610146, 0.169786958, 0.10004317, 0.048528412, 0.023649271, 0.01375091,
                                                0.011401505, 0.010165125, 0, 0, 0, 0, 0, 0.016295369, 0.02039971, 0.02628524
@@ -47,7 +47,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.QuantificationTests
                                                0.061990991, 0.059175713, 0.053291295, 0.046892873, 0.037952256, 0.030884989
                                                , 0.024965924, 0.019531111, 0.01613184, 0, 0, 0
                                            };
-            
+
 
 
 

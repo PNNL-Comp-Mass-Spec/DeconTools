@@ -34,7 +34,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
             switch (IsotopicProfileType)
             {
-                case Globals.IsotopicProfileType.UNLABELLED:
+                case Globals.IsotopicProfileType.UNLABELED:
                     if (run.CurrentMassTag?.IsotopicProfile == null)
                         return null;
 
@@ -42,12 +42,12 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
                     iso = run.CurrentMassTag.IsotopicProfile.CloneIsotopicProfile();
                     break;
 
-                case Globals.IsotopicProfileType.LABELLED:
-                    if (run.CurrentMassTag?.IsotopicProfileLabelled == null)
+                case Globals.IsotopicProfileType.LABELED:
+                    if (run.CurrentMassTag?.IsotopicProfileLabeled == null)
                         return null;
 
-                    Check.Require(run.CurrentMassTag.IsotopicProfileLabelled != null, "Target's labelled theoretical isotopic profile has not been established");
-                    iso = run.CurrentMassTag.IsotopicProfileLabelled.CloneIsotopicProfile();
+                    Check.Require(run.CurrentMassTag.IsotopicProfileLabeled != null, "Target's labeled theoretical isotopic profile has not been established");
+                    iso = run.CurrentMassTag.IsotopicProfileLabeled.CloneIsotopicProfile();
                     break;
 
                 default:

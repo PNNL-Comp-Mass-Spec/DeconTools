@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace DeconTools.Workflows.Backend.Results
 {
-    public class TopDownTargetedResultDTO : UnlabelledTargetedResultDTO
+    public class TopDownTargetedResultDTO : UnlabeledTargetedResultDTO
     {
         public HashSet<int> PrsmList { get; set; }
         public List<int> ChargeStateList { get; set; }

@@ -8,11 +8,11 @@ using DeconTools.Workflows.Backend.Results;
 
 namespace DeconTools.Workflows.Backend.Core
 {
-    public class ResultReprocessingTargetedWorkflowExecutor:TargetedWorkflowExecutor
+    public class ResultReprocessingTargetedWorkflowExecutor : TargetedWorkflowExecutor
     {
-        private TargetedResultDTO _currentResult ;
+        private TargetedResultDTO _currentResult;
         private string _currentDatasetName;
-        
+
 
         #region Constructors
         #endregion
@@ -37,7 +37,7 @@ namespace DeconTools.Workflows.Backend.Core
         {
         }
 
-       
+
 
         public override void Execute()
         {
@@ -52,11 +52,10 @@ namespace DeconTools.Workflows.Backend.Core
             }
 
 
-            TargetedResultFromTextImporter resultImporter = new UnlabelledTargetedResultFromTextImporter(ExecutorParameters.TargetsFilePath);
-            var allresults =  resultImporter.Import();
+            TargetedResultFromTextImporter resultImporter = new UnlabeledTargetedResultFromTextImporter(ExecutorParameters.TargetsFilePath);
+            var allResults = resultImporter.Import();
 
-
-            var resultsSortedByDataset = allresults.Results.OrderBy(p => p.DatasetName);
+            var resultsSortedByDataset = allResults.Results.OrderBy(p => p.DatasetName).ToList();
 
             var totalResults = resultsSortedByDataset.Count();
 
@@ -74,15 +73,12 @@ namespace DeconTools.Workflows.Backend.Core
 
                 if (result.DatasetName != _currentDatasetName)
                 {
-                    if (Run != null)
-                    {
-                        Run.Close();
-                    }
+                    Run?.Close();
 
 
                     InitializeRun(result.DatasetName);
 
-                    if (Run==null)
+                    if (Run == null)
                     {
                         throw new ApplicationException("Error initializing dataset. (Run is null)");
                     }
@@ -107,8 +103,8 @@ namespace DeconTools.Workflows.Backend.Core
                     throw;
                 }
 
-                var progressString = "Processed " + resultCounter + " of " + totalResults ;
-               
+                var progressString = "Processed " + resultCounter + " of " + totalResults;
+
                 if (_backgroundWorker != null)
                 {
                     if (_backgroundWorker.CancellationPending)

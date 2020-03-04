@@ -16,7 +16,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.TargetedFeatureFinderT
     public class TFFTests
     {
         [Test]
-        public void unlabelled_data_TFFTest1()
+        public void unlabeled_data_TFFTest1()
         {
             var massTagFile = @"\\protoapps\UserData\Slysz\Data\MassTags\QCShew_Formic_MassTags_Bin10_first10.txt";
 
@@ -31,7 +31,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.TargetedFeatureFinderT
 
 
         [Test]
-        public void n14N15LabelledData_TFFTest1()
+        public void n14N15LabeledData_TFFTest1()
         {
             double featureFinderTol = 15;
 
@@ -47,24 +47,23 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.TargetedFeatureFinderT
 
             //TestUtilities.DisplayPeaks(msPeakList);
 
-            //generate theor unlabelled profile
-            var unlabelledfeatureGen = new TomTheorFeatureGenerator();
-            unlabelledfeatureGen.GenerateTheorFeature(mt23140708);
+            //generate theor unlabeled profile
+            var unlabeledFeatureGen = new TomTheorFeatureGenerator();
+            unlabeledFeatureGen.GenerateTheorFeature(mt23140708);
 
-            //generate theor N15-labelled profile
-            var n15featureGen = new TomTheorFeatureGenerator(Globals.LabellingType.N15, 0.005);
-            n15featureGen.GenerateTheorFeature(mt23140708);
-
+            //generate theor N15-labeled profile
+            var n15FeatureGen = new TomTheorFeatureGenerator(Globals.LabelingType.N15, 0.005);
+            n15FeatureGen.GenerateTheorFeature(mt23140708);
 
             //find features in experimental data, using the theoretical profiles
-            var msfeatureFinder = new BasicTFF
+            var msFeatureFinder = new BasicTFF
             {
                 ToleranceInPPM = featureFinderTol,
                 NeedMonoIsotopicPeak = false
             };
 
-            var n14profile = msfeatureFinder.FindMSFeature(msPeakList, mt23140708.IsotopicProfile);
-            var n15profile = msfeatureFinder.FindMSFeature(msPeakList, mt23140708.IsotopicProfileLabelled);
+            var n14profile = msFeatureFinder.FindMSFeature(msPeakList, mt23140708.IsotopicProfile);
+            var n15profile = msFeatureFinder.FindMSFeature(msPeakList, mt23140708.IsotopicProfileLabeled);
 
             Console.WriteLine(mt23140708.GetEmpiricalFormulaFromTargetCode());
 
@@ -72,7 +71,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.TargetedFeatureFinderT
             TestUtilities.DisplayIsotopicProfileData(mt23140708.IsotopicProfile);
 
             Console.WriteLine();
-            TestUtilities.DisplayIsotopicProfileData(mt23140708.IsotopicProfileLabelled);
+            TestUtilities.DisplayIsotopicProfileData(mt23140708.IsotopicProfileLabeled);
 
             Console.WriteLine();
             TestUtilities.DisplayIsotopicProfileData(n14profile);
@@ -102,16 +101,16 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.TargetedFeatureFinderT
             run.CurrentMassTag = mt23140708;
             run.ResultCollection.ResultType = Globals.ResultType.N14N15_TARGETED_RESULT;
 
-            var theorN14FeatureGen = new TomTheorFeatureGenerator(Globals.LabellingType.NONE, 0.005);
+            var theorN14FeatureGen = new TomTheorFeatureGenerator(Globals.LabelingType.NONE, 0.005);
             theorN14FeatureGen.GenerateTheorFeature(mt23140708);
 
-            var theorN15FeatureGen = new TomTheorFeatureGenerator(Globals.LabellingType.N15, 0.005);
+            var theorN15FeatureGen = new TomTheorFeatureGenerator(Globals.LabelingType.N15, 0.005);
             theorN15FeatureGen.GenerateTheorFeature(mt23140708);
 
 
             var parameters = new IterativeTFFParameters
             {
-                IsotopicProfileType = Globals.IsotopicProfileType.LABELLED,
+                IsotopicProfileType = Globals.IsotopicProfileType.LABELED,
                 ToleranceInPPM = 30
             };
 
@@ -119,7 +118,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.TargetedFeatureFinderT
             var itff = new IterativeTFF(parameters);
 
             itff.Execute(run.ResultCollection);
-//            IsotopicProfile iso = itff.iterativelyFindMSFeature(run, mt23140708.IsotopicProfileLabelled);
+            //            IsotopicProfile iso = itff.iterativelyFindMSFeature(run, mt23140708.IsotopicProfileLabeled);
 
             var result = (N14N15_TResult)run.ResultCollection.GetTargetedResult(run.CurrentMassTag);
 

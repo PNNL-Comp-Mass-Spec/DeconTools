@@ -2,7 +2,7 @@
 
 namespace DeconTools.Workflows.Backend.Results
 {
-    public class DeuteratedTargetedResultDTO : UnlabelledTargetedResultDTO
+    public class DeuteratedTargetedResultDTO : UnlabeledTargetedResultDTO
     {
 
         #region Properties

@@ -3,17 +3,17 @@ using DeconTools.Workflows.Backend.Results;
 
 namespace DeconTools.Workflows.Backend.FileIO
 {
-    public class UnlabelledTargetedResultFromTextImporter : TargetedResultFromTextImporter
+    public class UnlabeledTargetedResultFromTextImporter : TargetedResultFromTextImporter
     {
         
         #region Constructors
-        public UnlabelledTargetedResultFromTextImporter(string filename) : base(filename) { }
+        public UnlabeledTargetedResultFromTextImporter(string filename) : base(filename) { }
 
         #endregion
 
         protected override TargetedResultDTO ConvertTextToDataObject(List<string> processedData)
         {
-            var result = new UnlabelledTargetedResultDTO();
+            var result = new UnlabeledTargetedResultDTO();
 
             result.DatasetName = LookupData(processedData, datasetHeaders);
 

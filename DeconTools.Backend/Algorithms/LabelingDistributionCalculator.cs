@@ -97,22 +97,22 @@ namespace DeconTools.Backend.Algorithms
         }
 
 
-        public void OutputLabelingInfo(List<double> distributionData, out double fractionUnlabelled, out double fractionLabelled, out double averageLabelsIncorporated)
+        public void OutputLabelingInfo(List<double> distributionData, out double fractionUnlabeled, out double fractionLabeled, out double averageLabelsIncorporated)
         {
 
             Check.Require(distributionData != null && distributionData.Count > 0, "distributionData is empty in call to OutputLabelingInfo");
             if (distributionData == null)
             {
-                fractionUnlabelled = 0;
-                fractionLabelled = 0;
+                fractionUnlabeled = 0;
+                fractionLabeled = 0;
                 averageLabelsIncorporated = 0;
                 return;
             }
 
             var dotProducts = new List<double>();
 
-            fractionUnlabelled = distributionData[0];
-            fractionLabelled = 1 - fractionUnlabelled;
+            fractionUnlabeled = distributionData[0];
+            fractionLabeled = 1 - fractionUnlabeled;
 
             //for (int numLabels = 0; numLabels < distributionData.Count; numLabels++)
             //{
@@ -122,7 +122,7 @@ namespace DeconTools.Backend.Algorithms
 
             //averageLabelsIncorporated = dotProducts.Sum() / 1;
 
-            if (fractionLabelled > 0)
+            if (fractionLabeled > 0)
             {
                 double sum = 0;
                 for (var numLabels = 1; numLabels < distributionData.Count; numLabels++)

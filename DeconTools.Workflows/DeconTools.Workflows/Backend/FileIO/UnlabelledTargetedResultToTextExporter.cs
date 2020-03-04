@@ -1,9 +1,9 @@
 ﻿
 namespace DeconTools.Workflows.Backend.FileIO
 {
-    public class UnlabelledTargetedResultToTextExporter : TargetedResultToTextExporter
+    public class UnlabeledTargetedResultToTextExporter : TargetedResultToTextExporter
     {
-        public UnlabelledTargetedResultToTextExporter(string filename)
+        public UnlabeledTargetedResultToTextExporter(string filename)
             : base(filename)
         {
             

@@ -97,35 +97,35 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.LabeledIso
 
 
 
-        public IsotopicProfile CreateIsotopicProfileFromSequence(string peptideSequenceOrOtherCode, string elementLabelled, int lightIsotope, int heavyIsotope, double percentHeavyLabel, int chargeState = 1)
+        public IsotopicProfile CreateIsotopicProfileFromSequence(string peptideSequenceOrOtherCode, string elementLabeled, int lightIsotope, int heavyIsotope, double percentHeavyLabel, int chargeState = 1)
         {
 
             var baseEmpiricalFormula = _peptideUtils.GetEmpiricalFormulaForPeptideSequence(peptideSequenceOrOtherCode);
 
-            return CreateIsotopicProfileFromEmpiricalFormula(baseEmpiricalFormula, elementLabelled, lightIsotope,
+            return CreateIsotopicProfileFromEmpiricalFormula(baseEmpiricalFormula, elementLabeled, lightIsotope,
                                                              heavyIsotope, percentHeavyLabel, chargeState);
 
         }
 
 
-        public IsotopicProfile CreateIsotopicProfileFromEmpiricalFormula(string baseEmpiricalFormula, string elementLabelled, int lightIsotope, int heavyIsotope, double percentHeavyLabel, int chargeState = 1)
+        public IsotopicProfile CreateIsotopicProfileFromEmpiricalFormula(string baseEmpiricalFormula, string elementLabeled, int lightIsotope, int heavyIsotope, double percentHeavyLabel, int chargeState = 1)
         {
 
 
-            var isUnlabelled = elementLabelled == "" || Math.Abs(percentHeavyLabel) < float.Epsilon;
+            var isUnlabeled = elementLabeled == "" || Math.Abs(percentHeavyLabel) < float.Epsilon;
 
             IsotopicProfile iso;
-            if (isUnlabelled)
+            if (isUnlabeled)
             {
 
                 iso = IsotopicDistributionCalculator.Instance.GetIsotopePattern(baseEmpiricalFormula);
             }
             else
             {
-                var abundanceLightIsotopeLabeled1 = CalculateAbundanceLightIsotope(elementLabelled, lightIsotope, percentHeavyLabel);
-                var abundanceHeavyIsotopeLabeled1 = CalculateAbundanceHeavyIsotope(elementLabelled, heavyIsotope, percentHeavyLabel);
+                var abundanceLightIsotopeLabeled1 = CalculateAbundanceLightIsotope(elementLabeled, lightIsotope, percentHeavyLabel);
+                var abundanceHeavyIsotopeLabeled1 = CalculateAbundanceHeavyIsotope(elementLabeled, heavyIsotope, percentHeavyLabel);
 
-                IsotopicDistributionCalculator.Instance.SetLabeling(elementLabelled, lightIsotope, abundanceLightIsotopeLabeled1, heavyIsotope, abundanceHeavyIsotopeLabeled1);
+                IsotopicDistributionCalculator.Instance.SetLabeling(elementLabeled, lightIsotope, abundanceLightIsotopeLabeled1, heavyIsotope, abundanceHeavyIsotopeLabeled1);
                 iso = IsotopicDistributionCalculator.Instance.GetIsotopePattern(baseEmpiricalFormula);
 
                 IsotopicDistributionCalculator.Instance.ResetToUnlabeled();
@@ -135,7 +135,7 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.LabeledIso
 
             var monoisotopicMass = EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(baseEmpiricalFormula);
             iso.MonoIsotopicMass = monoisotopicMass;
-            CalculateMZValuesForLabeledProfile(iso, baseEmpiricalFormula, elementLabelled, chargeState,
+            CalculateMZValuesForLabeledProfile(iso, baseEmpiricalFormula, elementLabeled, chargeState,
                                                lightIsotope, heavyIsotope);
 
             iso.ChargeState = chargeState;
@@ -165,40 +165,39 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.LabeledIso
 
 
         #region Private methods
-        private void CalculateMZValuesForLabeledProfile(IsotopicProfile iso, string empiricalFormula, string elementLabelled, int chargeState, int lightIsotope, int heavyIsotope)
+        private void CalculateMZValuesForLabeledProfile(IsotopicProfile iso, string empiricalFormula, string elementLabeled, int chargeState, int lightIsotope, int heavyIsotope)
         {
 
             var elementTable = EmpiricalFormulaUtilities.ParseEmpiricalFormulaString(empiricalFormula);
 
-            var numLabelledAtoms = elementTable[elementLabelled];
+            var numLabeledAtoms = elementTable[elementLabeled];
 
 
             for (var i = 0; i < iso.Peaklist.Count; i++)
             {
-                var keyLightIsotope = elementLabelled + lightIsotope;
-                var keyHeavyIsotope = elementLabelled + heavyIsotope;
+                var keyLightIsotope = elementLabeled + lightIsotope;
+                var keyHeavyIsotope = elementLabeled + heavyIsotope;
 
-                var lightIsotopeMass = Constants.Elements[elementLabelled].IsotopeDictionary[keyLightIsotope].Mass;
-                var heavyIsotopeMass = Constants.Elements[elementLabelled].IsotopeDictionary[keyHeavyIsotope].Mass;
+                var lightIsotopeMass = Constants.Elements[elementLabeled].IsotopeDictionary[keyLightIsotope].Mass;
+                var heavyIsotopeMass = Constants.Elements[elementLabeled].IsotopeDictionary[keyHeavyIsotope].Mass;
 
                 var massDiff = heavyIsotopeMass - lightIsotopeMass;
 
 
                 var monoMZ = iso.MonoIsotopicMass / chargeState + Globals.PROTON_MASS;
 
-                var peakMZIfUnlabelled = monoMZ + (i * Globals.MASS_DIFF_BETWEEN_ISOTOPICPEAKS) / chargeState;
+                var peakMZIfUnlabeled = monoMZ + (i * Globals.MASS_DIFF_BETWEEN_ISOTOPICPEAKS) / chargeState;
 
-                var monoPeakFullyLabelled = monoMZ + massDiff * numLabelledAtoms / chargeState;
+                var monoPeakFullyLabeled = monoMZ + massDiff * numLabeledAtoms / chargeState;
 
-                var peakMZBasedOnLabeled = monoPeakFullyLabelled -
-                                              (numLabelledAtoms - i) * Globals.MASS_DIFF_BETWEEN_ISOTOPICPEAKS /
-                                              chargeState;
+                var peakMZBasedOnLabeled = monoPeakFullyLabeled - 
+                                           (numLabeledAtoms - i) * Globals.MASS_DIFF_BETWEEN_ISOTOPICPEAKS / chargeState;
 
 
                 int peaksToUse;
-                if (i > numLabelledAtoms)
+                if (i > numLabeledAtoms)
                 {
-                    peaksToUse = numLabelledAtoms;
+                    peaksToUse = numLabeledAtoms;
                 }
                 else
                 {
@@ -206,17 +205,11 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.LabeledIso
                 }
 
 
-                iso.Peaklist[i].XValue = peakMZBasedOnLabeled * peaksToUse / numLabelledAtoms +
-                                                                        peakMZIfUnlabelled * (numLabelledAtoms - peaksToUse) / numLabelledAtoms;
+                iso.Peaklist[i].XValue = peakMZBasedOnLabeled * peaksToUse / numLabeledAtoms +
+                                         peakMZIfUnlabeled * (numLabeledAtoms - peaksToUse) / numLabeledAtoms;
 
 
             }
-
-
-
-
-
-
         }
 
         private double CalculateAbundanceLightIsotope(string elementSymbol, int isotopeNum, double percentAddedLabeling)

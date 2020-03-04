@@ -33,20 +33,20 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
         //public override void FindFeature(DeconTools.Backend.Core.ResultCollection resultColl)
         //{
         //    Check.Require(resultColl.Run.CurrentMassTag != null, string.Format("{0} failed. MassTag has not been defined.", this.Name));
-        //    Check.Require(resultColl.Run.CurrentMassTag.IsotopicProfileLabelled != null, string.Format("{0} failed. Labelled Theoretical profile not defined. Make sure to run a TheoreticalIsotopicProfile generator", this.Name));
+        //    Check.Require(resultColl.Run.CurrentMassTag.IsotopicProfileLabeled != null, string.Format("{0} failed. Labeled Theoretical profile not defined. Make sure to run a TheoreticalIsotopicProfile generator", this.Name));
 
         //    MassTagResultBase massTagresult = resultColl.GetMassTagResult(resultColl.Run.CurrentMassTag);
 
         //    BasicMSFeatureFinder bff = new BasicMSFeatureFinder();
 
-        //    IsotopicProfile labelledIso = bff.FindMSFeature(resultColl.Run.PeakList, resultColl.Run.CurrentMassTag.IsotopicProfileLabelled, ToleranceInPPM, false);
+        //    IsotopicProfile labeledIso = bff.FindMSFeature(resultColl.Run.PeakList, resultColl.Run.CurrentMassTag.IsotopicProfileLabeled, ToleranceInPPM, false);
 
-        //    if (labelledIso == null)
+        //    if (labeledIso == null)
         //    {
         //        massTagresult.Flags.Add(new LabeledProfileMissingResultFlag());
         //    }
 
-        //    massTagresult.AddLabelledIso(labelledIso);
+        //    massTagresult.AddLabeledIso(labeledIso);
 
         //}
 

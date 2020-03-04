@@ -35,16 +35,16 @@ namespace DeconTools.Backend.Core.Results
 
         public double ChromCorrelationStDev { get; set; }
 
-        public double PercentPeptideLabelled { get; set; }
+        public double PercentPeptideLabeled { get; set; }
 
-        public double NumCarbonsLabelled { get; set; }
+        public double NumCarbonsLabeled { get; set; }
 
         public int NumHighQualityProfilePeaks { get; set; }
 
         /// <summary>
         /// Number of labeled carbons as a percent of the total number of carbons
         /// </summary>
-        public double PercentCarbonsLabelled { get; set; }
+        public double PercentCarbonsLabeled { get; set; }
 
         public List<double> LabelDistributionVals { get; set; }
 
@@ -83,9 +83,9 @@ namespace DeconTools.Backend.Core.Results
                 data.Add(AreaUnderDifferenceCurve.ToString("0.000"));
                 data.Add(AreaUnderRatioCurveRevised.ToString("0.000"));
                 data.Add(ChromCorrelationMedian.ToString("0.000"));
-                data.Add(NumCarbonsLabelled.ToString("0.000"));
-                data.Add(PercentPeptideLabelled.ToString("0.000"));
-                data.Add(PercentCarbonsLabelled.ToString("0.000"));
+                data.Add(NumCarbonsLabeled.ToString("0.000"));
+                data.Add(PercentPeptideLabeled.ToString("0.000"));
+                data.Add(PercentCarbonsLabeled.ToString("0.000"));
                 data.Add("");   // ErrorDescription
             }
 

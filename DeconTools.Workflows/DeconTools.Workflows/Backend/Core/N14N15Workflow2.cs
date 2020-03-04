@@ -27,8 +27,8 @@ namespace DeconTools.Workflows.Backend.Core
 
         private DeconToolsPeakDetectorV2 msPeakDetector;
 
-        private IterativeTFF labelledProfileFinder;
-        private IterativeTFF unlabelledProfilefinder;
+        private IterativeTFF labeledProfileFinder;
+        private IterativeTFF unlabeledProfilefinder;
 
         private N14N15QuantifierTask quantifier;
 
@@ -36,7 +36,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         private ResultValidatorTask resultValidatorN14;
 
-        private LabelledIsotopicProfileScorer resultValidatorN15;
+        private LabeledIsotopicProfileScorer resultValidatorN15;
 
         private N14N15Workflow2Parameters _n14N15Workflow2Parameters => WorkflowParameters as N14N15Workflow2Parameters;
 
@@ -47,7 +47,7 @@ namespace DeconTools.Workflows.Backend.Core
             MsLeftTrimAmount = 5;
             MsRightTrimAmount = 5;
 
-           
+
 
 
         }
@@ -61,8 +61,8 @@ namespace DeconTools.Workflows.Backend.Core
 
         #endregion
 
-        
- 
+
+
 
         #region Workflow Members
 
@@ -88,7 +88,7 @@ namespace DeconTools.Workflows.Backend.Core
             updateMassSpectrumXYValues(Run.XYData);
 
             ExecuteTask(msPeakDetector);
-            ExecuteTask(unlabelledProfilefinder);
+            ExecuteTask(unlabeledProfilefinder);
 
             ExecuteTask(fitScoreCalc);
             ExecuteTask(resultValidatorN14);
@@ -127,7 +127,7 @@ namespace DeconTools.Workflows.Backend.Core
             //TrimData(Run.XYData, Run.CurrentMassTag.MZ, MsLeftTrimAmount, MsRightTrimAmount);
 
             ExecuteTask(msPeakDetector);
-            ExecuteTask(labelledProfileFinder);
+            ExecuteTask(labeledProfileFinder);
 
             resultValidatorN15.CurrentResult = Result;
 
@@ -141,57 +141,74 @@ namespace DeconTools.Workflows.Backend.Core
             base.DoPostInitialization();
             ValidateParameters();
 
-            theorFeatureGen = new JoshTheorFeatureGenerator(DeconTools.Backend.Globals.LabellingType.NONE, 0.005);
-            theorN15FeatureGen = new JoshTheorFeatureGenerator(DeconTools.Backend.Globals.LabellingType.N15, 0.005);
+            theorFeatureGen = new JoshTheorFeatureGenerator(DeconTools.Backend.Globals.LabelingType.NONE, 0.005);
+            theorN15FeatureGen = new JoshTheorFeatureGenerator(DeconTools.Backend.Globals.LabelingType.N15, 0.005);
 
-            chromGenN14 = new PeakChromatogramGenerator(_workflowParameters.ChromGenTolerance, _workflowParameters.ChromGeneratorMode);
-            chromGenN14.TopNPeaksLowerCutOff = 0.333;
+            chromGenN14 = new PeakChromatogramGenerator(
+                _workflowParameters.ChromGenTolerance, _workflowParameters.ChromGeneratorMode)
+            {
+                TopNPeaksLowerCutOff = 0.333
+            };
 
-            chromGenN15 = new PeakChromatogramGenerator(_workflowParameters.ChromGenTolerance, DeconTools.Backend.Globals.ChromatogramGeneratorMode.MOST_ABUNDANT_PEAK, DeconTools.Backend.Globals.IsotopicProfileType.LABELLED);
-            chromGenN15.TopNPeaksLowerCutOff = 0.333;
+            chromGenN15 = new PeakChromatogramGenerator(
+                _workflowParameters.ChromGenTolerance,
+                DeconTools.Backend.Globals.ChromatogramGeneratorMode.MOST_ABUNDANT_PEAK, DeconTools.Backend.Globals.IsotopicProfileType.LABELED)
+            {
+                TopNPeaksLowerCutOff = 0.333
+            };
 
             var pointsToSmooth = (_workflowParameters.ChromSmootherNumPointsInSmooth + 1) / 2;
             chromSmoother = new SavitzkyGolaySmoother(_workflowParameters.ChromSmootherNumPointsInSmooth, 2);
             chromPeakDetector = new ChromPeakDetector(_workflowParameters.ChromPeakDetectorPeakBR, _workflowParameters.ChromPeakDetectorSigNoise);
 
-            var smartchrompeakSelectorParams = new SmartChromPeakSelectorParameters();
-            smartchrompeakSelectorParams.MSFeatureFinderType = DeconTools.Backend.Globals.TargetedFeatureFinderType.ITERATIVE;
-            smartchrompeakSelectorParams.MSPeakDetectorPeakBR = _workflowParameters.MSPeakDetectorPeakBR;
-            smartchrompeakSelectorParams.MSPeakDetectorSigNoiseThresh = _workflowParameters.MSPeakDetectorSigNoise;
-            smartchrompeakSelectorParams.MSToleranceInPPM = _workflowParameters.MSToleranceInPPM;
-            smartchrompeakSelectorParams.NETTolerance = (float)_workflowParameters.ChromNETTolerance;
-            smartchrompeakSelectorParams.NumScansToSum = _workflowParameters.NumMSScansToSum;
-            smartchrompeakSelectorParams.NumChromPeaksAllowed = 10;
-            smartchrompeakSelectorParams.IterativeTffMinRelIntensityForPeakInclusion = 0.5;
+            var smartChromPeakSelectorParams = new SmartChromPeakSelectorParameters
+            {
+                MSFeatureFinderType = DeconTools.Backend.Globals.TargetedFeatureFinderType.ITERATIVE,
+                MSPeakDetectorPeakBR = _workflowParameters.MSPeakDetectorPeakBR,
+                MSPeakDetectorSigNoiseThresh = _workflowParameters.MSPeakDetectorSigNoise,
+                MSToleranceInPPM = _workflowParameters.MSToleranceInPPM,
+                NETTolerance = (float)_workflowParameters.ChromNETTolerance,
+                NumScansToSum = _workflowParameters.NumMSScansToSum,
+                NumChromPeaksAllowed = 10,
+                IterativeTffMinRelIntensityForPeakInclusion = 0.5
+            };
 
 
-            chromPeakSelectorN14 = new SmartChromPeakSelector(smartchrompeakSelectorParams);
+            chromPeakSelectorN14 = new SmartChromPeakSelector(smartChromPeakSelectorParams);
 
 
-            var chromPeakSelectorParameters = new ChromPeakSelectorParameters();
-            chromPeakSelectorParameters.NumScansToSum = _workflowParameters.NumMSScansToSum;
-            chromPeakSelectorParameters.NETTolerance = (float)_workflowParameters.ChromNETTolerance;
-            chromPeakSelectorParameters.PeakSelectorMode = DeconTools.Backend.Globals.PeakSelectorMode.N15IntelligentMode;
-            
+            var chromPeakSelectorParameters = new ChromPeakSelectorParameters
+            {
+                NumScansToSum = _workflowParameters.NumMSScansToSum,
+                NETTolerance = (float)_workflowParameters.ChromNETTolerance,
+                PeakSelectorMode = DeconTools.Backend.Globals.PeakSelectorMode.N15IntelligentMode
+            };
 
-            chromPeakSelectorN15 = new BasicChromPeakSelector(chromPeakSelectorParameters);
-            chromPeakSelectorN15.IsotopicProfileType = DeconTools.Backend.Globals.IsotopicProfileType.LABELLED;
+
+            chromPeakSelectorN15 = new BasicChromPeakSelector(chromPeakSelectorParameters)
+            {
+                IsotopicProfileType = DeconTools.Backend.Globals.IsotopicProfileType.LABELED
+            };
 
             msPeakDetector = new DeconToolsPeakDetectorV2(_workflowParameters.MSPeakDetectorPeakBR,
                 _workflowParameters.MSPeakDetectorSigNoise, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, false);
 
-            
-            var iterativeTFFParameters = new IterativeTFFParameters();
-            iterativeTFFParameters.ToleranceInPPM = _n14N15Workflow2Parameters.TargetedFeatureFinderToleranceInPPM;
-            iterativeTFFParameters.MinimumRelIntensityForForPeakInclusion = 0.33;
-            iterativeTFFParameters.IsotopicProfileType= DeconTools.Backend.Globals.IsotopicProfileType.UNLABELLED;
-            unlabelledProfilefinder = new IterativeTFF(iterativeTFFParameters);
 
-            iterativeTFFParameters = new IterativeTFFParameters();
-            iterativeTFFParameters.ToleranceInPPM = _n14N15Workflow2Parameters.TargetedFeatureFinderToleranceInPPM;
-            iterativeTFFParameters.MinimumRelIntensityForForPeakInclusion = 0.33;
-            iterativeTFFParameters.IsotopicProfileType = DeconTools.Backend.Globals.IsotopicProfileType.LABELLED;
-            labelledProfileFinder = new IterativeTFF(iterativeTFFParameters);
+            var iterativeTFFParameters = new IterativeTFFParameters
+            {
+                ToleranceInPPM = _n14N15Workflow2Parameters.TargetedFeatureFinderToleranceInPPM,
+                MinimumRelIntensityForForPeakInclusion = 0.33,
+                IsotopicProfileType = DeconTools.Backend.Globals.IsotopicProfileType.UNLABELED
+            };
+            unlabeledProfilefinder = new IterativeTFF(iterativeTFFParameters);
+
+            iterativeTFFParameters = new IterativeTFFParameters
+            {
+                ToleranceInPPM = _n14N15Workflow2Parameters.TargetedFeatureFinderToleranceInPPM,
+                MinimumRelIntensityForForPeakInclusion = 0.33,
+                IsotopicProfileType = DeconTools.Backend.Globals.IsotopicProfileType.LABELED
+            };
+            labeledProfileFinder = new IterativeTFF(iterativeTFFParameters);
 
             quantifier = new N14N15QuantifierTask(_n14N15Workflow2Parameters.NumPeaksUsedInQuant, _workflowParameters.MSToleranceInPPM);
 
@@ -200,14 +217,14 @@ namespace DeconTools.Workflows.Backend.Core
             var minRelativeIntensityForScore = 0.2;
             resultValidatorN14 = new ResultValidatorTask(minRelativeIntensityForScore, true);
 
-            resultValidatorN15 = new LabelledIsotopicProfileScorer(minRelativeIntensityForScore);
+            resultValidatorN15 = new LabeledIsotopicProfileScorer(minRelativeIntensityForScore);
 
             ChromatogramXYData = new XYData();
             MassSpectrumXYData = new XYData();
             ChromPeaksDetected = new List<ChromPeak>();
 
         }
- 
+
 
         #endregion
 
@@ -215,6 +232,6 @@ namespace DeconTools.Workflows.Backend.Core
         {
             return DeconTools.Backend.Globals.ResultType.N14N15_TARGETED_RESULT;
         }
-        
+
     }
 }

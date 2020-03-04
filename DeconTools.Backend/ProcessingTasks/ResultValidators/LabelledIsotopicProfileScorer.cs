@@ -8,18 +8,15 @@ using DeconTools.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks.ResultValidators
 {
-    public class LabelledIsotopicProfileScorer : ResultValidator
+    public class LabeledIsotopicProfileScorer : ResultValidator
     {
         private readonly InterferenceScorer iScorer;
         private AreaFitter areaFitter;
 
         #region Constructors
-        public LabelledIsotopicProfileScorer(double minRelativeIntensityForScore = 0.2)
+        public LabeledIsotopicProfileScorer(double minRelativeIntensityForScore = 0.2)
         {
-
-
             iScorer = new InterferenceScorer(minRelativeIntensityForScore);
-
         }
         #endregion
 
@@ -42,9 +39,9 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
             Check.Require(currentResult is N14N15_TResult, "Currently, this is only implemented for N14N15 results");
 
             var n14n15result = (N14N15_TResult)currentResult;
-            Check.Require(n14n15result.Target.IsotopicProfileLabelled != null, "Cannot validate labelled isotopic profile. Theoretical profile was not defined.");
+            Check.Require(n14n15result.Target.IsotopicProfileLabeled != null, "Cannot validate labeled isotopic profile. Theoretical profile was not defined.");
 
-            // stop, but don't throw an error if there is no labelled isotopic profile.
+            // stop, but don't throw an error if there is no labeled isotopic profile.
             if (n14n15result.IsotopicProfileLabeled == null) return;
 
             var isoN15 = n14n15result.IsotopicProfileLabeled;
@@ -57,7 +54,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
 
             // get fit score
 
-            var fitVal = getFitValue(resultColl.Run.XYData, n14n15result.Target.IsotopicProfileLabelled, isoN15);
+            var fitVal = getFitValue(resultColl.Run.XYData, n14n15result.Target.IsotopicProfileLabeled, isoN15);
             n14n15result.ScoreN15 = fitVal;
 
         }

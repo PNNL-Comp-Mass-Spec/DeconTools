@@ -129,8 +129,8 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
             var mt = TestUtilities.GetMassTagStandard(1);
             run.CurrentMassTag = mt;
 
-            var unlabelledTheorGenerator = new JoshTheorFeatureGenerator();
-            unlabelledTheorGenerator.GenerateTheorFeature(mt);
+            var unlabeledTheorGenerator = new JoshTheorFeatureGenerator();
+            unlabeledTheorGenerator.GenerateTheorFeature(mt);
 
             var peakChromGen = new PeakChromatogramGenerator(toleranceInPPM);
             peakChromGen.Execute(run.ResultCollection);
@@ -256,8 +256,8 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
 
             run.CurrentMassTag = mt;
 
-            var unlabelledTheorGenerator = new TomTheorFeatureGenerator();
-            unlabelledTheorGenerator.GenerateTheorFeature(mt);
+            var unlabeledTheorGenerator = new TomTheorFeatureGenerator();
+            unlabeledTheorGenerator.GenerateTheorFeature(mt);
 
             var peakChromGen = new PeakChromatogramGenerator(10, Globals.ChromatogramGeneratorMode.TOP_N_PEAKS) {
                 TopNPeaksLowerCutOff = 0.4

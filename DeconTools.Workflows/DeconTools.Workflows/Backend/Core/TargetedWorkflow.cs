@@ -165,9 +165,9 @@ namespace DeconTools.Workflows.Backend.Core
         {
             ValidateParameters();
 
-            _theorFeatureGen = new JoshTheorFeatureGenerator(DeconTools.Backend.Globals.LabellingType.NONE, 0.005);
+            _theorFeatureGen = new JoshTheorFeatureGenerator(DeconTools.Backend.Globals.LabelingType.NONE, 0.005);
             _chromGen = new PeakChromatogramGenerator(_workflowParameters.ChromGenTolerance, _workflowParameters.ChromGeneratorMode,
-                                                      DeconTools.Backend.Globals.IsotopicProfileType.UNLABELLED,
+                                                      DeconTools.Backend.Globals.IsotopicProfileType.UNLABELED,
                                                       _workflowParameters.ChromGenToleranceUnit)
                             {
                                 TopNPeaksLowerCutOff = 0.333,
@@ -383,7 +383,7 @@ namespace DeconTools.Workflows.Backend.Core
                 case Globals.TargetedWorkflowTypes.Undefined:
                     wf = new BasicTargetedWorkflow(workflowParameters as TargetedWorkflowParameters);
                     break;
-                case Globals.TargetedWorkflowTypes.UnlabelledTargeted1:
+                case Globals.TargetedWorkflowTypes.UnlabeledTargeted1:
                     wf = new BasicTargetedWorkflow(workflowParameters as TargetedWorkflowParameters);
                     break;
                 case Globals.TargetedWorkflowTypes.O16O18Targeted1:

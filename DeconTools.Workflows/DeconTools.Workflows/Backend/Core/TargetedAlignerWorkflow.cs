@@ -93,7 +93,7 @@ namespace DeconTools.Workflows.Backend.Core
             if (featuresAreImportedFromFile)
             {
                 //load them from the Features file
-                var importer = new UnlabelledTargetedResultFromTextImporter(AlignerParameters.ImportedFeaturesFilename);
+                var importer = new UnlabeledTargetedResultFromTextImporter(AlignerParameters.ImportedFeaturesFilename);
                 var repo = importer.Import();
                 _targetedResultRepository.Results = repo.Results;
             }
@@ -421,7 +421,7 @@ namespace DeconTools.Workflows.Backend.Core
         {
             var exportTargetedFeaturesFile = Path.Combine(outputDirectory, Run.DatasetName + "_alignedFeatures.txt");
 
-            var exporter = new UnlabelledTargetedResultToTextExporter(exportTargetedFeaturesFile);
+            var exporter = new UnlabeledTargetedResultToTextExporter(exportTargetedFeaturesFile);
             exporter.ExportResults(_targetedResultRepository.Results);
         }
 

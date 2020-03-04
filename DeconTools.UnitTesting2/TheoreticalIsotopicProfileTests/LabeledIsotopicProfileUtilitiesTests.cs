@@ -12,21 +12,21 @@ namespace DeconTools.UnitTesting2.TheoreticalIsotopicProfileTests
             var isoCreator = new LabeledIsotopicProfileUtilities();
 
             var peptideSeq = "SAMPLERSAMPLER";
-            var elementLabelled = "C";
+            var elementLabeled = "C";
 
             var lightIsotope = 12;
             var heavyIsotope = 13;
 
-            double percentLabelled1 = 0;        // first peptide population is unlabelled (0%)
-            double percentLabelled2 = 10;       // second peptide polulation has 8% of its carbons labelled. 
-            var fractionPopulationLabelled = 0.50;     // fraction of peptides that have heavy label. 
+            double percentLabeled1 = 0;        // first peptide population is unlabeled (0%)
+            double percentLabeled2 = 10;       // second peptide population has 8% of its carbons labeled.
+            var fractionPopulationLabeled = 0.50;     // fraction of peptides that have heavy label.
 
-            var iso = isoCreator.CreateIsotopicProfileFromSequence(peptideSeq, elementLabelled, lightIsotope, heavyIsotope, percentLabelled1);
-            var labelledIso = isoCreator.CreateIsotopicProfileFromSequence(peptideSeq, elementLabelled, lightIsotope, heavyIsotope, percentLabelled2);
+            var iso = isoCreator.CreateIsotopicProfileFromSequence(peptideSeq, elementLabeled, lightIsotope, heavyIsotope, percentLabeled1);
+            var labeledIso = isoCreator.CreateIsotopicProfileFromSequence(peptideSeq, elementLabeled, lightIsotope, heavyIsotope, percentLabeled2);
 
 
-            isoCreator.AddIsotopicProfile(iso, 1 - fractionPopulationLabelled);
-            isoCreator.AddIsotopicProfile(labelledIso, fractionPopulationLabelled);
+            isoCreator.AddIsotopicProfile(iso, 1 - fractionPopulationLabeled);
+            isoCreator.AddIsotopicProfile(labeledIso, fractionPopulationLabeled);
 
             var mixedIso = isoCreator.GetMixedIsotopicProfile();
 
@@ -40,21 +40,21 @@ namespace DeconTools.UnitTesting2.TheoreticalIsotopicProfileTests
             var isoCreator = new LabeledIsotopicProfileUtilities();
 
             var peptideSeq = "SAMPLERSAMPLER";
-            var elementLabelled = "N";
+            var elementLabeled = "N";
 
             var lightIsotope = 14;
             var heavyIsotope = 15;
 
-            double percentLabelled1 = 0;        // first peptide population is unlabelled (0%)
-            double percentLabelled2 = 20;       // second peptide polulation has 8% of its carbons labelled. 
-            var fractionPopulationLabelled = 0.50;     // fraction of peptides that have heavy label. 
+            double percentLabeled1 = 0;        // first peptide population is unlabeled (0%)
+            double percentLabeled2 = 20;       // second peptide population has 8% of its carbons labeled.
+            var fractionPopulationLabeled = 0.50;     // fraction of peptides that have heavy label.
 
-            var iso = isoCreator.CreateIsotopicProfileFromSequence(peptideSeq, elementLabelled, lightIsotope, heavyIsotope, percentLabelled1);
-            var labelledIso = isoCreator.CreateIsotopicProfileFromSequence(peptideSeq, elementLabelled, lightIsotope, heavyIsotope, percentLabelled2);
+            var iso = isoCreator.CreateIsotopicProfileFromSequence(peptideSeq, elementLabeled, lightIsotope, heavyIsotope, percentLabeled1);
+            var labeledIso = isoCreator.CreateIsotopicProfileFromSequence(peptideSeq, elementLabeled, lightIsotope, heavyIsotope, percentLabeled2);
 
 
-            isoCreator.AddIsotopicProfile(iso, 1 - fractionPopulationLabelled);
-            isoCreator.AddIsotopicProfile(labelledIso, fractionPopulationLabelled);
+            isoCreator.AddIsotopicProfile(iso, 1 - fractionPopulationLabeled);
+            isoCreator.AddIsotopicProfile(labeledIso, fractionPopulationLabeled);
 
             var mixedIso = isoCreator.GetMixedIsotopicProfile();
 

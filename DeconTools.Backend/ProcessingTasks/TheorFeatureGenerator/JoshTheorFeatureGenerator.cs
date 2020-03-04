@@ -15,26 +15,26 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
 
         #region Constructors
         public JoshTheorFeatureGenerator()
-            : this(Globals.LabellingType.NONE, 0.005)
+            : this(Globals.LabelingType.NONE, 0.005)
         {
         }
 
-        public JoshTheorFeatureGenerator(DeconTools.Backend.Globals.LabellingType labellingType, double lowPeakCutOff)
+        public JoshTheorFeatureGenerator(DeconTools.Backend.Globals.LabelingType labelingType, double lowPeakCutOff)
         {
-            this.LabellingType = labellingType;
+            this.LabelingType = labelingType;
             this.LowPeakCutOff = lowPeakCutOff;
         }
 
-        public JoshTheorFeatureGenerator(DeconTools.Backend.Globals.LabellingType labellingType, double fractionLabeling, double lowPeakCutOff)
+        public JoshTheorFeatureGenerator(DeconTools.Backend.Globals.LabelingType labelingType, double fractionLabeling, double lowPeakCutOff)
         {
-            this.LabellingType = labellingType;
+            this.LabelingType = labelingType;
             this.LowPeakCutOff = lowPeakCutOff;
             this.FractionLabeling = fractionLabeling;
         }
 
-        public JoshTheorFeatureGenerator(DeconTools.Backend.Globals.LabellingType labellingType, double fractionLabeling, double lowPeakCutOff, double molarMixingFraction)
+        public JoshTheorFeatureGenerator(DeconTools.Backend.Globals.LabelingType labelingType, double fractionLabeling, double lowPeakCutOff, double molarMixingFraction)
         {
-            this.LabellingType = labellingType;
+            this.LabelingType = labelingType;
             this.LowPeakCutOff = lowPeakCutOff;
             this.FractionLabeling = fractionLabeling;
             this.MolarMixingFraction = molarMixingFraction;
@@ -44,7 +44,7 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
         #endregion
 
         #region Properties
-        public Globals.LabellingType LabellingType { get; set; }
+        public Globals.LabelingType LabelingType { get; set; }
 
         /// <summary>
         /// Degree of labeling. Ranges between 0 and 1.0.  1 = 100% label incorporation
@@ -86,24 +86,24 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
             Check.Require(mt != null, "FeatureGenerator failed. MassTag not defined.");
             Check.Require(!string.IsNullOrEmpty(mt.EmpiricalFormula), "Theoretical feature generator failed. Can't retrieve empirical formula from Mass Tag");
 
-            switch (LabellingType)
+            switch (LabelingType)
             {
-                case Globals.LabellingType.NONE:
-                    mt.IsotopicProfile = GetUnlabelledIsotopicProfile(mt);
+                case Globals.LabelingType.NONE:
+                    mt.IsotopicProfile = GetUnlabeledIsotopicProfile(mt);
                     break;
-                case Globals.LabellingType.O18:
+                case Globals.LabelingType.O18:
                     throw new NotImplementedException();
-                case Globals.LabellingType.N15:
-                    mt.IsotopicProfileLabelled = _N15IsotopicProfileGenerator.GetN15IsotopicProfile2(mt, LowPeakCutOff);
+                case Globals.LabelingType.N15:
+                    mt.IsotopicProfileLabeled = _N15IsotopicProfileGenerator.GetN15IsotopicProfile2(mt, LowPeakCutOff);
                     break;
-                case Globals.LabellingType.Deuterium:
-                    //mt.IsotopicProfile = GetUnlabelledIsotopicProfile(mt);
-                    //mt.IsotopicProfileLabelled = _DeuteriumIsotopicProfileGenerator.GetDHIsotopicProfile2(mt, LowPeakCutOff, FractionLabeling, MolarMixingFraction);
+                case Globals.LabelingType.Deuterium:
+                    //mt.IsotopicProfile = GetUnlabeledIsotopicProfile(mt);
+                    //mt.IsotopicProfileLabeled = _DeuteriumIsotopicProfileGenerator.GetDHIsotopicProfile2(mt, LowPeakCutOff, FractionLabeling, MolarMixingFraction);
 
-                    //swap so we can keep the normal in labeled box and use the D/H for generall processing
-                    mt.IsotopicProfile = GetUnlabelledIsotopicProfile(mt);//needed for _DeuteriumIsotopicProfileGenerator
+                    //swap so we can keep the normal in labeled box and use the D/H for general processing
+                    mt.IsotopicProfile = GetUnlabeledIsotopicProfile(mt);//needed for _DeuteriumIsotopicProfileGenerator
                     mt.IsotopicProfile = _DeuteriumIsotopicProfileGenerator.GetDHIsotopicProfile2(mt, LowPeakCutOff, FractionLabeling, MolarMixingFraction);
-                    mt.IsotopicProfileLabelled = GetUnlabelledIsotopicProfile(mt);
+                    mt.IsotopicProfileLabeled = GetUnlabeledIsotopicProfile(mt);
 
                     break;
                 default:
@@ -119,7 +119,7 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
 
 
 
-        private IsotopicProfile GetUnlabelledIsotopicProfile(TargetBase mt)
+        private IsotopicProfile GetUnlabeledIsotopicProfile(TargetBase mt)
         {
 
             var iso = new IsotopicProfile();

@@ -9,8 +9,8 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
 {
     public class DeuteriumIsotopeProfileGenerator
     {
-        TomIsotopicPattern _TomIsotopicPatternGenerator = new TomIsotopicPattern();
-        IsotopicDistributionCalculator _isotopicDistributionCalculator = IsotopicDistributionCalculator.Instance;
+        readonly TomIsotopicPattern _TomIsotopicPatternGenerator = new TomIsotopicPattern();
+        readonly IsotopicDistributionCalculator _isotopicDistributionCalculator = IsotopicDistributionCalculator.Instance;
 
         const int H_ISOTOPE_NUMBER = 1;
         const int D_ISOTOPE_NUMBER = 2;
@@ -24,20 +24,20 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
             var dLabelingAmount = 0.5;
             var sumOfLabelingAmounts = (decimal)(Math.Round(hLabelingAmount, 2) + Math.Round(dLabelingAmount, 2));
 
-            Check.Require(sumOfLabelingAmounts == 1.00m, "H and D labelling amounts do not add up to 1.00 - which they should.");
+            Check.Require(sumOfLabelingAmounts == 1.00m, "H and D labeling amounts do not add up to 1.00 - which they should.");
 
-            this.HLabellingAmount = hLabelingAmount;
-            this.DLabellingAmount = dLabelingAmount;
+            this.HLabelingAmount = hLabelingAmount;
+            this.DLabelingAmount = dLabelingAmount;
         }
 
         public DeuteriumIsotopeProfileGenerator(double hLabelingAmount, double dLabelingAmount)
         {
             var sumOfLabelingAmounts = (decimal)(Math.Round(hLabelingAmount, 2) + Math.Round(dLabelingAmount, 2));
 
-            Check.Require(sumOfLabelingAmounts == 1.00m, "H and D labelling amounts do not add up to 1.00 - which they should.");
+            Check.Require(sumOfLabelingAmounts == 1.00m, "H and D labeling amounts do not add up to 1.00 - which they should.");
 
-            this.HLabellingAmount = hLabelingAmount;
-            this.DLabellingAmount = dLabelingAmount;
+            this.HLabelingAmount = hLabelingAmount;
+            this.DLabelingAmount = dLabelingAmount;
         }
 
         #endregion
@@ -45,14 +45,14 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
         #region Properties
 
         /// <summary>
-        /// fractional amount (0-1) for amount of H labelling
+        /// fractional amount (0-1) for amount of H labeling
         /// </summary>
-        public double HLabellingAmount { get; set; }
+        public double HLabelingAmount { get; set; }
 
         /// <summary>
-        /// fractional amount (0-1) for amount of D labelling
+        /// fractional amount (0-1) for amount of D labeling
         /// </summary>
-        public double DLabellingAmount { get; set; }
+        public double DLabelingAmount { get; set; }
 
         #endregion
 
@@ -90,23 +90,24 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
             //int numNitrogens = mt.GetAtomCountForElement("N");
             var numDeuterium = 0;
 
-            //_isotopicDistributionCalculator.SetLabeling("H", H_ISOTOPE_NUMBER, this.HLabellingAmount, D_ISOTOPE_NUMBER, this.DLabellingAmount);
+            //_isotopicDistributionCalculator.SetLabeling("H", H_ISOTOPE_NUMBER, this.HLabelingAmount, D_ISOTOPE_NUMBER, this.DLabelingAmount);
             var hydrogenTheoreticalProfile = _isotopicDistributionCalculator.GetIsotopePattern(mt.EmpiricalFormula);
 
             var deuteriumTheoreticalProfile = _isotopicDistributionCalculator.GetIsotopePattern(mt.EmpiricalFormula);
 
-            HLabellingAmount = molarMixingofH;
-            DLabellingAmount = 1 - molarMixingofH;
+            HLabelingAmount = molarMixingofH;
+            DLabelingAmount = 1 - molarMixingofH;
+
             //convert to floats
-            var labelingAmountfraction = Convert.ToSingle(fractionLabeling);
-            var HLabellingAmountMix = Convert.ToSingle(HLabellingAmount);
-            var DLabellingAmountMix = Convert.ToSingle(DLabellingAmount);
+            var labelingAmountFraction = Convert.ToSingle(fractionLabeling);
+            var HLabelingAmountMix = Convert.ToSingle(HLabelingAmount);
+            var DLabelingAmountMix = Convert.ToSingle(DLabelingAmount);
 
             //initialization
             float maxHeightForNormalization = 0;
             if (hydrogenTheoreticalProfile.Peaklist.Count > 0)
             {
-                maxHeightForNormalization = hydrogenTheoreticalProfile.Peaklist[0].Height * HLabellingAmountMix;
+                maxHeightForNormalization = hydrogenTheoreticalProfile.Peaklist[0].Height * HLabelingAmountMix;
             }
 
             //add deuterated peaks as an offset index
@@ -123,8 +124,8 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
                     peakD = deuteriumTheoreticalProfile.Peaklist[i - 1];
                 }
 
-                var contributionH = peakH.Height * HLabellingAmountMix;
-                var contributionD = (1 - labelingAmountfraction) * peakD.Height * DLabellingAmountMix + labelingAmountfraction * peakD.Height * DLabellingAmountMix;
+                var contributionH = peakH.Height * HLabelingAmountMix;
+                var contributionD = (1 - labelingAmountFraction) * peakD.Height * DLabelingAmountMix + labelingAmountFraction * peakD.Height * DLabelingAmountMix;
 
                 peakH.Height = contributionH + contributionD;
 

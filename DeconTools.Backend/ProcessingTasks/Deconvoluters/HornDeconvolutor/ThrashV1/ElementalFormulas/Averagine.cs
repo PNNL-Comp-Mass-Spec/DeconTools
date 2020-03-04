@@ -17,7 +17,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         private double _tagMass;
 
         /// <summary>
-        ///     If a chemical labelling tag is applied to the molecular formula, it needs to be necessarily added to the molecular
+        ///     If a chemical labeling tag is applied to the molecular formula, it needs to be necessarily added to the molecular
         ///     formula (after subtraction by its mass).
         /// </summary>
         private bool _useTag;

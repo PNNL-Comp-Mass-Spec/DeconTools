@@ -19,7 +19,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             PeakDetectorPeakFitType = Globals.PeakFitType.QUADRATIC;
             PeakDetectorIsDataThresholded = false;
 
-            IsotopicProfileType = Globals.IsotopicProfileType.UNLABELLED;
+            IsotopicProfileType = Globals.IsotopicProfileType.UNLABELED;
             NumPeaksUsedInAbundance = 1;
             RequiresMonoIsotopicPeak = false;
             ToleranceInPPM = 25;

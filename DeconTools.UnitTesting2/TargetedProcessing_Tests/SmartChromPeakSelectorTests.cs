@@ -49,7 +49,7 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
             var chromAligner = new ChromAlignerUsingVIPERInfo();
             chromAligner.Execute(run);
 
-            var theorFeatureGen = new TomTheorFeatureGenerator(DeconTools.Backend.Globals.LabellingType.NONE, 0.005);
+            var theorFeatureGen = new TomTheorFeatureGenerator(DeconTools.Backend.Globals.LabelingType.NONE, 0.005);
 
             var chromPeakDet = new ChromPeakDetector(0.5, 1);
 
@@ -129,7 +129,7 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
             var chromAligner = new ChromAlignerUsingVIPERInfo();
             chromAligner.Execute(run);
 
-            var theorFeatureGen = new TomTheorFeatureGenerator(DeconTools.Backend.Globals.LabellingType.NONE, 0.005);
+            var theorFeatureGen = new TomTheorFeatureGenerator(DeconTools.Backend.Globals.LabelingType.NONE, 0.005);
 
             var chromPeakDet = new ChromPeakDetector(0.5, 1);
 

@@ -9,7 +9,7 @@
             ChromGeneratorMode = DeconTools.Backend.Globals.ChromatogramGeneratorMode.MOST_ABUNDANT_PEAK;
 
             ChromNETToleranceN15 = 0.001; //very low since it is found in relation to the N14 chrom peak
-            TargetedFeatureFinderIsotopicProfileTargetType = DeconTools.Backend.Globals.IsotopicProfileType.LABELLED;
+            TargetedFeatureFinderIsotopicProfileTargetType = DeconTools.Backend.Globals.IsotopicProfileType.LABELED;
             TargetedFeatureFinderToleranceInPPM = MSToleranceInPPM;
             ResultType = DeconTools.Backend.Globals.ResultType.N14N15_TARGETED_RESULT;
 

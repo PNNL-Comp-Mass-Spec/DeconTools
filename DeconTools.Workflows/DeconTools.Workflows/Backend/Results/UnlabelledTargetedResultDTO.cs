@@ -1,10 +1,10 @@
 ﻿namespace DeconTools.Workflows.Backend.Results
 {
-    public class UnlabelledTargetedResultDTO : TargetedResultDTO
+    public class UnlabeledTargetedResultDTO : TargetedResultDTO
     {
 
         #region Constructors
-        public UnlabelledTargetedResultDTO()
+        public UnlabeledTargetedResultDTO()
         {
             ScanLCStart = 0;
             ScanLCEnd = 0;
@@ -15,9 +15,9 @@
         }
         #endregion
 
-        //public static UnlabelledTargetedResult CreateResult(MassTagResult result)
+        //public static UnlabeledTargetedResult CreateResult(MassTagResult result)
         //{
-        //    UnlabelledTargetedResult r = new UnlabelledTargetedResult();
+        //    UnlabeledTargetedResult r = new UnlabeledTargetedResult();
         //    r.ChargeState = result.MassTag == null ? 0 : result.MassTag.ChargeState;
         //    r.DatasetName = result.Run.DatasetName;
         //    r.IndexOfMostAbundantPeak = result.IsotopicProfile == null ? (short)0 : (short)result.IsotopicProfile.getIndexOfMostIntensePeak();

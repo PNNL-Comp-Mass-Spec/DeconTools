@@ -76,12 +76,12 @@ namespace DeconTools.UnitTesting2.Algorithm_tests
 
             Console.WriteLine();
             xyData.Display();
-            labelDistCalc.OutputLabelingInfo(solvedYvals.ToList(), out var fractionUnlabelled, out var fractionLabelled,
+            labelDistCalc.OutputLabelingInfo(solvedYvals.ToList(), out var fractionUnlabeled, out var fractionLabeled,
                                              out var averageLabelsIncorporated);
 
             Console.WriteLine();
-            Console.WriteLine("fractionUnlabelled= " + fractionUnlabelled);
-            Console.WriteLine("fractionLabelled= " + fractionLabelled);
+            Console.WriteLine("fractionUnlabeled= " + fractionUnlabeled);
+            Console.WriteLine("fractionLabeled= " + fractionLabeled);
             Console.WriteLine("averageAmountLabelIncorp= " + averageLabelsIncorporated);
 
 
@@ -177,12 +177,12 @@ namespace DeconTools.UnitTesting2.Algorithm_tests
             Console.WriteLine();
             Console.WriteLine("Relex-corrected isotopic profile= " + d);
             xyData.Display();
-            labelDistCalc.OutputLabelingInfo(solvedYvals.ToList(), out var fractionUnlabelled, out var fractionLabelled,
+            labelDistCalc.OutputLabelingInfo(solvedYvals.ToList(), out var fractionUnlabeled, out var fractionLabeled,
                                              out var averageLabelsIncorporated);
 
             Console.WriteLine();
-            Console.WriteLine("fractionUnlabelled= " + fractionUnlabelled);
-            Console.WriteLine("fractionLabelled= " + fractionLabelled);
+            Console.WriteLine("fractionUnlabeled= " + fractionUnlabeled);
+            Console.WriteLine("fractionLabeled= " + fractionLabeled);
             Console.WriteLine("averageAmountLabelIncorp= " + averageLabelsIncorporated);
 
 

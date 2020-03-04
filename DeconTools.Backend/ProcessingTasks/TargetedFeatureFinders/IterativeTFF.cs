@@ -207,11 +207,11 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
             switch (IsotopicProfileType)
             {
-                case Globals.IsotopicProfileType.UNLABELLED:
+                case Globals.IsotopicProfileType.UNLABELED:
                     result.IsotopicProfile = iso;
                     break;
-                case Globals.IsotopicProfileType.LABELLED:
-                    result.AddLabelledIso(iso);
+                case Globals.IsotopicProfileType.LABELED:
+                    result.AddLabeledIso(iso);
                     break;
                 default:
                     result.IsotopicProfile = iso;

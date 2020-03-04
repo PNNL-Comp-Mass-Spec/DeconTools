@@ -20,7 +20,7 @@ namespace DeconTools.UnitTesting2.TheoreticalIsotopicProfileTests
 
 
             var featureGenerator = new JoshTheorFeatureGenerator();
-            
+
 
         }
 
@@ -36,7 +36,7 @@ namespace DeconTools.UnitTesting2.TheoreticalIsotopicProfileTests
 
             TestUtilities.DisplayIsotopicProfileData(mt.IsotopicProfile);
 
-            //TODO: add an Assert, with a manually confirmed number. 
+            //TODO: add an Assert, with a manually confirmed number.
 
         }
 
@@ -51,81 +51,80 @@ namespace DeconTools.UnitTesting2.TheoreticalIsotopicProfileTests
 
             TestUtilities.DisplayIsotopicProfileData(mt.IsotopicProfile);
 
-            //TODO: add an Assert, with a manually confirmed number. 
+            //TODO: add an Assert, with a manually confirmed number.
 
         }
 
         [Test]
-        public void TomGenerateN15LabelledTheorProfileTest1()
+        public void TomGenerateN15LabeledTheorProfileTest1()
         {
             var mt = TestDataCreationUtilities.CreateN14N15TestMassTagList().First(p => p.ID == 23085473);
 
-            var unlabelledTheorGenerator = new TomTheorFeatureGenerator();
-            unlabelledTheorGenerator.GenerateTheorFeature(mt);
+            var unlabeledTheorGenerator = new TomTheorFeatureGenerator();
+            unlabeledTheorGenerator.GenerateTheorFeature(mt);
 
-
-            var n15theorGenerator = new TomTheorFeatureGenerator(DeconTools.Backend.Globals.LabellingType.N15, 0.005);
+            var n15theorGenerator = new TomTheorFeatureGenerator(DeconTools.Backend.Globals.LabelingType.N15, 0.005);
             n15theorGenerator.GenerateTheorFeature(mt);
 
-            TestUtilities.DisplayIsotopicProfileData(mt.IsotopicProfileLabelled);
+            TestUtilities.DisplayIsotopicProfileData(mt.IsotopicProfileLabeled);
 
-            //TODO: add an Assert, with a manually confirmed number. 
-            
+            //TODO: add an Assert, with a manually confirmed number.
+
         }
 
 
         [Test]
-        public void TomGenerateN15LabelledTheorProfileTest2()
-        {
-            var mt = TestDataCreationUtilities.CreateN14N15TestMassTagList().First(p => p.ID == 23085470);
-           mt.EmpiricalFormula=   mt.GetEmpiricalFormulaFromTargetCode();
-
-            Console.WriteLine("Total nitrogens = "+mt.GetAtomCountForElement("N"));
-
-
-            var unlabelledTheorGenerator = new TomTheorFeatureGenerator();
-            unlabelledTheorGenerator.GenerateTheorFeature(mt);
-
-
-            var n15theorGenerator = new TomTheorFeatureGenerator(DeconTools.Backend.Globals.LabellingType.N15, 0.005);
-            n15theorGenerator.GenerateTheorFeature(mt);
-
-            //TestUtilities.DisplayIsotopicProfileData(mt.IsotopicProfile);
-            TestUtilities.DisplayIsotopicProfileData(mt.IsotopicProfileLabelled);
-
-            //TODO: add an Assert, with a manually confirmed number. 
-
-        }
-
-        [Test]
-        public void JoshGenerateN15LabelledTheorProfileTest2()
+        public void TomGenerateN15LabeledTheorProfileTest2()
         {
             var mt = TestDataCreationUtilities.CreateN14N15TestMassTagList().First(p => p.ID == 23085470);
             mt.EmpiricalFormula = mt.GetEmpiricalFormulaFromTargetCode();
 
-            Console.WriteLine("Total nitrogens = " + mt.GetAtomCountForElement("N"));
+            Console.WriteLine("Total nitrogen count = " + mt.GetAtomCountForElement("N"));
 
 
-            var unlabelledTheorGenerator = new JoshTheorFeatureGenerator();
-            unlabelledTheorGenerator.GenerateTheorFeature(mt);
+            var unlabeledTheorGenerator = new TomTheorFeatureGenerator();
+            unlabeledTheorGenerator.GenerateTheorFeature(mt);
+
+
+            var n15theorGenerator = new TomTheorFeatureGenerator(DeconTools.Backend.Globals.LabelingType.N15, 0.005);
+            n15theorGenerator.GenerateTheorFeature(mt);
+
+            //TestUtilities.DisplayIsotopicProfileData(mt.IsotopicProfile);
+            TestUtilities.DisplayIsotopicProfileData(mt.IsotopicProfileLabeled);
+
+            //TODO: add an Assert, with a manually confirmed number.
+
+        }
+
+        [Test]
+        public void JoshGenerateN15LabeledTheorProfileTest2()
+        {
+            var mt = TestDataCreationUtilities.CreateN14N15TestMassTagList().First(p => p.ID == 23085470);
+            mt.EmpiricalFormula = mt.GetEmpiricalFormulaFromTargetCode();
+
+            Console.WriteLine("Total nitrogen count = " + mt.GetAtomCountForElement("N"));
+
+
+            var unlabeledTheorGenerator = new JoshTheorFeatureGenerator();
+            unlabeledTheorGenerator.GenerateTheorFeature(mt);
 
             TestUtilities.DisplayIsotopicProfileData(mt.IsotopicProfile);
             Console.WriteLine();
 
-            var n15theorGenerator = new JoshTheorFeatureGenerator(DeconTools.Backend.Globals.LabellingType.N15, 0.005);
+            var n15theorGenerator = new JoshTheorFeatureGenerator(DeconTools.Backend.Globals.LabelingType.N15, 0.005);
             n15theorGenerator.GenerateTheorFeature(mt);
 
-            unlabelledTheorGenerator.GenerateTheorFeature(mt);
+            unlabeledTheorGenerator.GenerateTheorFeature(mt);
 
             n15theorGenerator.GenerateTheorFeature(mt);
 
-            unlabelledTheorGenerator.GenerateTheorFeature(mt);
+            unlabeledTheorGenerator.GenerateTheorFeature(mt);
 
             TestUtilities.DisplayIsotopicProfileData(mt.IsotopicProfile);
             Console.WriteLine();
-            TestUtilities.DisplayIsotopicProfileData(mt.IsotopicProfileLabelled);
+            TestUtilities.DisplayIsotopicProfileData(mt.IsotopicProfileLabeled);
 
-            
+
 
         }
 
