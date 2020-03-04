@@ -259,6 +259,8 @@ namespace DeconTools.Backend.ProcessingTasks
             DeleteIntensityThreshold = 10;
             MinIntensityForScore = 10;
 
+            MaxProcessingTimeMinutes = 4;
+
             IsAbsolutePepIntensityUsed = false;
             AbsoluteThresholdPeptideIntensity = 0;
             AveragineFormula = "C4.9384 H7.7583 N1.3577 O1.4773 S0.0417";
@@ -448,7 +450,7 @@ namespace DeconTools.Backend.ProcessingTasks
                     transformRecords.Add(transformRecord);
                 }
 
-                if (DateTime.UtcNow.Subtract(startTime).TotalMinutes > maxProcessingTimeMinutes)
+                if (maxProcessingTimeMinutes > 0 && DateTime.UtcNow.Subtract(startTime).TotalMinutes > maxProcessingTimeMinutes)
                 {
                     processingAborted = true;
                     found = false;
