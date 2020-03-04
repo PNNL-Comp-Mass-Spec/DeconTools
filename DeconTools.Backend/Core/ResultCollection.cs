@@ -33,13 +33,13 @@ namespace DeconTools.Backend.Core
         public Dictionary<TargetBase, TargetedResultBase> MassTagResultList { get; set; }
 
 
-        private List<MSPeakResult> mSPeakResultList;
+        private List<MSPeakResult> msPeakResultList;
         public List<MSPeakResult> MSPeakResultList
         {
-            get => mSPeakResultList;
+            get => msPeakResultList;
             set
             {
-                mSPeakResultList = value;
+                msPeakResultList = value;
                 msPeakResultsGroupedAndMzOrdered.Clear();
             }
         }
@@ -80,18 +80,18 @@ namespace DeconTools.Backend.Core
 
         public Dictionary<int, List<MSPeakResult>> GetMsPeakResultsGroupedAndMzOrdered()
         {
-            if(msPeakResultsGroupedAndMzOrdered == null || !msPeakResultsGroupedAndMzOrdered.Any())
+            if (msPeakResultsGroupedAndMzOrdered == null || !msPeakResultsGroupedAndMzOrdered.Any())
             {
                 msPeakResultsGroupedAndMzOrdered = new Dictionary<int, List<MSPeakResult>>();
 
-                if(mSPeakResultList != null)
+                if (msPeakResultList != null)
                 {
                     // Group by scan number
-                    foreach (var grouping in mSPeakResultList.GroupBy(x => x.Scan_num))
+                    foreach (var grouping in msPeakResultList.GroupBy(x => x.Scan_num))
                     {
                         // Order by m/z
-                        var msPeakResultList = grouping.OrderBy(x => x.MSPeak.XValue).ToList();
-                        msPeakResultsGroupedAndMzOrdered.Add(grouping.Key, msPeakResultList);
+                        var sortedPeaks = grouping.OrderBy(x => x.MSPeak.XValue).ToList();
+                        msPeakResultsGroupedAndMzOrdered.Add(grouping.Key, sortedPeaks);
                     }
                 }
             }
@@ -119,7 +119,7 @@ namespace DeconTools.Backend.Core
 
         public TargetedResultBase GetTargetedResult(TargetBase target)
         {
-            if (target==null)
+            if (target == null)
             {
                 throw new NullReferenceException("Tried to get the TargetResult, but Target is null");
             }
@@ -239,17 +239,12 @@ namespace DeconTools.Backend.Core
             }
 
             return filteredResults;
-
-
-
-
         }
 
         public void FillMSPeakResults()
         {
             if (Run is UIMFRun uimfRun)
             {
-
                 foreach (var item in Run.PeakList)
                 {
                     var peak = (MSPeak)item;
