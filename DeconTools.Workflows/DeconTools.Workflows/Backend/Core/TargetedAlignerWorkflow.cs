@@ -449,21 +449,19 @@ namespace DeconTools.Workflows.Backend.Core
         private List<NETGrouping> createNETGroupings()
         {
             var netDivisions = new double[] { 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0 };
-            var netgroupings = new List<NETGrouping>();
+            var netGroupings = new List<NETGrouping>();
 
             for (var i = 0; i < netDivisions.Length - 1; i++)
             {
-                var grouping = new NETGrouping();
-                grouping.Lower = netDivisions[i];
-                grouping.Upper = netDivisions[i + 1];
+                var grouping = new NETGrouping {
+                    Lower = netDivisions[i],
+                    Upper = netDivisions[i + 1]
+                };
 
-                netgroupings.Add(grouping);
-
-
+                netGroupings.Add(grouping);
             }
 
-            return netgroupings;
-
+            return netGroupings;
         }
 
         private void ReportProgress(int progressPercentage, string progressString)
