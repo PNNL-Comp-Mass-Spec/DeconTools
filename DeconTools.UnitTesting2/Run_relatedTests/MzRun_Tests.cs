@@ -298,7 +298,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
                 @"\\proto-2\unitTest_Files\DeconTools_TestFiles\Waters\LC_MS_pHis_Caulo_meth_110207.mzXML";
 
             var run = new RunFactory().CreateRun(testfile);
-            Console.WriteLine(TestUtilities.DisplayRunInformation(run));
+            TestUtilities.DisplayRunInformation(run);
 
             run.ScanSetCollection = new ScanSetCollection();
             run.ScanSetCollection.Create(run, 500, 600, 1, 1);

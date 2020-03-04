@@ -188,85 +188,60 @@ namespace DeconTools.UnitTesting2
 
         public static void DisplayIsotopicProfileData(IsotopicProfile profile)
         {
-            var sb = new StringBuilder();
             var counter = 0;
+
+            Console.WriteLine("{0,-8} {1,-9} {2,-10} {3,-10} {4,-10}", "Index", "XValue", "Height", "Width", "S/N");
 
             foreach (var peak in profile.Peaklist)
             {
-                sb.Append(counter);
-                sb.Append("\t");
-                sb.Append(peak.XValue);
-                sb.Append("\t");
-                sb.Append(peak.Height);
-                sb.Append("\t");
-                sb.Append(peak.Width);
-                sb.Append("\t");
-                sb.Append(peak.SignalToNoise);
-                sb.Append("\n");
-
+                Console.WriteLine("{0,-8} {1,-9} {2,-10:G3} {3,-10} {4,-10}", counter, peak.XValue, peak.Height, peak.Width, peak.SignalToNoise);
                 counter++;
             }
-
-            Console.Write(sb.ToString());
         }
 
-        public static void DisplayMSFeatures(List<IsosResult> resultList)
+        public static void DisplayMSFeatures(List<IsosResult> resultList, int maxFeaturesToShow = 100)
         {
-            var sb = new StringBuilder();
+            Console.WriteLine("------------MSFeatures ---------------");
 
-            sb.Append("------------MSFeatures ---------------\n");
-            sb.Append("id\tscanNum\tmonomass\tmz\tz\tintens\tscore\tinterferenceScore\n");
+            Console.WriteLine("{0,-7} {1,-9} {2,-10} {3,-11} {4,-4} {5,-12} {6,-10} {7,-18} {8}",
+                "Index", "ScanNum", "MonoMass", "m/z", "z", "Intensity", "Score", "InterferenceScore", "Status");
+
+            var i = 0;
             foreach (var item in resultList)
             {
-                sb.Append(item.MSFeatureID);
-                sb.Append("\t");
-                sb.Append(item.ScanSet.PrimaryScanNumber);
-                sb.Append("\t");
-                sb.Append(item.IsotopicProfile.MonoIsotopicMass.ToString("0.0000"));
-                sb.Append("\t");
-                sb.Append(item.IsotopicProfile.MonoPeakMZ.ToString("0.00000"));
-                sb.Append("\t");
-                sb.Append(item.IsotopicProfile.ChargeState);
-                sb.Append("\t");
-                sb.Append(item.IntensityAggregate.ToString("0"));
-                sb.Append("\t");
-                sb.Append(item.IsotopicProfile.Score.ToString("0.000"));
-                sb.Append("\t");
-                sb.Append(item.InterferenceScore.ToString("0.000"));
-                sb.Append("\t");
-                sb.Append(item.Flags.Count == 0 ? "" : "FLAGGED");
+                if (i >= maxFeaturesToShow)
+                {
+                    Console.WriteLine();
+                    Console.WriteLine("... {0} additional features not displayed", resultList.Count - i);
+                    break;
+                }
 
-                sb.Append("\n");
+                Console.WriteLine("{0,-7} {1,-9} {2,-10:F4} {3,-11:F5} {4,-4} {5,-12:E3} {6,-10:G3} {7,-18:F3} {8}",
+                    item.MSFeatureID,
+                    item.ScanSet.PrimaryScanNumber,
+                    item.IsotopicProfile.MonoIsotopicMass,
+                    item.IsotopicProfile.MonoPeakMZ,
+                    item.IsotopicProfile.ChargeState,
+                    item.IntensityAggregate,
+                    item.IsotopicProfile.Score,
+                    item.InterferenceScore,
+                    item.Flags.Count == 0 ? "" : "FLAGGED");
 
+                i++;
             }
-
-            Console.Write(sb.ToString());
 
         }
 
-
-        public static string DisplayRunInformation(Run run)
+        public static void DisplayRunInformation(Run run)
         {
-            var sb = new StringBuilder();
-            var delim = Environment.NewLine;
 
-            sb.Append("Dataset name = " + run.DatasetName);
-            sb.Append(delim);
-            sb.Append("Datatset path = " + run.DatasetDirectoryPath);
-            sb.Append(delim);
-            sb.Append("MinScan = " + run.MinLCScan);
-            sb.Append(delim);
-            sb.Append("MaxScan = " + run.MaxLCScan);
-            sb.Append(delim);
-            sb.Append("FileType = " + run.MSFileType);
-            sb.Append(delim);
-            sb.Append("MassIsAligned = " + run.MassIsAligned);
-            sb.Append(delim);
-            sb.Append("NETIsAligned = " + run.NETIsAligned);
-
-            return sb.ToString();
-
-
+            Console.WriteLine("Dataset name = " + run.DatasetName);
+            Console.WriteLine("Dataset path = " + run.DatasetDirectoryPath);
+            Console.WriteLine("MinScan = " + run.MinLCScan);
+            Console.WriteLine("MaxScan = " + run.MaxLCScan);
+            Console.WriteLine("FileType = " + run.MSFileType);
+            Console.WriteLine("MassIsAligned = " + run.MassIsAligned);
+            Console.WriteLine("NETIsAligned = " + run.NETIsAligned);
         }
 
 
