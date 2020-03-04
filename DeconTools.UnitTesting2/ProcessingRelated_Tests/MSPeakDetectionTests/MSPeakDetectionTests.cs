@@ -48,7 +48,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
             var peakBR = 1.3;
             double sigNoise = 2;
             var isThresholded = true;
-            var peakfitType = Backend.Globals.PeakFitType.QUADRATIC;
+            var peakFitType = Backend.Globals.PeakFitType.QUADRATIC;
 
             var testFile = FileRefs.RawDataMSFiles.OrbitrapStdFile1;
 
@@ -60,10 +60,11 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
 
             generator.Execute(run.ResultCollection);
 
-            var peakDet = new DeconToolsPeakDetectorV2(peakBR, sigNoise, peakfitType, isThresholded);
-            peakDet.PeaksAreStored = true;
+            var peakDetector = new DeconToolsPeakDetectorV2(peakBR, sigNoise, peakFitType, isThresholded) {
+                PeaksAreStored = true
+            };
 
-            var peakList=  peakDet.FindPeaks(run.XYData, 0, 50000);
+            var peakList = peakDetector.FindPeaks(run.XYData, 0, 50000);
 
             TestUtilities.DisplayPeaks(peakList);
 
@@ -78,22 +79,22 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
             var peakBR = 1.3;
             double sigNoise = 2;
             var isThresholded = true;
-            var peakfitType = Backend.Globals.PeakFitType.QUADRATIC;
+            var peakFitType = Backend.Globals.PeakFitType.QUADRATIC;
 
             var testFile = FileRefs.RawDataMSFiles.OrbitrapStdFile1;
 
             Run run = new XCaliburRun2(testFile);
 
-            //create list of target scansets
-            run.ScanSetCollection .Create(run, 6000, 6015, 1, 1);
+            //create list of target ScanSets
+            run.ScanSetCollection.Create(run, 6000, 6015, 1, 1);
 
 
             //in the 'run' object there is now a list of scans : run.ScanSetCollection
             var generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
-
-            var peakDet = new DeconToolsPeakDetectorV2(peakBR, sigNoise, peakfitType, isThresholded);
-            peakDet.PeaksAreStored = true;
+            var peakDetector = new DeconToolsPeakDetectorV2(peakBR, sigNoise, peakFitType, isThresholded) {
+                PeaksAreStored = true
+            };
 
             foreach (var scan in run.ScanSetCollection.ScanSetList)
             {
@@ -101,11 +102,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
                 run.CurrentScanSet = scan;
 
                 generator.Execute(run.ResultCollection);
-                peakDet.Execute(run.ResultCollection);
-
-
-
-
+                peakDetector.Execute(run.ResultCollection);
             }
 
         }
