@@ -50,14 +50,14 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.FitCalculationRelatedT
             var result1 = results.ResultList[0];
 
 
-            var distcreator = new MercuryDistributionCreator();
+            var distCreator = new MercuryDistributionCreator();
             var resolution = result1.IsotopicProfile.GetMZofMostAbundantPeak() / result1.IsotopicProfile.GetFWHM();
-            distcreator.CreateDistribution(result1.IsotopicProfile.MonoIsotopicMass, result1.IsotopicProfile.ChargeState, resolution);
-            distcreator.OffsetDistribution(result1.IsotopicProfile);
+            distCreator.CreateDistribution(result1.IsotopicProfile.MonoIsotopicMass, result1.IsotopicProfile.ChargeState, resolution);
+            distCreator.OffsetDistribution(result1.IsotopicProfile);
 
 
 
-            var theorXYData = distcreator.Data;
+            var theorXYData = distCreator.Data;
 
             //StringBuilder sb = new StringBuilder();
             //TestUtilities.GetXYValuesToStringBuilder(sb, theorXYData.Xvalues, theorXYData.Yvalues);
@@ -127,13 +127,13 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.FitCalculationRelatedT
             double resolution = result1.IsotopicProfile.GetMZofMostAbundantPeak() / result1.IsotopicProfile.GetFWHM();
 
 
-            MercuryDistributionCreator distcreator = new MercuryDistributionCreator();
-            distcreator.CreateDistribution(result1.IsotopicProfile.MonoIsotopicMass, result1.IsotopicProfile.ChargeState, resolution);
-            distcreator.OffsetDistribution(result1.IsotopicProfile);
+            MercuryDistributionCreator distCreator = new MercuryDistributionCreator();
+            distCreator.CreateDistribution(result1.IsotopicProfile.MonoIsotopicMass, result1.IsotopicProfile.ChargeState, resolution);
+            distCreator.OffsetDistribution(result1.IsotopicProfile);
 
 
 
-            XYData theorXYData = distcreator.Data;
+            XYData theorXYData = distCreator.Data;
 
            // theorXYData.Display();
 
@@ -173,22 +173,15 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.FitCalculationRelatedT
             var result1 = results.ResultList[1];
             var resolution = result1.IsotopicProfile.GetMZofMostAbundantPeak() / result1.IsotopicProfile.GetFWHM();
 
-            var distcreator = new MercuryDistributionCreator();
-            distcreator.CreateDistribution(result1.IsotopicProfile.MonoIsotopicMass, result1.IsotopicProfile.ChargeState, resolution);
-            var sb = new StringBuilder();
-            var theorXYData = distcreator.Data;
+            var distCreator = new MercuryDistributionCreator();
+            distCreator.CreateDistribution(result1.IsotopicProfile.MonoIsotopicMass, result1.IsotopicProfile.ChargeState, resolution);
+            var theorXYData = distCreator.Data;
 
-            //TestUtilities.GetXYValuesToStringBuilder(sb, theorXYData.Xvalues, theorXYData.Yvalues);
+            //TestUtilities.DisplayXYValues(theorXYData);
 
-
-
-            distcreator.OffsetDistribution(result1.IsotopicProfile);
-
-
-
-
-
-            TestUtilities.GetXYValuesToStringBuilder(sb, theorXYData.Xvalues, theorXYData.Yvalues);
+            distCreator.OffsetDistribution(result1.IsotopicProfile);
+            
+            TestUtilities.DisplayXYValues(theorXYData);
 
             //Console.WriteLine(sb.ToString());
 
@@ -230,14 +223,14 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.FitCalculationRelatedT
 
 
 
-            var distcreator = new MercuryDistributionCreator();
-            distcreator.CreateDistribution(result1.IsotopicProfile.MonoIsotopicMass, result1.IsotopicProfile.ChargeState, resolution);
-            distcreator.OffsetDistribution(result1.IsotopicProfile);
+            var distCreator = new MercuryDistributionCreator();
+            distCreator.CreateDistribution(result1.IsotopicProfile.MonoIsotopicMass, result1.IsotopicProfile.ChargeState, resolution);
+            distCreator.OffsetDistribution(result1.IsotopicProfile);
 
             var sb = new StringBuilder();
 
             var areafitter = new AreaFitter();
-            var fitval = areafitter.GetFit(distcreator.Data, run.XYData, 10);
+            var fitval = areafitter.GetFit(distCreator.Data, run.XYData, 10);
 
             sb.Append(resolution);
             sb.Append("\t");
@@ -246,13 +239,13 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.FitCalculationRelatedT
 
             for (var fwhm = 0.001; fwhm < 0.050; fwhm = fwhm + 0.0005)
             {
-                distcreator = new MercuryDistributionCreator();
+                distCreator = new MercuryDistributionCreator();
                 resolution = result1.IsotopicProfile.GetMZofMostAbundantPeak() / fwhm;
 
-                distcreator.CreateDistribution(result1.IsotopicProfile.MonoIsotopicMass, result1.IsotopicProfile.ChargeState, resolution);
-                distcreator.OffsetDistribution(result1.IsotopicProfile);
+                distCreator.CreateDistribution(result1.IsotopicProfile.MonoIsotopicMass, result1.IsotopicProfile.ChargeState, resolution);
+                distCreator.OffsetDistribution(result1.IsotopicProfile);
                 areafitter = new AreaFitter();
-                fitval = areafitter.GetFit(distcreator.Data, run.XYData, 10);
+                fitval = areafitter.GetFit(distCreator.Data, run.XYData, 10);
 
                 sb.Append(resolution);
                 sb.Append("\t");

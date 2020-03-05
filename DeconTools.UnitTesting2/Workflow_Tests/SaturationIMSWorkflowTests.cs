@@ -66,13 +66,13 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             var maxScan = 160;
 
             var melettinMonoMass = 2844.75417;
-            var chargestate = 4;
+            var chargeState = 4;
 
             var tolerance = 0.3;
             var featureData =
                 (from n in distinctItems
                  where (Math.Abs(n.IsotopicProfile.MonoIsotopicMass - melettinMonoMass)) < tolerance &&
-                       n.IsotopicProfile.ChargeState == chargestate
+                       n.IsotopicProfile.ChargeState == chargeState
                  select n).Select(r => (UIMFIsosResult)r).ToList();
 
             OutputFeatureIntensityData(featureData, minFrame, maxFrame, maxScan, minScan);
@@ -99,7 +99,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
 
             featureData = (from n in distinctItems
                            where (Math.Abs(n.IsotopicProfile.MonoIsotopicMass - melettinMonoMass)) < tolerance &&
-                                 n.IsotopicProfile.ChargeState == chargestate
+                                 n.IsotopicProfile.ChargeState == chargeState
                            select n).Select(r => (UIMFIsosResult)r).ToList();
 
             OutputFeatureIntensityData(featureData, minFrame, maxFrame, maxScan, minScan);
@@ -164,13 +164,13 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             var maxScan = 200;
 
             var melettinMonoMass = 555.2693;
-            var chargestate = 1;
+            var chargeState = 1;
 
             var tolerance = 0.3;
             var featureData =
                 (from n in distinctItems
                  where (Math.Abs(n.IsotopicProfile.MonoIsotopicMass - melettinMonoMass)) < tolerance &&
-                       n.IsotopicProfile.ChargeState == chargestate
+                       n.IsotopicProfile.ChargeState == chargeState
                  select n).Select(r => (UIMFIsosResult)r).ToList();
 
             OutputFeatureIntensityData(featureData, minFrame, maxFrame, maxScan, minScan);
@@ -197,7 +197,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
 
             featureData = (from n in distinctItems
                            where (Math.Abs(n.IsotopicProfile.MonoIsotopicMass - melettinMonoMass)) < tolerance &&
-                                 n.IsotopicProfile.ChargeState == chargestate
+                                 n.IsotopicProfile.ChargeState == chargeState
                            select n).Select(r => (UIMFIsosResult)r).ToList();
 
             OutputFeatureIntensityData(featureData, minFrame, maxFrame, maxScan, minScan);
@@ -262,13 +262,13 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             var maxScan = 150;
 
             var peptideMonoMass = 1295.67749;
-            var chargestate = 3;
+            var chargeState = 3;
 
             var tolerance = 0.3;
             var featureData =
                 (from n in distinctItems
                  where (Math.Abs(n.IsotopicProfile.MonoIsotopicMass - peptideMonoMass)) < tolerance &&
-                       n.IsotopicProfile.ChargeState == chargestate
+                       n.IsotopicProfile.ChargeState == chargeState
                  select n).Select(r => (UIMFIsosResult)r).ToList();
 
             OutputFeatureIntensityData(featureData, minFrame, maxFrame, maxScan, minScan);
@@ -295,7 +295,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
 
             featureData = (from n in distinctItems
                            where (Math.Abs(n.IsotopicProfile.MonoIsotopicMass - peptideMonoMass)) < tolerance &&
-                                 n.IsotopicProfile.ChargeState == chargestate
+                                 n.IsotopicProfile.ChargeState == chargeState
                            select n).Select(r => (UIMFIsosResult)r).ToList();
 
             OutputFeatureIntensityData(featureData, minFrame, maxFrame, maxScan, minScan);
@@ -415,24 +415,24 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
 
             //this one elutes ScanLC at 180 - 195
             var targetMass = 860.3987;
-            var chargestate = 2;
+            var chargeState = 2;
 
             //targetMass = 1444.748171;
-            //chargestate = 3;
+            //chargeState = 3;
 
             //targetMass = 1079.559447;
-            //chargestate = 2;
+            //chargeState = 2;
 
             //non-saturated feature:
             //targetMass = 1064.485;
-            //chargestate = 2;
+            //chargeState = 2;
 
             //targetMass = 1224.5497;
-            //chargestate = 1;
+            //chargeState = 1;
 
 
             //targetMass = 949.454723;
-            //chargestate = 1;
+            //chargeState = 1;
             //minScan = 220;
             //maxScan = 228;
 
@@ -440,7 +440,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             var featureData =
                 (from n in distinctItems
                  where (Math.Abs(n.IsotopicProfile.MonoIsotopicMass - targetMass)) < tolerance &&
-                       n.IsotopicProfile.ChargeState == chargestate
+                       n.IsotopicProfile.ChargeState == chargeState
                  select n).Select(r => (UIMFIsosResult)r).ToList();
 
             OutputFeatureIntensityData(featureData, minFrame, maxFrame, maxScan, minScan);
@@ -513,24 +513,24 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
 
             //this one elutes ScanLC at 180 - 195
             var targetMass = 860.3987;
-            var chargestate = 2;
+            var chargeState = 2;
 
             //targetMass = 1444.748171;
-            //chargestate = 3;
+            //chargeState = 3;
 
             //targetMass = 1079.559447;
-            //chargestate = 2;
+            //chargeState = 2;
 
             //non-saturated feature:
             //targetMass = 1064.485;
-            //chargestate = 2;
+            //chargeState = 2;
 
             //targetMass = 1224.5497;
-            //chargestate = 1;
+            //chargeState = 1;
 
 
             //targetMass = 949.454723;
-            //chargestate = 1;
+            //chargeState = 1;
             //minScan = 220;
             //maxScan = 228;
 
@@ -538,7 +538,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             var featureData =
                 (from n in distinctItems
                  where (Math.Abs(n.IsotopicProfile.MonoIsotopicMass - targetMass)) < tolerance &&
-                       n.IsotopicProfile.ChargeState == chargestate
+                       n.IsotopicProfile.ChargeState == chargeState
                  select n).Select(r => (UIMFIsosResult)r).ToList();
 
             OutputFeatureIntensityData(featureData, minFrame, maxFrame, maxScan, minScan);
@@ -588,7 +588,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             var maxScan = 125;
 
             var targetMass = 819.48169;    //elutes at 199 - 205
-            var chargestate = 2;
+            var chargeState = 2;
 
 
 
@@ -596,7 +596,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             var featureData =
                 (from n in distinctItems
                  where (Math.Abs(n.IsotopicProfile.MonoIsotopicMass - targetMass)) < tolerance &&
-                       n.IsotopicProfile.ChargeState == chargestate
+                       n.IsotopicProfile.ChargeState == chargeState
                  select n).Select(r => (UIMFIsosResult)r).ToList();
 
             OutputFeatureIntensityData(featureData, minFrame, maxFrame, maxScan, minScan);
@@ -645,7 +645,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             var maxScan = 125;
 
             var targetMass = 819.48169;    //elutes at 199 - 205
-            var chargestate = 2;
+            var chargeState = 2;
 
 
 
@@ -653,7 +653,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             var featureData =
                 (from n in distinctItems
                  where (Math.Abs(n.IsotopicProfile.MonoIsotopicMass - targetMass)) < tolerance &&
-                       n.IsotopicProfile.ChargeState == chargestate
+                       n.IsotopicProfile.ChargeState == chargeState
                  select n).Select(r => (UIMFIsosResult)r).ToList();
 
             OutputFeatureIntensityData(featureData, minFrame, maxFrame, maxScan, minScan);
@@ -702,7 +702,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             var maxScan = 127;
 
             var targetMass = 1059.55169;
-            var chargestate = 2;
+            var chargeState = 2;
 
 
 
@@ -710,7 +710,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             var featureData =
                 (from n in distinctItems
                  where (Math.Abs(n.IsotopicProfile.MonoIsotopicMass - targetMass)) < tolerance &&
-                       n.IsotopicProfile.ChargeState == chargestate
+                       n.IsotopicProfile.ChargeState == chargeState
                  select n).Select(r => (UIMFIsosResult)r).ToList();
 
             OutputFeatureIntensityData(featureData, minFrame, maxFrame, maxScan, minScan);
@@ -782,14 +782,14 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             var minScan = 117;
             var maxScan = 131;
 
-            var chargestate = 2;
-            var targetMass = (605.82 - 1.00727649) * chargestate;
+            var chargeState = 2;
+            var targetMass = (605.82 - 1.00727649) * chargeState;
 
             var tolerance = 0.3;
             var featureData =
                 (from n in distinctItems
                  where (Math.Abs(n.IsotopicProfile.MonoIsotopicMass - targetMass)) < tolerance &&
-                       n.IsotopicProfile.ChargeState == chargestate
+                       n.IsotopicProfile.ChargeState == chargeState
                  select n).Select(r => (UIMFIsosResult)r).ToList();
 
             OutputFeatureIntensityData(featureData, minFrame, maxFrame, maxScan, minScan);

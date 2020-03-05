@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.Runs;
@@ -16,57 +17,67 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         [Test]
         public void ConstructorTest1()
         {
+            var fileName = Path.GetFileName(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+
             using (Run run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1))
             {
+                Console.WriteLine("Scan range for {0} is {1:N0} to {2:N0}", fileName, run.MinLCScan, run.MaxLCScan);
 
                 Assert.AreEqual(1, run.MinLCScan);
                 Assert.AreEqual(18505, run.MaxLCScan);
             }
-            
+
         }
 
         [Test]
-        public void checkVersion_2pt2_xcalibur_dll_test1()
+        public void TestGetNumMSScans()
         {
-            var run = new XCaliburRun2(@"\\proto-7\VOrbiETD01\2012_3\QC_Shew_12_02_Run-03_26Jul12_Roc_12-04-08\QC_Shew_12_02_Run-03_26Jul12_Roc_12-04-08.raw");
+            var rawFile = new FileInfo(@"\\proto-3\QExactP02\2020_1\QC_Shew_20_01_Run-1_30Feb20_Merry_19-11-03\QC_Shew_20_01_Run-1_30Feb20_Merry_19-11-03.raw");
 
-            Assert.AreEqual(8904, run.GetNumMSScans());
-
+            var run = new XCaliburRun2(rawFile.FullName);
             Assert.IsNotNull(run);
+
+            var scanCount = run.GetNumMSScans();
+            Console.WriteLine("File {0} has {1:N0} spectra", rawFile.Name, scanCount);
+
+            Assert.AreEqual(56864, scanCount);
         }
 
 
         [Test]
         public void TempTest1()
         {
-            using (var run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1))
+            using (var run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1, true))
             {
-
-                run.GetTuneData();
+                var tuneData = run.GetTuneData();
+                Console.WriteLine(tuneData);
             }
 
         }
 
-
-
-
         [Test]
         public void ConstructorTest2()
         {
+            var fileName = Path.GetFileName(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
             Run run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1, 6000, 7000);
+
+            Console.WriteLine("Scan range for {0} is {1:N0} to {2:N0}", fileName, run.MinLCScan, run.MaxLCScan);
 
             Assert.AreEqual(6000, run.MinLCScan);
             Assert.AreEqual(7000, run.MaxLCScan);
 
             run = null;
         }
-     
+
         [Test]
         public void getNumSpectraTest1()
         {
+            var fileName = Path.GetFileName(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
             var run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
-            var numScans= run.GetNumMSScans();
+            Console.WriteLine("Scan range for {0} is {1:N0} to {2:N0}", fileName, run.MinLCScan, run.MaxLCScan);
+
+            var numScans = run.GetNumMSScans();
             Assert.AreEqual(18505, numScans);
             Assert.AreEqual(1, run.MinLCScan);
             Assert.AreEqual(18505, run.MaxLCScan);
@@ -82,15 +93,20 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
 
             Run run = new XCaliburRun2(testFile);
 
+            Console.WriteLine("Opened " + testFile);
+
             Assert.AreEqual("QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18", run.DatasetName);
         }
 
         [Test]
         public void initializeVelosOrbiFile_Test1()
         {
+            var fileName = Path.GetFileName(FileRefs.RawDataMSFiles.VOrbiFile1);
             var testFile = FileRefs.RawDataMSFiles.VOrbiFile1;
 
             Run run = new XCaliburRun2(testFile);
+
+            Console.WriteLine("Scan range for {0} is {1:N0} to {2:N0}", fileName, run.MinLCScan, run.MaxLCScan);
 
             Assert.AreEqual(1, run.MinLCScan);
             Assert.AreEqual(17773, run.MaxLCScan);
@@ -98,17 +114,16 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         }
 
         [Test]
-        public  void GetIonInjectionTimeTest1()
+        public void GetIonInjectionTimeTest1()
         {
             var run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
             var scan = 6005;
             var ionInjectionTime = run.GetIonInjectionTimeInMilliseconds(scan);
 
-            Assert.AreEqual(2.84m, (decimal) Math.Round(ionInjectionTime, 2));
+            Console.WriteLine("Scan " + scan + "; ion injection time = " + ionInjectionTime);
 
-            Console.WriteLine("Scan "+ scan + "; ion injection time = " + ionInjectionTime);
-
+            Assert.AreEqual(2.84m, (decimal)Math.Round(ionInjectionTime, 2));
         }
 
 
@@ -120,24 +135,26 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             var scan = 6006;
             var isolationWidth = run.GetMS2IsolationWidth(scan);
 
-            Assert.AreEqual(3.0m, (decimal)Math.Round(isolationWidth,1));
-
             Console.WriteLine("Scan " + scan + "; MS2IsolationWidth = " + isolationWidth);
+
+            Assert.AreEqual(3.0m, (decimal)Math.Round(isolationWidth, 1));
         }
-
-
 
         [Test]
         public void getSpectrum_Test1()
         {
+            const int SCAN_NUMBER = 6005;
+
+            var fileName = Path.GetFileName(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
             var run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
-            var xyData=  run.GetMassSpectrum(new Backend.Core.ScanSet(6005));
+            var xyData = run.GetMassSpectrum(new ScanSet(SCAN_NUMBER));
+
+            Console.WriteLine("In file {0}, scan {1:N0} has {2:N0} points", fileName, SCAN_NUMBER, xyData.Xvalues.Length);
 
             Assert.IsTrue(xyData.Xvalues.Length > 1000);
-         
 
-           // TestUtilities.DisplayXYValues(xyData);
+            // TestUtilities.DisplayXYValues(xyData);
 
         }
 
@@ -145,15 +162,20 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         [Test]
         public void getSummedSpectrum_Test1()
         {
+            var fileName = Path.GetFileName(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
             var run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
+            var scanSet = new ScanSet(6005, new int[] { 6005, 6012, 6019 });
 
-            var scanset = new ScanSet(6005, new int[] { 6005, 6012, 6019 });
+            var xyData = run.GetMassSpectrum(scanSet);
 
-            var xyData= run.GetMassSpectrum(scanset);
+            Console.WriteLine("In file {0}, scans {1} sum to give {2:N0} points", fileName, scanSet, xyData.Xvalues.Length);
+
             Assert.IsTrue(xyData.Xvalues.Length > 1000);
-            //TestUtilities.DisplayXYValues(run.XYData);
 
+            Assert.AreEqual(46378, xyData.Xvalues.Length, 5, "Data point count is not close to the expected value");
+
+            TestUtilities.DisplayXYValues(xyData, 400, 402);
         }
 
 
@@ -180,11 +202,11 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
                     watch.Reset();
                 }
 
-                Console.WriteLine("Average reading time when summing 3 spectra = " + timeStats.Average()); 
-            } 
+                Console.WriteLine("Average reading time when summing 3 spectra = " + timeStats.Average());
+            }
 
 
-     
+
 
 
         }
@@ -223,7 +245,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         {
             var run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
-            
+
             PrecursorInfo precursor;
 
             precursor = run.GetPrecursorInfo(6005);
@@ -251,12 +273,12 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
 
             var scan = 6005;
 
-           var ticIntensity =   run.GetTICFromInstrumentInfo(scan);
+            var ticIntensity = run.GetTICFromInstrumentInfo(scan);
 
             Assert.IsTrue(ticIntensity > 0);
 
         }
-       
+
 
 
     }

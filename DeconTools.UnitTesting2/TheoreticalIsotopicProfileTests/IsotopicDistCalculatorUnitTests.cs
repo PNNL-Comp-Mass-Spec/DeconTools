@@ -127,13 +127,10 @@ namespace DeconTools.UnitTesting2.TheoreticalIsotopicProfileTests
             var formula = formBuild.FormulaToDictionary("C80H100N20O30Na2F3Mg2S10");
 
             var cluster = isotopicDistributionCalculator.GetIsotopePattern(formula);
-            var sb = new StringBuilder();
-            sb.Append(Environment.NewLine);
-            TestUtilities.IsotopicProfileDataToStringBuilder(sb, cluster);
 
-            Console.Write(sb.ToString());
-
+            TestUtilities.DisplayIsotopicProfileData(cluster);
         }
+
         [Test]
         public void TestIsotopeDict2()
         {
@@ -141,13 +138,7 @@ namespace DeconTools.UnitTesting2.TheoreticalIsotopicProfileTests
 
             var cluster = isotopicDistributionCalculator.GetIsotopePattern(formula);
 
-
-            var sb = new StringBuilder();
-            sb.Append(Environment.NewLine);
-            TestUtilities.IsotopicProfileDataToStringBuilder(sb, cluster);
-
-            Console.Write(sb.ToString());
-
+            TestUtilities.DisplayIsotopicProfileData(cluster);
         }
 
         [Test]
@@ -156,12 +147,8 @@ namespace DeconTools.UnitTesting2.TheoreticalIsotopicProfileTests
 
             var formula = formBuild.ConvertToMolecularFormula("ANKYLSRRH");
             var cluster = isotopicDistributionCalculator.GetIsotopePattern(formula);
-            var sb = new StringBuilder();
-            sb.Append(Environment.NewLine);
-            TestUtilities.IsotopicProfileDataToStringBuilder(sb, cluster);
 
-            Console.Write(sb.ToString());
-
+            TestUtilities.DisplayIsotopicProfileData(cluster);
         }
 
 
@@ -176,23 +163,14 @@ namespace DeconTools.UnitTesting2.TheoreticalIsotopicProfileTests
             isotopicDistributionCalculator.SetLabeling("N", 14, .02, 15, .98);
             var cluster = isotopicDistributionCalculator.GetAveraginePattern(1979);
             isotopicDistributionCalculator.ResetToUnlabeled();
-            var sb = new StringBuilder();
-            sb.Append(Environment.NewLine);
-            TestUtilities.IsotopicProfileDataToStringBuilder(sb, cluster);
 
-            Console.Write(sb.ToString());
-
+            TestUtilities.DisplayIsotopicProfileData(cluster);
 
             var cluster2 = _tomIsotopicPatternGenerator.GetAvnPattern(2000, true);
 
-
             Console.WriteLine(cluster2.Peaklist.Count);
 
-
-            sb.Append(Environment.NewLine);
-            TestUtilities.IsotopicProfileDataToStringBuilder(sb, cluster2);
-
-            Console.WriteLine(sb.ToString());
+            TestUtilities.DisplayIsotopicProfileData(cluster2);
         }
 
 
@@ -202,27 +180,17 @@ namespace DeconTools.UnitTesting2.TheoreticalIsotopicProfileTests
             var isIt = isotopicDistributionCalculator.IsSetToLabeled;
             //		isotopicDistributionCalculator.SetLabeling("N", 14, .02, 15, .98);
             var cluster = isotopicDistributionCalculator.GetAveraginePattern(1979);
-            //		isotopicDistributionCalculator.ResetToUnlabled();
-            var sb = new StringBuilder();
-            sb.Append(Environment.NewLine);
-            TestUtilities.IsotopicProfileDataToStringBuilder(sb, cluster);
+            //		isotopicDistributionCalculator.ResetToUnlabeled();
 
-            Console.Write(sb.ToString());
-
+            TestUtilities.DisplayIsotopicProfileData(cluster);
 
             var cluster2 = _tomIsotopicPatternGenerator.GetAvnPattern(1979, false);
 
 
             Console.WriteLine(cluster2.Peaklist.Count);
 
-
-            sb.Append(Environment.NewLine);
-            TestUtilities.IsotopicProfileDataToStringBuilder(sb, cluster2);
-
-            Console.WriteLine(sb.ToString());
+            TestUtilities.DisplayIsotopicProfileData(cluster2);
         }
-
-
 
         [Test]
         public void GetAveragineFormulaForGivenMass()
@@ -283,11 +251,8 @@ namespace DeconTools.UnitTesting2.TheoreticalIsotopicProfileTests
             Assert.AreEqual(elementC13MassC13IsotopeNumber, 13);
 
             stopWatch.Stop();
-            Console.WriteLine("This took " + stopWatch.Elapsed + "seconds to TestElements");
+            Console.WriteLine("This took " + stopWatch.Elapsed + " seconds to TestElements");
         }
-
-
-
 
         [Test]
         public void test01()
@@ -320,27 +285,23 @@ namespace DeconTools.UnitTesting2.TheoreticalIsotopicProfileTests
         {
 
             var mz = 1154.98841279744;    //mono MZ
-            var chargestate = 2;
+            var chargeState = 2;
             var fwhm = 0.0290254950523376;   //from second peak of isotopic profile
 
-            var monoMass = 1154.98841279744 * chargestate - chargestate * 1.00727649;
+            var monoMass = 1154.98841279744 * chargeState - chargeState * 1.00727649;
             var resolution = mz / fwhm;
 
-            var distcreator = new MercuryDistributionCreator();
-            distcreator.CreateDistribution(monoMass, chargestate, resolution);
+            var distCreator = new MercuryDistributionCreator();
+            distCreator.CreateDistribution(monoMass, chargeState, resolution);
 
-            distcreator.getIsotopicProfile();
-            Assert.AreEqual(5, distcreator.IsotopicProfile.GetNumOfIsotopesInProfile());
+            distCreator.getIsotopicProfile();
+            Assert.AreEqual(5, distCreator.IsotopicProfile.GetNumOfIsotopesInProfile());
 
-            var sb = new StringBuilder();
-            TestUtilities.IsotopicProfileDataToStringBuilder(sb, distcreator.IsotopicProfile);
+            TestUtilities.DisplayIsotopicProfileDataFloatX(distCreator.IsotopicProfile);
 
             var cluster = _tomIsotopicPatternGenerator.GetAvnPattern(monoMass, false);
-            sb.Append(Environment.NewLine);
-            TestUtilities.IsotopicProfileDataToStringBuilder(sb, cluster);
 
-            Console.Write(sb.ToString());
-
+            TestUtilities.DisplayIsotopicProfileData(cluster);
         }
 
         [Test]
@@ -350,18 +311,13 @@ namespace DeconTools.UnitTesting2.TheoreticalIsotopicProfileTests
             //Peptide testPeptide = new Peptide("P");
             //IsotopicProfile cluster = TomIsotopicPattern.GetIsotopePattern(testPeptide.GetEmpiricalFormulaIntArray(), TomIsotopicPattern.aafIsos);
             var cluster = _tomIsotopicPatternGenerator.GetIsotopePattern("C5H9N1O2", _tomIsotopicPatternGenerator.aafIsos);
-            var sb = new StringBuilder();
-            sb.Append(Environment.NewLine);
-            TestUtilities.IsotopicProfileDataToStringBuilder(sb, cluster);
 
-
+            TestUtilities.DisplayIsotopicProfileData(cluster);
 
             var testAgain = formBuild.ConvertToMolecularFormula("P");
             var cluster2 = isotopicDistributionCalculator.GetIsotopePattern(testAgain);
-            sb.Append(Environment.NewLine);
-            TestUtilities.IsotopicProfileDataToStringBuilder(sb, cluster2);
 
-            Console.Write(sb.ToString());
+            TestUtilities.DisplayIsotopicProfileData(cluster2);
         }
 
         [Test]

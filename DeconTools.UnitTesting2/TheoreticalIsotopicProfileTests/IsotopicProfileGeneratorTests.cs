@@ -30,15 +30,22 @@ namespace DeconTools.UnitTesting2.TheoreticalIsotopicProfileTests
 
             const double fwhm = 0.5;
 
+            // Note: the data returned by GetTheoreticalIsotopicProfileXYData()
+            // Lists each peak's m/z and intensity values sequentially
+            // If fwhm is relatively large (greater than 0.05) there will be overlap between the peaks
+
             var xyData = profile.GetTheoreticalIsotopicProfileXYData(fwhm);
             var xStart = xyData.Xvalues[0];
+
+            Console.WriteLine();
+            Console.WriteLine("{0,-10} {1,-10}", "m/z", "Intensity");
 
             for (var i = 0; i < xyData.Xvalues.Length; i += 5)
             {
                 if (xyData.Xvalues[i] > xStart + 2.5)
                     break;
 
-                Console.WriteLine("{0}\t{1}", xyData.Xvalues[i], xyData.Yvalues[i]);
+                Console.WriteLine("{0,-10:F4} {1,-10:F4}", xyData.Xvalues[i], xyData.Yvalues[i]);
             }
         }
 

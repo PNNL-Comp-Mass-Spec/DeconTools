@@ -206,12 +206,10 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
             double chromToleranceInPPM = 20;
             var targetMZ = 831.48;
 
-
             Run run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
             var peakImporter = new Backend.Data.PeakImporterFromText(FileRefs.PeakDataFiles.OrbitrapPeakFile_scans5500_6500);
             peakImporter.ImportPeaks(run.ResultCollection.MSPeakResultList);
-
 
             var chromGen = new ChromatogramGenerator();
             var filteredMSPeaks = chromGen.GeneratePeakChromatogram(run.ResultCollection.MSPeakResultList, run.MinLCScan, run.MaxLCScan, targetMZ, chromToleranceInPPM);

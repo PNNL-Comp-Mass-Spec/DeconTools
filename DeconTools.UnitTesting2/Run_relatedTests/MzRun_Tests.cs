@@ -231,7 +231,6 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             var info = run.GetScanInfo(ms2scan);
 
             Console.WriteLine(info);
-
         }
 
         [Test]
