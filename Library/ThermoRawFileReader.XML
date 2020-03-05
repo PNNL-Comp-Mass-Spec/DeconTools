@@ -1704,6 +1704,11 @@
             <returns></returns>
             <remarks></remarks>
         </member>
+        <member name="F:ThermoRawFileReader.clsScanInfo.IonInjectionTime">
+            <summary>
+            Ion Injection Time (in milliseconds)
+            </summary>
+        </member>
         <member name="P:ThermoRawFileReader.clsScanInfo.IsCentroided">
             <summary>
             Centroid scan flag
