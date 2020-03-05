@@ -139,15 +139,13 @@ namespace DeconTools.Backend.Core
         public abstract int GetMSLevelFromRawData(int scanNum);
 
         /// <summary>
-        /// Returns Scan information.
+        /// Returns a description of the given scan
         /// </summary>
         /// <param name="scanNum"></param>
         /// <returns></returns>
         public virtual string GetScanInfo(int scanNum)
         {
-            var sb = new StringBuilder();
-            sb.Append(scanNum.ToString());
-            return sb.ToString();
+            return scanNum.ToString();
         }
 
         /// <summary>

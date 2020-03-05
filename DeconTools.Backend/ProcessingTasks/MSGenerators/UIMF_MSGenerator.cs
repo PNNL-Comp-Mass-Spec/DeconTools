@@ -22,7 +22,6 @@ namespace DeconTools.Backend.ProcessingTasks
             MaxMZ = maxMZ;
         }
 
-
         public override double MinMZ
         {
             get => base.MinMZ;
@@ -38,7 +37,7 @@ namespace DeconTools.Backend.ProcessingTasks
 
         public override void Execute(ResultCollection resultList)
         {
-            var uimfRun = (UIMFRun) resultList.Run;
+            var uimfRun = (UIMFRun)resultList.Run;
 
             resultList.Run.XYData = GenerateMS(resultList.Run, resultList.Run.CurrentScanSet, uimfRun.CurrentIMSScanSet);
         }
@@ -51,7 +50,7 @@ namespace DeconTools.Backend.ProcessingTasks
 
             if (lcScanSet == null || imsScanSet == null) return null;
 
-            var xyData = uimfRun.GetMassSpectrum(lcScanSet, imsScanSet, MinMZ,MaxMZ);
+            var xyData = uimfRun.GetMassSpectrum(lcScanSet, imsScanSet, MinMZ, MaxMZ);
 
             if (xyData.Xvalues == null || xyData.Xvalues.Length == 0)
             {

@@ -52,7 +52,7 @@ namespace DeconTools.Backend.Runs
                 }
                 else
                 {
-                    // there was likely some problem... but will let the remaining code execute and see if ms filetype can
+                    // there was likely some problem... but will let the remaining code execute and see if ms file type can
                     // be determined from the extension.
                 }
             }
