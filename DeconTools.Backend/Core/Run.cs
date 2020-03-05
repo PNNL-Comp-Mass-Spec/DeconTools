@@ -186,7 +186,7 @@ namespace DeconTools.Backend.Core
         public virtual XYData GetMassSpectrum(ScanSet scanSet)
         {
             //set a wide mz range so we get everything
-            return GetMassSpectrum(scanSet, 0, 100000);
+            return GetMassSpectrum(scanSet, 0, 10000000);
         }
 
         public abstract XYData GetMassSpectrum(ScanSet scanSet, double minMZ, double maxMZ);
