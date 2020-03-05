@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.Utilities;
 using DeconTools.Utilities;
 using PNNLOmics.Data;
+using PRISM;
 using ThermoRawFileReader;
 
 
@@ -13,12 +15,34 @@ namespace DeconTools.Backend.Runs
     public sealed class XCaliburRun2 : Run
     {
 
-        private readonly MSFileReaderLib.MSFileReader_XRawfile _msFileReader;
+        private readonly XRawFileIO mRawFileReader;
 
         #region Constructors
-        public XCaliburRun2()
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="thermoRawFilePath"></param>
+        /// <param name="loadTuneInfo"></param>
+        public XCaliburRun2(string thermoRawFilePath, bool loadTuneInfo = false)
         {
-            _msFileReader = new MSFileReaderLib.MSFileReader_XRawfile();
+            Check.Require(File.Exists(thermoRawFilePath), "Run not initialized. File not found: " + thermoRawFilePath);
+
+            DatasetFileOrDirectoryPath = thermoRawFilePath;
+            var baseFilename = Path.GetFileName(DatasetFileOrDirectoryPath);
+            if (baseFilename == null)
+                throw new FileNotFoundException("Unable to determine the filename for " + thermoRawFilePath);
+
+            DatasetName = baseFilename.Substring(0, baseFilename.LastIndexOf('.'));
+            DatasetDirectoryPath = Path.GetDirectoryName(thermoRawFilePath);
+
+            var options = new ThermoReaderOptions
+            {
+                LoadMSMethodInfo = false,
+                LoadMSTuneInfo = loadTuneInfo
+            };
+
+            mRawFileReader = new XRawFileIO(DatasetFileOrDirectoryPath, options);
 
             IsDataThresholded = true;
             IsMsAbundanceReportedAsAverage = true;
@@ -28,31 +52,18 @@ namespace DeconTools.Backend.Runs
 
             ParentScanList = new Dictionary<int, int>();
 
-        }
-
-        public XCaliburRun2(string rawfilePath)
-            : this()
-        {
-            Check.Require(File.Exists(rawfilePath), "Run not initialized. File not found: " + rawfilePath);
-
-            DatasetFileOrDirectoryPath = rawfilePath;
-            var baseFilename = Path.GetFileName(DatasetFileOrDirectoryPath);
-            if (baseFilename == null)
-                throw new FileNotFoundException("Unable to determine the filename for " + rawfilePath);
-
-            DatasetName = baseFilename.Substring(0, baseFilename.LastIndexOf('.'));
-            DatasetDirectoryPath = Path.GetDirectoryName(rawfilePath);
-
-            _msFileReader.Open(DatasetFileOrDirectoryPath);
-            _msFileReader.SetCurrentController(0, 1);
-
             MinLCScan = 1;
             MaxLCScan = GetNumMSScans();
-
         }
 
-        public XCaliburRun2(string filename, int minScan, int maxScan)
-            : this(filename)
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="thermoRawFilePath"></param>
+        /// <param name="minScan"></param>
+        /// <param name="maxScan"></param>
+        public XCaliburRun2(string thermoRawFilePath, int minScan, int maxScan)
+            : this(thermoRawFilePath)
         {
             MinLCScan = minScan;
             MaxLCScan = maxScan;
@@ -64,59 +75,52 @@ namespace DeconTools.Backend.Runs
 
         public override bool IsDataCentroided(int scanNum)
         {
-            var isCentroided = 0;
-            _msFileReader.IsCentroidScanForScanNum(scanNum, ref isCentroided);
+            if (!TryGetScanInfo(scanNum, out var scanInfo))
+                return false;
 
-            return isCentroided != 0;
+            return scanInfo.IsCentroided;
         }
 
-        [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
         public override double GetIonInjectionTimeInMilliseconds(int scanNum)
         {
-            try
-            {
-                object value = null;
-                _msFileReader.GetTrailerExtraValueForScanNum(scanNum, "Ion Injection Time (ms):", ref value);
-
-                return Convert.ToDouble(value);
-            }
-            catch (AccessViolationException ex)
-            {
-                Console.WriteLine("Warning: Exception calling _msFileReader.GetTrailerExtraValueForScanNum for scan " + scanNum + ": " + ex.Message);
+            if (!TryGetScanInfo(scanNum, out var scanInfo))
                 return 0;
-            }
+
+            return scanInfo.IonInjectionTime;
         }
 
-        [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
         public override double GetMS2IsolationWidth(int scanNum)
         {
             try
             {
-                object value = null;
-                _msFileReader.GetTrailerExtraValueForScanNum(scanNum, "MS2 Isolation Width:", ref value);
+                if (!TryGetScanInfo(scanNum, out var scanInfo))
+                    return 0;
 
-                return Convert.ToDouble(value);
+                if (scanInfo.TryGetScanEvent("MS2 Isolation Width:", out var value, true))
+                {
+                    return Convert.ToDouble(value);
+                }
+
+                return 0;
             }
-            catch (AccessViolationException ex)
+            catch (Exception ex)
             {
-                Console.WriteLine("Warning: Exception calling _msFileReader.GetTrailerExtraValueForScanNum for scan " + scanNum + ": " + ex.Message);
+                ConsoleMsgUtils.ShowWarning("Warning: Exception looking up the value for \"MS2 Isolation Width\" for scan " + scanNum + ": " + ex.Message);
                 return 0;
             }
         }
 
         public override int GetNumMSScans()
         {
-            var numSpectra = 0;
-
-            _msFileReader.GetNumSpectra(ref numSpectra);
-            return numSpectra;
+            return mRawFileReader.GetNumScans();
         }
 
         public override double GetTime(int scanNum)
         {
-            double rtForAGivenScan = 0;
-            _msFileReader.RTFromScanNum(scanNum, ref rtForAGivenScan);
-            return rtForAGivenScan;
+            if (!TryGetScanInfo(scanNum, out var scanInfo))
+                return 0;
+
+            return scanInfo.RetentionTime;
         }
 
         public override int GetMinPossibleLCScanNum()
@@ -126,87 +130,54 @@ namespace DeconTools.Backend.Runs
 
         public override int GetMaxPossibleLCScanNum()
         {
-            var maxPossibleScanIndex = GetNumMSScans();           // RAW files are 1 based, so we don't subtract 1 here.
-            if (maxPossibleScanIndex < 1) maxPossibleScanIndex = 1;
-
-            return maxPossibleScanIndex;
+            // Note: Thermo Raw file scans are 1 based
+            var scanNumberMax = GetNumMSScans();
+            return Math.Max(1, scanNumberMax);
         }
 
+        /// <summary>
+        /// Get the MS Level
+        /// 1 means MS
+        /// 2 means MS/MS
+        /// 3 means MS^3
+        /// </summary>
+        /// <param name="scanNum"></param>
+        /// <returns></returns>
         public override int GetMSLevelFromRawData(int scanNum)
         {
-            // Parse the scan's filter string to determine the MS Level (typically MS1, MS2, or MS3)
+            if (!TryGetScanInfo(scanNum, out var scanInfo))
+                return 0;
 
-            // Example of MS1:
-            // FTMS + p NSI Full ms [400.00-2000.00]
-
-            // Example of MS2:
-            // ITMS + c NSI d Full ms2 408.25@cid35.00 [100.00-420.00]
-
-            string filter = null;
-            _msFileReader.GetFilterForScanNum(scanNum, ref filter);
-
-            if (string.IsNullOrWhiteSpace(filter))
-            {
-                return 1;
-            }
-
-            if (XRawFileIO.ExtractMSLevel(filter, out var msLevel, out _))
-            {
-                return msLevel;
-            }
-
-            return 1;
-
-        }
-
-        public double GetCollisionEnergyInfoFromInstrumentInfo(int scanNum)
-        {
-            return 0;
+            return scanInfo.MSLevel;
         }
 
         public override double GetTICFromInstrumentInfo(int scanNum)
         {
-            int pnNumPackets = 0, pnNumChannels = 0, pbUniformTime = 0;
-            double pdStartTime = 0, pdLowMass = 0, pdHighMass = 0, pdTIC = 0, pdBasePeakMass = 0, pdBasePeakIntensity = 0, pdFrequency = 0;
-            _msFileReader.GetScanHeaderInfoForScanNum(scanNum, ref pnNumPackets, ref pdStartTime, ref pdLowMass, ref pdHighMass, ref pdTIC,
-                                                      ref pdBasePeakMass, ref pdBasePeakIntensity, ref pnNumChannels, ref pbUniformTime,
-                                                      ref pdFrequency);
+            if (!TryGetScanInfo(scanNum, out var scanInfo))
+                return 0;
 
-            return pdTIC;
+            return scanInfo.TotalIonCurrent;
         }
 
-        [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
+        /// <summary>
+        /// Get the names of the items tracked by .FileInfo.TuneMethods
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks>Note that tune methods are only loaded if loadTuneInfo = true when instantiating this class</remarks>
         public string GetTuneData()
         {
-            try
-            {
-
-                // ReSharper disable IdentifierTypo
-                object pvarLabels = null, pvarValues = null;
-                // ReSharper restore IdentifierTypo
-
-                var pnArraySize = 0;
-                _msFileReader.GetTuneData(0, ref pvarLabels, ref pvarValues, ref pnArraySize);
-
-                var labels = (string[])pvarLabels;
-                var values = (string[])pvarValues;
-
-                for (var index = 0; index < labels.Length; index++)
-                {
-                    var label = labels[index];
-                    var value = values[index];
-
-                    Console.WriteLine(label + "\t" + value);
-                }
-
-                return labels.ToString();
-            }
-            catch (AccessViolationException ex)
-            {
-                Console.WriteLine("Warning: Exception calling _msFileReader.GetTuneData: " + ex.Message);
+            if (mRawFileReader.FileInfo.TuneMethods.Count == 0)
                 return string.Empty;
+
+            var tuneMethod = mRawFileReader.FileInfo.TuneMethods.First();
+            var tuneNames = new List<string>();
+
+            foreach (var item in tuneMethod.Settings)
+            {
+                tuneNames.Add(item.Name);
             }
 
+            return string.Join("\n", tuneNames);
         }
 
         public override PrecursorInfo GetPrecursorInfo(int scanNum)
@@ -279,19 +250,21 @@ namespace DeconTools.Backend.Runs
             return precursor;
         }
 
-        [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
         public override XYData GetMassSpectrum(ScanSet scanSet, double minMZ, double maxMZ)
         {
-            // Note that we're using function attribute HandleProcessCorruptedStateExceptions
-            // to force .NET to properly catch critical errors thrown by the XRawFile DLL
-
             Check.Require(scanSet != null, "Can't get mass spectrum; inputted set of scans is null");
             if (scanSet == null)
                 return null;
 
             Check.Require(scanSet.IndexValues.Count > 0, "Can't get mass spectrum; no scan numbers inputted");
 
-            double[,] vals = null;
+            if (Math.Abs(minMZ) < float.Epsilon && Math.Abs(maxMZ) < float.Epsilon)
+            {
+                maxMZ = 10000000;
+            }
+
+            double[,] massIntensityPairs;
+
             var spectraAreSummed = scanSet.IndexValues.Count > 1;
             var scanNumFirst = scanSet.IndexValues[0];
             var scanNumLast = scanSet.IndexValues[scanSet.IndexValues.Count - 1];
@@ -299,7 +272,7 @@ namespace DeconTools.Backend.Runs
             string scanDescription;
             if (spectraAreSummed)
             {
-                scanDescription = "scan " + scanSet.PrimaryScanNumber + "( summing scans " + scanNumFirst + " to " + scanNumLast + ")";
+                scanDescription = "scan " + scanSet.PrimaryScanNumber + " ( summing scans " + scanNumFirst + " to " + scanNumLast + ")";
             }
             else
             {
@@ -308,72 +281,15 @@ namespace DeconTools.Backend.Runs
 
             try
             {
-
-
                 if (spectraAreSummed)
                 {
-                    var backgroundScan1First = 0;
-                    var backgroundScan1Last = 0;
-                    var backgroundScan2First = 0;
-                    var backgroundScan2Last = 0;
-                    const string filter = "p full ms"; //only sum MS1 data
-
-                    const int intensityCutoffType = 0;
-                    const int intensityCutoffValue = 0;
-                    const int maxNumberOfPeaks = 0;
-                    const int centroidResult = 0;
-                    double centVal = 0;
-                    object massList = null;
-                    object peakFlags = null;
-                    var arraySize = 0;
-
-                    _msFileReader.GetAverageMassList(
-                        ref scanNumFirst,
-                        ref scanNumLast,
-                        ref backgroundScan1First,
-                        ref backgroundScan1Last,
-                        ref backgroundScan2First,
-                        ref backgroundScan2Last,
-                        filter,
-                        intensityCutoffType,
-                        intensityCutoffValue,
-                        maxNumberOfPeaks,
-                        centroidResult,
-                        ref centVal,
-                        ref massList,
-                        ref peakFlags,
-                        ref arraySize);
-
-                    vals = (double[,])massList;
+                    // Note that GetScanDataSumScans uses the scan filter of the first scan to assure that similar scans are summed
+                    mRawFileReader.GetScanDataSumScans(scanNumFirst, scanNumLast, out massIntensityPairs, 0, false);
                 }
                 else
                 {
                     var scanNum = scanSet.PrimaryScanNumber;
-
-                    const int intensityCutoffType = 0;
-                    const int intensityCutoffValue = 0;
-                    const int maxNumberOfPeaks = 0;
-                    const int centroidResult = 0;
-
-                    double centVal = 0;
-                    object massList = null;
-                    object peakFlags = null;
-                    var arraySize = 0;
-
-                    _msFileReader.GetMassListFromScanNum(
-                        ref scanNum,
-                        null,
-                        intensityCutoffType,
-                        intensityCutoffValue,
-                        maxNumberOfPeaks,
-                        centroidResult,
-                        ref centVal,
-                        ref massList,
-                        ref peakFlags,
-                        ref arraySize);
-
-                    vals = (double[,])massList;
-
+                    mRawFileReader.GetScanData2D(scanNum, out massIntensityPairs);
                 }
             }
             catch (AccessViolationException)
@@ -382,17 +298,16 @@ namespace DeconTools.Backend.Runs
                                       "; possibly a corrupt .Raw file";
                 Console.WriteLine(errorMessage);
                 Logger.Instance.AddEntry(errorMessage);
-
+                return new XYData();
             }
             catch (Exception ex)
             {
                 Logger.Instance.AddEntry("XCaliburRun2.GetMassSpectrum: Unable to load data for " + scanDescription +
                                          ": " + ex.Message + "; possibly a corrupt .Raw file");
+                return new XYData();
             }
 
-            if (vals == null) return null;
-
-            var length = vals.GetLength(1);
+            var dataPointCount = massIntensityPairs.GetLength(1);
 
             var xVals = new List<double>();
             var yVals = new List<double>();
@@ -403,15 +318,16 @@ namespace DeconTools.Backend.Runs
             // Therefore, we must validate that the data is truly sorted, and if we find a discrepancy, sort it after populating xyData.Xvalues and xyData.Yvalues
             var sortRequired = false;
 
-            for (var i = 0; i < length; i++)
+            for (var i = 0; i < dataPointCount; i++)
             {
-                var xValue = vals[0, i];
+                var xValue = massIntensityPairs[0, i];
 
-                if (xValue < minMZ || xValue > maxMZ) continue;
+                if (xValue < minMZ || xValue > maxMZ)
+                    continue;
 
-                var yValue = vals[1, i];
+                var yValue = massIntensityPairs[1, i];
 
-                if (i > 0 && xValue < vals[0, i - 1])
+                if (i > 0 && xValue < massIntensityPairs[0, i - 1])
                 {
                     // Points are out of order; this rarely occurs but it is possible and has been observed
                     sortRequired = true;
@@ -428,16 +344,24 @@ namespace DeconTools.Backend.Runs
             };
 
             if (sortRequired)
+            {
                 Array.Sort(xyData.Xvalues, xyData.Yvalues);
+            }
 
             return xyData;
         }
 
+        /// <summary>
+        /// Get a description of the given scan
+        /// </summary>
+        /// <param name="scanNum"></param>
+        /// <returns>The filter text for the given scan</returns>
         public override string GetScanInfo(int scanNum)
         {
-            string filter = null;
-            _msFileReader.GetFilterForScanNum(scanNum, ref filter);
-            return filter;
+            if (!TryGetScanInfo(scanNum, out var scanInfo))
+                return "Invalid scan number: " + scanNum;
+
+            return scanInfo.FilterText;
         }
 
         public override int GetParentScan(int scanLC)
@@ -456,6 +380,7 @@ namespace DeconTools.Backend.Runs
                     }
                     testScan--;
                 }
+
                 //we got to the MinScan and never found the parent scan
                 return -1;
             }
@@ -463,12 +388,11 @@ namespace DeconTools.Backend.Runs
             return ParentScanList[scanLC];
         }
 
-        [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
         public override void Close()
         {
             try
             {
-                _msFileReader.Close();
+                mRawFileReader.CloseRawFile();
             }
             catch (AccessViolationException)
             {
@@ -477,5 +401,24 @@ namespace DeconTools.Backend.Runs
 
             base.Close();
         }
+
+        /// <summary>
+        /// Gets the clsScanInfo instance for the given scan
+        /// </summary>
+        /// <param name="scanNumber"></param>
+        /// <param name="scanInfo"></param>
+        /// <returns>Bool if successful, false if the scan number is out of range</returns>
+        private bool TryGetScanInfo(int scanNumber, out clsScanInfo scanInfo)
+        {
+            if (scanNumber < mRawFileReader.FileInfo.ScanStart || scanNumber > mRawFileReader.FileInfo.ScanEnd)
+            {
+                scanInfo = new clsScanInfo(0);
+                return false;
+            }
+
+            var success = mRawFileReader.GetScanInfo(scanNumber, out scanInfo);
+            return success;
+        }
+
     }
 }
