@@ -6,7 +6,6 @@ using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend.ProcessingTasks.PeakDetectors;
 using DeconTools.Backend.Runs;
 using DeconTools.UnitTesting2;
-using MSFileReaderLib;
 using NUnit.Framework;
 
 namespace DeconTools.Testing.ProblemCases
@@ -18,7 +17,7 @@ namespace DeconTools.Testing.ProblemCases
     public class JoeBrownTesting
     {
 
-       
+
         [Test]
         public void Test1()
         {
@@ -32,7 +31,7 @@ namespace DeconTools.Testing.ProblemCases
             var msGen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
             int testScan = 2448;
-            
+
             run.CurrentScanSet = new ScanSet(testScan);
 
             DeconToolsPeakDetectorV2 ms1PeakDetector = new DeconToolsPeakDetectorV2();
@@ -53,7 +52,7 @@ namespace DeconTools.Testing.ProblemCases
 
             ms2PeakDetectorForCentroidedData = new DeconToolsPeakDetectorV2(0, 0, Globals.PeakFitType.QUADRATIC, true);
             ms2PeakDetectorForCentroidedData.RawDataType = Globals.RawDataType.Centroided;
-            
+
             run.ScanSetCollection.Create(run, testScan,testScan , 1, 1, true);
 
             Console.WriteLine("scan\tz\tinfo");
@@ -96,8 +95,8 @@ namespace DeconTools.Testing.ProblemCases
 
 
 
-        private MSFileReaderLib.IXRawfile5 _msfileReader;
-      
+        private ThermoRawFileReader _thermoFileReader;
+
         [Test]
         public void ReadCollisionEnergyValsTest1()
         {
@@ -107,29 +106,28 @@ namespace DeconTools.Testing.ProblemCases
             //testFile = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
 
             int testScan = 2519;
-            _msfileReader = (IXRawfile5)new MSFileReaderLib.MSFileReader_XRawfile();
-            _msfileReader.Open(testFile);
-            _msfileReader.SetCurrentController(0, 1);
+            _thermoFileReader = new ThermoRawFileReader.XRawFileIO(testFile);
+
             string pbstrFilter = null;
             double pdRT = 0;
-            
-            _msfileReader.RTFromScanNum(testScan, ref pdRT);
+
+            _thermoFileReader.RTFromScanNum(testScan, ref pdRT);
             Console.WriteLine("RT = " + pdRT);
 
             object value = null;
-            _msfileReader.GetTrailerExtraValueForScanNum(testScan, "Ion Injection Time (ms):", ref value);
+            _thermoFileReader.GetTrailerExtraValueForScanNum(testScan, "Ion Injection Time (ms):", ref value);
             Console.WriteLine("Ion injection time= " + Convert.ToDouble(value));
-            
+
             double pdCollisionEnergy = 0;
-            _msfileReader.GetCollisionEnergyForScanNum(testScan, 1, ref pdCollisionEnergy);
+            _thermoFileReader.GetCollisionEnergyForScanNum(testScan, 1, ref pdCollisionEnergy);
             Console.WriteLine("Collision energy ="  +  Convert.ToDouble(pdCollisionEnergy));
 
             int pnNumInstMethods = 0;
-            _msfileReader.GetNumInstMethods(ref pnNumInstMethods);
+            _thermoFileReader.GetNumInstMethods(ref pnNumInstMethods);
             Console.WriteLine("numMethods= " + Convert.ToDouble(pnNumInstMethods));
 
             string pbstrInstMethod = null;
-            _msfileReader.GetInstMethod(0, ref pbstrInstMethod);
+            _thermoFileReader.GetInstMethod(0, ref pbstrInstMethod);
             Console.WriteLine(pbstrInstMethod);
 
         }
