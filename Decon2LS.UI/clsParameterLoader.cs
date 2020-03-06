@@ -1,5 +1,5 @@
 using System;
-using System.Xml ; 
+using System.Xml ;
 using System.IO ;
 
 namespace Decon2LS
@@ -9,10 +9,10 @@ namespace Decon2LS
     /// </summary>
     public class clsParameterLoader
     {
-        DeconToolsV2.Peaks.clsPeakProcessorParameters mobjPeakParameters = new DeconToolsV2.Peaks.clsPeakProcessorParameters() ; 
-        DeconToolsV2.HornTransform.clsHornTransformParameters mobjTransformParameters = new DeconToolsV2.HornTransform.clsHornTransformParameters() ; 
-        DeconToolsV2.Readers.clsRawDataPreprocessOptions mobjFTICRPreProcessOptions = new DeconToolsV2.Readers.clsRawDataPreprocessOptions() ; 
-        DeconToolsV2.DTAGeneration.clsDTAGenerationParameters mobjDTAParameters = new DeconToolsV2.DTAGeneration.clsDTAGenerationParameters()  ; 
+        DeconToolsV2.Peaks.clsPeakProcessorParameters mobjPeakParameters = new DeconToolsV2.Peaks.clsPeakProcessorParameters() ;
+        DeconToolsV2.HornTransform.clsHornTransformParameters mobjTransformParameters = new DeconToolsV2.HornTransform.clsHornTransformParameters() ;
+        DeconToolsV2.Readers.clsRawDataPreprocessOptions mobjFTICRPreProcessOptions = new DeconToolsV2.Readers.clsRawDataPreprocessOptions() ;
+        DeconToolsV2.DTAGeneration.clsDTAGenerationParameters mobjDTAParameters = new DeconToolsV2.DTAGeneration.clsDTAGenerationParameters()  ;
 
         public clsParameterLoader()
         {
@@ -25,11 +25,11 @@ namespace Decon2LS
         {
             get
             {
-                return mobjPeakParameters ; 
+                return mobjPeakParameters ;
             }
             set
             {
-                mobjPeakParameters = value ; 
+                mobjPeakParameters = value ;
             }
         }
 
@@ -37,11 +37,11 @@ namespace Decon2LS
         {
             get
             {
-                return mobjTransformParameters ; 
+                return mobjTransformParameters ;
             }
             set
             {
-                mobjTransformParameters = value ; 
+                mobjTransformParameters = value ;
             }
         }
 
@@ -49,23 +49,23 @@ namespace Decon2LS
         {
             get
             {
-                return mobjFTICRPreProcessOptions ; 
+                return mobjFTICRPreProcessOptions ;
             }
             set
             {
-                mobjFTICRPreProcessOptions = value ; 
-            } 
+                mobjFTICRPreProcessOptions = value ;
+            }
         }
 
         public DeconToolsV2.DTAGeneration.clsDTAGenerationParameters DTAParameters
         {
             get
             {
-                return mobjDTAParameters ; 
+                return mobjDTAParameters ;
             }
             set
             {
-                mobjDTAParameters = value ; 
+                mobjDTAParameters = value ;
             }
         }
 
@@ -82,7 +82,7 @@ namespace Decon2LS
                     case XmlNodeType.Element:
                         if (rdr.Name == "PeakParameters")
                         {
-                            mobjPeakParameters.LoadV1PeakParameters(rdr) ; 
+                            mobjPeakParameters.LoadV1PeakParameters(rdr) ;
                         }
                         else if (rdr.Name == "HornTransformParameters")
                         {
@@ -90,26 +90,26 @@ namespace Decon2LS
                         }
                         else if (rdr.Name == "Miscellaneous")
                         {
-                            mobjTransformParameters.LoadV1MiscellaneousParameters(rdr) ; 
+                            mobjTransformParameters.LoadV1MiscellaneousParameters(rdr) ;
                         }
                         else if (rdr.Name == "FTICRRawPreProcessingOptions")
                         {
-                            mobjFTICRPreProcessOptions.LoadV1FTICRPreProcessOptions(rdr) ; 
+                            mobjFTICRPreProcessOptions.LoadV1FTICRPreProcessOptions(rdr) ;
                         }
                         else if (rdr.Name == "ElementIsotopes")
                         {
-                            mobjTransformParameters.ElementIsotopeComposition.LoadV1ElementIsotopes(rdr) ; 
+                            mobjTransformParameters.ElementIsotopeComposition.LoadV1ElementIsotopes(rdr) ;
                         }
-                        else if (rdr.Name == "DTAGenerationParameters") 
+                        else if (rdr.Name == "DTAGenerationParameters")
                         {
-                            mobjDTAParameters.LoadV1DTAGenerationParameters(rdr) ; 
+                            mobjDTAParameters.LoadV1DTAGenerationParameters(rdr) ;
                         }
                         break;
                     default:
-                        break ; 
+                        break ;
                 }
             }
-            rdr.Close() ; 
+            rdr.Close() ;
         }
 
 
@@ -122,37 +122,37 @@ namespace Decon2LS
                 var xwriter = new XmlTextWriter(fileName,System.Text.Encoding.UTF8);
                 xwriter.Formatting = Formatting.None;
                 xwriter.IndentChar = '\t' ;
-                xwriter.Indentation = 1 ; 
+                xwriter.Indentation = 1 ;
 
-                //Write the beginning of the document including the 
-                //document declaration. Standalone is true. 
+                //Write the beginning of the document including the
+                //document declaration. Standalone is true.
 
                 xwriter.WriteStartDocument(true);
 
-                //Write the beginning of the "data" element. This is 
-                //the opening tag to our data 
+                //Write the beginning of the "data" element. This is
+                //the opening tag to our data
 
-                xwriter.WriteWhitespace("\n") ; 
+                xwriter.WriteWhitespace("\n") ;
                 xwriter.WriteStartElement("parameters");
-                xwriter.WriteWhitespace("\n\t") ; 
-                xwriter.WriteElementString("version", "1.0") ; 
-                xwriter.WriteWhitespace("\n\t") ; 
+                xwriter.WriteWhitespace("\n\t") ;
+                xwriter.WriteElementString("version", "1.0") ;
+                xwriter.WriteWhitespace("\n\t") ;
 
-                mobjPeakParameters.SaveV1PeakParameters(xwriter) ; 
-                mobjDTAParameters.SaveV1DTAGenerationParameters(xwriter) ; 
-                mobjTransformParameters.SaveV1HornTransformParameters(xwriter) ; 
-                mobjTransformParameters.SaveV1MiscellaneousParameters(xwriter) ; 
+                mobjPeakParameters.SaveV1PeakParameters(xwriter) ;
+                mobjDTAParameters.SaveV1DTAGenerationParameters(xwriter) ;
+                mobjTransformParameters.SaveV1HornTransformParameters(xwriter) ;
+                mobjTransformParameters.SaveV1MiscellaneousParameters(xwriter) ;
                 if (mobjFTICRPreProcessOptions.IsToBePreprocessed)
-                    mobjFTICRPreProcessOptions.SaveV1FTICRPreProcessOptions(xwriter) ; 
+                    mobjFTICRPreProcessOptions.SaveV1FTICRPreProcessOptions(xwriter) ;
 
                 // And the isotope abundances.
-                mobjTransformParameters.ElementIsotopeComposition.SaveV1ElementIsotopes(xwriter) ; 
+                mobjTransformParameters.ElementIsotopeComposition.SaveV1ElementIsotopes(xwriter) ;
 
                 xwriter.WriteEndElement();
-                
+
                 //End the document
                 xwriter.WriteEndDocument();
-                xwriter.WriteWhitespace("\n") ; 
+                xwriter.WriteWhitespace("\n") ;
 
                 //Flush the xml document to the underlying stream and
                 //close the underlying stream. The data will not be

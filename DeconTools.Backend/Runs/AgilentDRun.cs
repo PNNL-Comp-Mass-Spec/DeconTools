@@ -169,13 +169,13 @@ namespace DeconTools.Backend.Runs
                 //adjust scan number if needed
                 precursor.PrecursorScan = scanNum;
 
-                // TODO: Only CID possible in Aglent files?
+                // TODO: Only CID possible in Agilent files?
                 precursor.FragmentationType = FragmentionType.CID;
             }
             else if (precursorMassCount > 1)
             {
 
-                throw new NotImplementedException("Strange case where more than one precursor is used to generate one spectra");
+                throw new NotImplementedException("Strange case where more than one precursor is used to generate one spectrum");
 
             }
             else

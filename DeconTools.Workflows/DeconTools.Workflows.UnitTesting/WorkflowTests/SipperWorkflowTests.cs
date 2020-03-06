@@ -222,7 +222,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             {
                 var result = (SipperLcmsTargetedResult)targetedResultBase.Value;
 
-                
+
 
                 Console.WriteLine(result + "\t" +   result.Target.IsotopicProfile.Peaklist.Count);
             }

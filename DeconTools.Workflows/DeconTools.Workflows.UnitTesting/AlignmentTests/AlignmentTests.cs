@@ -93,12 +93,8 @@ namespace DeconTools.Workflows.UnitTesting
             float testScan = 6005;
             var testNET1 = run.NetAlignmentInfo.GetNETValueForScan((int) testScan);
 
-           
-            //note - this is Multialign's 
+            //note - this is Multialign's
             Assert.AreEqual(0.3253423m, (decimal)testNET1);
-
-
-
         }
 
         [Test]
@@ -151,7 +147,7 @@ namespace DeconTools.Workflows.UnitTesting
             var testScan = 6005;
             var testNET1 = run.NetAlignmentInfo.GetNETValueForScan(testScan);
 
-            
+
            // float testNET1 = run.AlignmentInfo.GetNETFromTime(testScan);
             Assert.IsTrue(run.NETIsAligned);
             Assert.AreEqual(0.3252918m, (decimal)Math.Round(testNET1, 7));
@@ -220,7 +216,7 @@ namespace DeconTools.Workflows.UnitTesting
 
             var importer = new MassAlignmentInfoFromTextImporter(mzAlignmentInfoFilename);
             var massAlignmentData = importer.Import();
-            
+
             var massAlignmentInfo = new MassAlignmentInfoLcmsWarp();
             massAlignmentInfo.SetMassAlignmentData(massAlignmentData);
             run.MassAlignmentInfo = massAlignmentInfo;
@@ -251,7 +247,7 @@ namespace DeconTools.Workflows.UnitTesting
 
             var rf = new RunFactory();
             var run = rf.CreateRun(DeconTools.UnitTesting2.FileRefs.RawDataMSFiles.OrbitrapStdFile1);
-            
+
             var netAlignmentInfoImporter = new NETAlignmentFromTextImporter(NETAlignmentInfoFilename);
             var scanNETdata = netAlignmentInfoImporter.Import();
             run.NetAlignmentInfo.SetScanToNETAlignmentData(scanNETdata);
@@ -267,7 +263,7 @@ namespace DeconTools.Workflows.UnitTesting
             //foreach (var item in scanNETdata)
             //{
             //    Console.WriteLine(item);
-                
+
             //}
 
             //Console.WriteLine();
@@ -305,7 +301,7 @@ namespace DeconTools.Workflows.UnitTesting
             var ppmshift = run.MassAlignmentInfo.GetPpmShift(theorMZ, (int) testScan);
             Console.WriteLine("ppm shift = " + ppmshift);
 
-           
+
             var observedMZ = 698.8721;
             var alignedTargetMZ = run.GetTargetMZAligned(theorMZ);
 
@@ -313,7 +309,7 @@ namespace DeconTools.Workflows.UnitTesting
 
 
             Console.WriteLine("theor m/z of monoisotopic peak = " + theorMZ.ToString("0.0000"));
-         
+
             Console.WriteLine("observed m/z of monoisotopic peak = " + observedMZ.ToString("0.0000"));
 
             Console.WriteLine("aligned theor m/z = " + alignedTargetMZ.ToString("0.00000"));
@@ -337,8 +333,8 @@ namespace DeconTools.Workflows.UnitTesting
             var peaksDataFile = @"D:\Data\Orbitrap\QC_Shew_08_04-pt1-3_15Apr09_Sphinx_09-02-16_peaks.txt";
 
             var run =  DeconTools.Backend.Utilities.RunUtilities.CreateAndLoadPeaks(rawDataFile, peaksDataFile);
-          
-          
+
+
             var importer = new MassAlignmentInfoFromTextImporter(mzAlignmentInfoFilename);
             var massAlignmentData = importer.Import();
 
@@ -372,7 +368,7 @@ namespace DeconTools.Workflows.UnitTesting
 
             var netDiff = result.Target.NormalizedElutionTime - result.GetNET();
             Console.WriteLine("NET diff before alignment = " + netDiff);
-            
+
             var expectedNETDiff = 0.057m;
             Assert.AreEqual(expectedNETDiff, (decimal)Math.Round(netDiff, 3));
 
@@ -397,11 +393,11 @@ namespace DeconTools.Workflows.UnitTesting
 
             Assert.IsTrue(result.ChromPeakSelected != null);
             Assert.AreEqual(5395, (int)result.ChromPeakSelected.XValue);
-            
+
             var expectedNETDiffMaximum = 0.01;
             Assert.IsTrue(netDiff < expectedNETDiffMaximum);
 
-            
+
         }
 
         [Test]
@@ -472,7 +468,7 @@ namespace DeconTools.Workflows.UnitTesting
 
 
             Assert.IsTrue(result.ChromPeakSelected != null);
-            
+
             var expectedNETDiffMaximum = 0.01;
             Assert.IsTrue(netDiff < expectedNETDiffMaximum);
 
@@ -505,7 +501,7 @@ namespace DeconTools.Workflows.UnitTesting
             Console.WriteLine("ppmDiff= " + ppmDiff);
 
             Assert.AreEqual(-3.6, (decimal)Math.Round(ppmDiff, 1));
-            
+
         }
 
 
@@ -522,7 +518,7 @@ namespace DeconTools.Workflows.UnitTesting
             var loader = new ViperMassCalibrationLoader(viperMassAlignmentFile);
 
             /*
-             * From unit test: targetedWorkflow_alignUsingDataFromFiles     
+             * From unit test: targetedWorkflow_alignUsingDataFromFiles
              *      TargetID = 	24702
                     ChargeState = 	3
                     theor monomass= 	2920.5319802
@@ -536,9 +532,9 @@ namespace DeconTools.Workflows.UnitTesting
                     Database NET= 0.4197696
                     Result NET= 0.42916464805603
                     Result NET Error= -0.00934833288192749
-                    NumChromPeaksWithinTol= 3   
-             * 
-             * 
+                    NumChromPeaksWithinTol= 3
+             *
+             *
              */
 
 
@@ -552,7 +548,7 @@ namespace DeconTools.Workflows.UnitTesting
             var testMZ = 974.504343924692;
             var alignedMZ =  run.GetAlignedMZ(testMZ);
             var ppmDiff = (testMZ - alignedMZ)/testMZ*1e6;
-            
+
             Console.WriteLine("input m/z= " + testMZ);
             Console.WriteLine("aligned m/z= "+ alignedMZ);
             Console.WriteLine("ppmDiff= " + ppmDiff);

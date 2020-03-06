@@ -402,10 +402,7 @@ namespace DeconTools.Workflows.Backend.Core
 
                 ReportGeneralProgress(ex.Message);
                 ReportGeneralProgress(ex.StackTrace);
-
-
             }
-
         }
 
         protected void SetupAlignment()
@@ -573,13 +570,11 @@ namespace DeconTools.Workflows.Backend.Core
                 stopwatch.Start();
 #endif
 
-
                 Run.CurrentMassTag = massTag;
                 try
                 {
                     TargetedWorkflow.Execute();
                     ResultRepository.AddResult(TargetedWorkflow.Result);
-
                 }
                 catch (Exception ex)
                 {
@@ -607,18 +602,10 @@ namespace DeconTools.Workflows.Backend.Core
                 }
 
                 ReportProcessingProgress(progressString, mtCounter);
-
-
             }
 
             ReportGeneralProgress("---- PROCESSING COMPLETE ---------------", 100);
-
-
-
-
-
         }
-
 
         protected virtual void ExportData()
         {
@@ -746,7 +733,7 @@ namespace DeconTools.Workflows.Backend.Core
         {
             var logDirectory = new DirectoryInfo(logDirectoryPath);
 
-            if (!logDirectory.Exists) 
+            if (!logDirectory.Exists)
                 logDirectory.Create();
 
             // The timestamp for the log file name is today's date, plus the number of milliseconds since midnight

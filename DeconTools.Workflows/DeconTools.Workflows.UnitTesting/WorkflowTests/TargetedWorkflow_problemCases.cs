@@ -52,7 +52,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             workflow.Execute();
 
-            
+
 
             workflow.Result.DisplayToConsole();
 
@@ -111,7 +111,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         [Test]
         public void issue0705_completelyFailedAlignment_multialignErrors()
         {
-     
+
 
             var executorParameterFile = @"\\protoapps\UserData\Slysz\Data\Redmine_Issues\Issue0705_failedAlignment\workflowExecutorParameters.xml";
             var datasetPath = @"\\proto-3\LTQ_Orb_3\2010_1\QC_Shew_10_01-pt5-4_12Feb10_Doc_09-12-26\QC_Shew_10_01-pt5-4_12Feb10_Doc_09-12-26.raw";

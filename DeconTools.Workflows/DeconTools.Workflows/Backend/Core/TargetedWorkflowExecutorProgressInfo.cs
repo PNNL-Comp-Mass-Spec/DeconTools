@@ -7,7 +7,7 @@ namespace DeconTools.Workflows.Backend.Core
     /// <summary>
     /// Contains information that is usually passed along to user interface
     /// via a background worker. This class represents a light class
-    /// so that heavy objects (eg Workflow) are not passed. 
+    /// so that heavy objects (eg Workflow) are not passed.
     /// </summary>
     public class TargetedWorkflowExecutorProgressInfo
     {
@@ -15,7 +15,7 @@ namespace DeconTools.Workflows.Backend.Core
         public string ProgressInfoString { get; set; }
 
         public DateTime Time { get; set; }
-     
+
         public TargetedResultBase Result { get; set; }
 
         public  XYData MassSpectrumXYData { get; set; }

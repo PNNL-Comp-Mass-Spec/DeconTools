@@ -7,15 +7,17 @@ namespace DeconTools.Workflows.Backend.Results
     {
 
         #region Constructors
+
         public TargetedResultRepository()
         {
             Results = new List<TargetedResultDTO>();
         }
+
         #endregion
 
         #region Properties
-        public List<TargetedResultDTO> Results { get; set; }
 
+        public List<TargetedResultDTO> Results { get; set; }
 
         #endregion
 
@@ -24,8 +26,6 @@ namespace DeconTools.Workflows.Backend.Results
             var result = ResultDTOFactory.CreateTargetedResult(resultToConvert);
             Results.Add(result);
         }
-
-
 
         public void AddResults(List<TargetedResultDTO> featuresToAlign)
         {
@@ -41,13 +41,10 @@ namespace DeconTools.Workflows.Backend.Results
             }
         }
 
-
         public void Clear()
         {
             Results.Clear();
         }
-
-
 
         public bool HasResults => (Results != null && Results.Count > 0);
     }
