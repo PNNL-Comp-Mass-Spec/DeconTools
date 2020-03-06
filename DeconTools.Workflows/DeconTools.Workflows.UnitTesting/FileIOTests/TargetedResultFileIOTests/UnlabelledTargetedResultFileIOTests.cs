@@ -13,7 +13,7 @@ using NUnit.Framework;
 namespace DeconTools.Workflows.UnitTesting.FileIOTests.TargetedResultFileIOTests
 {
     [TestFixture]
-    public class UnlabelledTargetedResultFileIOTests
+    public class UnlabeledTargetedResultFileIOTests
     {
         [Test]
         public void exporterTest1()
@@ -22,7 +22,7 @@ namespace DeconTools.Workflows.UnitTesting.FileIOTests.TargetedResultFileIOTests
             var peaksTestFile = DeconTools.UnitTesting2.FileRefs.PeakDataFiles.OrbitrapPeakFile_scans5500_6500;
             var massTagFile = @"\\protoapps\UserData\Slysz\Data\MassTags\qcshew_standard_file_NETVals0.3-0.33.txt";
 
-            var exportedResultFile = Path.Combine(FileRefs.OutputFolderPath, "UnlabelledTargetedResultsExporterOutput1.txt");
+            var exportedResultFile = Path.Combine(FileRefs.OutputFolderPath, "UnlabeledTargetedResultsExporterOutput1.txt");
 
             if (File.Exists(exportedResultFile)) File.Delete(exportedResultFile);
 
@@ -52,7 +52,7 @@ namespace DeconTools.Workflows.UnitTesting.FileIOTests.TargetedResultFileIOTests
             
 
 
-            var exporter = new UnlabelledTargetedResultToTextExporter(exportedResultFile);
+            var exporter = new UnlabeledTargetedResultToTextExporter(exportedResultFile);
             exporter.ExportResults(repo.Results);
             
 
@@ -65,9 +65,9 @@ namespace DeconTools.Workflows.UnitTesting.FileIOTests.TargetedResultFileIOTests
         public void importerTest1()
         {
            
-            var importedResultFile = Path.Combine(FileRefs.OutputFolderPath, "UnlabelledTargetedResultsExporterOutput1.txt");
+            var importedResultFile = Path.Combine(FileRefs.OutputFolderPath, "UnlabeledTargetedResultsExporterOutput1.txt");
 
-            var importer = new UnlabelledTargetedResultFromTextImporter(importedResultFile);
+            var importer = new UnlabeledTargetedResultFromTextImporter(importedResultFile);
             var repo = importer.Import();
 
 

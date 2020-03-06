@@ -19,7 +19,7 @@ namespace DeconTools.Workflows.UnitTesting
 
             var alignmentFeaturesFile = @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\AlignmentInfo\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_READONLY_alignedFeatures.txt";
 
-            var importer = new UnlabelledTargetedResultFromTextImporter(alignmentFeaturesFile);
+            var importer = new UnlabeledTargetedResultFromTextImporter(alignmentFeaturesFile);
             var repo = importer.Import();
 
             var massTagFile =

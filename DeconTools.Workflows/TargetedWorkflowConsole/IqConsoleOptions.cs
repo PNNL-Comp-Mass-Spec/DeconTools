@@ -5,7 +5,7 @@ namespace IQ.Console
 {
     public class IqConsoleOptions
     {
-        private const string PROGRAM_DATE = "September 21, 2018";
+        private const string PROGRAM_DATE = "March 5, 2020";
 
         public IqConsoleOptions()
         {
@@ -13,11 +13,11 @@ namespace IQ.Console
             TargetsFile = string.Empty;
             ReferenceTargetFile = string.Empty;
             TargetFileForAlignment = string.Empty;
-            OutputFolder = string.Empty;
+            OutputDirectory = string.Empty;
             AppendTargetsFileNameToResultFile = false;
             UseInputScan = false;
             WorkflowParameterFile = string.Empty;
-            TemporaryWorkingFolder = string.Empty;
+            TemporaryWorkingDirectory = string.Empty;
             IsAlignmentPerformed = false;
             AlignmentParameterFile = string.Empty;
             IsMassAlignmentPerformed = false;
@@ -42,8 +42,8 @@ namespace IQ.Console
         [Option("A", "AlignmentTargetsFile", HelpText = "A text file containing a list of IQ targets which are used in calibrating mass and elution time. Supported formats= .txt, .mgf")]
         public string TargetFileForAlignment { get; set; }
 
-        [Option("D", "OutputFolder", HelpText = "Output folder")]
-        public string OutputFolder { get; set; }
+        [Option("D", "OutputDirectory", HelpText = "Output directory")]
+        public string OutputDirectory { get; set; }
 
         [Option("Append", "AppendTargetName", HelpText = "Append the targets file name to the results file")]
         public bool AppendTargetsFileNameToResultFile { get; set; }
@@ -54,8 +54,8 @@ namespace IQ.Console
         [Option("W", "WorkflowParameterFile", ArgPosition = 2, HelpText = "An .xml file containing a list of IQ parameters")]
         public string WorkflowParameterFile { get; set; }
 
-        [Option("F", "TemporaryWorkingFolder", HelpText = "Temporary working folder where dataset is copied")]
-        public string TemporaryWorkingFolder { get; set; }
+        [Option("F", "TemporaryWorkingDirectory", HelpText = "Temporary working directory where dataset is copied")]
+        public string TemporaryWorkingDirectory { get; set; }
 
         [Option("Q", "IsAlignmentPerformed", HelpText = "If true, IQ alignment is performed using AlignmentTargetsFile.  This option is obsolete; use IsMassAlignmentPerformed instead")]
         public bool IsAlignmentPerformed { get; set; }
@@ -103,8 +103,8 @@ namespace IQ.Console
             System.Console.WriteLine("Input file: " + InputFile);
             System.Console.WriteLine("Workflow parameter file: " + WorkflowParameterFile);
 
-            if (!string.IsNullOrEmpty(OutputFolder))
-                System.Console.WriteLine("Output folder: " + OutputFolder);
+            if (!string.IsNullOrEmpty(OutputDirectory))
+                System.Console.WriteLine("Output directory: " + OutputDirectory);
 
             System.Console.WriteLine();
             if (!string.IsNullOrEmpty(TargetsFile))
@@ -119,8 +119,8 @@ namespace IQ.Console
             System.Console.WriteLine();
             System.Console.WriteLine("Use input scan: " + UseInputScan);
 
-            if (!string.IsNullOrEmpty(TemporaryWorkingFolder))
-                System.Console.WriteLine("Temporary working directory: " + TemporaryWorkingFolder);
+            if (!string.IsNullOrEmpty(TemporaryWorkingDirectory))
+                System.Console.WriteLine("Temporary working directory: " + TemporaryWorkingDirectory);
 
             System.Console.WriteLine();
             System.Console.WriteLine("IsAlignmentPerformed: " + IsAlignmentPerformed);

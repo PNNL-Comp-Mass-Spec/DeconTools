@@ -25,7 +25,7 @@ namespace DeconTools.Workflows.UnitTesting
 
             var deconToolsResultFile = Path.Combine(FileRefs.ImportedData, "QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_targetedFeatures.txt");
 
-            var importer = new UnlabelledTargetedResultFromTextImporter(deconToolsResultFile);
+            var importer = new UnlabeledTargetedResultFromTextImporter(deconToolsResultFile);
             var repo = importer.Import();
 
             var massTagFile = @"\\protoapps\UserData\Slysz\Data\MassTags\qcshew_standard_file_allMassTags.txt";

@@ -207,7 +207,7 @@ namespace DeconTools.Workflows.Backend.Core
             return GetMSAlignTargets(targetsFilePath);
         }
 
-        protected override string GetOutputFileName()
+        protected override string GetOutputFilePath()
         {
             string resultsDirectoryPath;
 
@@ -220,7 +220,8 @@ namespace DeconTools.Workflows.Backend.Core
                 resultsDirectoryPath = Path.Combine(ExecutorParameters.OutputDirectoryBase, "IqResults");
             }
 
-            if (!Directory.Exists(resultsDirectoryPath)) Directory.CreateDirectory(resultsDirectoryPath);
+            if (!Directory.Exists(resultsDirectoryPath))
+                Directory.CreateDirectory(resultsDirectoryPath);
 
             return Path.Combine(resultsDirectoryPath, Run.DatasetName + "_quant.txt");
 

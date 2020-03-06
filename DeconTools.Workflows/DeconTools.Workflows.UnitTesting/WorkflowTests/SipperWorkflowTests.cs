@@ -250,8 +250,8 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             msGraphGenerator.GenerateGraph(massSpectrumXYData.Xvalues, massSpectrumXYData.Yvalues, target.MZ - 2,
                                            target.MZ + 6);
 
-            var annotation = "fractionC13= " + sipperLcmsTargetedResult.PercentCarbonsLabelled.ToString("0.000") + "\n" +
-                                "populationFraction= " + sipperLcmsTargetedResult.PercentPeptideLabelled.ToString("0.000");
+            var annotation = "fractionC13= " + sipperLcmsTargetedResult.PercentCarbonsLabeled.ToString("0.000") + "\n" +
+                                "populationFraction= " + sipperLcmsTargetedResult.PercentPeptideLabeled.ToString("0.000");
 
 
             msGraphGenerator.AddAnnotationRelativeAxis(annotation, 0.45, 0.05);

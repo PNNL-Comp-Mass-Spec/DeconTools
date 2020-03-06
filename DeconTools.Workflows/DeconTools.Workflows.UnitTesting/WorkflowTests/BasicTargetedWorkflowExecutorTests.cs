@@ -390,7 +390,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             Assert.IsTrue(File.Exists(expectedResultsFilename));
 
-            var importer = new UnlabelledTargetedResultFromTextImporter(expectedResultsFilename);
+            var importer = new UnlabeledTargetedResultFromTextImporter(expectedResultsFilename);
             var repository = importer.Import();
 
             Assert.AreEqual(10, repository.Results.Count);
@@ -474,7 +474,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             Assert.IsTrue(File.Exists(expectedResultsFilename));
 
-            var importer = new UnlabelledTargetedResultFromTextImporter(expectedResultsFilename);
+            var importer = new UnlabeledTargetedResultFromTextImporter(expectedResultsFilename);
             var repository = importer.Import();
 
             Assert.AreEqual(10, repository.Results.Count);
@@ -527,7 +527,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             Assert.IsTrue(File.Exists(expectedResultsFilename));
 
-            var importer = new UnlabelledTargetedResultFromTextImporter(expectedResultsFilename);
+            var importer = new UnlabeledTargetedResultFromTextImporter(expectedResultsFilename);
             var repository = importer.Import();
 
             Assert.AreEqual(10, repository.Results.Count);

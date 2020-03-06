@@ -23,7 +23,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         {
             var rawdataFile = @"D:\Data\Orbitrap\QC_Shew_09_05-pt5-6_4Jan10_Doc_09-11-08.RAW";
             var massTagFile = @"\\protoapps\UserData\Slysz\Data\MassTags\QCShew_Formic_MassTags_Bin10_all.txt";
-            var parameterFile = @"\\protoapps\UserData\Slysz\Data\QCShew_MassiveTargeted\WorkflowParameterFiles\UnlabelledTargeted_WorkflowParameters_noSum.xml";
+            var parameterFile = @"\\protoapps\UserData\Slysz\Data\QCShew_MassiveTargeted\WorkflowParameterFiles\UnlabeledTargeted_WorkflowParameters_noSum.xml";
 
             var mtimporter = new MassTagFromTextFileImporter(massTagFile);
 
@@ -68,7 +68,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         {
             var rawdataFile = @"D:\Data\Orbitrap\QC_Shew_09_05-pt5-6_4Jan10_Doc_09-11-08.RAW";
             var massTagFile = @"\\protoapps\UserData\Slysz\Data\MassTags\QCShew_Formic_MassTags_Bin10_all.txt";
-            var parameterFile = @"\\protoapps\UserData\Slysz\Data\QCShew_MassiveTargeted\WorkflowParameterFiles\UnlabelledTargeted_WorkflowParameters_noSum.xml";
+            var parameterFile = @"\\protoapps\UserData\Slysz\Data\QCShew_MassiveTargeted\WorkflowParameterFiles\UnlabeledTargeted_WorkflowParameters_noSum.xml";
 
             var mtimporter = new MassTagFromTextFileImporter(massTagFile);
 

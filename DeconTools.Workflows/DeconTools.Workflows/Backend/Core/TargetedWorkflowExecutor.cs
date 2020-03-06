@@ -633,13 +633,12 @@ namespace DeconTools.Workflows.Backend.Core
         /// Output file path
         /// </summary>
         /// <returns></returns>
-        protected virtual string GetOutputFileName()
+        protected virtual string GetOutputFilePath()
         {
-            var outputFilePath = string.Empty;
             if (!string.IsNullOrWhiteSpace(_resultsDirectory))
-                outputFilePath = _resultsDirectory;
+                return Path.Combine(_resultsDirectory, Run.DatasetName + "_results.txt");
 
-            return Path.Combine(outputFilePath, Run.DatasetName + "_results.txt");
+            return Path.Combine(Run.DatasetName + "_results.txt");
         }
 
         #endregion

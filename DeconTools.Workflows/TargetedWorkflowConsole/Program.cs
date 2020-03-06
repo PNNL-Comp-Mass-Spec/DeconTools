@@ -122,7 +122,7 @@ namespace IQ.Console
             var executorParameters = new BasicTargetedWorkflowExecutorParameters
             {
                 TargetsFilePath = options.TargetsFile,
-                OutputFolderBase = options.OutputFolder,
+                OutputDirectoryBase = options.OutputDirectory,
                 AppendTargetsFileNameToResultFile = options.AppendTargetsFileNameToResultFile,
 #pragma warning disable 618
                 TargetedAlignmentIsPerformed = options.IsAlignmentPerformed,
@@ -137,11 +137,11 @@ namespace IQ.Console
                                  : Globals.TargetType.DatabaseTarget
             };
 
-            if (!string.IsNullOrEmpty(options.TemporaryWorkingFolder))
+            if (!string.IsNullOrEmpty(options.TemporaryWorkingDirectory))
             {
                 executorParameters.CopyRawFileLocal = true;
 
-                executorParameters.FolderPathForCopiedRawDataset = options.TemporaryWorkingFolder;
+                executorParameters.LocalDirectoryPathForCopiedRawDataset = options.TemporaryWorkingDirectory;
                 executorParameters.DeleteLocalDatasetAfterProcessing = true;
             }
 
@@ -155,7 +155,7 @@ namespace IQ.Console
                 executorParameters.DeleteLocalDatasetAfterProcessing = GetParameter(parameterList, "DeleteLocalDatasetAfterProcessing", executorParameters.DeleteLocalDatasetAfterProcessing);
 
                 // Skip: FileContainingDatasetPaths
-                executorParameters.FolderPathForCopiedRawDataset = GetParameter(parameterList, "FolderPathForCopiedRawDataset", executorParameters.FolderPathForCopiedRawDataset);
+                executorParameters.LocalDirectoryPathForCopiedRawDataset = GetParameter(parameterList, "FolderPathForCopiedRawDataset", executorParameters.LocalDirectoryPathForCopiedRawDataset);
 
                 // Skip: LoggingFolder
 
@@ -168,7 +168,7 @@ namespace IQ.Console
                 if (string.Equals(targetType, "DatabaseTarget", StringComparison.CurrentCultureIgnoreCase))
                     executorParameters.TargetType = Globals.TargetType.DatabaseTarget;
 
-                executorParameters.OutputFolderBase = GetParameter(parameterList, "ResultsFolder", executorParameters.OutputFolderBase);
+                executorParameters.OutputDirectoryBase = GetParameter(parameterList, "ResultsFolder", executorParameters.OutputDirectoryBase);
 
                 executorParameters.AppendTargetsFileNameToResultFile = GetParameter(parameterList, "AppendTargetsFileNameToResultFile", executorParameters.AppendTargetsFileNameToResultFile);
 
@@ -262,16 +262,16 @@ namespace IQ.Console
                         return true;
                     }
 
-                    if (string.IsNullOrEmpty(options.TemporaryWorkingFolder))
+                    if (string.IsNullOrEmpty(options.TemporaryWorkingDirectory))
                     {
-                        IqLogger.LogWarning("Trying to grab .raw file from DMS, but no temporary working folder was declared. Use option -f");
+                        IqLogger.LogWarning("Trying to grab .raw file from DMS, but no temporary working directory was declared. Use option -f");
                         return false;
 
                     }
 
-                    if (string.IsNullOrEmpty(options.OutputFolder))
+                    if (string.IsNullOrEmpty(options.OutputDirectory))
                     {
-                        options.OutputFolder = options.TemporaryWorkingFolder;
+                        options.OutputDirectory = options.TemporaryWorkingDirectory;
                     }
 
                     var datasetutil = new DatasetUtilities();
@@ -294,9 +294,9 @@ namespace IQ.Console
                     return true;
                 }
 
-                if (string.IsNullOrEmpty(options.OutputFolder))
+                if (string.IsNullOrEmpty(options.OutputDirectory))
                 {
-                    options.OutputFolder = RunUtilities.GetDatasetParentFolder(currentDatasetPath);
+                    options.OutputDirectory = RunUtilities.GetDatasetParentDirectory(currentDatasetPath);
                 }
 
                 var executorParameters = GetExecutorParameters(options);

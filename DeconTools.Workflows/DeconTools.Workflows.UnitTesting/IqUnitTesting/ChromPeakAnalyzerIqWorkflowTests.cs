@@ -47,7 +47,7 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
             var run = new RunFactory().CreateRun(testFile);
             TargetedWorkflowParameters parameters = new BasicTargetedWorkflowParameters();
             var testTarget = new ChromPeakIqTarget();
-            ITheorFeatureGenerator TheorFeatureGen = new JoshTheorFeatureGenerator(DeconTools.Backend.Globals.LabellingType.NONE, 0.005);
+            ITheorFeatureGenerator TheorFeatureGen = new JoshTheorFeatureGenerator(DeconTools.Backend.Globals.LabelingType.NONE, 0.005);
 
             var testPeak = new ChromPeak(5184, 840963, 50, 0);
 

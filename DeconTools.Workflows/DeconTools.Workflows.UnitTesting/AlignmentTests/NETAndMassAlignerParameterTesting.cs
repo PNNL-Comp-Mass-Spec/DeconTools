@@ -22,7 +22,7 @@ namespace DeconTools.Workflows.UnitTesting
 
             var alignmentFeaturesFile = @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_READONLY_alignedFeatures.txt";
 
-            var importer = new UnlabelledTargetedResultFromTextImporter(alignmentFeaturesFile);
+            var importer = new UnlabeledTargetedResultFromTextImporter(alignmentFeaturesFile);
             var repo = importer.Import();
 
             var massTagFile =
@@ -103,7 +103,7 @@ namespace DeconTools.Workflows.UnitTesting
 
             var alignmentFeaturesFile = @"\\protoapps\UserData\Slysz\Data\QCShew_MassiveTargeted\AlignmentInfo\QC_Shew_10_01-pt5-1_8Feb10_Doc_09-12-24_alignedFeatures.txt";
 
-            var importer = new UnlabelledTargetedResultFromTextImporter(alignmentFeaturesFile);
+            var importer = new UnlabeledTargetedResultFromTextImporter(alignmentFeaturesFile);
             var repo = importer.Import();
 
             var massTagFile =
@@ -194,7 +194,7 @@ namespace DeconTools.Workflows.UnitTesting
             var run = new RunFactory().CreateRun(@"D:\Data\Orbitrap\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW");
 
             var alignmentFeaturesFile = @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\AlignmentInfo\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_READONLY_alignedFeatures.txt";
-            var importer = new UnlabelledTargetedResultFromTextImporter(alignmentFeaturesFile);
+            var importer = new UnlabeledTargetedResultFromTextImporter(alignmentFeaturesFile);
             var repo = importer.Import();
 
             var massTagFile = @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\QCShew_Formic_MassTags_Bin10_all.txt";
@@ -284,7 +284,7 @@ namespace DeconTools.Workflows.UnitTesting
 
             var alignmentFeaturesFile = @"D:\Data\Orbitrap\Subissue01\QC_Shew_10_01-pt5-1_8Feb10_Doc_09-12-24_alignedFeatures.txt";
 
-            var importer = new UnlabelledTargetedResultFromTextImporter(alignmentFeaturesFile);
+            var importer = new UnlabeledTargetedResultFromTextImporter(alignmentFeaturesFile);
             var repo = importer.Import();
 
             var massTagFile = @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\QCShew_Formic_MassTags_Bin10_all.txt";
@@ -408,10 +408,10 @@ namespace DeconTools.Workflows.UnitTesting
         {
             var run = new RunFactory().CreateRun(@"D:\Data\Orbitrap\Issue0725_badAlignment\QC_Shew_10_03-2_100min_06May10_Tiger_10-04-08.RAW");
 
-            var alignmentFeaturesFile = run.Filename.Replace(".RAW", "_alignedFeatures.txt");
+            var alignmentFeaturesFile = run.DatasetFileOrDirectoryPath.Replace(".RAW", "_alignedFeatures.txt");
 
 
-            var importer = new UnlabelledTargetedResultFromTextImporter(alignmentFeaturesFile);
+            var importer = new UnlabeledTargetedResultFromTextImporter(alignmentFeaturesFile);
             var repo = importer.Import();
 
             var massTagFile = @"\\protoapps\UserData\Slysz\Data\QCShew_MassiveTargeted\MassTags\QCShew_Formic_MassTags_for_alignment.txt";
