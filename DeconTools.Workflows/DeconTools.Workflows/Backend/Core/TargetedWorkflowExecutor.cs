@@ -609,11 +609,11 @@ namespace DeconTools.Workflows.Backend.Core
 
         protected virtual void ExportData()
         {
+            var outputFilePath = GetOutputFilePath();
+            backupResultsFileIfNecessary(Run.DatasetName, outputFilePath);
 
-            var outputFileName = GetOutputFileName();
-            backupResultsFileIfNecessary(Run.DatasetName, outputFileName);
-
-            var exporter = TargetedResultToTextExporter.CreateExporter(_workflowParameters, outputFileName);
+            ReportGeneralProgress("Writing results to " + outputFilePath);
+            var exporter = TargetedResultToTextExporter.CreateExporter(_workflowParameters, outputFilePath);
             exporter.ExportResults(ResultRepository.Results);
         }
 
