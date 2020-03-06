@@ -99,7 +99,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         public void InitializeWorkflow()
         {
-            if (string.IsNullOrEmpty(ExecutorParameters.OutputDirectoryBase))
+            if (string.IsNullOrWhiteSpace(ExecutorParameters.OutputDirectoryBase))
             {
                 _resultsDirectory = RunUtilities.GetDatasetParentDirectory(DatasetPath);
             }
@@ -116,7 +116,7 @@ namespace DeconTools.Workflows.Backend.Core
             }
 
 
-            var targetsFilePathIsEmpty = (string.IsNullOrEmpty(ExecutorParameters.TargetsFilePath));
+            var targetsFilePathIsEmpty = (string.IsNullOrWhiteSpace(ExecutorParameters.TargetsFilePath));
 
             string currentTargetsFilePath;
 
@@ -163,7 +163,7 @@ namespace DeconTools.Workflows.Backend.Core
             if (ExecutorParameters.TargetedAlignmentIsPerformed)
 #pragma warning restore 618
             {
-                if (string.IsNullOrEmpty(ExecutorParameters.TargetedAlignmentWorkflowParameterFile))
+                if (string.IsNullOrWhiteSpace(ExecutorParameters.TargetedAlignmentWorkflowParameterFile))
                 {
                     throw new FileNotFoundException(
                         "Cannot initialize workflow. TargetedAlignment is requested but TargetedAlignmentWorkflowParameter file is not found. Check path for the 'TargetedAlignmentWorkflowParameterFile' ");
@@ -237,7 +237,7 @@ namespace DeconTools.Workflows.Backend.Core
 
                 var isMissingMonoMass = target.MonoIsotopicMass <= 0;
 
-                if (string.IsNullOrEmpty(target.EmpiricalFormula))
+                if (string.IsNullOrWhiteSpace(target.EmpiricalFormula))
                 {
                     if (canUseReferenceMassTags && massTagIDsAvailableForLookup.Contains(target.FeatureToMassTagID))
                     {
@@ -256,7 +256,7 @@ namespace DeconTools.Workflows.Backend.Core
                         target.Code = mt.Code;
                         target.EmpiricalFormula = mt.EmpiricalFormula;
                     }
-                    else if (!string.IsNullOrEmpty(target.Code))
+                    else if (!string.IsNullOrWhiteSpace(target.Code))
                     {
                         //Create empirical formula based on code. Assume it is an unmodified peptide
 
@@ -306,7 +306,7 @@ namespace DeconTools.Workflows.Backend.Core
             var possibleTargetFiles = new List<FileInfo>();
 
             var targetsBaseDirPath = ExecutorParameters.TargetsBaseFolder;
-            if (string.IsNullOrEmpty(ExecutorParameters.TargetsBaseFolder))
+            if (string.IsNullOrWhiteSpace(ExecutorParameters.TargetsBaseFolder))
             {
                 targetsBaseDirPath = Path.Combine(ExecutorParameters.OutputDirectoryBase, "Targets");
             }
@@ -409,7 +409,7 @@ namespace DeconTools.Workflows.Backend.Core
         {
             string alignmentDirectoryPath;
 
-            if (string.IsNullOrEmpty(ExecutorParameters.OutputDirectoryBase))
+            if (string.IsNullOrWhiteSpace(ExecutorParameters.OutputDirectoryBase))
             {
                 alignmentDirectoryPath = Path.Combine(RunUtilities.GetDatasetParentDirectory(DatasetPath), "AlignmentInfo");
             }
@@ -436,7 +436,7 @@ namespace DeconTools.Workflows.Backend.Core
                 return string.Empty;
             }
 
-            if (string.IsNullOrEmpty(_alignmentDirectory))
+            if (string.IsNullOrWhiteSpace(_alignmentDirectory))
             {
                 SetupAlignment();
 
@@ -460,7 +460,7 @@ namespace DeconTools.Workflows.Backend.Core
         {
             string loggingDirectory;
 
-            if (string.IsNullOrEmpty(ExecutorParameters.OutputDirectoryBase))
+            if (string.IsNullOrWhiteSpace(ExecutorParameters.OutputDirectoryBase))
             {
                 loggingDirectory = RunUtilities.GetDatasetParentDirectory(DatasetPath);
             }
@@ -617,8 +617,6 @@ namespace DeconTools.Workflows.Backend.Core
             exporter.ExportResults(ResultRepository.Results);
         }
 
-
-
         /// <summary>
         /// This hook allows inheriting class to execute post processing methods. e.g. see TopDownTargetedWorkflowExecutor
         /// </summary>
@@ -684,7 +682,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         protected TargetCollection GetMassTagTargets(string massTagFileName, List<int> targetIDsToFilterOn)
         {
-            if (string.IsNullOrEmpty(massTagFileName) || !File.Exists(massTagFileName))
+            if (string.IsNullOrWhiteSpace(massTagFileName) || !File.Exists(massTagFileName))
             {
                 return new TargetCollection();
             }
@@ -1012,7 +1010,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         private void CopyAlignmentInfoIfExists()
         {
-            if (string.IsNullOrEmpty(_alignmentDirectory)) return;
+            if (string.IsNullOrWhiteSpace(_alignmentDirectory)) return;
 
             var dirInfo = new DirectoryInfo(_alignmentDirectory);
 
@@ -1041,7 +1039,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         protected void PerformAlignment()
         {
-            if (!string.IsNullOrEmpty(_alignmentDirectory))
+            if (!string.IsNullOrWhiteSpace(_alignmentDirectory))
             {
                 RunUtilities.AlignRunUsingAlignmentInfoInFiles(Run, _alignmentDirectory);
             }
@@ -1095,7 +1093,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         protected TargetCollection CreateTargets(Globals.TargetType targetType, string targetFilePath)
         {
-            if (string.IsNullOrEmpty(targetFilePath)) return null;
+            if (string.IsNullOrWhiteSpace(targetFilePath)) return null;
 
             switch (targetType)
             {
