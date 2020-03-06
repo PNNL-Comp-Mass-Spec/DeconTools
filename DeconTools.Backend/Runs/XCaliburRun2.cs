@@ -191,17 +191,17 @@ namespace DeconTools.Backend.Runs
                 MSLevel = msLevel
             };
 
-            //Get Precursor MZ
+            // Get Precursor MZ
             if (scanInfo == null)
             {
-                precursor.PrecursorMZ = -1;
+                precursor.PrecursorMZ = 0;
             }
             else
             {
                 precursor.PrecursorMZ = precursorMz;
             }
 
-            //Get the Parent scan if MS level is not MS1
+            // Get the Parent scan if MS level is not MS1
             if (precursor.MSLevel > 1)
             {
                 var stepBack = 0;
@@ -235,6 +235,7 @@ namespace DeconTools.Backend.Runs
                         precursor.FragmentationType = FragmentionType.None;
                         break;
                 }
+
             }
             else
             {
