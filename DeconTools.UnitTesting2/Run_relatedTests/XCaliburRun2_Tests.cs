@@ -81,9 +81,6 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             Assert.AreEqual(18505, numScans);
             Assert.AreEqual(1, run.MinLCScan);
             Assert.AreEqual(18505, run.MaxLCScan);
-
-            //TestUtilities.DisplayXYValues(run.XYData);
-
         }
 
         [Test]
@@ -154,10 +151,8 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
 
             Assert.IsTrue(xyData.Xvalues.Length > 1000);
 
-            // TestUtilities.DisplayXYValues(xyData);
-
+            TestUtilities.DisplayXYValues(xyData, 600, 603);
         }
-
 
         [Test]
         public void getSummedSpectrum_Test1()
@@ -178,15 +173,13 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             TestUtilities.DisplayXYValues(xyData, 400, 402);
         }
 
-
-
         [Test]
         public void getSummedSpectrum_SpeedTest1()
         {
             using (var run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1))
             {
 
-                var scanset = new ScanSet(6005, new int[] { 6005, 6012, 6019 });
+                var scanSet = new ScanSet(6005, new int[] { 6005, 6012, 6019 });
 
                 var numIterations = 50;
 
@@ -196,7 +189,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
                 for (var i = 0; i < numIterations; i++)
                 {
                     watch.Start();
-                    run.GetMassSpectrum(scanset);
+                    run.GetMassSpectrum(scanSet);
                     watch.Stop();
                     timeStats.Add(watch.ElapsedMilliseconds);
                     watch.Reset();
@@ -204,10 +197,6 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
 
                 Console.WriteLine("Average reading time when summing 3 spectra = " + timeStats.Average());
             }
-
-
-
-
 
         }
 
@@ -245,26 +234,36 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         {
             var run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
+            var precursor1 = run.GetPrecursorInfo(6005);
+            ShowPrecursorInfo(6005, precursor1);
 
-            PrecursorInfo precursor;
+            Assert.AreEqual(1, precursor1.MSLevel, "MSLevel is not {0} instead of 1", precursor1.MSLevel);
+            Assert.AreEqual(-1, precursor1.PrecursorCharge, "Charge is {0} instead of -1", precursor1.PrecursorCharge);
+            Assert.AreEqual(0, precursor1.PrecursorIntensity, "Intensity is {0} instead of 0", precursor1.PrecursorMZ);
+            Assert.AreEqual(0, precursor1.PrecursorMZ, "Precursor m/z is {0} instead of -1", precursor1.PrecursorIntensity);
+            Assert.AreEqual(6005, precursor1.PrecursorScan, "Scan is {0} instead of 600", precursor1.PrecursorScan);
 
-            precursor = run.GetPrecursorInfo(6005);
+            Console.WriteLine();
 
-            Assert.AreEqual(1, precursor.MSLevel);
-            Assert.AreEqual(-1, precursor.PrecursorCharge);
-            Assert.AreEqual(0, precursor.PrecursorIntensity);
-            Assert.AreEqual(-1, precursor.PrecursorMZ);
-            Assert.AreEqual(6005, precursor.PrecursorScan);
+            var precursor2 = run.GetPrecursorInfo(6006);
+            ShowPrecursorInfo(6006, precursor2);
 
-            precursor = run.GetPrecursorInfo(6006);
-
-            Assert.AreEqual(2, precursor.MSLevel);
-            Assert.AreEqual(-1, precursor.PrecursorCharge);
-            Assert.AreEqual(0, precursor.PrecursorIntensity);
-            Assert.AreEqual(408.25, precursor.PrecursorMZ);
-            Assert.AreEqual(6005, precursor.PrecursorScan);
+            Assert.AreEqual(2, precursor2.MSLevel, "MSLevel is {0} instead of 2", precursor1.MSLevel);
+            Assert.AreEqual(-1, precursor2.PrecursorCharge, "Charge is {0} instead of -1", precursor1.PrecursorCharge);
+            Assert.AreEqual(0, precursor2.PrecursorIntensity, "Intensity is {0} instead of 0", precursor1.PrecursorIntensity);
+            Assert.AreEqual(408.25, precursor2.PrecursorMZ, "Precursor m/z is {0} instead of 408.25", precursor1.PrecursorMZ);
+            Assert.AreEqual(6005, precursor2.PrecursorScan, "Scan is {0} instead of 6005", precursor1.PrecursorScan);
         }
 
+        private void ShowPrecursorInfo(int scanNumber, PrecursorInfo precursor)
+        {
+            Console.WriteLine("Precursor info for scan  {0}", scanNumber);
+            Console.WriteLine("Precursor scan: {0}", precursor.PrecursorScan);
+            Console.WriteLine("MSLevel:        {0}", precursor.MSLevel);
+            Console.WriteLine("Charge:         {0}", precursor.PrecursorCharge);
+            Console.WriteLine("m/z:            {0:F4}", precursor.PrecursorMZ);
+            Console.WriteLine("Intensity:      {0:F2}", precursor.PrecursorIntensity);
+        }
 
         [Test]
         public void GetTICFromInstrumentInfoTest1()
