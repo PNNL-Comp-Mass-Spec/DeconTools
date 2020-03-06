@@ -832,19 +832,15 @@ namespace DeconTools.Workflows.Backend.Core
 
         protected void writeToLogFile(string stringToWrite)
         {
+            if (string.IsNullOrWhiteSpace(_loggingFileName)) return;
 
-            if (!string.IsNullOrEmpty(_loggingFileName))
+            using (var sw = new StreamWriter(new FileStream(_loggingFileName, FileMode.Append,
+                FileAccess.Write, FileShare.Read)))
             {
-                using (var sw = new StreamWriter(new FileStream(_loggingFileName, FileMode.Append,
-                              FileAccess.Write, FileShare.Read)))
-                {
-                    sw.AutoFlush = true;
-                    sw.WriteLine(stringToWrite);
-                    sw.Flush();
-
-                }
+                sw.AutoFlush = true;
+                sw.WriteLine(stringToWrite);
+                sw.Flush();
             }
-
         }
 
         protected void HandleAlignmentInfoFiles()
