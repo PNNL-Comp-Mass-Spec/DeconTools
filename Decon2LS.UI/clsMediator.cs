@@ -4,23 +4,23 @@
 // E-mail: navdeep.jaitly@pnl.gov
 // Website: https://omics.pnl.gov/software or http://panomics.pnnl.gov
 // -------------------------------------------------------------------------------
-// 
+//
 // Licensed under the Apache License, Version 2.0; you may not use this file except
-// in compliance with the License.  You may obtain a copy of the License at 
+// in compliance with the License.  You may obtain a copy of the License at
 // http://www.apache.org/licenses/LICENSE-2.0
 
 using System;
-using System.Data; 
+using System.Data;
 using System.Windows.Forms;
-using PNNL.Controls ;
+using PNNL.Controls;
 using System.Collections;
 
 namespace Decon2LS
 {
 
-    public interface IMediatedForm 
+    public interface IMediatedForm
     {
-        clsMediator Mediator 
+        clsMediator Mediator
         {
             get;
         }
@@ -31,51 +31,51 @@ namespace Decon2LS
     /// </summary>
     public class clsTransformResultsEventArgs : EventArgs
     {
-        public DeconToolsV2.HornTransform.clsHornTransformResults []marr_records ; 
-        public clsTransformResultsEventArgs(ref DeconToolsV2.HornTransform.clsHornTransformResults [] transform_results)
+        public DeconToolsV2.HornTransform.clsHornTransformResults[] marr_records;
+        public clsTransformResultsEventArgs(ref DeconToolsV2.HornTransform.clsHornTransformResults[] transform_results)
         {
-            marr_records = transform_results ; 
+            marr_records = transform_results;
         }
     }
 
     public class clsZoomEventArgs : EventArgs
     {
-        public DeconToolsV2.HornTransform.clsHornTransformResults mobj_record ; 
+        public DeconToolsV2.HornTransform.clsHornTransformResults mobj_record;
         public clsZoomEventArgs(DeconToolsV2.HornTransform.clsHornTransformResults record)
         {
-            mobj_record = record ; 
+            mobj_record = record;
         }
     }
 
     public class clsNewScanEventArgs : EventArgs
     {
-        public int mint_scan_num ; 
-        public clsNewScanEventArgs(int scan_num) 
+        public int mint_scan_num;
+        public clsNewScanEventArgs(int scan_num)
         {
-            mint_scan_num = scan_num ; 
+            mint_scan_num = scan_num;
         }
     }
     public class clsMediator : ICategorizedItemNotifier
     {
-        public delegate void dlgMediatorEventHandler(object sender, object event_args) ; 
-        public delegate void dlgMediatorFileOpenHandler(object sender, object event_args) ; 
-        public delegate void dlgMediatorProgressHandler(object sender, object event_args) ; 
-        public delegate void dlgMediatorStatusHandler(object sender, object event_args) ;
-        public delegate void dlgMediatorTransformResultsHandler(object sender, clsTransformResultsEventArgs event_args) ;
-        public delegate void dlgMediatorZoomHandler(object sender, clsZoomEventArgs event_args) ;
-        public delegate void dlgMediatorNewScanHandler(object sender, clsNewScanEventArgs event_args) ;
-        
+        public delegate void dlgMediatorEventHandler(object sender, object event_args);
+        public delegate void dlgMediatorFileOpenHandler(object sender, object event_args);
+        public delegate void dlgMediatorProgressHandler(object sender, object event_args);
+        public delegate void dlgMediatorStatusHandler(object sender, object event_args);
+        public delegate void dlgMediatorTransformResultsHandler(object sender, clsTransformResultsEventArgs event_args);
+        public delegate void dlgMediatorZoomHandler(object sender, clsZoomEventArgs event_args);
+        public delegate void dlgMediatorNewScanHandler(object sender, clsNewScanEventArgs event_args);
+
         private clsMediator parent = null;
 
-        public event dlgMediatorFileOpenHandler mevnt_FileOpen ;
-        public event dlgMediatorProgressHandler mevnt_Progress ; 
-        public event dlgMediatorStatusHandler mevnt_Status ;
-        public event dlgMediatorTransformResultsHandler mevnt_MassTransform_Complete ;
-        public event dlgMediatorZoomHandler mevnt_Zoom ;
-        
+        public event dlgMediatorFileOpenHandler mevnt_FileOpen;
+        public event dlgMediatorProgressHandler mevnt_Progress;
+        public event dlgMediatorStatusHandler mevnt_Status;
+        public event dlgMediatorTransformResultsHandler mevnt_MassTransform_Complete;
+        public event dlgMediatorZoomHandler mevnt_Zoom;
 
-        private System.Windows.Forms.Form mfrm_main = new frmStatus(); 
-        private Decon2LS.frmStatus mfrm_status ;
+
+        private System.Windows.Forms.Form mfrm_main = new frmStatus();
+        private Decon2LS.frmStatus mfrm_status;
 
         /// <summary>
         /// ICategorizedItemNotifier members
@@ -87,7 +87,7 @@ namespace Decon2LS
         {
             get
             {
-                return mfrm_status ; 
+                return mfrm_status;
             }
         }
 
@@ -95,7 +95,7 @@ namespace Decon2LS
         {
             get
             {
-                return mfrm_main ; 
+                return mfrm_main;
             }
         }
 
@@ -104,7 +104,7 @@ namespace Decon2LS
             //
             // TODO: Add constructor logic here
             //
-            mfrm_main = main_form ; 
+            mfrm_main = main_form;
             mfrm_status = new frmStatus(this);
         }
 
@@ -112,14 +112,14 @@ namespace Decon2LS
         {
             this.Parent = parent;
         }
-        
-        public clsMediator Parent 
+
+        public clsMediator Parent
         {
-            get 
+            get
             {
                 return parent;
             }
-            set 
+            set
             {
                 this.parent = value;
             }
@@ -131,16 +131,16 @@ namespace Decon2LS
             {
                 if (mevnt_FileOpen != null)
                 {
-                    mevnt_FileOpen(sender, event_args) ; 
+                    mevnt_FileOpen(sender, event_args);
                 }
-                if (parent != null) 
+                if (parent != null)
                 {
                     parent.RaiseFileOpen(sender, event_args, ref Cancel);
                 }
             }
-            catch (Exception e )
+            catch (Exception e)
             {
-                Console.WriteLine(e.Message + e.StackTrace) ; 
+                Console.WriteLine(e.Message + e.StackTrace);
             }
         }
 
@@ -150,16 +150,16 @@ namespace Decon2LS
             {
                 if (mevnt_Status != null)
                 {
-                    mevnt_Status(sender, event_args) ; 
+                    mevnt_Status(sender, event_args);
                 }
-                if (parent != null) 
+                if (parent != null)
                 {
                     parent.RaiseStatusMessage(sender, event_args, ref Cancel);
                 }
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message + e.StackTrace) ; 
+                Console.WriteLine(e.Message + e.StackTrace);
             }
         }
 
@@ -169,52 +169,52 @@ namespace Decon2LS
             {
                 if (mevnt_Status != null)
                 {
-                    mevnt_Progress(sender, event_args) ; 
+                    mevnt_Progress(sender, event_args);
                 }
-                if (parent != null) 
+                if (parent != null)
                 {
                     parent.RaiseProgressMessage(sender, event_args, ref Cancel);
                 }
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message + e.StackTrace) ; 
+                Console.WriteLine(e.Message + e.StackTrace);
             }
         }
 
-        public void RaiseItemOpen(object sender, ICategorizedItem item) 
+        public void RaiseItemOpen(object sender, ICategorizedItem item)
         {
             var event_args = new PNNL.Controls.ItemChangedEventArgs(item);
-            if (ItemOpen != null) 
+            if (ItemOpen != null)
             {
                 ItemOpen(sender, event_args);
             }
-            if (parent != null) 
+            if (parent != null)
             {
                 parent.RaiseItemOpen(sender, item);
             }
         }
 
-        public void RaiseItemClose(object sender, ICategorizedItem item) 
+        public void RaiseItemClose(object sender, ICategorizedItem item)
         {
             var event_args = new PNNL.Controls.ItemChangedEventArgs(item);
-            if (ItemClose != null) 
+            if (ItemClose != null)
             {
                 ItemClose(sender, event_args);
             }
-            if (parent != null) 
+            if (parent != null)
             {
                 parent.RaiseItemClose(sender, item);
             }
         }
 
-        public void RaiseMassTransformComplete(object sender, ref DeconToolsV2.HornTransform.clsHornTransformResults []transform_results)
+        public void RaiseMassTransformComplete(object sender, ref DeconToolsV2.HornTransform.clsHornTransformResults[] transform_results)
         {
             if (mevnt_MassTransform_Complete != null)
             {
-                mevnt_MassTransform_Complete(sender, new clsTransformResultsEventArgs(ref transform_results)) ; 
+                mevnt_MassTransform_Complete(sender, new clsTransformResultsEventArgs(ref transform_results));
             }
-            if (parent != null) 
+            if (parent != null)
             {
                 parent.RaiseMassTransformComplete(sender, ref transform_results);
             }
@@ -224,9 +224,9 @@ namespace Decon2LS
         {
             if (mevnt_Zoom != null)
             {
-                mevnt_Zoom(sender, event_args) ; 
+                mevnt_Zoom(sender, event_args);
             }
-            if (parent != null) 
+            if (parent != null)
             {
                 parent.RaiseZoom(sender, event_args);
             }
@@ -236,9 +236,9 @@ namespace Decon2LS
         /// Opens a form in the application.
         /// </summary>
         /// <param name="form"></param>
-        public virtual void RequestFormOpen(Form form) 
+        public virtual void RequestFormOpen(Form form)
         {
-            if (parent != null) 
+            if (parent != null)
             {
                 parent.RequestFormOpen(form);
             }
@@ -249,9 +249,9 @@ namespace Decon2LS
         /// Requests the last active form of a given type.
         /// </summary>
         /// <param name="type"></param>
-        public virtual Form RequestLastActiveFormForType(Type type) 
+        public virtual Form RequestLastActiveFormForType(Type type)
         {
-            if (parent != null) 
+            if (parent != null)
             {
                 return parent.RequestLastActiveFormForType(type);
             }
@@ -259,12 +259,12 @@ namespace Decon2LS
         }
     }
 
-    public class Decon2LSMediator : clsMediator 
+    public class Decon2LSMediator : clsMediator
     {
         private EventHandler mFormClosedHandler;
-        private Hashtable mLastActiveFormByType = new Hashtable(); 
+        private Hashtable mLastActiveFormByType = new Hashtable();
 
-        public Decon2LSMediator(frmDecon2LS form) : base(form) 
+        public Decon2LSMediator(frmDecon2LS form) : base(form)
         {
             mFormClosedHandler = new EventHandler(this.FormClosed);
             var list = new ArrayList();
@@ -275,65 +275,65 @@ namespace Decon2LS
 
         public override void RequestFormOpen(Form form)
         {
-            if (form is IMediatedForm) 
+            if (form is IMediatedForm)
             {
-                ((IMediatedForm) form).Mediator.Parent = this;
+                ((IMediatedForm)form).Mediator.Parent = this;
             }
             form.MdiParent = this.MainForm;
             // attach handler to close event of form
             form.Closed += mFormClosedHandler;
             form.Show();
             // Raise item event if its a categorized item.
-            if (form is ICategorizedItem) 
+            if (form is ICategorizedItem)
             {
-                this.RaiseItemOpen(this, (ICategorizedItem) form);
+                this.RaiseItemOpen(this, (ICategorizedItem)form);
             }
         }
 
         public override Form RequestLastActiveFormForType(Type type)
         {
-            var formsForType = (ArrayList) mLastActiveFormByType[type];
-            if (formsForType == null || formsForType.Count <= 0) 
+            var formsForType = (ArrayList)mLastActiveFormByType[type];
+            if (formsForType == null || formsForType.Count <= 0)
             {
                 return null;
             }
-            return (Form) formsForType[0];
+            return (Form)formsForType[0];
         }
 
 
         /// <summary>
-        /// Notified when a form opened via the RequestFormOpen method is closed.  
+        /// Notified when a form opened via the RequestFormOpen method is closed.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void FormClosed(object sender, EventArgs e)
         {
-            var form = (Form) sender;
-            if (form is ICategorizedItem) 
+            var form = (Form)sender;
+            if (form is ICategorizedItem)
             {
-                this.RaiseItemClose(this, (ICategorizedItem) form);
+                this.RaiseItemClose(this, (ICategorizedItem)form);
             }
-            var formList = (ArrayList) mLastActiveFormByType[sender.GetType()];
-            if (formList != null) 
+            var formList = (ArrayList)mLastActiveFormByType[sender.GetType()];
+            if (formList != null)
             {
                 formList.Remove(sender);
             }
             // Remove closed event handler from form
-            form.Closed -= mFormClosedHandler ;
+            form.Closed -= mFormClosedHandler;
         }
 
         private void MainForm_MdiChildActivate(object sender, EventArgs e)
         {
             var activeMdiChild = this.MainForm.ActiveMdiChild;
-            if (activeMdiChild != null) 
+            if (activeMdiChild != null)
             {
-                var formList = (ArrayList) mLastActiveFormByType[activeMdiChild.GetType()];
-                if (formList == null) 
+                var formList = (ArrayList)mLastActiveFormByType[activeMdiChild.GetType()];
+                if (formList == null)
                 {
                     formList = new ArrayList();
                     mLastActiveFormByType[activeMdiChild.GetType()] = formList;
-                } 
-                else 
+                }
+                else
                 {
                     formList.Remove(activeMdiChild);
                 }

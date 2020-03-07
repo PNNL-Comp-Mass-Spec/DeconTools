@@ -1,12 +1,12 @@
-// Written by Navdeep Jaitly, Anoop Mayampurath and Kyle Littlefield 
+// Written by Navdeep Jaitly, Anoop Mayampurath and Kyle Littlefield
 // for the Department of Energy (PNNL, Richland, WA)
 // Copyright 2006, Battelle Memorial Institute
 // E-mail: navdeep.jaitly@pnl.gov
 // Website: https://omics.pnl.gov/software or http://panomics.pnnl.gov
 // -------------------------------------------------------------------------------
-// 
+//
 // Licensed under the Apache License, Version 2.0; you may not use this file except
-// in compliance with the License.  You may obtain a copy of the License at 
+// in compliance with the License.  You may obtain a copy of the License at
 // http://www.apache.org/licenses/LICENSE-2.0
 
 using System;
@@ -27,7 +27,7 @@ namespace Decon2LS
         private System.Windows.Forms.MenuItem menuItem_open;
 
         /// <summary>
-        /// Attached to forms to be notified when the window closed.  
+        /// Attached to forms to be notified when the window closed.
         /// The event is then propogated to the mediator.
         /// </summary>
         private EventHandler mMdiChildCloseHandler;
@@ -37,7 +37,7 @@ namespace Decon2LS
         /// </summary>
         private Decon2LS.clsMediator mMediator;
 
-        private clsCfgParms mobj_config = new clsCfgParms() ;
+        private clsCfgParms mobj_config = new clsCfgParms();
         private System.Windows.Forms.Splitter splitter1;
         private System.Windows.Forms.MenuItem menuItem_process;
         private System.Windows.Forms.MenuItem menuItem_ArrangeIcons;
@@ -55,35 +55,35 @@ namespace Decon2LS
         private System.Windows.Forms.MenuItem menuItem1;
         private System.Windows.Forms.MenuItem menuItemAbout;
         private System.Windows.Forms.MenuItem mmnuMercury;
-        private System.Windows.Forms.MenuItem mmnuCreateTIC ; 
-        private System.Windows.Forms.MenuItem mmnuOpenResults; 
+        private System.Windows.Forms.MenuItem mmnuCreateTIC;
+        private System.Windows.Forms.MenuItem mmnuOpenResults;
 
-        private DeconToolsV2.HornTransform.clsHornTransformParameters mobjTransformParameters ;
-        private DeconToolsV2.DTAGeneration.clsDTAGenerationParameters mobjDTAGenerationParameters ; 
-        private DeconToolsV2.Peaks.clsPeakProcessorParameters mobjPeakParameters ; 
-        private DeconToolsV2.Readers.clsRawDataPreprocessOptions mobjFTICRRawPreProcessParameters ; 
+        private DeconToolsV2.HornTransform.clsHornTransformParameters mobjTransformParameters;
+        private DeconToolsV2.DTAGeneration.clsDTAGenerationParameters mobjDTAGenerationParameters;
+        private DeconToolsV2.Peaks.clsPeakProcessorParameters mobjPeakParameters;
+        private DeconToolsV2.Readers.clsRawDataPreprocessOptions mobjFTICRRawPreProcessParameters;
 
         public DeconToolsV2.HornTransform.clsHornTransformParameters MassTransformParameters
         {
             get
             {
-                return mobjTransformParameters ; 
+                return mobjTransformParameters;
             }
             set
             {
-                mobjTransformParameters = value ; 
+                mobjTransformParameters = value;
             }
-        } 
+        }
 
         public DeconToolsV2.Peaks.clsPeakProcessorParameters PeakProcessorParameters
         {
             get
             {
-                return mobjPeakParameters ; 
+                return mobjPeakParameters;
             }
             set
             {
-                mobjPeakParameters = value ; 
+                mobjPeakParameters = value;
             }
         }
 
@@ -91,11 +91,11 @@ namespace Decon2LS
         {
             get
             {
-                return mobjFTICRRawPreProcessParameters ; 
+                return mobjFTICRRawPreProcessParameters;
             }
             set
             {
-                mobjFTICRRawPreProcessParameters = value ; 
+                mobjFTICRRawPreProcessParameters = value;
             }
         }
 
@@ -103,20 +103,20 @@ namespace Decon2LS
         {
             get
             {
-                return mobjDTAGenerationParameters ; 
+                return mobjDTAGenerationParameters;
             }
             set
             {
-                mobjDTAGenerationParameters = value ; 
+                mobjDTAGenerationParameters = value;
             }
         }
 
 
 
 
-        private const string mstrDEFAULTPARAMFILE = "Decon2LS.xml" ;
-        private System.Windows.Forms.MenuItem menuItem_Options; 
-        private string mstrParamFile ; 
+        private const string mstrDEFAULTPARAMFILE = "Decon2LS.xml";
+        private System.Windows.Forms.MenuItem menuItem_Options;
+        private string mstrParamFile;
         public frmDecon2LS()
         {
             try
@@ -140,79 +140,79 @@ namespace Decon2LS
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message) ; 
+                MessageBox.Show(ex.Message);
             }
             try
             {
-                var paramLoader = new clsParameterLoader() ; 
+                var paramLoader = new clsParameterLoader();
                 if (System.IO.File.Exists(Application.ExecutablePath + mstrDEFAULTPARAMFILE))
                 {
-                    mstrParamFile = Application.ExecutablePath + mstrDEFAULTPARAMFILE ; 
-                    paramLoader.LoadParametersFromFile(mstrParamFile) ; 
-                    mobjPeakParameters = paramLoader.PeakParameters ; 
-                    mobjTransformParameters = paramLoader.TransformParameters ; 
-                    mobjFTICRRawPreProcessParameters = paramLoader.FTICRPreprocessOptions ; 
-                    mobjDTAGenerationParameters = paramLoader.DTAParameters ; 
+                    mstrParamFile = Application.ExecutablePath + mstrDEFAULTPARAMFILE;
+                    paramLoader.LoadParametersFromFile(mstrParamFile);
+                    mobjPeakParameters = paramLoader.PeakParameters;
+                    mobjTransformParameters = paramLoader.TransformParameters;
+                    mobjFTICRRawPreProcessParameters = paramLoader.FTICRPreprocessOptions;
+                    mobjDTAGenerationParameters = paramLoader.DTAParameters;
                 }
                 else if (System.IO.File.Exists(Application.UserAppDataPath + mstrDEFAULTPARAMFILE))
                 {
-                    mstrParamFile = Application.UserAppDataPath + mstrDEFAULTPARAMFILE ; 
-                    paramLoader.LoadParametersFromFile(mstrParamFile) ; 
-                    mobjPeakParameters = paramLoader.PeakParameters ; 
-                    mobjTransformParameters = paramLoader.TransformParameters ; 
-                    mobjFTICRRawPreProcessParameters = paramLoader.FTICRPreprocessOptions ; 
-                    mobjDTAGenerationParameters = paramLoader.DTAParameters ; 
+                    mstrParamFile = Application.UserAppDataPath + mstrDEFAULTPARAMFILE;
+                    paramLoader.LoadParametersFromFile(mstrParamFile);
+                    mobjPeakParameters = paramLoader.PeakParameters;
+                    mobjTransformParameters = paramLoader.TransformParameters;
+                    mobjFTICRRawPreProcessParameters = paramLoader.FTICRPreprocessOptions;
+                    mobjDTAGenerationParameters = paramLoader.DTAParameters;
                 }
                 else
                 {
-                    // no default parameters found, loading defaults. 
-                    MessageBox.Show(this, "No parameter file found. Loading defaults.") ; 
-                    mobjPeakParameters = new DeconToolsV2.Peaks.clsPeakProcessorParameters() ; 
-                    mobjTransformParameters = new DeconToolsV2.HornTransform.clsHornTransformParameters() ; 
-                    mobjFTICRRawPreProcessParameters = new DeconToolsV2.Readers.clsRawDataPreprocessOptions() ; 
-                    mobjDTAGenerationParameters  = new DeconToolsV2.DTAGeneration.clsDTAGenerationParameters() ; 
-                    mstrParamFile = Application.ExecutablePath + mstrDEFAULTPARAMFILE ; 
+                    // no default parameters found, loading defaults.
+                    MessageBox.Show(this, "No parameter file found. Loading defaults.");
+                    mobjPeakParameters = new DeconToolsV2.Peaks.clsPeakProcessorParameters();
+                    mobjTransformParameters = new DeconToolsV2.HornTransform.clsHornTransformParameters();
+                    mobjFTICRRawPreProcessParameters = new DeconToolsV2.Readers.clsRawDataPreprocessOptions();
+                    mobjDTAGenerationParameters = new DeconToolsV2.DTAGeneration.clsDTAGenerationParameters();
+                    mstrParamFile = Application.ExecutablePath + mstrDEFAULTPARAMFILE;
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message + ex.StackTrace) ; 
-                mobjPeakParameters = new DeconToolsV2.Peaks.clsPeakProcessorParameters() ; 
-                mobjTransformParameters = new DeconToolsV2.HornTransform.clsHornTransformParameters() ; 
-                mobjFTICRRawPreProcessParameters = new DeconToolsV2.Readers.clsRawDataPreprocessOptions() ; 
-                mobjDTAGenerationParameters  = new DeconToolsV2.DTAGeneration.clsDTAGenerationParameters() ; 
+                Console.WriteLine(ex.Message + ex.StackTrace);
+                mobjPeakParameters = new DeconToolsV2.Peaks.clsPeakProcessorParameters();
+                mobjTransformParameters = new DeconToolsV2.HornTransform.clsHornTransformParameters();
+                mobjFTICRRawPreProcessParameters = new DeconToolsV2.Readers.clsRawDataPreprocessOptions();
+                mobjDTAGenerationParameters = new DeconToolsV2.DTAGeneration.clsDTAGenerationParameters();
             }
         }
 
         /// <summary>
         /// Clean up any resources being used.
         /// </summary>
-        protected override void Dispose( bool disposing )
+        protected override void Dispose(bool disposing)
         {
 
-            
-            if( disposing )
-            {
-                //write out parameters to file. 
-                var paramLoader = new clsParameterLoader() ; 
-                paramLoader.PeakParameters = mobjPeakParameters ; 
-                paramLoader.TransformParameters = mobjTransformParameters ; 
-                paramLoader.FTICRPreprocessOptions = mobjFTICRRawPreProcessParameters ; 
-                paramLoader.DTAParameters = mobjDTAGenerationParameters ; 
-                paramLoader.SaveParametersToFile(mstrParamFile) ; 
 
-                if(components != null)
+            if (disposing)
+            {
+                //write out parameters to file.
+                var paramLoader = new clsParameterLoader();
+                paramLoader.PeakParameters = mobjPeakParameters;
+                paramLoader.TransformParameters = mobjTransformParameters;
+                paramLoader.FTICRPreprocessOptions = mobjFTICRRawPreProcessParameters;
+                paramLoader.DTAParameters = mobjDTAGenerationParameters;
+                paramLoader.SaveParametersToFile(mstrParamFile);
+
+                if (components != null)
                 {
                     components.Dispose();
                 }
             }
-            base.Dispose( disposing );
+            base.Dispose(disposing);
         }
 
         [STAThread()]
-        public static void Main(string [] aa)
+        public static void Main(string[] aa)
         {
-            Application.Run(new frmDecon2LS()) ;
+            Application.Run(new frmDecon2LS());
         }
 
         #region Windows Form Designer generated code
@@ -247,18 +247,18 @@ namespace Decon2LS
             this.splitter1 = new System.Windows.Forms.Splitter();
             this.mFileTreeView = new PNNL.Controls.ctlFileView();
             this.SuspendLayout();
-            // 
+            //
             // mainMenu1
-            // 
+            //
             this.mainMenu1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.menuItem_File,
             this.menuItem_Tools,
             this.menuItem_Windows,
             this.menuItem1,
             this.menuItem_Options});
-            // 
+            //
             // menuItem_File
-            // 
+            //
             this.menuItem_File.Index = 0;
             this.menuItem_File.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.menuItem_open,
@@ -268,57 +268,57 @@ namespace Decon2LS
             this.mmnuMercury,
             this.menuItem_Exit});
             this.menuItem_File.Text = "File";
-            // 
+            //
             // menuItem_open
-            // 
+            //
             this.menuItem_open.Index = 0;
             this.menuItem_open.Text = "Open";
             this.menuItem_open.Click += new System.EventHandler(this.menuItem_open_Click);
-            // 
+            //
             // mmnuOpenResults
-            // 
+            //
             this.mmnuOpenResults.Index = 1;
             this.mmnuOpenResults.Text = "Open Results";
             this.mmnuOpenResults.Click += new System.EventHandler(this.mmnuOpenResults_Click);
-            // 
+            //
             // menuItem3
-            // 
+            //
             this.menuItem3.Index = 2;
             this.menuItem3.Text = "-";
-            // 
+            //
             // mmnuCreateTIC
-            // 
+            //
             this.mmnuCreateTIC.Index = 3;
             this.mmnuCreateTIC.Text = "TIC";
             this.mmnuCreateTIC.Click += new System.EventHandler(this.mmnuCreateTIC_Click);
-            // 
+            //
             // mmnuMercury
-            // 
+            //
             this.mmnuMercury.Index = 4;
             this.mmnuMercury.Text = "Mercury";
             this.mmnuMercury.Click += new System.EventHandler(this.mmnuMercury_Click);
-            // 
+            //
             // menuItem_Exit
-            // 
+            //
             this.menuItem_Exit.Index = 5;
             this.menuItem_Exit.Text = "Exit";
             this.menuItem_Exit.Click += new System.EventHandler(this.menuItem_Exit_Click);
-            // 
+            //
             // menuItem_Tools
-            // 
+            //
             this.menuItem_Tools.Index = 1;
             this.menuItem_Tools.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.menuItem_process});
             this.menuItem_Tools.Text = "Tools";
-            // 
+            //
             // menuItem_process
-            // 
+            //
             this.menuItem_process.Index = 0;
             this.menuItem_process.Text = "Process";
             this.menuItem_process.Click += new System.EventHandler(this.menuItem_process_Click);
-            // 
+            //
             // menuItem_Windows
-            // 
+            //
             this.menuItem_Windows.Index = 2;
             this.menuItem_Windows.MdiList = true;
             this.menuItem_Windows.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
@@ -327,67 +327,67 @@ namespace Decon2LS
             this.menuItem_TileHorizontal,
             this.menuItem_TileVertical});
             this.menuItem_Windows.Text = "Windows";
-            // 
+            //
             // menuItem_Cascade
-            // 
+            //
             this.menuItem_Cascade.Index = 0;
             this.menuItem_Cascade.Text = "Cascade";
             this.menuItem_Cascade.Click += new System.EventHandler(this.menuItem_Cascade_Click);
-            // 
+            //
             // menuItem_ArrangeIcons
-            // 
+            //
             this.menuItem_ArrangeIcons.Index = 1;
             this.menuItem_ArrangeIcons.Text = "Arrange Icons";
             this.menuItem_ArrangeIcons.Click += new System.EventHandler(this.menuItem_ArrangeIcons_Click);
-            // 
+            //
             // menuItem_TileHorizontal
-            // 
+            //
             this.menuItem_TileHorizontal.Index = 2;
             this.menuItem_TileHorizontal.Text = "Tile Horizontal";
             this.menuItem_TileHorizontal.Click += new System.EventHandler(this.menuItem_TileHorizontal_Click);
-            // 
+            //
             // menuItem_TileVertical
-            // 
+            //
             this.menuItem_TileVertical.Index = 3;
             this.menuItem_TileVertical.Text = "Tile Vertical";
             this.menuItem_TileVertical.Click += new System.EventHandler(this.menuItem_TileVertical_Click);
-            // 
+            //
             // menuItem1
-            // 
+            //
             this.menuItem1.Index = 3;
             this.menuItem1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.menuItemAbout});
             this.menuItem1.Text = "Help";
-            // 
+            //
             // menuItemAbout
-            // 
+            //
             this.menuItemAbout.Index = 0;
             this.menuItemAbout.Text = "About";
             this.menuItemAbout.Click += new System.EventHandler(this.menuItemAbout_Click);
-            // 
+            //
             // menuItem_Options
-            // 
+            //
             this.menuItem_Options.Index = 4;
             this.menuItem_Options.Text = "Options";
             this.menuItem_Options.Click += new System.EventHandler(this.menuItem_Options_Click);
-            // 
+            //
             // mimgListMain
-            // 
+            //
             this.mimgListMain.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("mimgListMain.ImageStream")));
             this.mimgListMain.TransparentColor = System.Drawing.Color.Transparent;
             this.mimgListMain.Images.SetKeyName(0, "");
-            // 
+            //
             // splitter1
-            // 
+            //
             this.splitter1.BackColor = System.Drawing.SystemColors.Control;
             this.splitter1.Location = new System.Drawing.Point(230, 0);
             this.splitter1.Name = "splitter1";
             this.splitter1.Size = new System.Drawing.Size(8, 502);
             this.splitter1.TabIndex = 5;
             this.splitter1.TabStop = false;
-            // 
+            //
             // mFileTreeView
-            // 
+            //
             this.mFileTreeView.Dock = System.Windows.Forms.DockStyle.Left;
             this.mFileTreeView.ImageIndex = 0;
             this.mFileTreeView.Location = new System.Drawing.Point(0, 0);
@@ -396,9 +396,9 @@ namespace Decon2LS
             this.mFileTreeView.Size = new System.Drawing.Size(230, 502);
             this.mFileTreeView.TabIndex = 7;
             this.mFileTreeView.BeforeExpand += new System.Windows.Forms.TreeViewCancelEventHandler(this.mFileTreeView_BeforeExpand);
-            // 
+            //
             // frmDecon2LS
-            // 
+            //
             this.AllowDrop = true;
             this.AutoScaleBaseSize = new System.Drawing.Size(6, 15);
             this.ClientSize = new System.Drawing.Size(744, 502);
@@ -408,7 +408,7 @@ namespace Decon2LS
             this.IsMdiContainer = ((bool)(configurationAppSettings.GetValue("frmDecon2LS.IsMdiContainer", typeof(bool))));
             this.Menu = this.mainMenu1;
             this.Name = "frmDecon2LS";
-            this.Text = "DeconTools_BetaV1.3.3";
+            this.Text = "DeconTools_v1.3.4";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.MdiChildActivate += new System.EventHandler(this.frmDecon2LS_MdiChildActivate);
             this.DragDrop += new System.Windows.Forms.DragEventHandler(this.frmDecon2LS_DragDrop);
@@ -417,193 +417,187 @@ namespace Decon2LS
 
         }
         #endregion
- 
+
         #region Menu response
 
-
-
-
-
-        
-        
         private void menuItem_open_Click(object sender, System.EventArgs e)
         {
             try
             {
                 var openFileDialog1 = new OpenFileDialog();
-                openFileDialog1.Filter = "Xcalibur files (*.RAW)|*.RAW|Agilent files (*.wiff)|*.wiff|Micromass files (_FUNC*.DAT)|_FUNC*.DAT|Bruker files(acqu)|acqu|S files ICR2LS Format(*.*)|*.*|S files SUN Extrel Format(*.*)|*.*|MZ Xml File(*.mzXML)|*.mzXML|PNNL IMF File(*.IMF)|*.IMF|PNNL UIMF File(*.UIMF)|*.UIMF|Bruker Ascii peak File(*.ascii)|*.ascii|Raw Ascii File(*.txt)|*.txt|All files(*.*)|*.*" ;
-                openFileDialog1.FilterIndex = 1 ;
-                openFileDialog1.RestoreDirectory = true ;
-                openFileDialog1.InitialDirectory = mobj_config.OpenDir ; 
+                openFileDialog1.Filter = "Xcalibur files (*.RAW)|*.RAW|Agilent files (*.wiff)|*.wiff|Micromass files (_FUNC*.DAT)|_FUNC*.DAT|Bruker files(acqu)|acqu|S files ICR2LS Format(*.*)|*.*|S files SUN Extrel Format(*.*)|*.*|MZ Xml File(*.mzXML)|*.mzXML|PNNL IMF File(*.IMF)|*.IMF|PNNL UIMF File(*.UIMF)|*.UIMF|Bruker Ascii peak File(*.ascii)|*.ascii|Raw Ascii File(*.txt)|*.txt|All files(*.*)|*.*";
+                openFileDialog1.FilterIndex = 1;
+                openFileDialog1.RestoreDirectory = true;
+                openFileDialog1.InitialDirectory = mobj_config.OpenDir;
 
-                if(openFileDialog1.ShowDialog() == DialogResult.OK)
+                if (openFileDialog1.ShowDialog() == DialogResult.OK)
                 {
-                    var file_name = openFileDialog1.FileName ; 
-                    var index = file_name.LastIndexOf("\\") ;
-                    var path_dir = "" ; 
+                    var file_name = openFileDialog1.FileName;
+                    var index = file_name.LastIndexOf("\\");
+                    var path_dir = "";
 
                     if (index > 0)
                     {
-                        path_dir = file_name.Substring(0, index) ; 
-                        mobj_config.OpenDir = path_dir ; 
+                        path_dir = file_name.Substring(0, index);
+                        mobj_config.OpenDir = path_dir;
                     }
 
-                    frmSpectra spectra_form ; 
-                    DialogResult ticComputeResult ; 
+                    frmSpectra spectra_form;
+                    DialogResult ticComputeResult;
                     switch (openFileDialog1.FilterIndex)
                     {
                         case 1:
                             // Open Xcalibur File.
-                            spectra_form = new frmSpectra() ; 
-                            spectra_form.PeakProcessorParameters = mobjPeakParameters ; 
-                            spectra_form.HornTransformParameters = mobjTransformParameters ; 
-                            spectra_form.FTICRPreProcessOptions = mobjFTICRRawPreProcessParameters ; 
-                            spectra_form.LoadXCaliburFile(file_name) ;
+                            spectra_form = new frmSpectra();
+                            spectra_form.PeakProcessorParameters = mobjPeakParameters;
+                            spectra_form.HornTransformParameters = mobjTransformParameters;
+                            spectra_form.FTICRPreProcessOptions = mobjFTICRRawPreProcessParameters;
+                            spectra_form.LoadXCaliburFile(file_name);
                             mMediator.RequestFormOpen(spectra_form);
-                            break ; 
+                            break;
                         case 2:
                             // Open Agilent File
-                            spectra_form = new frmSpectra() ; 
-                            spectra_form.PeakProcessorParameters = mobjPeakParameters ; 
-                            spectra_form.HornTransformParameters = mobjTransformParameters ; 
-                            spectra_form.FTICRPreProcessOptions = mobjFTICRRawPreProcessParameters ; 
-                            spectra_form.LoadAgilentTOFFile(file_name) ;
-                            mMediator.RequestFormOpen(spectra_form); 
-                            break ; 
+                            spectra_form = new frmSpectra();
+                            spectra_form.PeakProcessorParameters = mobjPeakParameters;
+                            spectra_form.HornTransformParameters = mobjTransformParameters;
+                            spectra_form.FTICRPreProcessOptions = mobjFTICRRawPreProcessParameters;
+                            spectra_form.LoadAgilentTOFFile(file_name);
+                            mMediator.RequestFormOpen(spectra_form);
+                            break;
                         case 3:
                             // Open Micromass File
-                            spectra_form = new frmSpectra() ; 
-                            spectra_form.PeakProcessorParameters = mobjPeakParameters ; 
-                            spectra_form.HornTransformParameters = mobjTransformParameters ; 
-                            spectra_form.FTICRPreProcessOptions = mobjFTICRRawPreProcessParameters ; 
-                            spectra_form.LoadMicromassTOFFile(path_dir) ;
+                            spectra_form = new frmSpectra();
+                            spectra_form.PeakProcessorParameters = mobjPeakParameters;
+                            spectra_form.HornTransformParameters = mobjTransformParameters;
+                            spectra_form.FTICRPreProcessOptions = mobjFTICRRawPreProcessParameters;
+                            spectra_form.LoadMicromassTOFFile(path_dir);
                             mMediator.RequestFormOpen(spectra_form);
-                            break ; 
+                            break;
                         case 4:
                             // Open Bruker File
-                            ticComputeResult = MessageBox.Show(this, 
-                                "Opening Bruker ser File. The .ser file does not have precomputed TIC stored. Would you like to load tic (could take a couple of minutes)?", 
-                                "Compute Tic for .ser file?", MessageBoxButtons.YesNoCancel) ; 
+                            ticComputeResult = MessageBox.Show(this,
+                                "Opening Bruker ser File. The .ser file does not have precomputed TIC stored. Would you like to load tic (could take a couple of minutes)?",
+                                "Compute Tic for .ser file?", MessageBoxButtons.YesNoCancel);
                             if (ticComputeResult == DialogResult.Cancel)
-                                return ; 
-                            spectra_form = new frmSpectra() ; 
-                            spectra_form.PeakProcessorParameters = mobjPeakParameters ; 
-                            spectra_form.HornTransformParameters = mobjTransformParameters ; 
-                            spectra_form.FTICRPreProcessOptions = mobjFTICRRawPreProcessParameters ; 
+                                return;
+                            spectra_form = new frmSpectra();
+                            spectra_form.PeakProcessorParameters = mobjPeakParameters;
+                            spectra_form.HornTransformParameters = mobjTransformParameters;
+                            spectra_form.FTICRPreProcessOptions = mobjFTICRRawPreProcessParameters;
                             if (ticComputeResult == DialogResult.Yes)
                             {
-                                spectra_form.LoadFileWithTicThreaded(path_dir, DeconToolsV2.Readers.FileType.BRUKER) ; 
+                                spectra_form.LoadFileWithTicThreaded(path_dir, DeconToolsV2.Readers.FileType.BRUKER);
                                 mMediator.RequestFormOpen(spectra_form);
                             }
                             else
                             {
-                                spectra_form.LoadBrukerFile(path_dir) ; 
+                                spectra_form.LoadBrukerFile(path_dir);
                                 mMediator.RequestFormOpen(spectra_form);
                             }
                             mMediator.RequestFormOpen(spectra_form);
-                            break ; 
+                            break;
                         case 5:
                             // Open S file (ICR2LS format) file
-                            spectra_form = new frmSpectra() ; 
-                            spectra_form.PeakProcessorParameters = mobjPeakParameters ; 
-                            spectra_form.HornTransformParameters = mobjTransformParameters ; 
-                            spectra_form.FTICRPreProcessOptions = mobjFTICRRawPreProcessParameters ; 
-                            spectra_form.LoadSFileICR2LSFormat(file_name) ; 
+                            spectra_form = new frmSpectra();
+                            spectra_form.PeakProcessorParameters = mobjPeakParameters;
+                            spectra_form.HornTransformParameters = mobjTransformParameters;
+                            spectra_form.FTICRPreProcessOptions = mobjFTICRRawPreProcessParameters;
+                            spectra_form.LoadSFileICR2LSFormat(file_name);
                             mMediator.RequestFormOpen(spectra_form);
-                            break ; 
+                            break;
                         case 6:
                             // Open S file (SUNExtrel format) file
-                            spectra_form = new frmSpectra() ; 
-                            spectra_form.PeakProcessorParameters = mobjPeakParameters ; 
-                            spectra_form.HornTransformParameters = mobjTransformParameters ; 
-                            spectra_form.FTICRPreProcessOptions = mobjFTICRRawPreProcessParameters ; 
-                            spectra_form.LoadSFileSUNExtrelFormat(file_name) ; 
+                            spectra_form = new frmSpectra();
+                            spectra_form.PeakProcessorParameters = mobjPeakParameters;
+                            spectra_form.HornTransformParameters = mobjTransformParameters;
+                            spectra_form.FTICRPreProcessOptions = mobjFTICRRawPreProcessParameters;
+                            spectra_form.LoadSFileSUNExtrelFormat(file_name);
                             mMediator.RequestFormOpen(spectra_form);
-                            break ; 
+                            break;
                         case 7:
-                            ticComputeResult = MessageBox.Show(this, 
-                                "Opening MZXml File. MZXml does not have precomputed TIC stored. Would you like to compute tic (could take a minute or two)?", 
-                                "Compute Tic for MZXml file?", MessageBoxButtons.YesNoCancel) ; 
+                            ticComputeResult = MessageBox.Show(this,
+                                "Opening MZXml File. MZXml does not have precomputed TIC stored. Would you like to compute tic (could take a minute or two)?",
+                                "Compute Tic for MZXml file?", MessageBoxButtons.YesNoCancel);
                             if (ticComputeResult == DialogResult.Cancel)
-                                return ; 
+                                return;
                             // Open MZXML file (MZXML format) file
-                            spectra_form = new frmSpectra() ; 
-                            spectra_form.PeakProcessorParameters = mobjPeakParameters ; 
-                            spectra_form.HornTransformParameters = mobjTransformParameters ; 
-                            spectra_form.FTICRPreProcessOptions = mobjFTICRRawPreProcessParameters ; 
+                            spectra_form = new frmSpectra();
+                            spectra_form.PeakProcessorParameters = mobjPeakParameters;
+                            spectra_form.HornTransformParameters = mobjTransformParameters;
+                            spectra_form.FTICRPreProcessOptions = mobjFTICRRawPreProcessParameters;
                             if (ticComputeResult == DialogResult.Yes)
                             {
-                                spectra_form.LoadFileWithTicThreaded(file_name, DeconToolsV2.Readers.FileType.MZXMLRAWDATA) ; 
+                                spectra_form.LoadFileWithTicThreaded(file_name, DeconToolsV2.Readers.FileType.MZXMLRAWDATA);
                                 mMediator.RequestFormOpen(spectra_form);
                             }
                             else
                             {
-                                spectra_form.LoadMZXMLFile(file_name) ; 
+                                spectra_form.LoadMZXMLFile(file_name);
                                 mMediator.RequestFormOpen(spectra_form);
                             }
-                            break ; 
+                            break;
                         case 8:
                             // Open IMF File
-                            spectra_form = new frmSpectra() ; 
-                            spectra_form.PeakProcessorParameters = mobjPeakParameters ; 
-                            spectra_form.HornTransformParameters = mobjTransformParameters ; 
-                            spectra_form.FTICRPreProcessOptions = mobjFTICRRawPreProcessParameters ; 
-                            spectra_form.LoadIMFTOFFile(file_name) ;
+                            spectra_form = new frmSpectra();
+                            spectra_form.PeakProcessorParameters = mobjPeakParameters;
+                            spectra_form.HornTransformParameters = mobjTransformParameters;
+                            spectra_form.FTICRPreProcessOptions = mobjFTICRRawPreProcessParameters;
+                            spectra_form.LoadIMFTOFFile(file_name);
                             mMediator.RequestFormOpen(spectra_form);
-                            break ; 
+                            break;
                         case 9:
                             // Open UIMF File
-                            spectra_form = new frmSpectra() ; 
-                            spectra_form.PeakProcessorParameters = mobjPeakParameters ; 
-                            spectra_form.HornTransformParameters = mobjTransformParameters ; 
-                            spectra_form.FTICRPreProcessOptions = mobjFTICRRawPreProcessParameters ; 
-                            spectra_form.LoadUIMFFile(file_name) ;
+                            spectra_form = new frmSpectra();
+                            spectra_form.PeakProcessorParameters = mobjPeakParameters;
+                            spectra_form.HornTransformParameters = mobjTransformParameters;
+                            spectra_form.FTICRPreProcessOptions = mobjFTICRRawPreProcessParameters;
+                            spectra_form.LoadUIMFFile(file_name);
                             mMediator.RequestFormOpen(spectra_form);
-                            break ; 
+                            break;
                         case 10:
-                            ticComputeResult = MessageBox.Show(this, 
-                                "Opening Bruker ascii File. The ascii file does not have precomputed TIC stored. Would you like to compute tic (could take a couple of minutes)?", 
-                                "Compute Tic for ascii file?", MessageBoxButtons.YesNoCancel) ; 
+                            ticComputeResult = MessageBox.Show(this,
+                                "Opening Bruker ascii File. The ascii file does not have precomputed TIC stored. Would you like to compute tic (could take a couple of minutes)?",
+                                "Compute Tic for ascii file?", MessageBoxButtons.YesNoCancel);
                             if (ticComputeResult == DialogResult.Cancel)
-                                return ; 
-                            spectra_form = new frmSpectra() ; 
-                            spectra_form.PeakProcessorParameters = mobjPeakParameters ; 
-                            spectra_form.HornTransformParameters = mobjTransformParameters ; 
-                            spectra_form.FTICRPreProcessOptions = mobjFTICRRawPreProcessParameters ; 
+                                return;
+                            spectra_form = new frmSpectra();
+                            spectra_form.PeakProcessorParameters = mobjPeakParameters;
+                            spectra_form.HornTransformParameters = mobjTransformParameters;
+                            spectra_form.FTICRPreProcessOptions = mobjFTICRRawPreProcessParameters;
                             if (ticComputeResult == DialogResult.Yes)
                             {
-                                spectra_form.LoadFileWithTicThreaded(file_name, DeconToolsV2.Readers.FileType.BRUKER_ASCII) ; 
+                                spectra_form.LoadFileWithTicThreaded(file_name, DeconToolsV2.Readers.FileType.BRUKER_ASCII);
                                 mMediator.RequestFormOpen(spectra_form);
                             }
                             else
                             {
-                                spectra_form.LoadBrukerAsciiFile(path_dir) ; 
+                                spectra_form.LoadBrukerAsciiFile(path_dir);
                                 mMediator.RequestFormOpen(spectra_form);
                             }
                             mMediator.RequestFormOpen(spectra_form);
-                            break ; 
+                            break;
                         case 11:
-                            ticComputeResult = MessageBox.Show(this, 
-                                "Opening ascii file. Since the file is unindexed we will have to scan the file first. This could take a few minutes for large files. Continue ?", 
-                                "Warning", MessageBoxButtons.YesNo) ; 
+                            ticComputeResult = MessageBox.Show(this,
+                                "Opening ascii file. Since the file is unindexed we will have to scan the file first. This could take a few minutes for large files. Continue ?",
+                                "Warning", MessageBoxButtons.YesNo);
                             if (ticComputeResult == DialogResult.No)
-                                return ; 
+                                return;
 
-                            spectra_form = new frmSpectra() ; 
-                            spectra_form.PeakProcessorParameters = mobjPeakParameters ; 
-                            spectra_form.HornTransformParameters = mobjTransformParameters ; 
-                            spectra_form.FTICRPreProcessOptions = mobjFTICRRawPreProcessParameters ; 
+                            spectra_form = new frmSpectra();
+                            spectra_form.PeakProcessorParameters = mobjPeakParameters;
+                            spectra_form.HornTransformParameters = mobjTransformParameters;
+                            spectra_form.FTICRPreProcessOptions = mobjFTICRRawPreProcessParameters;
                             if (ticComputeResult == DialogResult.Yes)
                             {
-                                spectra_form.LoadFileWithTicThreaded(file_name, DeconToolsV2.Readers.FileType.ASCII) ; 
+                                spectra_form.LoadFileWithTicThreaded(file_name, DeconToolsV2.Readers.FileType.ASCII);
                                 mMediator.RequestFormOpen(spectra_form);
                             }
 
                             mMediator.RequestFormOpen(spectra_form);
-                            break ; 
+                            break;
                         default:
                             // Open any kind of file. First get file type here.
-                            break ; 
+                            break;
                     }
                 }
                 else
@@ -612,7 +606,7 @@ namespace Decon2LS
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString()) ; 
+                MessageBox.Show(ex.ToString());
             }
 
         }
@@ -621,17 +615,17 @@ namespace Decon2LS
         {
             try
             {
-                var process_frm = new frmProcess(ref mobj_config) ; 
-                process_frm.PeakProcessorParameters = mobjPeakParameters ; 
-                process_frm.MassTransformParameters = mobjTransformParameters ; 
-                    process_frm.FTICRPreProcessParameters = mobjFTICRRawPreProcessParameters ; 
-                process_frm.DTAGenerationParameters = mobjDTAGenerationParameters ; 
-                process_frm.Show() ; 
-                process_frm.MdiParent = this ; 
+                var process_frm = new frmProcess(ref mobj_config);
+                process_frm.PeakProcessorParameters = mobjPeakParameters;
+                process_frm.MassTransformParameters = mobjTransformParameters;
+                process_frm.FTICRPreProcessParameters = mobjFTICRRawPreProcessParameters;
+                process_frm.DTAGenerationParameters = mobjDTAGenerationParameters;
+                process_frm.Show();
+                process_frm.MdiParent = this;
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, ex.Message + ex.StackTrace) ; 
+                MessageBox.Show(this, ex.Message + ex.StackTrace);
             }
 
         }
@@ -664,27 +658,27 @@ namespace Decon2LS
         }
 
         /// <summary>
-        /// Notified when a form opened via the OpenMdiChild method is closed.  
+        /// Notified when a form opened via the OpenMdiChild method is closed.
         /// Propagates event to the mediator.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void MdiChildClosed(object sender, EventArgs e)
         {
-            try 
+            try
             {
-                var form = (Form) sender;
+                var form = (Form)sender;
                 // Propogate event to mediator
-                if (form is ICategorizedItem) 
+                if (form is ICategorizedItem)
                 {
-                    mMediator.RaiseItemClose(this, (ICategorizedItem) form);
+                    mMediator.RaiseItemClose(this, (ICategorizedItem)form);
                 }
                 // Remove closed event handler from form
                 form.Closed -= this.mMdiChildCloseHandler;
-            } 
-            catch (Exception ex) 
+            }
+            catch (Exception ex)
             {
-                MessageBox.Show(this, ex.Message + ex.StackTrace) ; 
+                MessageBox.Show(this, ex.Message + ex.StackTrace);
             }
         }
 
@@ -695,19 +689,19 @@ namespace Decon2LS
 
         private void mtlbMain_ButtonClick(object sender, System.Windows.Forms.ToolBarButtonClickEventArgs e)
         {
-            
+
         }
 
         private void menuItemAbout_Click(object sender, System.EventArgs e)
         {
             try
             {
-                var aboutForm = new frmAbout() ; 
-                aboutForm.ShowDialog(this) ; 
+                var aboutForm = new frmAbout();
+                aboutForm.ShowDialog(this);
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message + ex.StackTrace) ; 
+                Console.WriteLine(ex.Message + ex.StackTrace);
             }
         }
 
@@ -716,36 +710,36 @@ namespace Decon2LS
             try
             {
                 var openFileDialog1 = new OpenFileDialog();
-                openFileDialog1.Filter = "Raw Peak Files (*.dat)|*.dat" ;
-                openFileDialog1.FilterIndex = 1 ;
-                openFileDialog1.RestoreDirectory = true ;
-                openFileDialog1.InitialDirectory = mobj_config.OpenDir ; 
-                
-                
+                openFileDialog1.Filter = "Raw Peak Files (*.dat)|*.dat";
+                openFileDialog1.FilterIndex = 1;
+                openFileDialog1.RestoreDirectory = true;
+                openFileDialog1.InitialDirectory = mobj_config.OpenDir;
 
-                if(openFileDialog1.ShowDialog() == DialogResult.OK)
+
+
+                if (openFileDialog1.ShowDialog() == DialogResult.OK)
                 {
-                    var file_name = openFileDialog1.FileName ; 
-                    var index = file_name.LastIndexOf("\\") ;
-                    var path_dir = "" ; 
+                    var file_name = openFileDialog1.FileName;
+                    var index = file_name.LastIndexOf("\\");
+                    var path_dir = "";
 
                     if (index > 0)
                     {
-                        path_dir = file_name.Substring(0, index) ; 
-                        mobj_config.OpenDir = path_dir ; 
+                        path_dir = file_name.Substring(0, index);
+                        mobj_config.OpenDir = path_dir;
                     }
-                    var transformResults = new DeconToolsV2.Results.clsTransformResults() ; 
-                    transformResults.ReadResults(file_name) ; 
-                    var frmTwoD = new frm2DPeakProcessing(transformResults) ;
-                    frmTwoD.HornTransformParameters = mobjTransformParameters ; 
-                    frmTwoD.PeakProcessorParameters = mobjPeakParameters ;
-                    frmTwoD.FTICRPreProcessOptions = mobjFTICRRawPreProcessParameters ;
-                    mMediator.RequestFormOpen(frmTwoD) ; 
+                    var transformResults = new DeconToolsV2.Results.clsTransformResults();
+                    transformResults.ReadResults(file_name);
+                    var frmTwoD = new frm2DPeakProcessing(transformResults);
+                    frmTwoD.HornTransformParameters = mobjTransformParameters;
+                    frmTwoD.PeakProcessorParameters = mobjPeakParameters;
+                    frmTwoD.FTICRPreProcessOptions = mobjFTICRRawPreProcessParameters;
+                    mMediator.RequestFormOpen(frmTwoD);
                 }
-            }			
+            }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString()) ; 
+                MessageBox.Show(ex.ToString());
             }
         }
 
@@ -754,12 +748,12 @@ namespace Decon2LS
             try
             {
                 var mercury = new frmMercury();
-                mercury.ElementIsotopes = mobjTransformParameters.ElementIsotopeComposition ; 
-                mMediator.RequestFormOpen(mercury);		
+                mercury.ElementIsotopes = mobjTransformParameters.ElementIsotopeComposition;
+                mMediator.RequestFormOpen(mercury);
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message + ex.StackTrace) ; 
+                Console.WriteLine(ex.Message + ex.StackTrace);
             }
         }
 
@@ -769,106 +763,108 @@ namespace Decon2LS
             {
 
                 var openFileDialog1 = new OpenFileDialog();
-                openFileDialog1.Filter = "Scans CSV File (*_scans.csv)|*.csv|ICR2LS TIC File (*.*)|*.tic" ;
-                openFileDialog1.FilterIndex = 1 ;
-                openFileDialog1.RestoreDirectory = true ;
-                openFileDialog1.InitialDirectory = mobj_config.OpenDir ; 
+                openFileDialog1.Filter = "Scans CSV File (*_scans.csv)|*.csv|ICR2LS TIC File (*.*)|*.tic";
+                openFileDialog1.FilterIndex = 1;
+                openFileDialog1.RestoreDirectory = true;
+                openFileDialog1.InitialDirectory = mobj_config.OpenDir;
 
-                if(openFileDialog1.ShowDialog() == DialogResult.OK)
+                if (openFileDialog1.ShowDialog() == DialogResult.OK)
                 {
-                    var file_name = openFileDialog1.FileName ; 
-                    var index = file_name.LastIndexOf("\\") ;
-                    index++ ; 
-                    var file_name_without_path = "" ; 
+                    var file_name = openFileDialog1.FileName;
+                    var index = file_name.LastIndexOf("\\");
+                    index++;
+                    var file_name_without_path = "";
 
                     if (index > 0)
                     {
-                        file_name_without_path = file_name.Substring(index, file_name.Length-index) ; 							
+                        file_name_without_path = file_name.Substring(index, file_name.Length - index);
                     }
-                    
-                    var frmTIC = new frmTICViewer() ; 
-                    frmTIC.mFileName = file_name  ; 
-                    frmTIC.mFileNameForHeader = file_name_without_path ; 
-                    switch(openFileDialog1.FilterIndex)
+
+                    var frmTIC = new frmTICViewer();
+                    frmTIC.mFileName = file_name;
+                    frmTIC.mFileNameForHeader = file_name_without_path;
+                    switch (openFileDialog1.FilterIndex)
                     {
-                        case 1 :frmTIC.LoadScansTICFile() ; 					
-                            break  ; 
-                        case 2: frmTIC.LoadIcr2lsTICFile()  ; 
-                            break ;
-                        default: break ; 
+                        case 1:
+                            frmTIC.LoadScansTICFile();
+                            break;
+                        case 2:
+                            frmTIC.LoadIcr2lsTICFile();
+                            break;
+                        default: break;
                     }
-            
-                    mMediator.RequestFormOpen(frmTIC) ; 
+
+                    mMediator.RequestFormOpen(frmTIC);
                 }
-                
-                
+
+
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message + ex.StackTrace) ; 
+                Console.WriteLine(ex.Message + ex.StackTrace);
             }
         }
 
         private void frmDecon2LS_DragDrop(object sender, System.Windows.Forms.DragEventArgs e)
         {
-            foreach (var fileName in (string[])e.Data.GetData(DataFormats.FileDrop) )
+            foreach (var fileName in (string[])e.Data.GetData(DataFormats.FileDrop))
             {
 
-                var index = fileName.LastIndexOf("\\") ;
-                var path_dir = "" ; 			
+                var index = fileName.LastIndexOf("\\");
+                var path_dir = "";
 
                 if (index > 0)
                 {
-                    path_dir = fileName.Substring(0, index) ; 
-                    mobj_config.OpenDir = path_dir ; 
-                }		
+                    path_dir = fileName.Substring(0, index);
+                    mobj_config.OpenDir = path_dir;
+                }
 
                 if (fileName.EndsWith("_scans.csv"))
-                {					
-                    index++ ; 
-                    var file_name_without_path = "" ; 
+                {
+                    index++;
+                    var file_name_without_path = "";
 
                     if (index > 0)
                     {
-                        file_name_without_path = fileName.Substring(index, fileName.Length-index) ; 							
+                        file_name_without_path = fileName.Substring(index, fileName.Length - index);
                     }
-                    
-                    var frmTIC = new frmTICViewer() ; 
-                    frmTIC.mFileName = fileName  ; 
-                    frmTIC.mFileNameForHeader = file_name_without_path ; 
-                    frmTIC.LoadScansTICFile() ; 					
-                    mMediator.RequestFormOpen(frmTIC) ;
+
+                    var frmTIC = new frmTICViewer();
+                    frmTIC.mFileName = fileName;
+                    frmTIC.mFileNameForHeader = file_name_without_path;
+                    frmTIC.LoadScansTICFile();
+                    mMediator.RequestFormOpen(frmTIC);
                 }
                 else if (fileName.EndsWith(".dat"))
-                {	
-                    var transformResults = new DeconToolsV2.Results.clsTransformResults() ; 
-                    transformResults.ReadResults(fileName) ; 
-                    var frmTwoD = new frm2DPeakProcessing(transformResults) ;
-                    frmTwoD.HornTransformParameters = mobjTransformParameters ; 
-                    frmTwoD.PeakProcessorParameters = mobjPeakParameters ;
-                    frmTwoD.FTICRPreProcessOptions = mobjFTICRRawPreProcessParameters ;
-                    mMediator.RequestFormOpen(frmTwoD) ; 
-                }	
-                else if(fileName.EndsWith(".tic"))
                 {
-                    index++ ; 
-                    var file_name_without_path = "" ; 
+                    var transformResults = new DeconToolsV2.Results.clsTransformResults();
+                    transformResults.ReadResults(fileName);
+                    var frmTwoD = new frm2DPeakProcessing(transformResults);
+                    frmTwoD.HornTransformParameters = mobjTransformParameters;
+                    frmTwoD.PeakProcessorParameters = mobjPeakParameters;
+                    frmTwoD.FTICRPreProcessOptions = mobjFTICRRawPreProcessParameters;
+                    mMediator.RequestFormOpen(frmTwoD);
+                }
+                else if (fileName.EndsWith(".tic"))
+                {
+                    index++;
+                    var file_name_without_path = "";
 
                     if (index > 0)
                     {
-                        file_name_without_path = fileName.Substring(index, fileName.Length-index) ; 							
+                        file_name_without_path = fileName.Substring(index, fileName.Length - index);
                     }
-                    
-                    var frmTIC = new frmTICViewer() ; 
-                    frmTIC.mFileName = fileName  ; 
-                    frmTIC.mFileNameForHeader = file_name_without_path ; 
-                    frmTIC.LoadIcr2lsTICFile() ; 				
-                    mMediator.RequestFormOpen(frmTIC) ;
+
+                    var frmTIC = new frmTICViewer();
+                    frmTIC.mFileName = fileName;
+                    frmTIC.mFileNameForHeader = file_name_without_path;
+                    frmTIC.LoadIcr2lsTICFile();
+                    mMediator.RequestFormOpen(frmTIC);
                 }
                 else
                 {
-                    
-                    Console.WriteLine("File cannot be dragged and dropped") ; 
+
+                    Console.WriteLine("File cannot be dragged and dropped");
                 }
             }
         }
@@ -885,34 +881,34 @@ namespace Decon2LS
         {
             try
             {
-                    // time to expose the options. 
-                    var frmOptions = new frmTransformOptions(mobjPeakParameters, mobjTransformParameters, 
-                        mobjFTICRRawPreProcessParameters, mobjDTAGenerationParameters) ; 
-                    var result = frmOptions.ShowDialog(this) ; 
-                    if (result == DialogResult.Cancel)
-                        return ; 
-                
-                    //this fills the local parameters with those from frmOptions
-                    frmOptions.GetTransformOptions(mobjTransformParameters) ; 
-                    frmOptions.GetMiscellaneousOptions(mobjTransformParameters) ; 
-                    frmOptions.GetDTASettings(mobjDTAGenerationParameters) ; 
-                    frmOptions.GetPeakPickingOptions(mobjPeakParameters) ; 
-                    frmOptions.GetFTICRRawPreProcessing(mobjFTICRRawPreProcessParameters) ; 
+                // time to expose the options.
+                var frmOptions = new frmTransformOptions(mobjPeakParameters, mobjTransformParameters,
+                    mobjFTICRRawPreProcessParameters, mobjDTAGenerationParameters);
+                var result = frmOptions.ShowDialog(this);
+                if (result == DialogResult.Cancel)
+                    return;
+
+                //this fills the local parameters with those from frmOptions
+                frmOptions.GetTransformOptions(mobjTransformParameters);
+                frmOptions.GetMiscellaneousOptions(mobjTransformParameters);
+                frmOptions.GetDTASettings(mobjDTAGenerationParameters);
+                frmOptions.GetPeakPickingOptions(mobjPeakParameters);
+                frmOptions.GetFTICRRawPreProcessing(mobjFTICRRawPreProcessParameters);
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message + ex.StackTrace) ; 
+                Console.WriteLine(ex.Message + ex.StackTrace);
             }
-        
+
         }
 
         private void mFileTreeView_BeforeExpand(object sender, System.Windows.Forms.TreeViewCancelEventArgs e)
         {
 
-//			if (e.Node.Tag is CategorizedInfo)
-//			{
-//				MessageBox.Show(((CategorizedInfo)(e.Node.Tag)).Text);
-//			}
+            //			if (e.Node.Tag is CategorizedInfo)
+            //			{
+            //				MessageBox.Show(((CategorizedInfo)(e.Node.Tag)).Text);
+            //			}
 
         }
 

@@ -40,7 +40,7 @@ namespace Decon2LS
         private DeconToolsV2.clsIsotopeFit mobjIsotopeFit;
 #pragma warning restore 618
 
-        private double mdbl_current_background_intensity = 0;
+        private double mdbl_current_background_intensity;
         private PNNL.Controls.clsSeries mobj_spectrum_series;
         private PNNL.Controls.clsSeries mobj_spectrum_peak_series;
         private PNNL.Controls.clsPlotParams mobj_spectrum_plt_params;
@@ -69,26 +69,26 @@ namespace Decon2LS
 
         readonly MenuItem menuItemShowHypertransformSpectrum = new MenuItem("&Show Hypertransform Spectrum");
 
-        private bool mbln_processing = false;
+        private bool mbln_processing;
         private DeconToolsV2.HornTransform.clsHornTransformResults[] marr_transformResults;
 
 #pragma warning disable 618
         private DeconToolsV2.Peaks.clsPeakProcessor mobj_PeakProcessor;
-        private EventHandler mStatusUpdateDelegate = null;
-        private DeconToolsV2.Readers.clsRawData mobjRawData = null;
+        private EventHandler mStatusUpdateDelegate;
+        private DeconToolsV2.Readers.clsRawData mobjRawData;
 #pragma warning restore 618
 
         private readonly int mint_num_zero_fill_discontinuous = 3;
         public event ScanChangedEventHandler mevntScanChanged;
 
         private DeconToolsV2.Peaks.clsPeak[] mobj_peaks;
-        private bool mblnDisplayTimeDomain = false;
-        private float[] marr_current_time_domain_values = null;
-        private float[] marr_current_mzs = null;
-        private float[] marr_current_intensities = null;
+        private bool mblnDisplayTimeDomain;
+        private float[] marr_current_time_domain_values;
+        private float[] marr_current_mzs;
+        private float[] marr_current_intensities;
 
 
-        private int mint_spectrum_num = 0;
+        private int mint_spectrum_num;
         private System.Windows.Forms.Timer mStatusTimer;
         private string mstrDescription;
 
