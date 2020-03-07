@@ -44,7 +44,7 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
             fAvnN = 1.3577f;
             fAvnO = 1.4773f;
             fAvnS = 0.0417f;
-            afAvn =new[] { fAvnH, fAvnC, fAvnN, fAvnO, fAvnS };
+            afAvn = new[] { fAvnH, fAvnC, fAvnN, fAvnO, fAvnS };
 
         }
 
@@ -80,7 +80,7 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
         double fS34m = 33.96786f;
         double fS34a = 0.0421f;
         //double fS35m = 35.96754f;
-       // double fS35a = 0.0002f;
+        // double fS35a = 0.0002f;
         double[] afHa;
         double[] afCa;
         double[] afNa;
@@ -91,8 +91,8 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
         //public double[][] aafN15Isos = { afHa, afCa, afNna, afOa, afSa };
         public double[][] aafIsos;
         public double[][] aafN15Isos;
-        double[] afHm ;
-        double[] afCm ;
+        double[] afHm;
+        double[] afCm;
         double[] afNm;
         double[] afOm;
         double[] afSm;

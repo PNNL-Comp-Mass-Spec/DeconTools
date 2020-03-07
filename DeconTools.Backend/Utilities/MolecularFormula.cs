@@ -25,7 +25,7 @@ namespace DeconTools.Backend.Utilities
             {
                 var regex = new Regex(partRegex);
                 var formula = new MolecularFormula();
-                var matches = regex.Matches(input) ;
+                var matches = regex.Matches(input);
                 foreach (Match match in matches)
                 {
                     if (!partFormulas.TryGetValue(match.Value, out var partFormula))
@@ -102,7 +102,7 @@ namespace DeconTools.Backend.Utilities
         /// method.
         /// </summary>
         private static readonly SortedSet<string> ORGANIC_PREFERENCE_ELEMENTS =
-            new SortedSet<string> {"C", "Ci", "Cn", "H", "D", "Hi", "N", "Ni", "Nn", "Nx", "O", "Oi", "On", "S"};
+            new SortedSet<string> { "C", "Ci", "Cn", "H", "D", "Hi", "N", "Ni", "Nn", "Nx", "O", "Oi", "On", "S" };
 
         /// <summary>
         /// Parses a formula into &lt;Symbol, Count&gt; pairs.  The count matches at most
@@ -209,8 +209,8 @@ namespace DeconTools.Backend.Utilities
                                 element + " is not allowed.");
                         }
                     }
-                        // This can never actually happen, because the regex makes sure that
-                        // only integer values which can be parsed make it to this stage
+                    // This can never actually happen, because the regex makes sure that
+                    // only integer values which can be parsed make it to this stage
                     catch (Exception ex)
                     {
                         throw new ApplicationException("The multiple for element " + element + ", " + count + ", was not parseable", ex);
@@ -353,7 +353,8 @@ namespace DeconTools.Backend.Utilities
                 throw new ArgumentOutOfRangeException(nameof(multiple), multiple, "Multiple must be >= 0");
             }
 
-            var newFormula = new MolecularFormula(this) {
+            var newFormula = new MolecularFormula(this)
+            {
                 name = null,
                 formulaString = null
             };
@@ -375,7 +376,7 @@ namespace DeconTools.Backend.Utilities
                 return false;
             }
 
-            var mf = (MolecularFormula) obj;
+            var mf = (MolecularFormula)obj;
             if (mf.elementCounts.Count != elementCounts.Count)
             {
                 return false;
