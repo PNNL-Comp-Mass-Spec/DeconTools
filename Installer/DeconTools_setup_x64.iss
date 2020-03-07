@@ -15,6 +15,12 @@ WelcomeLabel2=This will install [name/ver] on your computer.%n%n%n%nNOTICE:%nSom
 Source: DeconConsole\bin\x64\Release\DeconConsole.exe                                     ; DestDir: {app}
 Source: DeconConsole\bin\x64\Release\DeconConsole.exe.config                              ; DestDir: {app}
 
+Source: DeconConsole\bin\x64\Release\BaseCommon.dll                                       ; DestDir: {app}
+Source: DeconConsole\bin\x64\Release\BaseDataAccess.dll                                   ; DestDir: {app}
+Source: DeconConsole\bin\x64\Release\BaseError.dll                                        ; DestDir: {app}
+Source: DeconConsole\bin\x64\Release\MassSpecDataReader.dll                               ; DestDir: {app}
+Source: DeconConsole\bin\x64\Release\SQLite.Interop.dll                                   ; DestDir: {app}
+
 Source: DeconTools.Backend\bin\x64\Release\DeconTools.Backend.dll                         ; DestDir: {app}
 Source: DeconTools.Backend\bin\x64\Release\MathNet.Numerics.dll                           ; DestDir: {app}
 
@@ -29,14 +35,13 @@ Source: DeconTools.Backend\bin\x64\Release\PRISM.dll                            
 
 Source: Library\alglibnet2.dll                                                            ; DestDir: {app}
 Source: Library\BrukerDataReader.dll                                                      ; DestDir: {app}
-
 Source: Library\GWSFileUtilities.dll                                                      ; DestDir: {app}
 Source: Library\DLLsToBeCopied_x64\Interop.EDAL.SxS.manifest                              ; DestDir: {app}
 Source: Library\DLLsToBeCopied\Interop.HSREADWRITELib.SxS.manifest                        ; DestDir: {app}
 Source: Library\Mapack.dll                                                                ; DestDir: {app}
 Source: Library\DLLsToBeCopied_x64\MassLynxRaw.dll                                        ; DestDir: {app}
 Source: Library\MSDBLibrary.dll                                                           ; DestDir: {app}
-Source: Library\DLLsToBeCopied\MSFileReader.XRawfile2.SxS.manifest                        ; DestDir: {app}
+Source: Library\x64\DeconEngineV2.dll                                                     ; DestDir: {app}
 Source: Library\x64\MultiAlignEngine.dll                                                  ; DestDir: {app}
 Source: Library\PNNLOmics.dll                                                             ; DestDir: {app}
 Source: Library\PNNLOmicsElementData.xml                                                  ; DestDir: {app}
