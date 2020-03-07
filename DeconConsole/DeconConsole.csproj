@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -90,12 +90,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DeconTools.Backend\DeconTools.Backend.csproj">
-      <Project>{C9D895E0-A35E-497B-9103-0EC2FEFAAC56}</Project>
-      <Name>DeconTools.Backend</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="MathNet.Numerics">
       <Version>4.9.0</Version>
     </PackageReference>
@@ -106,6 +100,12 @@
     <PackageReference Include="UIMFLibrary">
       <Version>3.7.3</Version>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DeconTools.Backend\DeconTools.Backend.csproj">
+      <Project>{c9d895e0-a35e-497b-9103-0ec2fefaac56}</Project>
+      <Name>DeconTools.Backend</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

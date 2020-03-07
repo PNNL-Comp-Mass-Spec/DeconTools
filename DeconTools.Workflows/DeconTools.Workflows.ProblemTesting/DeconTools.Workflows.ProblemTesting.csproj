@@ -58,7 +58,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\DeconTools.Backend\DeconTools.Backend.csproj">
-      <Project>{C9D895E0-A35E-497B-9103-0EC2FEFAAC56}</Project>
+      <Project>{c9d895e0-a35e-497b-9103-0ec2fefaac56}</Project>
       <Name>DeconTools.Backend</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\DeconTools.UnitTesting2\DeconTools.UnitTesting2.csproj">
@@ -66,7 +66,7 @@
       <Name>DeconTools.UnitTesting2</Name>
     </ProjectReference>
     <ProjectReference Include="..\DeconTools.Workflows\DeconTools.Workflows.csproj">
-      <Project>{3041D403-9165-4018-8F83-FFBAA8528B79}</Project>
+      <Project>{3041d403-9165-4018-8f83-ffbaa8528b79}</Project>
       <Name>DeconTools.Workflows</Name>
     </ProjectReference>
   </ItemGroup>

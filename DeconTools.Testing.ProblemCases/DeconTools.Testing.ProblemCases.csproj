@@ -41,11 +41,9 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DeconEngineV2">
+    <Reference Include="DeconEngineV2, Version=1.0.6632.30486, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Library\DeconEngineV2.dll</HintPath>
-    </Reference>
-    <Reference Include="MSDataFileReader">
-      <HintPath>..\Library\MSDataFileReader.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -59,6 +57,10 @@
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="ThermoRawFileReader, Version=3.0.7368.31211, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Library\ThermoRawFileReader.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class1.cs" />
@@ -83,7 +85,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DeconTools.Backend\DeconTools.Backend.csproj">
-      <Project>{C9D895E0-A35E-497B-9103-0EC2FEFAAC56}</Project>
+      <Project>{c9d895e0-a35e-497b-9103-0ec2fefaac56}</Project>
       <Name>DeconTools.Backend</Name>
     </ProjectReference>
     <ProjectReference Include="..\DeconTools.UnitTesting2\DeconTools.UnitTesting2.csproj">
@@ -100,7 +102,7 @@
     </PackageReference>
     <PackageReference Include="System.Data.SQLite.Core" Version="1.0.111" />
     <PackageReference Include="UIMFLibrary">
-      <Version>3.7.0</Version>
+      <Version>3.7.3</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -69,6 +69,11 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Library\BrukerDataReader.dll</HintPath>
     </Reference>
+    <Reference Include="DeconEngineV2">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Library\x64\DeconEngineV2.dll</HintPath>
+      <Aliases>global</Aliases>
+    </Reference>
     <Reference Include="Interop.EDAL">
       <HintPath>..\Library\x64\Interop.EDAL.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
