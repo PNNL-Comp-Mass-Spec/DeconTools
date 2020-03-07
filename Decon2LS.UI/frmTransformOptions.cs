@@ -39,7 +39,7 @@ namespace Decon2LS
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.TreeView treeView1;
         private System.Windows.Forms.Panel panel1;
-        private Decon2LS.ctlElementalIsotopeDisplay mctlElementalIsotopeDisplay;
+        // Unsupported: private Decon2LS.ctlElementalIsotopeDisplay mctlElementalIsotopeDisplay;
         private Decon2LS.ctlAveragineOptions mctlAveragineOptions;
         private Decon2LS.ctlThresholdSettings mctlThresholdSettings;
         private Decon2LS.ctlPeakPickingOptions mctlPeakPickingOptions;
@@ -137,7 +137,6 @@ namespace Decon2LS
         {
             try
             {
-                mctlElementalIsotopeDisplay.ElementIsotopes = hornParameters.ElementIsotopeComposition ; 
                 mctlAveragineOptions.TagFormula = hornParameters.TagFormula;
                 mctlAveragineOptions.AveragineFormula = hornParameters.AveragineFormula;
 
@@ -164,6 +163,7 @@ namespace Decon2LS
                 mctlHornMassTransformOptions.IsotopeFitType = hornParameters.IsotopeFitType;
                 mctlHornMassTransformOptions.UseAbsolutePeptideIntensity = hornParameters.UseAbsolutePeptideIntensity;
                 mctlHornMassTransformOptions.AbsolutePeptideIntensity = hornParameters.AbsolutePeptideIntensity;
+                // Unsupported: mctlElementalIsotopeDisplay.ElementIsotopes = hornParameters.ElementIsotopeComposition ;
                 mctlHornMassTransformOptions.IsActualMonoMZUsed = hornParameters.IsActualMonoMZUsed;
                 mctlHornMassTransformOptions.LeftFitStringencyFactor = hornParameters.LeftFitStringencyFactor;
                 mctlHornMassTransformOptions.RightFitStringencyFactor = hornParameters.RightFitStringencyFactor;
@@ -253,7 +253,6 @@ namespace Decon2LS
         {
             try
             {
-                hornParameters.ElementIsotopeComposition = mctlElementalIsotopeDisplay.ElementIsotopes ; 
                 hornParameters.TagFormula = mctlAveragineOptions.TagFormula;
                 hornParameters.AveragineFormula = mctlAveragineOptions.AveragineFormula;
 
@@ -277,6 +276,7 @@ namespace Decon2LS
 
                 hornParameters.UseAbsolutePeptideIntensity = mctlHornMassTransformOptions.UseAbsolutePeptideIntensity;
                 hornParameters.AbsolutePeptideIntensity = mctlHornMassTransformOptions.AbsolutePeptideIntensity;
+                // Unsupported: hornParameters.ElementIsotopeComposition = mctlElementalIsotopeDisplay.ElementIsotopes ;
                 hornParameters.SumSpectra = mctlHornMassTransformOptions.SumSpectra;
                 hornParameters.SumSpectraAcrossScanRange = mctlHornMassTransformOptions.SumAcrossScanRange;
                 hornParameters.NumScansToSumOver = mctlHornMassTransformOptions.NumScansToSumOver;
@@ -426,9 +426,9 @@ namespace Decon2LS
 
                 nodePeakPicking.Expand();
                 nodePeakPicking.ImageIndex = 1;
-                mctlElementalIsotopeDisplay = new ctlElementalIsotopeDisplay() ;
                 nodePeakPickingGeneral.ImageIndex = 2;
 
+                // Unsupported: mctlElementalIsotopeDisplay = new ctlElementalIsotopeDisplay() ;
                 mctlAveragineOptions = new ctlAveragineOptions();
                 mctlMiscellaneousOptions = new ctlMiscellaneousOptions();
                 mctlThresholdSettings = new ctlThresholdSettings();
@@ -445,11 +445,12 @@ namespace Decon2LS
                 this.mctlHornMassTransformOptions.Dock = DockStyle.Fill;
                 this.mctlHornMassTransformOptions.BringToFront();
 
-                this.mctlElementalIsotopeDisplay.Location = new System.Drawing.Point(232, 8);
-                this.mctlElementalIsotopeDisplay.Name = "mctlElementalIsotopeDisplay";
-                this.mctlElementalIsotopeDisplay.Size = new System.Drawing.Size(520, 472);
-                this.mctlElementalIsotopeDisplay.TabIndex = 10 ;
-                this.mctlElementalIsotopeDisplay.Visible = false;
+                // Unsupported:
+                //this.mctlElementalIsotopeDisplay.Location = new System.Drawing.Point(232, 8);
+                //this.mctlElementalIsotopeDisplay.Name = "mctlElementalIsotopeDisplay";
+                //this.mctlElementalIsotopeDisplay.Size = new System.Drawing.Size(520, 472);
+                //this.mctlElementalIsotopeDisplay.TabIndex = 10 ;
+                //this.mctlElementalIsotopeDisplay.Visible = false;
 
                 this.mctlPeakPickingOptions.Location = new System.Drawing.Point(232, 8);
                 this.mctlPeakPickingOptions.Name = "mctlPeakPickingOptions";
@@ -474,7 +475,7 @@ namespace Decon2LS
 
                 this.panel1.Controls.Add(this.mctlPeakPickingOptions);
                 this.panel1.Controls.Add(this.mctlHornMassTransformOptions);
-                this.panel1.Controls.Add(this.mctlElementalIsotopeDisplay);
+                // Unsupported: this.panel1.Controls.Add(this.mctlElementalIsotopeDisplay);
                 this.panel1.Controls.Add(this.mctlMiscellaneousOptions);
                 this.panel1.Controls.Add(this.mctlPreprocessOptions);
                 this.panel1.Controls.Add(this.mctlDTASettings);
@@ -651,7 +652,7 @@ namespace Decon2LS
                         mctlPeakPickingOptions.Visible = true;
                         mctlHornMassTransformOptions.Visible = false;
                         mctlAveragineOptions.Visible = false;
-                        mctlElementalIsotopeDisplay.Visible = false;
+                        // Unsupported: mctlElementalIsotopeDisplay.Visible = false;
                         mctlThresholdSettings.Visible = false;
                         mctlPreprocessOptions.Visible = false;
                         mctlMiscellaneousOptions.Visible = false;
@@ -678,7 +679,7 @@ namespace Decon2LS
                         mctlPeakPickingOptions.Visible = false;
                         mctlAveragineOptions.Visible = false;
                         mctlThresholdSettings.Visible = false;
-                        mctlElementalIsotopeDisplay.Visible = false;
+                        // Unsupported: mctlElementalIsotopeDisplay.Visible = false;
                         mctlPreprocessOptions.Visible = false;
                         mctlMiscellaneousOptions.Visible = false;
                         mctlDTASettings.Visible = false;
@@ -705,7 +706,7 @@ namespace Decon2LS
                         mctlAveragineOptions.BringToFront();
                         mctlAveragineOptions.Dock = DockStyle.Fill;
                         mctlAveragineOptions.Visible = true;
-                        mctlElementalIsotopeDisplay.Visible = false;
+                        // Unsupported: mctlElementalIsotopeDisplay.Visible = false;
                         mctlThresholdSettings.Visible = false;
                         mctlPreprocessOptions.Visible = false;
                         mctlMiscellaneousOptions.Visible = false;
@@ -729,7 +730,7 @@ namespace Decon2LS
                     mctlPeakPickingOptions.Visible = true;
                     mctlHornMassTransformOptions.Visible = false;
                     mctlAveragineOptions.Visible = false;
-                    mctlElementalIsotopeDisplay.Visible = false;
+                    // Unsupported: mctlElementalIsotopeDisplay.Visible = false;
                     mctlThresholdSettings.Visible = false;
                     mctlPreprocessOptions.Visible = false;
                     mctlMiscellaneousOptions.Visible = false;
@@ -752,7 +753,7 @@ namespace Decon2LS
                     mctlHornMassTransformOptions.Visible = true;
                     mctlPeakPickingOptions.Visible = false;
                     mctlAveragineOptions.Visible = false;
-                    mctlElementalIsotopeDisplay.Visible = false;
+                    // Unsupported: mctlElementalIsotopeDisplay.Visible = false;
                     mctlThresholdSettings.Visible = false;
                     mctlPreprocessOptions.Visible = false;
                     mctlDTASettings.Visible = false;
@@ -776,7 +777,7 @@ namespace Decon2LS
                     mctlThresholdSettings.Visible = true;
                     mctlPeakPickingOptions.Visible = false;
                     mctlAveragineOptions.Visible = false;
-                    mctlElementalIsotopeDisplay.Visible = false;
+                    // Unsupported: mctlElementalIsotopeDisplay.Visible = false;
                     mctlHornMassTransformOptions.Visible = false;
                     mctlPreprocessOptions.Visible = false;
                     mctlMiscellaneousOptions.Visible = false;
@@ -799,7 +800,7 @@ namespace Decon2LS
                     mctlThresholdSettings.Visible = false;
                     mctlPeakPickingOptions.Visible = false;
                     mctlAveragineOptions.Visible = false;
-                    mctlElementalIsotopeDisplay.Visible = false;
+                    // Unsupported: mctlElementalIsotopeDisplay.Visible = false;
                     mctlHornMassTransformOptions.Visible = false;
                     mctlPreprocessOptions.Visible = false;
                     mctlDTASettings.Visible = false;
@@ -820,7 +821,7 @@ namespace Decon2LS
                     mctlThresholdSettings.Visible = false;
                     mctlPeakPickingOptions.Visible = false;
                     mctlAveragineOptions.Visible = false;
-                    mctlElementalIsotopeDisplay.Visible = false;
+                    // Unsupported: mctlElementalIsotopeDisplay.Visible = false;
                     mctlHornMassTransformOptions.Visible = false;
                     mctlPreprocessOptions.Visible = false;
                     mctlDTASettings.Dock = DockStyle.Fill;
@@ -842,7 +843,7 @@ namespace Decon2LS
                     mctlThresholdSettings.Visible = false;
                     mctlPeakPickingOptions.Visible = false;
                     mctlAveragineOptions.Visible = false;
-                    mctlElementalIsotopeDisplay.Visible = false;
+                    // Unsupported: mctlElementalIsotopeDisplay.Visible = false;
                     mctlHornMassTransformOptions.Visible = false;
                     mctlPreprocessOptions.Dock = DockStyle.Fill;
                     mctlPreprocessOptions.Visible = true;
@@ -862,7 +863,7 @@ namespace Decon2LS
                     mctlHornMassTransformOptions.Visible = false;
                     mctlAveragineOptions.Dock = DockStyle.Fill;
                     mctlAveragineOptions.Visible = true;
-                    mctlElementalIsotopeDisplay.Visible = false;
+                    // Unsupported: mctlElementalIsotopeDisplay.Visible = false;
                     mctlThresholdSettings.Visible = false; ;
                     mctlPreprocessOptions.Visible = false;
                     mctlMiscellaneousOptions.Visible = false;
@@ -876,9 +877,9 @@ namespace Decon2LS
                     nodeIsotopeDistributionComposition.SelectedImageIndex = 2;
                     nodeIsotopeDistributionAveragine.ImageIndex = 3;
                     nodeIsotopeDistribution.ImageIndex = 1;
-                    mctlElementalIsotopeDisplay.BringToFront() ; 
-                    mctlElementalIsotopeDisplay.Dock = DockStyle.Fill ;
-                    mctlElementalIsotopeDisplay.Visible = true;
+                    // Unsupported: mctlElementalIsotopeDisplay.BringToFront() ;
+                    // Unsupported: mctlElementalIsotopeDisplay.Dock = DockStyle.Fill ;
+                    // Unsupported: mctlElementalIsotopeDisplay.Visible = true;
                     mctlHornMassTransformOptions.Visible = false;
                     mctlPeakPickingOptions.Visible = false;
                     mctlAveragineOptions.Visible = false;
@@ -937,8 +938,8 @@ namespace Decon2LS
                 GetMiscellaneousOptions(transformOptions);
 
                 // And the isotope abundances.
-                transformOptions.ElementIsotopeComposition = mctlElementalIsotopeDisplay.ElementIsotopes ; 
-                paramLoader.TransformParameters = transformOptions ; 
+                // Unsupported: transformOptions.ElementIsotopeComposition = mctlElementalIsotopeDisplay.ElementIsotopes;
+                paramLoader.TransformParameters = transformOptions;
 
                 var fticrPreProcessOptions = new DeconToolsV2.Readers.clsRawDataPreprocessOptions();
                 GetFTICRRawPreProcessing(fticrPreProcessOptions);
