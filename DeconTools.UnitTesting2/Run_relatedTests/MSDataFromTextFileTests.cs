@@ -25,7 +25,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             Assert.AreEqual(2984, xyData.Yvalues[418]);
             Assert.AreEqual(1, textfiledata.GetNumMSScans());
 
-            
+
 
 
         }

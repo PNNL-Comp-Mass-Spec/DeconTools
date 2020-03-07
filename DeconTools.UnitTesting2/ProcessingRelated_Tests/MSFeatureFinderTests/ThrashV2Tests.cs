@@ -644,7 +644,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
         [Test]
         public void OldDeconvolutorTest_temp1()
         {
-            // Run run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
+            Run run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
 #if !Disable_DeconToolsV2
             var parameters = new DeconEngineClasses.OldDecon2LSParameters();

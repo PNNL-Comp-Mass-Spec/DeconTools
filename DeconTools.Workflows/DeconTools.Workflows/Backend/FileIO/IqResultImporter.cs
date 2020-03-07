@@ -23,21 +23,21 @@ namespace DeconTools.Workflows.Backend.FileIO
         protected string[] MonomassObsHeaders = { "MonoMassObs" };
         protected string[] MZObsHeaders = { "MZObs" };
         protected string[] MonomassObsCalibratedHeaders = { "MonoMassObsCalibrated" };
-        protected string[] MZObsCalibratedHeaders = {"MZObsCalibrated"};
+        protected string[] MZObsCalibratedHeaders = { "MZObsCalibrated" };
         protected string[] ElutionTimeObsHeaders = { "ElutionTimeObs" };
         protected string[] ChromPeaksWithinTolHeaders = { "ChromPeaksWithinTolerance" };
         protected string[] LcScanObsHeaders = { "scan" };
-        protected string[] AbundanceHeaders = { "abundance"};
+        protected string[] AbundanceHeaders = { "abundance" };
         protected string[] FitScoreHeaders = { "IsoFitScore" };
         protected string[] InterferenceScoreHeaders = { "iscore", "interferenceScore" };
 
         protected char Delimiter = '\t';
-        private List<string> _columnHeaders ;
+        private List<string> _columnHeaders;
         private Dictionary<string, int> _columnIndexTable;
 
         #region Constructors
 
-        protected IqResultImporter (string iqResultFilePath)
+        protected IqResultImporter(string iqResultFilePath)
         {
             IqResultFilePath = iqResultFilePath;
         }
@@ -145,8 +145,8 @@ namespace DeconTools.Workflows.Backend.FileIO
 
             result.NumChromPeaksWithinTolerance = ParseIntField(rowData, ChromPeaksWithinTolHeaders);
 
-            result.MassErrorBefore = (result.MonoMassObs -result.Target.MonoMassTheor)/result.Target.MonoMassTheor*1e6;
-            result.MassErrorAfter= (result.MonoMassObsCalibrated - result.Target.MonoMassTheor) / result.Target.MonoMassTheor * 1e6;
+            result.MassErrorBefore = (result.MonoMassObs - result.Target.MonoMassTheor) / result.Target.MonoMassTheor * 1e6;
+            result.MassErrorAfter = (result.MonoMassObsCalibrated - result.Target.MonoMassTheor) / result.Target.MonoMassTheor * 1e6;
 
         }
 

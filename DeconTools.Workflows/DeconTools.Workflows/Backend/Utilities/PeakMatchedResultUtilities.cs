@@ -52,7 +52,7 @@ namespace DeconTools.Workflows.Backend.Utilities
 
                     queryString =
                         @"SELECT * FROM " + ResultTableName + " where Dataset = '" +
-                        datasetName + "'" ;
+                        datasetName + "'";
 
                     command.CommandText = queryString;
                     command.CommandTimeout = 60;
@@ -71,8 +71,6 @@ namespace DeconTools.Workflows.Backend.Utilities
 
         }
 
-
-
         private void ReadResultsFromDB(List<TargetedResultDTO> results, DbDataReader reader)
         {
             while (reader.Read())
@@ -82,7 +80,7 @@ namespace DeconTools.Workflows.Backend.Utilities
                 result.DatasetName = readString(reader, "Dataset");
                 result.TargetID = readInt(reader, "UMC_Ind");
                 result.MatchedMassTagID = readInt(reader, "Mass_Tag_ID");
-                
+
 
                 result.FailureType = "";
                 //result.FitScore = readFloat(reader,"
@@ -96,7 +94,7 @@ namespace DeconTools.Workflows.Backend.Utilities
                 result.IntensityMostAbundantPeak = result.Intensity;
                 result.IScore = 0;
                 result.MassErrorBeforeCalibration = readFloat(reader, "MassErrorPPM");
-                
+
                 result.MonoMass = readDouble(reader, "Class_Mass");
                 result.MonoMassCalibrated = result.MonoMass;
                 result.MonoMZ = result.MonoMass / result.ChargeState + 1.00727649;

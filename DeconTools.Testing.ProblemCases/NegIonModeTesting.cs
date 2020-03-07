@@ -21,7 +21,7 @@ namespace DeconTools.Testing.ProblemCases
 
             Run run = new RunFactory().CreateRun(testfile);
 
-            Console.WriteLine(TestUtilities.DisplayRunInformation(run));
+            TestUtilities.DisplayRunInformation(run);
 
             var msgen = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 

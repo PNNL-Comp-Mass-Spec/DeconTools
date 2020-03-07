@@ -23,7 +23,7 @@ namespace DeconTools.Workflows.ProblemTesting
 
             var executorParameters = new TopDownTargetedWorkflowExecutorParameters();
             executorParameters.CopyRawFileLocal = true;
-            executorParameters.FolderPathForCopiedRawDataset = copyToFolder;
+            executorParameters.LocalDirectoryPathForCopiedRawDataset = copyToFolder;
 
             executorParameters.TargetsFilePath =
                 @"\\proto-7\VOrbiETD04\2012_1\CPTAC_Peptidome_Test2_P6-5_13Jan12_Polaroid_11-10-14\MSA201202231748_Auto796393\CPTAC_Peptidome_Test2_P6-5_13Jan12_Polaroid_11-10-14_MSAlign_ResultTable.txt";
@@ -48,8 +48,8 @@ namespace DeconTools.Workflows.ProblemTesting
 
             var executorParameters = new TopDownTargetedWorkflowExecutorParameters();
             executorParameters.CopyRawFileLocal = true;
-            executorParameters.FolderPathForCopiedRawDataset = copyToFolder;
-            executorParameters.OutputFolderBase = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\TargetedWorkflowTesting\Output";
+            executorParameters.LocalDirectoryPathForCopiedRawDataset = copyToFolder;
+            executorParameters.OutputDirectoryBase = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\TargetedWorkflowTesting\Output";
 
             executorParameters.TargetType = Globals.TargetType.LcmsFeature;
             executorParameters.WorkflowParameterFile =
@@ -82,7 +82,7 @@ namespace DeconTools.Workflows.ProblemTesting
             executorParameters.TargetsBaseFolder = Path.Combine(baseFolder, "Targets");
             executorParameters.WorkflowParameterFile = Path.Combine(baseFolder, "Parameters", "O16O18WorkflowParameters_2011_08_23_sum5.xml");
 
-            executorParameters.OutputFolderBase = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\TargetedWorkflowTesting\Output";
+            executorParameters.OutputDirectoryBase = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\TargetedWorkflowTesting\Output";
 
             executorParameters.TargetType = Globals.TargetType.LcmsFeature;
 

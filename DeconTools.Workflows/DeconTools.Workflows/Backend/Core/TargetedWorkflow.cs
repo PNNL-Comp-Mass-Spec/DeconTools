@@ -169,11 +169,11 @@ namespace DeconTools.Workflows.Backend.Core
             _chromGen = new PeakChromatogramGenerator(_workflowParameters.ChromGenTolerance, _workflowParameters.ChromGeneratorMode,
                                                       DeconTools.Backend.Globals.IsotopicProfileType.UNLABELED,
                                                       _workflowParameters.ChromGenToleranceUnit)
-                            {
-                                TopNPeaksLowerCutOff = 0.333,
-                                ChromWindowWidthForAlignedData = (float) _workflowParameters.ChromNETTolerance*2,
-                                ChromWindowWidthForNonAlignedData = (float) _workflowParameters.ChromNETTolerance*2
-                            };
+            {
+                TopNPeaksLowerCutOff = 0.333,
+                ChromWindowWidthForAlignedData = (float)_workflowParameters.ChromNETTolerance * 2,
+                ChromWindowWidthForNonAlignedData = (float)_workflowParameters.ChromNETTolerance * 2
+            };
 
             //only
             _chromSmoother = new SavitzkyGolaySmoother(_workflowParameters.ChromSmootherNumPointsInSmooth, 2);
@@ -183,7 +183,8 @@ namespace DeconTools.Workflows.Backend.Core
 
             _chromPeakSelector = CreateChromPeakSelector(_workflowParameters);
 
-            _iterativeTFFParameters = new IterativeTFFParameters {
+            _iterativeTFFParameters = new IterativeTFFParameters
+            {
                 ToleranceInPPM = _workflowParameters.MSToleranceInPPM
             };
 
@@ -332,7 +333,7 @@ namespace DeconTools.Workflows.Backend.Core
             }
 
             var result = Run.ResultCollection.GetTargetedResult(Run.CurrentMassTag);
-            result.ErrorDescription = "CRITICAL ERROR: " + ex.Message  ;
+            result.ErrorDescription = "CRITICAL ERROR: " + ex.Message;
             result.FailedResult = true;
         }
 

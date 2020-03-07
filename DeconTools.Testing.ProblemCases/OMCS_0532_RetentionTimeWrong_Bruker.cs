@@ -34,7 +34,7 @@ namespace DeconTools.Testing.ProblemCases
             }
 
 
-            Console.WriteLine(TestUtilities.DisplayRunInformation(run));
+            TestUtilities.DisplayRunInformation(run);
 
         }
 

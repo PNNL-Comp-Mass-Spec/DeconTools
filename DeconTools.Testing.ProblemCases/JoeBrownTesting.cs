@@ -7,6 +7,7 @@ using DeconTools.Backend.ProcessingTasks.PeakDetectors;
 using DeconTools.Backend.Runs;
 using DeconTools.UnitTesting2;
 using NUnit.Framework;
+using ThermoRawFileReader;
 
 namespace DeconTools.Testing.ProblemCases
 {
@@ -93,42 +94,24 @@ namespace DeconTools.Testing.ProblemCases
 
         }
 
-
-
-        private ThermoRawFileReader _thermoFileReader;
+        private XRawFileIO _thermoFileReader;
 
         [Test]
         public void ReadCollisionEnergyValsTest1()
         {
-            string testFile = @"\\proto-5\BionetDataXfer\People\Tao\CPTAC\CPTAC_10_Pep_QC_long_rampCE_13Mar19_Gandal_W22511A1.raw";
+            var testFile = @"\\proto-2\UnitTest_Files\DeconTools_TestFiles\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
 
-
-            //testFile = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
-
-            int testScan = 2519;
+            var testScan = 5000;
             _thermoFileReader = new ThermoRawFileReader.XRawFileIO(testFile);
 
-            string pbstrFilter = null;
-            double pdRT = 0;
+            _thermoFileReader.GetScanInfo(testScan, out clsScanInfo scanInfo);
 
-            _thermoFileReader.RTFromScanNum(testScan, ref pdRT);
-            Console.WriteLine("RT = " + pdRT);
+            Console.WriteLine("RT = " + scanInfo.RetentionTime);
 
-            object value = null;
-            _thermoFileReader.GetTrailerExtraValueForScanNum(testScan, "Ion Injection Time (ms):", ref value);
-            Console.WriteLine("Ion injection time= " + Convert.ToDouble(value));
-
-            double pdCollisionEnergy = 0;
-            _thermoFileReader.GetCollisionEnergyForScanNum(testScan, 1, ref pdCollisionEnergy);
-            Console.WriteLine("Collision energy ="  +  Convert.ToDouble(pdCollisionEnergy));
-
-            int pnNumInstMethods = 0;
-            _thermoFileReader.GetNumInstMethods(ref pnNumInstMethods);
-            Console.WriteLine("numMethods= " + Convert.ToDouble(pnNumInstMethods));
-
-            string pbstrInstMethod = null;
-            _thermoFileReader.GetInstMethod(0, ref pbstrInstMethod);
-            Console.WriteLine(pbstrInstMethod);
+            if (scanInfo.TryGetScanEvent("Ion Injection Time (ms):", out var eventValue, true))
+            {
+                Console.WriteLine("Ion injection time= " + Convert.ToDouble(eventValue));
+            }
 
         }
 
