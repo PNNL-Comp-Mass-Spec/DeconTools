@@ -635,7 +635,7 @@ namespace Decon2LS
                 var minDistancePeakIndex = -1;
                 for (var pkNum = 0; pkNum < mobj_peaks.Length; pkNum++)
                 {
-                    var diff = mobj_peaks[pkNum].mdbl_mz - mostAbundantMZ;
+                    var diff = mobj_peaks[pkNum].Mz - mostAbundantMZ;
                     if (Math.Abs(diff) < Math.Abs(minDistance))
                     {
                         minDistance = diff;
@@ -643,7 +643,7 @@ namespace Decon2LS
                     }
                 }
 
-                mMercuryIsotopeDistribution.Resolution = mobj_peaks[minDistancePeakIndex].mdbl_mz / mobj_peaks[minDistancePeakIndex].mdbl_FWHM;
+                mMercuryIsotopeDistribution.Resolution = mobj_peaks[minDistancePeakIndex].Mz / mobj_peaks[minDistancePeakIndex].FWHM;
                 points = this.mMercuryIsotopeDistribution.CalculateDistribution(molecularFormula.ToElementTable());
 
                 // go through the list of peaks for the possible peaks.
@@ -652,7 +652,7 @@ namespace Decon2LS
                 minDistancePeakIndex = -1;
                 for (var pkNum = 0; pkNum < mobj_peaks.Length; pkNum++)
                 {
-                    var diff = mobj_peaks[pkNum].mdbl_mz - mostAbundantMZ;
+                    var diff = mobj_peaks[pkNum].Mz - mostAbundantMZ;
                     if (Math.Abs(diff) < Math.Abs(minDistance))
                     {
                         minDistance = diff;
@@ -730,7 +730,7 @@ namespace Decon2LS
                 var minDistancePeakIndex = -1;
                 for (var pkNum = 0; pkNum < mobj_peaks.Length; pkNum++)
                 {
-                    var diff = mobj_peaks[pkNum].mdbl_mz - mzForResolution;
+                    var diff = mobj_peaks[pkNum].Mz - mzForResolution;
                     if (Math.Abs(diff) < Math.Abs(minDistance))
                     {
                         minDistance = diff;
@@ -1036,7 +1036,7 @@ namespace Decon2LS
 
             for (var pkNum = 0; pkNum < mobj_peaks.Length; pkNum++)
             {
-                peakMzs[pkNum] = Convert.ToSingle(mobj_peaks[pkNum].mdbl_mz);
+                peakMzs[pkNum] = Convert.ToSingle(mobj_peaks[pkNum].Mz);
                 peakIntensities[pkNum] = Convert.ToSingle(mobj_peaks[pkNum].mdbl_intensity);
                 peakFWHMs[pkNum] = Convert.ToSingle(mobj_peaks[pkNum].mdbl_FWHM);
             }
@@ -1050,7 +1050,7 @@ namespace Decon2LS
             {
                 var item = mlistView_peaks.Items.Add(Convert.ToString(pkNum + 1));
                 item.Tag = pkNum;
-                item.SubItems.Add(Convert.ToString(mobj_peaks[pkNum].mdbl_mz));
+                item.SubItems.Add(Convert.ToString(mobj_peaks[pkNum].Mz));
                 item.SubItems.Add(Convert.ToString(mobj_peaks[pkNum].mdbl_intensity));
                 item.SubItems.Add(Convert.ToString(mobj_peaks[pkNum].mdbl_FWHM));
                 item.SubItems.Add(Convert.ToString(mobj_peaks[pkNum].mdbl_SN));
@@ -1102,18 +1102,18 @@ namespace Decon2LS
 
                 for (var chNum = 0; chNum < marr_transformResults.Length; chNum++)
                 {
-                    chargePeaks[chNum] = new PNNL.Controls.MS.clsChargePeak(marr_transformResults[chNum].mint_peak_index,
-                        marr_transformResults[chNum].mshort_cs, Convert.ToInt16(marr_transformResults[chNum].mint_num_isotopes_observed),
-                        marr_transformResults[chNum].marr_isotope_peak_indices);
+                    chargePeaks[chNum] = new PNNL.Controls.MS.clsChargePeak(marr_transformResults[chNum].PeakIndex,
+                        (short)marr_transformResults[chNum].ChargeState, Convert.ToInt16(marr_transformResults[chNum].NumIsotopesObserved),
+                        marr_transformResults[chNum].IsotopePeakIndices.ToArray());
 
                     var item = mlistview_transform.Items.Add(Convert.ToString(chNum + 1));
                     item.Tag = chNum;
-                    item.SubItems.Add(Convert.ToString(marr_transformResults[chNum].mdbl_mono_mw));
-                    item.SubItems.Add(Convert.ToString(marr_transformResults[chNum].mint_abundance));
-                    item.SubItems.Add(Convert.ToString(marr_transformResults[chNum].mdbl_mz));
-                    item.SubItems.Add(Convert.ToString(marr_transformResults[chNum].mshort_cs));
-                    item.SubItems.Add(Convert.ToString(marr_transformResults[chNum].mdbl_fit));
-                    item.SubItems.Add(Convert.ToString(marr_transformResults[chNum].mdbl_most_intense_mw));
+                    item.SubItems.Add(Convert.ToString(marr_transformResults[chNum].MonoMw));
+                    item.SubItems.Add(Convert.ToString(marr_transformResults[chNum].Abundance));
+                    item.SubItems.Add(Convert.ToString(marr_transformResults[chNum].Mz));
+                    item.SubItems.Add(Convert.ToString(marr_transformResults[chNum].ChargeState));
+                    item.SubItems.Add(Convert.ToString(marr_transformResults[chNum].Fit));
+                    item.SubItems.Add(Convert.ToString(marr_transformResults[chNum].MostIntenseMw));
                 }
                 mlistview_transform.ResumeLayout(true);
                 mctl_spectra.AddCharges(chargePeaks);
