@@ -14,15 +14,15 @@ Preferably use the 64-bit installer: [DeconTools_Installer_x64.exe](https://gith
 
 DeconTools can read the following file formats.  However, some of the file formats require that you 
 install the vendor-supplied data browsing software so that DeconTools has access to the necessary DLLs.
-* mzXML files   (Requires ProteoWizard installation)
-* mzML files    (Requires ProteoWizard installation)
-* mz5 files     (Requires ProteoWizard installation)
-* Thermo Finnigan .Raw files (uses ThermoFisher.CommonCore.RawFileReader.dll)
+* mzXML files   (Requires 64-bit ProteoWizard installation)
+* mzML files    (Requires 64-bit ProteoWizard installation)
+* mz5 files     (Requires 64-bit ProteoWizard installation)
+* Thermo .Raw files (uses ThermoFisher.CommonCore.RawFileReader.dll)
 * Agilent .Wiff files (requires Analyst)
 * Agilent .D folders (requires Chemstation)
 * Micromass files (requires MassLynx)
 * Bruker acqu files
-* IMS .IMF and .UIMF files
+* IMS .UIMF files
 
 Download ProteoWizard from http://proteowizard.sourceforge.net/
 You typically will need the 64-bit version.
