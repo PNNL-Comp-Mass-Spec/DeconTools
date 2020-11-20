@@ -49,9 +49,6 @@
     <Reference Include="GWSGraphLibrary">
       <HintPath>..\Library\GWSGraphLibrary.dll</HintPath>
     </Reference>
-    <Reference Include="MSDataFileReader">
-      <HintPath>..\Library\MSDataFileReader.dll</HintPath>
-    </Reference>
     <Reference Include="MultiAlignEngine, Version=1.0.4170.28111, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Library\MultiAlignEngine.dll</HintPath>

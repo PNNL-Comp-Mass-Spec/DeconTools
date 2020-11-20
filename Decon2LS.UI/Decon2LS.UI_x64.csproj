@@ -70,9 +70,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Library\x64\DeconEngineV2.dll</HintPath>
     </Reference>
-    <Reference Include="MSDataFileReader">
-      <HintPath>..\Library\MSDataFileReader.dll</HintPath>
-    </Reference>
     <Reference Include="PJLControls, Version=1.1.3597.24984, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Library\PJLControls.dll</HintPath>

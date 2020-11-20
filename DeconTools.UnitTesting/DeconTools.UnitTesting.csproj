@@ -46,9 +46,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Library\DMSDeconToolsV2.dll</HintPath>
     </Reference>
-    <Reference Include="MSDataFileReader">
-      <HintPath>..\Library\MSDataFileReader.dll</HintPath>
-    </Reference>
     <Reference Include="ProteinCalc, Version=1.0.112.1023, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Library\ProteinCalc.dll</HintPath>
