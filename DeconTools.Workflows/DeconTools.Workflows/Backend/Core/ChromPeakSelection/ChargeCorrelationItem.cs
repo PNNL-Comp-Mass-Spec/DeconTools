@@ -37,7 +37,6 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
             }
 
             return MathUtils.GetMedian(corrList);
-
         }
     }
 }

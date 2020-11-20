@@ -1,16 +1,13 @@
 ﻿using System;
 using DeconTools.Backend.Core;
 
-
 namespace DeconTools.Backend.Runs
 {
-    public abstract class XYDataRun :Run
+    public abstract class XYDataRun : Run
     {
-
         protected XYDataRun()
         {
             xyData = new XYData();
-
         }
 
         private XYData xyData;
@@ -26,7 +23,6 @@ namespace DeconTools.Backend.Runs
                 xyData.Xvalues.Length == 0 || xyData.Yvalues.Length == 0) return 0;
 
             return 1;      // there is only one MS scan in this type of Run
-
         }
 
         public override int GetMinPossibleLCScanNum()

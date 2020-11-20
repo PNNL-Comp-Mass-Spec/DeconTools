@@ -15,9 +15,8 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
         readonly N15IsotopeProfileGenerator _N15IsotopicProfileGenerator = new N15IsotopeProfileGenerator();
 
         public TomTheorFeatureGenerator()
-            : this(Globals.LabelingType.NONE,0.005)
+            : this(Globals.LabelingType.NONE, 0.005)
         {
-
         }
 
         public TomTheorFeatureGenerator(Globals.LabelingType labelingType, double lowPeakCutOff)
@@ -35,8 +34,6 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
         /// Peaks below the cutoff will be trimmed out from the theoretical profile
         /// </summary>
         public double LowPeakCutOff { get; set; }
-
-
 
         #endregion
 
@@ -64,13 +61,10 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
                 default:
                     break;
             }
-
         }
-
 
         private IsotopicProfile GetUnlabeledIsotopicProfile(TargetBase mt)
         {
-
             IsotopicProfile iso;
 
             try
@@ -89,12 +83,10 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
             return iso;
         }
 
-
         #endregion
 
         #region Private Methods
         #endregion
-
 
         private void calculateMassesForIsotopicProfile(IsotopicProfile iso, TargetBase mt)
         {
@@ -108,9 +100,7 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
 
             iso.MonoPeakMZ = iso.Peaklist[0].XValue;
             iso.MonoIsotopicMass = (iso.MonoPeakMZ - Globals.PROTON_MASS) * mt.ChargeState;
-
         }
-
 
         public override void LoadRunRelatedInfo(ResultCollection results)
         {

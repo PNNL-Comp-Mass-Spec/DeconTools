@@ -11,7 +11,6 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 {
     public abstract class ChromatogramCorrelatorBase : Task
     {
-
         protected SavitzkyGolaySmoother Smoother;
         protected PeakChromatogramGenerator PeakChromGen;
 
@@ -31,10 +30,8 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             PeakChromGen = new PeakChromatogramGenerator(ChromTolerance, Globals.ChromatogramGeneratorMode.MOST_ABUNDANT_PEAK,
                                                          Globals.IsotopicProfileType.UNLABELED, toleranceUnit);
 
-
             Smoother = new SavitzkyGolaySmoother(NumPointsInSmoother, SavitzkyGolaySmoothingOrder);
         }
-
 
         #endregion
 
@@ -53,8 +50,6 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
                     PeakChromGen = new PeakChromatogramGenerator(ChromTolerance, Globals.ChromatogramGeneratorMode.MOST_ABUNDANT_PEAK,
                                                                  Globals.IsotopicProfileType.UNLABELED, ChromToleranceUnit);
                 }
-
-
             }
         }
 
@@ -73,16 +68,13 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             {
                 if (_numPointsInSmoother != value)
                 {
-
                     _numPointsInSmoother = value;
 
                     if (Smoother != null)
                     {
                         Smoother = new SavitzkyGolaySmoother(_numPointsInSmoother, SavitzkyGolaySmoothingOrder);
                     }
-
                 }
-
             }
         }
 
@@ -100,9 +92,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
                     {
                         Smoother = new SavitzkyGolaySmoother(NumPointsInSmoother, _savitzkyGolaySmoothingOrder);
                     }
-
                 }
-
             }
         }
 
@@ -152,10 +142,8 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             catch (Exception ex)
             {
                 IqLogger.LogError("!! FATAL ERROR in Chrom correlator !! " + ex.Message, ex);
-
             }
         }
-
 
         #endregion
 
@@ -180,7 +168,6 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 
             Check.Require(resultList.CurrentTargetedResult.IsotopicProfile != null, Name + " failed; Isotopic profile is null.");
 
-
             var scan = resultList.CurrentTargetedResult.ScanSet.PrimaryScanNumber;
 
             var chromScanWindowWidth = resultList.CurrentTargetedResult.ChromPeakSelected.Width * 2;
@@ -188,20 +175,14 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             var startScan = scan - (int)Math.Round(chromScanWindowWidth / 2, 0);
             var stopScan = scan + (int)Math.Round(chromScanWindowWidth / 2, 0);
 
-
             resultList.CurrentTargetedResult.ChromCorrelationData = CorrelateData(resultList.Run,
                 resultList.CurrentTargetedResult, startScan, stopScan);
         }
 
-
         public abstract ChromCorrelationData CorrelateData(Run run, TargetedResultBase result, int startScan, int stopScan);
-
-
-
 
         public ChromCorrelationData CorrelatePeaksWithinIsotopicProfile(Run run, IsotopicProfile iso, int startScan, int stopScan)
         {
-
             var correlationData = new ChromCorrelationData();
             var indexMostAbundantPeak = iso.GetIndexOfMostIntensePeak();
 
@@ -211,10 +192,8 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             var baseChromDataIsOK = basePeakChromXYData?.Xvalues != null;
             //&&basePeakChromXYData.Xvalues.Length > 3;
 
-
             var minIntensity = iso.Peaklist[indexMostAbundantPeak].Height *
                                  MinimumRelativeIntensityForChromCorr;
-
 
             for (var i = 0; i < iso.Peaklist.Count; i++)
             {
@@ -229,8 +208,6 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
                 {
                     //peak is being correlated to itself
                     correlationData.AddCorrelationData(1.0, 0, 1);
-
-
                 }
                 else if (iso.Peaklist[i].Height >= minIntensity)
                 {
@@ -242,22 +219,18 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 
                     if (chromDataIsOK)
                     {
-
                         chromPeakXYData = FillInAnyMissingValuesInChromatogram(basePeakChromXYData, chromPeakXYData);
 
                         GetElutionCorrelationData(basePeakChromXYData, chromPeakXYData,
                                                                           out var slope, out var intercept, out var rSquaredVal);
 
                         correlationData.AddCorrelationData(slope, intercept, rSquaredVal);
-
                     }
                     else
                     {
-
                         var defaultChromCorrDataItem = new ChromCorrelationDataItem();
                         correlationData.AddCorrelationData(defaultChromCorrDataItem);
                     }
-
                 }
                 else
                 {
@@ -287,7 +260,6 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
                 chromPeakXYData = Smoother.Smooth(xyData);
             }
 
-
             var chromDataIsOK = chromPeakXYData?.Xvalues != null && chromPeakXYData.Xvalues.Length > 3;
 
             if (chromDataIsOK)
@@ -313,7 +285,6 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             }
             return basePeakChromXYData;
         }
-
 
         /// <summary>
         /// Fills in any missing data in the chrom data being correlated.
@@ -347,8 +318,6 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             var xyData = new XYData { Xvalues = basePeakChromXYData.Xvalues, Yvalues = filledInData.Values.ToArray() };
 
             return xyData;
-
-
         }
     }
 }

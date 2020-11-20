@@ -16,7 +16,6 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.IsotopicProfileQuality
     [TestFixture]
     public class InterferenceScorerTests
     {
-
         [Test]
         public void rawinterference_weakFeature_test1()
         {
@@ -31,7 +30,6 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.IsotopicProfileQuality
 
             var decon = new HornDeconvolutor();
 
-
             generator.Execute(run.ResultCollection);
             peakDetector.Execute(run.ResultCollection);
             decon.Execute(run.ResultCollection);
@@ -57,9 +55,6 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.IsotopicProfileQuality
 
             Console.WriteLine("interference= " + interferenceScore);
             Console.WriteLine("Time taken = " + stopwatch.ElapsedMilliseconds);
-
-
-
         }
 
         [Test]
@@ -72,11 +67,9 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.IsotopicProfileQuality
 
             Task generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
-
             var peakDetector = new DeconToolsPeakDetectorV2(1.3, 2, Globals.PeakFitType.QUADRATIC, true);
 
             var decon = new HornDeconvolutor();
-
 
             generator.Execute(run.ResultCollection);
             peakDetector.Execute(run.ResultCollection);
@@ -103,9 +96,6 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.IsotopicProfileQuality
 
             Console.WriteLine("interference= " + interferenceScore);
             Console.WriteLine("Time taken = " + stopwatch.ElapsedMilliseconds);
-
-
-
         }
 
         [Test]
@@ -118,11 +108,9 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.IsotopicProfileQuality
 
             Task generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
-
             var peakDetector = new DeconToolsPeakDetectorV2(1.3, 2, Globals.PeakFitType.QUADRATIC, true);
 
             var decon = new HornDeconvolutor();
-
 
             generator.Execute(run.ResultCollection);
             peakDetector.Execute(run.ResultCollection);
@@ -151,9 +139,6 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.IsotopicProfileQuality
 
             Console.WriteLine("interference= " + interferenceScore);
             Console.WriteLine("Time taken = " + stopwatch.ElapsedMilliseconds);
-
-
-
         }
 
         [Test]
@@ -165,11 +150,9 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.IsotopicProfileQuality
             run.CurrentScanSet = scanSet;
             Task generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
-
             var peakDetector = new DeconToolsPeakDetectorV2(1.3, 2, Globals.PeakFitType.QUADRATIC, true);
 
             var decon = new HornDeconvolutor();
-
 
             generator.Execute(run.ResultCollection);
             peakDetector.Execute(run.ResultCollection);
@@ -197,16 +180,12 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.IsotopicProfileQuality
 
             Console.WriteLine("interference= " + interferenceScore);
             Console.WriteLine("Time taken = " + stopwatch.ElapsedMilliseconds);
-
-
-
         }
-
 
         [Test]
         public void peak_interference_UIMF_expectInterference_test1()
         {
-            var uimfFrame1200_142 =  FileRefs.RawDataBasePath + @"\UIMF\Sarc_MS_90_21Aug10_Cheetah_10-08-02_0000_frame1200_scan142.txt";
+            var uimfFrame1200_142 = FileRefs.RawDataBasePath + @"\UIMF\Sarc_MS_90_21Aug10_Cheetah_10-08-02_0000_frame1200_scan142.txt";
 
             Run run = new DeconTools.Backend.Runs.MSScanFromTextFileRun(uimfFrame1200_142);
 
@@ -227,7 +206,6 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.IsotopicProfileQuality
             decon.MinMZ = 200;
             decon.MaxMZ = 2000;
             decon.IsMZRangeUsed = false;
-
 
             var zeroFiller = new DeconToolsZeroFiller();
 
@@ -259,11 +237,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.IsotopicProfileQuality
 
             Console.WriteLine("interference= " + interferenceScore);
             Console.WriteLine("Time taken = " + stopwatch.ElapsedMilliseconds);
-
-
-
         }
-
 
         [Test]
         public void interference_allFeaturesInScan_test1()
@@ -275,11 +249,9 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.IsotopicProfileQuality
 
             Task generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
-
             var peakDetector = new DeconToolsPeakDetectorV2(1.3, 2, Globals.PeakFitType.QUADRATIC, true);
 
             var decon = new HornDeconvolutor();
-
 
             generator.Execute(run.ResultCollection);
             peakDetector.Execute(run.ResultCollection);
@@ -289,7 +261,6 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.IsotopicProfileQuality
 
             foreach (var isosResult in run.ResultCollection.ResultList)
             {
-
                 var monoPeak = isosResult.IsotopicProfile.getMonoPeak();
                 var lastPeak = isosResult.IsotopicProfile.Peaklist[isosResult.IsotopicProfile.Peaklist.Count - 1];
 
@@ -306,18 +277,9 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.IsotopicProfileQuality
                 stopwatch.Stop();
 
                 Console.WriteLine("interference= \t" + interferenceScore);
-
             }
 
             TestUtilities.DisplayMSFeatures(run.ResultCollection.ResultList);
-
-
-
-
-
         }
-
-
-
     }
 }

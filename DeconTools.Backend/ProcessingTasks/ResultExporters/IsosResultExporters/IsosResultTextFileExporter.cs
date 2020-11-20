@@ -9,13 +9,12 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
 {
     public abstract class IsosResultTextFileExporter : IsosResultExporter
     {
-
         #region Properties
         public virtual char Delimiter { get; set; }
 
         public string FileName { get; set; }
 
-        public override int TriggerToExport {get;set;}
+        public override int TriggerToExport { get; set; }
 
         #endregion
 
@@ -33,8 +32,6 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
                     {
                         writer.WriteLine(isosResultOutput);
                     }
-
-
                 }
 
                 writer.Flush();
@@ -44,7 +41,6 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
 
         protected virtual void initializeAndWriteHeader()
         {
-
             Check.Assert(!string.IsNullOrEmpty(FileName), string.Format("{0} failed. Export file's FileName wasn't declared.", Name));
 
             try
@@ -53,7 +49,6 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
                 {
                     File.Delete(FileName);
                 }
-
             }
             catch (Exception ex)
             {
@@ -61,7 +56,6 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
                     "; STACKTRACE = " + PRISM.StackTraceFormatter.GetExceptionStackTraceMultiLine(ex), Name), true);
                 throw;
             }
-
 
             using (var writer = File.AppendText(FileName))
             {
@@ -74,9 +68,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
 
         #endregion
 
-
         protected abstract string buildIsosResultOutput(IsosResult result);
         protected abstract string buildHeaderLine();
-
     }
 }

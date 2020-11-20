@@ -14,7 +14,6 @@ namespace DeconTools.Backend.Utilities
 {
     public class RunUtilities
     {
-
         #region Constructors
         #endregion
 
@@ -41,7 +40,6 @@ namespace DeconTools.Backend.Utilities
             }
 
             return datasetName;
-
         }
 
         public static string GetDatasetNameWithFileExtension(string datasetPath)
@@ -61,9 +59,7 @@ namespace DeconTools.Backend.Utilities
             }
 
             return datasetName;
-
         }
-
 
         /// <summary>
         /// Returns 'true' if Dataset is stored as directory  (e.g. Agilent.D mass spec data)
@@ -82,7 +78,6 @@ namespace DeconTools.Backend.Utilities
 
             return false;
         }
-
 
         public static bool DatasetAlreadyExists(string datasetPath)
         {
@@ -123,7 +118,6 @@ namespace DeconTools.Backend.Utilities
             }
 
             return datasetDirectoryPath;
-
         }
 
         public static Run CreateAndAlignRun(string filename)
@@ -160,7 +154,6 @@ namespace DeconTools.Backend.Utilities
         public static bool AlignRunUsingAlignmentInfoInFiles(Run run, string alignmentDataDirectory = "")
         {
             bool alignmentSuccessful;
-
 
             string basePath;
             if (string.IsNullOrEmpty(alignmentDataDirectory))
@@ -210,7 +203,6 @@ namespace DeconTools.Backend.Utilities
             //if still not aligned, try to get the NET alignment from UMCs file. (this is the older way to do it)
             if (run.NETIsAligned)
             {
-
                 alignmentSuccessful = true;
             }
             else
@@ -233,7 +225,6 @@ namespace DeconTools.Backend.Utilities
                     netAlignmentInfo.SetScanToNETAlignmentData(scanNetPairs);
 
                     run.NetAlignmentInfo = netAlignmentInfo;
-
 
                     Console.WriteLine(run.DatasetName + " aligned.");
                     alignmentSuccessful = true;
@@ -263,8 +254,6 @@ namespace DeconTools.Backend.Utilities
                         throw new FileNotFoundException("Trying to align dataset: " + run.DatasetName +
                                                         " but UMC file not found.");
                     }
-
-
                 }
                 else
                 {
@@ -280,14 +269,12 @@ namespace DeconTools.Backend.Utilities
 
                 if (File.Exists(expectedViperMassAlignmentFile))
                 {
-
                     var importer = new ViperMassCalibrationLoader(expectedViperMassAlignmentFile);
                     var viperCalibrationData = importer.ImportMassCalibrationData();
 
                     var massAlignmentInfo = new MassAlignmentInfoLcmsWarp();
                     massAlignmentInfo.SetMassAlignmentData(viperCalibrationData);
                     run.MassAlignmentInfo = massAlignmentInfo;
-
 
                     Console.WriteLine(run.DatasetName + "- mass aligned using file: " + expectedViperMassAlignmentFile);
 
@@ -297,17 +284,13 @@ namespace DeconTools.Backend.Utilities
                 {
                     Console.WriteLine(run.DatasetName + " is NOT mass aligned");
                 }
-
             }
 
             return alignmentSuccessful;
         }
 
-
-
         public static Run CreateAndAlignRun(string fileOrDirectoryPath, string peaksFile)
         {
-
             var directoryExists = Directory.Exists(fileOrDirectoryPath);
             var fileExists = File.Exists(fileOrDirectoryPath);
 
@@ -320,9 +303,7 @@ namespace DeconTools.Backend.Utilities
 
             //Console.WriteLine(run.DatasetName + " loaded.");
 
-
             AlignRunUsingAlignmentInfoInFiles(run);
-
 
             string sourcePeaksFile;
             if (string.IsNullOrEmpty(peaksFile))
@@ -346,14 +327,12 @@ namespace DeconTools.Backend.Utilities
             return CreateAndLoadPeaks(rawDataFilename, string.Empty);
         }
 
-
         public static Run CreateAndLoadPeaks(string rawDataFilename, string peaksTestFile, BackgroundWorker bw = null)
         {
             var rf = new RunFactory();
             var run = rf.CreateRun(rawDataFilename);
 
             //Console.WriteLine(run.DatasetName + " loaded.");
-
 
             string sourcePeaksFile;
             if (string.IsNullOrEmpty(peaksTestFile))

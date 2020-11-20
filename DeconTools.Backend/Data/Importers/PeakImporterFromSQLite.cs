@@ -17,7 +17,6 @@ namespace DeconTools.Backend.Data
         public PeakImporterFromSQLite(string sqLiteFilename)
             : this(sqLiteFilename, null)
         {
-
         }
 
         public PeakImporterFromSQLite(string sqLiteFilename, BackgroundWorker bw)

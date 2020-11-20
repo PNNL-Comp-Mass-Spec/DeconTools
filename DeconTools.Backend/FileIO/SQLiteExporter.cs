@@ -12,7 +12,6 @@ namespace DeconTools.Backend.FileIO
 {
     public abstract class SQLiteExporter<T> : ExporterBase<T>
     {
-
         protected DbConnection m_dbConnection;
 
         #region Constructors
@@ -39,7 +38,6 @@ namespace DeconTools.Backend.FileIO
         /// </summary>
         public abstract List<Field> FieldList { get; }
 
-
         #endregion
 
         #region Public Methods
@@ -51,7 +49,6 @@ namespace DeconTools.Backend.FileIO
                 return;
 
             Check.Assert(m_dbConnection.State == System.Data.ConnectionState.Open, string.Format("{0} failed. Connection to database is not open", Name));
-
 
             using (var myTransaction = m_dbConnection.BeginTransaction())
             {
@@ -76,7 +73,6 @@ namespace DeconTools.Backend.FileIO
         #region Private Methods
         protected virtual void InitializeAndBuildTable()
         {
-
             if (File.Exists(FileName)) File.Delete(FileName);
 
             DbProviderFactory fact = new SQLiteFactory();
@@ -98,7 +94,6 @@ namespace DeconTools.Backend.FileIO
             }
 
             BuildTable();
-
         }
 
         protected virtual void BuildTable()
@@ -109,7 +104,6 @@ namespace DeconTools.Backend.FileIO
         }
 
         protected abstract List<Field> CreateFieldList();
-
 
         private string CreateInsertionCommandString()
         {
@@ -160,7 +154,6 @@ namespace DeconTools.Backend.FileIO
             if (FieldList == null)
                 return "";
 
-
             var sb = new StringBuilder();
             sb.Append("CREATE TABLE ");
             sb.Append(TableName);
@@ -179,9 +172,7 @@ namespace DeconTools.Backend.FileIO
                 }
             }
 
-
             return sb.ToString();
-
         }
 
         private void CreateParameterList(DbCommand cmd)
@@ -191,7 +182,6 @@ namespace DeconTools.Backend.FileIO
                 var param = cmd.CreateParameter();
                 cmd.Parameters.Add(param);
             }
-
         }
 
         #endregion

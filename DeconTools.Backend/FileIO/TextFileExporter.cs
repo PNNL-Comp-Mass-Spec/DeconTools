@@ -13,7 +13,6 @@ namespace DeconTools.Backend.FileIO
         protected TextFileExporter(string filename)
             : this(filename, '\t')
         {
-
         }
 
         protected TextFileExporter(string filename, char delimiter)
@@ -43,14 +42,12 @@ namespace DeconTools.Backend.FileIO
         /// </summary>
         public char Delimiter { get; set; }
 
-
         #endregion
 
         #region Public Methods
 
         protected void initializeAndWriteHeader()
         {
-
             Check.Assert(!string.IsNullOrEmpty(FileName), string.Format("{0} failed. Export file's FileName wasn't declared.", Name));
 
             try
@@ -59,7 +56,6 @@ namespace DeconTools.Backend.FileIO
                 {
                     File.Delete(FileName);
                 }
-
             }
             catch (Exception ex)
             {
@@ -79,7 +75,6 @@ namespace DeconTools.Backend.FileIO
             }
         }
 
-
         public override void ExportResults(IEnumerable<T> resultList)
         {
             Check.Assert(!string.IsNullOrEmpty(FileName), Name + " failed. Illegal filename.");
@@ -94,17 +89,14 @@ namespace DeconTools.Backend.FileIO
                 writer.Flush();
                 writer.Close();
             }
-
         }
 
         protected abstract string buildResultOutput(T result);
         protected abstract string buildHeaderLine();
 
-
         #endregion
 
         #region Private Methods
-
 
         private void PossiblyCreateDirectory(string filePath)
         {
@@ -115,9 +107,7 @@ namespace DeconTools.Backend.FileIO
             {
                 diDirectory.Create();
             }
-
         }
-
 
         #endregion
     }

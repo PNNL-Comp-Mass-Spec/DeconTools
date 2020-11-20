@@ -40,7 +40,6 @@ namespace DeconTools.Workflows.Backend.FileIO
             IqFilePath = iqFilePath;
         }
 
-
         public override List<IqTarget> Import()
         {
             var allTargets = new List<IqTarget>();
@@ -70,7 +69,6 @@ namespace DeconTools.Workflows.Backend.FileIO
                 {
                     sr.Close();
                     throw new InvalidDataException("There is no data in file " + PRISM.PathUtils.CompactPathString(IqFilePath, 60));
-
                 }
 
                 var headerLine = sr.ReadLine();
@@ -154,6 +152,5 @@ namespace DeconTools.Workflows.Backend.FileIO
             target.AddTargetRange(children);
             return target;
         }
-
     }
 }

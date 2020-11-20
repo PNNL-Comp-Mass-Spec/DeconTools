@@ -7,8 +7,6 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
     [TestFixture]
     public class PeakExporterTests
     {
-
-
         [Test]
         public void ExportPeakDataToTextFileTest1()
         {
@@ -29,7 +27,6 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
 
             Assert.IsTrue(fi.Exists);
             Assert.AreNotEqual(0, fi.Length);
-
         }
 
         [Test]
@@ -39,7 +36,6 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
             //TODO:  finish this
         }
 
-
         [Test]
         [Ignore("Not implemented")]
         public void ExportToSQLiteFileTest1()
@@ -48,7 +44,6 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
 
         }
 
-
         [Test]
         [Ignore("Not implemented")]
         public void ExportUIMFPeakDataToSQLiteFileTest1()
@@ -56,9 +51,5 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
             //TODO: finish this
 
         }
-
-
-
-
     }
 }

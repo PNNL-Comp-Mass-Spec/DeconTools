@@ -20,8 +20,7 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
     {
         private string xcaliburTestfile = FileRefs.RawDataMSFiles.OrbitrapStdFile1;
         private string massTagTestList1 = FileRefs.RawDataBasePath + "\\TargetedWorkflowStandards\\QCShew_peptidesWithObsCountGreaterThan1000.txt";
-       
-      
+
         [Test]
         public void SmartChromPeakSelectorParameterTest1()
         {
@@ -30,16 +29,13 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
             Assert.AreEqual(0.05m, (decimal)parameters.NETTolerance);
         }
 
-
         [Test]
         public void smartChromPeakSelectorTest_noSumming()
         {
-
             var run = new RunFactory().CreateRun(xcaliburTestfile);
             run.Close();
 
             run = new RunFactory().CreateRun(xcaliburTestfile);
-           
 
             var massTagColl = new TargetCollection();
 
@@ -59,15 +55,11 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
             var basicChromParam = new ChromPeakSelectorParameters();
             var basicChromPeakSelector = new BasicChromPeakSelector(basicChromParam);
 
-
-
             var generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
             var iterativeTff = new IterativeTFF(new IterativeTFFParameters());
 
             var fitscoreCalc = new IsotopicProfileFitScoreCalculator();
-
-
 
             var testChromatogramDataFile = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\TargetedWorkflowStandards\massTag635428_chromatogramData.txt";
 
@@ -75,7 +67,7 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
             Assert.IsNotNull(xyData);
 
             run.XYData = xyData;
-           // run.XYData.Display();
+            // run.XYData.Display();
 
             run.CurrentMassTag = massTagColl.TargetList.Where(p => p.ID == 635428).First();
 
@@ -90,7 +82,6 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
             basicChromPeakSelector.Execute(run.ResultCollection);
             Assert.AreEqual(10066, (int)Math.Round(result.ChromPeakSelected.XValue));
 
-
             //now run the smart chrom peak selector
             run.XYData = xyData;
             chromPeakDet.Execute(run.ResultCollection);
@@ -104,17 +95,11 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
 
             fitscoreCalc.Execute(run.ResultCollection);
 
-        
             Assert.AreEqual(9579, (int)Math.Round(result.ChromPeakSelected.XValue));
             //result.DisplayToConsole();
 
-
             TestUtilities.DisplayIsotopicProfileData(result.Target.IsotopicProfile);
-
-           
-
         }
-
 
         [Test]
         public void smartChromPeakSelectorTest_withDynamicSumming()
@@ -138,15 +123,11 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
 
             var basicChromPeakSelector = new BasicChromPeakSelector(new ChromPeakSelectorParameters());
 
-
-
             var generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
             var iterativeTff = new IterativeTFF(new IterativeTFFParameters());
 
             var fitscoreCalc = new IsotopicProfileFitScoreCalculator();
-
-
 
             var testChromatogramDataFile = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\TargetedWorkflowStandards\massTag635428_chromatogramData.txt";
 
@@ -167,13 +148,10 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
 
             //first run the standard peak selector
 
-
-
             basicChromPeakSelector.Execute(run.ResultCollection);
 
             var result = run.ResultCollection.GetTargetedResult(run.CurrentMassTag);
             Assert.AreEqual(10066, (int)Math.Round(result.ChromPeakSelected.XValue));
-
 
             //now run the smart chrom peak selector
             run.XYData = new XYData();
@@ -190,7 +168,6 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
             generator.Execute(run.ResultCollection);
             iterativeTff.Execute(run.ResultCollection);
             fitscoreCalc.Execute(run.ResultCollection);
-
 
             Console.WriteLine(result.ScanSet);
             Assert.AreEqual(14, result.ScanSet.IndexValues.Count);
@@ -215,15 +192,10 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
             result.DisplayToConsole();
 
             Assert.AreEqual(9579, (int)Math.Round(result.ChromPeakSelected.XValue));
-            Assert.AreEqual(0.025m, (decimal)(Math.Round(result.Score,4)));
+            Assert.AreEqual(0.025m, (decimal)(Math.Round(result.Score, 4)));
             //Console.WriteLine(result.ScanSet);
             Assert.AreEqual(26, result.ScanSet.IndexValues.Count);
             Assert.AreEqual("9575 {9493, 9500, 9506, 9513, 9520, 9527, 9534, 9540, 9547, 9554, 9561, 9568, 9575, 9582, 9589, 9596, 9603, 9610, 9617, 9624, 9631, 9638, 9645, 9652, 9658, 9665}", result.ScanSet.ToString());
-
-           
         }
-
-
-       
     }
 }

@@ -21,8 +21,8 @@ namespace Decon2LS
     /// </summary>
     public class frmSavGolOptions : System.Windows.Forms.Form
     {
-        private short MaxOrder = 10 ; 
-        private short MaxPts = 50 ; 
+        private short MaxOrder = 10;
+        private short MaxPts = 50;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
@@ -52,16 +52,16 @@ namespace Decon2LS
         /// <summary>
         /// Clean up any resources being used.
         /// </summary>
-        protected override void Dispose( bool disposing )
+        protected override void Dispose(bool disposing)
         {
-            if( disposing )
+            if (disposing)
             {
-                if(components != null)
+                if (components != null)
                 {
                     components.Dispose();
                 }
             }
-            base.Dispose( disposing );
+            base.Dispose(disposing);
         }
 
         #region Windows Form Designer generated code
@@ -175,7 +175,6 @@ namespace Decon2LS
             this.Text = "Savitzky Golay Options";
             this.groupBox1.ResumeLayout(false);
             this.ResumeLayout(false);
-
         }
         #endregion
 
@@ -183,75 +182,75 @@ namespace Decon2LS
         {
             try
             {
-                var val = Convert.ToInt16(mtxtLeft.Text) ; 
+                var val = Convert.ToInt16(mtxtLeft.Text);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                MessageBox.Show(this, "Format problem for Left Points. Please enter a number") ; 
-                Console.WriteLine(ex.Message) ; 
-                return ; 
-            }
-            try
-            {
-                var val = Convert.ToInt16(mtxtRight.Text) ; 
-            }
-            catch(Exception ex)
-            {
-                Console.WriteLine(ex.Message + ex.StackTrace) ; 
-                MessageBox.Show(this, "Format problem for Right Points. Please enter a number") ; 
-                return ; 
+                MessageBox.Show(this, "Format problem for Left Points. Please enter a number");
+                Console.WriteLine(ex.Message);
+                return;
             }
             try
             {
-                var val = Convert.ToInt16(mtxtOrder.Text) ; 
+                var val = Convert.ToInt16(mtxtRight.Text);
             }
-            catch(FormatException ex)
+            catch (Exception ex)
             {
-                Console.WriteLine(ex.Message + ex.StackTrace) ; 
-                MessageBox.Show(this, "Format problem for Order. Please enter a number") ; 
-                return ; 
+                Console.WriteLine(ex.Message + ex.StackTrace);
+                MessageBox.Show(this, "Format problem for Right Points. Please enter a number");
+                return;
             }
-            catch(Exception ex)
+            try
             {
-                Console.WriteLine(ex.Message + ex.StackTrace) ; 
-                MessageBox.Show(this, "Please check entered number") ; 
-                return ; 
+                var val = Convert.ToInt16(mtxtOrder.Text);
+            }
+            catch (FormatException ex)
+            {
+                Console.WriteLine(ex.Message + ex.StackTrace);
+                MessageBox.Show(this, "Format problem for Order. Please enter a number");
+                return;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message + ex.StackTrace);
+                MessageBox.Show(this, "Please check entered number");
+                return;
             }
 
             if (NumLeft > MaxPts)
             {
-                MessageBox.Show(this, "Can have at most " + Convert.ToString(MaxPts) + " points for smoothing") ; 
-                NumLeft = MaxPts ; 
-                return ;
+                MessageBox.Show(this, "Can have at most " + Convert.ToString(MaxPts) + " points for smoothing");
+                NumLeft = MaxPts;
+                return;
             }
             if (NumRight > MaxPts)
             {
-                MessageBox.Show(this, "Can have at most " + Convert.ToString(MaxPts) + " points for smoothing") ; 
-                NumRight = MaxPts ; 
+                MessageBox.Show(this, "Can have at most " + Convert.ToString(MaxPts) + " points for smoothing");
+                NumRight = MaxPts;
             }
             if (Order > MaxOrder)
             {
-                MessageBox.Show(this, "Maximum value of order = " + Convert.ToString(MaxOrder)) ; 
-                Order = MaxOrder ; 
+                MessageBox.Show(this, "Maximum value of order = " + Convert.ToString(MaxOrder));
+                Order = MaxOrder;
             }
 
             if (NumLeft + NumRight < Order)
             {
-                MessageBox.Show(this, "Order can be at most equal to # left plus # right") ; 
-                var val = NumLeft ;
-                val += NumRight ; 
-                Order = val ; 
-                return ; 
+                MessageBox.Show(this, "Order can be at most equal to # left plus # right");
+                var val = NumLeft;
+                val += NumRight;
+                Order = val;
+                return;
             }
 
-            DialogResult = DialogResult.OK ; 
-            this.Hide() ; 
+            DialogResult = DialogResult.OK;
+            this.Hide();
         }
 
         private void mbtnCancel_Click(object sender, System.EventArgs e)
         {
-            DialogResult = DialogResult.Cancel ; 
-            this.Hide() ; 
+            DialogResult = DialogResult.Cancel;
+            this.Hide();
         }
 
         #region "Properties"
@@ -259,33 +258,33 @@ namespace Decon2LS
         {
             get
             {
-                return Convert.ToInt16(mtxtLeft.Text) ; 
+                return Convert.ToInt16(mtxtLeft.Text);
             }
             set
             {
-                mtxtLeft.Text = Convert.ToString(value) ; 
+                mtxtLeft.Text = Convert.ToString(value);
             }
         }
         public short NumRight
         {
             get
             {
-                return Convert.ToInt16(mtxtRight.Text) ; 
+                return Convert.ToInt16(mtxtRight.Text);
             }
             set
             {
-                mtxtRight.Text = Convert.ToString(value) ; 
+                mtxtRight.Text = Convert.ToString(value);
             }
         }
         public short Order
         {
             get
             {
-                return Convert.ToInt16(mtxtOrder.Text) ; 
+                return Convert.ToInt16(mtxtOrder.Text);
             }
             set
             {
-                mtxtOrder.Text = Convert.ToString(value) ; 
+                mtxtOrder.Text = Convert.ToString(value);
             }
         }
 

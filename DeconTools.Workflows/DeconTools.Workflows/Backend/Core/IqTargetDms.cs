@@ -2,7 +2,6 @@
 {
     public class IqTargetDms:IqTarget
     {
-
         #region Constructors
         #endregion
 

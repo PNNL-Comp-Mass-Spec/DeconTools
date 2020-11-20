@@ -44,26 +44,22 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
             Check.Require(theorFeature.Peaklist != null && theorFeature.Peaklist.Count > 0, "Theoretical feature hasn't been defined.");
 
-            var outFeature = new IsotopicProfile {
+            var outFeature = new IsotopicProfile
+            {
                 ChargeState = theorFeature.ChargeState
             };
 
             var indexOfMaxTheorPeak = theorFeature.GetIndexOfMostIntensePeak();
-
 
             var toleranceInMZ = theorFeature.getMonoPeak().XValue * ToleranceInPPM / 1e6;
 
             var foundMatchingMaxPeak = false;
             double massDefect = 0;   // this is the m/z diff between the max peak of theor feature and the max peak of the experimental feature
 
-
             var failedResult = false;
-
 
             for (var i = indexOfMaxTheorPeak; i >= 0; i--)
             {
-
-
                 //find experimental peak(s) within range
                 var peaksWithinTol = PeakUtilities.GetPeaksWithinTolerance(peakList, theorFeature.Peaklist[i].XValue, toleranceInMZ);
 
@@ -99,10 +95,8 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
                         outFeature.Peaklist.Insert(0, (MSPeak)peaksWithinTol[0]);
                     }
                 }
-
                 else    // when we have several peaks within tolerance, we'll need to decide what to do
                 {
-
                     MSPeak bestPeak;
                     if (i == indexOfMaxTheorPeak)   //when matching to most intense peak, we will use the most intense peak
                     {
@@ -120,18 +114,14 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
                     else
                     {
                         outFeature.Peaklist.Insert(0, bestPeak);
-
                     }
                 }
-
 
                 if (i == indexOfMaxTheorPeak)   //when matching to most intense peak, we will get the mass defect using the most intense peak
                 {
                     massDefect = theorFeature.Peaklist[i].XValue - outFeature.Peaklist[0].XValue;
                 }
-
             }
-
 
             //------------------------- look right -------------------------------------------
             for (var i = indexOfMaxTheorPeak + 1; i < theorFeature.Peaklist.Count; i++)     //start one peak to the right of the max intense theor peak
@@ -148,7 +138,6 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
                 if (peaksWithinTol.Count == 1)
                 {
-
                     outFeature.Peaklist.Add((MSPeak)peaksWithinTol[0]);   //here, we tack peaks onto the profile
                 }
                 else    //two or more peaks are within tolerance. Need to get the best one, which is based on the distance from the
@@ -157,16 +146,11 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
                 }
             }
 
-
-
-
             //for higher mass peptides, we will return the profile if there is 2 or more peaks, regardless if none are found to the right of the most abundant
-            if (indexOfMaxTheorPeak>0 && outFeature.Peaklist.Count>1)
+            if (indexOfMaxTheorPeak > 0 && outFeature.Peaklist.Count > 1)
             {
                 failedResult = false;
             }
-
-
 
             if (failedResult)
             {
@@ -182,7 +166,6 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             var indexOfMonoPeak = PeakUtilities.getIndexOfClosestValue(outFeature.Peaklist, theorFeature.MonoPeakMZ, 0, outFeature.Peaklist.Count - 1, 0.1);
             outFeature.MonoIsotopicPeakIndex = indexOfMonoPeak;
 
-
             double monoIsotopicPeakMZ = 0;
             double monoIsotopicMass = 0;
             var monoPeakFoundInObservedIso = (outFeature.MonoIsotopicPeakIndex != -1);
@@ -195,13 +178,11 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             }
             else
             {
-
                 var indexOfMostAbundantTheorPeak = theorFeature.GetIndexOfMostIntensePeak();
                 var indexOfCorrespondingObservedPeak = PeakUtilities.getIndexOfClosestValue(outFeature.Peaklist, theorFeature.Peaklist[indexOfMostAbundantTheorPeak].XValue, 0, outFeature.Peaklist.Count - 1, 0.1);
 
                 if (indexOfCorrespondingObservedPeak != -1)
                 {
-
                     //double mzOffset = outFeature.Peaklist[indexOfCorrespondingObservedPeak].XValue - theorFeature.Peaklist[indexOfMostAbundantTheorPeak].XValue;
 
                     var locationOfMonoPeakRelativeToTheorMaxPeak = theorFeature.MonoIsotopicPeakIndex - indexOfMostAbundantTheorPeak;
@@ -218,20 +199,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
 
 
-
-
-
-
-
-
-
-
-
-
         }
-
-
-
 
         public override void Execute(ResultCollection resultList)
         {
@@ -249,8 +217,6 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
             var targetedIso = CreateTargetIso(resultList.Run);
             var iso = FindMSFeature(resultList.Run.PeakList, targetedIso);
-
-
 
             switch (IsotopicProfileType)
             {
@@ -278,13 +244,12 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             }
 
             resultList.IsosResultBin.Add(result);
-
         }
 
         protected virtual IsotopicProfile CreateTargetIso(Run run)
         {
             IsotopicProfile iso;
-            Check.Require(run.CurrentMassTag != null,"Run's 'CurrentMassTag' has not been declared");
+            Check.Require(run.CurrentMassTag != null, "Run's 'CurrentMassTag' has not been declared");
 
             if (run.CurrentMassTag == null)
                 return null;
@@ -296,7 +261,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             switch (IsotopicProfileType)
             {
                 case Globals.IsotopicProfileType.UNLABELED:
-                    Check.Require(run.CurrentMassTag.IsotopicProfile!=null,"Target's theoretical isotopic profile has not been established");
+                    Check.Require(run.CurrentMassTag.IsotopicProfile != null, "Target's theoretical isotopic profile has not been established");
                     iso = run.CurrentMassTag.IsotopicProfile.CloneIsotopicProfile();
                     break;
 
@@ -323,7 +288,6 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             }
 
             return iso;
-
         }
         #endregion
 
@@ -356,7 +320,6 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             return mostIntensePeak;
         }
 
-
         //private MSPeak findClosestToXValue(List<MSPeak> list, double p)
         //{
         //    throw new NotImplementedException();
@@ -381,7 +344,6 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             return closestPeak;
         }
 
-
         private double sumPeaks(IsotopicProfile profile, int numPeaksUsedInAbundance, int defaultVal)
         {
             if (profile.Peaklist == null || profile.Peaklist.Count == 0) return defaultVal;
@@ -389,7 +351,6 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             foreach (var peak in profile.Peaklist)
             {
                 peakListIntensities.Add(peak.Height);
-
             }
             peakListIntensities.Sort();
             peakListIntensities.Reverse();    // i know... this isn't the best way to do this!
@@ -401,14 +362,10 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
                 {
                     summedIntensities += peakListIntensities[i];
                 }
-
-
             }
 
             return summedIntensities;
-
         }
-
 
         #endregion
 

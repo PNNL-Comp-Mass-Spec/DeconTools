@@ -6,10 +6,6 @@ namespace DeconTools.Workflows.Backend.FileIO
         public UnlabeledTargetedResultToTextExporter(string filename)
             : base(filename)
         {
-            
-
         }
-
-
     }
 }

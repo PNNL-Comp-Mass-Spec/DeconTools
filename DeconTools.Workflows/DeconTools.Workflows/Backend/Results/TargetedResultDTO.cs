@@ -2,13 +2,11 @@
 
 namespace DeconTools.Workflows.Backend.Results
 {
-
     /// <summary>
     /// Result object for targeted workflows; free of any heavy objects
     /// </summary>
     public class TargetedResultDTO : DeconToolsResultDTO
     {
-
         #region Properties
         public long TargetID { get; set; }
 
@@ -27,7 +25,6 @@ namespace DeconTools.Workflows.Backend.Results
 
         public string ErrorDescription { get; set; }
 
-
         public int MatchedMassTagID { get; set; }
 
         public string EmpiricalFormula { get; set; }
@@ -36,7 +33,6 @@ namespace DeconTools.Workflows.Backend.Results
         /// Target's code. For peptides this is the amino acid sequence.
         /// </summary>
         public string Code { get; set; }
-
 
         #endregion
 

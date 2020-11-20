@@ -3,7 +3,6 @@ namespace DeconTools.Utilities.SqliteUtils
 {
     public class Field
     {
-
         #region Constructors
         public Field(string name, string type)
         {

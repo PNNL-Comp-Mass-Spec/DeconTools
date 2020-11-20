@@ -9,7 +9,6 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
         public IMFIsosResult_TextFileExporter(string fileName)
             : this(fileName, 1000000)
         {
-
         }
 
         public IMFIsosResult_TextFileExporter(string fileName, int triggerValueToExport)
@@ -20,7 +19,6 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
             FileName = fileName;
 
             initializeAndWriteHeader();
-
         }
 
         #endregion
@@ -36,7 +34,6 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
 
         #region Private Methods
         #endregion
-
 
         protected override string buildIsosResultOutput(Core.IsosResult result)
         {
@@ -63,7 +60,6 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
             // data.Add(result.IsotopicProfile.ScoreCountBasis);				// Number of points used for the fit score
 
             return string.Join(Delimiter.ToString(), data);
-
         }
 
         protected override string buildHeaderLine()
@@ -91,11 +87,6 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
             //            //data.Add("fit_basis_count");
 
             return string.Join(Delimiter.ToString(), data);
-
-
-
         }
-
-
     }
 }

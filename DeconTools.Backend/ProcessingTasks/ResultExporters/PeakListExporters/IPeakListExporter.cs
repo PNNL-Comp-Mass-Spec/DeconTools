@@ -8,13 +8,12 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
 {
     public abstract class IPeakListExporter : Task
     {
-
         public abstract int TriggerToWriteValue { get; set; }
         public abstract int[] MSLevelsToExport { get; set; }
 
         public abstract void WriteOutPeaks(List<MSPeakResult> peakList);
         public abstract void WriteOutPeaks(StreamWriter sw, List<MSPeakResult> peakList);
-        
+
         public override void Execute(ResultCollection resultList)
         {
             if (resultList.MSPeakResultList == null || resultList.MSPeakResultList.Count == 0) return;
@@ -23,7 +22,7 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
 
             var lastScanNum = resultList.Run.ScanSetCollection.ScanSetList[resultList.Run.ScanSetCollection.ScanSetList.Count - 1].PrimaryScanNumber;
 
-            var isLastScan=true;
+            var isLastScan = true;
             var writeOutPeaksNoMatterWhat = false;
 
             if (resultList.Run is UIMFRun)
@@ -34,7 +33,6 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
             else
             {
                 isLastScan = (resultList.Run.CurrentScanSet.PrimaryScanNumber == lastScanNum);
-
             }
 
             //Write out results if exceeds trigger value or is last scan
@@ -44,6 +42,5 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
                 resultList.MSPeakResultList.Clear();
             }
         }
-
     }
 }

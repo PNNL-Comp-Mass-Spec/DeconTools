@@ -12,7 +12,6 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
 
         public ChromPeakIqTarget SelectBestPeak(List<ChromPeakIqTarget> peakQualityList, bool filterOutFlaggedIsotopicProfiles)
         {
-
             //flagging algorithm checks for peak-to-the-left. This is ok for peptides whose first isotope
             //is most abundant, but not good for large peptides in which the mono peak is of lower intensity. 
 
@@ -20,7 +19,6 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
                                  where n.GetResult().IsotopicProfileFound &&
                                  n.GetResult().FitScore < 1
                                  select n).ToList();
-
 
             if (filterOutFlaggedIsotopicProfiles)
             {
@@ -52,7 +50,6 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
                 {
                     if (_parameters.MultipleHighQualityMatchesAreAllowed)
                     {
-
                         if (filteredList1[0].GetResult().Abundance >= filteredList1[1].GetResult().Abundance)
                         {
                             bestpeak = filteredList1[0];

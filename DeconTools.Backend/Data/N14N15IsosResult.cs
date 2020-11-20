@@ -6,7 +6,5 @@ namespace DeconTools.Backend
     [Serializable]
     public class N14N15IsosResult : IsosResult
     {
-
-
     }
 }

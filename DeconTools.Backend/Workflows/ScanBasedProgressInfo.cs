@@ -32,6 +32,5 @@ namespace DeconTools.Backend.Workflows
             if (CurrentScanSet == null) return -1;
             return CurrentScanSet.PrimaryScanNumber;
         }
-
     }
 }

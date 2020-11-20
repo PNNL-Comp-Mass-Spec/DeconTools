@@ -13,7 +13,6 @@ namespace DeconTools.Workflows.Backend.Core
         private List<TargetBase> _massTagList;
         private TargetedResultRepository _featuresToBeAligned;
 
-
         #region Constructors
 
         public NETAndMassAligner()
@@ -28,14 +27,11 @@ namespace DeconTools.Workflows.Backend.Core
             : this()
         {
             AlignerParameters = alignerParameters;
-
         }
 
         #endregion
 
-
         public AlignmentResult Result { get; set; }
-
 
         #region Public Methods
 
@@ -50,7 +46,6 @@ namespace DeconTools.Workflows.Backend.Core
             _featuresToBeAligned.AddResults(featuresToAlign);
         }
 
-
         public void SetFeaturesToBeAligned(List<TargetedResultDTO> featuresToAlign)
         {
             _featuresToBeAligned.Clear();
@@ -59,7 +54,6 @@ namespace DeconTools.Workflows.Backend.Core
 
         public clsAlignmentFunction GetAlignment(List<TargetBase> massTagList, List<TargetedResultDTO> featuresToAlign)
         {
-
             var multialignMassTagDB = new clsMassTagDB();
 
             //TODO: I might be able to dynamically update these values. Take my foundFeatures and calculate their avg PPMDiff. Then use that info here. 
@@ -83,10 +77,9 @@ namespace DeconTools.Workflows.Backend.Core
             alignmentOptions.NETTolerance = AlignerParameters.NETTolerance;
             alignmentOptions.NumTimeSections = AlignerParameters.NumTimeSections;
             alignmentOptions.UsePromiscuousPoints = AlignerParameters.UsePromiscuousPoints;
-       
+
             var processor = new clsAlignmentProcessor();
             processor.AlignmentOptions = alignmentOptions;
-
 
             var multiAlignMassTags = convertDeconToolsMassTagsToMultialignMassTags(massTagList);
 
@@ -100,10 +93,7 @@ namespace DeconTools.Workflows.Backend.Core
 
             Result = getResultsForAlignment(processor);
 
-
             return processor.GetAlignmentFunction();
-
-
         }
 
         private AlignmentResult getResultsForAlignment(clsAlignmentProcessor processor)
@@ -120,20 +110,16 @@ namespace DeconTools.Workflows.Backend.Core
             result.NETValues = NETValues;
             result.AlignmentHeatmapScores = scores;
 
-
             //get massResiduals_vs_scan and massResiduals_vs_m/z
             var residuals = processor.GetResidualData();
-            
 
             result.Mass_vs_scan_ResidualsBeforeAlignment = residuals.massError;
             result.Mass_vs_scan_ResidualsAfterAlignment = residuals.massErrorCorrected;
             result.Mass_vs_scan_ResidualsScanValues = residuals.scans;
 
-
             result.Mass_vs_mz_ResidualsBeforeAlignment = residuals.mzMassError;
             result.Mass_vs_mz_ResidualsAfterAlignment = residuals.mzMassErrorCorrected;
             result.Mass_vs_mz_ResidualsMZValues = residuals.mz;
-
 
             //get stats on variability
             result.NETStDev = processor.GetNETStandardDeviation();
@@ -149,17 +135,8 @@ namespace DeconTools.Workflows.Backend.Core
             result.massHistogramData = massHistogramData;
             result.NETHistogramData = netHistogramData;
 
-
             return result;
-
-
-
-
         }
-
-
-
-
 
         public void Execute(Run run)
         {
@@ -173,8 +150,6 @@ namespace DeconTools.Workflows.Backend.Core
             massAlignmentInfo.AlignmentInfo = lcmswarpAlignmentInfo;
 
             run.MassAlignmentInfo = massAlignmentInfo;
-
-
         }
 
         #endregion
@@ -189,7 +164,6 @@ namespace DeconTools.Workflows.Backend.Core
             foreach (var feature in featuresToAlign)
             {
                 var umc = convertDeconToolsTargetedFeatureToUMC(feature);
-
 
                 umc.mint_umc_index = umcIndexCounter;
 
@@ -230,10 +204,6 @@ namespace DeconTools.Workflows.Backend.Core
             return umc;
         }
 
-
-
-
-
         private clsMassTag[] convertDeconToolsMassTagsToMultialignMassTags(List<TargetBase> massTagList)
         {
             var massTags = new List<clsMassTag>();
@@ -242,9 +212,7 @@ namespace DeconTools.Workflows.Backend.Core
             {
                 var multialignMassTag = convertDeconToolsMassTagToMultialignMassTag(mt);
                 massTags.Add(multialignMassTag);
-
             }
-
 
             return massTags.ToArray();
         }
@@ -277,11 +245,7 @@ namespace DeconTools.Workflows.Backend.Core
             return multialignMassTag;
         }
 
-
         #endregion
-
-
-
 
         public NETAndMassAlignerParameters AlignerParameters { get; set; }
     }

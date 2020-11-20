@@ -30,10 +30,8 @@ namespace DeconTools.Backend.ProcessingTasks
             //don't do anything if there aren't any peaks
             if (resultList.Run.PeakList == null || resultList.Run.PeakList.Count == 0) return;
 
-
             foreach (var msFeature in resultList.IsosResultBin)
             {
-
                 foreach (var peak in msFeature.IsotopicProfile.Peaklist)
                 {
                     var targetMZ = peak.XValue;
@@ -53,9 +51,7 @@ namespace DeconTools.Backend.ProcessingTasks
                         }
                     }
                 }
-
             }
-
         }
     }
 }

@@ -31,7 +31,6 @@ namespace DeconTools.Backend.Data
             }
             catch (Exception)
             {
-
                 throw new IOException("There was a problem reading the _isos data file " + filepath);
             }
         }
@@ -41,21 +40,16 @@ namespace DeconTools.Backend.Data
         {
             minVal = minValue;
             maxVal = maxValue;
-
         }
-
 
         public override List<IsosResult> Import()
         {
-
             var results = new List<IsosResult>();
-
 
             if (reader.EndOfStream)
             {
                 reader.Close();
                 throw new InvalidDataException("There is no data in Isos file " + filepath);
-
             }
 
             var headerLine = reader.ReadLine();
@@ -81,8 +75,6 @@ namespace DeconTools.Backend.Data
                         {
                             break;
                         }
-
-
                     }
                 }
                 else
@@ -94,12 +86,10 @@ namespace DeconTools.Backend.Data
                 }
 
                 counter++;
-
             }
 
             reader.Close();
             return results;
-
         }
 
         private IsosResult convertTextToIsosResult(List<string> processedData, List<string> headers)
@@ -108,7 +98,6 @@ namespace DeconTools.Backend.Data
             if (fileType == Globals.MSFileType.PNNL_UIMF)
             {
                 result = new UIMFIsosResult();
-
             }
             else
             {
@@ -125,14 +114,13 @@ namespace DeconTools.Backend.Data
                 var frame_num = parseIntField(lookup(processedData, headers, "frame_num"));
                 ((UIMFIsosResult)result).DriftTime = parseDoubleField(lookup(processedData, headers, "drift_time"));
                 result.ScanSet = new LCScanSetIMS(frame_num);
-                ((UIMFIsosResult) result).IMSScanSet = new IMSScanSet(imsScanNum);
+                ((UIMFIsosResult)result).IMSScanSet = new IMSScanSet(imsScanNum);
             }
             else
             {
                 var scan_num = parseIntField(lookup(processedData, headers, "scan_num"));
                 result.ScanSet = new ScanSet(scan_num);
             }
-
 
             result.IsotopicProfile.ChargeState = parseIntField(lookup(processedData, headers, "charge"));
             result.IsotopicProfile.MonoIsotopicMass = parseDoubleField(lookup(processedData, headers, "monoisotopic_mw"));
@@ -141,15 +129,12 @@ namespace DeconTools.Backend.Data
 
             //result.IsotopicProfile.IntensityMostAbundant = parseFloatField(lookup(processedData, headers, "abundance"));
 
-
-
             result.IsotopicProfile.MonoPeakMZ = parseDoubleField(lookup(processedData, headers, "mz"));
             result.InterferenceScore = parseDoubleField(lookup(processedData, headers, "interference_score"));
             result.IsotopicProfile.OriginalIntensity = parseDoubleField(lookup(processedData, headers, "unsummed_intensity"));
 
             var saturationFlagString = lookup(processedData, headers, "saturation_flag");
             result.IsotopicProfile.IsSaturated = saturationFlagString == "1";
-
 
             var mz = parseFloatField(lookup(processedData, headers, "mz"));
             var intensity = parseIntField(lookup(processedData, headers, "mono_abundance"));
@@ -161,7 +146,7 @@ namespace DeconTools.Backend.Data
             };
             //mono mz isn't available from _isos file AM modification, while this is true, we still need this.
 
-            var flagString= lookup(processedData, headers, "flag");
+            var flagString = lookup(processedData, headers, "flag");
 
             if (string.IsNullOrEmpty(flagString))
             {
@@ -172,12 +157,9 @@ namespace DeconTools.Backend.Data
                 if (flagNum == 1) result.Flags.Add(new PeakToTheLeftResultFlag());     // TODO: it'll be good to make a factory class for creating flags.
             }
 
-
-
             result.IsotopicProfile.Peaklist.Add(peak);
 
             return result;
-
         }
 
         private Run GetRunFromIsosFilename(string p, Globals.MSFileType msFileType)
@@ -230,17 +212,13 @@ namespace DeconTools.Backend.Data
             try
             {
                 run = factory.CreateRun(runFilename);
-
-
             }
             catch (Exception)
             {
-
                 run = null;
             }
 
             return run;
-
         }
     }
 }

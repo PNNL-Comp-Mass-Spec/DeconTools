@@ -5,13 +5,10 @@ namespace DeconTools.Workflows.Backend.Utilities
 {
     public class DatasetUtilities
     {
-
         public string DbUsername { get; set; }
         public string DbServerName { get; set; }
         public string DbUserPassWord { get; set; }
         public string DbName { get; set; }
-
-
 
         #region Constructors
         public DatasetUtilities()
@@ -20,15 +17,11 @@ namespace DeconTools.Workflows.Backend.Utilities
             this.DbUserPassWord = "dms4fun";
             this.DbServerName = "Gigasax";
             this.DbName = "DMS5";
-
         }
 
         #endregion
 
         #region Properties
-
-
-
 
         public string GetDatasetPath(string datasetName)
         {
@@ -51,21 +44,16 @@ namespace DeconTools.Workflows.Backend.Utilities
 
                     while (reader.Read())
                     {
-
                         if (!reader["Dataset Folder Path"].Equals(DBNull.Value))
                         {
                             datasetPath = Convert.ToString(reader["Dataset Folder Path"]);
                             break;
                         }
-
-
                     }
                 }
             }
 
             return datasetPath;
-
-
         }
 
         public string GetDatasetID(string datasetName)
@@ -89,26 +77,19 @@ namespace DeconTools.Workflows.Backend.Utilities
                     command.CommandTimeout = 60;
                     var reader = command.ExecuteReader();
 
-
                     while (reader.Read())
                     {
-
                         if (!reader["Dataset Folder Path"].Equals(DBNull.Value))
                         {
                             datasetPath = Convert.ToString(reader["Dataset Folder Path"]);
                             break;
                         }
-
-
                     }
                 }
             }
 
             return datasetPath;
-
-
         }
-
 
         public string GetDatasetPathArchived(string datasetName)
         {
@@ -133,27 +114,19 @@ namespace DeconTools.Workflows.Backend.Utilities
 
                     while (reader.Read())
                     {
-
                         if (!reader["Archive Folder Path"].Equals(DBNull.Value))
                         {
                             datasetPath = Convert.ToString(reader["Archive Folder Path"]);
                             break;
                         }
-
-
                     }
                 }
             }
 
             return datasetPath;
-
-
         }
 
-
-
         #endregion
-
 
         #region Private Methods
         private string buildConnectionString()

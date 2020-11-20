@@ -4,7 +4,6 @@ using DeconTools.Workflows.Backend.Core;
 
 namespace DeconTools.Workflows.Backend.Utilities
 {
-
     /// <summary>
     /// Used to dump data in a format where sipper can read it.
     /// </summary>
@@ -64,7 +63,6 @@ namespace DeconTools.Workflows.Backend.Utilities
                     status = "T-NEG";
                 }
             }
-
 
             using (var sipper = File.AppendText(Outfile))
             {

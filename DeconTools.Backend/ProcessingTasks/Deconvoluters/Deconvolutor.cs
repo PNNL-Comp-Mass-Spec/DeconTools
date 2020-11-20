@@ -17,7 +17,6 @@ namespace DeconTools.Backend.ProcessingTasks
 
         public abstract void Deconvolute(ResultCollection resultList);
 
-
         public override void Execute(ResultCollection resultList)
         {
             clearCurrentScanIsosResultBin(resultList);   //TODO:   this does not clear
@@ -34,9 +33,7 @@ namespace DeconTools.Backend.ProcessingTasks
 
             ShowTraceMessageIfEnabled("addCurrentScanIsosResultsToOverallList: " + resultList);
             addCurrentScanIsosResultsToOverallList(resultList);
-
         }
-
 
         protected virtual void GatherMSFeatureStatistics(Run run)
         {
@@ -58,9 +55,7 @@ namespace DeconTools.Backend.ProcessingTasks
                 return;
 
             currentScanset.NumIsotopicProfiles = run.ResultCollection.IsosResultBin.Count;    //used in ScanResult
-
         }
-
 
         private void associatePeaksToMSFeatureID(ResultCollection resultList)
         {
@@ -71,12 +66,8 @@ namespace DeconTools.Backend.ProcessingTasks
                 foreach (var peak in msFeature.IsotopicProfile.Peaklist)
                 {
                     peak.MSFeatureID = msFeature.MSFeatureID;
-
                 }
-
             }
-
-
         }
 
         private void clearCurrentScanIsosResultBin(ResultCollection resultList)
@@ -89,7 +80,6 @@ namespace DeconTools.Backend.ProcessingTasks
             if (resultList.Run is UIMFRun)
             {
                 resultList.IsosResultBin.Clear();
-
             }
             else
             {
@@ -99,10 +89,8 @@ namespace DeconTools.Backend.ProcessingTasks
                     {
                         resultList.IsosResultBin.RemoveAt(i);
                     }
-
                 }
             }
-
         }
 
         private void addCurrentScanIsosResultsToOverallList(ResultCollection resultList)
@@ -110,7 +98,7 @@ namespace DeconTools.Backend.ProcessingTasks
             resultList.ResultList.AddRange(resultList.IsosResultBin);
         }
 
-        protected void AddDeconResult(ResultCollection baseResultList, IsosResult addedResult, DeconResultComboMode comboMode= DeconResultComboMode.simplyAddIt)
+        protected void AddDeconResult(ResultCollection baseResultList, IsosResult addedResult, DeconResultComboMode comboMode = DeconResultComboMode.simplyAddIt)
         {
             Check.Require(baseResultList != null, "Deconvolutor problem. Can't combine results. Base resultList is null.");
             if (baseResultList == null)
@@ -142,8 +130,6 @@ namespace DeconTools.Backend.ProcessingTasks
                 case DeconResultComboMode.addAndReplaceIfOneDaltonErrorDetected:
                     throw new NotImplementedException("add and replace isotopic profile mode not yet supported");
             }
-
-
         }
 
         private bool doesResultExist(IEnumerable<IsosResult> scanSetIsosResults, IsosResult addedResult)
@@ -153,7 +139,6 @@ namespace DeconTools.Backend.ProcessingTasks
                 var addedMonoPeak = addedResult.IsotopicProfile.Peaklist[0];
                 var baseMonoPeak = result.IsotopicProfile.Peaklist[0];
 
-
                 if (addedResult.IsotopicProfile.ChargeState == result.IsotopicProfile.ChargeState
                     && Math.Abs(addedMonoPeak.XValue - baseMonoPeak.XValue) < float.Epsilon)
                 {
@@ -162,9 +147,6 @@ namespace DeconTools.Backend.ProcessingTasks
             }
             //didn't find a matching monoisotopic peak
             return false;
-
         }
-
-
     }
 }

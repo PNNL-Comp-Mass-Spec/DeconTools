@@ -3,8 +3,6 @@ using System.Collections.Generic;
 
 namespace DeconTools.Workflows.Backend.Core
 {
-    
-
     /// <summary>
     /// Helps developers assign workflows to targets
     /// </summary>
@@ -21,12 +19,10 @@ namespace DeconTools.Workflows.Backend.Core
 
         #region Public Methods
 
-
         public void AssignWorkflowToParent(IqWorkflow workflow, IqTarget target)
         {
             target.RootTarget.SetWorkflow(workflow);
         }
-
 
         public void AssignWorkflowToChildren(IqWorkflow workflow, IqTarget target, int childLevel=1)
         {
@@ -38,7 +34,6 @@ namespace DeconTools.Workflows.Backend.Core
             }
         }
 
-
         public void AssignWorkflowToParent(IqWorkflow workflow, List<IqTarget> targets)
         {
             foreach (var iqTarget in targets)
@@ -46,7 +41,6 @@ namespace DeconTools.Workflows.Backend.Core
                 iqTarget.RootTarget.SetWorkflow(workflow);
             }
         }
-
 
         public void AssignWorkflowToChildren(IqWorkflow workflow, List<IqTarget> targets, int childLevel = 1)
         {

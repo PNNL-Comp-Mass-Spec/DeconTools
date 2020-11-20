@@ -73,7 +73,6 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
                     var framePressureUnsmoothed = new SQLiteParameter();
                     var framePressureSmoothed = new SQLiteParameter();
 
-
                     mycommand.CommandText = "INSERT INTO T_IMS_Frames ([frame_num],[frame_time],[type],[bpi],[bpi_mz],[tic],[num_peaks],[num_deisotoped],[frame_pressure_unsmoothed],[frame_pressure_smoothed]) VALUES(?,?,?,?,?,?,?,?,?,?)";
                     mycommand.Parameters.Add(frameNumParam);
                     mycommand.Parameters.Add(frameTimeParam);
@@ -105,7 +104,6 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
                     }
                 }
                 mytransaction.Commit();
-
             }
         }
     }

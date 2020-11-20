@@ -74,7 +74,6 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
                             var output = buildScansResultOutput(scanResult);
                             sw.WriteLine(output);
                         }
-
                     }
 
                     break;
@@ -94,8 +93,6 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
                     }
                 }
             }
-
-
         }
 
         public override void ExportScanResult(ScanResult scanResult)

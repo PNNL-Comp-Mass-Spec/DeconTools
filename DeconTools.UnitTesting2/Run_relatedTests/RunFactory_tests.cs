@@ -31,8 +31,6 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             Assert.AreEqual(0, run.MaxLCScan);
         }
 
-
-
         [Test]
         public void createBruker_fromBruker12T_Test1()
         {
@@ -53,9 +51,6 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             Assert.AreEqual(599, run.MaxLCScan);
         }
 
-
-
-
         [Test]
         public void createBrukerSolarixRunTest1()
         {
@@ -64,9 +59,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
 
             Assert.AreEqual(Globals.MSFileType.Bruker, run.MSFileType);
             Assert.AreEqual(7, run.MaxLCScan);
-
         }
-
 
         [Test]
         public void CreateMZMLRunTest1()
@@ -81,7 +74,6 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             Assert.AreEqual(18504, run.MaxLCScan);
         }
 
-
         [Test]
         public void CreateMZXMLRunTest1()
         {
@@ -94,7 +86,6 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             Assert.AreEqual(Globals.MSFileType.MZXML_Rawdata, run.MSFileType);
             Assert.AreEqual(18504, run.MaxLCScan);
         }
-
 
         [Test]
         public void CreateMZ5RunTest1()
@@ -109,17 +100,13 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             Assert.AreEqual(18504, run.MaxLCScan);
         }
 
-
-
         [Test]
         public void createAgilentDRunTest1()
         {
-
             var rf = new RunFactory();
             var run = rf.CreateRun(FileRefs.RawDataMSFiles.AgilentDFile1);
 
             Assert.AreEqual(Globals.MSFileType.Agilent_D, run.MSFileType);
-
         }
 
         [Test]
@@ -129,7 +116,6 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             var run = rf.CreateRun(textFile1);
 
             Assert.AreEqual(Globals.MSFileType.Ascii, run.MSFileType);
-
         }
 
         [Test]
@@ -167,9 +153,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             }
 
             Assert.Fail("Exception was not caught; we expected an ApplicationException to be thrown");
-
         }
-
 
         // [Test]
         //[ExpectedException(typeof(ApplicationException))]
@@ -180,9 +164,6 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         //    RunFactory rf = new RunFactory();
         //    Run run = rf.CreateRun(testfile);
         //}
-
-
-        
 
     }
 }

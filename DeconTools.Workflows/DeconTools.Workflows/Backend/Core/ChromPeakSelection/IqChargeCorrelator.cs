@@ -28,7 +28,6 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
 
         #region Public Methods
 
-
         /// <summary>
         /// Performs charge correlation on all peaks within a sequence level target
         /// </summary>
@@ -115,7 +114,6 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
             return chargeCorrelationData;
         }
 
-
         /// <summary>
         /// Performs charge correlation on a pair of ChromPeakIqTarget peaks
         /// </summary>
@@ -168,7 +166,6 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
 
         #region Private Methods
 
-
         /// <summary>
         /// Gets the scan range for the peaks that need to be correlated together
         /// </summary>
@@ -181,7 +178,6 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
             startScan = Convert.ToInt32(Math.Floor(referencePeak.XValue - (0.5 * baseWidth)));
             stopScan = Convert.ToInt32(Math.Ceiling(referencePeak.XValue + (0.5 * baseWidth)));
         }
-
 
         /// <summary>
         /// Pulls all XICs needed to perform charge correlation

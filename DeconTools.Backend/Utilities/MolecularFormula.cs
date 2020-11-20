@@ -81,7 +81,6 @@ namespace DeconTools.Backend.Utilities
     /// </summary>
     public class MolecularFormula
     {
-
         /// <summary>
         /// The order of this list is not important, but only elements in this list are parsed
         /// from the formula.  Other symbols will cause an exception.  Putting them in a list allows

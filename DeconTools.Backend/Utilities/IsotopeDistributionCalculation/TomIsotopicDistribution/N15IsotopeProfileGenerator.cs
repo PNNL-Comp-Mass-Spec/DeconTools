@@ -6,27 +6,23 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
 {
     public class N15IsotopeProfileGenerator
     {
-
         TomIsotopicPattern _TomIsotopicPatternGenerator = new TomIsotopicPattern();
         IsotopicDistributionCalculator _isotopicDistributionCalculator = IsotopicDistributionCalculator.Instance;
 
         const int N14ISOTOPE_NUMBER = 14;
         const int N15ISOTOPE_NUMBER = 15;
 
-
         #region Constructors
-       
+
         public N15IsotopeProfileGenerator(double N14LabelingAmount = 0.02, double N15LabelingAmount = 0.98)
         {
-            var sumOfLabelingAmounts = (decimal)(Math.Round(N14LabelingAmount,2) + Math.Round(N15LabelingAmount,2));
+            var sumOfLabelingAmounts = (decimal)(Math.Round(N14LabelingAmount, 2) + Math.Round(N15LabelingAmount, 2));
 
             Check.Require(sumOfLabelingAmounts == 1.00m, "N14 and N15 labeling amounts do not add up to 1.00 - which they should.");
 
             this.N14LabelingAmount = N14LabelingAmount;
             this.N15LabelingAmount = N15LabelingAmount;
-
         }
-
 
         #endregion
 
@@ -41,7 +37,6 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
         /// fractional amount (0-1) for amount of N15 labeling
         /// </summary>
         public double N15LabelingAmount { get; set; }
-
 
         #endregion
 
@@ -63,10 +58,7 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
             labeledTheorProfile.ChargeState = mt.ChargeState;
 
             return labeledTheorProfile;
-
         }
-
-
 
         public IsotopicProfile GetN15IsotopicProfile2(TargetBase mt, double lowPeakCutoff)
         {
@@ -87,9 +79,7 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
             labeledTheorProfile.ChargeState = mt.ChargeState;
 
             return labeledTheorProfile;
-
         }
-
 
         #endregion
 
@@ -104,9 +94,6 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
 
             labeledTheorProfile.Peaklist[numNitrogens].XValue = labeledTheorProfile.MonoPeakMZ;
             labeledTheorProfile.MonoIsotopicMass = (labeledTheorProfile.MonoPeakMZ - Globals.PROTON_MASS) * chargeState;
-
-
-
 
             //Assign m/z values to the left of the monoN15Mass
             var counter = 1;
@@ -123,10 +110,6 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
                 labeledTheorProfile.Peaklist[i].XValue = labeledTheorProfile.Peaklist[numNitrogens].XValue + (double)counter * (1.003 / (double)chargeState);
                 counter++;
             }
-
-
-
-
         }
         #endregion
     }

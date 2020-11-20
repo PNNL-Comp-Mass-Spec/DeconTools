@@ -23,6 +23,5 @@ namespace DeconTools.Backend
             Run = run;
             ScanSet = scanSet;
         }
-
     }
 }

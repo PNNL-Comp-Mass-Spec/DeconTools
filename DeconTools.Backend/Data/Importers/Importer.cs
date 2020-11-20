@@ -11,11 +11,10 @@ namespace DeconTools.Backend.Data
 
         protected string lookup(List<string> data, List<string> headers, string targetHeader)
         {
-            var columnIndex = getIndexForTableHeader(headers, targetHeader,false);
+            var columnIndex = getIndexForTableHeader(headers, targetHeader, false);
             if (columnIndex == -1) return "";
 
             return data[columnIndex];
-
         }
 
         protected bool parseBoolField(string inputString)
@@ -34,7 +33,6 @@ namespace DeconTools.Backend.Data
 
         protected double parseDoubleField(string inputString)
         {
-
             if (double.TryParse(inputString, out var result))
                 return result;
             return double.NaN;
@@ -47,10 +45,8 @@ namespace DeconTools.Backend.Data
             return float.NaN;
         }
 
-
         protected int parseIntField(string inputString)
         {
-
             if (string.IsNullOrEmpty(inputString)) return -1;
 
             if (int.TryParse(inputString, out var result))
@@ -92,7 +88,6 @@ namespace DeconTools.Backend.Data
                     columnHeader = tableHeaders[i];
                 }
 
-
                 if (columnHeader == target)
                 {
                     return i;
@@ -100,7 +95,5 @@ namespace DeconTools.Backend.Data
             }
             return -1;     //didn't find header!
         }
-
-
     }
 }

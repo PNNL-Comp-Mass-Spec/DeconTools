@@ -5,8 +5,6 @@ namespace DeconTools.Workflows.Backend.Core
 {
     public abstract class WorkflowExecutorBaseParameters : WorkflowParameters
     {
-
-
         #region Constructors
 
         protected WorkflowExecutorBaseParameters()
@@ -87,12 +85,10 @@ namespace DeconTools.Workflows.Backend.Core
         public bool ChromGenSourceDataIsThresholded { get; set; }
         public bool ChromGenSourceDataProcessMsMs { get; set; }
 
-
         /// <summary>
         /// Minimum m/z value used for defining the a range of IqChargeState targets
         /// </summary>
         public double MinMzForDefiningChargeStateTargets { get; set; }
-
 
         /// <summary>
         /// Maxium m/z value used for defining the a range of IqChargeState targets
@@ -106,9 +102,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         //public string ExportAlignmentFolder { get; set; }
 
-
         #endregion
-
 
     }
 }

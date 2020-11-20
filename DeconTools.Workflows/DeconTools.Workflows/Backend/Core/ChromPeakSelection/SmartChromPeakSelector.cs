@@ -8,7 +8,6 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
 {
     public class SmartChromPeakSelector : SmartChromPeakSelectorBase
     {
-
         #region Constructors
         public SmartChromPeakSelector(SmartChromPeakSelectorParameters parameters)
         {
@@ -23,7 +22,7 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
             if (parameters.MSFeatureFinderType == DeconTools.Backend.Globals.TargetedFeatureFinderType.BASIC)
             {
                 throw new NotSupportedException("Currently the Basic TFF is not supported in the SmartChromPeakSelector");
-                
+
                 //TargetedMSFeatureFinder = new TargetedFeatureFinders.BasicTFF(parameters.MSToleranceInPPM);
             }
             else
@@ -35,12 +34,9 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
             fitScoreCalc = new IsotopicProfileFitScoreCalculator();
 
             InterferenceScorer = new InterferenceScorer();
-
-
         }
 
         #endregion
 
-       
     }
 }

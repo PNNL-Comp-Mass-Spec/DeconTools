@@ -29,9 +29,7 @@ namespace DeconTools.Backend.Core
 
         #region Properties
 
-
         public Dictionary<TargetBase, TargetedResultBase> MassTagResultList { get; set; }
-
 
         private List<MSPeakResult> msPeakResultList;
         public List<MSPeakResult> MSPeakResultList
@@ -107,15 +105,11 @@ namespace DeconTools.Backend.Core
             foreach (var scanResult in ScanResultList)
             {
                 totIsotopicProfiles += scanResult.NumIsotopicProfiles;
-
             }
             return totIsotopicProfiles;
         }
 
-
         public TargetedResultBase CurrentTargetedResult { get; set; }
-
-
 
         public TargetedResultBase GetTargetedResult(TargetBase target)
         {
@@ -207,7 +201,6 @@ namespace DeconTools.Backend.Core
         //            return new DeconTools.Backend.Core.MassTagResult();
         //    }
 
-
         //}
 
         public List<TargetedResultBase> GetMassTagResults()
@@ -215,10 +208,8 @@ namespace DeconTools.Backend.Core
             return MassTagResultList.Values.ToList();
         }
 
-
         public List<TargetedResultBase> GetSuccessfulMassTagResults()
         {
-
             //first collect all massTagIDs   (there are more than one massTag having the same ID - because there are multiple charge states for each ID
 
             var resultList = MassTagResultList.Values.ToList();
@@ -264,9 +255,7 @@ namespace DeconTools.Backend.Core
                     MSPeakResultList.Add(peakResult);
                 }
             }
-
         }
-
 
         #endregion
 
@@ -301,9 +290,7 @@ namespace DeconTools.Backend.Core
                     throw new ApplicationException("ResultType is a Targeted type but currently we are trying to create a Traditional result");
                 default:
                     throw new ApplicationException("ResultType is not of a know type: " + ResultType);
-
             }
-
 
             return result;
         }
@@ -324,10 +311,8 @@ namespace DeconTools.Backend.Core
                             where n.ScanSet == results.Run.CurrentScanSet
                             select n;
 
-
             return queryList.ToList();
         }
-
 
         #endregion
 

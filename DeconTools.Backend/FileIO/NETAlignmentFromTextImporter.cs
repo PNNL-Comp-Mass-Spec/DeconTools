@@ -8,7 +8,6 @@ namespace DeconTools.Backend.FileIO
 {
     public class NETAlignmentFromTextImporter : ImporterBase<List<ScanNETPair>>
     {
-
         protected string[] scanHeaders = { "scan", "scanClassRep" };
         protected string[] netHeaders = { "net", "NETClassRep" };
         private readonly string _filename;
@@ -31,10 +30,8 @@ namespace DeconTools.Backend.FileIO
         #region Public Methods
         public override List<ScanNETPair> Import()
         {
-
             GetScanNETPairsFromFile();
             return _scanNETPairs;
-
         }
 
         public void Execute(Run run)
@@ -44,7 +41,6 @@ namespace DeconTools.Backend.FileIO
             GetScanNETPairsFromFile();
             run.NetAlignmentInfo = new NetAlignmentInfoBasic(run.MinLCScan, run.MaxLCScan);
             run.NetAlignmentInfo.SetScanToNETAlignmentData(_scanNETPairs);
-
         }
 
         #endregion
@@ -72,7 +68,6 @@ namespace DeconTools.Backend.FileIO
                 {
                     sr.Close();
                     throw new InvalidDataException("There is no data in file " + _filename);
-
                 }
 
                 var headerLine = sr.ReadLine();
@@ -84,7 +79,6 @@ namespace DeconTools.Backend.FileIO
                 {
                     throw new InvalidDataException("There is a problem with the column headers in file " + _filename);
                 }
-
 
                 var lineCounter = 1;   //used for tracking which line is being processed.
 
@@ -103,7 +97,6 @@ namespace DeconTools.Backend.FileIO
                     var scanNETPair = ConvertTextToDataObject(processedData);
                     _scanNETPairs.Add(scanNETPair);
                     lineCounter++;
-
                 }
 
                 sr.Close();
@@ -123,11 +116,6 @@ namespace DeconTools.Backend.FileIO
             return true;
         }
         #endregion
-
-
-
-
-
 
     }
 }

@@ -8,7 +8,6 @@ namespace DeconTools.Backend.Core
     [Serializable]
     public class ScanSet
     {
-
         #region Constructors
 
         public ScanSet()
@@ -43,7 +42,6 @@ namespace DeconTools.Backend.Core
             {
                 IndexValues.Add(i);
             }
-
         }
 
         #endregion
@@ -80,7 +78,7 @@ namespace DeconTools.Backend.Core
             }
             else
             {
-                IndexValues = new List<int> {scanNumber};
+                IndexValues = new List<int> { scanNumber };
             }
         }
 
@@ -138,7 +136,5 @@ namespace DeconTools.Backend.Core
             if (IndexValues == null || IndexValues.Count == 0) return 0;
             return IndexValues.Count;
         }
-
-
     }
 }

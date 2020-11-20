@@ -49,7 +49,6 @@ namespace DeconTools.Workflows.Backend.FileIO
             HeaderSectionsFound = new Dictionary<HeaderSection, bool>();
         }
 
-
         #endregion
 
         #region Properties
@@ -113,7 +112,6 @@ namespace DeconTools.Workflows.Backend.FileIO
                 {
                     sr.Close();
                     throw new InvalidDataException("There is no data in file " + PRISM.PathUtils.CompactPathString(IqFilePath, 60));
-
                 }
 
                 var headerLine = sr.ReadLine();
@@ -125,7 +123,6 @@ namespace DeconTools.Workflows.Backend.FileIO
                 {
                     throw new InvalidDataException("There is a problem with the column headers in file " + PRISM.PathUtils.CompactPathString(IqFilePath, 60));
                 }
-
 
                 _lineCounter = 1;   //used for tracking which line is being processed.
 
@@ -147,10 +144,8 @@ namespace DeconTools.Workflows.Backend.FileIO
 
                     allTargets.Add(target);
                     _lineCounter++;
-
                 }
                 sr.Close();
-
             }
 
             //remove duplicates:
@@ -184,7 +179,6 @@ namespace DeconTools.Workflows.Backend.FileIO
                 {HeaderSection.Charge, ChargeStateHeaders}
             };
 
-
             var dummyData = new List<string>();
             for (var i = 0; i < m_columnHeaders.Count; i++)
             {
@@ -201,7 +195,6 @@ namespace DeconTools.Workflows.Backend.FileIO
                 else
                     HeaderSectionsFound.Add(item.Key, false);
             }
-
         }
 
         protected virtual bool ValidateHeaders()
@@ -225,7 +218,6 @@ namespace DeconTools.Workflows.Backend.FileIO
                     throw new IOException("Cannot import: must either have an empirical formula column or a peptide sequence column. " +
                         "Acceptable column names: " + string.Join(", ", EmpiricalFormulaHeaders) + ", " + string.Join(", ", CodeHeaders));
                 }
-
             }
 
             return true;
@@ -236,13 +228,11 @@ namespace DeconTools.Workflows.Backend.FileIO
             return _lineCounter;
         }
 
-
         #endregion
 
         #region Private Methods
 
         #endregion
-
 
     }
 }

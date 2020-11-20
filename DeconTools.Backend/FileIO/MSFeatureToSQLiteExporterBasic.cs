@@ -5,11 +5,10 @@ using System.Data.Common;
 
 namespace DeconTools.Backend.FileIO
 {
-    public sealed class MSFeatureToSQLiteExporterBasic:SQLiteExporter<IsosResult>
+    public sealed class MSFeatureToSQLiteExporterBasic : SQLiteExporter<IsosResult>
     {
         const string TABLE_NAME = "T_MSFeatures";
         List<Field> m_fieldList;
-
 
         #region Constructors
         public MSFeatureToSQLiteExporterBasic(string fileName)
@@ -28,7 +27,6 @@ namespace DeconTools.Backend.FileIO
         public override List<Field> FieldList => m_fieldList ?? (m_fieldList = CreateFieldList());
 
         #endregion
-
 
         #region Private Methods
         protected override void AddResults(DbParameterCollection dbParameters, IsosResult result)
@@ -70,10 +68,8 @@ namespace DeconTools.Backend.FileIO
             };
 
             return fieldList;
-
         }
         #endregion
-
 
     }
 }

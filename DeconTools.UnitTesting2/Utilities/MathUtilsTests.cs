@@ -32,7 +32,6 @@ namespace DeconTools.UnitTesting2.Utilities
             var testVals = new List<double> { 5, 25, 4, 72, 50, 45, 50, 45, 32, 73, 8, 300, 400, 200, 3, 9 };
             median = MathUtils.GetMedian(testVals);
             Assert.AreEqual(45, median);
-
         }
 
         [Test]
@@ -45,7 +44,6 @@ namespace DeconTools.UnitTesting2.Utilities
         [TestCase(0, 8, 0, 6, 5, 8, double.PositiveInfinity)]
         public void GetInterpolatedValue(double x1, double y1, double x2, double y2, double targetX, double mathUtilsExpectedY, double mathNetExpectedY)
         {
-
             // If x1 and x2 are the same, GetInterpolatedValue returns y2
             var mathUtilsResult = MathUtils.GetInterpolatedValue(x1, x2, y1, y2, targetX);
 
@@ -70,7 +68,6 @@ namespace DeconTools.UnitTesting2.Utilities
             {
                 Assert.True(double.IsNegativeInfinity(mathNetResult) || double.IsPositiveInfinity(mathNetResult),
                             "Expected the interpolated value from Math.NET to be positive or negative infinity, it is instead " + mathNetResult);
-
             }
             else
             {
@@ -111,7 +108,6 @@ namespace DeconTools.UnitTesting2.Utilities
             Assert.AreEqual(mathUtilsExpectedAverage, mathUtilsAvgFromList, mathUtilsExpectedAverage / 10000.0);
 
             Assert.AreEqual(mathNetExpectedAverage, mathNetAvg, mathNetExpectedAverage / 10000.0);
-
         }
 
         [Test]
@@ -140,7 +136,6 @@ namespace DeconTools.UnitTesting2.Utilities
 
             Assert.AreEqual(expectedStDev, mathUtilsStDevFromList, expectedStDev / 10000.0);
             Assert.AreEqual(expectedStDev, mathNetStDev, expectedStDev / 10000.0);
-
         }
 
         [Test]
@@ -227,7 +222,6 @@ namespace DeconTools.UnitTesting2.Utilities
         [TestCase(5000, 8000, 9000, -1)]
         public void GetClosestInt(int startIndex, int endIndex, int targetValue, int expectedClosestValueIndex)
         {
-
             var rand = new Random(314);
             var values = new List<int>();
             for (var i = startIndex; i <= endIndex; i++)
@@ -289,7 +283,6 @@ namespace DeconTools.UnitTesting2.Utilities
             Assert.AreEqual(expectedIntercept, mathNetIntercept, Math.Abs(expectedIntercept / 10000.0));
             Assert.AreEqual(expectedRSquared, mathUtilsRSquared, Math.Abs(expectedRSquared / 10000.0));
             Assert.AreEqual(expectedRSquared, mathNetRSquared, Math.Abs(expectedRSquared / 10000.0));
-
         }
 
         private List<double> GetLargeValuesList(double startValue, int dataCount)
@@ -310,6 +303,5 @@ namespace DeconTools.UnitTesting2.Utilities
 
             return values;
         }
-
     }
 }

@@ -24,7 +24,6 @@ namespace DeconTools.Backend.Data
             try
             {
                 sqLiteWriter.CreateNewDB(fileName);
-
             }
             catch (Exception)
             {

@@ -6,12 +6,10 @@ namespace DeconTools.Workflows.Backend.FileIO
 {
     public class N14N15TargetedResultToTextExporter : TargetedResultToTextExporter
     {
-
         #region Constructors
         public N14N15TargetedResultToTextExporter(string fileName) : base(fileName)
         {
         }
-
 
         #endregion
 
@@ -40,7 +38,6 @@ namespace DeconTools.Workflows.Backend.FileIO
             };
 
             return string.Join(Delimiter.ToString(), data);
-
         }
 
         protected override string buildHeaderLine()
@@ -66,9 +63,7 @@ namespace DeconTools.Workflows.Backend.FileIO
             };
 
             return string.Join(Delimiter.ToString(), data);
-
         }
-
 
         #endregion
 

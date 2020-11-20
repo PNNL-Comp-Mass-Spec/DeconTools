@@ -11,7 +11,6 @@ namespace DeconTools.Backend.Workflows
 {
     public class TraditionalScanBasedWorkflow : ScanBasedWorkflow
     {
-
         private readonly O16O18PeakDataAppender _o16O18PeakDataAppender = new O16O18PeakDataAppender();
         private int _scanCounter = 1;
         private DateTime _lastProgressTime = DateTime.UtcNow;
@@ -48,7 +47,6 @@ namespace DeconTools.Backend.Workflows
                     {
                         return;
                     }
-
                 }
                 ReportProgress();
 
@@ -79,7 +77,6 @@ namespace DeconTools.Backend.Workflows
             sb.Append(PRISM.StackTraceFormatter.GetExceptionStackTraceMultiLine(ex));
 
             return sb.ToString();
-
         }
 
         protected override void ExecuteOtherTasksHook()

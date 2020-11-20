@@ -38,7 +38,6 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
             Console.WriteLine("Created " + fi.FullName);
 
             Console.WriteLine("File length: {0} bytes", fi.Length);
-
         }
 
         [Test]
@@ -62,17 +61,13 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
             var fi = new FileInfo(exportedFile);
             Assert.AreEqual(2048, fi.Length);
             Console.Write(fi.Length);
-
-
         }
-
 
         [Test]
         [Ignore("Local testing only")]
         public void outputToText_UIMFData_Test1()
         {
             var exportedFile = exportedMSScanInfoToTextFileFromUIMFFile1;
-
 
             if (File.Exists(exportedFile))
             {
@@ -114,11 +109,6 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
             var fi = new FileInfo(exportedFile);
             Assert.AreEqual(2048, fi.Length);
             Console.Write(fi.Length);
-
-
         }
-
-
-
     }
 }

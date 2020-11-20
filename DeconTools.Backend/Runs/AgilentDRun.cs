@@ -38,7 +38,6 @@ namespace DeconTools.Backend.Runs
 
             Check.Require(dirInfo.FullName.EndsWith("d", StringComparison.OrdinalIgnoreCase), "Agilent_D dataset directories must end with with the suffix '.d'. Check your directory name.");
 
-
             DatasetFileOrDirectoryPath = dirInfo.FullName;
             DatasetName = dirInfo.Name.Substring(0, dirInfo.Name.LastIndexOf(".d", StringComparison.OrdinalIgnoreCase));
             //get dataset name without .d extension
@@ -50,13 +49,11 @@ namespace DeconTools.Backend.Runs
             MaxLCScan = GetMaxPossibleLCScanNum();
         }
 
-
         public AgilentDRun(string dataFileName, int minScan, int maxScan)
             : this(dataFileName)
         {
             MinLCScan = minScan;
             MaxLCScan = maxScan;
-
         }
 
         private void OpenDataset()
@@ -148,7 +145,6 @@ namespace DeconTools.Backend.Runs
                 precursor.MSLevel = 1;
             }
 
-
             //this returns a list of precursor masses (not sure how there can be more than one)
             var precursorMZlist = m_spec.GetPrecursorIon(out var precursorMassCount);
 
@@ -174,9 +170,7 @@ namespace DeconTools.Backend.Runs
             }
             else if (precursorMassCount > 1)
             {
-
                 throw new NotImplementedException("Strange case where more than one precursor is used to generate one spectrum");
-
             }
             else
             {
@@ -208,9 +202,8 @@ namespace DeconTools.Backend.Runs
 
                 FilterMassRange(minMZ, maxMZ, ref xVals, ref yVals, filterMassRange: true);
 
-
                 xyData.Xvalues = xVals;
-                xyData.Yvalues = yVals.Select(p=>(double)p).ToArray();
+                xyData.Yvalues = yVals.Select(p => (double)p).ToArray();
             }
             else
             {
@@ -229,7 +222,6 @@ namespace DeconTools.Backend.Runs
             }
 
             return xyData;
-
         }
 
         private static void FilterMassRange(double minMZ, double maxMZ, ref double[] xVals, ref float[] yVals, bool filterMassRange)
@@ -259,15 +251,14 @@ namespace DeconTools.Backend.Runs
 
             if (scanSet == null) return null;
 
-            var xyData=new XYData();
+            var xyData = new XYData();
 
             if (scanSet.IndexValues.Count == 1)            //this is the case of only wanting one MS spectrum
             {
                 getAgilentSpectrum(scanSet.PrimaryScanNumber);
 
                 xyData.Xvalues = m_spec.XArray;
-                xyData.Yvalues = m_spec.YArray.Select(p=>(double)p).ToArray();
-
+                xyData.Yvalues = m_spec.YArray.Select(p => (double)p).ToArray();
             }
             else
             {
@@ -280,7 +271,6 @@ namespace DeconTools.Backend.Runs
                 getSummedSpectrum(scanSet, ref xVals, ref yVals, minMZ, maxMZ);
                 xyData.Xvalues = xVals;
                 xyData.Yvalues = yVals.Select(p => (double)p).ToArray();
-
             }
 
             return xyData;
@@ -342,34 +332,26 @@ namespace DeconTools.Backend.Runs
 
         #endregion
 
-
         #region Private Methods
         private void getAgilentSpectrum(int scanNum)
         {
             m_spec = m_reader.GetSpectrum(scanNum, null, null, DesiredMSStorageType.ProfileElsePeak);
         }
 
-
-
-
         #endregion
 
         public override void Dispose()
         {
-
             if (m_reader != null)
             {
                 try
                 {
                     m_reader.CloseDataFile();
-
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine("Error occurred when trying to close AgilentD file: " + DatasetName + "\nDetails: " + ex.Message);
-
                 }
-
             }
             base.Dispose();
         }

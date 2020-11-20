@@ -50,16 +50,16 @@ namespace Decon2LS
         /// <summary>
         /// Clean up any resources being used.
         /// </summary>
-        protected override void Dispose( bool disposing )
+        protected override void Dispose(bool disposing)
         {
-            if( disposing )
+            if (disposing)
             {
-                if(components != null)
+                if (components != null)
                 {
                     components.Dispose();
                 }
             }
-            base.Dispose( disposing );
+            base.Dispose(disposing);
         }
 
         #region Windows Form Designer generated code
@@ -187,7 +187,6 @@ namespace Decon2LS
             this.panel2.ResumeLayout(false);
             this.panel3.ResumeLayout(false);
             this.ResumeLayout(false);
-
         }
         #endregion
 
@@ -195,7 +194,7 @@ namespace Decon2LS
         {
             get
             {
-                return mtxtFormula.Text ; 
+                return mtxtFormula.Text;
             }
         }
         public short Charge
@@ -204,26 +203,26 @@ namespace Decon2LS
             {
                 try
                 {
-                    return Convert.ToInt16(mtxtCharge.Text) ; 
+                    return Convert.ToInt16(mtxtCharge.Text);
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex.Message + ex.StackTrace) ; 
-                    return 1 ; 
+                    Console.WriteLine(ex.Message + ex.StackTrace);
+                    return 1;
                 }
             }
         }
 
         private void mbtnOK_Click(object sender, System.EventArgs e)
         {
-            DialogResult = DialogResult.OK ; 
-            this.Hide() ; 
+            DialogResult = DialogResult.OK;
+            this.Hide();
         }
 
         private void mbtnCancel_Click(object sender, System.EventArgs e)
         {
-            DialogResult = DialogResult.Cancel ; 
-            this.Hide() ; 		
+            DialogResult = DialogResult.Cancel;
+            this.Hide();
         }
     }
 }

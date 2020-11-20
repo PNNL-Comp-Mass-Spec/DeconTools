@@ -4,7 +4,6 @@ namespace DeconTools.Workflows.Backend.Core
     {
         public UIMFTargetedMSMSWorkflowCollapseIMSParameters()
         {
-
             ResultType = DeconTools.Backend.Globals.ResultType.BASIC_TARGETED_RESULT;
         }
 

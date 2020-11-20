@@ -14,21 +14,17 @@ namespace DeconTools.Backend.Data
             delimiter = ',';
             headerLine = "scan_num,scan_time,type,bpi,bpi_mz,tic,num_peaks,num_deisotoped";
             this.fileName = fileName;
-
         }
 
         protected sealed override string headerLine { get; set; }
         protected sealed override char delimiter { get; set; }
 
-
         public override void Export(ResultCollection results)
         {
-
             StreamWriter sw;
             try
             {
                 sw = new StreamWriter(fileName);
-
             }
             catch (Exception ex)
             {

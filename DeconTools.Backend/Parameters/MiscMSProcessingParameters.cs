@@ -6,7 +6,6 @@ namespace DeconTools.Backend.Parameters
     [Serializable]
     public class MiscMSProcessingParameters : ParametersBase
     {
-
         #region Constructors
         public MiscMSProcessingParameters()
         {
@@ -38,8 +37,6 @@ namespace DeconTools.Backend.Parameters
 
         public int SavitzkyGolayOrder { get; set; }
 
-
-
         public bool UseZeroFilling { get; set; }
 
         public int ZeroFillingNumZerosToFill { get; set; }
@@ -60,9 +57,9 @@ namespace DeconTools.Backend.Parameters
         public override void LoadParametersV2(XElement xElement)
         {
             UseSmoothing = GetBoolVal(xElement, "ApplySavitzkyGolay", UseSmoothing);
-            SmoothingType = (Globals.SmoothingType) GetEnum(xElement, "SmoothingType", SmoothingType.GetType(), SmoothingType);  //Smoothing type does not yet exist in parameter file
+            SmoothingType = (Globals.SmoothingType)GetEnum(xElement, "SmoothingType", SmoothingType.GetType(), SmoothingType);  //Smoothing type does not yet exist in parameter file
 
-            var smoothLeft = GetIntValue(xElement, "SGNumLeft", (SavitzkyGolayNumPointsInSmooth-1)/2);
+            var smoothLeft = GetIntValue(xElement, "SGNumLeft", (SavitzkyGolayNumPointsInSmooth - 1) / 2);
             var smoothRight = GetIntValue(xElement, "SGNumRight", (SavitzkyGolayNumPointsInSmooth - 1) / 2);
 
             SavitzkyGolayNumPointsInSmooth = smoothLeft + smoothRight + 1;
@@ -76,7 +73,6 @@ namespace DeconTools.Backend.Parameters
             MaxMinutesPerScan = GetIntValue(xElement, "MaxMinutesPerScan", MaxMinutesPerScan);
             MaxMinutesPerFrame = GetIntValue(xElement, "MaxMinutesPerFrame", MaxMinutesPerFrame);
             MaxHoursPerDataset = GetIntValue(xElement, "MaxHoursPerDataset", MaxHoursPerDataset);
-
         }
     }
 }

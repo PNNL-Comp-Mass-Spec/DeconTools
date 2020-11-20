@@ -84,7 +84,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             for (var elementNum = 0; elementNum < numElements; elementNum++)
             {
                 var elementCount = new AtomicCount(_averagineFormula.ElementalComposition[elementNum]);
-                var numAtoms = (int) (mw / _averagineFormula.MonoisotopicMass * elementCount.NumCopies + 0.5);
+                var numAtoms = (int)(mw / _averagineFormula.MonoisotopicMass * elementCount.NumCopies + 0.5);
                 if (
                     string.Compare(_elementIsotopeAbundance.ElementalIsotopesList[elementCount.Index].Symbol, "H",
                         StringComparison.InvariantCulture) == 0)
@@ -115,7 +115,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                 for (var elementNum = 0; elementNum < numElementsTag; elementNum++)
                 {
                     var elementCount = _tagFormula.ElementalComposition[elementNum];
-                    var numAtoms = (int) elementCount.NumCopies;
+                    var numAtoms = (int)elementCount.NumCopies;
                     var elementAvgMass = _elementIsotopeAbundance.ElementalIsotopesList[elementCount.Index].AverageMass;
                     var elementMonoMass =
                         _elementIsotopeAbundance.ElementalIsotopesList[elementCount.Index].Isotopes[0].Mass;

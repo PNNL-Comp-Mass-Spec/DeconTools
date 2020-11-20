@@ -21,7 +21,6 @@ namespace DeconTools.Backend.Data
                     }
                 }
                 Stream = File.Open(outputFilename, mode);
-
             }
             catch (Exception ex)
             {
@@ -43,7 +42,5 @@ namespace DeconTools.Backend.Data
         {
             Stream.Close();
         }
-
-
     }
 }

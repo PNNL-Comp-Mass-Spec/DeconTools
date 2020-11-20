@@ -3,7 +3,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters
 {
     //this functions to do nothing   :)    The purpose of this was to
     //avoid doing any deconvolution and just allow regular processing
-    public class NullDeconvolutor:Deconvolutor
+    public class NullDeconvolutor : Deconvolutor
     {
         #region Constructors
         #endregion

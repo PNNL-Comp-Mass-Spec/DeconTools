@@ -12,7 +12,6 @@ namespace DeconTools.Backend.Utilities.MercuryIsotopeDistribution
         {
             IsotopicProfile = new IsotopicProfile();
             Xydata = new XYData();
-
         }
     }
 }

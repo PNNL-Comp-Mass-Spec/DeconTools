@@ -204,7 +204,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             for (var j = 0; j < numElementsFound; j++)
             {
                 var elementIndex = formula.ElementalComposition[j].Index;
-                var atomicity = (int) formula.ElementalComposition[j].NumCopies;
+                var atomicity = (int)formula.ElementalComposition[j].NumCopies;
 
                 if (atomicity == 0)
                     continue;
@@ -223,15 +223,15 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             for (var elementNum = 0; elementNum < numElementsFound; elementNum++)
             {
                 var elementIndex = formula.ElementalComposition[elementNum].Index;
-                var atomicity = (int) formula.ElementalComposition[elementNum].NumCopies;
+                var atomicity = (int)formula.ElementalComposition[elementNum].NumCopies;
                 var elementalVariance = ElementalIsotopeComposition.ElementalIsotopesList[elementIndex].MassVariance;
                 MassVariance += elementalVariance * atomicity;
             }
 
             if (charge == 0)
-                _massRange = (int) (Math.Sqrt(1 + MassVariance) * 10);
+                _massRange = (int)(Math.Sqrt(1 + MassVariance) * 10);
             else
-                _massRange = (int) (Math.Sqrt(1 + MassVariance) * 10.0 / charge);
+                _massRange = (int)(Math.Sqrt(1 + MassVariance) * 10.0 / charge);
             /* +/- 5 sd's : Multiply charged */
 
             /* Set to nearest (upper) power of 2 */
@@ -282,26 +282,26 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                     for (i = 1; i <= numPoints; i++)
                     {
                         if (i <= numPoints / 2)
-                            apVal = Math.Exp(-(double) (i - 1) * (sub / 5000.0));
+                            apVal = Math.Exp(-(double)(i - 1) * (sub / 5000.0));
                         else
-                            apVal = Math.Exp(-(double) (numPoints - i) * (sub / 5000.0));
+                            apVal = Math.Exp(-(double)(numPoints - i) * (sub / 5000.0));
 
                         _frequencyData[i - 1] *= apVal;
                     }
                     break;
-                /* Never used - this was the only use of the enum value "UNGAUSSIAN"
-                case enmApodizationType.UNGAUSSIAN: // Unapodize Gaussian
-                    for (i = 1; i <= numPoints; i++)
-                    {
-                        expdenom = (numPoints / sub) * (numPoints / sub);
-                        if (i <= numPoints / 2)
-                            apVal = Math.Exp(-(i - 1) * (i - 1) / expdenom);
-                        else
-                            apVal = Math.Exp(-(numPoints - i - 1) * (numPoints - i - 1) / expdenom);
-                        _frequencyData[i - 1] /= apVal;
-                    }
-                    break;
-                */
+                    /* Never used - this was the only use of the enum value "UNGAUSSIAN"
+                    case enmApodizationType.UNGAUSSIAN: // Unapodize Gaussian
+                        for (i = 1; i <= numPoints; i++)
+                        {
+                            expdenom = (numPoints / sub) * (numPoints / sub);
+                            if (i <= numPoints / 2)
+                                apVal = Math.Exp(-(i - 1) * (i - 1) / expdenom);
+                            else
+                                apVal = Math.Exp(-(numPoints - i - 1) * (numPoints - i - 1) / expdenom);
+                            _frequencyData[i - 1] /= apVal;
+                        }
+                        break;
+                    */
             } /* End of Apodize() */
         }
 
@@ -399,7 +399,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                                 if (symmetryRatioCalc1.Equals(0)) //symmetrical
                                     isotopeMzs.Add(x2Iso);
                                 else
-                                //not symmetrical...   gord:  I'm not sure how the center point is calculated... perhaps a midpoint calc?
+                                    //not symmetrical...   gord:  I'm not sure how the center point is calculated... perhaps a midpoint calc?
                                     isotopeMzs.Add((x1Iso + x2Iso -
                                                     (y2Iso - y1Iso) * (x3Iso - x2Iso) * (x1Iso - x3Iso) /
                                                     ((y2Iso - y1Iso) * (x3Iso - x2Iso) -
@@ -430,7 +430,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                 }
                 lastIntensity = intensity;
                 if (intensity > highestIntensity)
-                    //[gord] this is used in determining the max of the entire theor isotopic profile
+                //[gord] this is used in determining the max of the entire theor isotopic profile
                 {
                     highestIntensity = intensity;
 
@@ -531,13 +531,13 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             /* Calculate first half of Frequency Domain (+)masses */
             for (i = 1; i <= numPoints / 2; i++)
             {
-                freq = (double) (i - 1) / _massRange;
+                freq = (double)(i - 1) / _massRange;
                 r = 1;
                 theta = 0;
                 for (j = 0; j < numElementsInEntity; j++)
                 {
                     var elementIndex = formula.ElementalComposition[j].Index;
-                    var atomicity = (int) formula.ElementalComposition[j].NumCopies;
+                    var atomicity = (int)formula.ElementalComposition[j].NumCopies;
                     var numIsotopes = ElementalIsotopeComposition.ElementalIsotopesList[elementIndex].NumberOfIsotopes;
                     var averageMass = ElementalIsotopeComposition.ElementalIsotopesList[elementIndex].AverageMass;
                     real = imag = 0.0;
@@ -577,14 +577,14 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             /* Calculate second half of Frequency Domain (-)masses */
             for (i = numPoints / 2 + 1; i <= numPoints; i++)
             {
-                freq = (double) (i - numPoints - 1) / _massRange;
+                freq = (double)(i - numPoints - 1) / _massRange;
                 r = 1;
                 theta = 0;
 
                 for (j = 0; j < numElementsInEntity; j++)
                 {
                     var elementIndex = formula.ElementalComposition[j].Index;
-                    var atomicity = (int) formula.ElementalComposition[j].NumCopies;
+                    var atomicity = (int)formula.ElementalComposition[j].NumCopies;
                     var numIsotopes = ElementalIsotopeComposition.ElementalIsotopesList[elementIndex].NumberOfIsotopes;
                     var averageMass = ElementalIsotopeComposition.ElementalIsotopesList[elementIndex].AverageMass;
 

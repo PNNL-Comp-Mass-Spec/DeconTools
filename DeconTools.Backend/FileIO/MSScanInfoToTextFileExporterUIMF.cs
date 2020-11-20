@@ -13,7 +13,6 @@ namespace DeconTools.Backend.FileIO
 
         #endregion
 
-
         #region Private Methods
         protected override string buildResultOutput(ScanResult result)
         {
@@ -33,9 +32,7 @@ namespace DeconTools.Backend.FileIO
                 DblToString(uimfScanResult.FramePressureSmoothed, 4)
             };
 
-
             return string.Join(Delimiter.ToString(), data);
-
         }
 
         protected override string buildHeaderLine()
@@ -53,7 +50,6 @@ namespace DeconTools.Backend.FileIO
                 "frame_pressure_unsmoothed",
                 "frame_pressure_smoothed"
             };
-
 
             return string.Join(Delimiter.ToString(), data);
         }

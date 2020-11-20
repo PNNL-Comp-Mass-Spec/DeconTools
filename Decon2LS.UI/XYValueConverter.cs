@@ -7,7 +7,6 @@ namespace Decon2LS
     /// </summary>
     public class XYValueConverter
     {
-
         public static double[] ConvertFloatsToDoubles(float[] vals)
         {
             if (vals == null) return null;
@@ -27,10 +26,7 @@ namespace Decon2LS
             for (var i = 0; i < inputVals.Length; i++)
             {
                 outputVals[i] = (float)inputVals[i];
-                
             }
         }
-
-
     }
 }

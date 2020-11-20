@@ -7,7 +7,6 @@ namespace DeconTools.Backend.Core
     [Serializable]
     public class IsotopicProfile
     {
-
         public IsotopicProfile()
         {
             Peaklist = new List<MSPeak>();
@@ -78,7 +77,6 @@ namespace DeconTools.Backend.Core
             return mostIntensePeak.Width;
         }
 
-
         public int GetIndexOfMostIntensePeak()
         {
             if (Peaklist == null || Peaklist.Count == 0) return -1;
@@ -95,7 +93,6 @@ namespace DeconTools.Backend.Core
                 }
             }
             return indexOfMaxPeak;
-
         }
 
         public MSPeak getMostIntensePeak()
@@ -110,10 +107,8 @@ namespace DeconTools.Backend.Core
                 {
                     maxPeak = peak;
                 }
-
             }
             return maxPeak;
-
         }
 
         public double GetSignalToNoise()
@@ -144,8 +139,6 @@ namespace DeconTools.Backend.Core
             return Peaklist[0].XValue;
         }
 
-
-
         public double GetAbundance()
         {
             return getMostIntensePeak().Height;
@@ -173,11 +166,9 @@ namespace DeconTools.Backend.Core
             foreach (var peak in Peaklist)
             {
                 summedIntensity += peak.Height;
-
             }
             return summedIntensity;
         }
-
 
         public IsotopicProfile CloneIsotopicProfile()
         {
@@ -207,9 +198,7 @@ namespace DeconTools.Backend.Core
             iso.ScoreCountBasis = ScoreCountBasis;
 
             return iso;
-
         }
-
 
         public XYData GetTheoreticalIsotopicProfileXYData(double fwhm)
         {

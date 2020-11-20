@@ -11,7 +11,6 @@ using NUnit.Framework;
 
 namespace DeconTools.UnitTesting2.AlgorithmTests
 {
-
     [TestFixture]
     public class PattersonAlgorithmTests
     {
@@ -20,13 +19,12 @@ namespace DeconTools.UnitTesting2.AlgorithmTests
         [Test]
         public void EasyCase1()
         {
-
             // https://jira.pnnl.gov/jira/browse/OMCS-647
 
             Run run = new XCaliburRun2(xcaliburTestfile);
 
             var generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
-            var peakDetector = new DeconToolsPeakDetectorV2 {PeakToBackgroundRatio = 1.3};
+            var peakDetector = new DeconToolsPeakDetectorV2 { PeakToBackgroundRatio = 1.3 };
 
             run.CurrentScanSet = new ScanSet(6005);
 
@@ -42,19 +40,17 @@ namespace DeconTools.UnitTesting2.AlgorithmTests
         [Test]
         public void HardCase1()
         {
-
             // https://jira.pnnl.gov/jira/browse/OMCS-647
 
             Run run = new XCaliburRun2(xcaliburTestfile);
 
             var generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
-            var peakDetector = new DeconToolsPeakDetectorV2 {PeakToBackgroundRatio = 1.3};
+            var peakDetector = new DeconToolsPeakDetectorV2 { PeakToBackgroundRatio = 1.3 };
 
             run.CurrentScanSet = new ScanSet(6005);
 
             generator.Execute(run.ResultCollection);
             peakDetector.Execute(run.ResultCollection);
-
 
             //579.535
             //TestUtilities.DisplayPeaks(run.PeakList);
@@ -80,6 +76,5 @@ namespace DeconTools.UnitTesting2.AlgorithmTests
 
             Console.WriteLine("average time in ms= " + times.Average());
         }
-
     }
 }

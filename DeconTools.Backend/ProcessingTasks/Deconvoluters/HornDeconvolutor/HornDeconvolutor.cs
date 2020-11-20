@@ -361,7 +361,6 @@ namespace DeconTools.Backend.ProcessingTasks
             if (ShowTraceMessages)
                 Console.WriteLine();
 
-
             PerformTransform(
                 backgroundIntensity, minPeptideIntensity, MaxProcessingTimeMinutes,
                 ref xVals, ref yVals,
@@ -910,14 +909,12 @@ namespace DeconTools.Backend.ProcessingTasks
                                       currentScanSet.GetLowestScanNumber(),
                                       currentScanSet.GetHighestScanNumber());
                 }
-
             }
 
             Console.WriteLine("{0}; runtime exceeded {1} minutes. IsotopicProfileCount={2}",
                                     messageBase,
                                     maxProcessingTimeMinutes,
                                     currentScanSet.NumIsotopicProfiles);
-
         }
 
         private double SumPeaks(IsotopicProfile profile, double defaultVal)

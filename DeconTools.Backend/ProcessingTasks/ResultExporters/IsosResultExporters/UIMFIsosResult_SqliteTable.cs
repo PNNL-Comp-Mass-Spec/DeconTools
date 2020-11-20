@@ -30,7 +30,6 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
                 new Field("TIA_orig_intensity", "FLOAT"),
                 new Field("flag", "INTEGER")
             };
-
         }
         #endregion
 

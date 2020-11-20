@@ -11,7 +11,6 @@ namespace DeconTools.Workflows.Backend.Core
 {
     public abstract class WorkflowParameters
     {
-
         #region Constructors
         #endregion
 
@@ -109,7 +108,6 @@ namespace DeconTools.Workflows.Backend.Core
             workflowParameters.LoadParameters(xmlFilepath);
 
             return workflowParameters;
-
         }
 
         public virtual void LoadParameters(string xmlFilepath)
@@ -151,7 +149,6 @@ namespace DeconTools.Workflows.Backend.Core
                 var pi = (PropertyInfo)mi;
                 var propertyName = pi.Name;
 
-
                 if (parameterTableFromXML.ContainsKey(propertyName))
                 {
                     var propertyType = pi.PropertyType;
@@ -166,7 +163,6 @@ namespace DeconTools.Workflows.Backend.Core
                     {
                         //value = Enum.ToObject(propertyType
                         value = Enum.Parse(propertyType, parameterTableFromXML[propertyName], true);
-
                     }
                     else
                     {
@@ -187,9 +183,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         public virtual void SaveParametersToXML(string xmlFilename)
         {
-
             var parameterValues = GetParameterTable();
-
 
             var xml = new XElement("WorkflowParameters",
                 from param in parameterValues
@@ -198,7 +192,6 @@ namespace DeconTools.Workflows.Backend.Core
 
             xml.Save(xmlFilename);
         }
-
 
         public virtual string ToStringWithDetails()
         {
@@ -214,7 +207,6 @@ namespace DeconTools.Workflows.Backend.Core
             }
 
             return sb.ToString();
-
         }
 
         public Dictionary<string, object> GetParameterTable()
@@ -242,14 +234,12 @@ namespace DeconTools.Workflows.Backend.Core
             }
 
             return parameterValues;
-
         }
 
         //public Dictionary<string, string> GetParameterTable()
         //{
 
         //    Dictionary<string, string> parameterValues = new Dictionary<string, string>();
-
 
         //    Type t = this.GetType();
 
@@ -258,7 +248,6 @@ namespace DeconTools.Workflows.Backend.Core
         //        if (mi.MemberType == System.Reflection.MemberTypes.Property)
         //        {
         //            System.Reflection.PropertyInfo pi = (PropertyInfo)mi;
-
 
         //            string propertyName = pi.Name;
         //            string propertyValue = pi.GetValue(this, null).ToString();
@@ -272,10 +261,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         //    return parameterValues;
 
-
         //}
-
-
 
         #endregion
 

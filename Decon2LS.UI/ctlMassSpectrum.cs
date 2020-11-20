@@ -48,7 +48,6 @@ namespace Decon2LS
 
         private readonly Hashtable mhash_series = new Hashtable();
 
-
         private readonly System.Windows.Forms.ContextMenu mcontextMenu_spectrum = new ContextMenu();
         readonly MenuItem menuItem_mass_transform = new MenuItem("&Mass Transform");
         readonly MenuItem menuItem_find_peaks = new MenuItem("&Find Peaks");
@@ -86,7 +85,6 @@ namespace Decon2LS
         private float[] marr_current_time_domain_values;
         private float[] marr_current_mzs;
         private float[] marr_current_intensities;
-
 
         private int mint_spectrum_num;
         private System.Windows.Forms.Timer mStatusTimer;
@@ -146,7 +144,6 @@ namespace Decon2LS
             {
                 Console.WriteLine(ex.Message + ex.StackTrace);
             }
-
         }
 
         public clsMediator Mediator
@@ -187,8 +184,6 @@ namespace Decon2LS
             mobjDTAGenerationParameters = new DeconToolsV2.DTAGeneration.clsDTAGenerationParameters();
             mobjIsotopeFit = new DeconToolsV2.clsIsotopeFit();
             mobjAveragine = new DeconToolsV2.HornTransform.clsAveragine();
-
-
         }
 
         private void SetupContextMenus()
@@ -253,14 +248,12 @@ namespace Decon2LS
                 menuItem_export_spectrum_to_clipboard_nonzero.Click += new EventHandler(menuItem_export_spectrum_to_clipboard_nonzero_Click);
                 menuItem_export_spectrum.Click += new EventHandler(menuItem_export_spectrum_Click);
                 menuItem_export_spectrum_nonzero.Click += new EventHandler(menuItem_export_spectrum_nonzero_Click);
-
             }
             catch (Exception ex)
             {
                 MessageBox.Show(this, ex.Message + ex.StackTrace);
             }
         }
-
 
         #region "Properties"
         public DeconToolsV2.Peaks.clsPeakProcessor PeakProcessor
@@ -411,11 +404,8 @@ namespace Decon2LS
             var yvals = XYValueConverter.ConvertFloatsToDoubles(intensity_values);
             mobjRawData.GetSummedSpectra(scan_num, scan_range, ref xvals, ref yvals);
 
-
             XYValueConverter.ConvertDoublesToFloats(xvals, ref mz_values);
             XYValueConverter.ConvertDoublesToFloats(yvals, ref intensity_values);
-
-
 
             mstrDescription = "Summed Spectra Across Range";
         }
@@ -430,7 +420,6 @@ namespace Decon2LS
 
             XYValueConverter.ConvertDoublesToFloats(xvals, ref mz_values);
             XYValueConverter.ConvertDoublesToFloats(yvals, ref intensity_values);
-
 
             mstrDescription = "Summed Spectra Across All Scans";
         }
@@ -488,7 +477,6 @@ namespace Decon2LS
             {
                 MessageBox.Show(this, ex.Message + ex.StackTrace);
             }
-
         }
 
         public void SetPeakSeriesData(int scan, float[] mzs, float[] intensities, float minMZ, float maxMZ)
@@ -500,7 +488,6 @@ namespace Decon2LS
             {
                 ShowSpectrumInSpectralChart(scan, true, false);
             }
-
 
             var max_intensity = float.MinValue;
             if (mzs != null)
@@ -583,7 +570,6 @@ namespace Decon2LS
                 }
                 else
                     GetSpectrum(spectrum_num, ref marr_current_mzs, ref marr_current_intensities);
-
             }
             var currentVP = this.mctl_spectra.ViewPort;
             ClearSpectralChart();
@@ -602,8 +588,6 @@ namespace Decon2LS
 
             // Update scan text box
             this.mScanTextBox.Text = spectrum_num.ToString();
-
-
         }
         public void DisplayFitResultForCurrentScan(string formula, short charge)
         {
@@ -627,7 +611,6 @@ namespace Decon2LS
                 var points =
                     this.mMercuryIsotopeDistribution.CalculateDistribution(
                     molecularFormula.ToElementTable());
-
 
                 // go through the list of peaks for the possible peaks.
                 var mostAbundantMZ = mMercuryIsotopeDistribution.MostAbundantMZ;
@@ -680,7 +663,6 @@ namespace Decon2LS
                 var minMZ = theoreticalMZs[0];
                 var maxMZ = theoreticalMZs[points.Length - 1];
 
-
                 var formulaParams = (clsPlotParams)this.mobj_spectrum_plt_params.Clone();
                 formulaParams.LinePen.Color = Color.Black;
                 formulaParams.LinePen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash;
@@ -690,10 +672,8 @@ namespace Decon2LS
 
                 formulaParams.Name = molecularFormula.ToSimpleOrganicElementalString() + " - " + fitScore.ToString("f3");
 
-
                 var formulaSeries = new clsSeries(ref theoreticalMZs, ref theoreticalIntensities, formulaParams);
                 mctl_spectra.SeriesCollection.Add(formulaSeries);
-
 
                 mctl_spectra.ViewPort = new RectangleF(minMZ, 0, maxMZ - minMZ, (float)peakHeight);
                 mctl_spectra.HasLegend = true;
@@ -702,7 +682,6 @@ namespace Decon2LS
             {
                 MessageBox.Show(this, ex.Message);
             }
-
         }
 
         private void DisplayFitResultForCurrentScan(string formula, short charge, double mzForResolution,
@@ -724,7 +703,6 @@ namespace Decon2LS
                 this.mMercuryIsotopeDistribution.ChargeState = charge;
                 var molecularFormula = MolecularFormula.Parse(formula);
                 this.mMercuryIsotopeDistribution.ElementIsotopes = mobjTransformParameters.ElementIsotopeComposition;
-
 
                 var minDistance = double.MaxValue;
                 var minDistancePeakIndex = -1;
@@ -753,7 +731,6 @@ namespace Decon2LS
                 var peakHeight = mobj_peaks[minDistancePeakIndex].mdbl_intensity;
                 points = this.mMercuryIsotopeDistribution.CalculateDistribution(molecularFormula.ToElementTable());
 
-
                 // now we have found the peak we want to scale relative to.
                 var theoreticalMZs = new float[points.Length];
                 var theoreticalIntensities = new float[points.Length];
@@ -767,7 +744,6 @@ namespace Decon2LS
                 var minMZ = theoreticalMZs[0];
                 var maxMZ = theoreticalMZs[points.Length - 1];
 
-
                 var formulaParams = (clsPlotParams)this.mobj_spectrum_plt_params.Clone();
                 formulaParams.LinePen.Color = Color.Black;
                 formulaParams.LinePen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash;
@@ -777,10 +753,8 @@ namespace Decon2LS
 
                 formulaParams.Name = molecularFormula.ToSimpleOrganicElementalString() + " - " + fitScore.ToString("f3");
 
-
                 var formulaSeries = new clsSeries(ref theoreticalMZs, ref theoreticalIntensities, formulaParams);
                 mctl_spectra.SeriesCollection.Add(formulaSeries);
-
 
                 mctl_spectra.ViewPort = new RectangleF(minMZ, 0, maxMZ - minMZ, (float)peakHeight);
                 mctl_spectra.HasLegend = true;
@@ -789,10 +763,7 @@ namespace Decon2LS
             {
                 MessageBox.Show(this, ex.Message);
             }
-
         }
-
-
 
         #region "Export Routines"
         private void ExportSpectrumToFile(double threshold)
@@ -833,8 +804,6 @@ namespace Decon2LS
 
         private void ExportSpectrumToClipboard(double threshold)
         {
-
-
             try
             {
                 var num_pts = marr_current_mzs.Length;
@@ -861,7 +830,6 @@ namespace Decon2LS
         private void menuItem_sg_smooth_Click(object sender, EventArgs e)
         {
             SmoothWithSavitzkyGolay();
-
         }
         private void menuItem_zero_fill_discontinuous_Click(object sender, EventArgs e)
         {
@@ -947,7 +915,6 @@ namespace Decon2LS
             if (e.KeyCode == Keys.T && !e.Handled && e.Modifiers == Keys.Shift)
             {
                 InitiateAndExecuteTransform();
-
             }
             if (e.KeyCode == Keys.F && !e.Handled && e.Modifiers == Keys.Shift)
             {
@@ -963,12 +930,7 @@ namespace Decon2LS
             {
                 clsClipboardUtility.CopyXYValuesToClipboard(this.marr_current_mzs, this.marr_current_intensities);
             }
-
-
-
-
         }
-
 
         private void mScanTextBox_KeyDown(object sender, System.Windows.Forms.KeyEventArgs e)
         {
@@ -1020,10 +982,6 @@ namespace Decon2LS
                 mobjPeakParameters.ThresholdedData = true;
             }
 
-
-
-
-
             mobj_PeakProcessor.SetOptions(mobjPeakParameters);
             mobj_peaks = new DeconToolsV2.Peaks.clsPeak[1];        //[gord] what's this doing?
             mobj_PeakProcessor.DiscoverPeaks(ref marr_current_mzs, ref marr_current_intensities, ref mobj_peaks,
@@ -1059,7 +1017,6 @@ namespace Decon2LS
             tabControl1.SelectedIndex = 2;
             mctl_spectra.Invalidate();
         }
-
 
         private void CheckDeconStatusHandler(object sender, EventArgs args)
         {
@@ -1133,8 +1090,6 @@ namespace Decon2LS
             mMediator.StatusForm.Hide();
         }
 
-
-
         private void displayFitResult()
         {
             var fitForm = new frmFitFormulaInput();
@@ -1144,7 +1099,6 @@ namespace Decon2LS
             var charge = fitForm.Charge;
             DisplayFitResultForCurrentScan(formula, charge);
         }
-
 
         public void SmoothWithSavitzkyGolay()
         {
@@ -1157,9 +1111,7 @@ namespace Decon2LS
             {
                 MessageBox.Show(this, ex.Message + ex.StackTrace);
             }
-
         }
-
 
         public void InitiateAndExecuteTransform()
         {
@@ -1200,16 +1152,13 @@ namespace Decon2LS
             FinishOrAbortProcessing(false);
             tabControl1.SelectedIndex = 1;
             mctl_spectra.Invalidate();
-
         }
-
 
         private void menuItem_mass_transform_Click(object sender, EventArgs e)
         {
             try
             {
                 InitiateAndExecuteTransform();
-
             }
             catch (Exception ex)
             {
@@ -1235,7 +1184,6 @@ namespace Decon2LS
                         mthrd_decon.Join();
                     }
                     mbln_processing = false;
-
                 }
             }
             catch (Exception ex)
@@ -1251,35 +1199,26 @@ namespace Decon2LS
         private void btnTransformMS_Click(object sender, System.EventArgs e)
         {
             InitiateAndExecuteTransform();
-
         }
         private void btnSmooth_Click(object sender, System.EventArgs e)
         {
             SmoothWithSavitzkyGolay();
-
         }
 
         private void btnCopytoClipboard_Click(object sender, System.EventArgs e)
         {
             clsClipboardUtility.CopyXYValuesToClipboard(this.marr_current_mzs, this.marr_current_intensities);
-
         }
 
         private void btnDisplayFit_Click(object sender, System.EventArgs e)
         {
             this.displayFitResult();
-
         }
-
 
         public void CopyValuesToClipboard()
         {
             clsClipboardUtility.CopyXYValuesToClipboard(this.marr_current_mzs, this.marr_current_intensities);
-
         }
-
-
-
 
         #endregion
 
@@ -1878,7 +1817,6 @@ namespace Decon2LS
             this.mtabPage_mass_transform.ResumeLayout(false);
             this.mtabPage_peaks.ResumeLayout(false);
             this.ResumeLayout(false);
-
         }
         #endregion
 
@@ -1905,7 +1843,6 @@ namespace Decon2LS
 
         private void menuItem_time_domain_Click(object sender, EventArgs e)
         {
-
             if (mblnDisplayTimeDomain)
             {
                 mblnDisplayTimeDomain = false;
@@ -2035,7 +1972,6 @@ namespace Decon2LS
             mctl_spectra.SeriesCollection.Add(mobj_spectrum_series);
             mctl_spectra.Title = title;
 
-
             mctl_spectra.ViewPortHistory.Clear();
             mctl_spectra.AutoViewPort();
 
@@ -2044,11 +1980,8 @@ namespace Decon2LS
             this.mctl_spectra.Title = title;
         }
 
-
-
         private void copyXYDataToClipBoard()
         {
-
         }
 
         private void txtLeftFitStringencyFactor_TextChanged(object sender, System.EventArgs e)
@@ -2062,7 +1995,6 @@ namespace Decon2LS
                 updateFormTransformParameters();
                 this.txtLeftFitStringencyFactor.SelectAll();
             }
-
         }
 
         private void txtRightFitStringencyFactor_TextChanged(object sender, System.EventArgs e)
@@ -2076,23 +2008,13 @@ namespace Decon2LS
                 updateFormTransformParameters();
                 this.txtRightFitStringencyFactor.SelectAll();
             }
-
-
         }
-
 
         private void updateFormTransformParameters()
         {
             this.txtRightFitStringencyFactor.Text = Convert.ToString(mobjTransformParameters.RightFitStringencyFactor);
             this.txtLeftFitStringencyFactor.Text = Convert.ToString(mobjTransformParameters.LeftFitStringencyFactor);
         }
-
-
-
-
-
-
-
 
 
 
@@ -2117,5 +2039,4 @@ namespace Decon2LS
             return val1.CompareTo(val2);
         }
     }
-
 }

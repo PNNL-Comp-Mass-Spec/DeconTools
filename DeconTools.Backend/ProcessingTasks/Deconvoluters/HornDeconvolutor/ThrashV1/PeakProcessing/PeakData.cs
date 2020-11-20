@@ -355,7 +355,6 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         /// <returns>true is the peak was found; false otherwise</returns>
         public bool GetPeak(double mz, out ThrashV1Peak peak)
         {
-
             if (_peakMzToIndexDict.ContainsKey(mz))
             {
                 var peakIndex = _peakMzToIndexDict[mz];

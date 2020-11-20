@@ -6,11 +6,9 @@ namespace IQ.ViewModel
 {
     public abstract class ViewModelBase : INotifyPropertyChanged, IDisposable
     {
-
         #region Constructors
         protected ViewModelBase()
         {
-
         }
         #endregion
 
@@ -22,7 +20,7 @@ namespace IQ.ViewModel
 
         /// <summary>
         /// Warns the developer if this object does not have
-        /// a public property with the specified name. This 
+        /// a public property with the specified name. This
         /// method does not exist in a Release build.
         /// </summary>
         [Conditional("DEBUG")]
@@ -45,7 +43,7 @@ namespace IQ.ViewModel
         /// <summary>
         /// Returns whether an exception is thrown, or if a Debug.Fail() is used
         /// when an invalid property name is passed to the VerifyPropertyName method.
-        /// The default value is false, but subclasses used by unit tests might 
+        /// The default value is false, but subclasses used by unit tests might
         /// override this property's getter to return true.
         /// </summary>
         protected virtual bool ThrowOnInvalidPropertyName { get; private set; }
@@ -71,7 +69,6 @@ namespace IQ.ViewModel
                 handler(this, e);
             }
         }
-
 
         #endregion
 

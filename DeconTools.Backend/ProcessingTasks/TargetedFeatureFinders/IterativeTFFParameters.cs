@@ -5,7 +5,6 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
     [Serializable]
     public class IterativeTFFParameters
     {
-
         #region Constructors
 
         public IterativeTFFParameters()
@@ -13,7 +12,6 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             PeakDetectorPeakBR = 5;
             PeakBRStep = 0.5;
             PeakDetectorMinimumPeakBR = 0.5d;
-
 
             PeakDetectorSigNoiseRatioThreshold = 3;
             PeakDetectorPeakFitType = Globals.PeakFitType.QUADRATIC;
@@ -24,10 +22,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             RequiresMonoIsotopicPeak = false;
             ToleranceInPPM = 25;
             MinimumRelIntensityForForPeakInclusion = 0.02;
-
-
         }
-
 
         #endregion
 
@@ -37,8 +32,6 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
         /// The is the initial PeakBR the peakDetector starts with. Then iteratively, the PeakBR is stepped down.
         /// </summary>
         public double PeakDetectorPeakBR { get; set; }
-
-
 
         public double PeakDetectorMinimumPeakBR { get; set; }
 
@@ -50,10 +43,6 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
         public double PeakDetectorSigNoiseRatioThreshold { get; set; }
         public Globals.PeakFitType PeakDetectorPeakFitType { get; set; }
         public bool PeakDetectorIsDataThresholded { get; set; }
-
-
-
-
 
         public double ToleranceInPPM { get; set; }
         public Globals.IsotopicProfileType IsotopicProfileType { get; set; }

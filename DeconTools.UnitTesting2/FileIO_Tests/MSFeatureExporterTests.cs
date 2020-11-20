@@ -5,7 +5,6 @@ using DeconTools.Backend.Core;
 using System.IO;
 using DeconTools.Backend.FileIO;
 
-
 namespace DeconTools.UnitTesting2.FileIO_Tests
 {
     [TestFixture]
@@ -21,7 +20,6 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
         {
             var exportedFile = exportedMSFeaturesToTextFileFromOrbitrapFile1;
 
-
             if (File.Exists(exportedFile))
             {
                 File.Delete(exportedFile);
@@ -36,17 +34,15 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
             Assert.AreEqual(true, File.Exists(exportedFile));
 
             var importer = new IsosImporter(exportedFile, run.MSFileType);
-            var results=   importer.Import();
+            var results = importer.Import();
 
             Assert.IsTrue(results != null);
-            Assert.IsTrue(results.Count>300);
+            Assert.IsTrue(results.Count > 300);
 
             //TODO: need to check if '388' is good or not
             //Assert.AreEqual(388, results.Count);
 
-
         }
-
 
         /// <summary>
         /// Note:  this test fails if Configuration is set to 'x86'
@@ -72,17 +68,13 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
             var fi = new FileInfo(exportedFile);
             //Assert.AreEqual(28672, fi.Length);
             Console.Write(fi.Length);
-
-
         }
-
 
         [Test]
         [Ignore("Local testing only")]
         public void outputToText_UIMFData_Test1()
         {
             var exportedFile = exportedMSFeaturesToTextFileFromUIMFFile1;
-
 
             if (File.Exists(exportedFile))
             {
@@ -124,11 +116,6 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
             var fi = new FileInfo(exportedFile);
             Assert.AreEqual(141312, fi.Length);
             Console.Write(fi.Length);
-
-
         }
-
-
-
     }
 }

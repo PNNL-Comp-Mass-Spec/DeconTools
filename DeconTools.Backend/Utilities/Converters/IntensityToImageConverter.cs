@@ -7,7 +7,6 @@ using DeconTools.Backend.DTO;
 
 namespace DeconTools.Backend.Utilities.Converters
 {
-
     //TODO: REVISIT
     public class IntensityToImageConverter //should implement TASK so that we can run execute on this, we might not expose any of the methods in that case.
     {
@@ -21,7 +20,6 @@ namespace DeconTools.Backend.Utilities.Converters
             initializeColorMap();
         }
 
-
         public void initializeColorMap()
         {
             color_blend = new ColorBlend();
@@ -32,7 +30,6 @@ namespace DeconTools.Backend.Utilities.Converters
             {
                 color_blend.Positions[i] = color_positions[i];
             }
-
         }
 
         /// <summary>
@@ -96,9 +93,7 @@ namespace DeconTools.Backend.Utilities.Converters
                     scanNumberList.Add(scanNumber--);
 
                     scanIndex--;
-
                 }
-
 
                 //start the search for the right value from the next scan
                 scanIndex = (ushort)(startScanInMap + 1);
@@ -150,7 +145,6 @@ namespace DeconTools.Backend.Utilities.Converters
                 // Console.WriteLine("processing frame " + frameIndex);
                 var scanNumberList = new List<ushort>(200);
 
-
                 var end = intensityMap[frameIndex].Length;
                 scanIndex = startScanInMap;
                 scanNumber = startScan;
@@ -174,7 +168,6 @@ namespace DeconTools.Backend.Utilities.Converters
 
                     scanNumberList.Add(scanNumber--);
                     scanIndex--;
-
                 }
 
                 //start the search for the right value from the next scan
@@ -202,7 +195,6 @@ namespace DeconTools.Backend.Utilities.Converters
                     scanIndex++;
                 }
 
-
                 frameIndex++;
 
                 //this means we've finished adding scan numbers to the list for current frame
@@ -219,15 +211,12 @@ namespace DeconTools.Backend.Utilities.Converters
             }
 
             return peaksForCurveFitting;
-
         }
 
         public Bitmap getBitMapFromIntensityMap(int[][] intensities, int maxIntensity, int frames, int scans, float threshold)
         {
-
             //the x dimension for intensities here is SCANS and the y dimension is FRAMES
             var imageFile = new Bitmap(frames, scans);
-
 
             //go through the frames first
             for (var i = 0; i < frames; i++)
@@ -252,13 +241,10 @@ namespace DeconTools.Backend.Utilities.Converters
                         }
                     }
                 }
-
             }
 
             //imageFile.Save("C:\\ProteomicsSoftwareTools\\TestImage.png", System.Drawing.Imaging.ImageFormat.Png);
             return imageFile;
-
-
         }
 
         public Color getColorFromIntensity(int colorAsInt)
@@ -274,7 +260,6 @@ namespace DeconTools.Backend.Utilities.Converters
                           (byte)((colorAsInt >> 8) & 0xff),
                           (byte)(colorAsInt & 0xff));
         }
-
 
         public Color getRGB(float intensity)
         {
@@ -305,11 +290,6 @@ namespace DeconTools.Backend.Utilities.Converters
             }
 
             return c;
-
-
         }
-
     }
-
-
 }

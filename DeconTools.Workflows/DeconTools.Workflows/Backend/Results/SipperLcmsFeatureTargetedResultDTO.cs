@@ -4,7 +4,6 @@ namespace DeconTools.Workflows.Backend.Results
 {
     public class SipperLcmsFeatureTargetedResultDTO : UnlabeledTargetedResultDTO
     {
-
         #region Properties
 
         public double AreaUnderRatioCurve { get; set; }
@@ -46,7 +45,6 @@ namespace DeconTools.Workflows.Backend.Results
 
         #endregion
 
-
         public override string ToStringWithDetailsAsRow()
         {
             var data = new List<string>
@@ -71,10 +69,7 @@ namespace DeconTools.Workflows.Backend.Results
                 ContiguousnessScore.ToString()
             };
 
-
             return string.Join("\t", data);
         }
-
-
     }
 }

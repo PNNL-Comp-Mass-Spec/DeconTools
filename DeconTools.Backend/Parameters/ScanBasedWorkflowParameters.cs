@@ -7,7 +7,6 @@ namespace DeconTools.Backend.Parameters
     [Serializable]
     public class ScanBasedWorkflowParameters : ParametersBase
     {
-
         #region Constructors
 
         public ScanBasedWorkflowParameters()
@@ -21,7 +20,6 @@ namespace DeconTools.Backend.Parameters
             DeconvolutionType = Globals.DeconvolutionType.ThrashV1;
 
             IsRefittingPerformed = false;
-
         }
 
         #endregion
@@ -57,7 +55,6 @@ namespace DeconTools.Backend.Parameters
             throw new NotImplementedException();
         }
 
-
         public override void LoadParametersV2(XElement xElement)
         {
             ProcessMS1 = GetBoolVal(xElement, "Process_MS", ProcessMS1);
@@ -74,8 +71,6 @@ namespace DeconTools.Backend.Parameters
             IsRefittingPerformed = GetBoolVal(xElement, "ReplaceRAPIDScoreWithHornFitScore", IsRefittingPerformed);
 
             ExportPeakData = GetBoolVal(xElement, "WritePeaksToTextFile", ExportPeakData);
-
-
         }
         #endregion
 

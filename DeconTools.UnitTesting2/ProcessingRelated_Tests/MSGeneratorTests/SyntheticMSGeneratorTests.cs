@@ -8,9 +8,6 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSGeneratorTests
         [Test]
         public void GenerateSyntheticMSBasedOnPeakData()
         {
-
         }
-
-
     }
 }

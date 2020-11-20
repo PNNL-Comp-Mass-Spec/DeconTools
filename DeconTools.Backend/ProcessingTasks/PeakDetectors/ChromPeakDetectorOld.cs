@@ -7,7 +7,7 @@ using DeconTools.Backend.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
 {
-    public class ChromPeakDetectorOld:PeakDetector
+    public class ChromPeakDetectorOld : PeakDetector
     {
         PeakProcessor _oldPeakProcessor;
 
@@ -59,14 +59,13 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
             if (UseNewPeakDetector)
             {
                 _peakDetectorV2.FindPeaks(xyData, xMin, xMax);
-
             }
             else
             {
                 var xVals = xyData.Xvalues.ToList();
                 var yVals = xyData.Yvalues.ToList();
 
-                if (_oldPeakProcessor==null)
+                if (_oldPeakProcessor == null)
                 {
                     _oldPeakProcessor = new PeakProcessor();
                 }
@@ -99,7 +98,6 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
                     };
 
                     peakList.Add(chromPeak);
-
                 }
             }
 

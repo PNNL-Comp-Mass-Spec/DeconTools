@@ -3,7 +3,6 @@ namespace DeconTools.Workflows.Backend.Results
 {
     public class AlignmentResult
     {
-
         #region Constructors
         public AlignmentResult()
         {
@@ -25,7 +24,6 @@ namespace DeconTools.Workflows.Backend.Results
         #region Private Methods
 
         #endregion
-
 
         public float[] ScanLCValues { get; set; }
 

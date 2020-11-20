@@ -11,7 +11,6 @@ namespace DeconTools.Backend.ProcessingTasks
 {
     public class SaturationDetector : Task
     {
-
         /// <summary>
         /// User-defined threshold that marks the intensity level above which detector saturation occurs.
         /// </summary>
@@ -23,12 +22,10 @@ namespace DeconTools.Backend.ProcessingTasks
 
         private MSGenerator _msGenerator;
 
-
         public SaturationDetector()
         {
             SaturationThreshold = 1e5;   //NOTE: this is geared for the IMS4 detector that saturates at 1e5
         }
-
 
         public SaturationDetector(double saturationThreshold)
             : this()
@@ -63,7 +60,6 @@ namespace DeconTools.Backend.ProcessingTasks
                 uimfRun.CurrentScanSet = lcScanSet;
                 uimfRun.CurrentIMSScanSet = imsScanSet;
                 _msGenerator.Execute(run.ResultCollection);
-
             }
             else
             {
@@ -80,7 +76,6 @@ namespace DeconTools.Backend.ProcessingTasks
 
             foreach (var result in resultList)
             {
-
                 var indexOfObsMostAbundant = result.IsotopicProfile.GetIndexOfMostIntensePeak();
 
                 var mzOfMostAbundant = result.IsotopicProfile.Peaklist[indexOfObsMostAbundant].XValue;
@@ -92,7 +87,7 @@ namespace DeconTools.Backend.ProcessingTasks
                     result.IsotopicProfile.IsSaturated = (result.IsotopicProfile.OriginalIntensity >=
                                                           SaturationThreshold);
 
-                    if (result.IsotopicProfile.IsSaturated )
+                    if (result.IsotopicProfile.IsSaturated)
                     {
                         //problem is that with these saturated profiles, they are often truncated because another
                         //isotopic profile was falsely assigned to the back end of it. So we need to find more peaks that should
@@ -106,40 +101,32 @@ namespace DeconTools.Backend.ProcessingTasks
                         theorTarget.MZ = (theorTarget.MonoIsotopicMass / theorTarget.ChargeState) + Globals.PROTON_MASS;
 
                         var averagineFormula = _tomIsotopicPatternGenerator.GetClosestAvnFormula(result.IsotopicProfile.MonoIsotopicMass, false);
-                        theorTarget.IsotopicProfile  = _tomIsotopicPatternGenerator.GetIsotopePattern(averagineFormula, _tomIsotopicPatternGenerator.aafIsos);
+                        theorTarget.IsotopicProfile = _tomIsotopicPatternGenerator.GetIsotopePattern(averagineFormula, _tomIsotopicPatternGenerator.aafIsos);
                         theorTarget.EmpiricalFormula = averagineFormula;
                         theorTarget.CalculateMassesForIsotopicProfile(result.IsotopicProfile.ChargeState);
 
-                        AssignMissingPeaksToSaturatedProfile(run.PeakList, result.IsotopicProfile,theorTarget.IsotopicProfile);
-
+                        AssignMissingPeaksToSaturatedProfile(run.PeakList, result.IsotopicProfile, theorTarget.IsotopicProfile);
 
                         //goal is to find the index of the isotopic profile peaks of a peak that is not saturated
 
                         var indexOfGoodUnsaturatedPeak = -1;
 
-                        for (var i = indexOfObsMostAbundant+1; i < result.IsotopicProfile.Peaklist.Count; i++)
+                        for (var i = indexOfObsMostAbundant + 1; i < result.IsotopicProfile.Peaklist.Count; i++)
                         {
-
-
                             var indexUnsummedData = run.XYData.GetClosestXVal(result.IsotopicProfile.Peaklist[i].XValue);
 
                             var unsummedIntensity = run.XYData.Yvalues[indexUnsummedData];
 
-
-                            if (unsummedIntensity < _minRelIntTheorProfile*SaturationThreshold)
+                            if (unsummedIntensity < _minRelIntTheorProfile * SaturationThreshold)
                             {
                                 indexOfGoodUnsaturatedPeak = i;
                                 break;
                             }
-
                         }
 
                         AdjustSaturatedIsotopicProfile(result.IsotopicProfile, theorTarget.IsotopicProfile,
                                                        indexOfGoodUnsaturatedPeak);
                     }
-
-
-
                 }
 
                 //double summedIntensity = 0;
@@ -159,8 +146,6 @@ namespace DeconTools.Backend.ProcessingTasks
 
         public void AdjustSaturatedIsotopicProfile(IsotopicProfile iso, IsotopicProfile theorIsotopicProfile, int indexOfPeakUsedInExtrapolation)
         {
-
-
             var indexOfMostAbundantTheorPeak = theorIsotopicProfile.GetIndexOfMostIntensePeak();
 
             //find index of peaks lower than 0.3
@@ -173,7 +158,6 @@ namespace DeconTools.Backend.ProcessingTasks
                     indexOfReferenceTheorPeak = i;
                     break;
                 }
-
             }
 
             var useProvidedPeakIndex = (indexOfPeakUsedInExtrapolation >= 0);
@@ -202,17 +186,8 @@ namespace DeconTools.Backend.ProcessingTasks
                 return;
             }
 
-
             iso.IntensityAggregateAdjusted = intensityObsPeakUsedForExtrapolation / intensityTheorPeak;
-
-
-
-
-
         }
-
-
-
 
         private void AssignMissingPeaksToSaturatedProfile(List<Peak> peakList, IsotopicProfile isotopicProfile, IsotopicProfile theorIsotopicProfile)
         {
@@ -231,8 +206,6 @@ namespace DeconTools.Backend.ProcessingTasks
                 {
                     isotopicProfile.Peaklist.Add(iso.Peaklist[i]);
                 }
-
-
             }
         }
 
@@ -250,12 +223,7 @@ namespace DeconTools.Backend.ProcessingTasks
             toleranceInPPM = toleranceInMZ / isotopicProfile.MonoPeakMZ * 1e6;
 
             return toleranceInPPM;
-
         }
-
-
-
-
 
         public override void Execute(ResultCollection resultList)
         {
@@ -264,8 +232,6 @@ namespace DeconTools.Backend.ProcessingTasks
                 return;
 
             GetUnsummedIntensitiesAndDetectSaturation(resultList.Run, resultList.IsosResultBin);
-
-
         }
     }
 }

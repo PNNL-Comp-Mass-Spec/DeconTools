@@ -17,12 +17,8 @@ namespace IQ.View
 
             DataContext = ViewModel;
 
-
             LoadSettings();
-            
         }
-
-       
 
         public AutoprocessorViewModel ViewModel { get; set; }
 
@@ -41,13 +37,11 @@ namespace IQ.View
             SaveSettings();
         }
 
-
         private void LoadSettings()
         {
             ViewModel.DatasetPath = Properties.Settings.Default.LastDatasetPath ?? "";
             ViewModel.TargetsFilePath = Properties.Settings.Default.LastTargetFilePath ?? "";
             ViewModel.WorkflowParametersFilePath = Properties.Settings.Default.LastWorkflowFilePath ?? "";
-
         }
 
         private void SaveSettings()
@@ -73,7 +67,6 @@ namespace IQ.View
                 string filename = dlg.FileName;
                 ViewModel.DatasetPath = filename;
             }
-
         }
 
         private void btnSelectWorkflowFile_Click(object sender, RoutedEventArgs e)
@@ -90,7 +83,6 @@ namespace IQ.View
                 string filename = dlg.FileName;
                 ViewModel.WorkflowParametersFilePath = filename;
             }
-
         }
 
         private void btnSelectTargetFile_Click(object sender, RoutedEventArgs e)
@@ -107,7 +99,6 @@ namespace IQ.View
                 string filename = dlg.FileName;
                 ViewModel.TargetsFilePath = filename;
             }
-
         }
 
         private void btnClearDataset_Click(object sender, RoutedEventArgs e)

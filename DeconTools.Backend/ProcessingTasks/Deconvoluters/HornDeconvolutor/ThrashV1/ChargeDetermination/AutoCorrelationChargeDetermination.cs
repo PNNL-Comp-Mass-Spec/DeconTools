@@ -226,7 +226,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                         // The default for Math.Round is MidpointRounding.ToEven, which will round 2.5 exactly to 2
                         // We should instead use MidpointRounding.AwayFromZero, which will round 2.5 to 3.
                         // TODO: This is a difference compared to PattersonChargeStateCalculator
-                        chargeStates.Add((int) (0.5 + chargeState));
+                        chargeStates.Add((int)(0.5 + chargeState));
                     }
                 }
                 wasGoingUp = goingUp;
@@ -263,7 +263,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                 var goingUp = autoCorrelationScores[i] - autoCorrelationScores[i - 1] > 0;
                 if (wasGoingUp && !goingUp)
                 {
-                    var chargeState = (int) (0.5 + numPts / ((maxMz - minMz) * (i - 1)));
+                    var chargeState = (int)(0.5 + numPts / ((maxMz - minMz) * (i - 1)));
                     var currentAutoCorScore = autoCorrelationScores[i - 1];
                     if ((Math.Abs(currentAutoCorScore / autoCorrelationScores[0]) > 0.05) && chargeState <= maxChargeState)
                     {

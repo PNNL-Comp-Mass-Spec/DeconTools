@@ -6,7 +6,6 @@ namespace DeconTools.Workflows.Backend.Results
 {
     public static class ResultDTOFactory
     {
-
         public static void CreateTargetedResult(TargetedResultBase result, TargetedResultDTO resultLight)
         {
             WriteStandardInfoToResult(resultLight, result);
@@ -84,7 +83,6 @@ namespace DeconTools.Workflows.Backend.Results
             r.RSquaredValForRatioCurve = result.RSquaredValForRatioCurve;
         }
 
-
         private static void AddAdditionalInfo(TargetedResultDTO tr, MassTagResult massTagResult)
         {
             // no other info needed now
@@ -140,7 +138,6 @@ namespace DeconTools.Workflows.Backend.Results
                 r.ScanN15Start = (int)Math.Round(result.ChromPeakSelectedN15.XValue - sigma);
                 r.ScanN15End = (int)Math.Round(result.ChromPeakSelectedN15.XValue + sigma);
             }
-
         }
 
         private static void AddAdditionalInfo(TargetedResultDTO tr, O16O18TargetedResultObject result)
@@ -179,7 +176,6 @@ namespace DeconTools.Workflows.Backend.Results
             r.DeuteriumI2 = result.DeuteriumI2;
             r.DeuteriumI3 = result.DeuteriumI3;
             r.DeuteriumI4 = result.DeuteriumI4;
-
 
             r.TheoryI0 = result.TheoryI0;
             r.TheoryI1 = result.TheoryI1;
@@ -242,11 +238,9 @@ namespace DeconTools.Workflows.Backend.Results
             tr.MassErrorBeforeCalibration = result.MassErrorBeforeAlignment;
             tr.MassErrorAfterCalibration = result.MassErrorAfterAlignment;
 
-
             tr.ScanLC = result.GetScanNum();
             tr.NET = (float)result.GetNET();
             tr.NETError = result.Target.NormalizedElutionTime - tr.NET;
-
 
             tr.NumChromPeaksWithinTol = result.NumChromPeaksWithinTolerance;
             tr.NumQualityChromPeaksWithinTol = result.NumQualityChromPeaks;
@@ -262,12 +256,9 @@ namespace DeconTools.Workflows.Backend.Results
             if (result.FailedResult)
             {
                 tr.FailureType = result.FailureType.ToString();
-
             }
 
             tr.ErrorDescription = result.ErrorDescription ?? "";
-
         }
-
     }
 }

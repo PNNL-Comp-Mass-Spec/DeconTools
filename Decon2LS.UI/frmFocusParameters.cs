@@ -50,16 +50,16 @@ namespace Decon2LS
         /// <summary>
         /// Clean up any resources being used.
         /// </summary>
-        protected override void Dispose( bool disposing )
+        protected override void Dispose(bool disposing)
         {
-            if( disposing )
+            if (disposing)
             {
-                if(components != null)
+                if (components != null)
                 {
                     components.Dispose();
                 }
             }
-            base.Dispose( disposing );
+            base.Dispose(disposing);
         }
 
         #region Windows Form Designer generated code
@@ -173,31 +173,30 @@ namespace Decon2LS
             this.ShowInTaskbar = false;
             this.Text = "frmFocusParameters";
             this.ResumeLayout(false);
-
         }
         #endregion
 
         private void mbtnOK_Click(object sender, System.EventArgs e)
         {
-            DialogResult = DialogResult.OK ; 
-            this.Hide() ; 
+            DialogResult = DialogResult.OK;
+            this.Hide();
         }
 
         private void mbtnCancel_Click(object sender, System.EventArgs e)
         {
-            DialogResult = DialogResult.Cancel ; 
-            this.Hide() ; 
+            DialogResult = DialogResult.Cancel;
+            this.Hide();
         }
 
         public float FocusMZ
         {
             get
             {
-                return Convert.ToSingle(mtxtFocusMZ.Text) ;
+                return Convert.ToSingle(mtxtFocusMZ.Text);
             }
             set
             {
-                mtxtFocusMZ.Text = Convert.ToString(value) ; 
+                mtxtFocusMZ.Text = Convert.ToString(value);
             }
         }
 
@@ -205,11 +204,11 @@ namespace Decon2LS
         {
             get
             {
-                return Convert.ToSingle(mtxtMZTolerance.Text) ;
+                return Convert.ToSingle(mtxtMZTolerance.Text);
             }
             set
             {
-                mtxtMZTolerance.Text = Convert.ToString(value) ; 
+                mtxtMZTolerance.Text = Convert.ToString(value);
             }
         }
 
@@ -217,11 +216,11 @@ namespace Decon2LS
         {
             get
             {
-                return Convert.ToInt32(mtxtFocusScan.Text) ;
+                return Convert.ToInt32(mtxtFocusScan.Text);
             }
             set
             {
-                mtxtFocusScan.Text = Convert.ToString(value) ; 
+                mtxtFocusScan.Text = Convert.ToString(value);
             }
         }
     }

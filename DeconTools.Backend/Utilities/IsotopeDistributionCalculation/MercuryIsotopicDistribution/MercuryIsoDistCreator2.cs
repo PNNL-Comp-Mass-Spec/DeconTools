@@ -29,9 +29,6 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.MercuryIso
             ApodizationType = MercuryApodizationType.Gaussian;
             Resolution = 100000;
             _pointsPerAtomicMassUnit = _mercuryArraySize / _massRange;
-
-
-
         }
 
         #endregion
@@ -46,14 +43,11 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.MercuryIso
 
         #region Public Methods
 
-
         public IsotopicProfile GetIsotopePattern(string empiricalFormula, int chargeState)
         {
             _elementTable = EmpiricalFormulaUtilities.ParseEmpiricalFormulaString(empiricalFormula);
 
-
             AddElementsToReferenceTable();
-
 
             var frequencyData = new double[2 * _mercuryArraySize + 1];
 
@@ -67,7 +61,6 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.MercuryIso
 
             var intensityVals = new List<double>();
             var mzVals = new List<double>();
-
 
             for (var i = _mercuryArraySize / 2 + 1; i <= _mercuryArraySize; i++)
             {
@@ -101,8 +94,6 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.MercuryIso
             //Console.WriteLine("Average mass= " + averageMass.ToString("0.000000"));
 
             return null;
-
-
         }
 
         private void AddElementsToReferenceTable()
@@ -113,9 +104,7 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.MercuryIso
                 {
                     _elementList.Add(i.Key, Constants.Elements[i.Key]);
                 }
-
             }
-
         }
 
         private void DisplayFrequencyDataToConsole(double[] frequencyData)
@@ -135,12 +124,10 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.MercuryIso
             Console.WriteLine(sb.ToString());
         }
 
-
         private void Apodize(MercuryApodizationType apodizationType, int numPoints, double averageMass, int chargeState, ref double[] frequencyData)
         {
             double apodizationVal;
             double expDenominator;
-
 
             var apodizationSubscript = averageMass / (Resolution * Math.Abs(chargeState)) * _mercuryArraySize * 2 / _massRange;
             expDenominator = numPoints / apodizationSubscript * numPoints / apodizationSubscript;
@@ -152,11 +139,9 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.MercuryIso
                     //TODO: make this zero-based (I copied what was done in DeconEngine - which was sloppy)
                     for (var j = 1; j <= numPoints; j++)
                     {
-
                         if (j <= numPoints / 2)
                         {
                             apodizationVal = Math.Exp(-(j - 1) * (j - 1) / expDenominator);
-
                         }
                         else
                         {
@@ -170,8 +155,6 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.MercuryIso
                         frequencyData[index2] = frequencyData[index2] * apodizationVal;
                         // Console.WriteLine(frequencyData[index1] + "\t"+frequencyData[index2]);
                     }
-
-
 
                     break;
                 case MercuryApodizationType.Lorentzian:
@@ -191,7 +174,6 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.MercuryIso
                         var index1 = 2 * j - 1;
                         var index2 = 2 * j;
 
-
                         frequencyData[index1] = frequencyData[index1] * apodizationVal;
                         frequencyData[index2] = frequencyData[index2] * apodizationVal;
                     }
@@ -200,11 +182,7 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.MercuryIso
                 default:
                     throw new ArgumentOutOfRangeException(nameof(apodizationType));
             }
-
-
-
         }
-
 
         private int Realft(ref double[] data)
         {
@@ -255,7 +233,6 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.MercuryIso
             }
             else
             {
-
             }
             return 0;
         }
@@ -322,11 +299,8 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.MercuryIso
             data[i] = tempVal;
         }
 
-
         private void CalculateFrequencies(int numPoints, int chargeState, ref double[] frequencyData)
         {
-
-
             for (var i = 1; i < numPoints / 2; i++)
             {
                 var freq = (i - 1) / _massRange;
@@ -343,12 +317,7 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.MercuryIso
                 frequencyData[2 * i - 1] = realVal;
                 frequencyData[2 * i] = imagVal;
             }
-
-
-
         }
-
-
 
         #endregion
 
@@ -365,21 +334,15 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.MercuryIso
 
                 var elementObject = _elementList[elementSymbol];
 
-
                 averageMass += elementObject.MassAverage * elementCount;
                 monoIsotopicMass += elementObject.MassMonoIsotopic * elementCount;
             }
-
         }
-
-
 
         private void GetRealAndImagValues(double freq, out double realVal, out double imagVal, int chargeState)
         {
             double r = 1;
             double theta = 0;
-
-
 
             foreach (var element in _elementTable)
             {
@@ -387,14 +350,12 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.MercuryIso
 
                 var elementObject = _elementList[element.Key];
 
-
                 var numIsotopes = elementObject.IsotopeDictionary.Count;
 
                 var averageMass = elementObject.MassAverage;
 
                 double real = 0;
                 double imag = 0;
-
 
                 var isotopes = elementObject.IsotopeDictionary.Values;
 
@@ -435,15 +396,11 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.MercuryIso
                 {
                     theta += numAtoms * -Math.PI / 2;
                 }
-
             }
 
             realVal = r * Math.Cos(theta);
             imagVal = r * Math.Sin(theta);
-
         }
-
-
 
         #endregion
 

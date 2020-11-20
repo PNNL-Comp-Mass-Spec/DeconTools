@@ -14,7 +14,6 @@ namespace DeconTools.Backend.Data
             _calibrationDataItems = new List<ViperMassCalibrationDataItem>();
         }
 
-
         #endregion
 
         #region Properties
@@ -22,15 +21,12 @@ namespace DeconTools.Backend.Data
         public double LeftBaseOfMassErrorCurve { get; set; }
         public double RightBaseOfMassErrorCurve { get; set; }
         protected double MassErrorCurveWidthAtBase { get; set; }
-        
 
-
-        public void SetCalibrationDataItems(List<ViperMassCalibrationDataItem> dataItems )
+        public void SetCalibrationDataItems(List<ViperMassCalibrationDataItem> dataItems)
         {
             _calibrationDataItems.Clear();
             _calibrationDataItems.AddRange(dataItems);
         }
-
 
         public void ExtractKeyCalibrationValues()
         {
@@ -44,8 +40,6 @@ namespace DeconTools.Backend.Data
 
             MassErrorCurveWidthAtBase = RightBaseOfMassErrorCurve - LeftBaseOfMassErrorCurve;
         }
-
-       
 
         #endregion
 

@@ -10,16 +10,12 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.LabeledIso
     {
         private readonly PeptideUtils _peptideUtils = new PeptideUtils();
 
-
-
         public LabeledIsotopicProfileUtilities()
         {
             IsotopicProfiles = new List<IsotopicProfileComponent>();
         }
 
-
         #region Public Methods
-
 
         public List<IsotopicProfileComponent> IsotopicProfiles { get; set; }
 
@@ -28,7 +24,6 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.LabeledIso
             var component = new IsotopicProfileComponent(iso, fraction);
             IsotopicProfiles.Add(component);
         }
-
 
         public IsotopicProfile GetMixedIsotopicProfile()
         {
@@ -41,7 +36,6 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.LabeledIso
                     mixedIso = isotopicProfileComponent.IsotopicProfile.CloneIsotopicProfile();
                     mixedIso.Peaklist.Clear();
                 }
-
 
                 //we need to first make sure all the intensities of the peaks add up to 1 for each isotopic profile
                 //then we need to adjust the ratios of each peak according to the fractional amount the isotopic profile contributes to the mixture
@@ -80,44 +74,28 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.LabeledIso
                         {
                             mixedIso.Peaklist.Add(addedPeak);
                         }
-
                     }
-
-
                 }
-
-
             }
 
             return mixedIso;
-
         }
-
-
-
-
 
         public IsotopicProfile CreateIsotopicProfileFromSequence(string peptideSequenceOrOtherCode, string elementLabeled, int lightIsotope, int heavyIsotope, double percentHeavyLabel, int chargeState = 1)
         {
-
             var baseEmpiricalFormula = _peptideUtils.GetEmpiricalFormulaForPeptideSequence(peptideSequenceOrOtherCode);
 
             return CreateIsotopicProfileFromEmpiricalFormula(baseEmpiricalFormula, elementLabeled, lightIsotope,
                                                              heavyIsotope, percentHeavyLabel, chargeState);
-
         }
-
 
         public IsotopicProfile CreateIsotopicProfileFromEmpiricalFormula(string baseEmpiricalFormula, string elementLabeled, int lightIsotope, int heavyIsotope, double percentHeavyLabel, int chargeState = 1)
         {
-
-
             var isUnlabeled = elementLabeled == "" || Math.Abs(percentHeavyLabel) < float.Epsilon;
 
             IsotopicProfile iso;
             if (isUnlabeled)
             {
-
                 iso = IsotopicDistributionCalculator.Instance.GetIsotopePattern(baseEmpiricalFormula);
             }
             else
@@ -129,9 +107,7 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.LabeledIso
                 iso = IsotopicDistributionCalculator.Instance.GetIsotopePattern(baseEmpiricalFormula);
 
                 IsotopicDistributionCalculator.Instance.ResetToUnlabeled();
-
             }
-
 
             var monoisotopicMass = EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(baseEmpiricalFormula);
             iso.MonoIsotopicMass = monoisotopicMass;
@@ -140,10 +116,8 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.LabeledIso
 
             iso.ChargeState = chargeState;
 
-
             return iso;
         }
-
 
         public bool ValidateElement(string elementSymbol)
         {
@@ -154,24 +128,19 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.LabeledIso
             catch (KeyNotFoundException)
             {
                 return false;
-
             }
 
             return true;
-
         }
 
         #endregion
 
-
         #region Private methods
         private void CalculateMZValuesForLabeledProfile(IsotopicProfile iso, string empiricalFormula, string elementLabeled, int chargeState, int lightIsotope, int heavyIsotope)
         {
-
             var elementTable = EmpiricalFormulaUtilities.ParseEmpiricalFormulaString(empiricalFormula);
 
             var numLabeledAtoms = elementTable[elementLabeled];
-
 
             for (var i = 0; i < iso.Peaklist.Count; i++)
             {
@@ -183,16 +152,14 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.LabeledIso
 
                 var massDiff = heavyIsotopeMass - lightIsotopeMass;
 
-
                 var monoMZ = iso.MonoIsotopicMass / chargeState + Globals.PROTON_MASS;
 
                 var peakMZIfUnlabeled = monoMZ + (i * Globals.MASS_DIFF_BETWEEN_ISOTOPICPEAKS) / chargeState;
 
                 var monoPeakFullyLabeled = monoMZ + massDiff * numLabeledAtoms / chargeState;
 
-                var peakMZBasedOnLabeled = monoPeakFullyLabeled - 
+                var peakMZBasedOnLabeled = monoPeakFullyLabeled -
                                            (numLabeledAtoms - i) * Globals.MASS_DIFF_BETWEEN_ISOTOPICPEAKS / chargeState;
-
 
                 int peaksToUse;
                 if (i > numLabeledAtoms)
@@ -204,11 +171,8 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.LabeledIso
                     peaksToUse = i;
                 }
 
-
                 iso.Peaklist[i].XValue = peakMZBasedOnLabeled * peaksToUse / numLabeledAtoms +
                                          peakMZIfUnlabeled * (numLabeledAtoms - peaksToUse) / numLabeledAtoms;
-
-
             }
         }
 
@@ -223,8 +187,6 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.LabeledIso
             var labelChange = percentAddedLabeling;
 
             return isotope.NaturalAbundance - labelChange / 100;
-
-
         }
 
         private double CalculateAbundanceHeavyIsotope(string elementSymbol, int isotopeNum, double percentAddedLabeling)
@@ -238,10 +200,7 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.LabeledIso
             var labelChange = percentAddedLabeling;
 
             return isotope.NaturalAbundance + labelChange / 100;
-
-
         }
-
 
         private int GetIndexOfTargetPeak(IsotopicProfile mixedIso, double xValue, out bool peakWasFound, double toleranceInPPM = 1)
         {
@@ -271,8 +230,6 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.LabeledIso
             }
 
             return indexOfPeak;
-
-
         }
 
         #endregion

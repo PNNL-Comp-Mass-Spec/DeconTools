@@ -52,7 +52,6 @@ namespace DeconTools.Backend.Data
             try
             {
                 sw = new StreamWriter(fileName);
-
             }
             catch (Exception ex)
             {
@@ -68,7 +67,6 @@ namespace DeconTools.Backend.Data
             {
                 results = deserializer.GetNextSetOfResults();
 
-
                 //OriginalIntensitiesExtractor origIntensityExtractor = new OriginalIntensitiesExtractor(results);
                 //List<OriginalIntensitiesDTO> origIntensitiesCollection = origIntensityExtractor.ExtractOriginalIntensities();
                 //writeUIMFIsosResults(sw, results, origIntensitiesCollection);
@@ -78,7 +76,6 @@ namespace DeconTools.Backend.Data
             sw.Close();
             deserializer.Close();
 
-
             if (deleteBinaryFileAfterUse)
             {
                 try
@@ -87,16 +84,12 @@ namespace DeconTools.Backend.Data
                     {
                         File.Delete(binaryResultCollectionFilename);
                     }
-
                 }
                 catch (Exception ex)
                 {
                     throw new IOException("Exporter could not delete binary file. Details: " + ex.Message);
-
                 }
             }
-
-
         }
 
         private void writeUIMFIsosResults(TextWriter sw, ResultCollection results, IReadOnlyList<OriginalIntensitiesDTO> origIntensitiesCollection)
@@ -148,7 +141,6 @@ namespace DeconTools.Backend.Data
             try
             {
                 sw = new StreamWriter(fileName);
-
             }
             catch (Exception)
             {
@@ -162,6 +154,5 @@ namespace DeconTools.Backend.Data
 
             sw.Close();
         }
-
     }
 }

@@ -49,16 +49,16 @@ namespace Decon2LS
         /// <summary>
         /// Clean up any resources being used.
         /// </summary>
-        protected override void Dispose( bool disposing )
+        protected override void Dispose(bool disposing)
         {
-            if( disposing )
+            if (disposing)
             {
-                if(components != null)
+                if (components != null)
                 {
                     components.Dispose();
                 }
             }
-            base.Dispose( disposing );
+            base.Dispose(disposing);
         }
 
         #region Windows Form Designer generated code
@@ -204,28 +204,24 @@ namespace Decon2LS
             this.panel2.ResumeLayout(false);
             this.panel4.ResumeLayout(false);
             this.ResumeLayout(false);
-
         }
         #endregion
 
         private void mrichTextBoxName_TextChanged(object sender, System.EventArgs e)
         {
-        
         }
 
         private void mbuttonOK_Click(object sender, System.EventArgs e)
         {
-            DialogResult = DialogResult.OK ; 
-            this.Hide() ;
+            DialogResult = DialogResult.OK;
+            this.Hide();
         }
 
         private void frmAbout_Load(object sender, System.EventArgs e)
         {
-            var assem = System.Reflection.Assembly.GetExecutingAssembly() ; 
-            var assemName = assem.GetName() ; 
-            label2.Text = "Version " + assemName.Version.Major + "." + assemName.Version.Minor + " Download Latest version from:"  ; 
+            var assem = System.Reflection.Assembly.GetExecutingAssembly();
+            var assemName = assem.GetName();
+            label2.Text = "Version " + assemName.Version.Major + "." + assemName.Version.Minor + " Download Latest version from:";
         }
-
-        
     }
 }

@@ -8,14 +8,12 @@ namespace DeconTools.Backend.FileIO
 {
     public class ViperMassCalibrationLoader
     {
-
         #region Constructors
 
         public ViperMassCalibrationLoader(string filePath)
         {
             FilePath = filePath;
         }
-
 
         #endregion
 
@@ -26,13 +24,9 @@ namespace DeconTools.Backend.FileIO
 
         #region Public Methods
 
-
-
         public ViperMassCalibrationData ImportMassCalibrationData()
         {
-
             var viperMassCalibrationData = new ViperMassCalibrationData();
-
 
             var massCalibrationDataItems = new List<ViperMassCalibrationDataItem>();
 
@@ -69,18 +63,13 @@ namespace DeconTools.Backend.FileIO
 
                     massCalibrationDataItems.Add(rowData);
                 }
-
             }
 
             viperMassCalibrationData.SetCalibrationDataItems(massCalibrationDataItems);
             viperMassCalibrationData.ExtractKeyCalibrationValues();
 
             return viperMassCalibrationData;
-
-
         }
-
-
 
         #endregion
 

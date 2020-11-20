@@ -11,7 +11,6 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
     [TestFixture]
     public class MSPeakDetectionTests
     {
-
         [Test]
         public void PeakDetectorDemo1()
         {
@@ -40,8 +39,6 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
             Console.WriteLine(sb.ToString());
         }
 
-
-
         [Test]
         public void DetectPeaksTest1()
         {
@@ -60,18 +57,15 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
 
             generator.Execute(run.ResultCollection);
 
-            var peakDetector = new DeconToolsPeakDetectorV2(peakBR, sigNoise, peakFitType, isThresholded) {
+            var peakDetector = new DeconToolsPeakDetectorV2(peakBR, sigNoise, peakFitType, isThresholded)
+            {
                 PeaksAreStored = true
             };
 
             var peakList = peakDetector.FindPeaks(run.XYData, 0, 50000);
 
             TestUtilities.DisplayPeaks(peakList);
-
         }
-
-
-
 
         [Test]
         public void DetectPeaksInOrbitrapData()
@@ -88,11 +82,11 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
             //create list of target ScanSets
             run.ScanSetCollection.Create(run, 6000, 6015, 1, 1);
 
-
             //in the 'run' object there is now a list of scans : run.ScanSetCollection
             var generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
-            var peakDetector = new DeconToolsPeakDetectorV2(peakBR, sigNoise, peakFitType, isThresholded) {
+            var peakDetector = new DeconToolsPeakDetectorV2(peakBR, sigNoise, peakFitType, isThresholded)
+            {
                 PeaksAreStored = true
             };
 
@@ -104,9 +98,6 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
                 generator.Execute(run.ResultCollection);
                 peakDetector.Execute(run.ResultCollection);
             }
-
         }
-
-
     }
 }

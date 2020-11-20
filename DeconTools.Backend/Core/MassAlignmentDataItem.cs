@@ -3,7 +3,6 @@ namespace DeconTools.Backend.Core
 {
     public class MassAlignmentDataItem
     {
-
         #region Constructors
         public MassAlignmentDataItem(float mz, float mzPPMCorrection, float scan, float scanPPMCorrection)
         {

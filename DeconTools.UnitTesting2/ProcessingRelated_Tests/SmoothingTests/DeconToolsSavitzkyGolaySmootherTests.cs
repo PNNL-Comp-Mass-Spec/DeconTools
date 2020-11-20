@@ -15,7 +15,6 @@ namespace DeconTools.UnitTesting2.ProcessingTasksTests
     [TestFixture]
     public class DeconToolsSavitzkyGolaySmootherTests
     {
-
         [Test]
         public void smootherTest1()
         {
@@ -37,8 +36,6 @@ namespace DeconTools.UnitTesting2.ProcessingTasksTests
             Assert.AreEqual(46, run.PeakList.Count);
         }
 
-
-
         [Test]
         public void SmoothWithOldDeconToolsSmootherTest1()
         {
@@ -51,25 +48,17 @@ namespace DeconTools.UnitTesting2.ProcessingTasksTests
             var xyData = TestUtilities.LoadXYDataFromFile(sampleXYDataFile);
             var smoothedXYData = smoother.Smooth(xyData);
 
-
             Assert.AreEqual(xyData.Xvalues.Length, smoothedXYData.Xvalues.Length);
-
 
             var sb = new StringBuilder();
             sb.Append("xval\tnonSmoothed_Y\tsmoothed_Y\n");
             for (var i = 0; i < xyData.Xvalues.Length; i++)
             {
-
                 sb.Append(xyData.Xvalues[i] + "\t" + xyData.Yvalues[i] + "\t" + smoothedXYData.Yvalues[i] + Environment.NewLine);
-
             }
 
             Console.WriteLine(sb.ToString());
-
-
-
         }
-
 
         [Test]
         public void SmoothWithNewDeconToolsSmootherTest1()
@@ -87,7 +76,6 @@ namespace DeconTools.UnitTesting2.ProcessingTasksTests
             var stopwatch = new Stopwatch();
             stopwatch.Start();
 
-
             var smoothedXYData = new XYData();
             for (var i = 0; i < numSmooths; i++)
             {
@@ -96,29 +84,19 @@ namespace DeconTools.UnitTesting2.ProcessingTasksTests
 
             stopwatch.Stop();
 
-
             Console.WriteLine("Average time for smoothing (milliseconds) = " + stopwatch.ElapsedMilliseconds / (double)numSmooths);
 
             Assert.AreEqual(xyData.Xvalues.Length, smoothedXYData.Xvalues.Length);
-
 
             var sb = new StringBuilder();
             sb.Append("xval\tnonSmoothed_Y\tsmoothed_Y\n");
             for (var i = 0; i < xyData.Xvalues.Length; i++)
             {
-
                 sb.Append(xyData.Xvalues[i] + "\t" + xyData.Yvalues[i] + "\t" + smoothedXYData.Yvalues[i] + Environment.NewLine);
-
             }
 
             // Console.WriteLine(sb.ToString());
 
-
-
         }
-
-
-
-
     }
 }

@@ -7,10 +7,9 @@ namespace DeconTools.Backend.ProcessingTasks
 {
     public class DeconvolutorFactory
     {
-
         public static Deconvolutor CreateDeconvolutor(DeconToolsParameters parameters)
         {
-            Check.Require(parameters != null,"Factory cannot create Deconvolutor class. DeconToolsParameters are null.");
+            Check.Require(parameters != null, "Factory cannot create Deconvolutor class. DeconToolsParameters are null.");
             if (parameters == null)
                 return new NullDeconvolutor();
 
@@ -43,14 +42,10 @@ namespace DeconTools.Backend.ProcessingTasks
 #else
                     throw new NotSupportedException("Support for Rapid is not included in this version of the DLL");
 #endif
-                    default:
+                default:
                     throw new ArgumentOutOfRangeException(nameof(parameters),
                                                           "Trying to create the deconvolutor, but an incorrect Deconvolutor type was given. Good example: 'ThrashV1'");
             }
-
-
         }
-
-
     }
 }

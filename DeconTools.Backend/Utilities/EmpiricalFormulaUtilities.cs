@@ -18,11 +18,10 @@ namespace DeconTools.Backend.Utilities
                 var elementMass = Constants.Elements[valuePair.Key].MassMonoIsotopic;
                 var elementCount = valuePair.Value;
 
-                monoisotopicMass += elementMass*elementCount;
+                monoisotopicMass += elementMass * elementCount;
             }
 
             return monoisotopicMass;
-
         }
 
         public static string AddFormula(string baseFormula, string formulaToBeAdded)
@@ -40,9 +39,7 @@ namespace DeconTools.Backend.Utilities
                 {
                     baseElementTable.Add(item.Key, item.Value);
                 }
-
             }
-
 
             return GetEmpiricalFormulaFromElementTable(baseElementTable);
         }
@@ -61,7 +58,6 @@ namespace DeconTools.Backend.Utilities
                 {
                     baseElementTable.Add(item.Key, item.Value);
                 }
-
             }
 
             return GetEmpiricalFormulaFromElementTable(baseElementTable);
@@ -74,12 +70,12 @@ namespace DeconTools.Backend.Utilities
 
             foreach (var item in doubleDictionary)
             {
-                parsedFormula.Add(item.Key,(int)Math.Round(item.Value));
+                parsedFormula.Add(item.Key, (int)Math.Round(item.Value));
             }
 
             return parsedFormula;
         }
-        public static Dictionary<string, double> ParseDoubleEmpiricalFormulaString (string empiricalFormula)
+        public static Dictionary<string, double> ParseDoubleEmpiricalFormulaString(string empiricalFormula)
         {
             var parsedFormula = new Dictionary<string, double>();
             if (string.IsNullOrEmpty(empiricalFormula)) return parsedFormula;
@@ -89,60 +85,53 @@ namespace DeconTools.Backend.Utilities
             string regexString;
             if (formulaIsUniModFormat)
             {
+                var elementArray = empiricalFormula.Split(' ');
 
-                    var elementArray = empiricalFormula.Split(' ');
-
-                    foreach (var element in elementArray)
+                foreach (var element in elementArray)
+                {
+                    if (element.Contains("("))
                     {
-                        if (element.Contains("("))
-                        {
-                            regexString = GetRegexStringForUniModFormat();
-                            var match = Regex.Match(element, regexString);
-                            var elementCountString = match.Groups["num"].Value;
-                            var elementSymbol = match.Groups["ele"].Value;
+                        regexString = GetRegexStringForUniModFormat();
+                        var match = Regex.Match(element, regexString);
+                        var elementCountString = match.Groups["num"].Value;
+                        var elementSymbol = match.Groups["ele"].Value;
                         Double.TryParse(elementCountString, out var numAtoms);
 
                         var formulaContainsDuplicateElements = (parsedFormula.ContainsKey(elementSymbol));
+                        Check.Require(!formulaContainsDuplicateElements, "Cannot parse formula string. It contains multiple identical elements. Formula= " + empiricalFormula);
+
+                        parsedFormula.Add(elementSymbol, numAtoms);
+                    }
+                    else
+                    {
+                        regexString = GetRegexStringForUniModFormatNoParentheses();
+                        var regex = new Regex(regexString);    //got this from StackOverflow
+                        var matches = regex.Matches(element);
+
+                        foreach (Match item in matches)
+                        {
+                            var elementSymbol = item.Groups[1].Value + item.Groups[2].Value;
+
+                            var elementCountString = item.Groups[3].Value;
+
+                            if (string.IsNullOrEmpty(elementSymbol)) continue;
+
+                            double numAtoms;
+                            if (elementCountString.Length > 0)
+                            {
+                                Double.TryParse(elementCountString, out numAtoms);
+                            }
+                            else
+                            {
+                                numAtoms = 1;
+                            }
+
+                            var formulaContainsDuplicateElements = (parsedFormula.ContainsKey(elementSymbol));
                             Check.Require(!formulaContainsDuplicateElements, "Cannot parse formula string. It contains multiple identical elements. Formula= " + empiricalFormula);
 
                             parsedFormula.Add(elementSymbol, numAtoms);
                         }
-                        else
-                        {
-                            regexString = GetRegexStringForUniModFormatNoParentheses();
-                            var regex = new Regex(regexString);    //got this from StackOverflow
-                            var matches = regex.Matches(element);
-
-                            foreach (Match item in matches)
-                            {
-
-                                var elementSymbol =  item.Groups[1].Value + item.Groups[2].Value;
-
-                                var elementCountString = item.Groups[3].Value;
-
-                                if (string.IsNullOrEmpty(elementSymbol)) continue;
-
-                                double numAtoms;
-                                if (elementCountString.Length > 0)
-                                {
-                                    Double.TryParse(elementCountString, out numAtoms);
-                                }
-                                else
-                                {
-                                    numAtoms = 1;
-                                }
-
-                                var formulaContainsDuplicateElements = (parsedFormula.ContainsKey(elementSymbol));
-                                Check.Require(!formulaContainsDuplicateElements, "Cannot parse formula string. It contains multiple identical elements. Formula= " + empiricalFormula);
-
-                                parsedFormula.Add(elementSymbol, numAtoms);
-
-
-                            }
-
                     }
-
-
                 }
                 return parsedFormula;
             }
@@ -178,28 +167,23 @@ namespace DeconTools.Backend.Utilities
 
         public static string GetEmpiricalFormulaFromElementTable(Dictionary<string, int> elementTable)
         {
-
             var sb = new StringBuilder();
             foreach (var item in elementTable)
             {
                 if (item.Value == 1)
                 {
                     sb.Append(item.Key);
-
                 }
                 else
                 {
                     sb.Append(item.Key);
                     sb.Append(item.Value);
                 }
-
             }
             return sb.ToString();
-
         }
         public static string GetEmpiricalFormulaFromElementTable(Dictionary<string, double> elementTable)
         {
-
             var sb = new StringBuilder();
             foreach (var item in elementTable)
             {
@@ -226,14 +210,10 @@ namespace DeconTools.Backend.Utilities
                     {
                         sb.Append(item.Value);
                     }
-
                 }
-
             }
             return sb.ToString();
-
         }
-
 
         private static string GetRegexStringForNonUniModFormat()
         {
@@ -255,9 +235,5 @@ namespace DeconTools.Backend.Utilities
 
             return @"([0-9]*)([A-Za-z]*)([0-9\.]*)";
         }
-
-
-
-
     }
 }

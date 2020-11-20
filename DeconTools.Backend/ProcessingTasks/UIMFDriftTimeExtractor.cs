@@ -6,7 +6,6 @@ namespace DeconTools.Backend.ProcessingTasks
 {
     public class UIMFDriftTimeExtractor : Task
     {
-
         public override void Execute(ResultCollection resultList)
         {
             Check.Require(resultList != null, "UIMF Drift Time extractor failed. ResultCollection is null");
@@ -27,7 +26,6 @@ namespace DeconTools.Backend.ProcessingTasks
                     uimfResult.DriftTime = uimfRun.GetDriftTime(uimfResult.ScanSet.PrimaryScanNumber, uimfResult.IMSScanSet.PrimaryScanNumber);
                 }
             }
-
 
             // = uimfRun.GetDriftTime(uimfRun.CurrentScanSet.PrimaryScanNumber, uimfRun.CurrentScanSet.PrimaryScanNumber);
 

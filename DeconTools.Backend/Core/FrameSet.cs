@@ -8,7 +8,6 @@ namespace DeconTools.Backend.Core
     [Serializable]
     public sealed class FrameSet
     {
-
         public FrameSet()
         {
             FramePressure = Single.NaN;
@@ -29,7 +28,6 @@ namespace DeconTools.Backend.Core
             IndexValues = new List<int> {
                 primaryFrame
             };
-
         }
 
         public FrameSet(int primaryFrame, int[] indexArray)
@@ -42,7 +40,6 @@ namespace DeconTools.Backend.Core
             {
                 IndexValues.Add(indexItem);
             }
-
         }
 
         public FrameSet(int primaryFrame, int lowerFrame, int upperFrame)
@@ -56,7 +53,6 @@ namespace DeconTools.Backend.Core
             {
                 IndexValues.Add(i);
             }
-
         }
 
         public void AddFrame(int frameNumber)
@@ -81,7 +77,6 @@ namespace DeconTools.Backend.Core
         public double AvgTOFLength { get; set; }
 
         public List<int> IndexValues { get; set; }
-
 
         internal int GetLowestFrameNumber()
         {
@@ -121,9 +116,5 @@ namespace DeconTools.Backend.Core
 
             return sb.ToString().TrimEnd(',');
         }
-
     }
-
-
-
 }

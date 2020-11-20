@@ -6,7 +6,6 @@ namespace DeconTools.Backend.FileIO
 {
     public class MassTagTextFileExporter : TextFileExporter<TargetBase>
     {
-
         #region Constructors
         public MassTagTextFileExporter(string fileName) : base(fileName, '\t') { }
 

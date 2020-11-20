@@ -11,7 +11,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
 
         #region Constructors
 
-        public IsotopicProfileInterferenceScorer(double minRelIntensityForScore = 0.025,  bool usePeakBasedInterferenceValue=true)
+        public IsotopicProfileInterferenceScorer(double minRelIntensityForScore = 0.025, bool usePeakBasedInterferenceValue = true)
         {
             m_scorer = new InterferenceScorer(minRelIntensityForScore);
             UsePeakBasedInterferenceValue = usePeakBasedInterferenceValue;
@@ -29,16 +29,14 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
 
         public override void ValidateResult(ResultCollection resultColl, IsosResult currentResult)
         {
-
             if (currentResult.IsotopicProfile == null) return;
 
             Check.Require(currentResult != null, string.Format("{0} failed. CurrentResult has not been defined.", this.Name));
-            if(resultColl.Run.PeakList == null || resultColl.Run.PeakList.Count == 0)
+            if (resultColl.Run.PeakList == null || resultColl.Run.PeakList.Count == 0)
             {
                 currentResult.InterferenceScore = -1;
                 return;
             }
-
 
             var monoPeak = currentResult.IsotopicProfile.getMonoPeak();
             var lastPeak = currentResult.IsotopicProfile.Peaklist[currentResult.IsotopicProfile.Peaklist.Count - 1];
@@ -61,13 +59,9 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
                 }
 
                 interferenceVal = m_scorer.GetInterferenceScore(resultColl.Run.XYData, currentResult.IsotopicProfile.Peaklist, leftMZBoundary, rightMZBoundary, startIndexOfXYData);
-
             }
 
-
-
             currentResult.InterferenceScore = interferenceVal;
-
         }
 
         #endregion
@@ -75,8 +69,6 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
         #region Private Methods
 
         #endregion
-
-
 
     }
 }

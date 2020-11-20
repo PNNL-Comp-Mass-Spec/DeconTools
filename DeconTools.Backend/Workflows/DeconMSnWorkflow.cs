@@ -50,15 +50,12 @@ namespace DeconTools.Backend.Workflows
             parameters.ScanBasedWorkflowParameters.ProcessMS2 = true;
             DeconMSnResults = new List<DeconMSnResult>();
             IsParentProfileDataExported = true;
-
         }
 
         protected override void InitializeProcessingTasks()
         {
-
             MSGenerator = MSGeneratorFactory.CreateMSGenerator(Run.MSFileType);
             PeakDetector = PeakDetectorFactory.CreatePeakDetector(NewDeconToolsParameters);
-
 
             var moreSensitivePeakToBackgroundRatio = NewDeconToolsParameters.PeakDetectorParameters.PeakToBackgroundRatio / 2;
             var moreSensitiveSigNoiseThresh = NewDeconToolsParameters.PeakDetectorParameters.SignalToNoiseThreshold;
@@ -69,9 +66,7 @@ namespace DeconTools.Backend.Workflows
             _superSensitiveMS1PeakDetector = new DeconToolsPeakDetectorV2(0, 0, NewDeconToolsParameters.PeakDetectorParameters.PeakFitType,
                                              NewDeconToolsParameters.PeakDetectorParameters.IsDataThresholded);
 
-
             Deconvolutor = DeconvolutorFactory.CreateDeconvolutor(NewDeconToolsParameters);
-
 
             //Will initialize these but whether or not they are used are determined elsewhere
             ZeroFiller = new DeconToolsZeroFiller(NewDeconToolsParameters.MiscMSProcessingParameters.ZeroFillingNumZerosToFill);
@@ -82,12 +77,9 @@ namespace DeconTools.Backend.Workflows
 
             ResultValidator = new ResultValidatorTask();
 
-
             PeakToMSFeatureAssociator = new PeakToMSFeatureAssociator();
 
-
             _ms2PeakDetectorForCentroidData = new DeconToolsPeakDetectorV2(0, 0, Globals.PeakFitType.QUADRATIC, true) { RawDataType = Globals.RawDataType.Centroided };
-
 
             _ms2PeakDetectorForProfileData = new DeconToolsPeakDetectorV2(NewDeconToolsParameters.PeakDetectorParameters.PeakToBackgroundRatio,
                                              NewDeconToolsParameters.PeakDetectorParameters.SignalToNoiseThreshold,
@@ -150,7 +142,6 @@ namespace DeconTools.Backend.Workflows
 
                 if (currentMSLevel == 1)
                 {
-
                     Run.ResultCollection.IsosResultBin.Clear();
 
                     Run.CurrentScanSet = scanSet;
@@ -167,15 +158,12 @@ namespace DeconTools.Backend.Workflows
 
                     PeakDetector.Execute(Run.ResultCollection);
                     _currentMS1Peaks = new List<Peak>(Run.PeakList);
-
-
                 }
                 else if (currentMSLevel == 2)
                 {
                     if (_currentMS1Peaks == null || _currentMS1Peaks.Count == 0)
                     {
                         continue;
-
                     }
 
                     var precursorInfo = Run.GetPrecursorInfo(scanSet.PrimaryScanNumber);
@@ -215,7 +203,6 @@ namespace DeconTools.Backend.Workflows
                         //if none were found, will regenerate MS1 spectrum and find peaks again
                         if (candidateMS1Features.Count == 0)
                         {
-
                             var numSummed = attemptNum * 2 + 3;
                             var ms1Scan = precursorInfo.PrecursorScan;
 
@@ -290,7 +277,6 @@ namespace DeconTools.Backend.Workflows
                             {
                                 candidatePeaks.Add(peak);
                             }
-
                         }
 
                         Peak selectedPeak = null;
@@ -311,7 +297,6 @@ namespace DeconTools.Backend.Workflows
 
                         if (selectedPeak != null)
                         {
-
                             deconMSnResult.ParentMZ = selectedPeak.XValue;
                             deconMSnResult.ParentChargeState = 1;   //not sure what charge I should assign... Ask SangTae
                             deconMSnResult.ParentIntensity = selectedPeak.Height;
@@ -346,15 +331,12 @@ namespace DeconTools.Backend.Workflows
                         {
                             WriteOutParentProfileInfoString(parentProfileString);
                         }
-
-
                     }
 
                     if (deconMSnResult.ParentIntensity > 0)
                     {
                         DeconMSnResults.Add(deconMSnResult);
                     }
-
                 }
                 else
                 {
@@ -363,9 +345,7 @@ namespace DeconTools.Backend.Workflows
                 }
 
                 ReportProgress();
-
             }
-
         }
 
         protected override void CreateOutputFileNames()
@@ -409,7 +389,6 @@ namespace DeconTools.Backend.Workflows
                 {
                     Console.WriteLine(DateTime.Now + "\t" + logText);
                 }
-
             }
         }
         #endregion
@@ -439,7 +418,6 @@ namespace DeconTools.Backend.Workflows
 
             return string.Join(_delimiter, data);
         }
-
 
         private string GetSummaryString(DeconMSnResult result, bool includeHeader = false)
         {
@@ -513,7 +491,6 @@ namespace DeconTools.Backend.Workflows
             sb.Append(Environment.NewLine);
 
             return sb.ToString();
-
         }
 
         protected override void WriteProcessingInfoToLog()
@@ -551,7 +528,6 @@ namespace DeconTools.Backend.Workflows
             }
         }
 
-
         protected override void WriteOutSummaryToLogfile()
         {
             Logger.Instance.AddEntry("Finished file processing", true);
@@ -586,6 +562,5 @@ namespace DeconTools.Backend.Workflows
             }
             return candidateMS1Features;
         }
-
     }
 }

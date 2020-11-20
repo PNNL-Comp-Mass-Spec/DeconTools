@@ -5,18 +5,15 @@ namespace DeconTools.Workflows.Backend.FileIO
 {
     public class DeuteratedTargetedResultToTextExporter : TargetedResultToTextExporter
     {
-
         public DeuteratedTargetedResultToTextExporter(string filename)
             : base(filename)
         {
-
         }
 
         #region Private Methods
 
         protected override string addAdditionalInfo(TargetedResultDTO result)
         {
-
             var deuteratedResult = (DeuteratedTargetedResultDTO)result;
 
             var data = new List<string>
@@ -47,9 +44,7 @@ namespace DeconTools.Workflows.Backend.FileIO
             };
 
             return string.Join(Delimiter.ToString(), data);
-
         }
-
 
         protected override string buildHeaderLine()
         {
@@ -83,7 +78,6 @@ namespace DeconTools.Workflows.Backend.FileIO
             };
 
             return string.Join(Delimiter.ToString(), data);
-
         }
 
         #endregion

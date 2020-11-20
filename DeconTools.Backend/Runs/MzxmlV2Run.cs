@@ -5,12 +5,10 @@ namespace DeconTools.Backend.Runs
 {
     public sealed class MzxmlV2Run : Run
     {
-
         #region Constructors
 
         public MzxmlV2Run()
         {
-
         }
 
         public MzxmlV2Run(string datasetFilePath)
@@ -22,9 +20,7 @@ namespace DeconTools.Backend.Runs
 
             MinLCScan = GetMinPossibleLCScanNum();
             MaxLCScan = GetMaxPossibleLCScanNum();
-
         }
-
 
         #endregion
 

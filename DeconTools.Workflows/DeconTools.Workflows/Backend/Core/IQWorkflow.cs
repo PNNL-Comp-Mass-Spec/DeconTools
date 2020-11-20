@@ -44,15 +44,12 @@ namespace DeconTools.Workflows.Backend.Core
 
             MsLeftTrimAmount = 1e10;     // set this high so, by default, nothing is trimmed
             MsRightTrimAmount = 1e10;  // set this high so, by default, nothing is trimmed
-
         }
 
         public IqWorkflow(TargetedWorkflowParameters parameters)
             : this(null, parameters)
         {
-
         }
-
 
         public virtual void InitializeRunRelatedTasks()
         {
@@ -63,15 +60,9 @@ namespace DeconTools.Workflows.Backend.Core
             }
         }
 
-
-
-
         public abstract TargetedWorkflowParameters WorkflowParameters { get; set; }
 
-
         private Run _run;
-
-
 
         public Run Run
         {
@@ -86,12 +77,9 @@ namespace DeconTools.Workflows.Backend.Core
                     {
                         InitializeRunRelatedTasks();
                     }
-
                 }
-
             }
         }
-
 
         #region Properties
 
@@ -115,10 +103,7 @@ namespace DeconTools.Workflows.Backend.Core
         /// </summary>
         public double MsRightTrimAmount { get; set; }
 
-
         #endregion
-
-
 
         protected virtual void ValidateParameters()
         {
@@ -131,7 +116,6 @@ namespace DeconTools.Workflows.Backend.Core
             }
         }
 
-
         public virtual void InitializeWorkflow()
         {
             Check.Require(Run != null, "Run is null");
@@ -143,14 +127,11 @@ namespace DeconTools.Workflows.Backend.Core
             DoPostInitialization();
 
             IsWorkflowInitialized = true;
-
         }
-
 
         protected virtual void DoPreInitialization() { }
 
         protected virtual void DoPostInitialization() { }
-
 
         protected virtual void DoMainInitialization()
         {
@@ -183,10 +164,7 @@ namespace DeconTools.Workflows.Backend.Core
 
             ResultValidator = new ResultValidatorTask();
             ChromatogramCorrelator = new IqChromCorrelator(WorkflowParameters.ChromSmootherNumPointsInSmooth, 0.05, WorkflowParameters.ChromGenTolerance);
-
-
         }
-
 
         /// <summary>
         /// Factory method for creating the key ChromPeakSelector algorithm
@@ -251,16 +229,11 @@ namespace DeconTools.Workflows.Backend.Core
             }
 
             return chromPeakSelector;
-
-
         }
-
-
 
         public virtual void Execute(IqResult result)
         {
             Check.Require(Run != null, "Error in IqWorkflow.Execute: Run has not been defined.");
-
 
             if (!IsWorkflowInitialized)
             {
@@ -279,14 +252,7 @@ namespace DeconTools.Workflows.Backend.Core
                 Console.WriteLine(errorMessage);
                 throw new ApplicationException(errorMessage, ex);
             }
-
-
-
-
-
-
         }
-
 
         protected virtual void HandleWorkflowError(Exception ex)
         {
@@ -302,7 +268,6 @@ namespace DeconTools.Workflows.Backend.Core
             result.ErrorDescription = ex.Message + "\n" + ex.StackTrace;
             result.FailedResult = true;
         }
-
 
         public virtual IqResultExporter GetResultExporter()
         {
@@ -329,19 +294,12 @@ namespace DeconTools.Workflows.Backend.Core
                 //    WorkflowStatusMessage = WorkflowStatusMessage + "; Target NOT found. Reason: " + Result.FailureType;
                 //}
 
-
             }
-
         }
-
-
 
         public virtual void TestTarget(IqTarget target)
         {
-
         }
-
-
 
         protected virtual void ExecuteWorkflow(IqResult result)
         {
@@ -362,7 +320,6 @@ namespace DeconTools.Workflows.Backend.Core
             var filterOutFlagged = result.Target.TheorIsotopicProfile.GetIndexOfMostIntensePeak() == 0;
             result.ChromPeakSelected = ChromPeakSelector.SelectBestPeak(result.IqResultDetail.ChromPeakQualityData, filterOutFlagged);
 
-
             result.LCScanSetSelected = ChromPeakUtilities.GetLCScanSetForChromPeak(result.ChromPeakSelected, Run,
                                                                                  WorkflowParameters.NumMSScansToSum);
 
@@ -373,7 +330,6 @@ namespace DeconTools.Workflows.Backend.Core
             TrimData(result.IqResultDetail.MassSpectrum, result.Target.MZTheor, MsLeftTrimAmount, MsRightTrimAmount);
 
             result.ObservedIsotopicProfile = MsFeatureFinder.IterativelyFindMSFeature(result.IqResultDetail.MassSpectrum, result.Target.TheorIsotopicProfile, out var msPeakList);
-
 
             result.FitScore = FitScoreCalc.CalculateFitScore(result.Target.TheorIsotopicProfile, result.ObservedIsotopicProfile,
                                                               result.IqResultDetail.MassSpectrum);
@@ -394,12 +350,10 @@ namespace DeconTools.Workflows.Backend.Core
                                                ? 0
                                                : (result.MZObsCalibrated - DeconTools.Backend.Globals.PROTON_MASS) * result.Target.ChargeState;
 
-
             var elutionTime = ((ChromPeak)result.ChromPeakSelected)?.NETValue ?? 0d;
             result.ElutionTimeObs = elutionTime;
 
             result.Abundance = GetAbundance(result);
-
         }
 
         //TODO:  later will make this abstract/virtual.  Workflow creates the type of IqResult we want
@@ -407,7 +361,6 @@ namespace DeconTools.Workflows.Backend.Core
         {
             return new IqResult(target);
         }
-
 
         protected virtual float GetAbundance(IqResult result)
         {
@@ -427,17 +380,14 @@ namespace DeconTools.Workflows.Backend.Core
             return result.ObservedIsotopicProfile.IntensityMostAbundantTheor;
         }
 
-
         protected virtual XYData TrimData(XYData xyData, double targetVal, double leftTrimAmount, double rightTrimAmount)
         {
             if (xyData == null) return null;
 
             if (xyData.Xvalues == null || xyData.Xvalues.Length == 0) return xyData;
 
-
             var leftTrimValue = targetVal - leftTrimAmount;
             var rightTrimValue = targetVal + rightTrimAmount;
-
 
             return xyData.TrimData(leftTrimValue, rightTrimValue, 0.1);
         }

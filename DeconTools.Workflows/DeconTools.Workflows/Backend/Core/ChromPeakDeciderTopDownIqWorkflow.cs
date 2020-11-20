@@ -15,7 +15,6 @@ namespace DeconTools.Workflows.Backend.Core
         {
         }
 
-
         public ChromPeakDeciderTopDownIqWorkflow(TargetedWorkflowParameters parameters) : base(parameters)
         {
         }
@@ -30,7 +29,6 @@ namespace DeconTools.Workflows.Backend.Core
             ChromatogramCorrelator = new IqChargeCorrelator(WorkflowParameters.ChromSmootherNumPointsInSmooth);
         }
 
-
         protected internal override IqResult CreateIQResult(IqTarget target)
         {
             return new TopDownIqResult(target);
@@ -40,7 +38,6 @@ namespace DeconTools.Workflows.Backend.Core
         {
             return new TopDownIqResultExporter();
         }
-
 
         /// <summary>
         /// Parent level workflow for Top-Down IQ analysis
@@ -86,8 +83,6 @@ namespace DeconTools.Workflows.Backend.Core
             return chromPeakTargets;
         }
 
-
-
         /// <summary>
         /// Expands charge range to cover all instances of a given sequence
         /// </summary>
@@ -104,7 +99,7 @@ namespace DeconTools.Workflows.Backend.Core
 
             var minCharge = (IqChargeStateTarget) childTargets.First();
             var maxCharge = (IqChargeStateTarget) childTargets.Last();
-            
+
             if (minCharge.GetResult().IqResultDetail.Chromatogram != null)
             {
                 var charge = minCharge.ChargeState;
@@ -139,7 +134,6 @@ namespace DeconTools.Workflows.Backend.Core
 
             parentTarget.SortChildTargetsByCharge();
         }
-
 
         /// <summary>
         /// Selects a peak that correlates with the reference target and returns a bool to continue extending the charge range
@@ -207,7 +201,6 @@ namespace DeconTools.Workflows.Backend.Core
             }
         }
 
-
         /// <summary>
         /// Selects charge correlating group based on composite score
         /// </summary>
@@ -246,14 +239,12 @@ namespace DeconTools.Workflows.Backend.Core
             return bestScoringGroup.ReferenceTarget;
         }
 
-
         /// <summary>
         /// Updates parent charge state result based on the selected chrom peak target
         /// </summary>
         /// <param name="chromPeakTarget"></param>
         private void UpdateSelection(ChromPeakIqTarget chromPeakTarget)
         {
-
             var childResult = chromPeakTarget.ParentTarget.GetResult();
 
             var chromPeakResult = chromPeakTarget.GetResult();
@@ -286,11 +277,9 @@ namespace DeconTools.Workflows.Backend.Core
                                     ? 0
                                     : chromPeakResult.ObservedIsotopicProfile.MonoPeakMZ;
 
-
             childResult.MZObsCalibrated = chromPeakResult.ObservedIsotopicProfile == null
                                               ? 0
                                               : Run.GetAlignedMZ(childResult.MZObs, chromPeakResult.LcScanObs);
-
 
             childResult.MonoMassObsCalibrated = (childResult.MZObsCalibrated - DeconTools.Backend.Globals.PROTON_MASS)*
                                                 childResult.MZObsCalibrated/childResult.Target.ChargeState;
@@ -299,10 +288,8 @@ namespace DeconTools.Workflows.Backend.Core
                                               ? 0
                                               : chromPeakResult.MassErrorBefore;
 
-
             childResult.MassErrorAfter = (childResult.MZObsCalibrated - childResult.Target.MZTheor)/childResult.Target.MZTheor*
                                          1e6;
-
 
             var elutionTime = childResult.ChromPeakSelected == null ? 0d : ((ChromPeak) childResult.ChromPeakSelected).NETValue;
             childResult.ElutionTimeObs = elutionTime;

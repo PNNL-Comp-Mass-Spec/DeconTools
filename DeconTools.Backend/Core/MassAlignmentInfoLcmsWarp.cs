@@ -5,9 +5,8 @@ using DeconTools.Backend.Data;
 
 namespace DeconTools.Backend.Core
 {
-    public class MassAlignmentInfoLcmsWarp:MassAlignmentInfo
+    public class MassAlignmentInfoLcmsWarp : MassAlignmentInfo
     {
-
         #region Properties
         public MultiAlignEngine.Alignment.clsAlignmentFunction AlignmentInfo { get; set; }
 
@@ -31,7 +30,6 @@ namespace DeconTools.Backend.Core
 
             AlignmentInfo.SetMassCalibrationFunctionWithMZ(ref mzVals, ref mzPPMCorrVals);
             AlignmentInfo.SetMassCalibrationFunctionWithTime(ref scanVals, ref scanPPMCorrVals);
-
         }
 
         public void SetMassAlignmentData(ViperMassCalibrationData viperCalibrationData)
@@ -72,9 +70,6 @@ namespace DeconTools.Backend.Core
             AlignmentInfo.SetMassCalibrationFunctionWithMZ(ref mzVals, ref mzPPMCorrVals);
         }
 
-
-
-
         #endregion
 
         #region Private Methods
@@ -106,13 +101,11 @@ namespace DeconTools.Backend.Core
                 {
                     mzForGettingAlignmentInfo = (float)mz;
                 }
-
             }
             else
             {
                 return 0;
             }
-
 
             if (canUseScanWhenGettingPPMShift)
             {

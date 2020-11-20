@@ -6,7 +6,6 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
 {
     public class MercuryFeatureGenerator : ITheorFeatureGenerator
     {
-
         #region Constructors
         public MercuryFeatureGenerator()
         {
@@ -43,20 +42,13 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
             Check.Require(mt != null, this.Name + " failed; CurrentMassTag hasn't been declared");
             //Check.Require(results.Run.CurrentMassTag.EmpiricalFormula!=null, this.Name + "failed; Problem with EmpiricalFormular of current mass tag.");
 
-
-
-
             //XYData theorXYData = new XYData();
             //for (int i = 0; i < mt.IsotopicProfile.Peaklist.Count; i++)
             //{
 
             //    XYData peakXYData = getTheorPeakData(mt.IsotopicProfile.Peaklist[i], fwhm);
 
-
-
-
             //}
-
 
             //distributionCreator.MolecularFormula = new MolecularFormula();
             //distributionCreator.getIsotopicProfile();
@@ -75,7 +67,5 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
         {
             throw new NotImplementedException();
         }
-
-
     }
 }

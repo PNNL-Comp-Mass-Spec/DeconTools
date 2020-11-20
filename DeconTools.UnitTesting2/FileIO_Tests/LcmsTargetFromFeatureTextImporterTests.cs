@@ -15,8 +15,8 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
             var testLcmsFile =
                 @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\LCMSFeatureFinder\Standard_tests\QCShew\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_LCMSFeatures.txt";
 
-            var importer=new LcmsTargetFromFeaturesFileImporter(testLcmsFile);
-            var targetCollection=  importer.Import();
+            var importer = new LcmsTargetFromFeaturesFileImporter(testLcmsFile);
+            var targetCollection = importer.Import();
 
             var testFeature = (from n in targetCollection.TargetList where n.ID == 8642 select (LcmsFeatureTarget)n).First();
             Assert.AreEqual(1855.927991m, (decimal)testFeature.MonoIsotopicMass);
@@ -25,11 +25,8 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
 
             Assert.AreEqual(330348, testFeature.FeatureToMassTagID);
             Assert.AreEqual(6054, testFeature.ScanLCTarget);
-            
+
             Console.WriteLine(testFeature);
-
-
         }
-
     }
 }

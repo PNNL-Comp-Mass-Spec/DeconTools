@@ -24,7 +24,6 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
 
             var testMassTag = (PeptideTarget)mtc.TargetList[0];
 
-
             Assert.AreEqual("AVAFGEALRPEFK", testMassTag.Code);
             Assert.AreEqual(2, testMassTag.ChargeState);
             Assert.AreEqual(0.3649905m, (decimal)testMassTag.NormalizedElutionTime);
@@ -35,8 +34,6 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
             Assert.AreEqual(717.8905912m, (decimal)testMassTag.MZ);
             Assert.AreEqual(75, testMassTag.ObsCount);
             Assert.AreEqual(4225609, testMassTag.ID);
-
-
         }
 
         [Test]
@@ -53,11 +50,9 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
             Assert.AreEqual(1, testMassTag.ModCount);
             Assert.AreEqual(testMassTag.ModDescription, "NH3_Loss:1");
 
-
             //250663994	1102.60623	QFPILLDFK	2	C56H82N10O13	1	NH3_Loss:1
 
         }
-
 
         [Test]
         public void ImportPeptidesContainingOnlySequenceInfo()
@@ -96,13 +91,11 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
                 var peptideTarget = (PeptideTarget)targetBase;
                 Console.WriteLine(peptideTarget);
             }
-
         }
 
         [Test]
         public void ImportTargetsContainingEmpiricalFormulaAndScanNumber()
         {
-
             var testfile = @"..\\..\\..\\TestFiles\\FileIOTests\\BSAmassTags_EmpiricalFormula_and_scans.txt";
 
             var massTagImporter = new MassTagFromTextFileImporter(testfile);
@@ -114,12 +107,7 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
                 var peptideTarget = (PeptideTarget)targetBase;
                 Console.WriteLine(peptideTarget);
             }
-
-
-
         }
-
-
 
         /// <summary>
         /// The header for this type of text file is:
@@ -149,10 +137,5 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
             Assert.AreEqual(6, testMassTag.ObsCount);
             Assert.AreEqual(354885422, testMassTag.ID);
         }
-
-
-
-
-
     }
 }

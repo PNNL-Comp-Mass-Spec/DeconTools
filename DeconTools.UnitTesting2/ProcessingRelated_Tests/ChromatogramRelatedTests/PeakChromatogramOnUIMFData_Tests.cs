@@ -5,18 +5,11 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
     [TestFixture]
     public class PeakChromatogramOnUIMFData_Tests
     {
-
-
-
         [Test]
         public void test1()
         {
             //Run run =
 
-
-
         }
-
-
     }
 }

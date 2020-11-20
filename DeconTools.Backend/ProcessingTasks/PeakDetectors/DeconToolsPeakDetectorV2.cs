@@ -8,7 +8,6 @@
 // in compliance with the License.  You may obtain a copy of the License at
 // http://www.apache.org/licenses/LICENSE-2.0
 
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -44,12 +43,9 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
             IsDataThresholded = isDataThresholded;
         }
 
-
         #endregion
 
         #region Properties
-
-
 
         public Globals.RawDataType RawDataType { get; set; }
 
@@ -61,12 +57,10 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
 
         public double PeakToBackgroundRatio { get; set; }
 
-
         public virtual Peak CreatePeak(double xValue, float height, float width = 0, float signalToNoise = 0)
         {
             return new MSPeak(xValue, height, width, signalToNoise);
         }
-
 
         #endregion
 
@@ -175,7 +169,6 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
                         var peak = CreatePeak(xValues[index], (float)yValues[index], peakWidth, (float)signalToNoise);
                         peak.DataIndex = index;
                         peakList.Add(peak);
-
                     }
 
                     break;
@@ -206,7 +199,6 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
 
                         if (peakApexFound && currentIntensity > _intensityThreshold)
                         {
-
                             if (IsDataThresholded)
                             {
                                 signalToNoise = currentIntensity / BackgroundIntensity;
@@ -275,7 +267,6 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
         /// <returns></returns>
         private double CalculateFWHM(IReadOnlyList<double> xValues, IReadOnlyList<double> yValues, int index)
         {
-
             var numPoints = xValues.Count;
             if (index >= numPoints || index < 0)
             {
@@ -284,14 +275,10 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
                     "Trying to calculate peak width, but index of peak apex was out of range.");
             }
 
-
             var peakApexIntensity = yValues[index];
             var halfHeightIntensity = peakApexIntensity / 2;
 
             double x1, x2, y1, y2;
-
-
-
 
             double interpolatedX1 = 0;
             double interpolatedX2 = 0;
@@ -368,17 +355,13 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
                 case Globals.PeakFitType.LORENTZIAN:
                     throw new NotImplementedException();
 
-
                 case Globals.PeakFitType.QUADRATIC:
 
                     return CalculateQuadraticFittedValue(xValues, yValues, index);
 
-
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-
-
         }
 
         /// <summary>

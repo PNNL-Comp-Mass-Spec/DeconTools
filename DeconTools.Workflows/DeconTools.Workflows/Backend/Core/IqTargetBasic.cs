@@ -5,13 +5,11 @@ namespace DeconTools.Workflows.Backend.Core
     {
         public IqTargetBasic()
         {
-
         }
 
         public IqTargetBasic(IqWorkflow workflow)
             : base(workflow)
         {
-
         }
 
         /// <summary>

@@ -4,18 +4,15 @@ using DeconTools.Utilities;
 
 namespace DeconTools.Backend.FileIO
 {
-
     /// <summary>
     /// This helper class will create the appropriate MS Feature (isosResult) Exporter when given info on
     /// fileType and dataset type.
     /// </summary>
     public class MSFeatureExporterFactory
     {
-
         #region Constructors
         public MSFeatureExporterFactory()
         {
-
         }
 
         #endregion
@@ -66,9 +63,7 @@ namespace DeconTools.Backend.FileIO
             }
 
             return msFeatureExporter;
-
         }
-
 
         #endregion
 

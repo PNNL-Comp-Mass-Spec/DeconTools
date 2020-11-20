@@ -23,7 +23,6 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
         [Test]
         public void GetMassTagsTest()
         {
-
             var importer = new MassTagFromSqlDbImporter(MTDB, MTS_SERVER, _targetIDList)
             {
                 ChargeStateRangeBasedOnDatabase = true
@@ -48,9 +47,7 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
             Assert.AreEqual(0.3919196426, testPeptide.NormalizedElutionTime, 0.00001);
             Assert.AreEqual(371, testPeptide.RefID);
             Assert.AreEqual("thioredoxin 1, TrxA", testPeptide.ProteinDescription);
-
         }
-
 
         [Test]
         public void checkModImport_Test1()
@@ -75,7 +72,6 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
             Assert.AreEqual(true, testPeptide.ContainsMods);
             Assert.LessOrEqual(59, testPeptide.ObsCount);
 
-
             var peptideUtils = new PeptideUtils();
 
             // This empirical formula has 25 oxygens since it ignores the two Plus1Oxy mods
@@ -85,14 +81,10 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
 
             // This empirical formula has 27 oxygens since it includes the two Plus1Oxy mods
             Assert.AreEqual("C81H134N24O27S2", testPeptide.EmpiricalFormula);
-
-
-
         }
 
         private PeptideTarget FindPeptide(TargetCollection targetCollection, int massTagID)
         {
-
             foreach (var peptide in targetCollection.TargetList)
             {
                 if (peptide.ID == massTagID)
@@ -107,6 +99,5 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
             Assert.Fail("Peptide with ID {0} not found", massTagID);
             return null;
         }
-
     }
 }

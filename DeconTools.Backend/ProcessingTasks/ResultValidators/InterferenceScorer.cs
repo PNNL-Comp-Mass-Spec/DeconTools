@@ -9,13 +9,11 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
     /// </summary>
     public class InterferenceScorer
     {
-
         #region Constructors
 
         public InterferenceScorer(double minRelativeIntensity = 0.025)
         {
             MinRelativeIntensity = minRelativeIntensity;
-
         }
 
         #endregion
@@ -27,12 +25,8 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
 
         #region Public Methods
 
-
         public double GetInterferenceScore(IsotopicProfile observedIso, List<Peak> observedMSPeaks)
         {
-
-
-
             if (observedIso == null) return 1.0;
 
             if (!observedMSPeaks.Any()) return 1.0;
@@ -42,9 +36,6 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
             var rightBoundary = rightMostPeak.XValue + rightMostPeak.Width / 2.35 * 2;  // 2 * sigma
 
             return GetInterferenceScore(observedIso, observedMSPeaks, leftBoundary, rightBoundary);
-
-
-
         }
 
         public double GetInterferenceScore(IsotopicProfile observedIso, List<Peak> observedMSPeaks, double minMz, double maxMz)
@@ -69,7 +60,6 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
         /// <returns></returns>
         public double GetInterferenceScore(XYData xyData, List<MSPeak> peakList, double leftBoundary, double rightBoundary, int startIndex = 0)
         {
-
             var currentIndex = startIndex;
             if (currentIndex < 0)
             {
@@ -82,7 +72,6 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
 
             while (xyData.Xvalues[currentIndex] < rightBoundary && currentPeakIndex < peakList.Count)
             {
-
                 var isWithinRange = (!(xyData.Xvalues[currentIndex] < leftBoundary));
 
                 if (isWithinRange)
@@ -97,7 +86,6 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
 
                     if (xyData.Xvalues[currentIndex] > leftPeakValue)
                     {
-
                         var wentPastPeak = (xyData.Xvalues[currentIndex] > rightPeakValue);
                         if (wentPastPeak)
                         {
@@ -107,11 +95,8 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
                         {
                             sumPeakIntensities += xyData.Yvalues[currentIndex];
                         }
-
                     }
-
                 }
-
 
                 currentIndex++;
                 if (currentIndex >= xyData.Xvalues.Length) break;
@@ -140,7 +125,6 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
 
             if (maxPeak == null) return -1;
 
-
             foreach (var currentPeak in allPeaks)
             {
                 if (currentPeak.XValue <= leftBoundary || currentPeak.XValue >= rightBoundary)
@@ -151,7 +135,6 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
                 {
                     sumAllPeakIntensities += currentPeak.Height;
                 }
-
             }
 
             foreach (var currentPeak in targetPeaks)
@@ -164,13 +147,11 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
                 {
                     sumTargetPeakIntensities += currentPeak.Height;
                 }
-
             }
 
             var interferenceScore = 1 - (sumTargetPeakIntensities / sumAllPeakIntensities);
             return interferenceScore;
         }
-
 
         #endregion
 
@@ -178,7 +159,6 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
 
         private MSPeak GetMaxPeak(IEnumerable<MSPeak> msPeakList)
         {
-
             MSPeak maxMsPeak = null;
 
             foreach (var msPeak in msPeakList)
@@ -187,7 +167,6 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
                 {
                     maxMsPeak = msPeak;
                     continue;
-
                 }
 
                 if (msPeak.Height > maxMsPeak.Height)
@@ -197,11 +176,9 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
             }
 
             return maxMsPeak;
-
         }
 
         #endregion
-
 
     }
 }

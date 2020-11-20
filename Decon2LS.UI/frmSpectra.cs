@@ -44,7 +44,6 @@ namespace Decon2LS
             BrukerCategory = CategoryForType("Bruker", IconUtils.GetIconForFileType("ser", IconSize.Small, false, false, false));
         }
 
-
         /// <summary>
         /// Adds the various Files categories to the fileView.
         /// </summary>
@@ -86,8 +85,6 @@ namespace Decon2LS
         private float[] marr_tic_values = null;
         private float[] marr_scan_times = null;
 
-
-
         const double TIC_HEIGHT_RATIO = 0.35;
 
         private PNNL.Controls.ArrayChartDataProvider m_tic_chart_data_provider;
@@ -121,7 +118,6 @@ namespace Decon2LS
         private Thread mthrd_tic;
         public frmSpectra()
         {
-
             //
             // Required for Windows Form Designer support
             //
@@ -132,13 +128,10 @@ namespace Decon2LS
             Init();
         }
 
-
         private void Init()
         {
             try
             {
-
-
                 mctl_spectrum = new ctlMassSpectrum();
                 mctl_spectrum.Dock = DockStyle.Fill;
                 panel1.Controls.Add(mctl_spectrum);
@@ -173,16 +166,12 @@ namespace Decon2LS
                 mctl_tic.DefaultZoomHandler.SingleClickNoZoomPerformed += new SingleClickNoZoomHandler(TicDefaultZoomHandler_SingleClickNoZoomPerformed);
 
                 this.frmSpectra_Resize(this, null);
-
-
             }
             catch (Exception ex)
             {
                 MessageBox.Show(this, ex.Message);
             }
         }
-
-
 
         public DeconToolsV2.Peaks.clsPeakProcessorParameters PeakProcessorParameters
         {
@@ -210,7 +199,6 @@ namespace Decon2LS
                 //				mctl_spectrum.DTAGenerationParameters = (DeconToolsV2.DTAGeneration.clsDTAGenerationParameters) value.Clone() ;
             }
         }
-
 
         public DeconToolsV2.HornTransform.clsHornTransformParameters HornTransformParameters
         {
@@ -405,7 +393,6 @@ namespace Decon2LS
             ((System.ComponentModel.ISupportInitialize)(this.mctl_tic)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.ResumeLayout(false);
-
         }
         #endregion
 
@@ -471,7 +458,6 @@ namespace Decon2LS
         {
             try
             {
-
                 this.mFileName = file_name;
                 this.Text = file_name;
                 mobjRawData.LoadFile(file_name, fileType);
@@ -493,7 +479,6 @@ namespace Decon2LS
                 MessageBox.Show(e.Message);
             }
         }
-
 
         /// <summary>
         /// Updates the details associated with the categorized view of this form.
@@ -610,7 +595,6 @@ namespace Decon2LS
             this.Category = SFileCategory;
         }
 
-
         private void GetTic()
         {
             mbln_processing = true;
@@ -659,7 +643,6 @@ namespace Decon2LS
                         mthrd_tic.Join();
                     }
                     mbln_processing = false;
-
                 }
             }
             catch (Exception ex)
@@ -690,9 +673,7 @@ namespace Decon2LS
             this.Category = BrukerCategory;
         }
 
-
         #endregion
-
 
         private void frmSpectra_KeyDown(object sender, KeyEventArgs e)
         {
@@ -733,7 +714,6 @@ namespace Decon2LS
                 if (e.KeyCode == Keys.T && !e.Handled && e.Modifiers == Keys.Shift)
                 {
                     this.mctl_spectrum.InitiateAndExecuteTransform();
-
                 }
                 if (e.KeyCode == Keys.F && !e.Handled && e.Modifiers == Keys.Shift)
                 {
@@ -749,10 +729,6 @@ namespace Decon2LS
                 {
                     clsClipboardUtility.CopyXYValuesToClipboard(this.marr_scan_times, this.marr_tic_values);
                 }
-
-
-
-
             }
             catch (Exception ex)
             {
@@ -793,16 +769,13 @@ namespace Decon2LS
             }
         }
 
-
         private void mMediator_mevnt_Zoom(object sender, clsZoomEventArgs event_args)
         {
         }
 
-
         // deleted the Toolbar containing four buttons; two of which didn't do anything see below for more notes
         private void mtlb_spectra_ButtonClick(object sender, System.Windows.Forms.ToolBarButtonClickEventArgs e)
         {
-
 
             // 2009_02_19: Gord decommissioned these buttons. 'mbln_overlap_mode'+ 'mbln_summation_mode' not ever used
             // Also, people wanted to apply the global options, instead of creating a new instance of options
@@ -840,7 +813,6 @@ namespace Decon2LS
             //				MessageBox.Show(this, ex.Message + ex.StackTrace) ;
             //			}
         }
-
 
         #region IMediatedForm Members
 
@@ -883,8 +855,6 @@ namespace Decon2LS
             return startIndex;
         }
 
-
-
         private void TicDefaultZoomHandler_SingleClickNoZoomPerformed(object sender, MouseEventArgs e)
         {
             // mz value will be drawn along the x axis.
@@ -905,7 +875,6 @@ namespace Decon2LS
         private void btnCopytoClipboard_Click(object sender, System.EventArgs e)
         {
             clsClipboardUtility.CopyXYValuesToClipboard(this.marr_scan_times, this.marr_tic_values);
-
         }
 
         private void frmSpectra_Resize(object sender, System.EventArgs e)
@@ -919,10 +888,7 @@ namespace Decon2LS
             this.groupBox1.Height = (int)(this.Height * TIC_HEIGHT_RATIO);
             this.panel1.Top = this.groupBox1.Top + this.groupBox1.Height;
             this.panel1.Height = this.Height - this.groupBox1.Height - 40;
-
         }
-
-
     }
 
     /// <summary>
@@ -943,7 +909,5 @@ namespace Decon2LS
             series.PlotParams.Name += " (" + new System.IO.FileInfo(mFilename).Name + ")";
             return series;
         }
-
-
     }
 }

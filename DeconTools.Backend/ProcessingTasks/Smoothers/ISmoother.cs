@@ -3,9 +3,8 @@ using DeconTools.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks.Smoothers
 {
-    public abstract class Smoother:Task
+    public abstract class Smoother : Task
     {
-
         public override void Execute(ResultCollection resultList)
         {
             Check.Require(resultList.Run.XYData != null, "Smoother not executed; no data in XYData object");
@@ -13,6 +12,5 @@ namespace DeconTools.Backend.ProcessingTasks.Smoothers
         }
 
         public abstract XYData Smooth(XYData xYData);
-
     }
 }

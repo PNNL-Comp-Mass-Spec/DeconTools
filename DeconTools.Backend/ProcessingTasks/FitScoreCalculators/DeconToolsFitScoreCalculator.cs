@@ -8,13 +8,11 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
     {
         readonly TomIsotopicPattern _tomIsotopicPatternGenerator = new TomIsotopicPattern();
 
-
         public double MZVar { get; set; }
         public IsotopicProfile TheorIsotopicProfile { get; set; }
 
         public DeconToolsFitScoreCalculator()
         {
-
         }
 
         public DeconToolsFitScoreCalculator(double mzVar)
@@ -23,10 +21,8 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
             MZVar = mzVar;
         }
 
-
         public override void GetFitScores(IEnumerable<IsosResult> isosResults)
         {
-
             foreach (var result in isosResults)
             {
                 //create a temporary mass tag, as a data object for storing relevant info, and using the CalculateMassesForIsotopicProfile() method.
@@ -99,12 +95,7 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
             foreach (var peak in theorIsotopicProfile.Peaklist)
             {
                 peak.XValue = peak.XValue + offset;
-
             }
-
-
         }
-
-
     }
 }

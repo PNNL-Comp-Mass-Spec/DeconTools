@@ -25,7 +25,7 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
             Assert.AreEqual("AREA", parameters.ThrashParameters.IsotopicProfileFitType.ToString());
             Assert.AreEqual(1.00727649, parameters.ThrashParameters.ChargeCarrierMass);
             Assert.AreEqual(1, parameters.ThrashParameters.MinIntensityForDeletion);
-            Assert.AreEqual(0.3m, (decimal)Math.Round(parameters.ThrashParameters.MaxFit,1));
+            Assert.AreEqual(0.3m, (decimal)Math.Round(parameters.ThrashParameters.MaxFit, 1));
             Assert.AreEqual(10, parameters.ThrashParameters.MaxCharge);
             Assert.AreEqual(1, parameters.ThrashParameters.MinMSFeatureToBackgroundRatio);
             Assert.AreEqual(10000, parameters.ThrashParameters.MaxMass);
@@ -88,13 +88,10 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
             Assert.AreEqual("quadratic", parameters.PeakDetectorParameters.PeakFitType.ToString().ToLower());
             Assert.AreEqual(true, parameters.PeakDetectorParameters.IsDataThresholded);
 
-
             Assert.AreEqual(1, parameters.MSGeneratorParameters.NumLCScansToSum);
             Assert.AreEqual(7, parameters.MSGeneratorParameters.NumImsScansToSum);
             Assert.AreEqual(true, parameters.MSGeneratorParameters.SumSpectraAcrossIms);
             Assert.AreEqual(true, parameters.MSGeneratorParameters.SumSpectraAcrossLC);
-
         }
-
     }
 }

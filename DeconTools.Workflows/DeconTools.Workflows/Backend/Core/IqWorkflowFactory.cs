@@ -4,7 +4,6 @@ namespace DeconTools.Workflows.Backend.Core
 {
     public class IqWorkflowFactory
     {
-
         #region Constructors
         #endregion
 
@@ -32,10 +31,7 @@ namespace DeconTools.Workflows.Backend.Core
             }
 
             return null;
-
-
         }
-
 
         #endregion
 

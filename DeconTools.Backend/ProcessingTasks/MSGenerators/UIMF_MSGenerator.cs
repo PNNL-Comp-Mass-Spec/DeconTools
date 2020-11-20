@@ -7,11 +7,9 @@ namespace DeconTools.Backend.ProcessingTasks
 {
     public sealed class UIMF_MSGenerator : MSGenerator
     {
-
         public UIMF_MSGenerator()
             : this(0, 5000)
         {
-
         }
 
         public UIMF_MSGenerator(double minMZ, double maxMZ)
@@ -42,7 +40,6 @@ namespace DeconTools.Backend.ProcessingTasks
             resultList.Run.XYData = GenerateMS(resultList.Run, resultList.Run.CurrentScanSet, uimfRun.CurrentIMSScanSet);
         }
 
-
         public override XYData GenerateMS(Run run, ScanSet lcScanSet, ScanSet imsScanSet = null)
         {
             Check.Require(run is UIMFRun, "UIMF_MSGenerator can only be used with UIMF files");
@@ -59,8 +56,6 @@ namespace DeconTools.Backend.ProcessingTasks
             }
 
             return xyData;
-
         }
-
     }
 }

@@ -7,7 +7,6 @@ namespace DeconTools.Backend.ProcessingTasks
 {
     public class BasicIsosMergerExporter : IIsosMergerExporter
     {
-
         const char DELIMITER = ',';
 
         private int runCounter;
@@ -35,7 +34,6 @@ namespace DeconTools.Backend.ProcessingTasks
 
         public override void MergeAndExport(ResultCollection results)
         {
-
             var data = new List<string>();
 
             foreach (var isosResult in results.ResultList)

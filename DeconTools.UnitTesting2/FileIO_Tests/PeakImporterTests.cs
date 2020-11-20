@@ -15,7 +15,6 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
             peakImporter.ImportPeaks(mspeaks);
 
             Assert.AreEqual(105540, mspeaks.Count);
-
         }
 
         [Test]
@@ -39,10 +38,8 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
             Assert.AreEqual(199.19, (decimal)testResult.MSPeak.SignalToNoise);
             Assert.AreEqual(-1, testResult.MSPeak.MSFeatureID);
 
-           // 43	800	213	357.38662	1528	0.071	100	16
+            // 43	800	213	357.38662	1528	0.071	100	16
 
         }
-
-
     }
 }

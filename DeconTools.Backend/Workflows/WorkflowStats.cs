@@ -34,6 +34,5 @@ namespace DeconTools.Backend.Workflows
         /// Elapsed time
         /// </summary>
         public TimeSpan ElapsedTime => TimeFinished - TimeStarted;
-
     }
 }

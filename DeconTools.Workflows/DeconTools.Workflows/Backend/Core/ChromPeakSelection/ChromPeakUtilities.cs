@@ -54,10 +54,8 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
             return scanSet;
         }
 
-
         public ScanSet GetLCScanSetForChromPeakUIMF(Peak chromPeak, Run run, int numLCScansToSum)
         {
-
             if (chromPeak == null || Math.Abs(chromPeak.XValue) < float.Epsilon)
             {
                 return null;
@@ -93,7 +91,6 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
             //uimfRun.CurrentIMSScanSet = new IMSScanSet(centerScan, uimfRun.MinIMSScan, uimfRun.MaxIMSScan);
         }
 
-
         /// <summary>
         /// Gets the LC ScanSet used in generating a mass spectrum, based on the width of the Chrom peak.
         /// </summary>
@@ -125,7 +122,6 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
             var scanSet = _scanSetFactory.CreateScanSet(run, bestScan, closestLowerScan, closestUpperScan);
             _scanSetFactory.TrimScans(scanSet, maxScansToSum);
 
-
             if (run.MSFileType == DeconTools.Backend.Globals.MSFileType.PNNL_UIMF)
             {
                 // GORD: Update this when fixing CurrentFrameSet
@@ -134,10 +130,6 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
 
             return scanSet;
         }
-
-
-
-
 
         #endregion
 

@@ -124,7 +124,6 @@ namespace DeconTools.Backend.Workflows
                     "Error creating the workflow: " +
                     ex.Message + Environment.NewLine + Environment.NewLine + PRISM.StackTraceFormatter.GetExceptionStackTraceMultiLine(ex));
             }
-
         }
 
         public static ScanBasedWorkflow CreateWorkflow(Run run, DeconToolsParameters parameters, string outputDirectoryPath = null, BackgroundWorker backgroundWorker = null)
@@ -228,7 +227,6 @@ namespace DeconTools.Backend.Workflows
                 IqLogger.LogMessage("Loading _peaks.txt file into memory. Takes 0 - 30 seconds" + Environment.NewLine);
                 LoadPeaks(OutputDirectoryPath);
             }
-
         }
 
         protected virtual void InitializeProcessingTasks()
@@ -312,7 +310,6 @@ namespace DeconTools.Backend.Workflows
         /// </summary>
         protected virtual void ExecutePreprocessHook()
         {
-
         }
 
         /// <summary>
@@ -502,7 +499,6 @@ namespace DeconTools.Backend.Workflows
             //Allows derived classes to execute additional tasks
             ExecuteOtherTasksHook();
 
-
             //the following exporting tasks should be last
             if (ExportData)
             {
@@ -519,17 +515,13 @@ namespace DeconTools.Backend.Workflows
                 ExecuteTask(IsosResultExporter);
 
                 ExecuteTask(ScanResultExporter);
-
             }
-
         }
-
 
         protected virtual void ExecuteOtherTasksHook() { }
 
         protected void ExecuteTask(Task processingTask)
         {
-
             try
             {
                 ShowTraceMessageIfEnabled("ExecuteTask " + processingTask.GetType().Name);
@@ -542,11 +534,8 @@ namespace DeconTools.Backend.Workflows
                 Logger.Instance.AddEntry(errorInfo, true);
 
                 throw;
-
             }
-
         }
-
 
         protected string GetErrorInfo(Run run, Task task, Exception ex)
         {
@@ -564,7 +553,6 @@ namespace DeconTools.Backend.Workflows
             sb.Append(PRISM.StackTraceFormatter.GetExceptionStackTraceMultiLine(ex));
 
             return sb.ToString();
-
         }
 
         private void ShowTraceMessageIfEnabled(string currentTask)
@@ -579,8 +567,6 @@ namespace DeconTools.Backend.Workflows
 
         private void CreatePeaksFile(PeakDetectorParameters peakDetectorParameters, string outputDirectoryPath)
         {
-
-
             var parameters = new PeakDetectAndExportWorkflowParameters
             {
                 OutputDirectory = outputDirectoryPath,
@@ -595,9 +581,7 @@ namespace DeconTools.Backend.Workflows
 
             var peakDetectAndExporter = new PeakDetectAndExportWorkflow(Run, parameters);
             peakDetectAndExporter.Execute();
-
         }
-
 
         protected virtual Globals.ResultType GetResultType()
         {
@@ -629,7 +613,6 @@ namespace DeconTools.Backend.Workflows
 
             Logger.Instance.OutputFilename = baseFileName + "_log.txt";
 
-
             switch (ExporterType)
             {
                 case Globals.ExporterType.Text:
@@ -646,7 +629,6 @@ namespace DeconTools.Backend.Workflows
                     throw new ArgumentOutOfRangeException();
             }
         }
-
 
         protected string GetBaseFileName(Run run)
         {
@@ -677,20 +659,16 @@ namespace DeconTools.Backend.Workflows
                 throw new DirectoryNotFoundException(
                     "Output directory does not exist. When we tried to create it there was an error: " + ex.Message,
                     ex);
-
             }
 
             return Path.Combine(OutputDirectoryPath, run.DatasetName);
         }
 
-
         protected void InitializeParameters()
         {
             //TODO: move this
             ExporterType = NewDeconToolsParameters.ScanBasedWorkflowParameters.ExportFileType;
-
         }
-
 
         #endregion
 

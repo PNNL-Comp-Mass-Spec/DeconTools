@@ -2,7 +2,7 @@
 
 namespace DeconTools.Backend.ProcessingTasks.ResultValidators
 {
-    public abstract class ResultValidator:Task
+    public abstract class ResultValidator : Task
     {
         #region Constructors
         #endregion

@@ -15,16 +15,13 @@ namespace DeconConsole.UnitTesting
         [Test]
         public void test1()
         {
-
             var args = new string[3];
             args[0] = agilentDFile1;
             args[1] = agilentDParamFile;
             args[2] = agilentDOutputFolder;
 
             DeconConsole.Program.Main(args);
-
         }
-
 
         [Test]
         [Ignore("Local files")]
@@ -37,12 +34,6 @@ namespace DeconConsole.UnitTesting
             args[3] = "korea_ims_custom1";
 
             DeconConsole.Program.Main(args);
-
-
         }
-
-
-
-
     }
 }

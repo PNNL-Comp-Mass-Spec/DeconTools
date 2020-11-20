@@ -19,7 +19,6 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
     [TestFixture]
     public class ThrashV2Tests
     {
-
         [Category("MustPass")]
         [Test]
         public void ThrashV2OnOrbitrapTest1()
@@ -28,11 +27,13 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
             run.ScanSetCollection.Create(run, 6005, 6005, 1, 1, false);
 
             var generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
-            var peakDetector = new DeconToolsPeakDetectorV2(1.3, 2, Globals.PeakFitType.QUADRATIC, true) {
+            var peakDetector = new DeconToolsPeakDetectorV2(1.3, 2, Globals.PeakFitType.QUADRATIC, true)
+            {
                 IsDataThresholded = true
             };
 
-            var parameters = new ThrashParameters {
+            var parameters = new ThrashParameters
+            {
                 MinMSFeatureToBackgroundRatio = 1,
                 MaxFit = 0.3
             };
@@ -78,7 +79,8 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
 
             var zeroFiller = new Backend.ProcessingTasks.ZeroFillers.DeconToolsZeroFiller(3);
 
-            var thrashParameters = new ThrashParameters {
+            var thrashParameters = new ThrashParameters
+            {
                 MinMSFeatureToBackgroundRatio = 1,
                 MaxFit = 0.4
             };
@@ -124,7 +126,6 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
             Assert.AreEqual(1160.55077m, (decimal)Math.Round(result1.IsotopicProfile.MonoIsotopicMass, 5));
 
             Assert.AreEqual(2, result1.IsotopicProfile.ChargeState);
-
         }
 
         [Test]
@@ -134,12 +135,14 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
             run.ScanSetCollection.Create(run, 6005, 6005, 1, 1, false);
 
             var generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
-            var peakDetector = new DeconToolsPeakDetectorV2(0.5, 2, Globals.PeakFitType.QUADRATIC, true) {
+            var peakDetector = new DeconToolsPeakDetectorV2(0.5, 2, Globals.PeakFitType.QUADRATIC, true)
+            {
                 IsDataThresholded = true,
                 PeaksAreStored = true
             };
 
-            var parameters = new ThrashParameters {
+            var parameters = new ThrashParameters
+            {
                 MinMSFeatureToBackgroundRatio = 1,
                 MaxFit = 0.3,
                 CheckAllPatternsAgainstChargeState1 = true
@@ -196,14 +199,14 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
             var generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
             var peakDetector = new DeconToolsPeakDetectorV2(1.3, 2, Globals.PeakFitType.QUADRATIC, true);
 
-            var deconvolutor = new HornDeconvolutor {
+            var deconvolutor = new HornDeconvolutor
+            {
                 MinPeptideBackgroundRatio = 3
             };
 
             //deconvolutor.IsMZRangeUsed = true;
             //deconvolutor.MinMZ = 575;
             //deconvolutor.MaxMZ = 585;
-
 
             foreach (var scanSet in run.ScanSetCollection.ScanSetList)
             {
@@ -223,7 +226,6 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
                 stopwatch.Stop();
 
                 Console.WriteLine("Time for decon= \t" + stopwatch.ElapsedMilliseconds);
-
             }
             //Assert.AreEqual(93, run.ResultCollection.ResultList.Count);
 
@@ -261,7 +263,8 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
                 PeaksAreStored = true
             };
 
-            var thrashParameters = new ThrashParameters {
+            var thrashParameters = new ThrashParameters
+            {
                 MinMSFeatureToBackgroundRatio = 3,
                 MaxFit = 0.4
             };
@@ -275,8 +278,10 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
 
             run.CurrentScanSet = scanSet;
 
-            var oldDeconvolutor = new HornDeconvolutor {
-                MinPeptideBackgroundRatio = 3, MaxFitAllowed = 0.4
+            var oldDeconvolutor = new HornDeconvolutor
+            {
+                MinPeptideBackgroundRatio = 3,
+                MaxFitAllowed = 0.4
             };
 
             // Populate run.ResultCollection.Run.XYData
@@ -323,7 +328,6 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
             Console.WriteLine("\n--------------Common to new and Old ------------------");
             TestUtilities.DisplayMSFeatures(sharedIsos);
 
-
             Console.WriteLine("\n--------------Unique to new ------------------");
             TestUtilities.DisplayMSFeatures(uniqueToNew);
 
@@ -331,15 +335,13 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
             if (!outputDirectory.Exists)
                 outputDirectory.Create();
 
-            var outputFilename = Path.Combine(outputDirectory.FullName,  "exportedIsos.csv");
+            var outputFilename = Path.Combine(outputDirectory.FullName, "exportedIsos.csv");
             var exporter = IsosExporterFactory.CreateIsosExporter(run.ResultCollection.ResultType, Globals.ExporterType.Text, outputFilename);
 
             exporter.ExportIsosResults(uniqueToNew);
 
-
             Console.WriteLine("\n--------------Unique to old ------------------");
             TestUtilities.DisplayMSFeatures(uniqueToOld);
-
         }
 
         private void GetComparisons(
@@ -349,14 +351,12 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
             ICollection<IsosResult> uniqueToNew,
             ICollection<IsosResult> uniqueToOld)
         {
-
             var scans = allNewResults.Select(p => p.ScanSet.PrimaryScanNumber).Distinct().OrderBy(p => p).ToList();
 
             foreach (var scan in scans)
             {
                 var newResults = allNewResults.Where(p => p.ScanSet.PrimaryScanNumber == scan).ToList();
                 var oldResults = allOldResults.Where(p => p.ScanSet.PrimaryScanNumber == scan).ToList();
-
 
                 foreach (var newResult in newResults)
                 {
@@ -397,9 +397,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
                         uniqueToOld.Add(oldResult);
                     }
                 }
-
             }
-
         }
 
         [Test]
@@ -420,20 +418,23 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
             var scanSet = new ScanSetFactory().CreateScanSet(run, testLCScan, 1);
 
             var generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
-            var peakDetector = new DeconToolsPeakDetectorV2(1.3, 2, Globals.PeakFitType.QUADRATIC, true) {
+            var peakDetector = new DeconToolsPeakDetectorV2(1.3, 2, Globals.PeakFitType.QUADRATIC, true)
+            {
                 PeaksAreStored = true
             };
 
             var zeroFiller = new Backend.ProcessingTasks.ZeroFillers.DeconToolsZeroFiller(3);
 
-            var thrashParameters = new ThrashParameters {
+            var thrashParameters = new ThrashParameters
+            {
                 MinMSFeatureToBackgroundRatio = 1,
                 MaxFit = 0.4
             };
 
             var newDeconvolutor = new ThrashDeconvolutorV2(thrashParameters);
 
-            var oldDeconvolutor = new HornDeconvolutor {
+            var oldDeconvolutor = new HornDeconvolutor
+            {
                 MinPeptideBackgroundRatio = 1,
                 MaxFitAllowed = 0.4
             };
@@ -475,10 +476,8 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
 
             var oldResults = new List<IsosResult>(run.ResultCollection.ResultList);
 
-
             //Console.WriteLine("\n--------------Old decon ------------------");
             //TestUtilities.DisplayMSFeatures(run.ResultCollection.ResultList);
-
 
             var sharedIsos = new List<IsosResult>();
             var uniqueToNew = new List<IsosResult>();
@@ -506,7 +505,6 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
                 {
                     uniqueToNew.Add(newResult);
                 }
-
             }
 
             foreach (var oldResult in oldResults)
@@ -525,7 +523,6 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
                 {
                     uniqueToOld.Add(oldResult);
                 }
-
             }
 
             Console.WriteLine("\n--------------Common to new and Old ------------------");
@@ -536,13 +533,11 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
 
             Console.WriteLine("\n--------------Unique to old ------------------");
             TestUtilities.DisplayMSFeatures(uniqueToOld);
-
         }
 
         [Obsolete("Unused")]
         private void DisplayPPMErrorsForeachPeakOfMSFeature(IEnumerable<IsosResult> newResults)
         {
-
             var sb = new StringBuilder();
             var delimiter = '\t';
 
@@ -566,7 +561,6 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
                     var expectedMZ = isosResult.IsotopicProfile.MonoPeakMZ +
                                      Globals.MASS_DIFF_BETWEEN_ISOTOPICPEAKS / isosResult.IsotopicProfile.ChargeState * i;
 
-
                     var ppmError = (expectedMZ - currentPeak.XValue) / expectedMZ * 1e6;
                     ppmErrors.Add(Math.Abs(ppmError));
 
@@ -580,9 +574,6 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
                 }
                 sb.Append(ppmErrors.Average().ToString("0.0"));
                 sb.Append(Environment.NewLine);
-
-
-
             }
 
             Console.WriteLine(sb.ToString());
@@ -605,20 +596,19 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
 
             var scanSet = new ScanSetFactory().CreateScanSet(run, testLCScan, 1);
 
-
             var generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
             var peakDetector = new DeconToolsPeakDetectorV2(2, 2, Globals.PeakFitType.QUADRATIC, true)
             {
                 PeaksAreStored = true
             };
 
-            var thrashParameters = new ThrashParameters {
+            var thrashParameters = new ThrashParameters
+            {
                 MinMSFeatureToBackgroundRatio = 2,
                 MaxFit = 0.4
             };
 
             var newDeconvolutor = new ThrashDeconvolutorV2(thrashParameters);
-
 
             run.CurrentScanSet = scanSet;
             ((UIMFRun)run).CurrentIMSScanSet = new IMSScanSet(testIMSScan, lowerIMSScan, upperIMSScan);
@@ -638,7 +628,6 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
 
             TestUtilities.DisplayMSFeatures(run.ResultCollection.ResultList);
         }
-
 
         [Ignore("Uses old decon engine")]
         [Test]
@@ -675,7 +664,6 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
             //TestUtilities.DisplayPeaks(run.PeakList);
 #endif
 
-
         }
 
         [Ignore("Local testing only")]
@@ -701,9 +689,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
             var uniqueToNew = new List<IsosResult>();
             var uniqueToOld = new List<IsosResult>();
 
-
             GetComparisons(newResults, oldResults, sharedIsos, uniqueToNew, uniqueToOld);
-
 
             Console.WriteLine("Summary----------------------------");
             Console.WriteLine("Shared =\t" + sharedIsos.Count);
@@ -713,7 +699,6 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
             Console.WriteLine("\n--------------Common to new and Old ------------------");
             TestUtilities.DisplayMSFeatures(sharedIsos);
 
-
             Console.WriteLine("\n--------------Unique to new ------------------");
             TestUtilities.DisplayMSFeatures(uniqueToNew);
 
@@ -722,10 +707,8 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
 
             exporter.ExportIsosResults(uniqueToNew);
 
-
             Console.WriteLine("\n--------------Unique to old ------------------");
             TestUtilities.DisplayMSFeatures(uniqueToOld);
-
         }
     }
 }

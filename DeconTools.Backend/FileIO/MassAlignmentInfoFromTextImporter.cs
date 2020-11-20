@@ -10,7 +10,7 @@ namespace DeconTools.Backend.FileIO
         readonly List<MassAlignmentDataItem> _massAndTimeCorrectionData = new List<MassAlignmentDataItem>();
         private readonly string[] mzHeaders = { "mz" };
         private readonly string[] mzPPMCorrectionHeaders = { "mzPPMCorrection" };
-        private readonly string[] scanHeaders= { "scan" };
+        private readonly string[] scanHeaders = { "scan" };
         private readonly string[] scanPPMCorrectionHeaders = { "scanPPMCorrection" };
         private readonly string _filename;
 
@@ -58,7 +58,6 @@ namespace DeconTools.Backend.FileIO
                 {
                     sr.Close();
                     throw new InvalidDataException("There is no data in file " + _filename);
-
                 }
 
                 var headerLine = sr.ReadLine();
@@ -70,7 +69,6 @@ namespace DeconTools.Backend.FileIO
                 {
                     throw new InvalidDataException("There is a problem with the column headers in file " + _filename);
                 }
-
 
                 var lineCounter = 1;   //used for tracking which line is being processed.
 

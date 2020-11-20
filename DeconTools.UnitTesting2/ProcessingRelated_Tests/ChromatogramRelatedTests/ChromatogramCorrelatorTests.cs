@@ -42,7 +42,6 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
 
             var chromdata1 = run.XYData.TrimData(startScan, stopScan);
 
-
             run.XYData = peakChromGen.GenerateChromatogram(run, startScan, stopScan, mt.IsotopicProfile.Peaklist[3].XValue, chromToleranceInPPM);
             run.XYData = smoother.Smooth(run.XYData);
 
@@ -62,13 +61,10 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
             Console.WriteLine("intercept = \t" + intercept);
             Console.WriteLine("rsquared = \t" + rsquaredVal);
 
-
             for (var i = 0; i < chromdata1.Xvalues.Length; i++)
             {
                 Console.WriteLine(chromdata1.Xvalues[i].ToString("0") + "\t" + chromdata1.Yvalues[i].ToString("0") + "\t" + chromdata2.Yvalues[i]);
             }
-
-
         }
 
         [Test]
@@ -106,12 +102,8 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
             foreach (var item in corrData.CorrelationDataItems)
             {
                 Console.WriteLine(item.CorrelationRSquaredVal);
-
             }
-
-
         }
-
 
         [Test]
         public void BadCorrelationTest1()
@@ -124,7 +116,6 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
             var peaksDataFile = dataset.ToLower().Replace(".raw", "_peaks.txt");
             var peakImporter = new PeakImporterFromText(peaksDataFile);
             peakImporter.ImportPeaks(run.ResultCollection.MSPeakResultList);
-
 
             double chromToleranceInPPM = 10;
             var startScan = 2340;
@@ -146,8 +137,6 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
 
             var chromdata2 = run.XYData.TrimData(startScan, stopScan);
 
-
-
             //chromdata1.Display();
             //Console.WriteLine();
             //chromdata2.Display();
@@ -156,20 +145,14 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
 
             correlator.GetElutionCorrelationData(chromdata1, chromdata2, out var slope, out var intercept, out var rsquaredVal);
 
-
             Console.WriteLine("slope = \t" + slope);
             Console.WriteLine("intercept = \t" + intercept);
             Console.WriteLine("rsquared = \t" + rsquaredVal);
-
 
             for (var i = 0; i < chromdata1.Xvalues.Length; i++)
             {
                 Console.WriteLine(chromdata1.Xvalues[i] + "\t" + chromdata1.Yvalues[i] + "\t" + chromdata2.Yvalues[i]);
             }
-
-
         }
-
-
     }
 }

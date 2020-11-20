@@ -3,12 +3,10 @@ namespace DeconTools.Backend.FileIO
 {
     public class DeconToolsParameterFileReader
     {
-
         #region Constructors
 
         public DeconToolsParameterFileReader()
         {
-
         }
 
         #endregion
@@ -18,10 +16,6 @@ namespace DeconTools.Backend.FileIO
         #endregion
 
         #region Public Methods
-
-        
-
-
 
         #endregion
 

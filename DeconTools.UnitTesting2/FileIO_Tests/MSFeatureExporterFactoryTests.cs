@@ -29,7 +29,6 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
             Assert.AreEqual(true, fileWasCreated);
         }
 
-
         [Test]
         public void create_IMF_IsosTextExporterTest1()
         {
@@ -69,6 +68,5 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
             var fileWasCreated = (File.Exists(x));
             Assert.AreEqual(true, fileWasCreated);
         }
-
     }
 }

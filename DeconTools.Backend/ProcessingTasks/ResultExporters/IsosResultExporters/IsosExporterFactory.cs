@@ -7,7 +7,6 @@ namespace DeconTools.Backend.Data
     {
         private const int TriggerToExportValue = 50000;
 
-      
         public static IsosResultExporter CreateIsosExporter(Globals.ResultType resultType, Globals.ExporterType exporterType, string outputFileName)
         {
             IsosResultExporter isosExporter;
@@ -27,7 +26,6 @@ namespace DeconTools.Backend.Data
                             isosExporter = new BasicIsosResultTextFileExporter(outputFileName, TriggerToExportValue);
                             break;
                     }
-
 
                     break;
                 case Globals.ResultType.UIMF_TRADITIONAL_RESULT:
@@ -53,7 +51,7 @@ namespace DeconTools.Backend.Data
                             break;
                         case Globals.ExporterType.Sqlite:
                             throw new NotImplementedException();
-                            
+
                         default:
                             isosExporter = new IMFIsosResult_TextFileExporter(outputFileName, TriggerToExportValue);
                             break;
@@ -68,7 +66,7 @@ namespace DeconTools.Backend.Data
                             break;
                         case Globals.ExporterType.Sqlite:
                             throw new NotImplementedException();
-                            
+
                         default:
                             isosExporter = new IMFIsosResult_TextFileExporter(outputFileName, TriggerToExportValue);
                             break;
@@ -76,27 +74,21 @@ namespace DeconTools.Backend.Data
                     break;
                 case Globals.ResultType.BASIC_TARGETED_RESULT:
                     throw new ApplicationException("Cannot create IsosExporter for Targeted-type results");
-                    
+
                 case Globals.ResultType.O16O18_TARGETED_RESULT:
                     throw new ApplicationException("Cannot create IsosExporter for Targeted-type results");
-                    
+
                 case Globals.ResultType.N14N15_TARGETED_RESULT:
                     throw new ApplicationException("Cannot create IsosExporter for Targeted-type results");
 
                 case Globals.ResultType.DEUTERATED_TARGETED_RESULT:
                     throw new ApplicationException("Cannot create IsosExporter for Targeted-type results");
-                    
+
                 default:
                     throw new ApplicationException("Cannot create IsosExporter for this type of Result: " + resultType);
-                    
             }
 
-
-
             return isosExporter;
-
         }
-
-
     }
 }

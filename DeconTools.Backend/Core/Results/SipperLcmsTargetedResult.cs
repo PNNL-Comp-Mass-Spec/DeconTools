@@ -5,7 +5,6 @@ namespace DeconTools.Backend.Core.Results
 {
     public class SipperLcmsTargetedResult : LcmsFeatureTargetedResult
     {
-
         #region Constructors
 
         public SipperLcmsTargetedResult(TargetBase target)
@@ -91,7 +90,5 @@ namespace DeconTools.Backend.Core.Results
 
             return string.Join("; ", data);
         }
-
-
     }
 }

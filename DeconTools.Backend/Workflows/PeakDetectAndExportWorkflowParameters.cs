@@ -4,7 +4,6 @@ namespace DeconTools.Backend.Workflows
 {
     public class PeakDetectAndExportWorkflowParameters
     {
-
         #region Constructors
         public PeakDetectAndExportWorkflowParameters()
         {

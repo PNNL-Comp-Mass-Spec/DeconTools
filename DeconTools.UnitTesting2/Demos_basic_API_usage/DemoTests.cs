@@ -17,14 +17,11 @@ namespace DeconTools.UnitTesting2.Demos_basic_API_usage
             var runFactory = new RunFactory();
             var run = runFactory.CreateRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
-
             //Create the task
             var generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
             //Create the target scan list (MS1 scans from 6005 - 6020).
-            run.ScanSetCollection .Create(run, 6005, 6020, 1, 1);
-
-
+            run.ScanSetCollection.Create(run, 6005, 6020, 1, 1);
 
             //iterate over each scan in the target collection get the mass spectrum
             foreach (var scan in run.ScanSetCollection.ScanSetList)
@@ -35,13 +32,7 @@ namespace DeconTools.UnitTesting2.Demos_basic_API_usage
 
                 Console.WriteLine("XYPair count = " + run.XYData.Xvalues.Length);
             }
-
-
-
-
-
         }
-
 
         [Test]
         public void getMSMSDataTest1()
@@ -70,12 +61,10 @@ namespace DeconTools.UnitTesting2.Demos_basic_API_usage
                     Console.Write("Working on Scan " + scanset.PrimaryScanNumber);
                     Console.WriteLine("; XYPair count = " + run.XYData.Xvalues.Length);
 
-                    Console.WriteLine("num peaks= "+ run.PeakList.Count);
+                    Console.WriteLine("num peaks= " + run.PeakList.Count);
                 }
             }
         }
-
-
 
         [Test]
         public void tempGetMSMSDataTest2()
@@ -91,11 +80,7 @@ namespace DeconTools.UnitTesting2.Demos_basic_API_usage
 
                 Console.Write("Working on Scan " + i);
                 Console.WriteLine("; Scan info = " + scanInfo);
-
             }
-
-
         }
-
     }
 }

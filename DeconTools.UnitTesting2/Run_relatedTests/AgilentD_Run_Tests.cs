@@ -9,18 +9,14 @@ using DeconTools.Utilities;
 using NUnit.Framework;
 using XYData = DeconTools.Backend.XYData;
 
-
 namespace DeconTools.UnitTesting2.Run_relatedTests
 {
     [TestFixture]
     public class AgilentD_Run_Tests
     {
-
-
         string agilentDataset1 = FileRefs.RawDataMSFiles.AgilentDFile1;
 
         string wrongFileExample1 = FileRefs.RawDataMSFiles.OrbitrapStdFile1;
-
 
         [Test]
         public void ConstructorTest1()
@@ -65,7 +61,6 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
 
             var stopWatch = new Stopwatch();
 
-
             Run run = new DeconTools.Backend.Runs.AgilentDRun(testfile);
 
             var scanset = new ScanSet(25);
@@ -82,7 +77,6 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             Console.WriteLine("numPoints = " + run.XYData.Xvalues.Length);
             Assert.AreEqual(258899, run.XYData.Xvalues.Length);
 
-
             var scansetSum = new ScanSet(25, 24, 26);
 
             stopWatch.Start();
@@ -91,7 +85,6 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
 
             stopWatch.Stop();
             var threeScanSumSpectraLoadTime = stopWatch.Elapsed;
-
 
             TestUtilities.DisplayXYValues(run.XYData);
             Console.WriteLine("numPoints = " + run.XYData.Xvalues.Length);
@@ -110,7 +103,6 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
 
             var stopWatch = new Stopwatch();
 
-
             Run run = new DeconTools.Backend.Runs.AgilentDRun(testfile);
 
             var scanset = new ScanSet(25);
@@ -126,7 +118,6 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             Console.WriteLine("numPoints = " + xyData.Xvalues.Length);
             Assert.AreEqual(8926, run.XYData.Xvalues.Length);
 
-
             var scansetSum = new ScanSet(25, 24, 26);
 
             stopWatch.Start();
@@ -135,7 +126,6 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
 
             stopWatch.Stop();
             var threeScanSumSpectraLoadTime = stopWatch.Elapsed;
-
 
             TestUtilities.DisplayXYValues(xyData);
             Console.WriteLine("numPoints = " + xyData.Xvalues.Length);
@@ -200,7 +190,6 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             Assert.AreEqual(258899, run.XYData.Xvalues.Length);
         }
 
-
         [Test]
         public void getMSLevelTest1()
         {
@@ -232,7 +221,6 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
                               stopwatch.ElapsedMilliseconds);
 
             Console.WriteLine("Average time (ms) to get MSLevel = " + (double)stopwatch.ElapsedMilliseconds / (scanStop - scanStart + 1));
-
 
             Assert.AreEqual(1, run.GetMSLevel(612));
             Assert.AreEqual(2, run.GetMSLevel(613));
@@ -282,10 +270,6 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             }
         }
 
-
-
-
-
         // ----------------------------- Exception tests -----------------------------------------
 
         [Test]
@@ -297,7 +281,6 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             });
             Assert.That(ex.Message, Is.EqualTo("Dataset's inputted name refers to a file, but should refer to a Folder"));
         }
-
 
         [Test]
         public void ConstructorError_wrongKindOfInputTest2()
@@ -333,7 +316,6 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             Assert.That(ex.Message, Is.EqualTo("Agilent_D dataset folders must end with with the suffix '.d'. Check your folder name."));
         }
 
-
         [Ignore("Testing only")]
         [Test]
         public void Test1()
@@ -353,10 +335,6 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             generator.Execute(run.ResultCollection);
 
             TestUtilities.DisplayXYValues(run.XYData);
-
         }
-
-
-
     }
 }

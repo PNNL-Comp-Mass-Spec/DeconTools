@@ -5,7 +5,6 @@ using DeconTools.Backend.ProcessingTasks;
 using DeconTools.Backend.ProcessingTasks.ResultValidators;
 using DeconTools.Workflows.Backend.Core.ChromPeakSelection;
 
-
 namespace DeconTools.Workflows.Backend.Core
 {
     public class O16O18ChromPeakAnalyzerIqWorkflow:ChromPeakAnalyzerIqWorkflow
@@ -27,7 +26,6 @@ namespace DeconTools.Workflows.Backend.Core
                                                                WorkflowParameters.ChromGenToleranceUnit);
         }
 
-
         /// <summary>
         /// Calculates Metrics based on ChromPeakIqTarget
         /// NET Error, Mass Error, Isotopic Fit, & Isotope Correlation
@@ -48,7 +46,6 @@ namespace DeconTools.Workflows.Backend.Core
                 throw new NullReferenceException("The ChromPeakAnalyzerIqWorkflow only works with the ChromPeakIqTarget.");
             }
 
-
             var lcScanSet = _chromPeakUtilities.GetLCScanSetForChromPeak(target.ChromPeak, Run, WorkflowParameters.SmartChromPeakSelectorNumMSSummed);
 
             //Generate a mass spectrum
@@ -61,7 +58,6 @@ namespace DeconTools.Workflows.Backend.Core
 
             //Get NET Error
             var netError = target.ChromPeak.NETValue - target.ElutionTimeTheor;
-
 
             var leftOfMonoPeakLooker = new LeftOfMonoPeakLooker();
             var peakToTheLeft = leftOfMonoPeakLooker.LookforPeakToTheLeftOfMonoPeak(target.TheorIsotopicProfile.getMonoPeak(), target.ChargeState, msPeakList);
@@ -115,14 +111,11 @@ namespace DeconTools.Workflows.Backend.Core
                 result.IqResultDetail.MassSpectrum = massSpectrumXYData;
                 result.Abundance = GetAbundance(result);
             }
-
         }
 
         protected internal override IqResult CreateIQResult(IqTarget target)
         {
             return new O16O18IqResult(target);
         }
-
-
     }
 }

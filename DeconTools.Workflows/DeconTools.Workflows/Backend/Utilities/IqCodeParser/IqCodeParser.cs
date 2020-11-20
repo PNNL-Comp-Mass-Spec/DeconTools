@@ -11,7 +11,6 @@ namespace DeconTools.Workflows.Backend.Utilities.IqCodeParser
     /// </summary>
     public class IqCodeParser
     {
-
         #region Constructors
 
         public IqCodeParser()
@@ -89,7 +88,6 @@ namespace DeconTools.Workflows.Backend.Utilities.IqCodeParser
         {
             //TODO:  this doesn't work with:  '
 
-
             var sequence = "";
 
             //Removes the . start and stop notation
@@ -101,7 +99,6 @@ namespace DeconTools.Workflows.Backend.Utilities.IqCodeParser
             {
                 sequence += Regex.Match(s, "^[A-Z]*[A-Z]$").Value;
             }
-
 
             return PeptideUtils.GetEmpiricalFormulaForPeptideSequence(sequence, true, cysteinesAreModified);
         }

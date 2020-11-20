@@ -8,8 +8,6 @@ namespace DeconTools.Backend.FileIO
 {
     public class NETAlignmentInfoToTextExporter : TextFileExporter<KeyValuePair<int, float>>
     {
-
-
         #region Constructors
         public NETAlignmentInfoToTextExporter(string exportFilename) : base(exportFilename) { }
 
@@ -25,10 +23,8 @@ namespace DeconTools.Backend.FileIO
             Check.Assert(!string.IsNullOrEmpty(FileName), Name + " failed. Illegal filename.");
             using (var writer = File.AppendText(FileName))
             {
-
                 for (var i = 0; i < alignmentInfo.marrNETFncTimeInput.Length; i++)
                 {
-
                     writer.WriteLine(alignmentInfo.marrNETFncTimeInput[i] + Delimiter + alignmentInfo.marrNETFncNETOutput[i]);
                 }
 

@@ -5,7 +5,6 @@ namespace DeconToolsAutoProcessV1
 {
     public partial class OptionsForm : Form
     {
-
         private bool isResultMergingModeUsed;
 
         public bool IsResultMergingModeUsed
@@ -17,9 +16,7 @@ namespace DeconToolsAutoProcessV1
         public OptionsForm()
             : this(false)
         {
-
         }
-        
 
         public OptionsForm(bool isRunMergingModeUsed)
         {
@@ -28,18 +25,16 @@ namespace DeconToolsAutoProcessV1
             updateData();
         }
 
-    
         private void updateData()
         {
             chkUseResultMergerMode.Checked = isResultMergingModeUsed;
-          
         }
 
         private void btnUpdate_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.OK;
             isResultMergingModeUsed = chkUseResultMergerMode.Checked;
-          
+
             Close();
         }
 

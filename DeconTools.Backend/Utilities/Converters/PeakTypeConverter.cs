@@ -25,13 +25,9 @@ namespace DeconTools.Backend.Utilities.Converters
                 {
                     msPeakList.Add((MSPeak)peak);
                 }
-
-                
             }
             return msPeakList;
-
         }
-
 
         #endregion
 

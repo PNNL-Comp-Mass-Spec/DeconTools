@@ -2,13 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 
-
 namespace DeconTools.Backend.Utilities
 {
     [Serializable]
     public class PeptideUtils
     {
-
         const double HYDROGEN_MASS = 1.00782503196;  // IUPAC 2002
         const double OXYGEN16_MASS = 15.994914622325; // IUPAC 2002
 
@@ -46,7 +44,6 @@ namespace DeconTools.Backend.Utilities
                 { 'Y', new KeyValuePair<string, double>("C9H9NO2", 163.06333)},
                 { 'V', new KeyValuePair<string, double>("C5H9NO", 99.068414)}
             };
-
         }
 
         #endregion
@@ -57,9 +54,8 @@ namespace DeconTools.Backend.Utilities
 
         #region Public Methods
 
-        public double GetMonoIsotopicMassForPeptideSequence(string peptideSequence, bool includeAmineHydrogenAndFreeAcid = true, bool cysteinesAreModified=false)
+        public double GetMonoIsotopicMassForPeptideSequence(string peptideSequence, bool includeAmineHydrogenAndFreeAcid = true, bool cysteinesAreModified = false)
         {
-
             peptideSequence = CleanUpPeptideSequence(peptideSequence);
 
             var sequenceIsValid = ValidateSequence(peptideSequence);
@@ -67,7 +63,6 @@ namespace DeconTools.Backend.Utilities
             {
                 throw new ArgumentException("Inputted peptide sequence contains illegal characters.");
             }
-
 
             double outputMonoisotopicMass = 0;
 
@@ -77,12 +72,11 @@ namespace DeconTools.Backend.Utilities
 
                 outputMonoisotopicMass += aminoAcidResideMass;
 
-                if (cysteinesAreModified &&  aminoAcid=='C')
+                if (cysteinesAreModified && aminoAcid == 'C')
                 {
                     var iodoacetamideMass = 57.021463725623;
 
                     outputMonoisotopicMass += iodoacetamideMass;
-
                 }
             }
 
@@ -110,7 +104,7 @@ namespace DeconTools.Backend.Utilities
 
                 outputEmpiricalFormula = EmpiricalFormulaUtilities.AddFormula(outputEmpiricalFormula, aminoAcidFormula);
 
-                if (cysteinesAreModified && aminoAcid=='C')
+                if (cysteinesAreModified && aminoAcid == 'C')
                 {
                     outputEmpiricalFormula = EmpiricalFormulaUtilities.AddFormula(outputEmpiricalFormula, "H3C2NO");
                 }
@@ -118,7 +112,6 @@ namespace DeconTools.Backend.Utilities
 
             if (includeAmineHydrogenAndFreeAcid)
             {
-
                 var nTerminalHydrogen = "H";
                 var cTerminalFreeAcid = "OH";
 
@@ -145,7 +138,7 @@ namespace DeconTools.Backend.Utilities
                     var indexFirstDot = peptideSequence.IndexOf('.');
                     var indexSecondDot = peptideSequence.LastIndexOf('.');
 
-                    peptideSequence = peptideSequence.Substring(indexFirstDot+1, indexSecondDot - indexFirstDot-1);
+                    peptideSequence = peptideSequence.Substring(indexFirstDot + 1, indexSecondDot - indexFirstDot - 1);
                 }
                 else
                 {
@@ -181,7 +174,6 @@ namespace DeconTools.Backend.Utilities
 
             // Return the empirical formula
             return aminoAcidInfo.Key;
-
         }
 
         public int GetNumAtomsForElement(string element, string empiricalFormula)
@@ -198,9 +190,7 @@ namespace DeconTools.Backend.Utilities
 
         public Dictionary<string, int> ParseEmpiricalFormulaString(string empiricalFormula)
         {
-
             return EmpiricalFormulaUtilities.ParseEmpiricalFormulaString(empiricalFormula);
-
         }
 
         public bool ValidateSequence(string peptideSequence)

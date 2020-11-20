@@ -3,7 +3,6 @@ namespace DeconTools.Backend.Utilities
 {
     public class XYDataUtilities
     {
-
         #region Constructors
         #endregion
 
@@ -21,7 +20,6 @@ namespace DeconTools.Backend.Utilities
                 Yvalues = xyData.Yvalues
             };
 
-
             var maxYValue = double.MinValue;
 
             foreach (var currentVal in normalized.Yvalues)
@@ -32,23 +30,16 @@ namespace DeconTools.Backend.Utilities
                 }
             }
 
-
             for (var i = 0; i < normalized.Yvalues.Length; i++)
             {
                 normalized.Yvalues[i] = normalized.Yvalues[i] / maxYValue;
             }
 
-
-
             return normalized;
-
-
         }
-
 
         public static XYData SubtractXYData(XYData xyData1, XYData xyData2, double minX, double maxX, double tolerance)
         {
-
             var startIndex1 = MathUtils.GetClosest(xyData1.Xvalues, minX, tolerance);
             var stopIndex1 = MathUtils.GetClosest(xyData1.Xvalues, maxX, tolerance);
 
@@ -69,7 +60,6 @@ namespace DeconTools.Backend.Utilities
                 subtracted.Yvalues[i] = subtracted.Yvalues[i] - xyData2.Yvalues[indexOfClosest];
             }
             return subtracted;
-
         }
 
         #endregion

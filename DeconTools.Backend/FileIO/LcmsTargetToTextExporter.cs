@@ -6,16 +6,13 @@ namespace DeconTools.Backend.FileIO
 {
     public class LcmsTargetToTextExporter : TextFileExporter<TargetBase>
     {
-
         #region Constructors
 
         public LcmsTargetToTextExporter(string fileName) : base(fileName, '\t') { }
 
         public LcmsTargetToTextExporter(string fileName, char delimiter) : base(fileName, delimiter) { }
 
-
         #endregion
-
 
         protected override string buildResultOutput(TargetBase target)
         {

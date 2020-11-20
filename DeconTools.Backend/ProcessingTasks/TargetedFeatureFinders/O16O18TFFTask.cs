@@ -11,7 +11,6 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
         public O16O18TffTask(double toleranceInPPM)
         {
             ToleranceInPPM = toleranceInPPM;
-
         }
         #endregion
 
@@ -21,7 +20,6 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
         #region Public Methods
         //public override void FindFeature(DeconTools.Backend.Core.ResultCollection resultColl)
         //{
-
 
         //    resultColl.ResultType = Globals.ResultType.O16O18_MASSTAG_RESULT;
 
@@ -40,7 +38,6 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
         //    result.IsotopicProfile = m_featureFinder.FindFeature(resultColl.Run.PeakList, this.TheorFeature, this.ToleranceInPPM, this.NeedMonoIsotopicPeak);
         //    addInfoToResult(result);
 
-
         //}
 
         private void addInfoToResult(TargetedResultBase result)
@@ -56,10 +53,6 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
             //((O16O18_TResult)result).RatioO16O18 =  m_quantifier.Get_I0_I4_ratio(result.IsotopicProfile);
         }
-
-
-
-
 
         #endregion
 

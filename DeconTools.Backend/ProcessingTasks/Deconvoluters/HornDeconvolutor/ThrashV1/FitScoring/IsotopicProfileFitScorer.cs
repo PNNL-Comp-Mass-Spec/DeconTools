@@ -581,11 +581,12 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                 }
 
                 if (mzLeft > 0 && nextPeak.Mz > 0)
-                    //if there is a theoreticalPeak to the RIGHT of theoreticalMaxPeak AND there is an experimentalPeak to the LEFT of experimentalMaxPeak...
+                //if there is a theoreticalPeak to the RIGHT of theoreticalMaxPeak AND there is an experimentalPeak to the LEFT of experimentalMaxPeak...
                 {
                     delta = peak.Mz - mzLeft;
                     // essentially, this shifts the theoretical over to the left and gets the delta; then check the fit
-                    var currentPeakCopy = new ThrashV1Peak(peak) {
+                    var currentPeakCopy = new ThrashV1Peak(peak)
+                    {
                         Intensity = nextPeak.Intensity      // in c++ this copy is created by value;
                     };
 
@@ -654,7 +655,8 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                 if (mzRight > 0 && nextPeak.Mz > 0)
                 {
                     delta = peak.Mz - mzRight;
-                    var currentPeakCopy = new ThrashV1Peak(peak) {
+                    var currentPeakCopy = new ThrashV1Peak(peak)
+                    {
                         Intensity = nextPeak.Intensity
                     };
 

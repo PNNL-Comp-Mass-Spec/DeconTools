@@ -20,7 +20,6 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
             };
 
             IsDataThresholded = false;
-
         }
 
         public ChromPeakDetectorMedianBased(double chromPeakDetectorPeakBr, double chromPeakDetectorSigNoise) : this()
@@ -43,7 +42,6 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
 
         #endregion
 
-
         protected override double GetBackgroundIntensity(double[] yValues, double[] xValues = null)
         {
             var copiedYValues = new double[yValues.Length];
@@ -55,7 +53,6 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
                 var peaklist = _chromPeakDetector.FindPeaks(xValues, copiedYValues);
 
                 var largestPeaks = peaklist.OrderByDescending(p => p.Height).Take(3);
-
 
                 foreach (var peak in largestPeaks)
                 {
@@ -73,14 +70,11 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
                         {
                             copiedYValues[index] = 0;     //zero-out the intensities of the largest peak.
                         }
-
                     }
                 }
-
             }
 
             var valuesAboveZero = copiedYValues.Where(p => p > 0).ToList();
-
 
             double medianIntensity = 0;
             if (valuesAboveZero.Count > 0)
@@ -89,9 +83,6 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
             }
 
             return medianIntensity;
-
-
         }
-
     }
 }

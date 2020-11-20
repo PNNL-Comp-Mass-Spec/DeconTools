@@ -10,16 +10,12 @@ namespace DeconTools.Workflows.Backend.Core
 
         public UIMFTargetedMSMSWorkflowCollapseIMS(Run run, TargetedWorkflowParameters parameters):base(run,parameters)
         {
-            
             ChromPeakToXYDataMap = new Dictionary<ChromPeak, XYData>();
-
-            
         }
 
         public UIMFTargetedMSMSWorkflowCollapseIMS(TargetedWorkflowParameters parameters)
             : this(null, parameters)
         {
-
         }
 
         protected override DeconTools.Backend.Globals.ResultType GetResultType()
@@ -66,8 +62,6 @@ namespace DeconTools.Workflows.Backend.Core
             //    ExecuteTask(_chromatogramCorrelatorTask);
             //}
         }
-
-
 
         private void UpdateChromPeaksWithXYData()
         {

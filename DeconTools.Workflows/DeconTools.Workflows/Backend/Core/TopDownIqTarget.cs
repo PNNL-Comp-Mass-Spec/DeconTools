@@ -7,18 +7,16 @@ namespace DeconTools.Workflows.Backend.Core
     {
         public TopDownIqTarget ()
         {
-            
         }
 
         public TopDownIqTarget(IqWorkflow workflow) : base(workflow)
         {
-
         }
 
-        public List<double> PTMList { get; set; } 
+        public List<double> PTMList { get; set; }
 
         /// <summary>
-        /// Removes redundant charge state targets and adds in missing targets within range. 
+        /// Removes redundant charge state targets and adds in missing targets within range.
         /// </summary>
         public override void RefineChildTargets()
         {
@@ -86,7 +84,6 @@ namespace DeconTools.Workflows.Backend.Core
                 RemoveTarget(remove);
             }
         }
-
 
         public void SortChildTargetsByCharge()
         {

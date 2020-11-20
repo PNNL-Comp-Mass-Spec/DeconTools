@@ -9,7 +9,6 @@ namespace DeconTools.Backend.ProcessingTasks.ZeroFillers
         public DeconToolsZeroFiller()
             : this(DEFAULT_POINTS_TO_ADD, DEFAULT_MAX_ZERO_FILL_DISTANCE)
         {
-
         }
 
         public DeconToolsZeroFiller(int maxNumPointsToAdd)
@@ -59,7 +58,6 @@ namespace DeconTools.Backend.ProcessingTasks.ZeroFillers
                     };
                     return xyData;
                 }
-
 
                 var zeroFilledXVals = new List<double>();
                 var zeroFilledYVals = new List<double>();

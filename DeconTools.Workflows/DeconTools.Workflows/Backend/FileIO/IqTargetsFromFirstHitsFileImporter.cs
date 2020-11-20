@@ -5,9 +5,7 @@ namespace DeconTools.Workflows.Backend.FileIO
 {
     public class IqTargetsFromFirstHitsFileImporter:IqTargetImporter
     {
-
         #region Constructors
-
 
         public IqTargetsFromFirstHitsFileImporter(string iqFilePath) : base()
         {
@@ -19,7 +17,6 @@ namespace DeconTools.Workflows.Backend.FileIO
             MassErrorHeaders = new[] {"DelM_PPM"};
 
             MzHeaders = new[] {"PrecursorMZ", "MZ"};
-
         }
 
         #endregion
@@ -59,10 +56,7 @@ namespace DeconTools.Workflows.Backend.FileIO
 
             target.MonoMassTheor = (target.MZTheor - DeconTools.Backend.Globals.PROTON_MASS)*target.ChargeState;
 
-
             var targetUtilities = new IqTargetUtilities();
-
-           
 
             return target;
         }

@@ -12,14 +12,12 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
 {
     public class ChromPeakAnalyzer
     {
-
         protected MSGenerator MSGenerator;
         protected ResultValidatorTask ResultValidator;
         protected IsotopicProfileFitScoreCalculator FitScoreCalc;
         protected InterferenceScorer InterferenceScorer;
         protected DeconToolsPeakDetectorV2 MSPeakDetector;
         protected IterativeTFF TargetedMSFeatureFinder;
-
 
         private readonly ChromPeakUtilities _chromPeakUtilities = new ChromPeakUtilities();
 
@@ -36,8 +34,6 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
             MSPeakDetector = new DeconToolsPeakDetectorV2();
             FitScoreCalc = new IsotopicProfileFitScoreCalculator();
             ResultValidator = new ResultValidatorTask();
-
-
         }
 
         protected TargetedWorkflowParameters Parameters { get; set; }
@@ -53,7 +49,6 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
         public List<ChromPeakQualityData> GetChromPeakQualityData(Run run, IqTarget target, List<Peak> chromPeakList)
         {
             var peakQualityList = new List<ChromPeakQualityData>();
-
 
             if (MSGenerator == null)
             {
@@ -75,10 +70,7 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
                               ";  ------------------------- PeaksWithinTol = " + chromPeakList.Count);
 #endif
 
-
-
             //target.NumChromPeaksWithinTolerance = peaksWithinTol.Count;
-
 
             foreach (var peak in chromPeakList)
             {
@@ -103,18 +95,15 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
                 var peakToTheLeft = leftOfMonoPeakLooker.LookforPeakToTheLeftOfMonoPeak(target.TheorIsotopicProfile.getMonoPeak(), target.ChargeState,
                                                                                         msPeakList);
 
-
                 var hasPeakToTheLeft = peakToTheLeft != null;
 
                 //collect the results together
-
 
                 var pq = new ChromPeakQualityData(chromPeak);
 
                 if (observedIso == null)
                 {
                     pq.IsotopicProfileFound = false;
-
                 }
                 else
                 {
@@ -134,11 +123,7 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
             }
 
             return peakQualityList;
-
-
-
         }
-
 
         #endregion
 

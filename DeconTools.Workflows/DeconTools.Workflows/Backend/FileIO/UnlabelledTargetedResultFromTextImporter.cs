@@ -5,7 +5,6 @@ namespace DeconTools.Workflows.Backend.FileIO
 {
     public class UnlabeledTargetedResultFromTextImporter : TargetedResultFromTextImporter
     {
-        
         #region Constructors
         public UnlabeledTargetedResultFromTextImporter(string filename) : base(filename) { }
 
@@ -21,7 +20,6 @@ namespace DeconTools.Workflows.Backend.FileIO
             {
                 result.DatasetName = TryGetDatasetNameFromFileName();
             }
-
 
             result.ChargeState = ParseIntField(LookupData(processedData, chargeStateHeaders));
             result.FitScore = ParseFloatField(LookupData(processedData, fitScoreHeaders));
@@ -45,13 +43,7 @@ namespace DeconTools.Workflows.Backend.FileIO
 
             result.MatchedMassTagID = ParseIntField(LookupData(processedData, matchedMassTagIDHeaders,"-1"));
 
-
             return result;
-
-
-
         }
-
-
     }
 }

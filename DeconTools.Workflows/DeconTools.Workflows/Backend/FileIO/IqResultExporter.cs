@@ -48,10 +48,6 @@ namespace DeconTools.Workflows.Backend.FileIO
             }
         }
 
-
-
-
-
         public virtual string GetHeader()
         {
             var data = new List<string>
@@ -77,9 +73,7 @@ namespace DeconTools.Workflows.Backend.FileIO
             };
 
             return string.Join(Delimiter, data);
-
         }
-
 
         public virtual string GetHeader(IqResult result)
         {
@@ -117,7 +111,5 @@ namespace DeconTools.Workflows.Backend.FileIO
 
             return string.Join(Delimiter, data);
         }
-
-
     }
 }

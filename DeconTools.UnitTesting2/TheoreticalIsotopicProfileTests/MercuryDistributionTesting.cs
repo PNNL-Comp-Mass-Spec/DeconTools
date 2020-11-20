@@ -12,12 +12,10 @@ namespace DeconTools.UnitTesting2.TheoreticalIsotopicProfileTests
     {
         //private DeconToolsV2.clsMercuryIsotopeDistribution decon2LSMercuryDistribution;
 
-
         [Test]
         public void Test1()
         {
             //decon2LSMercuryDistribution = new DeconToolsV2.clsMercuryIsotopeDistribution();
-
 
         }
 
@@ -40,15 +38,11 @@ namespace DeconTools.UnitTesting2.TheoreticalIsotopicProfileTests
             }
             sw.Stop();
             Console.WriteLine(sw.ElapsedMilliseconds / (double)numIterations);
-
-
         }
-
 
         [Test]
         public void ShowAverageMassesTest1()
         {
-
             string[] elements = { "C", "H", "N", "O", "S", "P", "Na", "Cl", "Si", "Hg" };
 
             foreach (var element in elements)
@@ -58,9 +52,5 @@ namespace DeconTools.UnitTesting2.TheoreticalIsotopicProfileTests
                 Console.WriteLine(element + "\t" + monomass);
             }
         }
-
-
-
-
     }
 }

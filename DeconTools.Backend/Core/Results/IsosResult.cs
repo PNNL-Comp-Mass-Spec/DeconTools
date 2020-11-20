@@ -48,9 +48,6 @@ namespace DeconTools.Backend.Core
         public void Display()
         {
             Console.WriteLine(ToString());
-
         }
-
-
     }
 }

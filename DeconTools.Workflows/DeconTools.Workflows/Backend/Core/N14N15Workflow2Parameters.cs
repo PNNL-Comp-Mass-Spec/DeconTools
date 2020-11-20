@@ -2,8 +2,6 @@
 {
     public class N14N15Workflow2Parameters : TargetedWorkflowParameters
     {
-
-
         public N14N15Workflow2Parameters()
         {
             ChromGeneratorMode = DeconTools.Backend.Globals.ChromatogramGeneratorMode.MOST_ABUNDANT_PEAK;
@@ -13,26 +11,22 @@
             TargetedFeatureFinderToleranceInPPM = MSToleranceInPPM;
             ResultType = DeconTools.Backend.Globals.ResultType.N14N15_TARGETED_RESULT;
 
-            
             SmartChromSelectorPeakBR = 5;
             SmartChromSelectorPeakSigNoiseRatio = 3;
- 
         }
 
         #region Properties
-    
+
         public double ChromNETToleranceN15 { get; set; }
         public int NumPeaksUsedInQuant { get; set; }
-    
+
         public DeconTools.Backend.Globals.IsotopicProfileType TargetedFeatureFinderIsotopicProfileTargetType { get; set; }
         public double TargetedFeatureFinderToleranceInPPM { get; set; }
 
         public double SmartChromSelectorPeakBR { get; set; }
         public double SmartChromSelectorPeakSigNoiseRatio { get; set; }
 
-
         #endregion
-
 
         //public override void LoadParameters(string xmlFilename)
         //{
@@ -41,7 +35,6 @@
         //    XDocument doc = XDocument.Load(xmlFilename);
 
         //    var query = doc.Element("WorkflowParameters").Elements();
-
 
         //    Dictionary<string, string> parameterTableFromXML = new Dictionary<string, string>();
 

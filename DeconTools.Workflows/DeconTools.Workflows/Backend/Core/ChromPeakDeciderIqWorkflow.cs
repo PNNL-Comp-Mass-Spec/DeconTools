@@ -10,7 +10,6 @@ namespace DeconTools.Workflows.Backend.Core
     /// </summary>
     public class ChromPeakDeciderIqWorkflow : BasicIqWorkflow
     {
-
         #region Constructors
 
         public ChromPeakDeciderIqWorkflow(Run run, TargetedWorkflowParameters parameters) : base(run, parameters)
@@ -76,7 +75,6 @@ namespace DeconTools.Workflows.Backend.Core
 
                 if (chromPeakTarget != null)
                 {
-
                     var chromPeakResult = chromPeakTarget.GetResult();
 
                     childResult.ChromPeakSelected = chromPeakTarget.ChromPeak;
@@ -106,22 +104,18 @@ namespace DeconTools.Workflows.Backend.Core
                     childResult.MZObs = chromPeakResult.ObservedIsotopicProfile == null
                                             ? 0
                                             : chromPeakResult.ObservedIsotopicProfile.MonoPeakMZ;
-                    
 
                     childResult.MZObsCalibrated = chromPeakResult.ObservedIsotopicProfile == null
                                             ? 0
                                             : Run.GetAlignedMZ(childResult.MZObs, chromPeakResult.LcScanObs);
 
-
                     childResult.MonoMassObsCalibrated = (childResult.MZObsCalibrated - DeconTools.Backend.Globals.PROTON_MASS)* childResult.Target.ChargeState;
-                    
+
                     childResult.MassErrorBefore = chromPeakResult.ObservedIsotopicProfile == null
                                             ? 0
                                             : chromPeakResult.MassErrorBefore;
 
-
                     childResult.MassErrorAfter = (childResult.MZObsCalibrated- childResult.Target.MZTheor)/childResult.Target.MZTheor*1e6;
-
 
                     var elutionTime = childResult.ChromPeakSelected == null ? 0d : ((ChromPeak) childResult.ChromPeakSelected).NETValue;
                     childResult.ElutionTimeObs = elutionTime;
@@ -129,8 +123,6 @@ namespace DeconTools.Workflows.Backend.Core
                     childResult.Abundance = GetAbundance(childResult);
                 }
             }
-
         }
-
     }
 }

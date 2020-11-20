@@ -29,9 +29,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         protected IqTargetUtilities TargetUtilities;
 
-
         protected ChromPeakAnalyzerIqWorkflow ChromPeakAnalyzerIqWorkflow { get; set; }
-
 
         #endregion
 
@@ -81,7 +79,6 @@ namespace DeconTools.Workflows.Backend.Core
             foreach (var child in children)
             {
                 child.DoWorkflow();
-
             }
 
             if (Utilities.SipperDataDump.OutputResults)
@@ -98,7 +95,6 @@ namespace DeconTools.Workflows.Backend.Core
         protected virtual void InitializeChromPeakAnalyzerWorkflow()
         {
             ChromPeakAnalyzerIqWorkflow = new ChromPeakAnalyzerIqWorkflow(Run, WorkflowParameters);
-
         }
     }
 }

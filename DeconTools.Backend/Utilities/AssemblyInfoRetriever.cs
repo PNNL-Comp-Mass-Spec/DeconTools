@@ -5,7 +5,6 @@ namespace DeconTools.Backend.Utilities
 {
     public static class AssemblyInfoRetriever
     {
-
         public static string GetVersion(Type classType, bool showExtendedInfo)
         {
             try
@@ -27,28 +26,20 @@ namespace DeconTools.Backend.Utilities
                         return ("v" + versionString.Substring(0, posOfLastDot));
                     }
 
-
                     return ("v" + versionString);
                 }
 
                 return "";
-
             }
             catch (Exception)
             {
-
                 return "";
             }
-
         }
 
         public static string GetVersion(Type classType)
         {
             return GetVersion(classType, true);
-
-
-
         }
-
     }
 }

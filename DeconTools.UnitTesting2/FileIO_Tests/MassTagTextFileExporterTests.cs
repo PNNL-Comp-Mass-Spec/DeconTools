@@ -10,7 +10,6 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
     {
         readonly string testOutput1 = @"..\..\..\TestFiles\FileIOTests\exportedMassTags.txt";
 
-
         [Test]
         public void exportMassTagsToTextFile_Test1()
         {
@@ -36,7 +35,5 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
             //Assert.AreEqual(13716, fi.Length);
 
         }
-
-
     }
 }

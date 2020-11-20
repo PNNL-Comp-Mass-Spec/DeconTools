@@ -31,9 +31,9 @@ namespace DeconTools.Backend.Algorithms
 
         #region Public Methods
 
-        public Dictionary<MSPeak, XYData> GetChromatogramsForIsotopicProfilePeaks(List<MSPeakResult>peakList, IsotopicProfile theorIso)
+        public Dictionary<MSPeak, XYData> GetChromatogramsForIsotopicProfilePeaks(List<MSPeakResult> peakList, IsotopicProfile theorIso)
         {
-            return GetChromatogramsForIsotopicProfilePeaks(peakList, theorIso,false,null);
+            return GetChromatogramsForIsotopicProfilePeaks(peakList, theorIso, false, null);
         }
 
         public Dictionary<MSPeak, XYData> GetChromatogramsForIsotopicProfilePeaks(List<MSPeakResult> peakList, IsotopicProfile theorIso, bool filterOutMSMSScans, List<int> ms1LevelScanTable)
@@ -47,7 +47,7 @@ namespace DeconTools.Backend.Algorithms
             {
                 var xyData = chromGen.GenerateChromatogram(peakList, peakList.First().Scan_num, peakList.Last().Scan_num, peak.XValue, m_toleranceInPPM);
 
-                if (filterOutMSMSScans && ms1LevelScanTable!=null)
+                if (filterOutMSMSScans && ms1LevelScanTable != null)
                 {
                     var filteredChromVals = new Dictionary<int, double>();
 
@@ -69,9 +69,7 @@ namespace DeconTools.Backend.Algorithms
             }
 
             return chromatogramsForIsotopicProfiles;
-
         }
-
 
         public void SmoothChromatograms(Dictionary<MSPeak, XYData> chromatograms, Smoother smoother)
         {
@@ -102,8 +100,6 @@ namespace DeconTools.Backend.Algorithms
             }
 
             return sortedList.Take(numPeaks).ToList();
-
-
         }
         #endregion
     }

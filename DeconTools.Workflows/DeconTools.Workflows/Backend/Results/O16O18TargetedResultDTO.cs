@@ -4,7 +4,6 @@ namespace DeconTools.Workflows.Backend.Results
 {
     public class O16O18TargetedResultDTO : UnlabeledTargetedResultDTO
     {
-
         #region Properties
         public float IntensityI2 { get; set; }
         public float IntensityI4 { get; set; }
@@ -19,10 +18,7 @@ namespace DeconTools.Workflows.Backend.Results
         public float ChromCorrO16O18SingleLabel { get; set; }
         public float ChromCorrO16O18DoubleLabel { get; set; }
 
-
-
         #endregion
-
 
         public override string ToStringWithDetailsAsRow()
         {
@@ -53,7 +49,6 @@ namespace DeconTools.Workflows.Backend.Results
             };
 
             return string.Join("\t", data);
-
         }
     }
 }

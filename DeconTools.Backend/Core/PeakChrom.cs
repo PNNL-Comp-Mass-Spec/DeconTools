@@ -7,7 +7,6 @@ namespace DeconTools.Backend.Core
 {
     public abstract class PeakChrom
     {
-
         #region Constructors
         #endregion
 
@@ -29,7 +28,6 @@ namespace DeconTools.Backend.Core
 
                 return false;
             }
-
         }
 
         public bool PeakDataIsNullOrEmpty
@@ -47,7 +45,6 @@ namespace DeconTools.Backend.Core
 
         public XYData GetXYDataFromChromPeakData(int minScan, int maxScan)
         {
-
             //populate array with zero intensities.
             var xyValues = new SortedDictionary<int, double>();
             for (var i = minScan; i <= maxScan; i++)
@@ -67,7 +64,6 @@ namespace DeconTools.Backend.Core
 
                     if (xyValues.ContainsKey(peak.Scan_num))
                     {
-
                         if (intensity > xyValues[peak.Scan_num])
                         {
                             xyValues[peak.Scan_num] = intensity;
@@ -76,19 +72,14 @@ namespace DeconTools.Backend.Core
                 }
             }
 
-
             var outputXYData = new XYData
             {
                 Xvalues = XYData.ConvertIntsToDouble(xyValues.Keys.ToArray()),
                 Yvalues = xyValues.Values.ToArray()
             };
 
-
             return outputXYData;
-
         }
-
-
 
         /// <summary>
         /// If the chromatogram was based on peak-level data we may store the Peak-based chrom data here
@@ -124,16 +115,13 @@ namespace DeconTools.Backend.Core
             }
 
             return peaksToBeAssignedID;
-
         }
-
 
         #endregion
 
         #region Private Methods
 
         #endregion
-
 
         public Peak GetChromPeakForGivenSource(MSPeakResult peakResult)
         {
@@ -145,13 +133,10 @@ namespace DeconTools.Backend.Core
             var fourSigma = 4 * peakWidthSigma;
 
             return GetChromPeakForGivenSource(peakResult, fourSigma);
-
         }
-
 
         public Peak GetChromPeakForGivenSource(MSPeakResult peakResult, double scanTolerance)
         {
-
             if (PeakDataIsNullOrEmpty) return null;
 
             var peakQuery = (from n in PeakList where Math.Abs(n.XValue - peakResult.Scan_num) <= scanTolerance select n).ToList();
@@ -164,12 +149,6 @@ namespace DeconTools.Backend.Core
 
             var sortedPeaks = peakQuery.OrderByDescending(p => p.Height);
             return sortedPeaks.First();
-
-
-
-
-
-
         }
     }
 }

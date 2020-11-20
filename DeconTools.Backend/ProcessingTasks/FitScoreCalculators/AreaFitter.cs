@@ -10,9 +10,8 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
     /// <summary>
     /// Does a least-squares fit.
     /// </summary>
-    public class AreaFitter:LeastSquaresFitter
+    public class AreaFitter : LeastSquaresFitter
     {
-
         public double GetFit(XYData theorXYData, XYData observedXYData, double minIntensityForScore, double offset = 0)
         {
             return GetFit(theorXYData, observedXYData, minIntensityForScore, out var ionCountUsed, offset);
@@ -37,14 +36,12 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
 
             //Check.Require(minIntensityForScore >= 0 && minIntensityForScore <= 100, "MinIntensityForScore should be between 0 and 100");
 
-
             ionCountUsed = 0;
 
             double sumOfSquaredDiff = 0;
             double sumOfSquaredTheorIntens = 0;
             var xMin = theorXYData.Xvalues[0] + offset;
             var xMax = theorXYData.Xvalues.Max() + offset;
-
 
             var trimmedObservedXYData = observedXYData.TrimData(xMin, xMax);
             //XYData trimmedObservedXYData = observedXYData;
@@ -54,7 +51,6 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
 
             var interpolatedValues = new List<double>();
             var theoreticalValues = new List<double>();
-
 
             for (var i = 0; i < theorXYData.Xvalues.Length; i++)
             {
@@ -92,8 +88,6 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
                             mz2 = trimmedObservedXYData.Xvalues[indexOfClosest + 1];
                             intensity2 = trimmedObservedXYData.Yvalues[indexOfClosest + 1];
                         }
-
-
                     }
                     else  // closest point is above the targetMZ; so get the mz of the point below
                     {
@@ -111,7 +105,6 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
                         }
                     }
 
-
                     var interpolatedIntensity = MathUtils.GetInterpolatedValue(mz1, mz2, intensity1, intensity2, currentTheorMZ);
 
                     interpolatedValues.Add(interpolatedIntensity);
@@ -127,13 +120,11 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
 
                     //sumOfSquaredTheorIntens += normalizedTheorIntensity * normalizedTheorIntensity;
 
-
                 }
             }
 
             var maxTheoreticalIntens = getMax(theoreticalValues);
             var maxObservIntens = getMax(interpolatedValues);
-
 
             for (var i = 0; i < theoreticalValues.Count; i++)
             {
@@ -164,7 +155,6 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
             // fitScore /= ionCountUsed;
 
             return fitScore;
-
         }
 
         private double getMax(List<double> values)
@@ -178,13 +168,5 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
 
             return max;
         }
-
-
-
-
-
-
-
-
     }
 }

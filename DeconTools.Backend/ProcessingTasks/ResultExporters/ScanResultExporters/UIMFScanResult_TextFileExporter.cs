@@ -5,7 +5,6 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
 {
     public class UIMFScanResult_TextFileExporter : ScanResult_TextFileExporter
     {
-
         #region Constructors
         public UIMFScanResult_TextFileExporter(string fileName) : base(fileName) { }
         #endregion
@@ -18,7 +17,6 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
 
         protected override string buildScansResultOutput(ScanResult result)
         {
-
             var uimfScanResult = (UimfScanResult)result;
 
             var data = new List<string>
@@ -37,7 +35,6 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
             };
 
             return string.Join(Delimiter.ToString(), data);
-
         }
 
         protected override string buildHeaderLine()
@@ -58,8 +55,5 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
 
             return string.Join(Delimiter.ToString(), data);
         }
-
-
-
     }
 }

@@ -8,7 +8,6 @@ namespace DeconTools.Backend.DTO
 {
     public class IsosResultComparer : IEqualityComparer<IsosResult>
     {
-
         /// <summary>
         /// this is slow but sure!
         /// </summary>
@@ -40,16 +39,10 @@ namespace DeconTools.Backend.DTO
 
                 if (resultsWithinMassTol.Count > 1) Console.WriteLine("Scan = " + result.ScanSet.PrimaryScanNumber + "; m/z = " + result.IsotopicProfile.MonoPeakMZ);
                 if (resultsWithinMassTol.Count > 0) intersectedResults.Add(resultsWithinMassTol[0]);
-
-
-
             }
 
             return intersectedResults;
         }
-
-
-
 
         /// <summary>
         /// This is faster, but the IComparable parts of this ('Equals' and 'GetHashCode') must be tested if there are any changes
@@ -79,12 +72,9 @@ namespace DeconTools.Backend.DTO
                 {
                     return item;
                 }
-
             }
             return null;
         }
-
-
 
         public List<IsosResult> GetUnionBetweenTwoIsosResultSets()
         {
@@ -98,24 +88,17 @@ namespace DeconTools.Backend.DTO
             Check.Require(resultList1.GetType() == resultList2.GetType(), "resultLists are not the same Type");
             var uniqueResults = resultList1.Except(resultList2, this).ToList();
             return uniqueResults;
-
         }
 
-
-
         #region IEqualityComparer<IsosResult> Members
-
-
 
         public bool Equals(IsosResult result1, IsosResult result2)
         {
             //return true;
 
-
             return (result1.IsotopicProfile.MonoPeakMZ == result2.IsotopicProfile.MonoPeakMZ &&
                 result1.ScanSet.PrimaryScanNumber == result2.ScanSet.PrimaryScanNumber &&
                 result1.IsotopicProfile.ChargeState == result2.IsotopicProfile.ChargeState);
-
         }
 
         public int GetHashCode(IsosResult obj)

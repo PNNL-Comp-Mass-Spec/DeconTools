@@ -3,7 +3,6 @@ namespace DeconTools.Backend.Core
 {
     public abstract class MassAlignmentInfo
     {
-
         #region Constructors
         #endregion
 
@@ -19,14 +18,12 @@ namespace DeconTools.Backend.Core
 
         public abstract double GetPpmShift(double mz, int scan = -1);
 
-
         public int GetNumPoints()
         {
             if (ScanAndPpmShiftVals == null) return 0;
 
             return ScanAndPpmShiftVals.Xvalues.Length;
         }
-
 
         #endregion
 

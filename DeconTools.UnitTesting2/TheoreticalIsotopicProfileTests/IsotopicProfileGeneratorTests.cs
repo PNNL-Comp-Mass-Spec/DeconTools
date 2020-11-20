@@ -4,7 +4,6 @@ using DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator;
 using DeconTools.Backend.Utilities;
 using NUnit.Framework;
 
-
 namespace DeconTools.UnitTesting2.TheoreticalIsotopicProfileTests
 {
     [TestFixture]
@@ -63,7 +62,6 @@ namespace DeconTools.UnitTesting2.TheoreticalIsotopicProfileTests
 
         }
 
-
         [Test]
         public void JoshGenerateTheorProfileTest1()
         {
@@ -95,7 +93,6 @@ namespace DeconTools.UnitTesting2.TheoreticalIsotopicProfileTests
 
         }
 
-
         [Test]
         public void TomGenerateN15LabeledTheorProfileTest2()
         {
@@ -104,10 +101,8 @@ namespace DeconTools.UnitTesting2.TheoreticalIsotopicProfileTests
 
             Console.WriteLine("Total nitrogen count = " + mt.GetAtomCountForElement("N"));
 
-
             var unlabeledTheorGenerator = new TomTheorFeatureGenerator();
             unlabeledTheorGenerator.GenerateTheorFeature(mt);
-
 
             var n15theorGenerator = new TomTheorFeatureGenerator(DeconTools.Backend.Globals.LabelingType.N15, 0.005);
             n15theorGenerator.GenerateTheorFeature(mt);
@@ -127,7 +122,6 @@ namespace DeconTools.UnitTesting2.TheoreticalIsotopicProfileTests
 
             Console.WriteLine("Total nitrogen count = " + mt.GetAtomCountForElement("N"));
 
-
             var unlabeledTheorGenerator = new JoshTheorFeatureGenerator();
             unlabeledTheorGenerator.GenerateTheorFeature(mt);
 
@@ -146,11 +140,6 @@ namespace DeconTools.UnitTesting2.TheoreticalIsotopicProfileTests
             TestUtilities.DisplayIsotopicProfileData(mt.IsotopicProfile);
             Console.WriteLine();
             TestUtilities.DisplayIsotopicProfileData(mt.IsotopicProfileLabeled);
-
-
-
         }
-
-
     }
 }

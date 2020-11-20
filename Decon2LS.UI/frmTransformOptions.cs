@@ -167,8 +167,6 @@ namespace Decon2LS
                 mctlHornMassTransformOptions.IsActualMonoMZUsed = hornParameters.IsActualMonoMZUsed;
                 mctlHornMassTransformOptions.LeftFitStringencyFactor = hornParameters.LeftFitStringencyFactor;
                 mctlHornMassTransformOptions.RightFitStringencyFactor = hornParameters.RightFitStringencyFactor;
-
-
             }
             catch (Exception ex)
             {
@@ -206,7 +204,6 @@ namespace Decon2LS
                     mctlMiscellaneousOptions.NumZerosToFill = hornParameters.NumZerosToFill;
                 }
                 mctlMiscellaneousOptions.ProcessMSMS = hornParameters.ProcessMSMS;
-
             }
             catch (Exception ex)
             {
@@ -232,7 +229,6 @@ namespace Decon2LS
             {
                 MessageBox.Show(ex.Message + ex.StackTrace);
             }
-
         }
 
         public void GetPeakPickingOptions(DeconToolsV2.Peaks.clsPeakProcessorParameters peakParameters)
@@ -285,7 +281,6 @@ namespace Decon2LS
                 hornParameters.IsActualMonoMZUsed = mctlHornMassTransformOptions.IsActualMonoMZUsed;
                 hornParameters.LeftFitStringencyFactor = mctlHornMassTransformOptions.LeftFitStringencyFactor;
                 hornParameters.RightFitStringencyFactor = mctlHornMassTransformOptions.RightFitStringencyFactor;
-
             }
             catch (Exception ex)
             {
@@ -323,7 +318,6 @@ namespace Decon2LS
                     hornParameters.NumZerosToFill = mctlMiscellaneousOptions.NumZerosToFill;
                 }
                 hornParameters.ProcessMSMS = mctlMiscellaneousOptions.ProcessMSMS;
-
             }
             catch (Exception ex)
             {
@@ -343,15 +337,12 @@ namespace Decon2LS
                 dtaParameters.CCMass = mctlDTASettings.CCMass;
                 dtaParameters.OutputType = mctlDTASettings.OutputType;
                 dtaParameters.WindowSizetoCheck = mctlDTASettings.WindowSize;
-
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message + ex.StackTrace);
             }
-
         }
-
 
         public void GetFTICRRawPreProcessing(DeconToolsV2.Readers.clsRawDataPreprocessOptions fticrPreprocessingOptions)
         {
@@ -366,13 +357,11 @@ namespace Decon2LS
                 fticrPreprocessingOptions.A = mctlPreprocessOptions.CalibrationConstA;
                 fticrPreprocessingOptions.B = mctlPreprocessOptions.CalibrationConstB;
                 fticrPreprocessingOptions.C = mctlPreprocessOptions.CalibrationConstC;
-
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message + ex.StackTrace);
             }
-
         }
 
         private void Init()
@@ -392,7 +381,6 @@ namespace Decon2LS
                 nodeDTAGenerationOptions = new TreeNode();
                 nodePreprocessingOptions = new TreeNode();
 
-
                 nodePeakPicking.Text = "Peak Picking";
                 nodeHornTransform.Text = "Horn Transform";
                 nodeIsotopeDistribution.Text = "Isotope Distribution";
@@ -404,8 +392,6 @@ namespace Decon2LS
                 nodeMiscellaneousOptions.Text = "Miscellaneous Options";
                 nodePreprocessingOptions.Text = "FTICR Preprocessing Options";
                 nodeDTAGenerationOptions.Text = "DTA Generation Options";
-
-
 
                 treeView1.Nodes.Add(nodePeakPicking);
                 nodePeakPicking.Nodes.Add(nodePeakPickingGeneral);
@@ -500,9 +486,6 @@ namespace Decon2LS
             }
             base.Dispose(disposing);
         }
-
-
-
 
         #region Windows Form Designer generated code
         /// <summary>
@@ -621,7 +604,6 @@ namespace Decon2LS
             this.groupBox1.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
-
         }
         #endregion
 
@@ -657,7 +639,6 @@ namespace Decon2LS
                         mctlPreprocessOptions.Visible = false;
                         mctlMiscellaneousOptions.Visible = false;
                         mctlDTASettings.Visible = false;
-
                     }
                 }
                 else if (nodeHornTransform.IsSelected)
@@ -684,7 +665,6 @@ namespace Decon2LS
                         mctlMiscellaneousOptions.Visible = false;
                         mctlDTASettings.Visible = false;
                         mctlHornMassTransformOptions.BringToFront();
-
                     }
                 }
                 else if (nodeIsotopeDistribution.IsSelected)
@@ -711,10 +691,8 @@ namespace Decon2LS
                         mctlPreprocessOptions.Visible = false;
                         mctlMiscellaneousOptions.Visible = false;
                         mctlDTASettings.Visible = false;
-
                     }
                 }
-
                 else if (nodePeakPickingGeneral.IsSelected)
                 {
                     nodeHornTransform.Collapse();
@@ -760,7 +738,6 @@ namespace Decon2LS
                     mctlMiscellaneousOptions.Visible = false;
                     mctlHornMassTransformOptions.BringToFront();
                 }
-
                 else if (nodeThresholdSettings.IsSelected)
                 {
                     nodePeakPicking.Collapse();
@@ -804,7 +781,6 @@ namespace Decon2LS
                     mctlHornMassTransformOptions.Visible = false;
                     mctlPreprocessOptions.Visible = false;
                     mctlDTASettings.Visible = false;
-
                 }
                 else if (nodeDTAGenerationOptions.IsSelected)
                 {
@@ -897,7 +873,6 @@ namespace Decon2LS
 
         private void mctlThresholdSettings_Load(object sender, System.EventArgs e)
         {
-
         }
 
         private void mbtnOK_Click(object sender, System.EventArgs e)
@@ -971,7 +946,6 @@ namespace Decon2LS
             }
         }
 
-
         private void mbtnLoadParameterFile_Click(object sender, System.EventArgs e)
         {
             try
@@ -1022,9 +996,6 @@ namespace Decon2LS
                 MessageBox.Show(ex.Message + ex.StackTrace);
             }
         }
-
-
-
     }
 }
 

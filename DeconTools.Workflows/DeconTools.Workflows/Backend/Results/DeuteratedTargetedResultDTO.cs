@@ -4,18 +4,15 @@ namespace DeconTools.Workflows.Backend.Results
 {
     public class DeuteratedTargetedResultDTO : UnlabeledTargetedResultDTO
     {
-
         #region Properties
         //public float IntensityI2 { get; set; }
         //public float IntensityI4 { get; set; }
         //public double IntensityI4Adjusted { get; set; }
         //public double Ratio { get; set; }
 
-
         //public float IntensityTheorI0 { get; set; }
         //public float IntensityTheorI2 { get; set; }
         //public float IntensityTheorI4 { get; set; }
-
 
         public double HydrogenI0 { get; set; }
         public double HydrogenI1 { get; set; }
@@ -47,7 +44,6 @@ namespace DeconTools.Workflows.Backend.Results
         public double IntegratedLcAbundance { get; set; }
 
         #endregion
-
 
         public override string ToStringWithDetailsAsRow()
         {
@@ -90,7 +86,6 @@ namespace DeconTools.Workflows.Backend.Results
             };
 
             return string.Join("\t", data);
-
         }
     }
 }

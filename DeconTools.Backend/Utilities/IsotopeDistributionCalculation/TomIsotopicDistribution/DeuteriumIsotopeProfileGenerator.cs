@@ -56,7 +56,6 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
 
         #endregion
 
-
         #region Public Methods
 
         public IsotopicProfile GetDHIsotopicProfile(TargetBase mt, double lowpeakCutoff)
@@ -76,10 +75,7 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
             labeledTheorProfile.ChargeState = mt.ChargeState;
 
             return labeledTheorProfile;
-
         }
-
-
 
         public IsotopicProfile GetDHIsotopicProfile2(TargetBase mt, double lowpeakCutoff, double fractionLabeling, double molarMixingofH)
         {
@@ -158,9 +154,7 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
             labeledTheoreticalProfile.ChargeState = mt.ChargeState;
 
             return labeledTheoreticalProfile;
-
         }
-
 
         #endregion
 
@@ -175,9 +169,6 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
 
             labeledTheorProfile.Peaklist[numDeuteriums].XValue = labeledTheorProfile.MonoPeakMZ;
             labeledTheorProfile.MonoIsotopicMass = (labeledTheorProfile.MonoPeakMZ - Globals.PROTON_MASS) * chargeState;
-
-
-
 
             //Assign m/z values to the left of the monoDMass
             var counter = 1;
@@ -194,10 +185,6 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
                 labeledTheorProfile.Peaklist[i].XValue = labeledTheorProfile.Peaklist[numDeuteriums].XValue + (double)counter * (1.003 / (double)chargeState);
                 counter++;
             }
-
-
-
-
         }
         #endregion
 

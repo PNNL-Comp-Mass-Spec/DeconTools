@@ -22,7 +22,6 @@ namespace DeconTools.Workflows.Backend.Core
 
             var target = inputTarget.RootTarget;
 
-
             while (target.HasChildren())
             {
                 target = target.ChildTargets().First();
@@ -30,7 +29,6 @@ namespace DeconTools.Workflows.Backend.Core
             }
 
             return 1+ levels;
-
         }
 
         public List<IqTarget> GetTargetsFromNodelLevel(IqTarget target, int level)
@@ -39,12 +37,10 @@ namespace DeconTools.Workflows.Backend.Core
             iqTargetList.Add(target);
 
             return GetTargetsFromNodelLevel(iqTargetList, level);
-
         }
 
         public List<IqTarget> GetTargetsFromNodelLevel(List<IqTarget> inputTargets, int level)
         {
-
             var iqtargets = new List<IqTarget>(inputTargets);
 
             var currentlevel = 0;
@@ -54,14 +50,9 @@ namespace DeconTools.Workflows.Backend.Core
                 currentlevel++;
 
                 iqtargets = GetAllTargetsOnNextLevel(iqtargets);
-
-
             }
 
             return iqtargets;
-
-
-
         }
 
         public List<IqTarget>GetAllTargetsOnNextLevel(List<IqTarget>inputTargets)
@@ -105,20 +96,17 @@ namespace DeconTools.Workflows.Backend.Core
 
                 if (mz < maxMZObserved)
                 {
-
                     if (mz < minMZObs)
                     {
                         break;
                     }
 
                     IqTarget chargeStateTarget = new IqChargeStateTarget();
-                    
 
                     CopyTargetProperties(iqTarget, chargeStateTarget);
 
                     //Note - make sure this step is done after the 'CopyTargetProperties'
                     chargeStateTarget.ChargeState = charge;
-
 
                     //adjust isotope profile to reflect new charge state
                     if (chargeStateTarget.TheorIsotopicProfile != null && iqTarget.TheorIsotopicProfile !=null)
@@ -133,12 +121,8 @@ namespace DeconTools.Workflows.Backend.Core
                 }
             }
 
-
             //sort by charge state (descending). Then take the top N charge states. Then reorder by charge state (ascending).
             targetList = targetList.OrderByDescending(p => p.ChargeState).Take(maxChargeStatesToCreate).OrderBy(p => p.ChargeState).ToList();
-
-            
-
 
             return targetList;
         }
@@ -176,11 +160,9 @@ namespace DeconTools.Workflows.Backend.Core
 
             var targetList = new List<IqTarget>();
 
-
             foreach (var formula in empiricalFormulaList)
             {
                 IqTarget parentTarget = new IqTargetBasic();
-
 
                 parentTarget.EmpiricalFormula = formula;
                 parentTarget.ID = targetIDCounter++;
@@ -191,20 +173,13 @@ namespace DeconTools.Workflows.Backend.Core
                 parentTarget.ElutionTimeTheor = 0.5;
                 parentTarget.ChargeState = 0;     //this is the neutral mass
 
-
                 var childTargets = CreateChargeStateTargets(parentTarget, minMZObs, maxMZObserved);
                 parentTarget.AddTargetRange(childTargets);
 
-
                 targetList.Add(parentTarget);
-
             }
 
             return targetList;
-
-
-
-
         }
 
         /// <summary>
@@ -221,7 +196,7 @@ namespace DeconTools.Workflows.Backend.Core
             //TODO: the problem is here is we are creating an IqTargetBasic, which might not fit everyone's liking
             IqTarget copiedTarget = new IqTargetBasic();
             CopyTargetProperties(target, copiedTarget);
-            
+
             //this returnes the copied tree
             var deepCopy = CloneIqTrees(target);
 
@@ -252,7 +227,7 @@ namespace DeconTools.Workflows.Backend.Core
         public IqTarget Clone(IqTarget target)
         {
             IqTarget tempTarget = new IqTargetBasic();
-            
+
             CopyTargetProperties(target,tempTarget);
 
             //child targets
@@ -298,8 +273,6 @@ namespace DeconTools.Workflows.Backend.Core
             {
                 target.MonoMassTheor =
                     EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(target.EmpiricalFormula);
-
-               
             }
 
             if (target.ChargeState != 0)
@@ -342,7 +315,6 @@ namespace DeconTools.Workflows.Backend.Core
             return s[0];
         }
 
-
         public void CopyTargetProperties(IqTarget sourceTarget, IqTarget targetForUpdate, bool updateWorkflow = true)
         {
             targetForUpdate.ID = sourceTarget.ID;
@@ -354,7 +326,6 @@ namespace DeconTools.Workflows.Backend.Core
             targetForUpdate.ElutionTimeTheor = sourceTarget.ElutionTimeTheor;
             targetForUpdate.ScanLC = sourceTarget.ScanLC;
             targetForUpdate.QualityScore = sourceTarget.QualityScore;
-            
 
             targetForUpdate.TheorIsotopicProfile = sourceTarget.TheorIsotopicProfile == null
                              ? null
@@ -364,11 +335,9 @@ namespace DeconTools.Workflows.Backend.Core
             {
                 targetForUpdate.Workflow = sourceTarget.Workflow;
             }
-
         }
 
         #endregion
-
 
     }
 }

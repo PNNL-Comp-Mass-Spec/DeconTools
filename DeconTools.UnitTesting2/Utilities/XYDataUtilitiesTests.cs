@@ -15,22 +15,16 @@ namespace DeconTools.UnitTesting2.Utilities
         [Test]
         public void Test1()
         {
-
             double featureFinderTol = 15;
 
-             var n14n15Util = new N14N15TestingUtilities();
+            var n14n15Util = new N14N15TestingUtilities();
             //get MS
             var massSpectrum = n14n15Util.GetSpectrumAMTTag23140708_Z3_Sum3();  //this is the diff b/w previous test and this one
 
-
             var mt23140708 = n14n15Util.CreateMT23140708_Z3();
-
 
             var featureGen2 = new JoshTheorFeatureGenerator();
             featureGen2.GenerateTheorFeature(mt23140708);
-
-
-
 
             //get ms peaks
             var peakDet = new DeconToolsPeakDetectorV2(1.3, 2);
@@ -39,11 +33,9 @@ namespace DeconTools.UnitTesting2.Utilities
             var bff = new BasicTFF(featureFinderTol, requiresMonoPeak: false);
             var n14Profile = bff.FindMSFeature(msPeakList, mt23140708.IsotopicProfile);
 
-            var theorXYData=   mt23140708.IsotopicProfile.GetTheoreticalIsotopicProfileXYData(n14Profile.GetFWHM());
-
+            var theorXYData = mt23140708.IsotopicProfile.GetTheoreticalIsotopicProfileXYData(n14Profile.GetFWHM());
 
             double obsMaxY = n14Profile.getMostIntensePeak().Height;
-
 
             for (var i = 0; i < theorXYData.Xvalues.Length; i++)
             {
@@ -52,11 +44,8 @@ namespace DeconTools.UnitTesting2.Utilities
 
             offsetDistribution(theorXYData, mt23140708.IsotopicProfile, n14Profile);
 
-
-            var subtracted=   XYDataUtilities.SubtractXYData(massSpectrum, theorXYData, n14Profile.MonoPeakMZ - 1,
+            var subtracted = XYDataUtilities.SubtractXYData(massSpectrum, theorXYData, n14Profile.MonoPeakMZ - 1,
                                            n14Profile.MonoPeakMZ + 3, 0.01);
-
-
 
             var outputFileMS = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\TextFile\massSpectrum1.txt";
             var outputFileMSSubtracted = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\TextFile\massSpectrum1_withDataSubtracted.txt";
@@ -64,14 +53,9 @@ namespace DeconTools.UnitTesting2.Utilities
             TestUtilities.WriteToFile(massSpectrum, outputFileMS);
             TestUtilities.WriteToFile(subtracted, outputFileMSSubtracted);
 
-
-
             // XYDataUtilities.NormalizeXYData()
 
-
-
         }
-
 
         private void offsetDistribution(XYData theorXYData, IsotopicProfile theorIsotopicProfile, IsotopicProfile observedIsotopicProfile)
         {
@@ -105,13 +89,7 @@ namespace DeconTools.UnitTesting2.Utilities
             foreach (var peak in theorIsotopicProfile.Peaklist)
             {
                 peak.XValue = peak.XValue + offset;
-
             }
-
-
         }
-
-
-
     }
 }

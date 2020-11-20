@@ -15,7 +15,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.O16O18TraditionalProce
         public void Test1()
         {
             var rawfilename = @"D:\Data\O16O18\GlueGrant\GG_MO_Trauma_374020_20May11_Sphinx_11-03-28.RAW";
-            var exportedIsos = Path.Combine(Path.GetDirectoryName(rawfilename),  Path.GetFileName(rawfilename).Replace(".RAW", "_test_isos.csv"));
+            var exportedIsos = Path.Combine(Path.GetDirectoryName(rawfilename), Path.GetFileName(rawfilename).Replace(".RAW", "_test_isos.csv"));
 
             if (File.Exists(exportedIsos)) File.Delete(exportedIsos);
 
@@ -23,8 +23,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.O16O18TraditionalProce
 
             run.ResultCollection.ResultType = Backend.Globals.ResultType.O16O18_TRADITIONAL_RESULT;
 
-            run.ScanSetCollection .Create(run, 5000, 5000, 1, 1);
-
+            run.ScanSetCollection.Create(run, 5000, 5000, 1, 1);
 
             run.CurrentScanSet = run.ScanSetCollection.ScanSetList[0];
 
@@ -56,6 +55,5 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.O16O18TraditionalProce
 
             run.Close();
         }
-
     }
 }

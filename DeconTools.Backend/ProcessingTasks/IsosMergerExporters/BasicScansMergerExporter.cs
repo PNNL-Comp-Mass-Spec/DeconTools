@@ -6,9 +6,8 @@ using DeconTools.Backend.Core;
 
 namespace DeconTools.Backend.ProcessingTasks.IsosMergerExporters
 {
-    public class BasicScansMergerExporter:IIsosMergerExporter
+    public class BasicScansMergerExporter : IIsosMergerExporter
     {
-
         private int runCounter;
         private readonly StreamWriter sw;
         private const char DELIMITER = ',';
@@ -76,7 +75,6 @@ namespace DeconTools.Backend.ProcessingTasks.IsosMergerExporters
         {
             return scan_num * runCounter;
         }
-
 
         public override void Cleanup()
         {

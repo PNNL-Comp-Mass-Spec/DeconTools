@@ -38,9 +38,9 @@ namespace Decon2LS
         private System.Windows.Forms.Label mlblLeft;
         private System.Windows.Forms.TextBox mtxtOrder;
         private System.Windows.Forms.Label mlblOrder;
-        private short SGMaxPts = 50 ; 
-        private short SGMaxOrder = 5 ;
-        private short MaxNumZerosToFill = 150 ; 
+        private short SGMaxPts = 50;
+        private short SGMaxOrder = 5;
+        private short MaxNumZerosToFill = 150;
         private System.Windows.Forms.TextBox mtxtMaxMZ;
         private System.Windows.Forms.Label mlabelMaxMZ;
         private System.Windows.Forms.TextBox mtxtMinMZ;
@@ -55,8 +55,8 @@ namespace Decon2LS
         private System.Windows.Forms.TextBox mtxtZeros;
         private System.Windows.Forms.Panel panelMSMS;
         private System.Windows.Forms.CheckBox mchkProcessMSMS;
-        private System.Windows.Forms.GroupBox groupBoxMSMS; 
-        /// <summary> 
+        private System.Windows.Forms.GroupBox groupBoxMSMS;
+        /// <summary>
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.Container components = null;
@@ -70,24 +70,24 @@ namespace Decon2LS
 
         }
 
-        /// <summary> 
+        /// <summary>
         /// Clean up any resources being used.
         /// </summary>
-        protected override void Dispose( bool disposing )
+        protected override void Dispose(bool disposing)
         {
-            if( disposing )
+            if (disposing)
             {
-                if(components != null)
+                if (components != null)
                 {
                     components.Dispose();
                 }
             }
-            base.Dispose( disposing );
+            base.Dispose(disposing);
         }
 
         #region Component Designer generated code
-        /// <summary> 
-        /// Required method for Designer support - do not modify 
+        /// <summary>
+        /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
@@ -494,101 +494,100 @@ namespace Decon2LS
             this.panelMSMS.ResumeLayout(false);
             this.groupBoxMSMS.ResumeLayout(false);
             this.ResumeLayout(false);
-
         }
         #endregion
 
         private void mCheckUseScanRange_CheckedChanged(object sender, System.EventArgs e)
         {
-            mpanelScanOptions.Enabled = mCheckUseScanRange.Checked ; 
-            mtxtMaxScan.Enabled = mCheckUseScanRange.Checked ; 
-            mtxtMinScan.Enabled = mCheckUseScanRange.Checked ; 
-            mlabelMinScan.Enabled = mCheckUseScanRange.Checked ; 
-            mlabelMaxScan.Enabled = mCheckUseScanRange.Checked ; 
+            mpanelScanOptions.Enabled = mCheckUseScanRange.Checked;
+            mtxtMaxScan.Enabled = mCheckUseScanRange.Checked;
+            mtxtMinScan.Enabled = mCheckUseScanRange.Checked;
+            mlabelMinScan.Enabled = mCheckUseScanRange.Checked;
+            mlabelMaxScan.Enabled = mCheckUseScanRange.Checked;
         }
 
         private void mCheckUseMZRange_CheckedChanged(object sender, System.EventArgs e)
         {
-            mpanelMZOptions.Enabled = mCheckUseMZRange.Checked ; 
-            mtxtMinMZ.Enabled = mCheckUseMZRange.Checked ; 
-            mtxtMaxMZ.Enabled = mCheckUseMZRange.Checked ; 
-            mlabelMinMZ.Enabled = mCheckUseMZRange.Checked ; 
-            mlabelMaxMZ.Enabled = mCheckUseMZRange.Checked ; 
+            mpanelMZOptions.Enabled = mCheckUseMZRange.Checked;
+            mtxtMinMZ.Enabled = mCheckUseMZRange.Checked;
+            mtxtMaxMZ.Enabled = mCheckUseMZRange.Checked;
+            mlabelMinMZ.Enabled = mCheckUseMZRange.Checked;
+            mlabelMaxMZ.Enabled = mCheckUseMZRange.Checked;
         }
 
         private void mChkSmoothing_CheckedChanged(object sender, System.EventArgs e)
         {
-            mgroupBoxSavGol.Enabled = mChkSmoothing.Checked ; 
-            mtxtLeft.Enabled = mChkSmoothing.Checked ; 
-            mtxtRight.Enabled = mChkSmoothing.Checked ; 
-            mtxtOrder.Enabled = mChkSmoothing.Checked ; 
-            mlblLeft.Enabled = mChkSmoothing.Checked ; 
-            mlblRight.Enabled = mChkSmoothing.Checked ; 
-            mlblOrder.Enabled = mChkSmoothing.Checked ; 
+            mgroupBoxSavGol.Enabled = mChkSmoothing.Checked;
+            mtxtLeft.Enabled = mChkSmoothing.Checked;
+            mtxtRight.Enabled = mChkSmoothing.Checked;
+            mtxtOrder.Enabled = mChkSmoothing.Checked;
+            mlblLeft.Enabled = mChkSmoothing.Checked;
+            mlblRight.Enabled = mChkSmoothing.Checked;
+            mlblOrder.Enabled = mChkSmoothing.Checked;
         }
 
         private void mCheckZeroFile_CheckedChanged(object sender, System.EventArgs e)
         {
             //mgroupZeroFill.Enabled = mChkZeroFill.Checked ; //[gord] this disables the checkbox itself
-            mtxtZeros.Enabled = mChkZeroFill.Checked ; 
-            mlblZeroFill.Enabled = mChkZeroFill.Checked ; 
-            mtxtZeros.Enabled = mChkZeroFill.Checked ; 
+            mtxtZeros.Enabled = mChkZeroFill.Checked;
+            mlblZeroFill.Enabled = mChkZeroFill.Checked;
+            mtxtZeros.Enabled = mChkZeroFill.Checked;
         }
 
         public bool ZeroFill
         {
             get
             {
-                return mChkZeroFill.Checked ; 
+                return mChkZeroFill.Checked;
             }
             set
             {
-                mChkZeroFill.Checked = value ; 
+                mChkZeroFill.Checked = value;
             }
         }
         public short NumZerosToFill
         {
             get
             {
-                return Convert.ToInt16(mtxtZeros.Text) ; 
+                return Convert.ToInt16(mtxtZeros.Text);
             }
             set
             {
-                mtxtZeros.Text = Convert.ToString(value) ; 
+                mtxtZeros.Text = Convert.ToString(value);
             }
         }
-    
+
         public bool UseScanRange
         {
             get
             {
-                return mCheckUseScanRange.Checked ; 
+                return mCheckUseScanRange.Checked;
             }
             set
             {
-                mCheckUseScanRange.Checked = value ; 
+                mCheckUseScanRange.Checked = value;
             }
         }
         public int MinScan
         {
             get
             {
-                return Convert.ToInt32(mtxtMinScan.Text) ; 
+                return Convert.ToInt32(mtxtMinScan.Text);
             }
             set
             {
-                mtxtMinScan.Text = Convert.ToString(value) ; 
+                mtxtMinScan.Text = Convert.ToString(value);
             }
         }
         public int MaxScan
         {
             get
             {
-                return Convert.ToInt32(mtxtMaxScan.Text) ; 
+                return Convert.ToInt32(mtxtMaxScan.Text);
             }
             set
             {
-                mtxtMaxScan.Text = Convert.ToString(value) ; 
+                mtxtMaxScan.Text = Convert.ToString(value);
             }
         }
 
@@ -596,127 +595,122 @@ namespace Decon2LS
         {
             get
             {
-                return mCheckUseMZRange.Checked ; 
+                return mCheckUseMZRange.Checked;
             }
             set
             {
-                mCheckUseMZRange.Checked = value ; 
+                mCheckUseMZRange.Checked = value;
             }
         }
         public double MinMZ
         {
             get
             {
-                return Convert.ToDouble(mtxtMinMZ.Text) ; 
+                return Convert.ToDouble(mtxtMinMZ.Text);
             }
             set
             {
-                mtxtMinMZ.Text = Convert.ToString(value) ; 
+                mtxtMinMZ.Text = Convert.ToString(value);
             }
         }
         public double MaxMZ
         {
             get
             {
-                return Convert.ToDouble(mtxtMaxMZ.Text) ; 
+                return Convert.ToDouble(mtxtMaxMZ.Text);
             }
             set
             {
-                mtxtMaxMZ.Text = Convert.ToString(value) ; 
+                mtxtMaxMZ.Text = Convert.ToString(value);
             }
         }
 
-        
         public bool UseSavitzkyGolaySmooth
         {
             get
             {
-                return mChkSmoothing.Checked ; 
+                return mChkSmoothing.Checked;
             }
             set
             {
-                mChkSmoothing.Checked = value ; 
+                mChkSmoothing.Checked = value;
             }
         }
         public short SGNumLeft
         {
             get
             {
-                return Convert.ToInt16(mtxtLeft.Text) ; 
+                return Convert.ToInt16(mtxtLeft.Text);
             }
             set
             {
-                mtxtLeft.Text = Convert.ToString(value) ; 
+                mtxtLeft.Text = Convert.ToString(value);
             }
         }
         public short SGNumRight
         {
             get
             {
-                return Convert.ToInt16(mtxtRight.Text) ; 
+                return Convert.ToInt16(mtxtRight.Text);
             }
             set
             {
-                mtxtRight.Text = Convert.ToString(value) ; 
+                mtxtRight.Text = Convert.ToString(value);
             }
         }
         public short SGOrder
         {
             get
             {
-                return Convert.ToInt16(mtxtOrder.Text) ; 
+                return Convert.ToInt16(mtxtOrder.Text);
             }
             set
             {
-                mtxtOrder.Text = Convert.ToString(value) ; 
+                mtxtOrder.Text = Convert.ToString(value);
             }
         }
-        
 
         public void SanityCheck()
         {
             if (SGNumLeft > SGMaxPts)
             {
-                MessageBox.Show(this, "Can have at most " + Convert.ToString(SGMaxPts) + " points for smoothing") ; 
-                SGNumLeft = SGMaxPts ; 
+                MessageBox.Show(this, "Can have at most " + Convert.ToString(SGMaxPts) + " points for smoothing");
+                SGNumLeft = SGMaxPts;
             }
             if (SGNumRight > SGMaxPts)
             {
-                MessageBox.Show(this, "Can have at most " + Convert.ToString(SGMaxPts) + " points for smoothing") ; 
-                SGNumRight = SGMaxPts ; 
+                MessageBox.Show(this, "Can have at most " + Convert.ToString(SGMaxPts) + " points for smoothing");
+                SGNumRight = SGMaxPts;
             }
             if (SGOrder > SGMaxOrder)
             {
-                MessageBox.Show(this, "Maximum value of order = " + Convert.ToString(SGMaxOrder)) ; 
-                SGOrder = SGMaxOrder ; 
+                MessageBox.Show(this, "Maximum value of order = " + Convert.ToString(SGMaxOrder));
+                SGOrder = SGMaxOrder;
             }
             if (SGNumLeft + SGNumRight < SGOrder)
             {
-                MessageBox.Show(this, "Savitzky Golay Order can be at most equal to # left plus # right. Using updated value.") ; 
-                var val = SGNumLeft ;
-                val += SGNumRight ; 
-                SGOrder = val ; 
+                MessageBox.Show(this, "Savitzky Golay Order can be at most equal to # left plus # right. Using updated value.");
+                var val = SGNumLeft;
+                val += SGNumRight;
+                SGOrder = val;
             }
             if (NumZerosToFill > MaxNumZerosToFill)
             {
-                MessageBox.Show(this, "Maximum value of number of zeros to fill = " + Convert.ToString(MaxNumZerosToFill)) ; 
-                SGOrder = MaxNumZerosToFill ; 
+                MessageBox.Show(this, "Maximum value of number of zeros to fill = " + Convert.ToString(MaxNumZerosToFill));
+                SGOrder = MaxNumZerosToFill;
             }
-
         }
 
         public bool ProcessMSMS
         {
             get
             {
-                return mchkProcessMSMS.Checked ; 
+                return mchkProcessMSMS.Checked;
             }
             set
             {
-                mchkProcessMSMS.Checked = value ; 
+                mchkProcessMSMS.Checked = value;
             }
         }
-
-
     }
 }

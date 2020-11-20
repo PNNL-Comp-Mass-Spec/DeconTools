@@ -17,8 +17,6 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.MassTagResultExport
         public BasicMTResultSQLiteExporter(string fileName)
             : this(fileName, 10000)
         {
-
-
         }
 
         public BasicMTResultSQLiteExporter(string fileName, int triggerValue)
@@ -46,21 +44,16 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.MassTagResultExport
             }
 
             buildTables();
-
-
-
         }
 
         private void buildTables()
         {
-
             Table isosResultTable = new MassTagResult_SqliteTable("T_MassTagResults");
             var command = cnn.CreateCommand();
 
             command.CommandText = isosResultTable.BuildCreateTableString();
             command.ExecuteNonQuery();
         }
-
 
         #endregion
 
@@ -99,7 +92,6 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.MassTagResultExport
                     var massTagNETParam = new SQLiteParameter();
                     var massTagSequenceParam = new SQLiteParameter();
 
-
                     mycommand.CommandText = @"INSERT INTO T_MassTagResults ([feature_id],[scan_num],[charge],[abundance],[mz],[fit],
 [net],[mass_tag_id],[mass_tag_mz],[mass_tag_NET],[mass_tag_sequence],
 [average_mw],[monoisotopic_mw],[mostabundant_mw],[fwhm],[signal_noise],[mono_abundance],[mono_plus2_abundance]) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
@@ -115,7 +107,6 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.MassTagResultExport
                     mycommand.Parameters.Add(massTagMZParam);
                     mycommand.Parameters.Add(massTagNETParam);
                     mycommand.Parameters.Add(massTagSequenceParam);
-
 
                     mycommand.Parameters.Add(averageMWParam);
                     mycommand.Parameters.Add(monoIsotopicMWParam);
@@ -147,7 +138,6 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.MassTagResultExport
                             abundanceParam.Value = item.Value.IsotopicProfile.GetAbundance();
                             mzParam.Value = item.Value.IsotopicProfile.GetMZ();
 
-
                             averageMWParam.Value = item.Value.IsotopicProfile.AverageMass;
                             monoIsotopicMWParam.Value = item.Value.IsotopicProfile.MonoIsotopicMass;
                             //mostAbundantMWParam.Value = item.Value.IsotopicProfile.getMostIntensePeak().XValue;
@@ -158,15 +148,10 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.MassTagResultExport
                         }
                         mycommand.ExecuteNonQuery();
                     }
-
-
                 }
                 mytransaction.Commit();
-
             }
-
         }
-
 
         #endregion
         public override void ExportMassTagResults(Core.ResultCollection resultColl)
@@ -183,14 +168,13 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.MassTagResultExport
             {
                 try
                 {
-                    using (var tempConn = cnn )
+                    using (var tempConn = cnn)
                     {
                         if (tempConn.State != System.Data.ConnectionState.Closed)
                         {
                             tempConn.Close();
                         }
                     }
-
                 }
                 catch (Exception)
                 {

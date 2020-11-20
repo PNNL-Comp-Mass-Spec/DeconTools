@@ -14,10 +14,7 @@ namespace DeconTools.Workflows.Backend.Core
 {
     public sealed class SipperWorkflowExecutor : TargetedWorkflowExecutor
     {
-
         #region Properties
-
-
 
         public bool TargetsAreFromPeakMatchingDataBase { get; set; }
 
@@ -34,10 +31,7 @@ namespace DeconTools.Workflows.Backend.Core
         public SipperWorkflowExecutor(WorkflowParameters parameters, string datasetPath, BackgroundWorker backgroundWorker = null)
             : base(parameters, datasetPath, backgroundWorker)
         {
-
-
         }
-
 
         public new void InitializeWorkflow()
         {
@@ -45,22 +39,18 @@ namespace DeconTools.Workflows.Backend.Core
 
             Check.Require(WorkflowParameters is SipperWorkflowExecutorParameters, "Parameters are not of the right type.");
 
-
             var db = ((SipperWorkflowExecutorParameters)WorkflowParameters).DbName;
             var server = ((SipperWorkflowExecutorParameters)WorkflowParameters).DbServer;
             var table = ((SipperWorkflowExecutorParameters)WorkflowParameters).DbTableName;
-
 
             var massTagIDsForFiltering =
                 GetMassTagsToFilterOn(((SipperWorkflowExecutorParameters)WorkflowParameters).TargetsToFilterOn).Distinct().ToList();
 
             _loggingFileName = Path.Combine(ExecutorParameters.OutputDirectoryBase, "Logs", RunUtilities.GetDatasetName(DatasetPath) + "_log.txt");
 
-
             TargetsAreFromPeakMatchingDataBase = (!string.IsNullOrEmpty(db) && !string.IsNullOrEmpty(server));
 
             var targetsFilePathIsEmpty = (string.IsNullOrEmpty(ExecutorParameters.TargetsFilePath));
-
 
             if (TargetsAreFromPeakMatchingDataBase)
             {
@@ -80,30 +70,22 @@ namespace DeconTools.Workflows.Backend.Core
                     {
                         Targets = GetLcmsFeatureTargets(currentTargetsFilePath);
                     }
-
                 }
                 else
                 {
                     Targets = GetLcmsFeatureTargets(ExecutorParameters.TargetsFilePath);
                 }
-
-
             }
 
             Check.Ensure(Targets != null && Targets.TargetList.Count > 0, "Failed to initialize - Target list is empty. Please check parameter file.");
 
-
             if (massTagIDsForFiltering.Count > 0)
             {
-
                 Targets.TargetList =
                     (from n in Targets.TargetList
                      where massTagIDsForFiltering.Contains(((LcmsFeatureTarget)n).FeatureToMassTagID)
                      select n).ToList();
-
             }
-
-
 
             MassTagIDsInTargets = Targets.TargetList.Select(p => (long)((LcmsFeatureTarget)p).FeatureToMassTagID).Where(n => n > 0).ToList();
 
@@ -114,8 +96,6 @@ namespace DeconTools.Workflows.Backend.Core
             }
             else
             {
-
-
                 MassTagsForReference = GetMassTagTargets(((SipperWorkflowExecutorParameters)WorkflowParameters).ReferenceDataForTargets, MassTagIDsInTargets.Select(p => (int)p).ToList());
             }
 
@@ -128,12 +108,7 @@ namespace DeconTools.Workflows.Backend.Core
                                                    into grp
                                                    select grp.First()).ToList();
 
-
-
-
-
             UpdateTargetMissingInfo();
-
 
             _resultsDirectory = GetResultsDirectory(ExecutorParameters.OutputDirectoryBase);
 
@@ -178,21 +153,15 @@ namespace DeconTools.Workflows.Backend.Core
             return massTagList;
         }
 
-
         public TargetCollection LoadAllTargetsFromPeakMatchingResults()
         {
             var table = ((SipperWorkflowExecutorParameters)WorkflowParameters).DbTableName;
 
-
             var targetCollection = new TargetCollection();
-
-
-
 
             var fact = DbProviderFactories.GetFactory("System.Data.SqlClient");
             using (var cnn = fact.CreateConnection())
             {
-
                 cnn.ConnectionString = buildConnectionString();
                 cnn.Open();
 
@@ -206,31 +175,21 @@ namespace DeconTools.Workflows.Backend.Core
                     var reader = command.ExecuteReader();
 
                     ReadResultsFromDB(targetCollection, reader);
-
-
                 }
-
-
             }
 
             return targetCollection;
         }
 
-
         public TargetCollection LoadTargetsFromPeakMatchingResultsForGivenDataset(string datasetName)
         {
             var table = ((SipperWorkflowExecutorParameters)WorkflowParameters).DbTableName;
 
-
             var targetCollection = new TargetCollection();
-
-
-
 
             var fact = DbProviderFactories.GetFactory("System.Data.SqlClient");
             using (var cnn = fact.CreateConnection())
             {
-
                 cnn.ConnectionString = buildConnectionString();
                 cnn.Open();
 
@@ -245,11 +204,7 @@ namespace DeconTools.Workflows.Backend.Core
                     var reader = command.ExecuteReader();
 
                     ReadResultsFromDB(targetCollection, reader);
-
-
                 }
-
-
             }
 
             return targetCollection;
@@ -259,7 +214,6 @@ namespace DeconTools.Workflows.Backend.Core
         {
             var db = ((SipperWorkflowExecutorParameters)WorkflowParameters).DbName;
             var server = ((SipperWorkflowExecutorParameters)WorkflowParameters).DbServer;
-
 
             var builder = new System.Data.SqlClient.SqlConnectionStringBuilder
             {
@@ -299,7 +253,6 @@ namespace DeconTools.Workflows.Backend.Core
 
         private string readString(IDataRecord reader, string columnName, string defaultVal = "")
         {
-
             if (!reader[columnName].Equals(DBNull.Value))
             {
                 return Convert.ToString(reader[columnName]);
@@ -312,7 +265,6 @@ namespace DeconTools.Workflows.Backend.Core
 
         private int readInt(IDataRecord reader, string columnName, int defaultVal = 0)
         {
-
             if (!reader[columnName].Equals(DBNull.Value))
             {
                 return Convert.ToInt32(reader[columnName]);
@@ -325,7 +277,6 @@ namespace DeconTools.Workflows.Backend.Core
 
         private void ReadResultsFromDB(TargetCollection targetCollection, DbDataReader reader)
         {
-
             while (reader.Read())
             {
                 var result = new LcmsFeatureTarget
@@ -345,6 +296,5 @@ namespace DeconTools.Workflows.Backend.Core
                 targetCollection.TargetList.Add(result);
             }
         }
-
     }
 }

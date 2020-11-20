@@ -9,7 +9,6 @@ namespace DeconTools.Backend.ProcessingTasks.MSGenerators
         public GenericMSGenerator()
             : this(0, 5000, true)
         {
-
         }
 
         public GenericMSGenerator(double minMZ, double maxMZ, bool isTicRequested)
@@ -39,8 +38,6 @@ namespace DeconTools.Backend.ProcessingTasks.MSGenerators
             }
 
             return xyData;
-
-
         }
     }
 }

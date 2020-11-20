@@ -42,6 +42,4 @@ namespace DeconTools.Backend.Utilities
             }
         }
     }
-
-
 }

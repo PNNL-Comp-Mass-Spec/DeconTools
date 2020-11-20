@@ -19,7 +19,6 @@ namespace DeconTools.Backend.Utilities
 
             if (targetIndex > 0)
             {
-
                 for (var i = (targetIndex - 1); i >= 0; i--)
                 {
                     if (Math.Abs(targetVal - inputList[i].XValue) <= toleranceInMZ)
@@ -41,7 +40,6 @@ namespace DeconTools.Backend.Utilities
                     {
                         outputList.Add(inputList[i]);
                     }
-
                 }
             }
 
@@ -59,10 +57,7 @@ namespace DeconTools.Backend.Utilities
             }
 
             return msPeakList;
-
         }
-
-
 
         public static List<Peak> GetPeaksWithinTolerance(List<Peak> inputList, double targetVal, double toleranceInMZ)
         {
@@ -108,7 +103,6 @@ namespace DeconTools.Backend.Utilities
             return outputList;
         }
 
-
         public Peak GetBasePeak(List<Peak> peakList)
         {
             if (peakList == null || peakList.Count == 0) return new Peak();
@@ -123,10 +117,8 @@ namespace DeconTools.Backend.Utilities
                 {
                     maxPeak = peak;
                 }
-
             }
             return maxPeak;
-
         }
 
         public static int getIndexOfClosestValue(List<Peak> inputList, double targetVal, int leftIndex, int rightIndex, double toleranceInMZ)
@@ -175,14 +167,12 @@ namespace DeconTools.Backend.Utilities
             return -1;
         }
 
-
         public static void TrimIsotopicProfile(IsotopicProfile isotopicProfile, double cutOff, bool neverTrimLeft = false, bool neverTrimRight = false)
         {
             if (isotopicProfile?.Peaklist == null || isotopicProfile.Peaklist.Count == 0) return;
 
             var indexOfMaxPeak = isotopicProfile.GetIndexOfMostIntensePeak();
             var trimmedPeakList = new List<MSPeak>();
-
 
             //Trim left
             if (indexOfMaxPeak > 0)   // if max peak is not the first peak, then trim
@@ -208,12 +198,10 @@ namespace DeconTools.Backend.Utilities
                     {
                         trimmedPeakList.Add(isotopicProfile.Peaklist[i]);
                     }
-
                 }
             }
 
             isotopicProfile.Peaklist = trimmedPeakList;
-
         }
 
         public static List<MSPeak> OrderPeaksByIntensityDesc(List<MSPeak> inputList)
@@ -239,13 +227,7 @@ namespace DeconTools.Backend.Utilities
             }
 
             return outputList;
-
-
-
-
         }
-
-
 
         public static double GetSumOfIntensities(IList<Peak> inputPeaks, double backgroundIntensity)
         {
@@ -257,18 +239,14 @@ namespace DeconTools.Backend.Utilities
             }
 
             return sum;
-
         }
-
 
         public static XYData GetChromatogram(List<DTO.MSPeakResult> peakList, double targetMZ, double toleranceInMZ)
         {
-
             var xyData = new XYData();
 
             var lowerMZ = targetMZ - toleranceInMZ;
             var upperMZ = targetMZ + toleranceInMZ;
-
 
             var filteredPeakList = peakList.Where(p => p.MSPeak.XValue >= lowerMZ && p.MSPeak.XValue <= upperMZ).ToList();
 
@@ -276,7 +254,6 @@ namespace DeconTools.Backend.Utilities
             {
                 return null;
             }
-
 
             var minScan = filteredPeakList.First().Scan_num;
             var maxScan = filteredPeakList.Last().Scan_num;
@@ -286,7 +263,6 @@ namespace DeconTools.Backend.Utilities
             for (var i = minScan; i <= maxScan; i++)
             {
                 scanAndIntensityList.Add(i, 0);
-
             }
 
             foreach (var peakResult in filteredPeakList)

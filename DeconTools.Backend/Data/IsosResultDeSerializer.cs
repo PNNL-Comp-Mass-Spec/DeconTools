@@ -5,7 +5,6 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 namespace DeconTools.Backend.Data
 {
-
     /// <summary>
     /// Retrieves ResultCollection objects that have been serialized one after another.
     /// </summary>
@@ -23,15 +22,12 @@ namespace DeconTools.Backend.Data
             try
             {
                 stream = new FileStream(binaryDataFilename, FileMode.Open, FileAccess.Read);
-
             }
             catch (Exception ex)
             {
-
-                throw new IOException("De-serializer could not find temporary binary file. Details: "+ex.Message);
+                throw new IOException("De-serializer could not find temporary binary file. Details: " + ex.Message);
             }
         }
-
 
         public ResultCollection GetNextSetOfResults()
         {
@@ -46,7 +42,6 @@ namespace DeconTools.Backend.Data
             }
 
             return results;
-
         }
 
         internal void Close()
@@ -57,7 +52,6 @@ namespace DeconTools.Backend.Data
             }
             catch (Exception ex)
             {
-
                 throw new IOException("Deserializer couldn't close the binary stream. Details: " + ex.Message);
             }
         }

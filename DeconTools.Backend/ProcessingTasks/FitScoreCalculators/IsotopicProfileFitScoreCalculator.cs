@@ -4,7 +4,7 @@ using DeconTools.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
 {
-    public class IsotopicProfileFitScoreCalculator:Task
+    public class IsotopicProfileFitScoreCalculator : Task
     {
         #region properties
 
@@ -54,23 +54,20 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
                     break;
             }
 
-           resultList.CurrentTargetedResult.Score = CalculateFitScore(theorProfile, resultList.CurrentTargetedResult.IsotopicProfile, resultList.Run.XYData);
+            resultList.CurrentTargetedResult.Score = CalculateFitScore(theorProfile, resultList.CurrentTargetedResult.IsotopicProfile, resultList.Run.XYData);
         }
         #endregion
 
-
-        public double CalculateFitScore(IsotopicProfile theorProfile, IsotopicProfile observedProfile, XYData massSpecXYData )
+        public double CalculateFitScore(IsotopicProfile theorProfile, IsotopicProfile observedProfile, XYData massSpecXYData)
         {
             if (observedProfile?.Peaklist == null || observedProfile.Peaklist.Count == 0)
             {
                 return 1.0;   // this is the worst possible fit score. ( 0.000 is the best possible fit score);  Maybe we want to return a '-1' to indicate a failure...
-
             }
 
             var indexOfMostAbundantTheorPeak = theorProfile.GetIndexOfMostIntensePeak();
             var indexOfCorrespondingObservedPeak = PeakUtilities.getIndexOfClosestValue(observedProfile.Peaklist,
                 theorProfile.getMostIntensePeak().XValue, 0, observedProfile.Peaklist.Count - 1, 0.1);
-
 
             if (indexOfCorrespondingObservedPeak < 0)      // most abundant peak isn't present in the actual theoretical profile... problem!
             {
@@ -93,6 +90,5 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
             if (double.IsNaN(fitVal) || fitVal > 1) fitVal = 1;
             return fitVal;
         }
-
     }
 }

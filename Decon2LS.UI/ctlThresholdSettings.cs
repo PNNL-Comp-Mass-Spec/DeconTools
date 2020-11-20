@@ -36,7 +36,7 @@ namespace Decon2LS
         private System.Windows.Forms.TextBox mTextDeletionIntensityThreshold;
         private System.Windows.Forms.TextBox mTextScoreIntensityThreshold;
         private System.Windows.Forms.PictureBox pictureBox_ThDeletion;
-        /// <summary> 
+        /// <summary>
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.Container components = null;
@@ -50,24 +50,24 @@ namespace Decon2LS
 
         }
 
-        /// <summary> 
+        /// <summary>
         /// Clean up any resources being used.
         /// </summary>
-        protected override void Dispose( bool disposing )
+        protected override void Dispose(bool disposing)
         {
-            if( disposing )
+            if (disposing)
             {
-                if(components != null)
+                if (components != null)
                 {
                     components.Dispose();
                 }
             }
-            base.Dispose( disposing );
+            base.Dispose(disposing);
         }
 
         #region Component Designer generated code
-        /// <summary> 
-        /// Required method for Designer support - do not modify 
+        /// <summary>
+        /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
@@ -253,92 +253,87 @@ namespace Decon2LS
             this.groupBox2.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
             this.ResumeLayout(false);
-
         }
         #endregion
 
         private void textBox_max_fit_Enter(object sender, System.EventArgs e)
         {
-                      		
         }
-                                                                                                                  
-        
+
         private void textBox_IntScore_Leave(object sender, System.EventArgs e)
         {
-            label_max_fit_tip.Visible = true;			
-            label_max_fit_tip.Dock = DockStyle.Bottom ; 
+            label_max_fit_tip.Visible = true;
+            label_max_fit_tip.Dock = DockStyle.Bottom;
             pictureBox_ThDeletion.Visible = false;
-            pictureBox_ThScore.Visible = false;		
+            pictureBox_ThScore.Visible = false;
             label_ThDeletion_tip.Visible = false;
             label_thscore_tip.Visible = false;
         }
 
         private void textBox_IntScore_Enter(object sender, System.EventArgs e)
         {
-            label_max_fit_tip.Visible = false;			
+            label_max_fit_tip.Visible = false;
             pictureBox_ThDeletion.Visible = false;
-            pictureBox_ThScore.Visible = true;	
+            pictureBox_ThScore.Visible = true;
             label_ThDeletion_tip.Visible = false;
             label_thscore_tip.Visible = true;
-            label_thscore_tip.Dock = DockStyle.Bottom ; 
+            label_thscore_tip.Dock = DockStyle.Bottom;
         }
 
         private void textBox_IntDeletion_Enter(object sender, System.EventArgs e)
         {
-            label_max_fit_tip.Visible = false;			
+            label_max_fit_tip.Visible = false;
             pictureBox_ThDeletion.Visible = true;
             label_ThDeletion_tip.Visible = true;
-            pictureBox_ThScore.Visible = false;		
+            pictureBox_ThScore.Visible = false;
             label_thscore_tip.Visible = false;
         }
 
         private void textBox_IntDeletion_Leave(object sender, System.EventArgs e)
         {
-            label_max_fit_tip.Visible = true;			
+            label_max_fit_tip.Visible = true;
             pictureBox_ThDeletion.Visible = false;
             label_ThDeletion_tip.Visible = false;
-            pictureBox_ThScore.Visible = false;		
+            pictureBox_ThScore.Visible = false;
             label_thscore_tip.Visible = false;
         }
 
         private void groupBox2_Enter(object sender, System.EventArgs e)
         {
-        
         }
 
         public double DeleteIntensityThreshold
         {
             get
             {
-                return Convert.ToDouble(mTextDeletionIntensityThreshold.Text) ; 
+                return Convert.ToDouble(mTextDeletionIntensityThreshold.Text);
             }
             set
             {
-                mTextDeletionIntensityThreshold.Text = Convert.ToString(value) ;
+                mTextDeletionIntensityThreshold.Text = Convert.ToString(value);
             }
         }
         public double MaxFit
         {
             get
             {
-                return Convert.ToDouble(mTextMaxFit.Text) ; 
+                return Convert.ToDouble(mTextMaxFit.Text);
             }
             set
             {
-                mTextMaxFit.Text = Convert.ToString(value) ;
+                mTextMaxFit.Text = Convert.ToString(value);
             }
         }
         public double MinIntensityForScore
         {
             get
             {
-                return Convert.ToDouble(mTextScoreIntensityThreshold.Text) ; 
+                return Convert.ToDouble(mTextScoreIntensityThreshold.Text);
             }
             set
             {
-                mTextScoreIntensityThreshold.Text = Convert.ToString(value) ;
+                mTextScoreIntensityThreshold.Text = Convert.ToString(value);
             }
         }
-
     }
 }

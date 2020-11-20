@@ -217,7 +217,6 @@ namespace DeconTools.Backend.Algorithms
             return chromData;
         }
 
-
         public XYData GenerateChromatogramFromRawData(Run run, int minScan, int maxScan, double targetMZ, double toleranceInPPM)
         {
             var xyData = new XYData();
@@ -405,7 +404,6 @@ namespace DeconTools.Backend.Algorithms
 
         private XYData AddCurrentXYDataToBaseXYData(XYData baseData, XYData newData)
         {
-
             if (baseData == null)
             {
                 return newData;
@@ -434,10 +432,10 @@ namespace DeconTools.Backend.Algorithms
                 {
                     baseValues.Add(scanToBeInserted, intensityToBeInserted);
                 }
-
             }
 
-            var returnedData = new XYData {
+            var returnedData = new XYData
+            {
                 Xvalues = XYData.ConvertIntsToDouble(baseValues.Keys.ToArray()),
                 Yvalues = baseValues.Values.ToArray()
             };

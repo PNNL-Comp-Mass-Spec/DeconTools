@@ -26,17 +26,17 @@ namespace Decon2LS
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button mbtn_cancel;
 
-        private clsMediator mobj_mediator ; 
+        private clsMediator mobj_mediator;
 
         private System.Threading.ManualResetEvent mevnt_init = new System.Threading.ManualResetEvent(false);
         private System.Threading.ManualResetEvent mevnt_abort = new System.Threading.ManualResetEvent(false);
         private System.Windows.Forms.Label mlbl_status;
 
-        private delegate void SetControlString(string status) ; 
-        private delegate void SetProgressValue() ; 
-        private delegate void NonArgFunc() ; 
-        private int mint_percent_done = 0 ; 
-        private int mint_step_size = 2 ; 
+        private delegate void SetControlString(string status);
+        private delegate void SetProgressValue();
+        private delegate void NonArgFunc();
+        private int mint_percent_done = 0;
+        private int mint_step_size = 2;
 
         /// <summary>
         /// Required designer variable.
@@ -53,9 +53,9 @@ namespace Decon2LS
             //
             // TODO: Add any constructor code after InitializeComponent call
             //
-            mbar_progress.Minimum = 0 ; 
-            mbar_progress.Maximum = 100 ; 
-            mbar_progress.Step = mint_step_size ; 
+            mbar_progress.Minimum = 0;
+            mbar_progress.Maximum = 100;
+            mbar_progress.Step = mint_step_size;
         }
 
         public frmStatus(clsMediator mediator)
@@ -68,22 +68,22 @@ namespace Decon2LS
             //
             // TODO: Add any constructor code after InitializeComponent call
             //
-            HookMediator(mediator) ; 
+            HookMediator(mediator);
         }
 
         /// <summary>
         /// Clean up any resources being used.
         /// </summary>
-        protected override void Dispose( bool disposing )
+        protected override void Dispose(bool disposing)
         {
-            if( disposing )
+            if (disposing)
             {
-                if(components != null)
+                if (components != null)
                 {
                     components.Dispose();
                 }
             }
-            base.Dispose( disposing );
+            base.Dispose(disposing);
         }
 
         #region Windows Form Designer generated code
@@ -162,14 +162,13 @@ namespace Decon2LS
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Status";
             this.ResumeLayout(false);
-
         }
         #endregion
 
         private void HookMediator(clsMediator mediator)
         {
-            mobj_mediator = mediator ; 
-            mobj_mediator.mevnt_Progress +=new Decon2LS.clsMediator.dlgMediatorProgressHandler(OnProgressMessage);
+            mobj_mediator = mediator;
+            mobj_mediator.mevnt_Progress += new Decon2LS.clsMediator.dlgMediatorProgressHandler(OnProgressMessage);
             mobj_mediator.mevnt_Status += new Decon2LS.clsMediator.dlgMediatorStatusHandler(OnStatusMessage);
         }
 
@@ -178,19 +177,19 @@ namespace Decon2LS
             try
             {
                 if (!IsHandleCreated)
-                    return ; 
-                var percent_done = (int) event_args ; 
-                Console.WriteLine(Convert.ToString(percent_done)) ; 
+                    return;
+                var percent_done = (int)event_args;
+                Console.WriteLine(Convert.ToString(percent_done));
                 // if the new status is greater, or if its been reset to a newer value then update
                 if (mint_percent_done + mint_step_size < percent_done || mint_percent_done > percent_done)
                 {
-                    mint_percent_done = percent_done ; 
-                    Invoke(new SetProgressValue(this.SetProgressVal), null) ; 
+                    mint_percent_done = percent_done;
+                    Invoke(new SetProgressValue(this.SetProgressVal), null);
                 }
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message + e.StackTrace) ; 
+                Console.WriteLine(e.Message + e.StackTrace);
             }
         }
 
@@ -207,20 +206,19 @@ namespace Decon2LS
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message + ex.StackTrace) ; 
+                Console.WriteLine(ex.Message + ex.StackTrace);
             }
         }
-
 
         private void SetProgressVal()
         {
             try
             {
-                mbar_progress.Value = mint_percent_done ; 
+                mbar_progress.Value = mint_percent_done;
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message + ex.StackTrace) ; 
+                Console.WriteLine(ex.Message + ex.StackTrace);
             }
         }
 
@@ -228,12 +226,12 @@ namespace Decon2LS
         {
             try
             {
-                mint_percent_done = 0 ; 
-                SetProgressVal() ;
+                mint_percent_done = 0;
+                SetProgressVal();
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message + ex.StackTrace) ; 
+                Console.WriteLine(ex.Message + ex.StackTrace);
             }
         }
         private void OnStatusMessage(object sender, object event_args)
@@ -241,13 +239,13 @@ namespace Decon2LS
             try
             {
                 if (!IsHandleCreated)
-                    return ; 
-                var status_str = (string) event_args ; 
-                Invoke(new SetControlString(this.SetStatusString), new object [] {status_str}) ; 
+                    return;
+                var status_str = (string)event_args;
+                Invoke(new SetControlString(this.SetStatusString), new object[] { status_str });
             }
             catch (Exception e)
             {
-                MessageBox.Show(e.ToString()) ; 
+                MessageBox.Show(e.ToString());
             }
         }
 
@@ -255,11 +253,11 @@ namespace Decon2LS
         {
             try
             {
-                this.mlbl_status.Text = txt ; 
+                this.mlbl_status.Text = txt;
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message + ex.StackTrace) ; 
+                Console.WriteLine(ex.Message + ex.StackTrace);
             }
         }
 
@@ -267,14 +265,14 @@ namespace Decon2LS
         {
             try
             {
-                this.Text = "Loading file " + (string) event_args ;
-                this.mint_percent_done = 0 ;
-                mbar_progress.Value = 0 ;
-                ShowDialog() ; 
+                this.Text = "Loading file " + (string)event_args;
+                this.mint_percent_done = 0;
+                mbar_progress.Value = 0;
+                ShowDialog();
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message + ex.StackTrace) ; 
+                Console.WriteLine(ex.Message + ex.StackTrace);
             }
         }
 
@@ -287,7 +285,7 @@ namespace Decon2LS
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message + ex.StackTrace) ; 
+                Console.WriteLine(ex.Message + ex.StackTrace);
             }
         }
     }

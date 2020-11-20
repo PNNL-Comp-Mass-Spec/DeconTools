@@ -7,7 +7,6 @@ namespace DeconTools.Backend.Runs
 {
     public sealed class BrukerTOF : Run
     {
-
         private readonly IMSAnalysis _msAnalysis;
         private readonly MSSpectrumCollection _spectrumCollection;
 
@@ -19,16 +18,13 @@ namespace DeconTools.Backend.Runs
             ContainsMSMSData = false;
         }
 
-
         public BrukerTOF(string directoryPath)
             : this()
         {
-
             if (!Directory.Exists(directoryPath))
             {
                 throw new DirectoryNotFoundException(
                     "Could not create Bruker dataset.  Path " + directoryPath + " does not exist. Ensure you are pointing to a directory that contains the raw MS files (e.g. analysis.baf)");
-
             }
 
             bool isDirectory;
@@ -36,13 +32,10 @@ namespace DeconTools.Backend.Runs
             try
             {
                 isDirectory = (File.GetAttributes(directoryPath) & FileAttributes.Directory) == FileAttributes.Directory;
-
             }
             catch (Exception exception)
             {
-
                 throw new IOException("Could not create Bruker dataset. Path " + directoryPath + " does not exist. Ensure you are pointing to a directory that contains the raw MS files (e.g. analysis.baf)", exception);
-
             }
 
             _msAnalysis = new MSAnalysis();
@@ -55,11 +48,7 @@ namespace DeconTools.Backend.Runs
 
             MinLCScan = GetMinPossibleLCScanNum();
             MaxLCScan = GetMaxPossibleLCScanNum();
-
         }
-
-
-
 
         public override XYData XYData { get; set; }
         public override int GetNumMSScans()
@@ -74,24 +63,17 @@ namespace DeconTools.Backend.Runs
 
         public override double GetTime(int scanNum)
         {
-
             var spectrum = _spectrumCollection[scanNum];
 
-
             //NOTE: retention time is reported in seconds. DeconTools normally reports in Minutes. So need to change this.
-            return spectrum.RetentionTime/60;
-
-
-
+            return spectrum.RetentionTime / 60;
         }
 
         public override int GetMSLevelFromRawData(int scanNum)
         {
-
             var spectrum = _spectrumCollection[scanNum];
 
             return spectrum.MSMSStage;
-
         }
 
         public override XYData GetMassSpectrum(ScanSet scanSet, double minMZ, double maxMZ)
@@ -101,9 +83,7 @@ namespace DeconTools.Backend.Runs
 
         public override XYData GetMassSpectrum(ScanSet scanSet)
         {
-
             var spectrum = _spectrumCollection[scanSet.PrimaryScanNumber];
-
 
             spectrum.GetMassIntensityValues(SpectrumTypes.SpectrumType_Profile, out var mzVals, out var intensityVals);
             var xyData = new XYData
@@ -113,9 +93,7 @@ namespace DeconTools.Backend.Runs
             };
 
             return xyData;
-
         }
-
 
         public override int GetMinPossibleLCScanNum()
         {
@@ -129,7 +107,6 @@ namespace DeconTools.Backend.Runs
 
         private string GetDatasetName(string fullFolderPath)
         {
-
             var dirInfo = new DirectoryInfo(fullFolderPath);
 
             if (dirInfo.Name.EndsWith(".d", StringComparison.OrdinalIgnoreCase))
@@ -145,6 +122,5 @@ namespace DeconTools.Backend.Runs
             var dirInfo = new DirectoryInfo(fullFolderPath);
             return dirInfo.FullName;
         }
-
     }
 }

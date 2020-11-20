@@ -24,7 +24,6 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
         int heavyIsotopeNum = -1;
         private readonly PeptideUtils _peptideUtils = new PeptideUtils();
 
-
         #endregion
 
         #region Properties
@@ -54,8 +53,6 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
             }
         }
 
-
-
         /// <summary>
         /// Assign the labeling and the efficiency
         /// </summary>
@@ -75,7 +72,6 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
                 labeledElementSymbol + labeledHeavyIsoNum].NaturalAbundance;
             naturalAbundanceLight = Constants.Elements[labeledElementSymbol].IsotopeDictionary[
                 labeledElementSymbol + labeledLightIsoNum].NaturalAbundance;
-
 
             //TODO: we should never be messing with the Constants values. We should be only altering our own copy!!
 
@@ -134,7 +130,6 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
 
                     for (var i = 0; i <= iso.Value; i++)
                     {
-
                         var logTotal = logAmtLight * (iso.Value - i) + logAmtHeavy * i;
                         logTotal += LogAChooseB(iso.Value, i);
                         ionProbability.Add(Math.Pow(10, logTotal));
@@ -158,7 +153,6 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
             }
             RecursiveCalculator(jaggedProbability);
 
-
             //normalize the probabilities
             var max = 0.0;
             foreach (var f in IonProbabilities)
@@ -170,10 +164,8 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
             }
             for (var i = 0; i < IonProbabilities.Length; i++)
             {
-
                 IonProbabilities[i] = IonProbabilities[i] / max;
             }
-
 
             var isoCluster = new IsotopicProfile();
             foreach (var probability in IonProbabilities)
@@ -184,8 +176,6 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
                 }
                 isoCluster.Peaklist.Add(new MSPeak(0.0f, (float)probability));
             }
-
-
 
             return isoCluster;
         }
@@ -200,7 +190,6 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
             var formula = GetAveragineFormulaAsTableRoundedToInteger(inputMass);
             var profile = GetIsotopePattern(formula);
             return profile;
-
         }
 
         #endregion
@@ -227,7 +216,6 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
             };
 
             return averagineDict;
-
         }
 
         /// <summary>
@@ -243,7 +231,6 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
                 basePeak += GetMostAbundant(element)[0].Mass * averagineDictionary[element];
             }
             return basePeak;
-
         }
 
         /// <summary>
@@ -445,7 +432,6 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
                 ProbabilityCalculator(jaggedProbabilities, level + 1, isotopeNum + j, probabilitySet);
                 probabilitySet.Remove(jaggedProbabilities[level][j]);
             }
-
         }
 
         #endregion

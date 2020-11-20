@@ -17,7 +17,6 @@ namespace DeconTools.Workflows.Backend.FileIO
 
         private readonly List<int> _targetsContainingMods;
 
-
         #region Constructors
 
         public IqTargetFromDmsImporter(string serverName, string databaseName)
@@ -36,11 +35,9 @@ namespace DeconTools.Workflows.Backend.FileIO
             IsMonoMassCalculatedFromEmpiricalFormula = true;
         }
 
-
         #endregion
 
         #region Properties
-
 
         public string DbUsername { get; set; }
         public string DbServerName { get; set; }
@@ -56,7 +53,6 @@ namespace DeconTools.Workflows.Backend.FileIO
 
         // if true, the DMS monomass is superceded by the one calculated from the empirical formula
         public bool IsMonoMassCalculatedFromEmpiricalFormula { get; set; }
-
 
         #endregion
 
@@ -93,8 +89,6 @@ namespace DeconTools.Workflows.Backend.FileIO
                             {
                                 IqLogger.LogDebug("Failed to calculate empirical formula for the Target " + target.ID + " (" + ex.Message + ")" +
                                                   "; Having trouble with the mod: " + modString + "; This Target was NOT imported!!");
-
-
                             }
                         }
                     }
@@ -105,16 +99,11 @@ namespace DeconTools.Workflows.Backend.FileIO
                     {
                         iqTarget.MonoMassTheor = EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(iqTarget.EmpiricalFormula);
                     }
-
                 }
             }
 
             return targets;
-
-
         }
-
-
 
         public void SaveIqTargetsToFile(string fileName, List<IqTarget> targets)
         {
@@ -129,7 +118,6 @@ namespace DeconTools.Workflows.Backend.FileIO
                     var targetString = GetTargetStringForExport(iqTarget);
                     writer.WriteLine(targetString);
                 }
-
             }
 
             IqLogger.LogMessage("IqTargetFromDmsImporter saved " + targets.Count + " to the following file: " + fileName);
@@ -149,9 +137,7 @@ namespace DeconTools.Workflows.Backend.FileIO
             };
 
             return string.Join("\t", data);
-
         }
-
 
         private string GetHeaderLine()
         {
@@ -167,24 +153,19 @@ namespace DeconTools.Workflows.Backend.FileIO
             };
 
             return string.Join("\t", data);
-
         }
-
 
         public List<IqTarget> Import(List<int> massTagIDsToImport)
         {
             return GetMassTagDataFromDb(massTagIDsToImport);
         }
 
-
         #endregion
 
         #region Private Methods
 
-
         private List<IqTarget> GetMassTagDataFromDb()
         {
-
             var iqTargetList = new List<IqTarget>();
 
             var fact = DbProviderFactories.GetFactory("System.Data.SqlClient");
@@ -202,13 +183,11 @@ namespace DeconTools.Workflows.Backend.FileIO
                 var queryString = CreateQueryString(MinPmtQualityScore);
                 //Console.WriteLine(queryString);
 
-
                 using (var command = cnn.CreateCommand())
                 {
                     command.CommandText = queryString;
                     command.CommandTimeout = 120;
                     var reader = command.ExecuteReader();
-
 
                     while (reader.Read())
                     {
@@ -238,15 +217,12 @@ namespace DeconTools.Workflows.Backend.FileIO
                         if (!reader[8].Equals(DBNull.Value))
                             target.Code = Convert.ToString(reader[8]);
 
-
                         if (!string.IsNullOrEmpty(target.ModDescription))
                         {
                             _targetsContainingMods.Add(target.ID);
                         }
 
-
                         iqTargetList.Add(target);
-
 
                         if (progressCounter % 100 == 0)
                             IqLogger.LogDebug(progressCounter + " records loaded; " + reader[0]);
@@ -259,9 +235,7 @@ namespace DeconTools.Workflows.Backend.FileIO
             }
 
             return iqTargetList;
-
         }
-
 
         private void GetModDataFromDb(IEnumerable<int> massTagsToBeRetrivedList)
         {
@@ -300,8 +274,6 @@ namespace DeconTools.Workflows.Backend.FileIO
 
                         var rowData = Tuple.Create(mtid, modName, modPosition, empiricalFormula);
 
-
-
                         if (rowData.Item2.Contains("O18"))
                         {
                             IqLogger.LogDebug("ignoring this mod: " + rowData.Item1 + "; " + rowData.Item2 + "; " + rowData.Item3 + "; " + rowData.Item4 + "; " + empiricalFormula);
@@ -311,22 +283,14 @@ namespace DeconTools.Workflows.Backend.FileIO
                         {
                             //ignore N15 modifications for now
                             IqLogger.LogDebug("ignoring this mod: " + rowData.Item1 + "; " + rowData.Item2 + "; " + rowData.Item3 + "; " + rowData.Item4 + "; " + empiricalFormula);
-
                         }
                         else
                         {
                             _massTagModData.Add(rowData);
                         }
-
-
                     }
                 }
             }
-
-
-
-
-
         }
 
         private string getModDataQueryString(IEnumerable<int> massTagIDs)
@@ -347,9 +311,7 @@ namespace DeconTools.Workflows.Backend.FileIO
             }
 
             return sb.ToString().TrimEnd(',') + ")";
-
         }
-
 
         private string CreateQueryString(int minPmtQualityScore)
         {
@@ -372,10 +334,8 @@ namespace DeconTools.Workflows.Backend.FileIO
             return sb.ToString();
         }
 
-
         private List<IqTarget> GetMassTagDataFromDb(IReadOnlyCollection<int> massTagsToBeRetrivedList)
         {
-
             var iqTargetList = new List<IqTarget>();
 
             var fact = DbProviderFactories.GetFactory("System.Data.SqlClient");
@@ -398,13 +358,11 @@ namespace DeconTools.Workflows.Backend.FileIO
                     var queryString = CreateQueryString(nextGroupOfMassTagIDs);
                     //Console.WriteLine(queryString);
 
-
                     using (var command = cnn.CreateCommand())
                     {
                         command.CommandText = queryString;
                         command.CommandTimeout = 120;
                         var reader = command.ExecuteReader();
-
 
                         while (reader.Read())
                         {
@@ -434,25 +392,17 @@ namespace DeconTools.Workflows.Backend.FileIO
                             if (!reader[8].Equals(DBNull.Value))
                                 target.Code = Convert.ToString(reader[8]);
 
-
                             iqTargetList.Add(target);
-
 
                             if (progressCounter % 100 == 0)
                                 Console.WriteLine(progressCounter + " records loaded; " + reader[0]);
                         }
                         reader.Close();
                     }
-
                 }
             }
 
-
             return iqTargetList;
-
-
-
-
         }
 
         private string BuildConnectionString()
@@ -486,7 +436,6 @@ namespace DeconTools.Workflows.Backend.FileIO
                              ON dbo.t_mass_tags.mass_tag_id = dbo.t_mass_tags_net.mass_tag_id
                         Order by MassTagID ");
 
-
             Check.Require(massTagsToBeRetrieved != null && massTagsToBeRetrieved.Count > 0, "Importer is trying to import mass tag data, but list of MassTags has not been set.");
             sb.Append("Mass_Tag_ID in (");
 
@@ -502,23 +451,17 @@ namespace DeconTools.Workflows.Backend.FileIO
                 {
                     //sb.Append(")) ORDER BY Mass_Tag_ID");
                     sb.Append("))");
-
                 }
                 else
                 {
                     sb.Append(", ");
                 }
-
             }
 
             return sb.ToString();
         }
 
-
-
-
         #endregion
-
 
     }
 }

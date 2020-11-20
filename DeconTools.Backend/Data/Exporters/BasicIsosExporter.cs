@@ -31,7 +31,6 @@ namespace DeconTools.Backend.Data
             try
             {
                 sw = new StreamWriter(fileName);
-
             }
             catch (Exception)
             {
@@ -66,7 +65,6 @@ namespace DeconTools.Backend.Data
             }
 
             sw.Close();
-
         }
 
         protected override int getScanNumber(int scan_num)

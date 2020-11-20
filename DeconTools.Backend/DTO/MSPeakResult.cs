@@ -11,14 +11,12 @@ namespace DeconTools.Backend.DTO
             Scan_num = -1;
             FrameNum = -1;
             MSPeak = null;
-
         }
-        public MSPeakResult(int peakID, int scanNum, MSPeak peak):this()
+        public MSPeakResult(int peakID, int scanNum, MSPeak peak) : this()
         {
             PeakID = peakID;
             Scan_num = scanNum;
             MSPeak = peak;
-
         }
 
         public MSPeakResult(int peakID, int frameNum, int scanNum, MSPeak peak)
@@ -54,44 +52,43 @@ namespace DeconTools.Backend.DTO
 
         public int FrameNum { get; set; }
 
-
         public MSPeak MSPeak { get; set; }
 
         #region IComparable Members
-/*
-        public override int CompareTo(object obj)
-        {
-            if (obj == null)
-            {
-                return -1;
-            }
-
-
-            IPeak secondPeak = obj as IPeak;
-            if (secondPeak == null)
-            {
-                return -1;
-            }
-            else
-            {
-
-                //TODO:: two peaks are the same if they are within a tolerance of each other in
-                //terms of mz, scan and lc frame. in this case we're only implementing mz values
-                //
-                double toleranceInPPM = 20;
-                double differenceInPPM = Math.Abs(1000000 * (secondPeak.XValue - this.XValue) / this.XValue);
-
-                if (differenceInPPM <= toleranceInPPM)
+        /*
+                public override int CompareTo(object obj)
                 {
-                    return 0;
-                }
-
-            }
-
-            return 1;
+                    if (obj == null)
+                    {
+                        return -1;
+                    }
 
 
-        }*/
+                    IPeak secondPeak = obj as IPeak;
+                    if (secondPeak == null)
+                    {
+                        return -1;
+                    }
+                    else
+                    {
+
+                        //TODO:: two peaks are the same if they are within a tolerance of each other in
+                        //terms of mz, scan and lc frame. in this case we're only implementing mz values
+                        //
+                        double toleranceInPPM = 20;
+                        double differenceInPPM = Math.Abs(1000000 * (secondPeak.XValue - this.XValue) / this.XValue);
+
+                        if (differenceInPPM <= toleranceInPPM)
+                        {
+                            return 0;
+                        }
+
+                    }
+
+                    return 1;
+
+
+                }*/
 
         #endregion
     }

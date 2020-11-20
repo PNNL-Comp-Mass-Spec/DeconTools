@@ -3,7 +3,6 @@ using System;
 
 namespace DeconTools.Backend.Core
 {
-
     /// <summary>
     /// this class has been decommissioned. Delete after Jan 2011.
     /// Singleton class that functions to allow only one UIMF file to be opened at a time
@@ -45,7 +44,7 @@ namespace DeconTools.Backend.Core
                 }
                 else     // method's caller is requesting the same filename that is already open
                 {
-                    if (ConnectionState== System.Data.ConnectionState.Closed)
+                    if (ConnectionState == System.Data.ConnectionState.Closed)
                     {
                         instance = new UIMFLibraryAdapter(filename);
                     }
@@ -53,7 +52,6 @@ namespace DeconTools.Backend.Core
                     {
                         // don't need to do anything but return the instance (below)
                     }
-
                 }
             }
 

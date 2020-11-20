@@ -16,7 +16,6 @@ namespace DeconTools.Backend.Algorithms
 
         public IsotopicProfile FindFeature(List<Peak> peakList, IsotopicProfile theorFeature, double toleranceInPPM, bool requireMonoPeak)
         {
-
             var basicFeatureFinder = new BasicMSFeatureFinder();
 
             var o16profile = basicFeatureFinder.FindMSFeature(peakList, theorFeature, toleranceInPPM, false);
@@ -31,7 +30,8 @@ namespace DeconTools.Backend.Algorithms
             var o18SingleLabelProfile = basicFeatureFinder.FindMSFeature(peakList, theorO18SingleLabel, toleranceInPPM, false);
             var o18DoubleLabelProfile = basicFeatureFinder.FindMSFeature(peakList, theorO18DoubleLabel, toleranceInPPM, false);
 
-            var foundO16O18Profile = new IsotopicProfile {
+            var foundO16O18Profile = new IsotopicProfile
+            {
                 ChargeState = theorFeature.ChargeState
             };
 
@@ -58,7 +58,6 @@ namespace DeconTools.Backend.Algorithms
                 {
                     break;
                 }
-
             }
         }
 
@@ -71,7 +70,6 @@ namespace DeconTools.Backend.Algorithms
             var monoMZ = theorFeature.getMonoPeak().XValue;
 
             var toleranceInDa = 0.1;
-
 
             //this will iterate over the first five expected m/z values of a theoretical profile
             //and loosely try to the corresponding peak within the observed profile.
@@ -88,8 +86,6 @@ namespace DeconTools.Backend.Algorithms
                     o16o18Profile.Peaklist.Insert(i, new MSPeak(currentMZ));
                 }
             }
-
-
         }
 
         private IsotopicProfile convertO16ProfileToO18(IsotopicProfile theorFeature, int numPeaksToShift)
@@ -109,12 +105,10 @@ namespace DeconTools.Backend.Algorithms
                 peak.XValue += numPeaksToShift * mzBetweenIsotopes;
 
                 o18Iso.Peaklist.Add(peak);
-
             }
 
             return o18Iso;
         }
-
 
         #endregion
 

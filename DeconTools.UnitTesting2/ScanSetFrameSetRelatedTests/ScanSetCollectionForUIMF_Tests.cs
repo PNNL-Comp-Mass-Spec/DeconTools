@@ -11,7 +11,6 @@ namespace DeconTools.UnitTesting2.ScanSetFrameSetRelatedTests
         [Test]
         public void creatorTest_sum3_test1()
         {
-
             var rf = new RunFactory();
             var run = rf.CreateRun(FileRefs.RawDataMSFiles.UIMFStdFile3);
 
@@ -26,30 +25,19 @@ namespace DeconTools.UnitTesting2.ScanSetFrameSetRelatedTests
 
             Assert.AreEqual(11, uimfRun.ScanSetCollection.ScanSetList.Count);
 
-
             foreach (var frameset in uimfRun.ScanSetCollection.ScanSetList)
             {
                 Console.WriteLine(frameset);
-
-
             }
-
 
             var testFrame0 = uimfRun.ScanSetCollection.ScanSetList[1];
             Assert.AreEqual(3, testFrame0.IndexValues.Count);
             Assert.AreEqual(1, testFrame0.IndexValues[0]);
-
-
-
-
-
         }
-
 
         [Test]
         public void creatorTest_ensureOnlyMS1_test1()
         {
-
             //note that frame 26 is a calibration frame. So we don't want to have this if we are summing frames
 
             var rf = new RunFactory();
@@ -67,15 +55,9 @@ namespace DeconTools.UnitTesting2.ScanSetFrameSetRelatedTests
             Assert.AreEqual(4, uimfRun.ScanSetCollection.ScanSetList.Count);
             Assert.AreEqual("25 {24, 25, 27}", uimfRun.ScanSetCollection.ScanSetList[1].ToString());
 
-
-
             //FrameSet testFrame0 = uimfRun.ScanSetCollection.ScanSetList[1];
             //Assert.AreEqual(3, testFrame0.IndexValues.Count);
             //Assert.AreEqual(1, testFrame0.IndexValues[0]);
-
-
-
-
 
         }
 
@@ -142,7 +124,6 @@ namespace DeconTools.UnitTesting2.ScanSetFrameSetRelatedTests
         [Test]
         public void creatorTest_sum7_test1()
         {
-
             var rf = new RunFactory();
             var run = rf.CreateRun(FileRefs.RawDataMSFiles.UIMFStdFile3);
 
@@ -150,7 +131,6 @@ namespace DeconTools.UnitTesting2.ScanSetFrameSetRelatedTests
             var frameStop = 11;
 
             var numFramesToSum = 7;
-
 
             var uimfRun = (UIMFRun)run;
 
@@ -161,58 +141,39 @@ namespace DeconTools.UnitTesting2.ScanSetFrameSetRelatedTests
             foreach (var frameset in uimfRun.ScanSetCollection.ScanSetList)
             {
                 Console.WriteLine(frameset);
-
-
             }
 
             var testFrame0 = uimfRun.ScanSetCollection.ScanSetList[3];
             Assert.AreEqual(1, testFrame0.IndexValues.First());
             Assert.AreEqual(7, testFrame0.IndexValues.Count);
             Assert.AreEqual(7, testFrame0.IndexValues.Last());
-
         }
-
-
 
         [Test]
         public void creator_endFramesTest1()
         {
-
             var rf = new RunFactory();
             var run = rf.CreateRun(FileRefs.RawDataMSFiles.UIMFStdFile3);
-
 
             var frameStop = ((UIMFRun)run).MaxLCScan;
             var frameStart = frameStop - 10;
 
-
-
             var uimfrun = (UIMFRun)run;
             uimfrun.ScanSetCollection.Create(uimfrun, frameStart, frameStop, 3, 1);
 
-
             Assert.AreEqual(11, uimfrun.ScanSetCollection.ScanSetList.Count);
-
 
             foreach (var frameset in uimfrun.ScanSetCollection.ScanSetList)
             {
                 Console.WriteLine(frameset);
             }
 
-
             var testFrame0 = uimfrun.ScanSetCollection.ScanSetList[0];
             Assert.AreEqual(3, testFrame0.IndexValues.Count);
             Assert.AreEqual(1164, testFrame0.IndexValues[0]);
             Assert.AreEqual(1165, testFrame0.IndexValues[1]);
             Assert.AreEqual(1166, testFrame0.IndexValues[2]);
-
-
-
-
-
         }
-
-
 
         [Test]
         public void createIMSScanSets1()
@@ -231,9 +192,7 @@ namespace DeconTools.UnitTesting2.ScanSetFrameSetRelatedTests
             Assert.AreEqual(7, run.ScanSetCollection.ScanSetList[0].IndexValues.Count);
             Assert.AreEqual(117, run.ScanSetCollection.ScanSetList[0].IndexValues[0]);
             Assert.AreEqual(123, run.ScanSetCollection.ScanSetList[0].IndexValues[6]);
-
         }
-
 
         [Test]
         public void createIMSScanSets2()
@@ -241,10 +200,8 @@ namespace DeconTools.UnitTesting2.ScanSetFrameSetRelatedTests
             var factory = new RunFactory();
             var run = (UIMFRun)factory.CreateRun(FileRefs.RawDataMSFiles.UIMFStdFile3);
 
-
             var numScansSummed = 7;
             run.IMSScanSetCollection.Create(run, numScansSummed, 1);
-
 
             Assert.IsNotNull(run.IMSScanSetCollection);
 
@@ -258,9 +215,6 @@ namespace DeconTools.UnitTesting2.ScanSetFrameSetRelatedTests
             Assert.AreEqual(7, run.IMSScanSetCollection.ScanSetList[testIMSScan2].IndexValues.Count);
             Assert.AreEqual(100, run.IMSScanSetCollection.ScanSetList[testIMSScan2].IndexValues[3]);
             Assert.AreEqual(100, run.IMSScanSetCollection.ScanSetList[testIMSScan2].PrimaryScanNumber);
-
-
         }
-
     }
 }

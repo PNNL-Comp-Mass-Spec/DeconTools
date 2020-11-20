@@ -10,7 +10,6 @@ namespace DeconTools.Workflows.Backend.FileIO
         public TopDownTargetedResultToTextExporter(string filename)
             : base(filename)
         {
-
         }
 
         #region Private Methods
@@ -56,7 +55,6 @@ namespace DeconTools.Workflows.Backend.FileIO
             return string.Join(Delimiter.ToString(), data);
         }
 
-
         protected override string buildHeaderLine()
         {
             var data = new List<string>
@@ -74,7 +72,6 @@ namespace DeconTools.Workflows.Backend.FileIO
             };
 
             return string.Join(Delimiter.ToString(), data);
-
         }
 
         #endregion

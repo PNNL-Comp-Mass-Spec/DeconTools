@@ -13,7 +13,6 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
     [TestFixture]
     public class XCaliburRun2_Tests
     {
-
         [Test]
         public void ConstructorTest1()
         {
@@ -26,7 +25,6 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
                 Assert.AreEqual(1, run.MinLCScan);
                 Assert.AreEqual(18505, run.MaxLCScan);
             }
-
         }
 
         [Test]
@@ -43,7 +41,6 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             Assert.AreEqual(56864, scanCount);
         }
 
-
         [Test]
         public void TempTest1()
         {
@@ -52,7 +49,6 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
                 var tuneData = run.GetTuneData();
                 Console.WriteLine(tuneData);
             }
-
         }
 
         [Test]
@@ -107,7 +103,6 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
 
             Assert.AreEqual(1, run.MinLCScan);
             Assert.AreEqual(17773, run.MaxLCScan);
-
         }
 
         [Test]
@@ -122,7 +117,6 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
 
             Assert.AreEqual(2.84m, (decimal)Math.Round(ionInjectionTime, 2));
         }
-
 
         [Test]
         public void GetMS2IsolationWidthTest1()
@@ -178,7 +172,6 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         {
             using (var run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1))
             {
-
                 var scanSet = new ScanSet(6005, new int[] { 6005, 6012, 6019 });
 
                 var numIterations = 50;
@@ -197,7 +190,6 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
 
                 Console.WriteLine("Average reading time when summing 3 spectra = " + timeStats.Average());
             }
-
         }
 
         [Test]
@@ -226,7 +218,6 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
 
             var scanInfoString = run.GetScanInfo(scan.PrimaryScanNumber);
             Assert.AreEqual(@"ITMS + c NSI d Full ms2 543.80@cid35.00 [135.00-2000.00]", scanInfoString);
-
         }
 
         [Test]
@@ -275,10 +266,6 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             var ticIntensity = run.GetTICFromInstrumentInfo(scan);
 
             Assert.IsTrue(ticIntensity > 0);
-
         }
-
-
-
     }
 }

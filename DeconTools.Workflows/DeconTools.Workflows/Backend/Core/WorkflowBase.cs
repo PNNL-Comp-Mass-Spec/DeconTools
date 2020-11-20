@@ -7,7 +7,6 @@ namespace DeconTools.Workflows.Backend.Core
 {
     public abstract class WorkflowBase
     {
-
         protected MSGenerator MSGenerator { get; set; }
 
         #region Public Methods
@@ -27,7 +26,6 @@ namespace DeconTools.Workflows.Backend.Core
             if (Run != null)
             {
                 MSGenerator = MSGeneratorFactory.CreateMSGenerator(Run.MSFileType);
-
             }
         }
 
@@ -46,7 +44,7 @@ namespace DeconTools.Workflows.Backend.Core
 
                 if (_run != null)
                 {
-                    InitializeRunRelatedTasks(); 
+                    InitializeRunRelatedTasks();
                 }
             }
         }

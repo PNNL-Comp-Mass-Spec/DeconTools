@@ -34,7 +34,7 @@ namespace Decon2LS
         private System.Windows.Forms.TreeNode nodeIsotopeDistributionType;
         private System.Windows.Forms.TreeNode nodeIsotopeDistributionComposition;
 
-        /// <summary> 
+        /// <summary>
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.Container components = null;
@@ -56,8 +56,7 @@ namespace Decon2LS
             nodeIsotopeDistributionComposition = new TreeNode();
             nodeIsotopeDistributionIsotopicDistribution = new TreeNode();
             nodeIsotopeDistributionType = new TreeNode();
-            
-            
+
             nodePeakPicking.Text = "Peak Picking";
             nodeHornTransform.Text = "Horn Transform";
             nodeIsotopeDistribution.Text = "Isotope Distribution";
@@ -65,7 +64,6 @@ namespace Decon2LS
             nodeHornTransformGeneral.Text = "General";
             nodeIsotopeDistributionGeneral.Text = "General";
             nodeIsotopeDistributionAveragine.Text = "Averagine";
-            
 
             treeView1.Nodes.Add(nodePeakPicking);
             nodePeakPicking.Nodes.Add(nodePeakPickingGeneral);
@@ -74,28 +72,26 @@ namespace Decon2LS
             treeView1.Nodes.Add(nodeIsotopeDistribution);
             nodeIsotopeDistribution.Nodes.Add(nodeIsotopeDistributionGeneral);
             nodeIsotopeDistribution.Nodes.Add(nodeIsotopeDistributionAveragine);
-
-
         }
 
-        /// <summary> 
+        /// <summary>
         /// Clean up any resources being used.
         /// </summary>
-        protected override void Dispose( bool disposing )
+        protected override void Dispose(bool disposing)
         {
-            if( disposing )
+            if (disposing)
             {
-                if(components != null)
+                if (components != null)
                 {
                     components.Dispose();
                 }
             }
-            base.Dispose( disposing );
+            base.Dispose(disposing);
         }
 
         public bool Choose()
         {
-            if (string.Compare(treeView1.SelectedNode.Text, nodePeakPicking.Text)== 0)
+            if (string.Compare(treeView1.SelectedNode.Text, nodePeakPicking.Text) == 0)
             {
                 return true;
             }
@@ -103,13 +99,11 @@ namespace Decon2LS
             {
                 return false;
             }
-            
         }
-    
 
         #region Component Designer generated code
-        /// <summary> 
-        /// Required method for Designer support - do not modify 
+        /// <summary>
+        /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
@@ -133,16 +127,14 @@ namespace Decon2LS
             this.Name = "ctlOptionsView";
             this.Size = new System.Drawing.Size(520, 448);
             this.ResumeLayout(false);
-
         }
         #endregion
 
         private void treeView1_Click(object sender, System.EventArgs e)
         {
-
             var set_visibility = Choose();
             //ctlPeakPickingOptions1.Visible = set_visibility;
-        
+
         }
     }
 }

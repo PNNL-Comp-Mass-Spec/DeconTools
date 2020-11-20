@@ -5,7 +5,7 @@ using DeconTools.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
 {
-    public class IsotopicPeakFitScoreCalculator:Task
+    public class IsotopicPeakFitScoreCalculator : Task
     {
         #region properties
         /// <summary>
@@ -71,7 +71,6 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
         }
         #endregion
 
-
         public double CalculateFitScore(IsotopicProfile theorProfile, IsotopicProfile observedProfile, XYData massSpecXYData, int numberOfPeaksToLeftForPenalty = 0, double massErrorPPMBetweenPeaks = 15)
         {
             if (observedProfile?.Peaklist == null || observedProfile.Peaklist.Count == 0)
@@ -114,6 +113,5 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
 
             return fitVal;
         }
-
     }
 }

@@ -17,17 +17,17 @@ namespace Decon2LS
     /// </summary>
     public class clsCfgParms
     {
-        private string mstr_last_open_dir ; 
+        private string mstr_last_open_dir;
 
         public string OpenDir
         {
             get
             {
-                return mstr_last_open_dir ; 
+                return mstr_last_open_dir;
             }
             set
             {
-                mstr_last_open_dir = value ; 
+                mstr_last_open_dir = value;
             }
         }
         public clsCfgParms()

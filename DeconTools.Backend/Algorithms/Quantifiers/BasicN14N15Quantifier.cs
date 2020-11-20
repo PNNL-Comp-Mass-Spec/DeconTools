@@ -6,7 +6,6 @@ using DeconTools.Backend.Core;
 
 namespace DeconTools.Backend.Algorithms.Quantifiers
 {
-
     public enum RatioType
     {
         ISO1_OVER_ISO2,
@@ -39,7 +38,6 @@ namespace DeconTools.Backend.Algorithms.Quantifiers
 
         public RatioType RatioType { get; set; }
 
-
         #endregion
 
         #region Public Methods
@@ -51,21 +49,16 @@ namespace DeconTools.Backend.Algorithms.Quantifiers
             return returnVal;
         }
 
-
         public void GetRatioBasedOnTopPeaks(IsotopicProfile iso1, IsotopicProfile iso2,
                     IsotopicProfile theorIso1, IsotopicProfile theorIso2, double backgroundIntensity, int numPeaks,
                     out double ratio, out double ratioContribForIso1, out double ratioContribForIso2)
         {
-
-
             //Find top n peaks of the theor profile.  Reference them by their peak index so that they can be looked up in the experimental.
             //List<int> sortedTheorIso1Indexes = getIndexValsOfTopPeaks(theorIso1);
             //List<int> sortedTheorIso2Indexes = getIndexValsOfTopPeaks(theorIso2);
 
             IList<Peak> topTheorIso1Peaks = GetTopPeaks(theorIso1, numPeaks);
             IList<Peak> topTheorIso2Peaks = GetTopPeaks(theorIso2, numPeaks);
-
-
 
             //get the top n peaks of the experimental profile, based on peaks of the theor profile
             //adjust intensity (subtract background intensity)
@@ -87,7 +80,6 @@ namespace DeconTools.Backend.Algorithms.Quantifiers
             double summedTheorIso1Intensities = filteredTopTheorIso1Peaks.Sum(p => (p.Height));
             double summedTheorIso2Intensities = filteredTopTheorIso2Peaks.Sum(p => (p.Height));
 
-
             var fractionTheor1 = summedTheorIso1Intensities / theorIso1.Peaklist.Sum(p => p.Height);
             var fractionTheor2 = summedTheorIso2Intensities / theorIso2.Peaklist.Sum(p => p.Height);
 
@@ -97,7 +89,6 @@ namespace DeconTools.Backend.Algorithms.Quantifiers
 
             var summedAllIsos1PeakIntensities = iso1.Peaklist.Sum(p => (p.Height - backgroundIntensity));
             var summedAllIsos2PeakIntensities = iso2.Peaklist.Sum(p => (p.Height - backgroundIntensity));
-
 
             switch (RatioType)
             {
@@ -112,13 +103,8 @@ namespace DeconTools.Backend.Algorithms.Quantifiers
                     break;
             }
 
-
             ratioContribForIso1 = summedTopIso1PeakIntensities / summedAllIsos1PeakIntensities * 1 / fractionTheor1;   //we expect a value of '1'
             ratioContribForIso2 = summedTopIso2PeakIntensities / summedAllIsos2PeakIntensities * 1 / fractionTheor2;
-
-
-
-
         }
 
         public double GetRatioBasedOnAreaUnderPeaks(double[] xVals, double[] yVals,
@@ -134,12 +120,10 @@ namespace DeconTools.Backend.Algorithms.Quantifiers
             var indexOfStartingPoint = MathUtils.BinarySearchWithTolerance(xVals, leftMostMZ, 0, xVals.Length - 1, 0.1);
             if (indexOfStartingPoint == -1) indexOfStartingPoint = 0;
 
-
             var area1 = IsotopicProfileUtilities.CalculateAreaOfProfile(iso1, xVals, yVals, backgroundIntensity, ref indexOfStartingPoint);
             var area2 = IsotopicProfileUtilities.CalculateAreaOfProfile(iso2, xVals, yVals, backgroundIntensity, ref indexOfStartingPoint);
 
             if (area1 < 0) area1 = 0;
-
 
             if (area2 > 0)
             {
@@ -152,21 +136,11 @@ namespace DeconTools.Backend.Algorithms.Quantifiers
 
             return returnRatio;
 
-
-
-
-
-
-
-
-
             //iterate over peaks from isotopic profile 1
-
 
             //iterate over raw m/z values.
 
             //If within peak m/z range, calculate area (trapezoid)
-
 
             //repeat the above with isotopic profile 2
 
@@ -182,7 +156,6 @@ namespace DeconTools.Backend.Algorithms.Quantifiers
             double iso2MaxIntensity = iso2.getMostIntensePeak().Height;
 
             return returnVal;
-
         }
         #endregion
 
@@ -216,10 +189,8 @@ namespace DeconTools.Backend.Algorithms.Quantifiers
                 sortedList.Add(peak);
             }
 
-
             sortedList.Sort((peak1, peak2) => peak2.Height.CompareTo(peak1.Height)
             );
-
 
             //sortedList.Reverse();
 
@@ -227,9 +198,6 @@ namespace DeconTools.Backend.Algorithms.Quantifiers
             sortedList = sortedList.Take(numPeaks).ToList();
 
             return sortedList;
-
-
-
         }
 
         [Obsolete("Unused")]
@@ -265,12 +233,9 @@ namespace DeconTools.Backend.Algorithms.Quantifiers
                     {
                         indexValsOfTopPeaks.Add(i);
                     }
-
                 }
-
             }
             return indexValsOfTopPeaks;
-
         }
 
         #endregion

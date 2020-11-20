@@ -9,7 +9,6 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
 {
     public class BionomialExpansionIsotopicProfileCalculator
     {
-
         #region Constructors
         #endregion
 
@@ -19,20 +18,11 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
 
         #region Public Methods
 
-
         public void LoadElementData()
         {
-
-            var _elementLibrary=   Constants.Elements;
+            var _elementLibrary = Constants.Elements;
             var carbon = _elementLibrary["C"];
-            
-
-
-
-
         }
-
-
 
         #endregion
 

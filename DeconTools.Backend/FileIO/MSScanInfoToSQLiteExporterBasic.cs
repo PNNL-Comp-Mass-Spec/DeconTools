@@ -9,7 +9,6 @@ namespace DeconTools.Backend.FileIO
         const string TABLE_NAME = "T_MS_ScanSummary";
         List<Field> m_fieldList;
 
-
         #region Constructors
         public MSScanInfoToSQLiteExporterBasic(string fileName)
         {

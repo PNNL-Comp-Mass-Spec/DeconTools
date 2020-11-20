@@ -17,7 +17,6 @@ namespace DeconTools.Backend.Data.Structures
     public class BinaryTreeNode<T>
         where T : IComparable
     {
-
         public override string ToString()
         {
             return Value.ToString();
@@ -200,7 +199,6 @@ namespace DeconTools.Backend.Data.Structures
 
                     //at this node we have a MSResultPeakWithLocation, .
                     var peakWithLoc = node.Value as MSResultPeakWithLocation;
-
                 }
 
                 var insertLeftSide = matchValue < 0;
@@ -240,7 +238,6 @@ namespace DeconTools.Backend.Data.Structures
         {
             var node = head;
 
-
             while (node != null)
             {
                 var thisFeature = node.Value as Peak;
@@ -265,12 +262,9 @@ namespace DeconTools.Backend.Data.Structures
                 {
                     node = node.RightChild;
                 }
-
             }
 
             return null;
-
-
         }
 
         public bool FindPeakWithinFeatures(Peak value, int frameNum, int scanNum, int toleranceInPPM, int netTolRange, int driftTolRange)
@@ -294,7 +288,6 @@ namespace DeconTools.Backend.Data.Structures
 
                     if (hasMass)
                     {
-
                         var number = thisFeature.ContainsPeak(value, (ushort)frameNum, (ushort)scanNum, (ushort)toleranceInPPM, (ushort)netTolRange, (ushort)driftTolRange);
 
                         if (number == 0)
@@ -304,7 +297,6 @@ namespace DeconTools.Backend.Data.Structures
                         }
                     }
 
-
                     if (value.XValue < thisFeature.XValue)
                     {
                         node = node.LeftChild;
@@ -313,18 +305,14 @@ namespace DeconTools.Backend.Data.Structures
                     {
                         node = node.RightChild;
                     }
-
                 }
                 catch (InvalidCastException invalidCast)
                 {
                     Console.WriteLine("BinarySearchTree: The node is not of type MSResultPeakWithLocation");
                     Console.WriteLine(invalidCast.Message);
                 }
-
-
             }
             return false;
-
         }
 
         /// <summary>
@@ -366,10 +354,8 @@ namespace DeconTools.Backend.Data.Structures
                 {
                     return null;
                 }
-
             }
             return null; //not found
-
         }
 
         /// <summary>
@@ -470,7 +456,6 @@ namespace DeconTools.Backend.Data.Structures
 
                 Remove(successorNode); //recursively remove the in order predecessor
             }
-
 
             return true;
         }

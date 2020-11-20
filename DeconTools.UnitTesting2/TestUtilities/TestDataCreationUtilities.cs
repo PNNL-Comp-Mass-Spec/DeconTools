@@ -13,7 +13,6 @@ namespace DeconTools.UnitTesting2
 {
     public class TestDataCreationUtilities
     {
-
         public static Run CreatePeakDataFromStandardOrbitrapData()
         {
             Run run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
@@ -43,14 +42,10 @@ namespace DeconTools.UnitTesting2
             }
 
             return run;
-
-
         }
-
 
         public static Run CreateResultsFromThreeScansOfStandardOrbitrapData()
         {
-
             Run run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
             Console.WriteLine("Opening " + run.DatasetFileOrDirectoryPath);
 
@@ -115,14 +110,10 @@ namespace DeconTools.UnitTesting2
                     msScanInfoCreator.Execute(run.ResultCollection);
                     ticExtractor.Execute(run.ResultCollection);
                 }
-
             }
 
             return run;
-
-
         }
-
 
         public static List<PeptideTarget> CreateN14N15TestMassTagList()
         {
@@ -141,7 +132,6 @@ namespace DeconTools.UnitTesting2
 
             mtList.Add(mt1);
 
-
             var mt2 = new PeptideTarget
             {
                 ID = 23085470,
@@ -156,9 +146,6 @@ namespace DeconTools.UnitTesting2
             mtList.Add(mt2);
 
             return mtList;
-
         }
-
-
     }
 }

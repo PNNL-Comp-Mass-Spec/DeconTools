@@ -21,7 +21,6 @@ namespace DeconTools.Backend.Data
             }
             catch (Exception ex)
             {
-
                 throw new IOException("There was a problem reading UMC data file " + FilePath + ": " + ex.Message);
             }
         }
@@ -40,12 +39,12 @@ namespace DeconTools.Backend.Data
         #endregion
         public override UMCCollection Import()
         {
-            var umcCollection = new UMCCollection {
+            var umcCollection = new UMCCollection
+            {
                 UMCList = getUMCs()
             };
 
             return umcCollection;
-
         }
 
         private List<UMC> getUMCs()
@@ -58,7 +57,6 @@ namespace DeconTools.Backend.Data
                 {
                     sr.Close();
                     throw new InvalidDataException("There is no data in UMC data file " + FilePath);
-
                 }
                 var headerLine = sr.ReadLine();
                 var headers = processLine(headerLine);
@@ -66,9 +64,7 @@ namespace DeconTools.Backend.Data
                 if (!validateHeaders(headers))
                 {
                     throw new InvalidDataException("There is a problem with the column headers in UMC data file " + FilePath);
-
                 }
-
 
                 var counter = 1;
                 while (!sr.EndOfStream)
@@ -83,10 +79,8 @@ namespace DeconTools.Backend.Data
                     var row = convertTextToUMCData(processedData, headers);
                     umcList.Add(row);
                     counter++;
-
                 }
                 sr.Close();
-
             }
             return umcList;
         }

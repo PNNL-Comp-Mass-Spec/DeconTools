@@ -1,7 +1,7 @@
 ﻿
 namespace DeconTools.Backend.Core
 {
-    public abstract class LabeledMassTagResult:TargetedResultBase
+    public abstract class LabeledMassTagResult : TargetedResultBase
     {
         #region Constructors
         #endregion

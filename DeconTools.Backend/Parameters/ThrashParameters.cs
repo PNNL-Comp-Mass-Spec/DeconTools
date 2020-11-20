@@ -115,7 +115,7 @@ namespace DeconTools.Backend.Parameters
             CompleteFit = GetBoolVal(thrashElement, "CompleteFit", CompleteFit);
             IsO16O18Data = GetBoolVal(thrashElement, "O16O18Media", IsO16O18Data);
             IsThrashUsed = GetBoolVal(thrashElement, "ThrashOrNot", IsThrashUsed);
-            IsotopicProfileFitType = (Globals.IsotopicProfileFitType) GetEnum(thrashElement, "IsotopeFitType", IsotopicProfileFitType.GetType(), IsotopicProfileFitType);
+            IsotopicProfileFitType = (Globals.IsotopicProfileFitType)GetEnum(thrashElement, "IsotopeFitType", IsotopicProfileFitType.GetType(), IsotopicProfileFitType);
 
             LeftFitStringencyFactor = GetDoubleValue(thrashElement, "LeftFitStringencyFactor", LeftFitStringencyFactor);
 

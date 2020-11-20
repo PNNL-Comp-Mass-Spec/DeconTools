@@ -3,7 +3,6 @@ namespace DeconTools.Backend.Core
 {
     public class ChromPeak : Peak
     {
-
         public ChromPeak()
         {
             NETValue = -1;
@@ -16,7 +15,6 @@ namespace DeconTools.Backend.Core
             SignalToNoise = signalToNoise;
         }
 
-
         #region Properties
 
         public double NETValue { get; set; }
@@ -26,7 +24,6 @@ namespace DeconTools.Backend.Core
         public double IntegratedAbundance { get; set; }
 
         #endregion
-
 
     }
 }

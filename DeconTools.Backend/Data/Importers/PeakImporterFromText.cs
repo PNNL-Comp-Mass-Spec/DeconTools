@@ -8,7 +8,6 @@ using DeconTools.Backend.Utilities;
 
 namespace DeconTools.Backend.Data
 {
-
     //NOTE:  2012_11_15 - The importer imports UIMF peaks as if they were Orbitrap peaks.  All IMS scan info is ignored
     public class PeakImporterFromText : IPeakImporter
     {
@@ -66,7 +65,6 @@ namespace DeconTools.Backend.Data
 
         //}
 
-
         public override void ImportPeaks(List<MSPeakResult> peakList)
         {
             using (var reader = new StreamReader(new FileStream(_filename, FileMode.Open, FileAccess.Read, FileShare.Read)))
@@ -89,7 +87,6 @@ namespace DeconTools.Backend.Data
 
                     progressCounter++;
                     reportProgress(progressCounter, ref lastReportProgress, ref lastReportProgressConsole);
-
                 }
             }
         }
@@ -106,7 +103,6 @@ namespace DeconTools.Backend.Data
 
             var processedLine = ProcessLine(line);
             peakResult.PeakID = Convert.ToInt32(processedLine[columnCounter]);
-
 
             //NOTE - for UIMF data the frame column is loaded into the 'Scan_num' property.  This is kind of ugly since there is
             //already a FrameNum property. I'm doing this so that we can process UIMF files in IQ.  We need to fix this later.
@@ -129,9 +125,6 @@ namespace DeconTools.Backend.Data
             }
 
             return peakResult;
-
-
-
         }
 
         private MSPeakResult ConvertTextToPeakUIMFResult(string line)
@@ -160,7 +153,6 @@ namespace DeconTools.Backend.Data
             }
 
             return peakResult;
-
         }
 
         private List<string> ProcessLine(string inputLine)

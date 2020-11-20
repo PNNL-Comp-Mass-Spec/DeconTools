@@ -104,11 +104,6 @@ namespace Decon2LS
             }
         }
 
-
-
-
-
-
         /// <summary>
         /// Object for reading a raw data for showing status update figures
         /// when performing a deisotoping.
@@ -153,9 +148,7 @@ namespace Decon2LS
 
                 mcmb_process_type.SelectedIndex = 0;
 
-
                 loadSettings();
-
             }
             catch (Exception ex)
             {
@@ -166,7 +159,6 @@ namespace Decon2LS
         private void loadSettings()
         {
             //			this.mtxt_param_file.Text=System.Configuration.ConfigurationSettings.AppSettings.Get("frmProcessUserParamFile");
-
 
         }
         private void saveSettings()
@@ -179,8 +171,6 @@ namespace Decon2LS
             //		}
 
         }
-
-
 
         private void SetDataTable()
         {
@@ -200,7 +190,6 @@ namespace Decon2LS
                 var filetype_column = new DataGridTextBoxColumn();
                 filetype_column.Width = mdatagrid_files.Width - 10 - filename_column.Width - outfilename_column.Width;
                 filetype_column.HeaderText = "File type";
-
 
                 var table = new DataTable();
                 table.Columns.Add("Filename");
@@ -608,7 +597,6 @@ namespace Decon2LS
             this.mpanel_display.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.mctl_spectra)).EndInit();
             this.ResumeLayout(false);
-
         }
         #endregion
 
@@ -636,7 +624,6 @@ namespace Decon2LS
             {
                 MessageBox.Show(ex.ToString());
             }
-
         }
 
         private void mbtn_add_files_Click(object sender, System.EventArgs e)
@@ -741,12 +728,8 @@ namespace Decon2LS
             }
         }
 
-
-
-
         private void mbtn_add_imsfolder_Click(object sender, System.EventArgs e)
         {
-
             int num_files_loaded;
             var fb = new FolderBrowser();
 
@@ -767,8 +750,6 @@ namespace Decon2LS
                         num_files_loaded = LoadIMFFilesIntoTable(ims_dir);
                     }
                 }
-
-
             }
             //
             //			try
@@ -840,8 +821,6 @@ namespace Decon2LS
             }
         }
 
-
-
         private void mbtn_add_sfolder_Click(object sender, System.EventArgs e)
         {
             try
@@ -851,7 +830,6 @@ namespace Decon2LS
             catch (Exception ex)
             {
                 MessageBox.Show("Error selecting folder\n\nDetails:\n" + ex.Message);
-
             }
 
             //			try
@@ -915,7 +893,6 @@ namespace Decon2LS
 
         private void mbtn_process_Click(object sender, System.EventArgs e)
         {
-
             try
             {
                 if (this.chkUseParameterFile.Checked)
@@ -928,7 +905,6 @@ namespace Decon2LS
                     {
                         MessageBox.Show("Parameter file doesn't exist - check the file path\n\n" + this.mtxt_param_file.Text);
                         return;
-
                     }
                 }
             }
@@ -936,13 +912,7 @@ namespace Decon2LS
             {
                 MessageBox.Show(ex.Message);
                 return;
-
             }
-
-
-
-
-
 
             try
             {
@@ -989,9 +959,6 @@ namespace Decon2LS
         {
             try
             {
-
-
-
                 this.mctl_spectra.SeriesCollection.Clear();
 
                 data_provider = new PNNL.Controls.ArrayChartDataProvider();
@@ -1042,18 +1009,14 @@ namespace Decon2LS
             }
         }
 
-
         private bool validateParameterFile(string filename)
         {
             if (System.IO.File.Exists(filename)) return true;
             return false;
-
-
         }
 
         private void updateCurrentParameters(string filename)
         {
-
             try
             {
                 var paramLoader = new clsParameterLoader();
@@ -1062,18 +1025,12 @@ namespace Decon2LS
                 this.mobj_fticr_preprocess_parameters = paramLoader.FTICRPreprocessOptions;
                 this.mobj_peak_parameters = paramLoader.PeakParameters;
                 this.mobj_transform_parameters = paramLoader.TransformParameters;
-
-
-
             }
             catch (Exception ex)
             {
                 throw new System.IO.IOException("Could not load the parameters.\nDetails:" + ex.Message);
             }
-
-
         }
-
 
         private void ProcessFilesThreaded()
         {
@@ -1120,11 +1077,8 @@ namespace Decon2LS
                 row[1] = fb.FolderPath;
                 row[2] = DeconToolsV2.Readers.FileType.ICR2LSRAWDATA.ToString();
                 table.Rows.Add(row);
-
             }
         }
-
-
 
         private void CheckTicStatusHandler(object sender, EventArgs args)
         {
@@ -1154,9 +1108,7 @@ namespace Decon2LS
         {
             try
             {
-
                 mpbar_process.Value = mobj_proc_runner.PercentDone;
-
             }
             catch (Exception e)
             {
@@ -1187,7 +1139,6 @@ namespace Decon2LS
                     mint_current_scan_in_preview = current_scan;
                     lock (this)
                     {
-
                         var xvals = XYValueConverter.ConvertFloatsToDoubles(mz_values);
                         var yvals = XYValueConverter.ConvertFloatsToDoubles(intensity_values);
 
@@ -1219,7 +1170,6 @@ namespace Decon2LS
                 Console.WriteLine(e);
             }
         }
-
 
         private DeconToolsV2.Readers.FileType GetFileType(string file_type)
         {
@@ -1278,7 +1228,6 @@ namespace Decon2LS
 
         private void ProcessCurrentFile(string fileName, string paramFile, string outFileName, DeconToolsV2.Readers.FileType fileType)
         {
-
             try
             {
                 var start_time = DateTime.Now;
@@ -1349,7 +1298,6 @@ namespace Decon2LS
             {
                 if (this.mdatagrid_files != null && this.mdatagrid_files.TableStyles.Count > 0)
                 {
-
                     if (this.mdatagrid_files.TableStyles[0].GridColumnStyles.Count > 0)
                     {
                         this.mdatagrid_files.TableStyles[0].GridColumnStyles[0].Width = (this.Width * 3) / 8;
@@ -1417,12 +1365,10 @@ namespace Decon2LS
 
         private void frmProcess_Load(object sender, System.EventArgs e)
         {
-
         }
 
         private void mcmb_process_type_SelectedIndexChanged(object sender, System.EventArgs e)
         {
-
         }
 
         private void mpbar_process_Click(object sender, System.EventArgs e)
@@ -1452,10 +1398,6 @@ namespace Decon2LS
             }
 
             //			MessageBox.Show("Smoothing = " + this.MassTransformParameters.UseSavitzkyGolaySmooth.ToString());
-
-
-
-
 
         }
     }

@@ -26,7 +26,6 @@ namespace DeconTools.Backend.Data
             try
             {
                 sqLiteWriter.CreateNewDB(fileName);
-
             }
             catch (Exception)
             {
@@ -45,7 +44,6 @@ namespace DeconTools.Backend.Data
             try
             {
                 sqLiteWriter.CreateNewDB(fileName);
-
             }
             catch (Exception ex)
             {
@@ -65,7 +63,6 @@ namespace DeconTools.Backend.Data
             sqLiteWriter.CloseDB(fileName);
             deserializer.Close();
 
-
             if (deleteBinaryFileAfterUse)
             {
                 try
@@ -74,15 +71,12 @@ namespace DeconTools.Backend.Data
                     {
                         File.Delete(binaryResultCollectionFilename);
                     }
-
                 }
                 catch (Exception ex)
                 {
                     throw new IOException("Exporter could not delete binary file. Details: " + ex.Message);
-
                 }
             }
-
         }
 
         private void exportSQLiteUIMFIsosResults(ResultCollection results)

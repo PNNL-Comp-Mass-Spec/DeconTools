@@ -10,7 +10,6 @@ using DeconTools.Backend.Utilities;
 using DeconTools.Backend.ProcessingTasks.PeakListExporters;
 using DeconTools.Backend.ProcessingTasks.PeakDetectors;
 
-
 namespace DeconTools.Backend.ProcessingTasks.ChargeStateDeciders
 {
     public class ChromCorrelatingChargeDecider : ChargeStateDecider
@@ -70,7 +69,6 @@ namespace DeconTools.Backend.ProcessingTasks.ChargeStateDeciders
                 reportString += "Score: " + potentialFeature.Score;
                 IqLogger.LogTrace(reportString);
 
-
                 //tabular output
                 //string reportString = "\tCHARGE: " + potentialFeature.ChargeState + "\t" +
                 //   "CORRELATION: \t" + correlation + "\t";
@@ -81,7 +79,6 @@ namespace DeconTools.Backend.ProcessingTasks.ChargeStateDeciders
                 //}
                 //reportString += "Score: \t" + potentialFeature.Score + "\t";
                 //IqLogger.Log.Debug(reportString);
-
 
                 correlations[indexCurrentFeature] = correlation;
 
@@ -124,7 +121,6 @@ namespace DeconTools.Backend.ProcessingTasks.ChargeStateDeciders
 
         private double GetCorrelationWithAnotherChargeState(IsotopicProfile potentialFeature, int chargeState)
         {
-
             if (potentialFeature.MonoIsotopicPeakIndex == -1)
             {
                 return -3;
@@ -137,7 +133,6 @@ namespace DeconTools.Backend.ProcessingTasks.ChargeStateDeciders
             var ppmTolerancePeak1 = (widthPeak1 / 2.35) / xValuePeak1 * 1e6;    //   peak's sigma value / mz * 1e6
 
             return getCorrelation(monoPeakMZ, pretendMonoPeakMZ, ppmTolerancePeak1, ppmTolerancePeak1);
-
         }
 
         [Obsolete("Unused")]
@@ -152,7 +147,6 @@ namespace DeconTools.Backend.ProcessingTasks.ChargeStateDeciders
 
         private double GetMZOfAnotherChargeState(IsotopicProfile potentialFeature, int peakIndex, int chargeState)
         {
-
             return (potentialFeature.Peaklist[peakIndex].XValue * potentialFeature.ChargeState) / chargeState;
         }
 
@@ -177,12 +171,10 @@ namespace DeconTools.Backend.ProcessingTasks.ChargeStateDeciders
                     for (var i = 0; i < correlationList.Length; i++)
                     {
                         correlationList[i] = correlationsWithAltChargeState[contenderIndex, i];
-
                     }
                     var bestAltCorr = correlationList.Max();
                     favorites.Add(contenderIndex, bestAltCorr);
                 }
-
             }
             if (favorites.Count > 0)
             {
@@ -306,7 +298,6 @@ namespace DeconTools.Backend.ProcessingTasks.ChargeStateDeciders
             else { otherPeakToLookForIndex = monoIndex - 1; }
 
             return getCorrelation(monoIndex, otherPeakToLookForIndex, potentialFeature);
-
         }
         private double getCorrelation(int peak1Index, int peak2Index, IsotopicProfile potentialFeature)
         {
@@ -414,14 +405,12 @@ namespace DeconTools.Backend.ProcessingTasks.ChargeStateDeciders
                 if (number % chargeStates[i] == 0) indexesWhoAreFactorsOfMe.Add(i);
             }
             return indexesWhoAreFactorsOfMe;
-
         }
 
         internal HashSet<int> GetPotentialChargeState(int indexOfCurrentPeak, List<Peak> msPeakList, double ppmTolerance)
         {
             //List<IsotopicProfile> potentialProfiles = new List<IsotopicProfile>();
             CreatePeaksIfNeeded();//note: does not actually create peaks. Only loads them. An exception is thrown if it's not there.
-
 
             var chargeStates = new HashSet<int>();
             var charge = 1;
@@ -485,7 +474,6 @@ namespace DeconTools.Backend.ProcessingTasks.ChargeStateDeciders
             _ms2PeakDetectorForCentroidedData.PeaksAreStored = true;
             _ms1PeakDetector.PeaksAreStored = true;
 
-
             var peakExporter = new PeakListTextExporter(_run.MSFileType, peaksFile);
 
             var scanCounter = 0;
@@ -509,7 +497,6 @@ namespace DeconTools.Backend.ProcessingTasks.ChargeStateDeciders
                         uimfRun.CurrentIMSScanSet = (IMSScanSet)scanSet;
                         msGen.Execute(uimfRun.ResultCollection);
                         _ms1PeakDetector.Execute(uimfRun.ResultCollection);
-
                     }
                     peakExporter.WriteOutPeaks(uimfRun.ResultCollection.MSPeakResultList);
 
@@ -518,9 +505,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChargeStateDeciders
                         double percentProgress = frameCounter * 100 / numTotalFrames;
                         // reportProgress(percentProgress);
                     }
-
                 }
-
             }
             else
             {
@@ -551,13 +536,8 @@ namespace DeconTools.Backend.ProcessingTasks.ChargeStateDeciders
                     }
 
                     peakExporter.WriteOutPeaks(_run.ResultCollection.MSPeakResultList);
-
-
                 }
             }
-
-
-
         }
     }
 }

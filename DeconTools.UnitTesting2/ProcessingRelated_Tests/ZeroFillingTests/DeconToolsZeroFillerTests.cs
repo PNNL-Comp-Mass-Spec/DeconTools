@@ -49,7 +49,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ZeroFillingTests
 
             run.XYData = run.XYData.TrimData(lowerMZ, upperMZ);
             newZeroFilled = newZeroFilled.TrimData(lowerMZ, upperMZ);
-           
+
             Console.WriteLine("---------- before zerofilling ---------------");
             TestUtilities.DisplayXYValues(run.XYData, lowerMZ, upperMZ);
 
@@ -63,16 +63,14 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ZeroFillingTests
         [Test]
         public void ZeroFillerCompareNewAndOld()
         {
-
             Run run = new MSScanFromTextFileRun(FileRefs.RawDataMSFiles.TextFileMS_std1);
             var generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
             var zeroFiller = new DeconToolsZeroFiller(3);
 
             generator.Execute(run.ResultCollection);
-            var numZerosToFill=3;
-            var newZeroFilled=  zeroFiller.ZeroFill(run.XYData.Xvalues, run.XYData.Yvalues, numZerosToFill);
+            var numZerosToFill = 3;
+            var newZeroFilled = zeroFiller.ZeroFill(run.XYData.Xvalues, run.XYData.Yvalues, numZerosToFill);
             // var oldZeroFilled = zeroFiller.ZeroFillOld(run.XYData.Xvalues, run.XYData.Yvalues, numZerosToFill);
-
 
             var lowerMZ = 625.48;
             var upperMZ = 626.18;
@@ -90,11 +88,6 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ZeroFillingTests
             // Console.WriteLine("---------- after zerofilling using DeconEngine ---------------");
             // TestUtilities.DisplayXYValues(oldZeroFilled);
 
-
         }
-
-
-
-
     }
 }

@@ -67,7 +67,6 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
 
         #region Public Methods
 
-
         public override IsotopicProfile GenerateTheorProfile(string empiricalFormula, int chargeState)
         {
             var iso = _isotopicDistCalculator.GetIsotopePattern(empiricalFormula);
@@ -111,7 +110,6 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
                 default:
                     throw new NotImplementedException();
             }
-
         }
         #endregion
 
@@ -134,7 +132,6 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
             PeakUtilities.TrimIsotopicProfile(iso, LowPeakCutOff);
             iso.ChargeState = mt.ChargeState;
 
-
             if (iso.ChargeState != 0)
                 CalculateMassesForIsotopicProfile(iso, mt.MonoIsotopicMass, mt.ChargeState);
 
@@ -142,7 +139,6 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
         }
 
         #endregion
-
 
         private void CalculateMassesForIsotopicProfile(IsotopicProfile iso, double targetMonoMass, double targetChargeState)
         {
@@ -162,7 +158,5 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
         {
             //
         }
-
-
     }
 }

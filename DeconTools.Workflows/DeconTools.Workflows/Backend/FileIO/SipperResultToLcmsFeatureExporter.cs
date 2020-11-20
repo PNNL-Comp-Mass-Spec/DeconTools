@@ -6,12 +6,10 @@ namespace DeconTools.Workflows.Backend.FileIO
 {
     public class SipperResultToLcmsFeatureExporter : TargetedResultToTextExporter
     {
-
         #region Constructors
         public SipperResultToLcmsFeatureExporter(string filename)
             : base(filename)
         {
-
         }
 
         #endregion
@@ -44,7 +42,6 @@ namespace DeconTools.Workflows.Backend.FileIO
             //data.Add(Delimiter);
 
             return string.Join(Delimiter.ToString(), data);
-
         }
 
         private string GetLabelDistributionDataAsString(SipperLcmsFeatureTargetedResultDTO sipperResult)
@@ -61,7 +58,6 @@ namespace DeconTools.Workflows.Backend.FileIO
             }
 
             return sb.ToString().TrimEnd(delim);
-
         }
 
         protected override string buildHeaderLine()
@@ -89,9 +85,6 @@ namespace DeconTools.Workflows.Backend.FileIO
             };
 
             return string.Join(Delimiter.ToString(), data);
-
         }
-
-
     }
 }

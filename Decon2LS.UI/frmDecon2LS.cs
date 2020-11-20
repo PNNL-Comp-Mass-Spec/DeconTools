@@ -111,9 +111,6 @@ namespace Decon2LS
             }
         }
 
-
-
-
         private const string mstrDEFAULTPARAMFILE = "Decon2LS.xml";
         private System.Windows.Forms.MenuItem menuItem_Options;
         private string mstrParamFile;
@@ -136,7 +133,6 @@ namespace Decon2LS
                 frmSpectra.InitializeCategories(mFileTreeView);
                 frmMercury.InitializeCategories(mFileTreeView);
                 frm2DPeakProcessing.InitializeCategories(mFileTreeView);
-
             }
             catch (Exception ex)
             {
@@ -189,8 +185,6 @@ namespace Decon2LS
         /// </summary>
         protected override void Dispose(bool disposing)
         {
-
-
             if (disposing)
             {
                 //write out parameters to file.
@@ -414,7 +408,6 @@ namespace Decon2LS
             this.DragDrop += new System.Windows.Forms.DragEventHandler(this.frmDecon2LS_DragDrop);
             this.DragEnter += new System.Windows.Forms.DragEventHandler(this.frmDecon2LS_DragEnter);
             this.ResumeLayout(false);
-
         }
         #endregion
 
@@ -608,7 +601,6 @@ namespace Decon2LS
             {
                 MessageBox.Show(ex.ToString());
             }
-
         }
 
         private void menuItem_process_Click(object sender, System.EventArgs e)
@@ -627,7 +619,6 @@ namespace Decon2LS
             {
                 MessageBox.Show(this, ex.Message + ex.StackTrace);
             }
-
         }
         #endregion
 
@@ -689,7 +680,6 @@ namespace Decon2LS
 
         private void mtlbMain_ButtonClick(object sender, System.Windows.Forms.ToolBarButtonClickEventArgs e)
         {
-
         }
 
         private void menuItemAbout_Click(object sender, System.EventArgs e)
@@ -714,8 +704,6 @@ namespace Decon2LS
                 openFileDialog1.FilterIndex = 1;
                 openFileDialog1.RestoreDirectory = true;
                 openFileDialog1.InitialDirectory = mobj_config.OpenDir;
-
-
 
                 if (openFileDialog1.ShowDialog() == DialogResult.OK)
                 {
@@ -761,7 +749,6 @@ namespace Decon2LS
         {
             try
             {
-
                 var openFileDialog1 = new OpenFileDialog();
                 openFileDialog1.Filter = "Scans CSV File (*_scans.csv)|*.csv|ICR2LS TIC File (*.*)|*.tic";
                 openFileDialog1.FilterIndex = 1;
@@ -796,8 +783,6 @@ namespace Decon2LS
 
                     mMediator.RequestFormOpen(frmTIC);
                 }
-
-
             }
             catch (Exception ex)
             {
@@ -809,7 +794,6 @@ namespace Decon2LS
         {
             foreach (var fileName in (string[])e.Data.GetData(DataFormats.FileDrop))
             {
-
                 var index = fileName.LastIndexOf("\\");
                 var path_dir = "";
 
@@ -863,7 +847,6 @@ namespace Decon2LS
                 }
                 else
                 {
-
                     Console.WriteLine("File cannot be dragged and dropped");
                 }
             }
@@ -899,7 +882,6 @@ namespace Decon2LS
             {
                 Console.WriteLine(ex.Message + ex.StackTrace);
             }
-
         }
 
         private void mFileTreeView_BeforeExpand(object sender, System.Windows.Forms.TreeViewCancelEventArgs e)
@@ -911,8 +893,5 @@ namespace Decon2LS
             //			}
 
         }
-
-
-
     }
 }

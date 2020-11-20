@@ -5,13 +5,10 @@ using System.Linq;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.Utilities;
 
-
 namespace DeconTools.Backend.FileIO
 {
     public class MassTagFromTextFileImporter : IMassTagImporter
     {
-
-
         #region Constructors
 
         readonly string m_filename;
@@ -22,11 +19,7 @@ namespace DeconTools.Backend.FileIO
             if (!File.Exists(filename)) throw new IOException("MassTagImporter failed. File doesn't exist: " + DiagnosticUtilities.GetFullPathSafe(filename));
             m_filename = filename;
             delimiter = '\t';
-
         }
-
-
-
 
         #endregion
 
@@ -41,12 +34,10 @@ namespace DeconTools.Backend.FileIO
         public override TargetCollection Import()
         {
             return Import(new List<int>());
-
         }
 
-        public TargetCollection Import(List<int>TargetIDsToFilterOn)
+        public TargetCollection Import(List<int> TargetIDsToFilterOn)
         {
-
             var filterOnTargetIDs = TargetIDsToFilterOn != null && TargetIDsToFilterOn.Count > 0;
 
             var data = new TargetCollection();
@@ -63,8 +54,6 @@ namespace DeconTools.Backend.FileIO
                     var line = reader.ReadLine();
                     lineCounter++;
 
-
-
                     var lineData = processLine(line);
 
                     PeptideTarget massTag;
@@ -77,11 +66,8 @@ namespace DeconTools.Backend.FileIO
                             if (!TargetIDsToFilterOn.Contains(massTag.ID))
                             {
                                 continue;
-
                             }
                         }
-
-
                     }
                     catch (Exception ex)
                     {
@@ -89,12 +75,10 @@ namespace DeconTools.Backend.FileIO
                         throw new Exception(msg);
                     }
 
-
                     if (!massTag.ContainsMods && string.IsNullOrEmpty(massTag.EmpiricalFormula))
                     {
                         massTag.EmpiricalFormula = massTag.GetEmpiricalFormulaFromTargetCode();
                     }
-
 
                     var massTagMassInfoMissing = (Math.Abs(massTag.MonoIsotopicMass - 0) < double.Epsilon);
 
@@ -114,7 +98,6 @@ namespace DeconTools.Backend.FileIO
                         }
                     }
 
-
                     if (!chargeStateInfoIsAvailable)
                     {
                         double minMZToConsider = 400;
@@ -130,30 +113,21 @@ namespace DeconTools.Backend.FileIO
                                 //we need to create multiple mass tags
                                 var copiedMassTag = new PeptideTarget(massTag)
                                 {
-                                    ChargeState = (short)chargeState, MZ = calcMZ
+                                    ChargeState = (short)chargeState,
+                                    MZ = calcMZ
                                 };
 
                                 targetList.Add(copiedMassTag);
                             }
-
                         }
 
                         data.TargetList.AddRange(targetList.Take(3));
-
                     }
                     else
                     {
-
                         data.TargetList.Add(massTag);
                     }
-
-
-
-
-
                 }
-
-
             }
 
             foreach (PeptideTarget peptideTarget in data.TargetList)
@@ -165,25 +139,20 @@ namespace DeconTools.Backend.FileIO
                 //}
             }
 
-
-
-
             return data;
         }
 
         private PeptideTarget ConvertTextToMassTag(IReadOnlyList<string> lineData)
         {
-
             // ReSharper disable StringLiteralTypo
             var mt = new PeptideTarget
             {
-                ChargeState = (short)parseIntField(getValue(new[] {"z", "charge_state", "charge"}, lineData, "0")),
-                ID = parseIntField(getValue(new[] {"id", "targetid", "target_id", "mass_tag_id", "massTagid"}, lineData, "-1")),
-                Code = getValue(new[] {"peptide", "sequence"}, lineData, "")
+                ChargeState = (short)parseIntField(getValue(new[] { "z", "charge_state", "charge" }, lineData, "0")),
+                ID = parseIntField(getValue(new[] { "id", "targetid", "target_id", "mass_tag_id", "massTagid" }, lineData, "-1")),
+                Code = getValue(new[] { "peptide", "sequence" }, lineData, "")
             };
 
-
-            var scanNum = parseIntField(getValue(new[] { "scannum", "scan" ,"scanNum"}, lineData, "-1"));
+            var scanNum = parseIntField(getValue(new[] { "scannum", "scan", "scanNum" }, lineData, "-1"));
             mt.NormalizedElutionTime = parseFloatField(getValue(new[] { "net", "avg_ganet", "ElutionTimeTheor" }, lineData, "-1"));
 
             // ReSharper restore StringLiteralTypo
@@ -207,14 +176,13 @@ namespace DeconTools.Backend.FileIO
 
             mt.ObsCount = parseIntField(getValue(new[] { "obs", "obscount" }, lineData, "-1"));
             mt.MonoIsotopicMass = parseDoubleField(getValue(new[] { "mass", "monoisotopicmass", "monoisotopic_mass" }, lineData, "0"));
-            mt.EmpiricalFormula = getValue(new[] { "formula", "empirical_formula", "empiricalformula"}, lineData, "");
+            mt.EmpiricalFormula = getValue(new[] { "formula", "empirical_formula", "empiricalformula" }, lineData, "");
             mt.ModCount = parseShortField(getValue(new[] { "modCount", "mod_count" }, lineData, "0"));
             mt.ModDescription = getValue(new[] { "mod", "mod_description" }, lineData, "");
             // ReSharper restore StringLiteralTypo
 
             if (mt.ChargeState == 0)
             {
-
             }
             else
             {
@@ -225,21 +193,18 @@ namespace DeconTools.Backend.FileIO
                 }
             }
 
-            mt.GeneReference = getValue(new[] {"reference"}, lineData, "");
+            mt.GeneReference = getValue(new[] { "reference" }, lineData, "");
 
             mt.RefID = parseIntField(getValue(new[] { "ref_id" }, lineData, "-1"));
-            mt.ProteinDescription = getValue(new[] { "description" ,"protein" }, lineData, "");
+            mt.ProteinDescription = getValue(new[] { "description", "protein" }, lineData, "");
 
             return mt;
-
         }
 
         private string getValue(string[] possibleHeaders, IReadOnlyList<string> lineData, string defaultVal)
         {
             foreach (var possibleHeader in possibleHeaders)
             {
-
-
                 var indexOfHeader = getIndexForTableHeader(_headers, possibleHeader, true);
                 var foundHeader = (indexOfHeader != -1);
 
@@ -247,10 +212,8 @@ namespace DeconTools.Backend.FileIO
                 {
                     return lineData[indexOfHeader];
                 }
-
             }
             return defaultVal;
-
         }
 
         private List<string> getHeaders(string headerLine)

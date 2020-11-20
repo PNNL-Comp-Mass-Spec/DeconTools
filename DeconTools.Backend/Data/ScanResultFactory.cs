@@ -6,11 +6,8 @@ namespace DeconTools.Backend.Data
 {
     public class ScanResultFactory
     {
-
         public ScanResult CreateScanResult(Run run)
         {
-
-
             ScanResult scanResult;
             if (run is UIMFRun uimfRun)
             {
@@ -21,9 +18,7 @@ namespace DeconTools.Backend.Data
                 scanResult = createStandardScanResult(run, run.CurrentScanSet);
             }
 
-
             return scanResult;
-
         }
 
         private ScanResult createStandardScanResult(Run run, ScanSet scanSet)
@@ -38,7 +33,6 @@ namespace DeconTools.Backend.Data
                 TICValue = scanSet.TICValue,
                 Description = run.GetScanInfo(scanSet.PrimaryScanNumber)
             };
-
 
             return scanResult;
         }
@@ -96,7 +90,6 @@ namespace DeconTools.Backend.Data
                     FramePressureSmoothed = lcScanSetUIMF.FramePressureSmoothed,
                     FramePressureUnsmoothed = run.GetFramePressure(lcScanSet.PrimaryScanNumber)
                 };
-
             }
             else
             {
@@ -104,8 +97,6 @@ namespace DeconTools.Backend.Data
             }
 
             return scanResult;
-
         }
-
     }
 }

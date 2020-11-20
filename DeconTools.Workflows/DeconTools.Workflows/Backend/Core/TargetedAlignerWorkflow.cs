@@ -32,13 +32,11 @@ namespace DeconTools.Workflows.Backend.Core
         public TargetedAlignerWorkflow(TargetedWorkflowParameters workflowParameters)
             : this(null, workflowParameters)
         {
-
         }
 
         public TargetedAlignerWorkflow(Run run, TargetedWorkflowParameters workflowParameters)
             : base(run, workflowParameters)
         {
-
             Check.Require(workflowParameters is TargetedAlignerWorkflowParameters, "Parameter object is of the wrong type.");
 
             _netGroupings = createNETGroupings();
@@ -46,8 +44,6 @@ namespace DeconTools.Workflows.Backend.Core
             NumFailuresPerNETGrouping = new List<int>();
 
             outputToConsole = true;
-
-
         }
 
         public TargetedAlignerWorkflow(Run run, TargetedWorkflowParameters workflowParameters, BackgroundWorker bw)
@@ -55,7 +51,6 @@ namespace DeconTools.Workflows.Backend.Core
         {
             _backgroundWorker = bw;
         }
-
 
         #endregion
 
@@ -74,7 +69,6 @@ namespace DeconTools.Workflows.Backend.Core
 
         public NETAndMassAligner Aligner { get; set; }
 
-
         public List<TargetBase> MassTagList { get; set; }
 
         public bool outputToConsole { get; set; }
@@ -87,7 +81,6 @@ namespace DeconTools.Workflows.Backend.Core
         {
             List<TargetedResultBase> resultsPassingCriteria;
             _targetedResultRepository = new TargetedResultRepository();
-
 
             var featuresAreImportedFromFile = !string.IsNullOrEmpty(AlignerParameters.ImportedFeaturesFilename);
             if (featuresAreImportedFromFile)
@@ -122,7 +115,6 @@ namespace DeconTools.Workflows.Backend.Core
                     ReportProgress(0, progressString);
                     var secondPassResults = FindTargetsThatPassSpecifiedMassTolerance(netGrouping, chromTolerance);
                     firstPassResults.AddRange(secondPassResults);
-
                 }
 
                 if (firstPassResults.Count < 10)
@@ -134,18 +126,12 @@ namespace DeconTools.Workflows.Backend.Core
                     ReportProgress(0, progressString);
                     var thirdPassResults = FindTargetsThatPassSpecifiedMassTolerance(netGrouping, chromTolerance);
                     firstPassResults.AddRange(thirdPassResults);
-
                 }
 
                 var ppmErrors = getMassErrors(firstPassResults);
                 var filteredUsingGrubbsPPMErrors = MathUtilities.filterWithGrubbsApplied(ppmErrors);
 
-
                 var canUseNarrowTolerances = executeDecisionOnUsingTightTolerances(filteredUsingGrubbsPPMErrors);
-
-
-
-
 
                 if (canUseNarrowTolerances)
                 {
@@ -163,11 +149,9 @@ namespace DeconTools.Workflows.Backend.Core
                     ReportProgress(0, progressString);
 
                     _workflow = new BasicTargetedWorkflow(Run, AlignerParameters);
-
                 }
                 else
                 {
-
                     double avgPPMError = 0;
                     double stdev = 0;
                     if (filteredUsingGrubbsPPMErrors.Count != 0)
@@ -175,7 +159,6 @@ namespace DeconTools.Workflows.Backend.Core
                         avgPPMError = filteredUsingGrubbsPPMErrors.Average();
                         stdev = MathUtilities.GetStDev(filteredUsingGrubbsPPMErrors);
                     }
-
 
                     progressString = "STRICT_Matches_AveragePPMError = \t" + avgPPMError.ToString("0.00") + "; Stdev = \t" + stdev.ToString("0.00000");
                     ReportProgress(0, progressString);
@@ -186,13 +169,9 @@ namespace DeconTools.Workflows.Backend.Core
                     // find a way to work with datasets with masses way off but low stdev
                 }
 
-
                 resultsPassingCriteria = FindTargetsThatPassCriteria();
 
                 _targetedResultRepository.AddResults(resultsPassingCriteria);
-
-
-
             }
 
             var canDoAlignment = _targetedResultRepository.Results.Count > 0;
@@ -205,7 +184,6 @@ namespace DeconTools.Workflows.Backend.Core
 
         private bool executeDecisionOnUsingTightTolerances(List<double> ppmErrors)
         {
-
             if (ppmErrors.Count < 5) return false;
 
             var avgPPMError = ppmErrors.Average();
@@ -213,27 +191,20 @@ namespace DeconTools.Workflows.Backend.Core
             if (avgPPMError > 10) return false;
 
             return true;
-
         }
 
         private List<double> getMassErrors(List<TargetedResultBase> firstPassResults)
         {
             var ppmErrors = new List<double>();
 
-
             foreach (var result in firstPassResults)
             {
-
-
                 var theorMZ = result.GetMZOfMostIntenseTheorIsotopicPeak();
                 var observedMZ = result.GetMZOfObservedPeakClosestToTargetVal(theorMZ);
-
 
                 var ppmError = (theorMZ - observedMZ) / theorMZ * 1e6;
 
                 ppmErrors.Add(ppmError);
-
-
             }
 
             return ppmErrors;
@@ -247,8 +218,6 @@ namespace DeconTools.Workflows.Backend.Core
             var workflowParameters = _workflow.WorkflowParameters as TargetedWorkflowParameters;
             workflowParameters.ChromGenTolerance = chromTolerance;
 
-
-
             var resultsPassingCriteria = new List<TargetedResultBase>();
 
             var netgrouping1 = (from n in _netGroupings where n.Lower >= netGrouping select n).First();
@@ -261,7 +230,6 @@ namespace DeconTools.Workflows.Backend.Core
             var numPassingMassTagsInGrouping = 0;
             var numFailingMassTagsInGrouping = 0;
 
-
             foreach (var massTag in filteredMasstags)
             {
                 Run.CurrentMassTag = massTag;
@@ -271,7 +239,6 @@ namespace DeconTools.Workflows.Backend.Core
 
                 if (resultPassesStrictCriteria(result))
                 {
-
                     var theorMZ = result.GetMZOfMostIntenseTheorIsotopicPeak();
                     var obsMZ = result.GetMZOfObservedPeakClosestToTargetVal(theorMZ);
                     var ppmError = (theorMZ - obsMZ) / theorMZ * 1e6;
@@ -297,20 +264,10 @@ namespace DeconTools.Workflows.Backend.Core
                 {
                     break;  // too many failed massTags in this grouping. Will move on to next grouping
                 }
-
             }
 
             return resultsPassingCriteria;
-
-
-
-
         }
-
-
-
-
-
 
         public List<TargetedResultBase> FindTargetsThatPassCriteria()
         {
@@ -329,8 +286,6 @@ namespace DeconTools.Workflows.Backend.Core
                 var progressString = "NET grouping " + netGrouping.Lower + "-" + netGrouping.Upper;
                 ReportProgress(progressPercentage, progressString);
 
-
-
                 var filteredMasstags = (from n in MassTagList
                                         where n.NormalizedElutionTime >= netGrouping.Lower && n.NormalizedElutionTime < netGrouping.Upper
                                         orderby n.ObsCount descending
@@ -338,7 +293,6 @@ namespace DeconTools.Workflows.Backend.Core
 
                 var numPassingMassTagsInGrouping = 0;
                 var numFailingMassTagsInGrouping = 0;
-
 
                 foreach (var massTag in filteredMasstags)
                 {
@@ -349,7 +303,6 @@ namespace DeconTools.Workflows.Backend.Core
 
                     if (resultPassesCriteria(result))
                     {
-
                         var progressInfo = massTag.ID + "; m/z= " + massTag.MZ.ToString("0.0000") + "; NET= " + massTag.NormalizedElutionTime.ToString("0.000") + "; found in scan: " + result.GetScanNum();
 
                         ReportProgress(progressPercentage, progressInfo);
@@ -370,7 +323,6 @@ namespace DeconTools.Workflows.Backend.Core
                     {
                         break;  // too many failed massTags in this grouping. Will move on to next grouping
                     }
-
                 }
 
                 NumFailuresPerNETGrouping.Add(numFailingMassTagsInGrouping);
@@ -381,21 +333,13 @@ namespace DeconTools.Workflows.Backend.Core
 
                 if (_backgroundWorker != null && _backgroundWorker.CancellationPending)
                 {
-
                     resultsPassingCriteria.Clear();
                     return resultsPassingCriteria;
                 }
-
             }
 
             return resultsPassingCriteria;
-
-
-
-
         }
-
-
 
         public void SetMassTags(List<TargetBase> massTagList)
         {
@@ -412,7 +356,6 @@ namespace DeconTools.Workflows.Backend.Core
         public List<int> NumSuccessesPerNETGrouping { get; set; }
         public List<int> NumFailuresPerNETGrouping { get; set; }
 
-
         #endregion
 
         #region Private Methods
@@ -427,7 +370,6 @@ namespace DeconTools.Workflows.Backend.Core
 
         public void SaveAlignmentData(string outputDirectory)
         {
-
             var exportNETAlignmentFilename = Path.Combine(outputDirectory, Run.DatasetName + "_NETAlignment.txt");
             var exportMZAlignmentFilename = Path.Combine(outputDirectory, Run.DatasetName + "_MZAlignment.txt");
 
@@ -471,7 +413,6 @@ namespace DeconTools.Workflows.Backend.Core
                 if (outputToConsole)
                 {
                     Console.WriteLine(DateTime.Now + "\t" + progressString);
-
                 }
             }
             else
@@ -503,7 +444,6 @@ namespace DeconTools.Workflows.Backend.Core
             return passesCriteria;
         }
 
-
         private bool resultPassesCriteria(TargetedResultBase result)
         {
             var passesCriteria = true;
@@ -529,14 +469,12 @@ namespace DeconTools.Workflows.Backend.Core
 
         #endregion
 
-
         public string GetAlignmentReport1()
         {
             if (_netGroupings == null || _netGroupings.Count == 0) return string.Empty;
 
             if (NumFailuresPerNETGrouping.Count != _netGroupings.Count) return string.Empty;
             if (NumSuccessesPerNETGrouping.Count != _netGroupings.Count) return string.Empty;
-
 
             var sb = new StringBuilder();
             sb.Append("NETGrouping\tSuccesses\tFailures\n");
@@ -553,7 +491,5 @@ namespace DeconTools.Workflows.Backend.Core
 
             return sb.ToString();
         }
-
-
     }
 }

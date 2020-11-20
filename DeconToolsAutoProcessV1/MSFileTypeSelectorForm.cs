@@ -20,7 +20,6 @@ namespace DeconToolsAutoProcessV1
         public MSFileTypeSelectorForm()
             : this("")
         {
-
         }
 
         public MSFileTypeSelectorForm(string filename)
@@ -28,13 +27,12 @@ namespace DeconToolsAutoProcessV1
             InitializeComponent();
             listBox1.DataSource = Enum.GetValues(typeof(Globals.MSFileType));
 
-            Globals.MSFileType guessedFileType= guessFileTypeFromFileName(filename);
+            Globals.MSFileType guessedFileType = guessFileTypeFromFileName(filename);
             listBox1.SelectedItem = guessedFileType;
         }
 
         private Globals.MSFileType guessFileTypeFromFileName(string filename)
         {
-
             RunFactory runFactory = new RunFactory();
 
             Run run = runFactory.CreateRun(filename);
@@ -48,16 +46,13 @@ namespace DeconToolsAutoProcessV1
 
             try
             {
-
                 if (Directory.Exists(filename))
                 {
                     if (filename.EndsWith(".d", StringComparison.OrdinalIgnoreCase))
                     {
                         return Globals.MSFileType.Agilent_D;
                     }
-
                 }
-
 
                 if (!File.Exists(filename))
                 {
@@ -100,8 +95,6 @@ namespace DeconToolsAutoProcessV1
             {
                 return Globals.MSFileType.Undefined;
             }
-
-
         }
 
         private void btnOK_Click(object sender, EventArgs e)

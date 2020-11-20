@@ -40,23 +40,23 @@ namespace Decon2LS
             //
             // TODO: Add any constructor code after InitializeComponent call
             //
-            this.mtxt_value.Text = default_value ;
-            this.mlabel.Text = label ;
+            this.mtxt_value.Text = default_value;
+            this.mlabel.Text = label;
         }
 
         /// <summary>
         /// Clean up any resources being used.
         /// </summary>
-        protected override void Dispose( bool disposing )
+        protected override void Dispose(bool disposing)
         {
-            if( disposing )
+            if (disposing)
             {
-                if(components != null)
+                if (components != null)
                 {
                     components.Dispose();
                 }
             }
-            base.Dispose( disposing );
+            base.Dispose(disposing);
         }
 
         #region Windows Form Designer generated code
@@ -116,42 +116,41 @@ namespace Decon2LS
             this.Name = "frmSimpleDialogBox";
             this.Text = "frmSimpleDialogBox";
             this.ResumeLayout(false);
-
         }
         #endregion
 
         private void mbtn_OK_Click(object sender, System.EventArgs e)
         {
-            this.DialogResult = DialogResult.OK ;
-            this.Hide() ;
+            this.DialogResult = DialogResult.OK;
+            this.Hide();
         }
 
         private void mbtn_cancel_Click(object sender, System.EventArgs e)
         {
-            this.DialogResult = DialogResult.Cancel ;
-            this.Hide() ;
+            this.DialogResult = DialogResult.Cancel;
+            this.Hide();
         }
 
         public string Value
         {
             get
             {
-                return this.mtxt_value.Text ;
+                return this.mtxt_value.Text;
             }
             set
             {
-                this.mtxt_value.Text = value ;
+                this.mtxt_value.Text = value;
             }
         }
         public string Label
         {
             get
             {
-                return this.mlabel.Text ;
+                return this.mlabel.Text;
             }
             set
             {
-                this.mlabel.Text = value ;
+                this.mlabel.Text = value;
             }
         }
     }

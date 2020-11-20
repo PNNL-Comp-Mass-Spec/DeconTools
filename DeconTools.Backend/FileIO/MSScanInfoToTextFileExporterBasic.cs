@@ -32,7 +32,6 @@ namespace DeconTools.Backend.FileIO
             };
 
             return string.Join(Delimiter.ToString(), data);
-
         }
 
         protected override string buildHeaderLine()

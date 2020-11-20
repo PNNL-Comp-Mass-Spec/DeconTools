@@ -5,7 +5,6 @@ namespace DeconTools.Workflows.Backend.Utilities
 {
     public class FileUtilities
     {
-
         public static List<string> LoadStringsFromFile(string filename, bool containsHeader = false)
         {
             var list = new List<string>();
@@ -31,10 +30,7 @@ namespace DeconTools.Workflows.Backend.Utilities
             }
 
             return list;
-
         }
-
-
 
         public static void CopyAll(DirectoryInfo source, DirectoryInfo target)
         {
@@ -65,7 +61,6 @@ namespace DeconTools.Workflows.Backend.Utilities
             }
         }
 
-
         public static void CopyAll(FileInfo fileToBeCopied, DirectoryInfo targetFolder)
         {
             // Check if the target directory exists, if not, create it.
@@ -75,7 +70,6 @@ namespace DeconTools.Workflows.Backend.Utilities
             }
 
             fileToBeCopied.CopyTo(Path.Combine(targetFolder.FullName, fileToBeCopied.Name), true);
-
         }
     }
 }

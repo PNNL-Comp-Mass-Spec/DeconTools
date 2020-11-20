@@ -3,7 +3,6 @@ namespace DeconTools.Workflows.Backend.Core
 {
     public class IqTargetMsgfFirstHit:IqChargeStateTarget
     {
-
         #region Constructors
         #endregion
 

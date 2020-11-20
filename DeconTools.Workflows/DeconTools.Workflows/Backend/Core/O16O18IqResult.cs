@@ -5,17 +5,14 @@ namespace DeconTools.Workflows.Backend.Core
 {
     public class O16O18IqResult:IqResult
     {
-
         #region Constructors
         public O16O18IqResult(IqTarget target)
             : base(target)
         {
-
         }
         #endregion
 
         #region Properties
-
 
         public double RatioO16O18DoubleLabel { get; set; }
 
@@ -48,12 +45,10 @@ namespace DeconTools.Workflows.Backend.Core
                 peak.XValue += numPeaksToShift * mzBetweenIsotopes;
 
                 o18Iso.Peaklist.Add(peak);
-
             }
 
             return o18Iso;
         }
-
 
         #endregion
 
@@ -125,7 +120,6 @@ namespace DeconTools.Workflows.Backend.Core
             return failedValue;
         }
 
-
         public double GetRatioO16O18SingleLabel()
         {
             double failedValue = -9999;
@@ -157,6 +151,5 @@ namespace DeconTools.Workflows.Backend.Core
 
             return failedValue;
         }
-
     }
 }

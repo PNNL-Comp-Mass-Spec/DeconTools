@@ -8,29 +8,23 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
         public ChromatogramCorrelatorO16O18(int numPointsInSmoother, double minRelativeIntensityForChromCorr = 0.00001, double chromToleranceInPPM = 20)
             : base(numPointsInSmoother, minRelativeIntensityForChromCorr, chromToleranceInPPM)
         {
-
         }
 
         public override ChromCorrelationData CorrelateData(Run run, TargetedResultBase result, int startScan, int stopScan)
         {
-
-            var chromCorrData=   CorrelateO16O18Profiles(run, result.IsotopicProfile, startScan, stopScan);
+            var chromCorrData = CorrelateO16O18Profiles(run, result.IsotopicProfile, startScan, stopScan);
 
             if (result is O16O18TargetedResultObject o16O18Result)
             {
                 if (chromCorrData.CorrelationDataItems.Any())
                 {
-                    o16O18Result.ChromCorrO16O18SingleLabel= chromCorrData.CorrelationDataItems[0].CorrelationRSquaredVal;
+                    o16O18Result.ChromCorrO16O18SingleLabel = chromCorrData.CorrelationDataItems[0].CorrelationRSquaredVal;
                     o16O18Result.ChromCorrO16O18DoubleLabel = chromCorrData.CorrelationDataItems[1].CorrelationRSquaredVal;
                 }
             }
 
-
             return chromCorrData;
-
-
         }
-
 
         public ChromCorrelationData CorrelateO16O18Profiles(Run run, IsotopicProfile iso, int startScan, int stopScan)
         {
@@ -73,7 +67,6 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             return correlationData;
         }
 
-
         private ChromCorrelationDataItem GetChromCorrDataItem(Run run, int startScan, int stopScan, XYData baseXYData, double correlatedMZValue)
         {
             var chromPeakXYData = GetCorrelatedChromPeakXYData(run, startScan, stopScan, baseXYData, correlatedMZValue);
@@ -83,25 +76,18 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
             ChromCorrelationDataItem dataItem;
             if (chromDataIsOK)
             {
-
                 chromPeakXYData = FillInAnyMissingValuesInChromatogram(baseXYData, chromPeakXYData);
 
                 GetElutionCorrelationData(baseXYData, chromPeakXYData, out var slope, out var intercept, out var rSquaredVal);
 
                 dataItem = new ChromCorrelationDataItem(slope, intercept, rSquaredVal);
-
-
             }
             else
             {
-
                 dataItem = new ChromCorrelationDataItem();
-
             }
 
             return dataItem;
         }
-
-
     }
 }

@@ -3,7 +3,6 @@ namespace DeconTools.Backend.Core
 {
     public class UMC
     {
-
         public int UMCIndex { get; set; }
 
         public int ScanStart { get; set; }
@@ -75,6 +74,5 @@ namespace DeconTools.Backend.Core
         public double StacScore { get; set; }
 
         public double StacUniquenessProbability { get; set; }
-
     }
 }

@@ -3,7 +3,6 @@ namespace DeconTools.Backend.Data
 {
     public abstract class Exporter<T>
     {
-
         protected abstract string headerLine { get; set; }
 
         protected abstract char delimiter { get; set; }
@@ -14,8 +13,5 @@ namespace DeconTools.Backend.Data
         {
             return PNNLOmics.Utilities.StringUtilities.DblToString(value, digitsAfterDecimal, limitDecimalsForLargeValues);
         }
-
     }
-
-
 }

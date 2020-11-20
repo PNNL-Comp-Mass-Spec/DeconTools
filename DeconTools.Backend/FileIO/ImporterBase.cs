@@ -11,7 +11,6 @@ namespace DeconTools.Backend.FileIO
     {
         const string DEFAULT_RETURN_STRING = "-1";
 
-
         Dictionary<string, int> columnIndexTable;
 
         protected char m_delimiter = '\t';
@@ -43,7 +42,6 @@ namespace DeconTools.Backend.FileIO
 
         protected string LookupData(List<string> row, string[] possibleColumnHeaders)
         {
-
             foreach (var possibleHeader in possibleColumnHeaders)
             {
                 var columnIndex = GetColumnIndexForHeader(possibleHeader);
@@ -54,12 +52,10 @@ namespace DeconTools.Backend.FileIO
             }
 
             return DEFAULT_RETURN_STRING;
-
         }
 
         protected string LookupData(List<string> row, string[] possibleColumnHeaders, string defaultValue)
         {
-
             foreach (var possibleHeader in possibleColumnHeaders)
             {
                 var columnIndex = GetColumnIndexForHeader(possibleHeader);
@@ -70,13 +66,10 @@ namespace DeconTools.Backend.FileIO
             }
 
             return defaultValue;
-
         }
 
         protected string LookupData(List<string> row, string targetColumn, bool ignoreCase)
         {
-
-
             var columnIndex = GetColumnIndexForHeader(targetColumn);
             if (columnIndex == -1)
             {
@@ -86,13 +79,11 @@ namespace DeconTools.Backend.FileIO
             return row[columnIndex];
         }
 
-
         protected void CreateHeaderLookupTable(string headerLine)
         {
             m_columnHeaders = ProcessLine(headerLine);
 
             columnIndexTable = new Dictionary<string, int>();
-
 
             for (var i = 0; i < m_columnHeaders.Count; i++)
             {
@@ -102,11 +93,8 @@ namespace DeconTools.Backend.FileIO
                 {
                     columnIndexTable.Add(header, i);
                 }
-
             }
-
         }
-
 
         protected string ParseStringField(List<string> rowData, string[] headers, string defaultVal = "")
         {
@@ -119,8 +107,6 @@ namespace DeconTools.Backend.FileIO
 
             return rowValueString;
         }
-
-
 
         protected bool ParseBoolField(string inputString)
         {
@@ -142,7 +128,6 @@ namespace DeconTools.Backend.FileIO
             if (rowValueString == "1" || rowValueString == "true")
             {
                 return true;
-
             }
 
             if (rowValueString == "0" || rowValueString == "false")
@@ -151,8 +136,6 @@ namespace DeconTools.Backend.FileIO
             }
 
             return defaultVal;
-
-
         }
 
         protected short ParseShortField(string inputString)
@@ -163,7 +146,6 @@ namespace DeconTools.Backend.FileIO
             return 0;
         }
 
-
         protected short ParseShortField(List<string> rowData, string[] headers, short defaultVal = -1)
         {
             var rowValueString = LookupData(rowData, headers, string.Empty).ToLower();
@@ -173,18 +155,13 @@ namespace DeconTools.Backend.FileIO
                 return defaultVal;
             }
 
-
             if (Int16.TryParse(rowValueString, out var result))
             {
                 return result;
             }
 
             return defaultVal;
-
-
         }
-
-
 
         protected double ParseDoubleField(string inputString)
         {
@@ -211,9 +188,6 @@ namespace DeconTools.Backend.FileIO
             return defaultVal;
         }
 
-
-
-
         protected float ParseFloatField(string inputString)
         {
             if (float.TryParse(inputString, out var result))
@@ -238,10 +212,6 @@ namespace DeconTools.Backend.FileIO
 
             return defaultVal;
         }
-
-
-
-
 
         protected int ParseIntField(string inputString)
         {
@@ -274,7 +244,6 @@ namespace DeconTools.Backend.FileIO
             return defaultVal;
         }
 
-
         protected long ParseLongField(string inputString)
         {
             if (Int64.TryParse(inputString, out var result))
@@ -282,7 +251,6 @@ namespace DeconTools.Backend.FileIO
 
             return -1;
         }
-
 
         protected long ParseLongField(List<string> rowData, string[] headers, long defaultVal = -1)
         {
@@ -300,8 +268,6 @@ namespace DeconTools.Backend.FileIO
 
             return defaultVal;
         }
-
-
 
         /// <summary>
         /// Parses a single line of data into a List of strings
@@ -321,14 +287,9 @@ namespace DeconTools.Backend.FileIO
             return parsedLine;
         }
 
-
-
-
         protected int GetColumnIndexForHeader(string target)
         {
-
             var t = target.ToLower();
-
 
             if (columnIndexTable.ContainsKey(t))
             {

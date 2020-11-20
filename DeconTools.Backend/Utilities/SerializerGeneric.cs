@@ -10,7 +10,6 @@ namespace DeconTools.Backend.Utilities
 
         public SerializerGeneric(string outputFilename, FileMode mode, bool deletePrevious)
         {
-
             OutputFilename = outputFilename;
             fileMode = mode;
 
@@ -23,7 +22,6 @@ namespace DeconTools.Backend.Utilities
                         File.Delete(outputFilename);
                     }
                 }
-
             }
             catch (Exception ex)
             {
@@ -48,7 +46,5 @@ namespace DeconTools.Backend.Utilities
         {
             Stream.Close();
         }
-
-
     }
 }

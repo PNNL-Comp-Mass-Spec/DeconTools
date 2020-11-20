@@ -5,14 +5,11 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
 {
     public class BasicIsosResultTextFileExporter : IsosResultTextFileExporter
     {
-
         #region Constructors
         public BasicIsosResultTextFileExporter(string fileName)
             : this(fileName, 10000)
         {
-
         }
-
 
         public BasicIsosResultTextFileExporter(string fileName, int triggerValueToExport)
         {
@@ -22,7 +19,6 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
             FileName = fileName;
 
             initializeAndWriteHeader();
-
         }
 
         #endregion
@@ -33,7 +29,6 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
 
         protected override string buildIsosResultOutput(IsosResult result)
         {
-
             var data = new List<string>
             {
                 result.ScanSet.PrimaryScanNumber.ToString(),
@@ -86,9 +81,4 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
             return string.Join(Delimiter.ToString(), data);
         }
     }
-
-
-
-
-
 }

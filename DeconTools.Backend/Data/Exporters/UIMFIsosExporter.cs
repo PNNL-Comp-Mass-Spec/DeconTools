@@ -39,7 +39,6 @@ namespace DeconTools.Backend.Data
             };
 
             headerLine = string.Join(delimiter.ToString(), data);
-
         }
 
         public override void Export(ResultCollection results)
@@ -59,7 +58,6 @@ namespace DeconTools.Backend.Data
             try
             {
                 sw = new StreamWriter(fileName);
-
             }
             catch (Exception ex)
             {
@@ -88,16 +86,12 @@ namespace DeconTools.Backend.Data
                 {
                     File.Delete(binaryResultCollectionFilename);
                 }
-
             }
             catch (Exception ex)
             {
                 throw new IOException("Exporter could not delete binary file. Details: " + ex.Message);
-
             }
-
         }
-
 
         private void WriteUIMFIsosResults(TextWriter sw, ResultCollection results)
         {

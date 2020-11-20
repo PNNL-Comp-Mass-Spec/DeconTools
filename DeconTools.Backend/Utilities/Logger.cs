@@ -17,7 +17,6 @@ namespace DeconTools.Backend.Utilities
 
         public string OutputFilename { get; set; }
 
-
         private Logger()
         {
             LogEntryBuffer = new List<LogEntry>();
@@ -58,7 +57,6 @@ namespace DeconTools.Backend.Utilities
                 return;
 
             FlushLogEntries(Instance.OutputFilename);
-
         }
 
         /// <summary>
@@ -110,9 +108,6 @@ namespace DeconTools.Backend.Utilities
 
             var span = logEntry2.LogTime.Subtract(logEntry1.LogTime);
             return span;
-
-
-
         }
 
         public void Display()
@@ -132,8 +127,6 @@ namespace DeconTools.Backend.Utilities
                     sw.WriteLine(entry.LogTime.ToString(CultureInfo.InvariantCulture) + "\t" + entry.LogDescription);
                 }
             }
-
         }
-
     }
 }

@@ -59,7 +59,6 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
                 isLastScan = (resultList.Run.CurrentScanSet.PrimaryScanNumber == lastScanNum);
             }
 
-
             if (resultList.ResultList.Count >= TriggerToExport ||
                 DateTime.UtcNow.Subtract(LastExportTime).TotalSeconds >= MAX_SECONDS_BETWEEN_EXPORT ||
                 isLastScan)
@@ -70,9 +69,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
 
                 LastExportTime = DateTime.UtcNow;
             }
-
         }
-
 
         #endregion
 

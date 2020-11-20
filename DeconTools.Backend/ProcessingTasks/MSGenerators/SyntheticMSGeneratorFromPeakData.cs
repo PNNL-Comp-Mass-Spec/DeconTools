@@ -10,7 +10,6 @@ namespace DeconTools.Backend.ProcessingTasks.MSGenerators
         WidthsCalculatedOnAPerPeakBasis
     }
 
-
     public class SyntheticMSGeneratorFromPeakData : MSGenerator
     {
         #region Constructors
@@ -24,7 +23,6 @@ namespace DeconTools.Backend.ProcessingTasks.MSGenerators
         {
             this.PeakWidthForAllPeaks = peakWidthForAllPeaks;
             this.ModeOfPeakWidthCalculation = SyntheticMSGeneratorFromPeakDataMode.WidthsCalculatedFromSingleValue;
-
         }
         #endregion
 
@@ -36,8 +34,6 @@ namespace DeconTools.Backend.ProcessingTasks.MSGenerators
         #endregion
 
         #region Public Methods
-
-
 
         #endregion
 
@@ -81,14 +77,13 @@ namespace DeconTools.Backend.ProcessingTasks.MSGenerators
                 yVals.AddRange(generatedXYData.Yvalues);
             }
 
-            var xyData = new XYData {
+            var xyData = new XYData
+            {
                 Xvalues = xVals.ToArray(),
                 Yvalues = yVals.ToArray()
             };
 
             return xyData;
         }
-
-
     }
 }

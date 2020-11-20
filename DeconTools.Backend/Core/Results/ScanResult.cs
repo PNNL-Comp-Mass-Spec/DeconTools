@@ -5,7 +5,6 @@ namespace DeconTools.Backend.Core
     [Serializable]
     public abstract class ScanResult
     {
-
         protected ScanResult(ScanSet scanSet)
         {
             ScanSet = scanSet;

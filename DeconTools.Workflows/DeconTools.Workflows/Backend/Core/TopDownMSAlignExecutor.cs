@@ -31,8 +31,6 @@ namespace DeconTools.Workflows.Backend.Core
 
         #endregion
 
-
-
         #region public methods
 
         public override void LoadAndInitializeTargets(string targetsFilePath)
@@ -68,7 +66,6 @@ namespace DeconTools.Workflows.Backend.Core
             target.ElutionTimeTheor = Run.NetAlignmentInfo.GetNETValueForScan(scanList[scanList.Count / 2]);
         }
 
-
         #endregion
 
         protected override void ReportGeneralProgress(int currentTarget, int totalTargets, ref DateTime lastProgress, int progressIntervalSeconds = 10)
@@ -88,7 +85,6 @@ namespace DeconTools.Workflows.Backend.Core
             }
         }
 
-
         protected override void ExportResults(IqResult iqResult)
         {
             var resultsForExport = _iqResultUtilities.FlattenOutResultTree(iqResult);
@@ -107,9 +103,7 @@ namespace DeconTools.Workflows.Backend.Core
             IqResultExporter.WriteOutResults(Path.Combine(_resultsDirectory, Run.DatasetName), exportedResults);
         }
 
-
         #region private methods
-
 
         private void SetupResultsFolder()
         {
@@ -123,17 +117,13 @@ namespace DeconTools.Workflows.Backend.Core
             }
 
             if (!Directory.Exists(_resultsDirectory)) Directory.CreateDirectory(_resultsDirectory);
-
-
         }
-
 
         private string GetDefaultOutputDirectory()
         {
             var defaultOutputDirectory = Run.DatasetDirectoryPath;
             return defaultOutputDirectory;
         }
-
 
         #endregion
 

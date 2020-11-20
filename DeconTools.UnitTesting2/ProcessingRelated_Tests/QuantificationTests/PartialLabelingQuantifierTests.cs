@@ -15,21 +15,18 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.QuantificationTests
         {
             // see https://jira.pnnl.gov/jira/browse/OMCS-743
 
-
             var peptideSeq = "SAMPLERSAMPLER";
-             var isoCreator = new LabeledIsotopicProfileUtilities();
+            var isoCreator = new LabeledIsotopicProfileUtilities();
 
             var elementLabeled = "C";
 
             var target = new PeptideTarget();
             target.Code = peptideSeq;
-            target.EmpiricalFormula=   target.GetEmpiricalFormulaFromTargetCode();
+            target.EmpiricalFormula = target.GetEmpiricalFormulaFromTargetCode();
             target.ChargeState = 2;
             target.CalculateMassesForIsotopicProfile(target.ChargeState);
 
-
-            target.IsotopicProfile=   isoCreator.CreateIsotopicProfileFromEmpiricalFormula(target.EmpiricalFormula, elementLabeled, 12, 13, 0, target.ChargeState);
-
+            target.IsotopicProfile = isoCreator.CreateIsotopicProfileFromEmpiricalFormula(target.EmpiricalFormula, elementLabeled, 12, 13, 0, target.ChargeState);
 
             double[] obsMZVals = {
                                        794.4027177, 794.9043951, 795.4060725, 795.9077499, 796.4094273, 796.9111047,
@@ -48,14 +45,11 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.QuantificationTests
                                                , 0.024965924, 0.019531111, 0.01613184, 0, 0, 0
                                            };
 
-
-
-
-            var peakList = obsMZVals.Select((t, i) => new Peak(t, (float) obsIntensities[i], 0)).ToList();
+            var peakList = obsMZVals.Select((t, i) => new Peak(t, (float)obsIntensities[i], 0)).ToList();
 
             var partialLabelingQuantifier = new PartialLabelingQuantifier("C", 12, 13);
 
-            var bestIso=  partialLabelingQuantifier.FindBestLabeledProfile(target, peakList, null);
+            var bestIso = partialLabelingQuantifier.FindBestLabeledProfile(target, peakList, null);
 
             var counter = 0;
             foreach (var currentFitScore in partialLabelingQuantifier.FitScoreData)
@@ -63,8 +57,6 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.QuantificationTests
                 Console.WriteLine(currentFitScore.Key + "\t" + currentFitScore.Value);
                 counter++;
             }
-
         }
-
     }
 }

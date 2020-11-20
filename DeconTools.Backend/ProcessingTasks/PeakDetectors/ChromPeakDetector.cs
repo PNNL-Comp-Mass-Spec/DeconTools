@@ -2,12 +2,10 @@
 using System.Collections.Generic;
 using DeconTools.Backend.Core;
 
-
 namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
 {
     public class ChromPeakDetector : DeconToolsPeakDetectorV2
     {
-
         #region Constructors
 
         public ChromPeakDetector() : base()
@@ -68,6 +66,5 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
         {
             CalculateElutionTimes(run, run.PeakList);
         }
-
     }
 }

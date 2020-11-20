@@ -115,7 +115,6 @@ namespace DeconTools.Workflows.Backend.Core
                 MassTagsForTargetedAlignment = GetMassTagTargets(GetTargetFilePathForIqAlignment());
             }
 
-
             var targetsFilePathIsEmpty = (string.IsNullOrWhiteSpace(ExecutorParameters.TargetsFilePath));
 
             string currentTargetsFilePath;
@@ -138,7 +137,6 @@ namespace DeconTools.Workflows.Backend.Core
                 return;
 
             IqLogger.LogMessage("Total targets loaded= " + Targets.TargetList.Count);
-
 
             if (ExecutorParameters.TargetType == Globals.TargetType.LcmsFeature)
             {
@@ -169,12 +167,9 @@ namespace DeconTools.Workflows.Backend.Core
                         "Cannot initialize workflow. TargetedAlignment is requested but TargetedAlignmentWorkflowParameter file is not found. Check path for the 'TargetedAlignmentWorkflowParameterFile' ");
                 }
 
-
                 TargetedAlignmentWorkflowParameters = new TargetedAlignerWorkflowParameters();
                 TargetedAlignmentWorkflowParameters.LoadParameters(ExecutorParameters.TargetedAlignmentWorkflowParameterFile);
-
             }
-
         }
 
         #endregion
@@ -206,21 +201,16 @@ namespace DeconTools.Workflows.Backend.Core
         /// </summary>
         public TargetCollection MassTagsForReference { get; set; }
 
-
         public double MsgfFdrScoreCutoff { get; set; }
 
         public bool RunIsDisposed { get; set; }
 
-
         #endregion
-
-
 
         #region Public Methods
 
         protected virtual void UpdateTargetMissingInfo()
         {
-
             var canUseReferenceMassTags = MassTagsForReference != null && MassTagsForReference.TargetList.Count > 0;
 
             var massTagIDsAvailableForLookup = new List<int>();
@@ -229,7 +219,6 @@ namespace DeconTools.Workflows.Backend.Core
             {
                 massTagIDsAvailableForLookup = MassTagsForReference.TargetList.Select(p => p.ID).ToList();
             }
-
 
             foreach (var targetBase in Targets.TargetList)
             {
@@ -241,7 +230,6 @@ namespace DeconTools.Workflows.Backend.Core
                 {
                     if (canUseReferenceMassTags && massTagIDsAvailableForLookup.Contains(target.FeatureToMassTagID))
                     {
-
                         var mt = MassTagsForReference.TargetList.First(p => p.ID == target.FeatureToMassTagID);
 
                         //in DMS, Sequest will put an 'X' when it can't differentiate 'I' and 'L'
@@ -266,7 +254,6 @@ namespace DeconTools.Workflows.Backend.Core
                         }
 
                         target.EmpiricalFormula = new PeptideUtils().GetEmpiricalFormulaForPeptideSequence(target.Code);
-
                     }
                     else
                     {
@@ -281,19 +268,13 @@ namespace DeconTools.Workflows.Backend.Core
                     }
                 }
 
-
                 if (isMissingMonoMass)
                 {
                     target.MonoIsotopicMass =
                         EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(target.EmpiricalFormula);
 
-
-
                     target.MZ = target.MonoIsotopicMass / target.ChargeState + DeconTools.Backend.Globals.PROTON_MASS;
                 }
-
-
-
             }
         }
 
@@ -315,7 +296,6 @@ namespace DeconTools.Workflows.Backend.Core
             foreach (var suffix in possibleFileSuffixes)
             {
                 var fileInfos = targetsBaseDirectory.GetFiles("*" + suffix);
-
 
                 foreach (var fileInfo in fileInfos)
                 {
@@ -349,7 +329,6 @@ namespace DeconTools.Workflows.Backend.Core
             throw new NotSupportedException(sb.ToString());
         }
 
-
         public override void Execute()
         {
             try
@@ -361,7 +340,6 @@ namespace DeconTools.Workflows.Backend.Core
                 ReportGeneralProgress("Started Processing....");
                 ReportGeneralProgress("Dataset = " + DatasetPath);
                 ReportGeneralProgress("Parameters:" + "\n" + _workflowParameters.ToStringWithDetails());
-
 
                 if (!RunIsInitialized)
                 {
@@ -383,7 +361,6 @@ namespace DeconTools.Workflows.Backend.Core
                 {
                     FinalizeRun();
                 }
-
             }
             catch (Exception ex)
             {
@@ -424,9 +401,7 @@ namespace DeconTools.Workflows.Backend.Core
             }
 
             _alignmentDirectory = alignmentDirectoryPath;
-
         }
-
 
         protected virtual string GetTargetFilePathForIqAlignment()
         {
@@ -439,7 +414,6 @@ namespace DeconTools.Workflows.Backend.Core
             if (string.IsNullOrWhiteSpace(_alignmentDirectory))
             {
                 SetupAlignment();
-
             }
 
             //first look for _fht.txt file (MSGF output)
@@ -481,10 +455,8 @@ namespace DeconTools.Workflows.Backend.Core
                 throw new IOException("Trying to set up log file directory but there was a critical error. Details:\n\n" + ex.Message, ex);
             }
 
-
             _loggingFileName = Path.Combine(loggingDirectory, RunUtilities.GetDatasetName(DatasetPath) + "_log.txt");
         }
-
 
         public List<TargetedResultDTO> GetResults()
         {
@@ -509,10 +481,8 @@ namespace DeconTools.Workflows.Backend.Core
             }
         }
 
-
         public void ProcessDataset()
         {
-
             //apply mass calibration and NET alignment from .txt files, if they exist
             PerformAlignment();
 
@@ -591,7 +561,6 @@ namespace DeconTools.Workflows.Backend.Core
 #endif
 
                 var progressString = "Percent complete = " + ((double)mtCounter / totalTargets * 100.0).ToString("0.0") + "\tTarget " + mtCounter + " of " + totalTargets;
-
 
                 if (_backgroundWorker != null)
                 {
@@ -687,7 +656,6 @@ namespace DeconTools.Workflows.Backend.Core
                 return new TargetCollection();
             }
 
-
             if (massTagFileName.ToLower().Contains("_msgfplus.tsv"))
             {
                 var iqTargetImporter = new BasicIqTargetImporter(massTagFileName);
@@ -721,7 +689,6 @@ namespace DeconTools.Workflows.Backend.Core
                 return targetCollection;
             }
 
-
             var importer = new MassTagFromTextFileImporter(massTagFileName);
             return importer.Import(targetIDsToFilterOn);
         }
@@ -749,17 +716,14 @@ namespace DeconTools.Workflows.Backend.Core
 
             using (var sr = new StreamReader(fileContainingDatasetPaths))
             {
-
                 while (!sr.EndOfStream)
                 {
                     datasetPathList.Add(sr.ReadLine());
-
                 }
                 sr.Close();
             }
 
             return datasetPathList;
-
         }
 
         protected void ReportGeneralProgress(string generalProgressString, int progressPercent = 0)
@@ -787,17 +751,14 @@ namespace DeconTools.Workflows.Backend.Core
             writeToLogFile(DateTime.Now + "\t" + generalProgressString);
         }
 
-
         protected void ReportProcessingProgress(string reportString, int progressCounter)
         {
-
             if (_backgroundWorker == null)
             {
                 if (progressCounter % 100 == 0)
                 {
                     Console.WriteLine(DateTime.Now + "\t" + reportString);
                 }
-
             }
             else
             {
@@ -827,7 +788,6 @@ namespace DeconTools.Workflows.Backend.Core
             {
                 writeToLogFile(DateTime.Now + "\t" + reportString);
             }
-
         }
 
         protected void writeToLogFile(string stringToWrite)
@@ -847,23 +807,18 @@ namespace DeconTools.Workflows.Backend.Core
         {
             var attr = File.GetAttributes(Run.DatasetFileOrDirectoryPath);
 
-
             FileInfo[] datasetRelatedFiles;
 
             if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
             {
                 var dirInfo = new DirectoryInfo(Run.DatasetFileOrDirectoryPath);
                 datasetRelatedFiles = dirInfo.GetFiles(Run.DatasetName + "*.txt");
-
-
-
             }
             else
             {
                 var fi = new FileInfo(Run.DatasetFileOrDirectoryPath);
                 var dirInfo = fi.Directory;
                 datasetRelatedFiles = dirInfo.GetFiles(Run.DatasetName + "*.txt");
-
             }
 
             foreach (var file in datasetRelatedFiles)
@@ -882,12 +837,8 @@ namespace DeconTools.Workflows.Backend.Core
                     {
                         file.Delete();       //if things were copied locally, we are going to delete anything created.
                     }
-
                 }
-
             }
-
-
         }
 
         public void InitializeRun(string datasetFileOrDirectoryPath)
@@ -924,11 +875,8 @@ namespace DeconTools.Workflows.Backend.Core
                     else
                     {
                         ReportGeneralProgress("Datafile already exists on local drive. Using existing datafile.");
-
                     }
-
                 }
-
             }
             else
             {
@@ -948,12 +896,8 @@ namespace DeconTools.Workflows.Backend.Core
 
             ReportGeneralProgress("Run initialized successfully.");
 
-
             //Retrieve alignment data if it exists
             CopyAlignmentInfoIfExists();
-
-
-
 
             //check and load chrom source data (_peaks.txt)
             var peaksFileExists = CheckForPeaksFile();
@@ -969,9 +913,7 @@ namespace DeconTools.Workflows.Backend.Core
                 ReportGeneralProgress("Using existing _Peaks.txt file");
             }
 
-
             ReportGeneralProgress("Peak loading started...");
-
 
             var baseFileName = Path.Combine(Run.DatasetDirectoryPath, Run.DatasetName);
 
@@ -1012,7 +954,6 @@ namespace DeconTools.Workflows.Backend.Core
 
             if (dirInfo.Exists)
             {
-
                 var datasetRelatedFiles = dirInfo.GetFiles(Run.DatasetName + "*.txt");
 
                 foreach (var file in datasetRelatedFiles)
@@ -1025,11 +966,7 @@ namespace DeconTools.Workflows.Backend.Core
                             file.CopyTo(Path.Combine(Run.DatasetDirectoryPath, file.Name), true);
                         }
                     }
-
-
                 }
-
-
             }
         }
 
@@ -1039,7 +976,6 @@ namespace DeconTools.Workflows.Backend.Core
             {
                 RunUtilities.AlignRunUsingAlignmentInfoInFiles(Run, _alignmentDirectory);
             }
-
 
             if (Run.MassIsAligned)
             {
@@ -1104,7 +1040,6 @@ namespace DeconTools.Workflows.Backend.Core
             }
         }
 
-
         protected virtual TargetCollection GetLcmsFeatureTargets(string targetsFilePath)
         {
             if (targetsFilePath.ToLower().Contains("_msgf"))
@@ -1149,10 +1084,8 @@ namespace DeconTools.Workflows.Backend.Core
             throw new NotImplementedException();
         }
 
-
         protected void FinalizeRun()
         {
-
             var runFileOrDirectoryPath = Run.DatasetFileOrDirectoryPath;
             var datasetName = Run.DatasetName;
 
@@ -1203,8 +1136,6 @@ namespace DeconTools.Workflows.Backend.Core
                     {
                         // Ignore errors here
                     }
-
-
                 }
             }
         }

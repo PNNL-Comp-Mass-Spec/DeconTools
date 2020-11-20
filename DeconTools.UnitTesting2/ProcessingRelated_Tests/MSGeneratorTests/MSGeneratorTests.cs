@@ -12,7 +12,6 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSGeneratorTests
     [TestFixture]
     public class MSGeneratorTests
     {
-
         [Test]
         public void MSGeneratorOnOrbiTest1()
         {
@@ -20,10 +19,10 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSGeneratorTests
             var run = new RunFactory().CreateRun(testfile);
             var generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
-            var testLCScan=6005;
+            var testLCScan = 6005;
             var scanSet = new ScanSetFactory().CreateScanSet(run, testLCScan, 1);
 
-            var xyData= generator.GenerateMS(run, scanSet);
+            var xyData = generator.GenerateMS(run, scanSet);
 
             Assert.IsNotNull(xyData);
             Assert.IsTrue(xyData.Xvalues.Length > 1000);
@@ -59,9 +58,6 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSGeneratorTests
             generator.Execute(run.ResultCollection);
 
             Assert.IsTrue(run.XYData.Xvalues.Length > 100);
-
         }
-
-
     }
 }

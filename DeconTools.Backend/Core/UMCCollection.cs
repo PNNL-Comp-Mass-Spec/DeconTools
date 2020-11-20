@@ -30,8 +30,6 @@ namespace DeconTools.Backend.Core
             var distinctItems = UMCList.GroupBy(p => p.ScanClassRep).Select(p => p.First());    //this creates a list of UMCs distinct with reference to the ScanClassRep field
             var tempUMCs = distinctItems.ToList();
 
-
-
             foreach (var umc in tempUMCs)
             {
                 var scanNetPair = new ScanNETPair(umc.ScanClassRep, (float)umc.NETClassRep);
@@ -52,7 +50,6 @@ namespace DeconTools.Backend.Core
             var tempUMCs = distinctItems.ToList();
             //create a temp copy of list
 
-
             var umcWithSameScanNum = tempUMCs.Find(p => p.ScanClassRep == scanNum);
             if (umcWithSameScanNum != null)
             {
@@ -62,7 +59,6 @@ namespace DeconTools.Backend.Core
             tempUMCs.Sort((umc1, umc2) => umc1.ScanClassRep.CompareTo(umc2.ScanClassRep));
 
             return netVal;
-
         }
 
         public List<UMC> FilterUMCsByMassTagMatch(List<int> massTagIDList)
@@ -81,17 +77,9 @@ namespace DeconTools.Backend.Core
                     filteredUMCs.Add(umc);
                     alreadyAddedMassTags.Add(umc.MassTagID);
                 }
-
-
-
             }
 
-
-
-
             return filteredUMCs;
-
-
         }
 
         public List<UMC> FilterOutPairedData()
@@ -108,12 +96,9 @@ namespace DeconTools.Backend.Core
                     filteredUMCs.Add(umc);
                     alreadyAddedMassTags.Add(umc.MassTagID);
                 }
-
             }
 
             return filteredUMCs;
-
-
         }
 
         public void DisplayBasicInfo()
@@ -169,7 +154,6 @@ namespace DeconTools.Backend.Core
                 "delSlic",
                 "mass_tag_id",
                 "Ratio"
-
             };
 
             Console.WriteLine(string.Join("\t", data));
@@ -197,7 +181,6 @@ namespace DeconTools.Backend.Core
 
                 Console.WriteLine(string.Join("\t", data));
             }
-
         }
 
         #endregion

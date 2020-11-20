@@ -14,24 +14,17 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
             chromPeakDetector.PeakToBackgroundRatio = 3;
             chromPeakDetector.SignalToNoiseThreshold = 1;
 
-
-
             var testDataFile =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\ChromatogramAlgorithmTesting\SampleChromatogram_Highpeak_lowpeak.txt";
 
             Assert.IsTrue(File.Exists(testDataFile), "Test file doesn't exist. File path= " + testDataFile);
 
+            var xyData = TestUtilities.LoadXYDataFromFile(testDataFile);
 
-            var xyData=  TestUtilities.LoadXYDataFromFile(testDataFile);
-
-            var peakList= chromPeakDetector.FindPeaks(xyData);
+            var peakList = chromPeakDetector.FindPeaks(xyData);
 
             TestUtilities.DisplayPeaks(peakList);
-
-
-            
         }
-
 
         [Test]
         public void MedianBasedChromPeakDetectorTest2()
@@ -40,24 +33,16 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ChromatogramRelatedTes
             chromPeakDetector.PeakToBackgroundRatio = 3;
             chromPeakDetector.SignalToNoiseThreshold = 1;
 
-
-
             var testDataFile =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\ChromatogramAlgorithmTesting\SampleChromatogram02_Lots of candidate peaks.txt";
 
             Assert.IsTrue(File.Exists(testDataFile), "Test file doesn't exist. File path= " + testDataFile);
-
 
             var xyData = TestUtilities.LoadXYDataFromFile(testDataFile);
 
             var peakList = chromPeakDetector.FindPeaks(xyData);
 
             TestUtilities.DisplayPeaks(peakList);
-
-
-            
         }
-
-
     }
 }

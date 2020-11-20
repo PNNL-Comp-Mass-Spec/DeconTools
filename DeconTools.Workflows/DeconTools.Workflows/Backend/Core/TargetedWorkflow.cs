@@ -43,12 +43,10 @@ namespace DeconTools.Workflows.Backend.Core
         protected TargetedWorkflow(WorkflowParameters parameters)
             : this(null, parameters)
         {
-
         }
 
         #region Constructors
         #endregion
-
 
         #region Properties
         public virtual IList<ChromPeak> ChromPeaksDetected { get; set; }
@@ -81,7 +79,6 @@ namespace DeconTools.Workflows.Backend.Core
 
         #endregion
 
-
         protected abstract DeconTools.Backend.Globals.ResultType GetResultType();
 
         protected void UpdateChromDetectedPeaks(List<Peak> list)
@@ -91,8 +88,6 @@ namespace DeconTools.Workflows.Backend.Core
                 var chrompeak = (ChromPeak)peak;
                 ChromPeaksDetected.Add(chrompeak);
             }
-
-
         }
 
         protected virtual void ValidateParameters()
@@ -116,16 +111,11 @@ namespace DeconTools.Workflows.Backend.Core
 
             ChromatogramXYData.Xvalues = xydata.Xvalues;
             ChromatogramXYData.Yvalues = xydata.Yvalues;
-
         }
-
 
         protected virtual void updateMassAndNETValuesAfterAlignment()
         {
-
-
         }
-
 
         protected void updateMassSpectrumXYValues(XYData xydata)
         {
@@ -154,7 +144,6 @@ namespace DeconTools.Workflows.Backend.Core
             DoPostInitialization();
 
             IsWorkflowInitialized = true;
-
         }
 
         protected virtual void DoPreInitialization() { }
@@ -179,8 +168,6 @@ namespace DeconTools.Workflows.Backend.Core
             _chromSmoother = new SavitzkyGolaySmoother(_workflowParameters.ChromSmootherNumPointsInSmooth, 2);
             _chromPeakDetector = new ChromPeakDetectorMedianBased(_workflowParameters.ChromPeakDetectorPeakBR, _workflowParameters.ChromPeakDetectorSigNoise);
 
-
-
             _chromPeakSelector = CreateChromPeakSelector(_workflowParameters);
 
             _iterativeTFFParameters = new IterativeTFFParameters
@@ -196,11 +183,7 @@ namespace DeconTools.Workflows.Backend.Core
             ChromatogramXYData = new XYData();
             MassSpectrumXYData = new XYData();
             ChromPeaksDetected = new List<ChromPeak>();
-
         }
-
-
-
 
         public virtual void DoWorkflow()
         {
@@ -245,7 +228,6 @@ namespace DeconTools.Workflows.Backend.Core
             Result.MonoIsotopicMassCalibrated = Result.GetCalibratedMonoisotopicMass();
             Result.MassErrorBeforeAlignment = Result.GetMassErrorBeforeAlignmentInPPM();
             Result.MassErrorAfterAlignment = Result.GetMassErrorAfterAlignmentInPPM();
-
         }
 
         protected virtual XYData TrimData(XYData xyData, double targetVal, double leftTrimAmount, double rightTrimAmount)
@@ -260,14 +242,11 @@ namespace DeconTools.Workflows.Backend.Core
             var rightTrimValue = targetVal + rightTrimAmount;
 
             return xyData.TrimData(leftTrimValue, rightTrimValue);
-
         }
-
 
         public override void Execute()
         {
             Check.Require(Run != null, "Error in TargetedWorkflow.Execute: Run has not been defined.");
-
 
             if (!IsWorkflowInitialized)
             {
@@ -316,11 +295,8 @@ namespace DeconTools.Workflows.Backend.Core
                 {
                     WorkflowStatusMessage = WorkflowStatusMessage + "; Target NOT found. Reason: " + Result.FailureType;
                 }
-
             }
-
         }
-
 
         protected virtual void HandleWorkflowError(Exception ex)
         {
@@ -336,7 +312,6 @@ namespace DeconTools.Workflows.Backend.Core
             result.ErrorDescription = "CRITICAL ERROR: " + ex.Message;
             result.FailedResult = true;
         }
-
 
         public virtual void ResetStoredData()
         {
@@ -356,7 +331,6 @@ namespace DeconTools.Workflows.Backend.Core
             xydata.Yvalues = new double[] { 0, 0, 0, 0 };
         }
 
-
         public override void InitializeRunRelatedTasks()
         {
             if (Run == null) return;
@@ -368,7 +342,6 @@ namespace DeconTools.Workflows.Backend.Core
                 Run.ResultCollection.ResultType = parameters.ResultType;
             }
         }
-
 
         /// <summary>
         /// Factory method for creating the Workflow object using the WorkflowType information in the parameter object
@@ -415,9 +388,7 @@ namespace DeconTools.Workflows.Backend.Core
             }
 
             return wf;
-
         }
-
 
         /// <summary>
         /// Factory method for creating the key ChromPeakSelector algorithm
@@ -483,8 +454,6 @@ namespace DeconTools.Workflows.Backend.Core
             }
 
             return chromPeakSelector;
-
-
         }
 
         public WorkflowParameters WorkflowParameters

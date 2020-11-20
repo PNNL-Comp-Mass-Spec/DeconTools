@@ -3,10 +3,8 @@ namespace DeconTools.Workflows.Backend.Core
 {
     public class TargetedWorkflowExecutorFactory
     {
-
         public static TargetedWorkflowExecutor CreateTargetedWorkflowExecutor(WorkflowExecutorBaseParameters workflowParameters, string datasetPath)
         {
-
             //TODO: add ResultReprocessingWorkflow
 
             switch (workflowParameters.WorkflowType)
@@ -24,6 +22,5 @@ namespace DeconTools.Workflows.Backend.Core
                                                        " is not an executor type of workflow");
             }
         }
-
     }
 }

@@ -1,10 +1,9 @@
 ﻿
 namespace DeconTools.Backend.Runs
 {
-    public sealed class ConcreteXYDataRun:XYDataRun
+    public sealed class ConcreteXYDataRun : XYDataRun
     {
-
-        public ConcreteXYDataRun(double[]xVals, double[] yVals)
+        public ConcreteXYDataRun(double[] xVals, double[] yVals)
         {
             XYData.Xvalues = xVals;
             XYData.Yvalues = yVals;
@@ -19,6 +18,5 @@ namespace DeconTools.Backend.Runs
         {
             return XYData;
         }
-
     }
 }

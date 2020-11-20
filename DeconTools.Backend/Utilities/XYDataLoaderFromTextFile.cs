@@ -4,7 +4,6 @@ namespace DeconTools.Utilities
 {
     public class XYDataLoaderFromTextFile
     {
-
         public void LoadDataFromFile(string filename, out float[] xdata, out float[] yData)
         {
             var sr = new System.IO.StreamReader(filename);
@@ -23,7 +22,6 @@ namespace DeconTools.Utilities
 
             xdata = xVals.ToArray();
             yData = yVals.ToArray();
-
         }
 
         private float parseFloatField(string inputString)
@@ -45,8 +43,5 @@ namespace DeconTools.Utilities
             }
             return returnedList;
         }
-
-
-
     }
 }

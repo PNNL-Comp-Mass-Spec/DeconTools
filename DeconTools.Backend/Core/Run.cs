@@ -22,7 +22,6 @@ namespace DeconTools.Backend.Core
             PrimaryLcScanNumbers = new List<int>();
 
             IsMsAbundanceReportedAsAverage = false;
-
         }
 
         #region Properties
@@ -74,7 +73,6 @@ namespace DeconTools.Backend.Core
                 }
             }
         }
-
 
         public MassAlignmentInfo MassAlignmentInfo { get; set; }
 
@@ -130,7 +128,6 @@ namespace DeconTools.Backend.Core
 
         public double CurrentBackgroundIntensity { get; set; }
 
-
         #endregion
 
         public abstract XYData XYData { get; set; }
@@ -181,7 +178,6 @@ namespace DeconTools.Backend.Core
             //Default is false
             return false;
         }
-
 
         public virtual XYData GetMassSpectrum(ScanSet scanSet)
         {
@@ -285,8 +281,6 @@ namespace DeconTools.Backend.Core
 
         public virtual int GetClosestMSScan(int inputScan, Globals.ScanSelectionMode scanSelectionMode)
         {
-
-
             switch (scanSelectionMode)
             {
                 case Globals.ScanSelectionMode.ASCENDING:
@@ -343,7 +337,6 @@ namespace DeconTools.Backend.Core
 
                     return inputScan;
             }
-
         }
 
         /// <summary>
@@ -392,7 +385,6 @@ namespace DeconTools.Backend.Core
             {
                 MSLevelList.Add(scanNum, (byte)msLevel);
             }
-
         }
 
         protected Dictionary<int, byte> MSLevelList { get; set; }
@@ -439,7 +431,6 @@ namespace DeconTools.Backend.Core
 
         #region Mass and NET Alignment
 
-
         public virtual void UpdateNETValuesInScanSetCollection()
         {
             if (NetAlignmentInfo == null) return;
@@ -448,11 +439,9 @@ namespace DeconTools.Backend.Core
 
             foreach (var scan in ScanSetCollection.ScanSetList)
             {
-                scan.NETValue=  (float) NetAlignmentInfo.GetNETValueForScan(scan.PrimaryScanNumber);
+                scan.NETValue = (float)NetAlignmentInfo.GetNETValueForScan(scan.PrimaryScanNumber);
             }
         }
-
-
 
         /// <summary>
         /// Returns the adjusted m/z after alignment
@@ -460,12 +449,11 @@ namespace DeconTools.Backend.Core
         /// <param name="observedMZ"></param>
         /// <param name="scan"></param>
         /// <returns></returns>
-        public double GetAlignedMZ(double observedMZ, double scan=-1)
+        public double GetAlignedMZ(double observedMZ, double scan = -1)
         {
             if (MassAlignmentInfo == null) return observedMZ;
 
-            var ppmShift = MassAlignmentInfo.GetPpmShift(observedMZ, (int) scan);
-
+            var ppmShift = MassAlignmentInfo.GetPpmShift(observedMZ, (int)scan);
 
             var alignedMZ = observedMZ - (ppmShift * observedMZ / 1e6);
             return alignedMZ;
@@ -477,16 +465,15 @@ namespace DeconTools.Backend.Core
         /// <param name="theorMZ"></param>
         /// <param name="scan"> </param>
         /// <returns></returns>
-        public double GetTargetMZAligned(double theorMZ, double scan=-1)
+        public double GetTargetMZAligned(double theorMZ, double scan = -1)
         {
             if (MassAlignmentInfo == null) return theorMZ;
 
-            var ppmShift =MassAlignmentInfo.GetPpmShift(theorMZ, (int) scan);
+            var ppmShift = MassAlignmentInfo.GetPpmShift(theorMZ, (int)scan);
 
             var alignedMZ = theorMZ + (ppmShift * theorMZ / 1e6);
             return alignedMZ;
         }
-
 
         #endregion
 

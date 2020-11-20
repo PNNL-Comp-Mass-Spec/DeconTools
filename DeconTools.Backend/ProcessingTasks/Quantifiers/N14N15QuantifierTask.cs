@@ -10,12 +10,10 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
     {
         readonly N15IsotopeProfileGenerator _N15IsotopicProfileGenerator = new N15IsotopeProfileGenerator();
 
-
         #region Constructors
         public N14N15QuantifierTask()
             : this(3, 25)
         {
-
         }
 
         /// <summary>
@@ -30,7 +28,6 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
             this.RatioType = Algorithms.Quantifiers.RatioType.ISO2_OVER_ISO1;
         }
 
-
         public N14N15QuantifierTask(int numPeaksUsedInRatioCalc, double msToleranceInPPM, RatioType ratioType)
             : this(numPeaksUsedInRatioCalc, msToleranceInPPM)
         {
@@ -44,11 +41,9 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
         public double MSToleranceInPPM { get; set; }
         public RatioType RatioType { get; set; }
 
-
         #endregion
 
         #region Public Methods
-
 
         #endregion
 
@@ -66,7 +61,7 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
 
             var n14n15Result = ((N14N15_TResult)currentResult);
 
-            var quant = new BasicN14N15Quantifier(this.MSToleranceInPPM,this.RatioType);
+            var quant = new BasicN14N15Quantifier(this.MSToleranceInPPM, this.RatioType);
 
             var iso1 = ((N14N15_TResult)currentResult).IsotopicProfile;
             var iso2 = ((N14N15_TResult)currentResult).IsotopicProfileLabeled;
@@ -77,8 +72,6 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
             }
             else
             {
-
-
                 quant.GetRatioBasedOnTopPeaks(iso1, iso2, mt.IsotopicProfile, _N15IsotopicProfileGenerator.GetN15IsotopicProfile(mt, 0.005),
                     currentResult.ScanSet.BackgroundIntensity, NumPeaksUsedInRatioCalc,
                     out var ratio, out var ratioContribIso1, out var ratioContribIso2);
@@ -86,11 +79,9 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
                 n14n15Result.RatioN14N15 = ratio;
                 n14n15Result.RatioContributionN14 = ratioContribIso1;
                 n14n15Result.RatioContributionN15 = ratioContribIso2;
-
             }
 
             //((N14N15_TResult)currentResult).RatioN14N15 = quant.GetRatioBasedOnAreaUnderPeaks(resultColl.Run.XYData.Xvalues, resultColl.Run.XYData.Yvalues, iso1, iso2, currentResult.ScanSet.BackgroundIntensity);
-
 
         }
 
@@ -98,7 +89,5 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
         {
             throw new NotImplementedException();
         }
-
-
     }
 }

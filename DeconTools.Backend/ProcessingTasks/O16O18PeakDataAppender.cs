@@ -7,7 +7,6 @@ namespace DeconTools.Backend.ProcessingTasks
 {
     public class O16O18PeakDataAppender : Task
     {
-
         const double MASS_UNIT_BETWEEN_ISO = 1.002125;
 
         public override void Execute(ResultCollection resultList)
@@ -74,9 +73,7 @@ namespace DeconTools.Backend.ProcessingTasks
                 {
                     msFeature.MonoPlus2Abundance = 0;
                 }
-
             }
-
         }
 
         private Peak GetBestPeak(IReadOnlyList<Peak> peaksWithinTol, double targetMZ)
@@ -84,7 +81,6 @@ namespace DeconTools.Backend.ProcessingTasks
             if (peaksWithinTol.Count == 0) return null;
 
             if (peaksWithinTol.Count == 1) return peaksWithinTol[0];
-
 
             var diff = double.MaxValue;
             Peak bestPeak = null;

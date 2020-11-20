@@ -11,17 +11,13 @@ namespace DeconTools.Backend.Workflows
 {
     public class RunMergingPeakExportingWorkflow : ScanBasedWorkflow
     {
-
         private int _datasetCounter;
         private int _peaksProcessedInLastDataset;
         private int _totalPeaksProcessed;
 
         private const int NumScansBetweenProgress = 1;
 
-
         #region Constructors
-
-
 
         public RunMergingPeakExportingWorkflow(DeconToolsParameters parameters, IEnumerable<string> datasetFileNameList, string outputDirectoryPath = null, BackgroundWorker backgroundWorker = null)
             : base(null, null)
@@ -34,9 +30,7 @@ namespace DeconTools.Backend.Workflows
             OutputDirectoryPath = outputDirectoryPath;
 
             BackgroundWorker = backgroundWorker;
-
         }
-
 
         #endregion
 
@@ -46,11 +40,9 @@ namespace DeconTools.Backend.Workflows
         {
             Check.Assert(NewDeconToolsParameters != null, "Cannot initialize workflow. Parameters are null");
 
-
             ExportData = true;
 
             InitializeParameters();
-
 
             if (Run != null)
             {
@@ -63,7 +55,6 @@ namespace DeconTools.Backend.Workflows
                 WriteProcessingInfoToLog();
             }
         }
-
 
         public override void Execute()
         {
@@ -78,7 +69,8 @@ namespace DeconTools.Backend.Workflows
             _peaksProcessedInLastDataset = 0;
             _totalPeaksProcessed = 0;
 
-            WorkflowStats = new WorkflowStats {
+            WorkflowStats = new WorkflowStats
+            {
                 TimeStarted = DateTime.UtcNow
             };
 
@@ -88,7 +80,7 @@ namespace DeconTools.Backend.Workflows
 
                 Run = new RunFactory().CreateRun(datasetFileName);
 
-                Check.Require(Run!=null, "ERROR: tried to initialize Run but failed.");
+                Check.Require(Run != null, "ERROR: tried to initialize Run but failed.");
 
                 if (_datasetCounter == 0)
                 {
@@ -101,19 +93,14 @@ namespace DeconTools.Backend.Workflows
 
                 _totalPeaksProcessed += _peaksProcessedInLastDataset;
 
-
                 _datasetCounter++;
-
             }
 
             WorkflowStats.TimeFinished = DateTime.UtcNow;
             WorkflowStats.NumFeatures = _totalPeaksProcessed;
 
             WriteOutSummaryToLogfile();
-
         }
-
-
 
         protected override void WriteOutSummaryToLogfile()
         {
@@ -127,7 +114,6 @@ namespace DeconTools.Backend.Workflows
             Logger.Instance.AddEntry("Peak data written to: " + PeakListOutputFileName, true);
             Logger.Instance.Close();
         }
-
 
         protected override void IterateOverScans()
         {
@@ -145,29 +131,20 @@ namespace DeconTools.Backend.Workflows
                     {
                         return;
                     }
-
                 }
                 ReportProgress();
-
-
             }
         }
-
 
         protected override void CreateOutputFileNames()
         {
             base.CreateOutputFileNames();
 
             PeakListOutputFileName = PeakListOutputFileName.Replace("_peaks.txt", "_merged_peaks.txt");
-
         }
-
 
         protected override void ExecuteProcessingTasks()
         {
-
-
-
             ExecuteTask(MSGenerator);
             if (NewDeconToolsParameters.MiscMSProcessingParameters.UseZeroFilling)
             {
@@ -197,7 +174,7 @@ namespace DeconTools.Backend.Workflows
 
             var userState = new ScanBasedProgressInfo(Run, Run.CurrentScanSet);
 
-            var percentDone = (_datasetCounter+1) / (float)(DatasetFileNameList.Count()) * 100;
+            var percentDone = (_datasetCounter + 1) / (float)(DatasetFileNameList.Count()) * 100;
             userState.PercentDone = percentDone;
 
             var logText = "Dataset= \t" + Run.DatasetName + "; PercentComplete= \t" + percentDone.ToString("0.0") + "; Total peaks= \t" + _peaksProcessedInLastDataset;
@@ -212,7 +189,6 @@ namespace DeconTools.Backend.Workflows
                 {
                     Console.WriteLine(DateTime.Now + "\t" + logText);
                 }
-
             }
         }
     }

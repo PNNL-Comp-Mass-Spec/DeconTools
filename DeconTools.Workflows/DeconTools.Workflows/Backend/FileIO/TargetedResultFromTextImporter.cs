@@ -8,7 +8,6 @@ namespace DeconTools.Workflows.Backend.FileIO
 {
     public abstract class TargetedResultFromTextImporter : ImporterBase<TargetedResultRepository>
     {
-
         //note that case does not matter in the header
         protected string[] datasetHeaders = { "dataset" };
         protected string[] chargeStateHeaders = { "chargestate", "z", "charge_state", "ClassStatsChargeBasis" };
@@ -42,7 +41,6 @@ namespace DeconTools.Workflows.Backend.FileIO
         public TargetedResultFromTextImporter(string filename)
         {
             _filename = filename;
-
         }
 
         #endregion
@@ -73,7 +71,6 @@ namespace DeconTools.Workflows.Backend.FileIO
                 {
                     sr.Close();
                     throw new InvalidDataException("There is no data in file " + PRISM.PathUtils.CompactPathString(_filename, 60));
-
                 }
 
                 var headerLine = sr.ReadLine();
@@ -85,7 +82,6 @@ namespace DeconTools.Workflows.Backend.FileIO
                 {
                     throw new InvalidDataException("There is a problem with the column headers in file " + PRISM.PathUtils.CompactPathString(_filename, 60));
                 }
-
 
                 var lineCounter = 1;   //used for tracking which line is being processed.
 
@@ -103,17 +99,12 @@ namespace DeconTools.Workflows.Backend.FileIO
                                                        "The number of columns does not match that of the header line");
                     }
 
-
-
                     var result = ConvertTextToDataObject(processedData);
                     repos.Results.Add(result);
                     lineCounter++;
-
                 }
                 sr.Close();
-
             }
-
 
             return repos;
         }
@@ -124,7 +115,6 @@ namespace DeconTools.Workflows.Backend.FileIO
         {
             return true;    //TODO: actually do some validation
         }
-
 
         protected virtual void GetBasicResultDTOData(List<string> rowData, TargetedResultDTO result)
         {
@@ -151,30 +141,23 @@ namespace DeconTools.Workflows.Backend.FileIO
             result.EmpiricalFormula = LookupData(rowData, empiricalFormulaHeaders);
             result.Code = LookupData(rowData, codeHeaders);
 
-
-
             var validationCode = LookupData(rowData, validationCodeHeaders);
             if (string.IsNullOrEmpty(validationCode))
             {
                 result.ValidationCode = ValidationCode.None;
-
             }
             else
             {
                 if (Enum.IsDefined(typeof(ValidationCode),validationCode))
                 {
                     result.ValidationCode = (ValidationCode)Enum.Parse(typeof (ValidationCode), validationCode, true);
-
                 }
                 else
                 {
                     result.ValidationCode = ValidationCode.None;
                 }
             }
-
-
         }
-
 
         protected string TryGetDatasetNameFromFileName()
         {
@@ -182,7 +165,6 @@ namespace DeconTools.Workflows.Backend.FileIO
 
             datasetName = datasetName.Replace("_LCMSFeatures.txt", string.Empty);
             datasetName = datasetName.Replace("_TargetedFeatures.txt", string.Empty);
-
 
             return datasetName;
         }

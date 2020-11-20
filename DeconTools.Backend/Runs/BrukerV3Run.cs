@@ -18,7 +18,6 @@ namespace DeconTools.Backend.Runs
         {
             internal string Name { get; set; }
             internal string Value { get; set; }
-
         }
 
         #region Constructors
@@ -100,7 +99,6 @@ namespace DeconTools.Backend.Runs
             MaxLCScan = maxScan;
         }
 
-
         #endregion
 
         #region Properties
@@ -131,7 +129,6 @@ namespace DeconTools.Backend.Runs
             return GetNumMSScans() - 1;
         }
 
-
         public override double GetTime(int scanNum)
         {
             return scanNum;
@@ -149,7 +146,6 @@ namespace DeconTools.Backend.Runs
 
         public override XYData GetMassSpectrum(ScanSet scanSet, double minMZ, double maxMZ)
         {
-
             var scanValues = scanSet.IndexValues.ToArray();
 
             var maximumMzToUse = maxMZ;
@@ -168,12 +164,10 @@ namespace DeconTools.Backend.Runs
             };
 
             return xyData;
-
         }
 
         public override XYData GetMassSpectrum(ScanSet scanSet)
         {
-
             var scanValues = scanSet.IndexValues.ToArray();
 
             m_rawDataReader.GetMassSpectrum(scanValues, out var xVals, out var yVals);
@@ -184,7 +178,6 @@ namespace DeconTools.Backend.Runs
             };
 
             return xyData;
-
         }
 
         #endregion
@@ -193,7 +186,6 @@ namespace DeconTools.Backend.Runs
 
         private string GetDatasetName(string fullFolderPath)
         {
-
             var dirInfo = new DirectoryInfo(fullFolderPath);
 
             if (dirInfo.Name.EndsWith(".d", StringComparison.OrdinalIgnoreCase))
@@ -227,7 +219,6 @@ namespace DeconTools.Backend.Runs
 
             Check.Require(!isFile, "Could not initialize Dataset. Looking for a folder path, but user supplied a file path.");
             Check.Require(isDirectory, "Could not initialize Dataset. Target dataset folder not found.");
-
         }
         private FileInfo findFIDFile()
         {
@@ -269,12 +260,10 @@ namespace DeconTools.Backend.Runs
                 {
                     return fi;
                 }
-
             }
 
             throw new NotSupportedException("Multiple ser files were found within the dataset folder structure. This is not yet supported.");
         }
-
 
         private FileInfo findSettingsFile()
         {
@@ -333,7 +322,6 @@ namespace DeconTools.Backend.Runs
                 throw new NotSupportedException("Multiple acqus files were found within the dataset folder structure. Cannot decide which is best to use.");
             }
 
-
             foreach (var file in acqusFiles)
             {
                 var fi = new FileInfo(file);
@@ -344,13 +332,9 @@ namespace DeconTools.Backend.Runs
             }
 
             throw new NotSupportedException("Multiple acqus files were found within the dataset folder structure. Cannot decide which is best to use.");
-
         }
 
         #endregion
-
-
-
 
     }
 }

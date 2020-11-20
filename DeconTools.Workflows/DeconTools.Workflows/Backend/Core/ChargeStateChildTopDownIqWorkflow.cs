@@ -30,15 +30,12 @@ namespace DeconTools.Workflows.Backend.Core
 
         #endregion
 
-
         protected override void DoPostInitialization()
         {
             base.DoPostInitialization();
 
             ChromPeakDetector = new ChromPeakDetectorMedianBased(WorkflowParameters.ChromPeakDetectorPeakBR, WorkflowParameters.ChromPeakDetectorSigNoise);
-
         }
-
 
         /// <summary>
         /// ChargeStateChildTopDownIqWorkflow

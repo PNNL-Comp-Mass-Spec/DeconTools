@@ -11,7 +11,6 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
 {
     public sealed class PeakListSQLiteExporter : IPeakListExporter, IDisposable
     {
-
         private readonly DbConnection cnn;
         private readonly bool createIndexOnMZ;
 
@@ -37,9 +36,7 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
             createIndexOnMZ = false;
             try
             {
-
                 cnn.Open();
-
             }
             catch (Exception ex)
             {
@@ -63,9 +60,7 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
                 command.CommandText += " CREATE INDEX mzIndex on T_Peaks (mz)";
             }
 
-
             command.ExecuteNonQuery();
-
         }
         #endregion
 
@@ -112,14 +107,13 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
                     var fwhmParam = new SQLiteParameter();
                     var msfeatureParam = new SQLiteParameter();
 
-                                       mycommand.CommandText = "INSERT INTO T_Peaks ([peak_id],[scan_num],[mz],[intensity],[fwhm],[msfeatureID]) VALUES(?,?,?,?,?,?)";
+                    mycommand.CommandText = "INSERT INTO T_Peaks ([peak_id],[scan_num],[mz],[intensity],[fwhm],[msfeatureID]) VALUES(?,?,?,?,?,?)";
                     mycommand.Parameters.Add(peakIDParam);
                     mycommand.Parameters.Add(scanIDParam);
                     mycommand.Parameters.Add(mzParam);
                     mycommand.Parameters.Add(intensParam);
                     mycommand.Parameters.Add(fwhmParam);
                     mycommand.Parameters.Add(msfeatureParam);
-
 
                     foreach (var peak in peakList)
                     {
@@ -130,12 +124,9 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
                         fwhmParam.Value = peak.MSPeak.Width;
                         msfeatureParam.Value = peak.MSPeak.MSFeatureID;
                         mycommand.ExecuteNonQuery();
-
                     }
-
                 }
                 mytransaction.Commit();
-
             }
 
             //results = resultList;
@@ -191,7 +182,6 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
         //    }
         //    return sb.ToString();
 
-
         //}
 
         #region IDisposable Members
@@ -200,7 +190,6 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
         {
             if (cnn != null)
             {
-
                 try
                 {
                     if (cnn.State != System.Data.ConnectionState.Closed)
@@ -208,12 +197,10 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
                         cnn.Close();
                     }
                     cnn.Dispose();
-
                 }
                 catch (Exception)
                 {
                     Console.WriteLine("************** there was a problem closing the Sqlite database *****************");
-
                 }
             }
         }

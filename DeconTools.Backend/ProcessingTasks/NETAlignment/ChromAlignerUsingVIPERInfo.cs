@@ -12,14 +12,12 @@ namespace DeconTools.Backend.ProcessingTasks.NETAlignment
         #region Constructors
         public ChromAlignerUsingVIPERInfo()
         {
-
         }
 
         public ChromAlignerUsingVIPERInfo(string targetUMCFileStoringAlignmentInfo)
         {
             this.m_targetUMCFileStoringAlignmentInfo = targetUMCFileStoringAlignmentInfo;
         }
-
 
         #endregion
 
@@ -51,7 +49,6 @@ namespace DeconTools.Backend.ProcessingTasks.NETAlignment
 
             run.NetAlignmentInfo = new NetAlignmentInfoBasic(run.MinLCScan, run.MaxLCScan);
             run.NetAlignmentInfo.SetScanToNETAlignmentData(scanNetPairs);
-
         }
 
         #endregion

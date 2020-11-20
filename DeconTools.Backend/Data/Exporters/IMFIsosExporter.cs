@@ -18,7 +18,6 @@ namespace DeconTools.Backend.Data
             this.fileName = fileName;
         }
 
-
         public override void Export(string binaryResultCollectionFilename, bool deleteBinaryFileAfterUse)
         {
             throw new NotImplementedException();
@@ -27,14 +26,12 @@ namespace DeconTools.Backend.Data
         protected sealed override string headerLine { get; set; }
         protected sealed override char delimiter { get; set; }
 
-
         public override void Export(Core.ResultCollection results)
         {
             StreamWriter sw;
             try
             {
                 sw = new StreamWriter(fileName);
-
             }
             catch (Exception)
             {
@@ -71,6 +68,5 @@ namespace DeconTools.Backend.Data
 
             sw.Close();
         }
-
     }
 }

@@ -12,22 +12,18 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
         private readonly char m_delimiter;
         private readonly Globals.MSFileType m_FileType;
 
-
         #region Constructors
         public PeakListTextExporter(Globals.MSFileType fileType, string outputFileName)
             : this(fileType, 100000, outputFileName)      // default allowed MSLevels = 1
         {
         }
 
-
         public PeakListTextExporter(Globals.MSFileType fileType, int triggerValue, string outputFileName)
         {
-
             FileName = outputFileName;
             TriggerToWriteValue = triggerValue;      //will write out peaks if trigger value is reached
             m_delimiter = '\t';
             m_FileType = fileType;    // need to know filetype so that frame_num can be outputted for UIMF data
-
 
             bool fileExists;
             try
@@ -40,7 +36,6 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
                 throw new Exception("Peak exporter failed.  Check to see if output file is already open.");
             }
 
-
             if (fileExists)
             {
                 try
@@ -51,14 +46,11 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
                 {
                     Logger.Instance.AddEntry("PeakExporter failed. Details: " + ex.Message, true);
                     throw new Exception("Peak exporter failed.  Check to see if output file is already open.");
-
                 }
             }
 
             initializeAndWriteHeader();
         }
-
-
 
         #endregion
 
@@ -94,14 +86,12 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
         /// <param name="peakList">Peak list to write</param>
         public override void WriteOutPeaks(StreamWriter sw, List<MSPeakResult> peakList)
         {
-
             foreach (var peak in peakList)
             {
                 var lineOfPeakData = buildPeakString(peak);
                 sw.WriteLine(lineOfPeakData);
             }
             sw.Flush();
-
         }
 
         # endregion
@@ -151,7 +141,6 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
 
         private void initializeAndWriteHeader()
         {
-
             Check.Assert(!string.IsNullOrEmpty(FileName), string.Format("{0} failed. Export file's FileName wasn't declared.", Name));
 
             try
@@ -160,7 +149,6 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
                 {
                     File.Delete(FileName);
                 }
-
             }
             catch (Exception ex)
             {
@@ -168,7 +156,6 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
                     "; STACKTRACE = " + PRISM.StackTraceFormatter.GetExceptionStackTraceMultiLine(ex), Name), true);
                 throw;
             }
-
 
             using (var writer = new StreamWriter(new FileStream(FileName, FileMode.Create, FileAccess.Write, FileShare.Read)))
             {
@@ -180,7 +167,6 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
         }
 
         #endregion
-
 
     }
 }

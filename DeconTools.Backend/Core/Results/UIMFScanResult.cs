@@ -15,7 +15,5 @@ namespace DeconTools.Backend.Core
         public double FramePressureUnsmoothed { get; set; }
 
         public double FramePressureSmoothed { get; set; }
-
-
     }
 }

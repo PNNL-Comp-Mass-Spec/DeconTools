@@ -8,7 +8,6 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
         public N14N15TFFTask()
             : this(0.02)
         {
-
         }
 
         /// <summary>
@@ -19,7 +18,6 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
         {
             ToleranceInPPM = toleranceInPPM;
             Name = "N14N15FeatureFinder";
-
         }
 
         #endregion
@@ -51,7 +49,6 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
         //}
 
         #endregion
-
 
     }
 }

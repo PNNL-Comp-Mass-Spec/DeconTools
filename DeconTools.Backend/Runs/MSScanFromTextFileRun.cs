@@ -7,7 +7,6 @@ namespace DeconTools.Backend.Runs
 {
     public sealed class MSScanFromTextFileRun : XYDataRun
     {
-
         private char m_delimiter;
         private readonly int m_xValsColumnIndex = 0;
         private readonly int m_yValsColumnIndex = 1;
@@ -22,17 +21,12 @@ namespace DeconTools.Backend.Runs
             DatasetDirectoryPath = Path.GetDirectoryName(DatasetFileOrDirectoryPath);
             XYData = new XYData();
             CurrentScanSet = new Core.ScanSet(0);    //
-
-
         }
         public MSScanFromTextFileRun(string fileName, char delimiter)
             : this(fileName)
         {
-
             m_delimiter = delimiter;
-
         }
-
 
         public MSScanFromTextFileRun(string fileName, char delimiter,
             int xValsColumnIndex, int yValsColumnIndex)
@@ -66,13 +60,11 @@ namespace DeconTools.Backend.Runs
                     if (match.Success)
                     {
                         foundStartOfXYData = true;     //found a line that starts with numbers.
-
                     }
                     else
                     {
                         continue;
                     }
-
                 }
 
                 var vals = processLine(line);
@@ -93,7 +85,6 @@ namespace DeconTools.Backend.Runs
                     throw new InvalidOperationException("XY importer error. Cannot find y-values in column " + (m_yValsColumnIndex + 1).ToString());
                 }
 
-
                 xVals.Add(ParseDoubleField(vals[m_xValsColumnIndex]));
                 yVals.Add(ParseDoubleField(vals[m_yValsColumnIndex]));
             }
@@ -105,7 +96,6 @@ namespace DeconTools.Backend.Runs
             };
 
             return xyData;
-
         }
         private double ParseDoubleField(string inputString)
         {
@@ -138,10 +128,8 @@ namespace DeconTools.Backend.Runs
 
         private char determineDelimiter(string fileName)
         {
-
             using (var sr = new StreamReader(fileName))
             {
-
                 var foundStartOfXYData = false;
 
                 var counter = 0;
@@ -162,13 +150,11 @@ namespace DeconTools.Backend.Runs
                         if (match.Success)
                         {
                             foundStartOfXYData = true;     //found a line that starts with numbers.
-
                         }
                         else
                         {
                             continue;
                         }
-
                     }
 
                     //we found the start of the data, now figure out the delimiter
@@ -185,10 +171,8 @@ namespace DeconTools.Backend.Runs
                             if (!delimiterCount.ContainsKey(delimiter))
                             {
                                 delimiterCount.Add(delimiter, 0);
-
                             }
                             delimiterCount[delimiter]++;   //adds one to the count of occurrences for this delimiter.
-
                         }
                     }
                 }
@@ -203,18 +187,12 @@ namespace DeconTools.Backend.Runs
                         delimiterCounter = item.Value;
                         mostCommonDelimiter = item.Key;
                     }
-
-
                 }
 
                 sr.Close();
                 return mostCommonDelimiter;
-
             }
-
         }
-
-
 
         public override XYData GetMassSpectrum(Core.ScanSet scanSet, double minMZ, double maxMZ)
         {
@@ -226,7 +204,6 @@ namespace DeconTools.Backend.Runs
             }
             catch (Exception ex)
             {
-
                 throw new IOException("There was an error reading file " + Utilities.DiagnosticUtilities.GetFullPathSafe(DatasetFileOrDirectoryPath) + "\n\n" + ex.Message);
             }
 
@@ -244,7 +221,5 @@ namespace DeconTools.Backend.Runs
         {
             return 1;      // simply assume that it is a regular MS
         }
-
-
     }
 }

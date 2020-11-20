@@ -6,7 +6,6 @@ namespace DeconTools.Backend.Utilities
 {
     public class MathUtils
     {
-
         /// <summary>
         /// Fit a line between the two points, then compute the y value for the given target x value
         /// </summary>
@@ -18,7 +17,6 @@ namespace DeconTools.Backend.Utilities
         /// <returns>Interpolated y value for the given target x value</returns>
         public static double GetInterpolatedValue(double x1, double x2, double y1, double y2, double targetXValue)
         {
-
             if (Math.Abs(x1 - x2) < double.Epsilon) return y1;
 
             var slope = (y2 - y1) / (x2 - x1);
@@ -217,7 +215,6 @@ namespace DeconTools.Backend.Utilities
         /// <param name="rSquaredVal"></param>
         public static void GetLinearRegression(double[] xVals, double[] yVals, out double slope, out double intercept, out double rSquaredVal)
         {
-
             var fitResult = MathNet.Numerics.Fit.Line(xVals.ToArray(), yVals.ToArray());
             slope = fitResult.Item2;
             intercept = fitResult.Item1;
@@ -245,7 +242,6 @@ namespace DeconTools.Backend.Utilities
             try
             {
                 alglib.lrunpack(linearModel, out regressionLineInfo, out numIndependentVariables);
-
             }
             catch (Exception ex)
             {
@@ -266,7 +262,6 @@ namespace DeconTools.Backend.Utilities
             var squaredMeanResiduals = new List<double>();
 
             var averageY = yVals.Average();
-
 
             for (var i = 0; i < xVals.Length; i++)
             {
@@ -291,8 +286,6 @@ namespace DeconTools.Backend.Utilities
             {
                 rSquaredVal = 1.0d - (squaredResiduals.Sum() / sumSquaredMeanResiduals);
             }
-
         }
-
     }
 }

@@ -87,7 +87,6 @@ namespace DeconTools.Backend.Core
         /// </summary>
         public string Code { get; set; }
 
-
         public IsotopicProfile IsotopicProfile { get; set; }    // the theoretical isotopic profile
 
         public IsotopicProfile IsotopicProfileLabeled { get; set; }  // an optional labeled isotopic profile (i.e used in N15-labeling)
@@ -121,7 +120,6 @@ namespace DeconTools.Backend.Core
         {
             return ID + "; " + MonoIsotopicMass.ToString("0.000") + "; " + ChargeState;
         }
-
 
         #endregion
 

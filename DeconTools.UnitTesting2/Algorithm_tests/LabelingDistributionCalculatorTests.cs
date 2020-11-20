@@ -13,7 +13,6 @@ namespace DeconTools.UnitTesting2.Algorithm_tests
     [TestFixture]
     public class LabelingDistributionCalculatorTests
     {
-
         [Test]
         public void CalculateLabelingDistributionTest1()
         {
@@ -50,7 +49,7 @@ namespace DeconTools.UnitTesting2.Algorithm_tests
             *
             *
             */
-            var theorIntensities = new List<double>(new[] {1, 0.530190, 0.206161, 0.059286, 0.013694});
+            var theorIntensities = new List<double>(new[] { 1, 0.530190, 0.206161, 0.059286, 0.013694 });
             var obsIntensities = new List<double>(new[] { 118.8932, 73.8074, 34.413, 14.4563, 6.3169 });
 
             var labelDistCalc = new LabelingDistributionCalculator();
@@ -83,17 +82,13 @@ namespace DeconTools.UnitTesting2.Algorithm_tests
             Console.WriteLine("fractionUnlabeled= " + fractionUnlabeled);
             Console.WriteLine("fractionLabeled= " + fractionLabeled);
             Console.WriteLine("averageAmountLabelIncorp= " + averageLabelsIncorporated);
-
-
         }
-
 
         [Test]
         public void CalculateLabelingDistributionTest2()
         {
             //mass_tag_id	monoisotopic_mass	NET	obs	mod_count	mod_description	pmt	peptide	peptideex
             //355176429	1538.8166126	0.42422	1	0		2.00000	LFLASACLYGAALAGV	R.LFLASACLYGAALAGV.C
-
 
             //------------------------load theor data ------------------------------------
 
@@ -110,7 +105,6 @@ namespace DeconTools.UnitTesting2.Algorithm_tests
 
             Console.WriteLine("Total carbons = " + peptideUtils.GetNumAtomsForElement("C", peptide.EmpiricalFormula));
 
-
             var obsIntensities = new List<double>(new[]
                                      {
                                          1, 0.8335001, 0.4029815, 0.1846439, 0.1116047, 0.09458135, 0.07157851, 0.04972008,
@@ -118,14 +112,12 @@ namespace DeconTools.UnitTesting2.Algorithm_tests
                                          0.000484514
                      });
 
-
             var relexCorrectedIntensities = new List<double>(new[]
                                      {
                                          1, 0.84416, 0.4174013, 0.1843375, 0.1073706, 0.09557419, 0.07190877, 0.04823519,
                                          0.02991197, 0.01456759, 0.008299164, 0.004003931, 0.001711554, 0.000766305,
                                          0.000484514
                                      });
-
 
             /*
              *
@@ -151,13 +143,10 @@ namespace DeconTools.UnitTesting2.Algorithm_tests
              *
              */
 
-
             var labelDistCalc = new LabelingDistributionCalculator();
-
 
             var d = 0.1;
             labelDistCalc.CalculateLabelingDistribution(theorIntensities, obsIntensities, d, d, out var solvedXVals, out var solvedYvals);
-
 
             var xyData = new XYData();
             xyData.Xvalues = solvedXVals;
@@ -166,8 +155,6 @@ namespace DeconTools.UnitTesting2.Algorithm_tests
             Console.WriteLine();
             Console.WriteLine("threshold= " + d);
             xyData.Display();
-
-
 
             labelDistCalc.CalculateLabelingDistribution(theorIntensities, relexCorrectedIntensities, d, d, out solvedXVals, out solvedYvals);
 
@@ -185,12 +172,9 @@ namespace DeconTools.UnitTesting2.Algorithm_tests
             Console.WriteLine("fractionLabeled= " + fractionLabeled);
             Console.WriteLine("averageAmountLabelIncorp= " + averageLabelsIncorporated);
 
-
-
             //for (double d = 0; d < 2.1; d+=0.1)
             //{
             //    labelDistCalc.CalculateLabelingDistribution(theorIntensities, obsIntensities, d, d, out solvedXVals, out solvedYvals);
-
 
             //    XYData xyData = new XYData();
             //    xyData.Xvalues = solvedXVals;
@@ -201,10 +185,6 @@ namespace DeconTools.UnitTesting2.Algorithm_tests
             //    xyData.Display();
             //}
 
-
-
         }
-
-
     }
 }

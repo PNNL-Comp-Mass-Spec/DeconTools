@@ -13,8 +13,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
     [TestFixture]
     public class UIMFRun_Tests
     {
-       
-       [Test]
+        [Test]
         public void getUIMFFileTest1()
         {
             var fileName = FileRefs.RawDataMSFiles.UIMFStdFile3;
@@ -32,7 +31,6 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             var currentUIMFFilePath = Path.GetDirectoryName(fileName);
             Assert.AreEqual(currentUIMFFilePath, uimfRun.DatasetDirectoryPath);
             Assert.AreEqual(fileName, uimfRun.DatasetFileOrDirectoryPath);
-
         }
 
         [Test]
@@ -43,13 +41,10 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             var numFrames = uimfRun.GetNumFrames();
             var numScans = uimfRun.GetNumMSScans();
 
-
             Console.WriteLine("Number of frames = " + numFrames);
             Console.WriteLine("Number of scans = " + numScans);
             Assert.AreEqual(1175, numFrames);
             Assert.AreEqual(423000, numScans);
-
-
         }
 
         [Test]
@@ -60,8 +55,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             var frameNum = 162;
             var frametime1 = run.GetTime(frameNum);
 
-            Assert.AreEqual(474.3, (decimal) Math.Round(frametime1, 1));
-
+            Assert.AreEqual(474.3, (decimal)Math.Round(frametime1, 1));
         }
 
         [Test]
@@ -72,13 +66,12 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             var frame = new ScanSet(162);
             var scan = new IMSScanSet(121);
 
-            var xyData=  run.GetMassSpectrum(frame, scan, 0, 50000);
+            var xyData = run.GetMassSpectrum(frame, scan, 0, 50000);
 
             var testMZ = 627.2655682;
             var maxIntensityForTestMZ = 0;
             for (var i = 0; i < xyData.Xvalues.Length; i++)
             {
-
                 if (xyData.Xvalues[i] > (testMZ - 0.1) && xyData.Xvalues[i] < (testMZ + 0.1))
                 {
                     if (xyData.Yvalues[i] > maxIntensityForTestMZ) maxIntensityForTestMZ = (int)xyData.Yvalues[i];
@@ -94,18 +87,16 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
         {
             var run = new UIMFRun(FileRefs.RawDataMSFiles.UIMFStdFile3);
 
-            var frame = new ScanSet(163,162,164);
+            var frame = new ScanSet(163, 162, 164);
             var scan = new IMSScanSet(121);
 
-            var xyData=  run.GetMassSpectrum(frame, scan, 0, 50000);
+            var xyData = run.GetMassSpectrum(frame, scan, 0, 50000);
 
             var testMZ = 627.2655682;
             var maxIntensityForTestMZ = 0;
 
-            
             for (var i = 0; i < xyData.Xvalues.Length; i++)
             {
-
                 if (xyData.Xvalues[i] > (testMZ - 0.1) && xyData.Xvalues[i] < (testMZ + 0.1))
                 {
                     if (xyData.Yvalues[i] > maxIntensityForTestMZ) maxIntensityForTestMZ = (int)xyData.Yvalues[i];
@@ -113,20 +104,17 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             }
 
             Assert.AreEqual(126568, maxIntensityForTestMZ);
-            
         }
-
 
         [Test]
         public void InitializeUIMFContainingMSMSDataTest1()
         {
-           // var runContainsMSMS = new UIMFRun(FileRefs.RawDataMSFiles.UIMFFileContainingMSMSLevelData);
+            // var runContainsMSMS = new UIMFRun(FileRefs.RawDataMSFiles.UIMFFileContainingMSMSLevelData);
             var runNoMSMS = new UIMFRun(FileRefs.RawDataMSFiles.UIMFStdFile3);
 
             //Assert.IsTrue(runContainsMSMS.ContainsMSMSData);
             Assert.IsFalse(runNoMSMS.ContainsMSMSData);
         }
-
 
         [Test]
         public void getFramePressureTest1()
@@ -138,9 +126,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
 
             Assert.AreNotEqual(0, framePressure);
             Assert.AreEqual(4.02672m, (Decimal)framePressure);
-
         }
-
 
         [Test]
         public void GetFrameParameters_Test1()
@@ -150,16 +136,11 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             var frameStop = 172;
             var numFramesSummed = 3;
 
-
-            uimfRun.ScanSetCollection .Create(uimfRun, frameStart, frameStop, numFramesSummed, 1);
+            uimfRun.ScanSetCollection.Create(uimfRun, frameStart, frameStop, numFramesSummed, 1);
 
             uimfRun.GetFrameDataAllFrameSets();
-
         }
 
-
-
-      
         [Test]
         public void getDriftTimeForScanZero()
         {
@@ -188,7 +169,6 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             Assert.AreEqual(148000, numBins);
         }
 
-        
         [Test]
         public void SimpleSpeedTest1()
         {
@@ -198,15 +178,12 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             double minMZ = 300;
             double maxMZ = 2000;
 
-
             uimfRun.ScanSetCollection.Create(uimfRun, 300, 310, numFramesSummed, 1);
 
             uimfRun.IMSScanSetCollection.Create(uimfRun, 120, 125, numScansSummed, 1);
 
-
             var times = new List<long>();
             var sw = new Stopwatch();
-
 
             foreach (var frame in uimfRun.ScanSetCollection.ScanSetList)
             {
@@ -220,19 +197,12 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
 
                     times.Add(sw.ElapsedMilliseconds);
                     sw.Reset();
-
                 }
-
             }
 
             Console.WriteLine("NumMSScans= " + times.Count);
             Console.WriteLine("Time (ms) per scan = " + times.Average());
-
-
-
         }
-
-
 
         [Test]
         public void getLCProfileTest1()
@@ -244,17 +214,14 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             var startScan = 122;
             var stopScan = 122;
 
-
             var targetMZ = 627.27;
             double toleranceInPPM = 25;
 
-           var chromXYData=   uimfRun.GetChromatogram(startFrame, stopFrame, startScan, stopScan, targetMZ, toleranceInPPM);
+            var chromXYData = uimfRun.GetChromatogram(startFrame, stopFrame, startScan, stopScan, targetMZ, toleranceInPPM);
 
-           chromXYData.Display();
+            chromXYData.Display();
             //TODO: actually test something
         }
-
-
 
         [Test]
         public void getDriftTimeProfile()
@@ -262,10 +229,9 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             var uimfRun = new UIMFRun(FileRefs.RawDataMSFiles.UIMFStdFile3);
 
             var frame = 163;
-           
+
             var startScan = 100;
             var stopScan = 140;
-
 
             var targetMZ = 627.27;
             double toleranceInPPM = 5;
@@ -276,10 +242,6 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             //TODO: actually test something
         }
 
-
-
-
-
         [Test]
         public void getPressureLastFrameTest1()
         {
@@ -289,11 +251,8 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
 
             var pressureLastFrame = uimfRun.GetFramePressure(lastFrame);
 
-
             Console.WriteLine("pressure on last frame = " + pressureLastFrame);
-
         }
-
 
         [Test]
         public void getSmoothedFramePressuresTest1()
@@ -306,43 +265,38 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             for (var frame = startFrame; frame <= stopFrame; frame++)
             {
                 pressuresBeforeAveraging.Add(uimfRun.GetFramePressure(frame));
-                
             }
 
-            uimfRun.ScanSetCollection .Create(uimfRun, startFrame, stopFrame, 1, 1);
+            uimfRun.ScanSetCollection.Create(uimfRun, startFrame, stopFrame, 1, 1);
 
             uimfRun.GetFrameDataAllFrameSets();
 
             uimfRun.SmoothFramePressuresInFrameSets();
 
-
             var pressuresAfterAveraging = new List<double>();
             for (var frame = startFrame; frame <= stopFrame; frame++)
             {
-                var lcScanset = (LCScanSetIMS) uimfRun.ScanSetCollection.ScanSetList.First(p => p.PrimaryScanNumber == frame);
+                var lcScanset = (LCScanSetIMS)uimfRun.ScanSetCollection.ScanSetList.First(p => p.PrimaryScanNumber == frame);
                 pressuresAfterAveraging.Add(lcScanset.FramePressureSmoothed);
             }
 
-            var testScanset1 = (LCScanSetIMS) uimfRun.ScanSetCollection.ScanSetList.First(p => p.PrimaryScanNumber == 1079);
+            var testScanset1 = (LCScanSetIMS)uimfRun.ScanSetCollection.ScanSetList.First(p => p.PrimaryScanNumber == 1079);
 
-            var testScanset2 =(LCScanSetIMS) uimfRun.ScanSetCollection.ScanSetList.First(p => p.PrimaryScanNumber == 1175);
+            var testScanset2 = (LCScanSetIMS)uimfRun.ScanSetCollection.ScanSetList.First(p => p.PrimaryScanNumber == 1175);
 
             Assert.AreEqual(4.0091461, (decimal)testScanset1.FramePressureSmoothed);
             Assert.AreEqual(4.008275, (decimal)testScanset2.FramePressureSmoothed);
-
         }
-
-    
 
         [Test]
         public void getSmoothedFramePressuresTest2()
         {
             var uimfRun = new UIMFRun(FileRefs.RawDataMSFiles.UIMFStdFile3);
-           
+
             var startFrame = uimfRun.MaxLCScan - 200;
             var stopFrame = uimfRun.MaxLCScan;
 
-            uimfRun.ScanSetCollection .Create(uimfRun, startFrame, stopFrame, 1, 1);
+            uimfRun.ScanSetCollection.Create(uimfRun, startFrame, stopFrame, 1, 1);
 
             var pressuresBeforeAveraging = new Dictionary<int, double>();
             for (var frame = startFrame; frame <= stopFrame; frame++)
@@ -352,11 +306,10 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             uimfRun.GetFrameDataAllFrameSets();
             uimfRun.SmoothFramePressuresInFrameSets();
 
-
             var pressuresAfterAveraging = new Dictionary<int, double>();
             for (var frame = startFrame; frame <= stopFrame; frame++)
             {
-                var scanset =(LCScanSetIMS) uimfRun.ScanSetCollection.ScanSetList.First(p => p.PrimaryScanNumber == frame);
+                var scanset = (LCScanSetIMS)uimfRun.ScanSetCollection.ScanSetList.First(p => p.PrimaryScanNumber == frame);
 
                 var pressure = scanset.FramePressureSmoothed;
 
@@ -377,12 +330,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             //Console.WriteLine(sb.ToString());
 
             Assert.AreEqual(4.008936m, (decimal)pressuresAfterAveraging[1100]);
-
-
-
-
         }
-
 
         [Test]
         public void GetMSLevelFromMSMSDatasetTest1()
@@ -392,17 +340,13 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
 
             var uimfRun = new UIMFRun(msmsDatafile);
 
-            var numFrames =  uimfRun.GetNumFrames();
+            var numFrames = uimfRun.GetNumFrames();
             var testFrame = 10;
 
-            var  mslevel= uimfRun.GetMSLevel(testFrame);
+            var mslevel = uimfRun.GetMSLevel(testFrame);
 
             Assert.AreEqual(2, mslevel);
-
-
-
         }
-
 
         [Test]
         public void GetMSLevelInfoTest1()
@@ -414,7 +358,6 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             Assert.IsTrue(!uimfRun.MS1Frames.Contains(26));    //frame 26 is FrameType 3 - calibration frame
             Assert.IsTrue(uimfRun.MS2Frames.Count == 0);
         }
-
 
         [Test]
         public void GetMassSpectrumFromMSMSDatasetTest1()
@@ -431,32 +374,25 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             var frame = new ScanSet(testFrame);
             var scanset = new ScanSet(150, startScan, stopScan);
 
-            var xyData=uimfRun.GetMassSpectrum(frame, scanset, 0, 50000);
+            var xyData = uimfRun.GetMassSpectrum(frame, scanset, 0, 50000);
 
             Assert.IsNotNull(xyData);
             Assert.IsNotNull(xyData.Xvalues);
             TestUtilities.DisplayXYValues(xyData);
-
-
         }
 
         [Test]
         public void GetClosestMS1SpectrumTest1()
         {
-
             var msmsDatafile =
                @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\UIMF\MSMS_Testing\PepMix_MSMS_4msSA.UIMF";
 
             var uimfRun = new UIMFRun(msmsDatafile);
 
             var testFrame = 5;
-            var closestMS1=  uimfRun.GetClosestMS1Frame(testFrame);
+            var closestMS1 = uimfRun.GetClosestMS1Frame(testFrame);
 
             Assert.AreEqual(6, closestMS1);
-
-
         }
-
-
     }
 }

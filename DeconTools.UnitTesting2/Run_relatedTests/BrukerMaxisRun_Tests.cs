@@ -21,7 +21,6 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             Assert.IsNotNull(run);
             Assert.AreEqual("2012_05_15_MN9_A_000001", run.DatasetName);
             Assert.AreEqual(path, run.DatasetDirectoryPath);
-
         }
 
         [Test]
@@ -49,9 +48,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
 
             Assert.AreEqual(1, run.GetMinPossibleLCScanNum());
             Assert.AreEqual(1131, run.GetMaxPossibleLCScanNum());
-
         }
-
 
         [Test]
         public void GetMassSpectrumTest1()
@@ -63,9 +60,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
 
             var scan = new ScanSet(_testScan);
 
-
-            var xyData=   run.GetMassSpectrum(scan);
-
+            var xyData = run.GetMassSpectrum(scan);
 
             Assert.IsTrue(xyData.Xvalues.Length > 100);
 
@@ -75,16 +70,13 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
 
             run = null;
             GC.Collect();
-
         }
-
 
         [Test]
         public void GetRetentionTimeTest1()
         {
             var path =
            @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\Bruker\Bruker_Maxis\2012_05_15_MN9_A_000001.d";
-
 
             var run = new BrukerTOF(path);
 
@@ -95,10 +87,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             //}
 
             Assert.AreEqual(0.5388m, (decimal)run.GetTime(478));
-
-
         }
-
 
         [Test]
         public void GetMSLevelTest1()
@@ -106,13 +95,11 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             var path =
              @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\Bruker\Bruker_Maxis\2012_05_15_MN9_A_000001.d";
 
-
             var run = new BrukerTOF(path);
 
             for (var i = 478; i < 600; i++)
             {
                 Console.WriteLine(i + "\t" + run.GetMSLevel(i));
-
             }
             Assert.AreEqual(1, run.GetMSLevel(_testScan));
         }

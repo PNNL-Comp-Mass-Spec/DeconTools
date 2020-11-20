@@ -21,9 +21,6 @@ namespace DeconTools.UnitTesting2.Demos_basic_API_usage
                 if (i % 100 == 0)
                     Console.WriteLine("{0}\t{1:F3}", i, retentionTime);
             }
-
         }
-
-
     }
 }

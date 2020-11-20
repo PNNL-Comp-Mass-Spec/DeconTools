@@ -4,7 +4,6 @@ namespace DeconTools.Backend.Core
 {
     public class LcmsFeatureTarget : TargetBase
     {
-
         public LcmsFeatureTarget(LcmsFeatureTarget target) : base(target)
         {
             FeatureToMassTagID = target.FeatureToMassTagID;
@@ -12,7 +11,6 @@ namespace DeconTools.Backend.Core
 
         public LcmsFeatureTarget()
         {
-
         }
 
         /// <summary>
@@ -28,7 +26,6 @@ namespace DeconTools.Backend.Core
         public override string ToString()
         {
             return ID + "; " + ScanLCTarget + "; " + MonoIsotopicMass.ToString("0.0000") + "; " + ChargeState;
-
         }
 
         public override string GetEmpiricalFormulaFromTargetCode()

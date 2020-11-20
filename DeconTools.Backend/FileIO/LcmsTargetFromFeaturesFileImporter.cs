@@ -5,7 +5,6 @@ using DeconTools.Backend.Core;
 
 namespace DeconTools.Backend.FileIO
 {
-
     public class LcmsTargetFromFeaturesFileImporter : ImporterBase<TargetCollection>
     {
         private readonly string _filename;
@@ -15,21 +14,21 @@ namespace DeconTools.Backend.FileIO
             _filename = fileName;
         }
 
-        private readonly string[] datasetHeaders = {"dataset"};
+        private readonly string[] datasetHeaders = { "dataset" };
         private readonly string[] chargeStateHeaders = { "chargestate", "z", "charge_state", "ClassStatsChargeBasis", "Charge", "Class_Stats_Charge_Basis" };
-        private readonly string[] chargeStateLowerHeaders = {"ChargeStateMin"};
-        private readonly string[] chargeStateUpperHeaders = {"ChargeStateMax"};
-        private readonly string[] targetIDHeaders = {"index", "UMCIndex","TargetID", "FeatureID", "UMC_Ind"};
+        private readonly string[] chargeStateLowerHeaders = { "ChargeStateMin" };
+        private readonly string[] chargeStateUpperHeaders = { "ChargeStateMax" };
+        private readonly string[] targetIDHeaders = { "index", "UMCIndex", "TargetID", "FeatureID", "UMC_Ind" };
         private readonly string[] featureToMassTagIDHeaders = { "MassTagID", "MatchedMassTagID", "ReferenceID", "Mass_Tag_ID" };
-        private readonly string[] empiricalFormulaHeaders= {"formula","empirical_formula","empiricalFormula","molecular_formula","molecularFormula" };
-        private readonly string[] monomassHeaders = {"MonoisotopicMass", "UMCMonoMW", "MonoMassIso1"};
+        private readonly string[] empiricalFormulaHeaders = { "formula", "empirical_formula", "empiricalFormula", "molecular_formula", "molecularFormula" };
+        private readonly string[] monomassHeaders = { "MonoisotopicMass", "UMCMonoMW", "MonoMassIso1" };
 
-        private string[] mzHeaders = {"MonoMZ", "UMCMZForChargeBasis"};
-        private readonly string[] scanHeaders = { "scan", "scanClassRep", "Scan_Max_Abundance","ScanNum" };
-        private string[] scanEndHeaders = {"scanEnd", "scan_end"};
-        private string[] scanStartHeaders = {"scanStart", "scan_start"};
-        private string[] netHeaders = {"net", "NETClassRep", "ElutionTime"};
-        private readonly string[] peptideSequenceHeaders = {"peptide", "peptidesequence", "sequence", "code"};
+        private string[] mzHeaders = { "MonoMZ", "UMCMZForChargeBasis" };
+        private readonly string[] scanHeaders = { "scan", "scanClassRep", "Scan_Max_Abundance", "ScanNum" };
+        private string[] scanEndHeaders = { "scanEnd", "scan_end" };
+        private string[] scanStartHeaders = { "scanStart", "scan_start" };
+        private string[] netHeaders = { "net", "NETClassRep", "ElutionTime" };
+        private readonly string[] peptideSequenceHeaders = { "peptide", "peptidesequence", "sequence", "code" };
 
         public override TargetCollection Import()
         {
@@ -52,7 +51,6 @@ namespace DeconTools.Backend.FileIO
                 {
                     sr.Close();
                     throw new InvalidDataException("There is no data in file " + _filename);
-
                 }
 
                 var headerLine = sr.ReadLine();
@@ -64,7 +62,6 @@ namespace DeconTools.Backend.FileIO
                 {
                     throw new InvalidDataException("There is a problem with the column headers in file " + _filename);
                 }
-
 
                 var lineCounter = 1;   //used for tracking which line is being processed.
 
@@ -83,12 +80,9 @@ namespace DeconTools.Backend.FileIO
                     var target = ConvertTextToDataObject(processedData);
                     repos.TargetList.Add(target);
                     lineCounter++;
-
                 }
                 sr.Close();
-
             }
-
 
             return repos;
         }
@@ -118,7 +112,6 @@ namespace DeconTools.Backend.FileIO
                 for (var i = lowerChargeState; i <= upperChargeState; i++)
                 {
                     target.ChargeStateTargets.Add(i);
-
                 }
             }
 
@@ -126,11 +119,11 @@ namespace DeconTools.Backend.FileIO
             target.ElutionTimeUnit = Globals.ElutionTimeUnit.ScanNum;
 
             target.MonoIsotopicMass = ParseDoubleField(LookupData(processedData, monomassHeaders));
-            target.MZ = target.MonoIsotopicMass/target.ChargeState + Globals.PROTON_MASS;
+            target.MZ = target.MonoIsotopicMass / target.ChargeState + Globals.PROTON_MASS;
 
             target.FeatureToMassTagID = ParseIntField(LookupData(processedData, featureToMassTagIDHeaders));
-            target.EmpiricalFormula = LookupData(processedData, empiricalFormulaHeaders,string.Empty);
-            target.Code = LookupData(processedData, peptideSequenceHeaders,string.Empty);
+            target.EmpiricalFormula = LookupData(processedData, empiricalFormulaHeaders, string.Empty);
+            target.Code = LookupData(processedData, peptideSequenceHeaders, string.Empty);
 
             //UMCIndex	ScanStart	ScanEnd	ScanClassRep
             //NETClassRep	UMCMonoMW	UMCMWStDev	UMCMWMin

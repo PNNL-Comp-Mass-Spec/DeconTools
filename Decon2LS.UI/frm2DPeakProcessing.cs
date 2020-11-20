@@ -14,7 +14,7 @@ using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
 using System.Data;
-using System.IO ;
+using System.IO;
 
 namespace Decon2LS
 {
@@ -23,15 +23,15 @@ namespace Decon2LS
     /// </summary>
     public class frm2DPeakProcessing : PNNL.Controls.CategorizedForm
     {
-        public class clsRawDataComparer: IComparer
+        public class clsRawDataComparer : IComparer
         {
-            int IComparer.Compare(object x_obj, object y_obj )
+            int IComparer.Compare(object x_obj, object y_obj)
             {
-                var x = (Engine.Results.LcmsPeak) x_obj ;
-                var y = (Engine.Results.LcmsPeak) y_obj ;
-                var x_int = x.Intensity ;
-                var y_int = y.Intensity ;
-                return x_int.CompareTo(y_int) ;
+                var x = (Engine.Results.LcmsPeak)x_obj;
+                var y = (Engine.Results.LcmsPeak)y_obj;
+                var x_int = x.Intensity;
+                var y_int = y.Intensity;
+                return x_int.CompareTo(y_int);
             }
         }
 
@@ -39,8 +39,8 @@ namespace Decon2LS
         private System.Windows.Forms.Splitter msplitterBottom;
         private System.Windows.Forms.Panel mpanelCenter;
 
-        private DeconToolsV2.Results.clsTransformResults mobj_results ;
-        private Engine.Results.LcmsPeak[] marr_peaks = null ;
+        private DeconToolsV2.Results.clsTransformResults mobj_results;
+        private Engine.Results.LcmsPeak[] marr_peaks = null;
         private PNNL.Controls.MS.ctl2DPeaks mctl_rawdata;
 
         private System.Windows.Forms.Splitter splitter1;
@@ -54,40 +54,40 @@ namespace Decon2LS
         private PNNL.Controls.MS.ctlSpectrum ctlChartTopPane;
         private System.ComponentModel.IContainer components;
 
-        private PNNL.Controls.clsSeries mobj_top_series ;
-        private PNNL.Controls.clsPlotParams mobj_elution_profile_plt_params ;
+        private PNNL.Controls.clsSeries mobj_top_series;
+        private PNNL.Controls.clsPlotParams mobj_elution_profile_plt_params;
 
         private static readonly Icon TwoDPeakIcon;
-        private static readonly PNNL.Controls.CategoryInfo [] TwoDPeakCategory ;
+        private static readonly PNNL.Controls.CategoryInfo[] TwoDPeakCategory;
         private System.Windows.Forms.ToolBarButton mtlnButtonOverlay;
         private static readonly String CategorizedTextString = "2D Peak View";
 
-        private float mflt_sic_mz_tolerance = 0.1F ;
-        private float mfltMinIntensity = 0.0F ;
+        private float mflt_sic_mz_tolerance = 0.1F;
+        private float mfltMinIntensity = 0.0F;
 
-        private float [] marr_sic_scans ;
-        private float [] marr_sic_intensities ;
+        private float[] marr_sic_scans;
+        private float[] marr_sic_intensities;
 
-        private float [] marr_spectrum_peak_mzs ;
-        private float [] marr_spectrum_peak_intensities ;
+        private float[] marr_spectrum_peak_mzs;
+        private float[] marr_spectrum_peak_intensities;
 
-        private float [] marr_scans ;
-        private float [] marr_intensities ;
-        private float [] marr_mzs ;
-        private DeconToolsV2.Readers.clsRawData mobj_raw_data ;
+        private float[] marr_scans;
+        private float[] marr_intensities;
+        private float[] marr_mzs;
+        private DeconToolsV2.Readers.clsRawData mobj_raw_data;
         private System.Windows.Forms.Splitter splitter2;
 
-        private ctlMassSpectrum mctl_spectrum ;
+        private ctlMassSpectrum mctl_spectrum;
         private System.Windows.Forms.ToolBarButton mtlnButtonLinkZoom;
-        private int mint_num_pixel_screen_tolerance = 6 ;
+        private int mint_num_pixel_screen_tolerance = 6;
         private System.Windows.Forms.ToolBarButton mtlnButtonSelectBackground;
 
-        private clsMediator mMediator ;
+        private clsMediator mMediator;
         static frm2DPeakProcessing()
         {
             // Load the icons used for categorization info from embedded resources.
             TwoDPeakIcon = PNNL.Controls.IconUtils.LoadIconFromAssembly(typeof(frm2DPeakProcessing), "Icons.RawData.ico", 16, 16);
-            TwoDPeakCategory = new PNNL.Controls.CategoryInfo[] {new PNNL.Controls.CategoryInfo(CategorizedTextString, TwoDPeakIcon)};
+            TwoDPeakCategory = new PNNL.Controls.CategoryInfo[] { new PNNL.Controls.CategoryInfo(CategorizedTextString, TwoDPeakIcon) };
         }
 
         #region "Constructors"
@@ -101,8 +101,8 @@ namespace Decon2LS
             //
             // TODO: Add any constructor code after InitializeComponent call
             //
-            mobj_raw_data = null ;
-            Init() ;
+            mobj_raw_data = null;
+            Init();
         }
 
         public frm2DPeakProcessing(DeconToolsV2.Results.clsTransformResults results)
@@ -116,30 +116,28 @@ namespace Decon2LS
             // TODO: Add any constructor code after InitializeComponent call
             //
 
-            Init() ;
-            SetData(results) ;
-
-
+            Init();
+            SetData(results);
         }
 
         private void Init()
         {
-            mMediator = new clsMediator(this) ;
+            mMediator = new clsMediator(this);
 
-            mctl_spectrum = new ctlMassSpectrum() ;
-            mctl_spectrum.Dock = DockStyle.Fill ;
-            mexpandPanelBottom.Controls.Add(mctl_spectrum) ;
-            mctl_spectrum.Mediator = mMediator ;
-            mctl_spectrum.mevntScanChanged +=new Decon2LS.ctlMassSpectrum.ScanChangedEventHandler(mctl_spectrum_mevntScanChanged);
+            mctl_spectrum = new ctlMassSpectrum();
+            mctl_spectrum.Dock = DockStyle.Fill;
+            mexpandPanelBottom.Controls.Add(mctl_spectrum);
+            mctl_spectrum.Mediator = mMediator;
+            mctl_spectrum.mevntScanChanged += new Decon2LS.ctlMassSpectrum.ScanChangedEventHandler(mctl_spectrum_mevntScanChanged);
 
             // Set initial categorized info
-            this.Category = TwoDPeakCategory ;
+            this.Category = TwoDPeakCategory;
 
-            mobj_elution_profile_plt_params = new PNNL.Controls.clsPlotParams(new PNNL.Controls.BubbleShape(2,false), Color.Red, false, true, true) ;
+            mobj_elution_profile_plt_params = new PNNL.Controls.clsPlotParams(new PNNL.Controls.BubbleShape(2, false), Color.Red, false, true, true);
 
-            mctl_rawdata.DefaultZoomHandler.SingleClickNoZoomPerformed +=new PNNL.Controls.SingleClickNoZoomHandler(DefaultZoomHandler_SingleClickNoZoomPerformed);
+            mctl_rawdata.DefaultZoomHandler.SingleClickNoZoomPerformed += new PNNL.Controls.SingleClickNoZoomHandler(DefaultZoomHandler_SingleClickNoZoomPerformed);
             mctl_rawdata.MZHorizontal = true;
-            mctl_rawdata.ViewPortChanged +=new PNNL.Controls.ViewPortChangedHandler(mctl_rawdata_ViewPortChanged);
+            mctl_rawdata.ViewPortChanged += new PNNL.Controls.ViewPortChangedHandler(mctl_rawdata_ViewPortChanged);
             //SetPlotStructures() ;
         }
         #endregion
@@ -148,14 +146,13 @@ namespace Decon2LS
         {
             try
             {
-                ctlChartTopPane.SeriesCollection.Clear() ;
-                this.ctlChartTopPane.ViewPortHistory.Clear() ;
+                ctlChartTopPane.SeriesCollection.Clear();
+                this.ctlChartTopPane.ViewPortHistory.Clear();
 
-                float minMZ = 0 , maxMZ = 0 ;
+                float minMZ = 0, maxMZ = 0;
 
-                minMZ = mctl_rawdata.ViewPort.Left ;
-                maxMZ = mctl_rawdata.ViewPort.Right ;
-
+                minMZ = mctl_rawdata.ViewPort.Left;
+                maxMZ = mctl_rawdata.ViewPort.Right;
 
                 this.mctl_rawdata.XAxisLabel = "m/z";
                 this.mctl_rawdata.YAxisLabel = "scan #";
@@ -165,17 +162,16 @@ namespace Decon2LS
 
                 if (marr_sic_intensities != null)
                 {
-                    mobj_top_series = new PNNL.Controls.clsSeries(ref marr_sic_intensities, ref marr_sic_scans,mobj_elution_profile_plt_params) ;
+                    mobj_top_series = new PNNL.Controls.clsSeries(ref marr_sic_intensities, ref marr_sic_scans, mobj_elution_profile_plt_params);
                     this.ctlChartTopPane.SeriesCollection.Add(mobj_top_series);
                 }
 
-                mctl_spectrum.SetPeakSeriesData(mctl_rawdata.FocusScan, marr_spectrum_peak_mzs, marr_spectrum_peak_intensities, minMZ, maxMZ) ;
+                mctl_spectrum.SetPeakSeriesData(mctl_rawdata.FocusScan, marr_spectrum_peak_mzs, marr_spectrum_peak_intensities, minMZ, maxMZ);
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, ex.Message + ex.StackTrace) ;
+                MessageBox.Show(this, ex.Message + ex.StackTrace);
             }
-
         }
 
         #region "Category Info"
@@ -192,7 +188,7 @@ namespace Decon2LS
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message + ex.StackTrace) ;
+                Console.WriteLine(ex.Message + ex.StackTrace);
             }
         }
 
@@ -202,77 +198,76 @@ namespace Decon2LS
         {
             try
             {
-                mobj_results = results ;
-                marr_peaks = new Engine.Results.LcmsPeak[1] ;
-                var min_intensity = float.MaxValue ;
-                var max_intensity = float.MinValue ;
-                mobj_results.GetRawData(out marr_peaks) ;
+                mobj_results = results;
+                marr_peaks = new Engine.Results.LcmsPeak[1];
+                var min_intensity = float.MaxValue;
+                var max_intensity = float.MinValue;
+                mobj_results.GetRawData(out marr_peaks);
                 if (marr_peaks.Length == 0)
-                    return ;
+                    return;
 
-                var myComparer = new clsRawDataComparer() ;
+                var myComparer = new clsRawDataComparer();
 
+                Array.Sort(marr_peaks, myComparer);
+                min_intensity = (float)marr_peaks[0].Intensity;
+                max_intensity = (float)marr_peaks[marr_peaks.Length - 1].Intensity;
 
-                Array.Sort(marr_peaks, myComparer) ;
-                min_intensity = (float)marr_peaks[0].Intensity ;
-                max_intensity = (float)marr_peaks[marr_peaks.Length-1].Intensity ;
-
-                var startIndex = 0 ;
+                var startIndex = 0;
                 if (min_intensity < mfltMinIntensity)
                 {
-                    while(startIndex < marr_peaks.Length && marr_peaks[startIndex].Intensity < mfltMinIntensity)
-                        startIndex++ ;
+                    while (startIndex < marr_peaks.Length && marr_peaks[startIndex].Intensity < mfltMinIntensity)
+                        startIndex++;
                 }
 
                 if (startIndex == marr_peaks.Length)
-                    return ;
+                    return;
 
                 if (max_intensity < 0)
                 {
                     max_intensity = 1f;
                 }
 
-                marr_scans = new float [marr_peaks.Length-startIndex] ;
-                marr_mzs = new float [marr_peaks.Length-startIndex] ;
-                marr_intensities = new float [marr_peaks.Length-startIndex] ;
+                marr_scans = new float[marr_peaks.Length - startIndex];
+                marr_mzs = new float[marr_peaks.Length - startIndex];
+                marr_intensities = new float[marr_peaks.Length - startIndex];
 
-                for (var i = startIndex ; i < marr_peaks.Length ; i++)
+                for (var i = startIndex; i < marr_peaks.Length; i++)
                 {
-                    marr_scans[i-startIndex] = Convert.ToSingle(marr_peaks[i].ScanNum) ;
-                    marr_mzs[i-startIndex] = (float)marr_peaks[i].Mz ;
-                    marr_intensities[i-startIndex] = (float)marr_peaks[i].Intensity ;
+                    marr_scans[i - startIndex] = Convert.ToSingle(marr_peaks[i].ScanNum);
+                    marr_mzs[i - startIndex] = (float)marr_peaks[i].Mz;
+                    marr_intensities[i - startIndex] = (float)marr_peaks[i].Intensity;
                 }
 
-                mctl_rawdata.SetData(marr_scans, marr_mzs, marr_intensities, min_intensity, max_intensity) ;
+                mctl_rawdata.SetData(marr_scans, marr_mzs, marr_intensities, min_intensity, max_intensity);
 
-                var mono_masses = results.MonoMasses ;
-                var charges = results.Charges ;
-                var scans = results.Scans ;
-                mctl_rawdata.SetDeisotopedData(scans, mono_masses, charges) ;
+                var mono_masses = results.MonoMasses;
+                var charges = results.Charges;
+                var scans = results.Scans;
+                mctl_rawdata.SetDeisotopedData(scans, mono_masses, charges);
 
-                this.Text = mobj_results.FileName ;
+                this.Text = mobj_results.FileName;
                 var slashIndex = mobj_results.FileName.LastIndexOf("\\") + 1;
-                this.CategorizedText = mobj_results.FileName.Substring(slashIndex, mobj_results.FileName.Length - slashIndex) ;
+                this.CategorizedText = mobj_results.FileName.Substring(slashIndex, mobj_results.FileName.Length - slashIndex);
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, ex.Message + ex.StackTrace) ;
+                MessageBox.Show(this, ex.Message + ex.StackTrace);
             }
         }
 
         /// <summary>
         /// Clean up any resources being used.
         /// </summary>
-        protected override void Dispose( bool disposing )
+        protected override void Dispose(bool disposing)
         {
-            if( disposing )
+            if (disposing)
             {
                 if (components != null)
                 {
                     components.Dispose();
                 }
             }
-            base.Dispose( disposing );
+            base.Dispose(disposing);
         }
 
         #region Windows Form Designer generated code
@@ -574,7 +569,6 @@ namespace Decon2LS
             this.mpanelCenter.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.mctl_rawdata)).EndInit();
             this.ResumeLayout(false);
-
         }
         #endregion
 
@@ -584,47 +578,47 @@ namespace Decon2LS
             {
                 if (e.Button == mtlnButtonOverlay)
                 {
-                    var focus_form = new frmFocusParameters() ;
-                    focus_form.FocusMZ = mctl_rawdata.FocusMZ ;
-                    focus_form.FocusScan = mctl_rawdata.FocusScan ;
-                    focus_form.FocusMZTolerance = mflt_sic_mz_tolerance ;
+                    var focus_form = new frmFocusParameters();
+                    focus_form.FocusMZ = mctl_rawdata.FocusMZ;
+                    focus_form.FocusScan = mctl_rawdata.FocusScan;
+                    focus_form.FocusMZTolerance = mflt_sic_mz_tolerance;
 
                     if (focus_form.ShowDialog(this) == DialogResult.OK)
                     {
                         if (focus_form.FocusMZ != mctl_rawdata.FocusMZ || focus_form.FocusScan != mctl_rawdata.FocusScan
                             || focus_form.FocusMZTolerance != mflt_sic_mz_tolerance)
                         {
-                            mctl_rawdata.FocusMZ = focus_form.FocusMZ ;
-                            mctl_rawdata.FocusScan = focus_form.FocusScan ;
-                            mflt_sic_mz_tolerance = focus_form.FocusMZTolerance ;
+                            mctl_rawdata.FocusMZ = focus_form.FocusMZ;
+                            mctl_rawdata.FocusScan = focus_form.FocusScan;
+                            mflt_sic_mz_tolerance = focus_form.FocusMZTolerance;
                             // now its been set. Calculate the new selected ion chromatogram and set that to the
-                            SetDataPlots() ;
+                            SetDataPlots();
                         }
                     }
                 }
                 else if (e.Button == mtlbButtonLinkRaw)
                 {
-                    LinkRawFile() ;
+                    LinkRawFile();
                 }
                 else if (e.Button == mtlnButtonLinkZoom)
                 {
-                    mtlnButtonLinkZoom.Pushed = !mtlnButtonLinkZoom.Pushed ;
+                    mtlnButtonLinkZoom.Pushed = !mtlnButtonLinkZoom.Pushed;
                 }
                 else if (e.Button == mtlnButtonSelectBackground)
                 {
                     var frmThreshold = new frmFloatDialog();
-                    frmThreshold.Prompt = "Please enter background intensity" ;
-                    frmThreshold.EditingValue = mfltMinIntensity ;
+                    frmThreshold.Prompt = "Please enter background intensity";
+                    frmThreshold.EditingValue = mfltMinIntensity;
                     if (frmThreshold.ShowDialog() == DialogResult.OK)
                     {
-                        mfltMinIntensity = frmThreshold.EditingValue ;
-                        SetData(mobj_results) ;
+                        mfltMinIntensity = frmThreshold.EditingValue;
+                        SetData(mobj_results);
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, ex.Message + ex.StackTrace) ;
+                MessageBox.Show(this, ex.Message + ex.StackTrace);
             }
         }
 
@@ -637,59 +631,58 @@ namespace Decon2LS
             try
             {
                 if (mctl_rawdata.FocusMZ == 0 || mobj_results == null || marr_peaks == null)
-                    return ;
+                    return;
 
                 // now get the selected ion chromatogram.
-                var currentViewPort = mctl_rawdata.ViewPort ;
+                var currentViewPort = mctl_rawdata.ViewPort;
 
                 if (currentViewPort.Bottom == currentViewPort.Top || currentViewPort.Left == currentViewPort.Right)
-                    return  ;
+                    return;
 
-                int min_scan = 0, max_scan = 0 ;
+                int min_scan = 0, max_scan = 0;
 
-                min_scan = (int) currentViewPort.Top ;
-                max_scan = (int) currentViewPort.Bottom ;
+                min_scan = (int)currentViewPort.Top;
+                max_scan = (int)currentViewPort.Bottom;
 
                 if (marr_sic_intensities == null)
-                    marr_sic_intensities = new float[1] ;
+                    marr_sic_intensities = new float[1];
 
-                mobj_results.GetSIC(min_scan, max_scan, mctl_rawdata.FocusMZ, mflt_sic_mz_tolerance, out marr_sic_intensities) ;
-                marr_sic_scans = new float[marr_sic_intensities.Length] ;
-                for (var scan_num = min_scan ; scan_num <= max_scan ; scan_num++)
+                mobj_results.GetSIC(min_scan, max_scan, mctl_rawdata.FocusMZ, mflt_sic_mz_tolerance, out marr_sic_intensities);
+                marr_sic_scans = new float[marr_sic_intensities.Length];
+                for (var scan_num = min_scan; scan_num <= max_scan; scan_num++)
                 {
-                    marr_sic_scans[scan_num-min_scan] = (float) scan_num ;
+                    marr_sic_scans[scan_num - min_scan] = (float)scan_num;
                 }
 
-
                 // now for the peaks in the spectrum.
-                mobj_results.GetScanPeaks(mctl_rawdata.FocusScan, out marr_spectrum_peak_mzs, out marr_spectrum_peak_intensities) ;
+                mobj_results.GetScanPeaks(mctl_rawdata.FocusScan, out marr_spectrum_peak_mzs, out marr_spectrum_peak_intensities);
 
-                SetPlotStructures() ;
+                SetPlotStructures();
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, ex.Message + ex.StackTrace) ;
+                MessageBox.Show(this, ex.Message + ex.StackTrace);
             }
         }
         private void DefaultZoomHandler_SingleClickNoZoomPerformed(object sender, MouseEventArgs e)
         {
-            float mz_focus = 0 ;
-            var scan_focus = 0 ;
+            float mz_focus = 0;
+            var scan_focus = 0;
             // mz value will be drawn along the x axis.
-            mz_focus = mctl_rawdata.GetChartX(mctl_rawdata.GetChartAreaX(e.X)) ;
-            scan_focus = Convert.ToInt32(mctl_rawdata.GetChartY(mctl_rawdata.GetChartAreaY(e.Y))) ;
+            mz_focus = mctl_rawdata.GetChartX(mctl_rawdata.GetChartAreaX(e.X));
+            scan_focus = Convert.ToInt32(mctl_rawdata.GetChartY(mctl_rawdata.GetChartAreaY(e.Y)));
 
-            mctl_rawdata.FocusMZ = mz_focus ;
-            mctl_rawdata.FocusScan = scan_focus ;
+            mctl_rawdata.FocusMZ = mz_focus;
+            mctl_rawdata.FocusScan = scan_focus;
             //
-            var mz_range = mctl_rawdata.ViewPort.Width ;
-            float ctl_range = mctl_rawdata.ClientRectangle.Width ;
+            var mz_range = mctl_rawdata.ViewPort.Width;
+            float ctl_range = mctl_rawdata.ClientRectangle.Width;
             if (mz_range < 10)
-                mflt_sic_mz_tolerance = mz_range/ctl_range * mint_num_pixel_screen_tolerance ;
+                mflt_sic_mz_tolerance = mz_range / ctl_range * mint_num_pixel_screen_tolerance;
             else
-                mflt_sic_mz_tolerance = 0.1F ;
+                mflt_sic_mz_tolerance = 0.1F;
             // now its been set. Calculate the new selected ion chromatogram and set that to the
-            SetDataPlots() ;
+            SetDataPlots();
         }
 
         private void SavePeaks(string fileName)
@@ -698,33 +691,32 @@ namespace Decon2LS
 
         private void LinkRawFile()
         {
-            var selectRawFile = new frmSelectRaw() ;
+            var selectRawFile = new frmSelectRaw();
             if (mobj_results.FileType != DeconToolsV2.Readers.FileType.UNDEFINED)
             {
-                selectRawFile.FileType = mobj_results.FileType ;
-                selectRawFile.FileName = mobj_results.FileName ;
+                selectRawFile.FileType = mobj_results.FileType;
+                selectRawFile.FileName = mobj_results.FileName;
             }
-            selectRawFile.Text = "Please Select a Raw File" ;
+            selectRawFile.Text = "Please Select a Raw File";
             if (selectRawFile.ShowDialog() == DialogResult.Cancel)
-                return ;
-            mobj_raw_data = new DeconToolsV2.Readers.clsRawData(selectRawFile.FileName, selectRawFile.FileType) ;
-            mctl_spectrum.RawData = mobj_raw_data ;
+                return;
+            mobj_raw_data = new DeconToolsV2.Readers.clsRawData(selectRawFile.FileName, selectRawFile.FileType);
+            mctl_spectrum.RawData = mobj_raw_data;
         }
 
         private void mctl_spectrum_mevntScanChanged(object sender, int new_scan)
         {
-
         }
 
         public DeconToolsV2.Peaks.clsPeakProcessorParameters PeakProcessorParameters
         {
             get
             {
-                return mctl_spectrum.PeakProcessorParameters ;
+                return mctl_spectrum.PeakProcessorParameters;
             }
             set
             {
-                mctl_spectrum.PeakProcessorParameters = value ;
+                mctl_spectrum.PeakProcessorParameters = value;
             }
         }
 
@@ -732,11 +724,11 @@ namespace Decon2LS
         {
             get
             {
-                return mctl_spectrum.HornTransformParameters ;
+                return mctl_spectrum.HornTransformParameters;
             }
             set
             {
-                mctl_spectrum.HornTransformParameters = value ;
+                mctl_spectrum.HornTransformParameters = value;
             }
         }
 
@@ -744,11 +736,11 @@ namespace Decon2LS
         {
             get
             {
-                return mctl_spectrum.FTICRPreProcessOptions  ;
+                return mctl_spectrum.FTICRPreProcessOptions;
             }
             set
             {
-                mctl_spectrum.FTICRPreProcessOptions = value ;
+                mctl_spectrum.FTICRPreProcessOptions = value;
             }
         }
 
@@ -756,9 +748,9 @@ namespace Decon2LS
         {
             if (mtlnButtonLinkZoom.Pushed)
             {
-                mctl_spectrum.SetMZRange(args.ViewPort.Left, args.ViewPort.Right) ;
-                ctlChartTopPane.ViewPort = new RectangleF(0, args.ViewPort.Y, 1, args.ViewPort.Height) ;
-                ctlChartTopPane.AutoViewPortX() ;
+                mctl_spectrum.SetMZRange(args.ViewPort.Left, args.ViewPort.Right);
+                ctlChartTopPane.ViewPort = new RectangleF(0, args.ViewPort.Y, 1, args.ViewPort.Height);
+                ctlChartTopPane.AutoViewPortX();
             }
         }
     }

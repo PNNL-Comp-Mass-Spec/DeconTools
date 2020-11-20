@@ -15,7 +15,6 @@ namespace DeconTools.Utilities
             if (UseExceptions)
             {
                 if (!assertion) throw new PreconditionException(message);
-
             }
             else
             {

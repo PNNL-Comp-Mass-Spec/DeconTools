@@ -68,13 +68,10 @@ namespace DeconTools.Workflows.Backend.Core
                 {
                     ExportChromatogramDataForEachProtein();
                 }
-
-
             }
 
             // Collapse + process results
             PostProcessResults(ResultRepository.Results);
-
         }
 
         private void ExportChromatogramDataForEachProtein()
@@ -82,7 +79,6 @@ namespace DeconTools.Workflows.Backend.Core
             var allResults = TargetedWorkflow.Run.ResultCollection.GetMassTagResults();
 
             var proteoformList = allResults.Select(p => p.Target.Code).Distinct();
-
 
             var counter = 0;
             foreach (var proteoform in proteoformList)
@@ -120,14 +116,11 @@ namespace DeconTools.Workflows.Backend.Core
                     sb.Append(result.IsotopicProfile == null ? 0 : result.IntensityAggregate);
 
                     sb.Append(Environment.NewLine);
-
                 }
 
                 sb.Append(Environment.NewLine);
 
-
                 var topDownChromData = new TopdownChromData();
-
 
                 foreach (var targetedResultBase in resultsForProtein)
                 {
@@ -154,12 +147,9 @@ namespace DeconTools.Workflows.Backend.Core
 
                     sb.Append(resultsForProtein[i].Target.ChargeState.ToString("0") + "+");
                     sb.Append(delimiter);
-
                 }
 
                 sb.Append(Environment.NewLine);
-
-
 
                 //add data from multiple chrom data arrays
                 for (var i = 0; i < lengthOfScanArray; i++)
@@ -173,15 +163,11 @@ namespace DeconTools.Workflows.Backend.Core
                             sb.Append(delimiter);
 
                             isFirstIteration = false;
-
                         }
                         sb.Append(val.Yvalues[i]);
                         sb.Append(delimiter);
-
-
                     }
                     sb.Append(Environment.NewLine);
-
                 }
 
                 var outputDebugFolder = Path.Combine(ExecutorParameters.OutputDirectoryBase, "Testing");
@@ -193,13 +179,11 @@ namespace DeconTools.Workflows.Backend.Core
                 {
                     writer.Write(sb.ToString());
                     writer.Close();
-
                 }
 
                 //output graph image
 
             }
-
         }
 
         protected override TargetCollection GetLcmsFeatureTargets(string targetsFilePath)
@@ -224,7 +208,6 @@ namespace DeconTools.Workflows.Backend.Core
                 Directory.CreateDirectory(resultsDirectoryPath);
 
             return Path.Combine(resultsDirectoryPath, Run.DatasetName + "_quant.txt");
-
         }
 
         #endregion

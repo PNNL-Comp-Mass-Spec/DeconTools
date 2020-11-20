@@ -5,7 +5,6 @@ using System.Text;
 
 namespace DeconConsole.UnitTesting
 {
-    
     public class Class1
     {
     }

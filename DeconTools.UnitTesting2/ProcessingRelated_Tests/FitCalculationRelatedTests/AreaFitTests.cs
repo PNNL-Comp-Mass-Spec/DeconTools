@@ -12,15 +12,12 @@ using DeconTools.Backend.Runs;
 using DeconTools.Backend.Utilities;
 using NUnit.Framework;
 
-
 namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.FitCalculationRelatedTests
 {
     [TestFixture]
     public class AreaFitTests
     {
         private readonly string xcaliburTestfile = FileRefs.RawDataMSFiles.OrbitrapStdFile1;
-
-
 
         [Test]
         public void fitterOnHornDataTest1()
@@ -36,7 +33,9 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.FitCalculationRelatedT
             Task peakDetector = new DeconToolsPeakDetectorV2(0.5, 3);
             peakDetector.Execute(results);
 
-            var deconParameters = new DeconToolsParameters {ThrashParameters = {
+            var deconParameters = new DeconToolsParameters
+            {
+                ThrashParameters = {
                     MinMSFeatureToBackgroundRatio = 2            // PeptideMinBackgroundRatio
                 }
             };
@@ -49,13 +48,10 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.FitCalculationRelatedT
 
             var result1 = results.ResultList[0];
 
-
             var distCreator = new MercuryDistributionCreator();
             var resolution = result1.IsotopicProfile.GetMZofMostAbundantPeak() / result1.IsotopicProfile.GetFWHM();
             distCreator.CreateDistribution(result1.IsotopicProfile.MonoIsotopicMass, result1.IsotopicProfile.ChargeState, resolution);
             distCreator.OffsetDistribution(result1.IsotopicProfile);
-
-
 
             var theorXYData = distCreator.Data;
 
@@ -90,7 +86,6 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.FitCalculationRelatedT
             Console.WriteLine("{0,8:F5}       {1,8:F5}", result1.IsotopicProfile.Score, bestFitViaShifting);
 
             Assert.AreEqual(0.00926548, bestFitViaShifting, 0.00001);
-
         }
 
         // To include support for Rapid, you must add a reference to DeconEngine.dll, which was compiled with Visual Studio 2003 and uses MSVCP71.dll
@@ -163,7 +158,6 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.FitCalculationRelatedT
             Task peakDetector = new DeconToolsPeakDetectorV2(0.5, 3);
             peakDetector.Execute(results);
 
-
             Task decon = new HornDeconvolutor();
             decon.Execute(results);
 
@@ -180,7 +174,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.FitCalculationRelatedT
             //TestUtilities.DisplayXYValues(theorXYData);
 
             distCreator.OffsetDistribution(result1.IsotopicProfile);
-            
+
             TestUtilities.DisplayXYValues(theorXYData);
 
             //Console.WriteLine(sb.ToString());
@@ -192,9 +186,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.FitCalculationRelatedT
             Console.WriteLine((result1.IsotopicProfile.Score - fitval) / result1.IsotopicProfile.Score * 100);
 
             Assert.AreEqual(0.0763818319332606m, (decimal)fitval);
-
         }
-
 
         [Test]
         [Ignore("No results")]
@@ -211,7 +203,6 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.FitCalculationRelatedT
             Task peakDetector = new DeconToolsPeakDetectorV2(0.5, 3);
             peakDetector.Execute(results);
 
-
             Task decon = new HornDeconvolutor();
             decon.Execute(results);
 
@@ -220,8 +211,6 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.FitCalculationRelatedT
 
             var result1 = results.ResultList[0];
             var resolution = result1.IsotopicProfile.GetMZofMostAbundantPeak() / result1.IsotopicProfile.GetFWHM();
-
-
 
             var distCreator = new MercuryDistributionCreator();
             distCreator.CreateDistribution(result1.IsotopicProfile.MonoIsotopicMass, result1.IsotopicProfile.ChargeState, resolution);
@@ -255,7 +244,5 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.FitCalculationRelatedT
 
             //Console.Write(sb.ToString());
         }
-
-
     }
 }

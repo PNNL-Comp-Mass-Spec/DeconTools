@@ -12,7 +12,6 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
         public LeftOfMonoPeakLooker()
             : this(0.5)
         {
-
         }
 
         public LeftOfMonoPeakLooker(double minRatioToGiveFlag)
@@ -42,8 +41,6 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
             {
                 currentResult.Flags.Add(new PeakToTheLeftResultFlag());
             }
-
-
         }
 
         #endregion
@@ -64,7 +61,6 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
 
             var targetMZ = monoPeak.XValue - (1.003 / (double)chargeState);
 
-
             var foundLeftOfMonoPeaks = PeakUtilities.GetPeaksWithinTolerance(peakList, targetMZ, mzTol);
 
             //if found a peak to the left, will return that peak. If
@@ -74,11 +70,9 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
                 return null;
             }
 
-
             var peakToTheLeft = foundLeftOfMonoPeaks.OrderByDescending(p => p.Height).First() as MSPeak;
 
             if (peakToTheLeft == null) return null;
-
 
             if (peakToTheLeft.Height > monoPeak.Height * MinRatioToGiveFlag)
             {
@@ -88,13 +82,11 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
             return null;
         }
 
-
         public MSPeak LookforPeakToTheLeftOfMonoPeak(MSPeak monoPeak, int chargeState, List<Peak> peakList)
         {
             return LookforPeakToTheLeftOfMonoPeak(monoPeak, chargeState, peakList, this.MinRatioToGiveFlag);
         }
         #endregion
-
 
     }
 }

@@ -5,7 +5,6 @@ namespace DeconTools.Workflows.Backend.FileIO
 {
     public class BasicIqTargetImporter : IqTargetImporter
     {
-
         /// <summary>
         /// Constructor
         /// </summary>
@@ -34,7 +33,5 @@ namespace DeconTools.Workflows.Backend.FileIO
 
             return target;
         }
-
-
     }
 }

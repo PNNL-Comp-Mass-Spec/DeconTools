@@ -42,16 +42,16 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             numIsotopes = elementData.NumberOfIsotopes;
             elementName = elementData.Name;
             elementSymbol = elementData.Symbol;
-            averageMass = (float) elementData.AverageMass;
-            massVariance = (float) elementData.MassVariance;
+            averageMass = (float)elementData.AverageMass;
+            massVariance = (float)elementData.MassVariance;
 
             isotopeMass = new float[numIsotopes];
             isotopeProb = new float[numIsotopes];
             for (var isotopeNum = 0; isotopeNum < numIsotopes; isotopeNum++)
             {
                 var isotopeData = elementData.Isotopes[isotopeNum];
-                isotopeMass[isotopeNum] = (float) isotopeData.Mass;
-                isotopeProb[isotopeNum] = (float) isotopeData.Probability;
+                isotopeMass[isotopeNum] = (float)isotopeData.Mass;
+                isotopeProb[isotopeNum] = (float)isotopeData.Probability;
             }
         }
 

@@ -3,7 +3,7 @@ using DeconTools.Backend.Data;
 
 namespace DeconTools.Backend.FileIO
 {
-    public abstract class IMassTagImporter:Importer<TargetCollection>
+    public abstract class IMassTagImporter : Importer<TargetCollection>
     {
         #region Constructors
         #endregion

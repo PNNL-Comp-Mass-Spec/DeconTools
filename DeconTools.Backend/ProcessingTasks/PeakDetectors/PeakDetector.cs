@@ -39,7 +39,6 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
 
             var counter = 1;
 
-
             //[gord] I'm adding a loop here, because we are experiencing an infrequent and seemingly random failure with the peak detector on data from UIMF files
             //looping it may force it to process the current ims scan.
             while (!isSuccess && counter <= 4)
@@ -74,14 +73,11 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
                     {
                         Logger.Instance.AddEntry(sb.ToString(), true);
                     }
-
                 }
 
                 ExecutePostProcessingHook(resultList.Run);
                 counter++;
-
             }
-
         }
 
         protected virtual void ExecutePostProcessingHook(Run run)
@@ -89,10 +85,8 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
             run.CurrentBackgroundIntensity = BackgroundIntensity;
         }
 
-
         protected void GatherPeakStatistics(Run run)
         {
-
             ScanSet currentScanSet;
 
             if (run is UIMFRun uimfRun)

@@ -4,7 +4,6 @@ using DeconTools.Backend.Core;
 
 namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopicDistribution
 {
-
     /// <summary>
     /// Written by Tom Taverner
     /// </summary>
@@ -45,7 +44,6 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
             fAvnO = 1.4773f;
             fAvnS = 0.0417f;
             afAvn = new[] { fAvnH, fAvnC, fAvnN, fAvnO, fAvnS };
-
         }
 
         public double fNPerThLow; // lower and upper limits of how many
@@ -53,7 +51,6 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
 
         public double fNn15a = 0.98f;//0.996337f;//  // this is our N15 abundance
         public double fNn14a;
-
 
         public double fH1m = 1.007825f;
         double fH1a = 0.99985f;
@@ -129,7 +126,6 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
                     else
                         fBase += aafIsosm[i][0] * afFormula[i];
             return fBase;
-
         }
         public string GetClosestAvnFormula(double inputMass, bool hasLabel)
         {
@@ -140,7 +136,6 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
             for (var i = 0; i < 5; i++)
                 averagineIntArray[i] = (int)System.Math.Round(afAvn[i] * fNumAvn);
 
-
             //I will reverse these to report  C H N O S
             var numHydrogens = averagineIntArray[0];
             var numCarbons = averagineIntArray[1];
@@ -149,14 +144,11 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
             averagineIntArray[1] = numHydrogens;
 
             return ("C" + averagineIntArray[0] + "H" + averagineIntArray[1] + "N" + averagineIntArray[2] + "O" + averagineIntArray[3] + "S" + averagineIntArray[4]);
-
-
         }
 
         public IsotopicProfile GetAvnPattern(double fInputMass, bool bLabel)
         {
             var averagineFormula = GetClosestAvnFormula(fInputMass, bLabel);
-
 
             if (bLabel == false)
                 return GetIsotopePattern(averagineFormula, aafIsos);
@@ -171,7 +163,6 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
 
         public IsotopicProfile GetIsotopePattern(string empiricalFormula, double[][] aafIsoLocal)
         {
-
             var elementTable = _peptideUtils.ParseEmpiricalFormulaString(empiricalFormula);
 
             var formulaArray = new int[5];
@@ -240,6 +231,5 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
                 return 0;
             }
         }
-
     }
 }

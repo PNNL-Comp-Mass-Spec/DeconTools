@@ -17,7 +17,6 @@ using System.Collections;
 
 namespace Decon2LS
 {
-
     public interface IMediatedForm
     {
         clsMediator Mediator
@@ -72,7 +71,6 @@ namespace Decon2LS
         public event dlgMediatorStatusHandler mevnt_Status;
         public event dlgMediatorTransformResultsHandler mevnt_MassTransform_Complete;
         public event dlgMediatorZoomHandler mevnt_Zoom;
-
 
         private System.Windows.Forms.Form mfrm_main = new frmStatus();
         private Decon2LS.frmStatus mfrm_status;
@@ -244,7 +242,6 @@ namespace Decon2LS
             }
         }
 
-
         /// <summary>
         /// Requests the last active form of a given type.
         /// </summary>
@@ -299,7 +296,6 @@ namespace Decon2LS
             }
             return (Form)formsForType[0];
         }
-
 
         /// <summary>
         /// Notified when a form opened via the RequestFormOpen method is closed.

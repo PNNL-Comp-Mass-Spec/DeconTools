@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 
-
 namespace DeconTools.Backend.Core
 {
     [Serializable]
@@ -10,9 +9,7 @@ namespace DeconTools.Backend.Core
         #region Constructors
         public PeptideTarget()
         {
-
         }
-
 
         public PeptideTarget(PeptideTarget copiedTarget)
             : base(copiedTarget)
@@ -46,7 +43,6 @@ namespace DeconTools.Backend.Core
             return PeptideUtils.GetEmpiricalFormulaForPeptideSequence(Code);
         }
 
-
         public void CalculateMassesForIsotopicProfile(int chargeState)
         {
             if (IsotopicProfile?.Peaklist == null) return;
@@ -56,7 +52,6 @@ namespace DeconTools.Backend.Core
                 var calcMZ = MonoIsotopicMass / chargeState + Globals.PROTON_MASS + i * 1.00235 / chargeState;
                 IsotopicProfile.Peaklist[i].XValue = calcMZ;
             }
-
         }
 
         public override string ToString()

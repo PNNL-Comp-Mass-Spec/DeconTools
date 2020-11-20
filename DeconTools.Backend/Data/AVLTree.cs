@@ -261,6 +261,5 @@ namespace DeconTools.Backend.Data.Structures
                 rootParent.RightChild = pivot;
         }
     }
-
 }
 

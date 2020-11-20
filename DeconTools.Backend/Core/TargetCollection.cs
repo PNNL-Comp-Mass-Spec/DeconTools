@@ -46,19 +46,15 @@ namespace DeconTools.Backend.Core
                 }
             }
 
-
             var uniqueMTIDs = (from n in massTagsNonRedundant select n.ID).Distinct().ToList();
-
 
             foreach (var mtID in uniqueMTIDs)
             {
                 var topChargeStatesOfMassTag = massTagsNonRedundant.Where(p => p.ID == mtID).OrderByDescending(n => n.ObsCount).Take(3).ToList();
                 filteredMassTagList.AddRange(topChargeStatesOfMassTag);
-
             }
 
             TargetList = filteredMassTagList;
-
         }
 
         public void FilterOutDuplicates()
@@ -77,11 +73,9 @@ namespace DeconTools.Backend.Core
                 {
                     filteredList.Add(mt);
                 }
-
             }
 
             TargetList = filteredList;
-
         }
 
         #endregion
@@ -107,23 +101,19 @@ namespace DeconTools.Backend.Core
         /// </summary>
         /// <param name="targets"></param>
         /// <param name="sourceList"></param>
-        public static void UpdateTargetsWithMassTagInfo(IEnumerable<TargetBase>targets, List<TargetBase>sourceList)
+        public static void UpdateTargetsWithMassTagInfo(IEnumerable<TargetBase> targets, List<TargetBase> sourceList)
         {
-
             foreach (var targetBase in targets)
             {
                 var lcmsFeatureTarget = (LcmsFeatureTarget)targetBase;
                 var mt = sourceList.FirstOrDefault(p => p.ID == lcmsFeatureTarget.FeatureToMassTagID);
 
-                if (mt!=null)
+                if (mt != null)
                 {
                     lcmsFeatureTarget.Code = mt.Code;
                     lcmsFeatureTarget.EmpiricalFormula = mt.EmpiricalFormula;
                 }
-
             }
-
         }
-
     }
 }

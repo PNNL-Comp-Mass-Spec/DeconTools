@@ -2,7 +2,7 @@
 
 namespace DeconTools.Backend.ProcessingTasks
 {
-    public abstract class  TICExtractor:Task
+    public abstract class TICExtractor : Task
     {
         public abstract void GetTIC(ResultCollection resultList);
 

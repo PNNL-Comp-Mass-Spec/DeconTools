@@ -4,7 +4,6 @@ namespace DeconTools.Workflows.Backend.Core
 {
     public class BasicTargetedWorkflowExecutor : TargetedWorkflowExecutor
     {
-
         #region Constructors
         public BasicTargetedWorkflowExecutor(WorkflowExecutorBaseParameters parameters, string datasetPath, BackgroundWorker backgroundWorker = null)
             : base(parameters, datasetPath, backgroundWorker) { }
@@ -15,7 +14,6 @@ namespace DeconTools.Workflows.Backend.Core
             TargetedWorkflow workflow, string datasetPath, BackgroundWorker backgroundWorker =null) : base(workflowExecutorParameters, workflow, datasetPath,backgroundWorker) { }
 
         #endregion
-
 
         #region Public Methods
 

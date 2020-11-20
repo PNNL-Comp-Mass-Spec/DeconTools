@@ -6,9 +6,8 @@ using DeconTools.Backend.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
 {
-    public class PeakLeastSquaresFitter:LeastSquaresFitter
+    public class PeakLeastSquaresFitter : LeastSquaresFitter
     {
-
         #region Constructors
         #endregion
 
@@ -17,8 +16,6 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
         #endregion
 
         #region Public Methods
-
-
 
         public double GetFit(List<Peak> theorPeakList, List<Peak> observedPeakList, double minIntensityForScore, double toleranceInPPM)
         {
@@ -65,7 +62,7 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
                     Utilities.IqLogger.IqLogger.LogTrace("Theoretical Peak Selected!	Peak Height: " + peak.Height + " Peak X-Value: " + peak.XValue);
 
                     //find peak in obs data
-                    var mzTolerance = toleranceInPPM*peak.XValue/1e6;
+                    var mzTolerance = toleranceInPPM * peak.XValue / 1e6;
                     var foundPeaks = PeakUtilities.GetPeaksWithinTolerance(observedPeakList, peak.XValue, mzTolerance);
 
                     double obsIntensity;
@@ -111,7 +108,6 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
             var normalizedTheor = theorIntensitiesUsedInCalc.Select(p => p / maxTheor).ToList();
             Utilities.IqLogger.IqLogger.LogTrace("Max Theoretical Intensity: " + maxTheor);
 
-
             //foreach (var val in normalizedObs)
             //{
             //    Console.WriteLine(val);
@@ -123,7 +119,6 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
             //    Console.WriteLine(val);
             //}
 
-
             double sumSquareOfDiffs = 0;
             double sumSquareOfTheor = 0;
             for (var i = 0; i < normalizedTheor.Count; i++)
@@ -131,7 +126,7 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
                 var diff = normalizedObs[i] - normalizedTheor[i];
 
                 sumSquareOfDiffs += (diff * diff);
-                sumSquareOfTheor += (normalizedTheor[i]*normalizedTheor[i]);
+                sumSquareOfTheor += (normalizedTheor[i] * normalizedTheor[i]);
 
                 Utilities.IqLogger.IqLogger.LogTrace("Normalized Observed: " + normalizedObs[i]);
                 Utilities.IqLogger.IqLogger.LogTrace("Normalized Theoretical: " + normalizedTheor[i]);
@@ -155,7 +150,6 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
             Utilities.IqLogger.IqLogger.LogTrace("Fit Score: " + fitScore);
             return fitScore;
         }
-
 
         #endregion
 

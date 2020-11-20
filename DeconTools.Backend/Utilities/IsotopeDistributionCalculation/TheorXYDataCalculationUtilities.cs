@@ -21,7 +21,6 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
             return GetTheorPeakData(peak.XValue, peak.Height, fwhm, numPointsPerPeak);
         }
 
-
         public static XYData GetTheorPeakData(double centerXValue, double peakHeight, double peakWidth, int numPointsPerPeak)
         {
             var xydata = new XYData();
@@ -49,14 +48,12 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
 
             xydata.NormalizeYData();
 
-
             for (var i = 0; i < xydata.Yvalues.Length; i++)
             {
                 xydata.Yvalues[i] = xydata.Yvalues[i] * peakHeight;
             }
             return xydata;
         }
-
 
         public static XYData GetTheoreticalIsotopicProfileXYData(IsotopicProfile isotopicProfile, double fwhm)
         {
@@ -72,21 +69,15 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
                 var tempXYData = GetTheorPeakData(isotopicProfile.Peaklist[i], fwhm);
                 xvals.AddRange(tempXYData.Xvalues);
                 yvals.AddRange(tempXYData.Yvalues);
-
             }
             xydata.Xvalues = xvals.ToArray();
             xydata.Yvalues = yvals.ToArray();
 
-
-
             return xydata;
         }
 
-
-
         #endregion
 
-     
         public static XYData GetTheoreticalIsotopicProfileXYData(IsotopicProfile theorProfile, double fwhm, double mzOffset)
         {
             throw new NotImplementedException();

@@ -204,15 +204,12 @@ namespace DeconTools.Backend.Runs
             return fullFileName;
         }
 
-
         private Run determineIfRunIsABrukerTypeAndCreateRun(string folderName)
         {
             Run run = null;
 
-
             var serFileInfo = findSerFile(folderName);
             var fidFileInfo = findFIDFile(folderName);
-
 
             var apexAcquisitionMethodFileInfo = findAcquisitionMethodFile(folderName);
             var acqusFileInfos = findAcqusFile(folderName);
@@ -233,7 +230,6 @@ namespace DeconTools.Backend.Runs
                 {
                     run = new BrukerTOF(folderName);
                 }
-
             }
 
             return run;

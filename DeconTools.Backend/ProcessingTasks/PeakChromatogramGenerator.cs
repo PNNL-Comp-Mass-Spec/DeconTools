@@ -22,19 +22,16 @@ namespace DeconTools.Backend.ProcessingTasks
         public PeakChromatogramGenerator()
             : this(20)
         {
-
         }
 
         public PeakChromatogramGenerator(double tolerance)
             : this(tolerance, Globals.ChromatogramGeneratorMode.MOST_ABUNDANT_PEAK)
         {
-
         }
 
         public PeakChromatogramGenerator(double tolerance, Globals.ChromatogramGeneratorMode chromMode)
             : this(tolerance, chromMode, Globals.IsotopicProfileType.UNLABELED)
         {
-
         }
 
         public PeakChromatogramGenerator(double tolerance, Globals.ChromatogramGeneratorMode chromMode,
@@ -51,7 +48,6 @@ namespace DeconTools.Backend.ProcessingTasks
             ToleranceUnit = toleranceUnit;
 
             _chromGen = new ChromatogramGenerator();
-
         }
 
         #endregion
@@ -68,7 +64,6 @@ namespace DeconTools.Backend.ProcessingTasks
         /// </summary>
         public float ChromWindowWidthForNonAlignedData { get; set; }
 
-
         /// <summary>
         /// The width or range of the NET / scan window. A larger value will result in a chromatogram covering more of the dataset scan range.
         /// For Aligned data, we should be able to use a smaller range which will lead to faster chromatogram generation
@@ -79,7 +74,6 @@ namespace DeconTools.Backend.ProcessingTasks
         /// Peaks of the theoretical isotopic profile that fall below this cutoff will not be used in generating the chromatogram.
         /// </summary>
         public double TopNPeaksLowerCutOff { get; set; }
-
 
         #endregion
 
@@ -109,7 +103,6 @@ namespace DeconTools.Backend.ProcessingTasks
             else
             {
                 netElutionTime = resultList.Run.CurrentMassTag.NormalizedElutionTime;
-
             }
 
             float minNetVal;
@@ -128,10 +121,10 @@ namespace DeconTools.Backend.ProcessingTasks
             if (minNetVal < 0) minNetVal = 0;
             if (maxNetVal > 1) maxNetVal = 1;
 
-            var lowerScan = (int) Math.Floor(resultList.Run.NetAlignmentInfo.GetScanForNet(minNetVal));
+            var lowerScan = (int)Math.Floor(resultList.Run.NetAlignmentInfo.GetScanForNet(minNetVal));
             if (lowerScan == -1) lowerScan = resultList.Run.MinLCScan;
 
-            var upperScan = (int) Math.Ceiling(resultList.Run.NetAlignmentInfo.GetScanForNet(maxNetVal));
+            var upperScan = (int)Math.Ceiling(resultList.Run.NetAlignmentInfo.GetScanForNet(maxNetVal));
             if (upperScan == -1) upperScan = resultList.Run.MaxLCScan;
 
             List<double> targetMZList;
@@ -145,16 +138,15 @@ namespace DeconTools.Backend.ProcessingTasks
             {
                 var theorIso = resultList.Run.CurrentMassTag.IsotopicProfile;
                 targetMZList = GetTargetMzList(theorIso);
-
             }
 
-            var midScan = (int) ((lowerScan + (double)upperScan)/2);
+            var midScan = (int)((lowerScan + (double)upperScan) / 2);
 
             if (resultList.Run.MassIsAligned)
             {
                 for (var i = 0; i < targetMZList.Count; i++)
                 {
-                    targetMZList[i] = getAlignedMZValue(targetMZList[i], resultList.Run,midScan);
+                    targetMZList[i] = getAlignedMZValue(targetMZList[i], resultList.Run, midScan);
                 }
             }
 
@@ -178,7 +170,7 @@ namespace DeconTools.Backend.ProcessingTasks
                 return;
             }
 
-            resultList.Run.XYData = FilterOutDataBasedOnMsMsLevel(resultList.Run, resultList.Run.XYData, result.Run.CurrentMassTag.MsLevel,false);
+            resultList.Run.XYData = FilterOutDataBasedOnMsMsLevel(resultList.Run, resultList.Run.XYData, result.Run.CurrentMassTag.MsLevel, false);
         }
 
         private List<double> GetTargetMzList(IsotopicProfile theorIso)
@@ -223,9 +215,6 @@ namespace DeconTools.Backend.ProcessingTasks
 
         public XYData GenerateChromatogram(Run run, List<double> targetMzList, double elutionTimeCenter = 0.5, Globals.ElutionTimeUnit elutionTimeUnit = Globals.ElutionTimeUnit.NormalizedElutionTime)
         {
-
-
-
             var lowerScan = run.MinLCScan;
             var upperScan = run.MaxLCScan;
 
@@ -247,13 +236,11 @@ namespace DeconTools.Backend.ProcessingTasks
                 if (minNetVal < 0) minNetVal = 0;
                 if (maxNetVal > 1) maxNetVal = 1;
 
-                lowerScan = (int) Math.Floor(run.NetAlignmentInfo.GetScanForNet(minNetVal));
+                lowerScan = (int)Math.Floor(run.NetAlignmentInfo.GetScanForNet(minNetVal));
                 if (lowerScan == -1) lowerScan = run.MinLCScan;
 
-                upperScan = (int) Math.Ceiling(run.NetAlignmentInfo.GetScanForNet(maxNetVal));
+                upperScan = (int)Math.Ceiling(run.NetAlignmentInfo.GetScanForNet(maxNetVal));
                 if (upperScan == -1) upperScan = run.MaxLCScan;
-
-
             }
             else if (elutionTimeUnit == Globals.ElutionTimeUnit.ScanNum)
             {
@@ -272,35 +259,32 @@ namespace DeconTools.Backend.ProcessingTasks
             if (lowerScan == -1) lowerScan = run.MinLCScan;
             if (upperScan == -1) upperScan = run.MaxLCScan;
 
-
-            var midScan = (int) ((lowerScan + (double)upperScan)/2);
+            var midScan = (int)((lowerScan + (double)upperScan) / 2);
 
             if (run.MassIsAligned)
             {
                 for (var i = 0; i < targetMzList.Count; i++)
                 {
-                    targetMzList[i] = getAlignedMZValue(targetMzList[i], run,midScan);
+                    targetMzList[i] = getAlignedMZValue(targetMzList[i], run, midScan);
                 }
             }
 
             var chromValues = _chromGen.GenerateChromatogram(run.ResultCollection.MSPeakResultList, lowerScan, upperScan, targetMzList, Tolerance, ToleranceUnit);
 
-            chromValues = FilterOutDataBasedOnMsMsLevel(run, chromValues, 1,false);
+            chromValues = FilterOutDataBasedOnMsMsLevel(run, chromValues, 1, false);
 
             return chromValues;
-
-
         }
 
         public XYData GenerateChromatogram(Run run, int scanStart, int scanStop, double targetMz, double tolerance, Globals.ToleranceUnit toleranceUnit = Globals.ToleranceUnit.PPM)
         {
-            var targetMzList = new List<double> {targetMz};
+            var targetMzList = new List<double> { targetMz };
             return GenerateChromatogram(run, targetMzList, scanStart, scanStop, tolerance, toleranceUnit);
         }
 
         public XYData GenerateChromatogram(Run run, List<double> targetMzList, int lowerScan, int upperScan, double tolerance, Globals.ToleranceUnit toleranceUnit = Globals.ToleranceUnit.PPM)
         {
-            var midScan =  (int) ((lowerScan + (double)upperScan)/2);
+            var midScan = (int)((lowerScan + (double)upperScan) / 2);
 
             if (run.MassIsAligned)
             {
@@ -326,7 +310,6 @@ namespace DeconTools.Backend.ProcessingTasks
             var targetMZList = GetTargetMzList(theorProfile);
 
             return GenerateChromatogram(run, targetMZList, lowerScan, upperScan, tolerance, toleranceUnit);
-
         }
 
         public XYData GenerateChromatogram(Run run, double targetMz, double elutionTimeCenter = 0.5, Globals.ElutionTimeUnit elutionTimeUnit = Globals.ElutionTimeUnit.NormalizedElutionTime)
@@ -344,7 +327,6 @@ namespace DeconTools.Backend.ProcessingTasks
             var targetMZList = GetTargetMzList(theorProfile);
 
             return GenerateChromatogram(run, targetMZList, elutionTimeCenter, elutionTimeUnit);
-
         }
 
         #endregion
@@ -446,7 +428,6 @@ namespace DeconTools.Backend.ProcessingTasks
             return targetMZList;
         }
 
-
         [Obsolete("Unused")]
         private XYData getChromValues(List<MSPeakResult> filteredPeakList, Run run)
         {
@@ -469,7 +450,6 @@ namespace DeconTools.Backend.ProcessingTasks
 
                 //case of being at the beginning of the scan list
                 if (leftScanPtr < 0) leftScanPtr = 0;
-
 
                 //this loop adds zeros to the left of a chrom value
                 for (var i = leftScanPtr; i < centerScanPtr; i++)
@@ -569,7 +549,6 @@ namespace DeconTools.Backend.ProcessingTasks
 
             //now iterate over peakList and add data to output array
 
-
             //foreach (var item in filteredPeakList)
             //{
             //    double intensity = item.MSPeak.Height;
@@ -605,9 +584,7 @@ namespace DeconTools.Backend.ProcessingTasks
 
         //    HashSet<int> test = new HashSet<int>();
 
-
         //    List<int> scansAnalyzed = new List<int>();
-
 
         //    foreach (MSPeakResult peak in filteredPeakList)
         //    {
@@ -616,14 +593,12 @@ namespace DeconTools.Backend.ProcessingTasks
         //        int currentScan = peak.Scan_num;
         //        int nextScan = run.GetClosestMSScan(currentScan + 1, Globals.ScanSelectionMode.ASCENDING);
 
-
         //        if (test.Contains(peak.Scan_num))
         //        {
 
         //        }
 
         //        //if not then need to add some zeros to the left
-
 
         //        //add peak's info
         //        tempXVals.Add(peak.Scan_num);
@@ -648,7 +623,6 @@ namespace DeconTools.Backend.ProcessingTasks
 
         //            }
         //            currentScan = nextScan;
-
 
         //        }
 

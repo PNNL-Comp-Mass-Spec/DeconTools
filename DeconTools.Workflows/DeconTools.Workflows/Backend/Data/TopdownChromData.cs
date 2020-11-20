@@ -6,14 +6,11 @@ namespace DeconTools.Workflows.Backend.Data
 {
     public class TopdownChromData
     {
-
         private List<TopdownChromDataItem> _chromDataItems;
-       
+
         public TopdownChromData()
         {
             _chromDataItems = new List<TopdownChromDataItem>();
-
-
         }
 
         #region Properties
@@ -22,29 +19,17 @@ namespace DeconTools.Workflows.Backend.Data
 
         #region Public Methods
 
-
-       
-
-
-
-
         public List<XYData> GetChromData()
         {
-
             var allData = new List<XYData>();
 
-
             var listOfScanLists = new List<List<int>>();
-
-
 
             //get min and max scan value
             foreach (var topdownChromDataItem in _chromDataItems)
             {
                 listOfScanLists.Add(topdownChromDataItem.ChromData.Keys.ToList());
-
             }
-
 
             var combinedScanList = UnionAll(listOfScanLists);
             combinedScanList.Sort();
@@ -52,13 +37,10 @@ namespace DeconTools.Workflows.Backend.Data
             if (combinedScanList.Count==0)
             {
                 return null;
-
             }
-
 
             foreach (var topdownChromDataItem in _chromDataItems)
             {
-
                 foreach (var scan in combinedScanList)
                 {
                     if (!topdownChromDataItem.ChromData.ContainsKey(scan))
@@ -67,20 +49,14 @@ namespace DeconTools.Workflows.Backend.Data
                     }
                 }
 
-                   
-                
-
                 var data = new XYData();
                 data.Xvalues = topdownChromDataItem.ChromData.Keys.Select(key => (double) key).ToArray();
                 data.Yvalues = topdownChromDataItem.ChromData.Values.ToArray();
 
-
                 allData.Add(data);
             }
 
-
             return allData;
-
         }
 
         public List<T> UnionAll<T>(IEnumerable<IEnumerable<T>> lists)
@@ -100,8 +76,6 @@ namespace DeconTools.Workflows.Backend.Data
             return hashSet == null ? new List<T>() : hashSet.ToList();
         }
 
-
-
         #endregion
 
         #region Private Methods
@@ -119,11 +93,7 @@ namespace DeconTools.Workflows.Backend.Data
             }
 
             _chromDataItems.Add(chromDataItem);
-
-
-
         }
-
 
         #endregion
 

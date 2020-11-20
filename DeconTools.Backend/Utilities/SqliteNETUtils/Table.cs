@@ -15,8 +15,6 @@ namespace DeconTools.Utilities.SqliteUtils
         public abstract List<Field> FieldList { get; set; }
         #endregion
 
-       
-
         #region Public Methods
         public virtual string BuildCreateTableString()
         {
@@ -37,10 +35,8 @@ namespace DeconTools.Utilities.SqliteUtils
                     sb.Append(", ");
                 }
             }
-            
 
-            return sb.ToString(); 
-
+            return sb.ToString();
         }
 
         public virtual string BuildInsertionHeader()
@@ -52,14 +48,10 @@ namespace DeconTools.Utilities.SqliteUtils
             return sb.ToString();
         }
 
-
-
         #endregion
 
         #region Private Methods
         #endregion
 
-
-       
     }
 }

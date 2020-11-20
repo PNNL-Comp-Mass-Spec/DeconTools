@@ -5,7 +5,6 @@ namespace DeconTools.Workflows.Backend.Core
 {
     public class IqResultUtilities
     {
-
         #region Constructors
         #endregion
 
@@ -14,7 +13,6 @@ namespace DeconTools.Workflows.Backend.Core
         #endregion
 
         #region Public Methods
-
 
         public List<IqResult> FlattenOutResultTree(IqResult iqResult)
         {
@@ -32,11 +30,8 @@ namespace DeconTools.Workflows.Backend.Core
 
             flattenedResults.Add(iqResult);
 
-
             return flattenedResults;
-
         }
-
 
         #endregion
 

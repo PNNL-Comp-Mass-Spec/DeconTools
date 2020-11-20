@@ -6,7 +6,6 @@ namespace DeconTools.Backend.Core
 {
     public abstract class NetAlignmentInfo
     {
-
         #region Constructors
 
         protected NetAlignmentInfo(int minLcScan, int maxLcScan)
@@ -15,9 +14,7 @@ namespace DeconTools.Backend.Core
             MaxLcScan = maxLcScan;
 
             ScanToNETAlignmentData = new SortedDictionary<int, float>();
-
         }
-
 
         #endregion
 
@@ -30,8 +27,6 @@ namespace DeconTools.Backend.Core
 
         //Maximum possible LcScan. We need this for calculating NET. The max LcScan = NET 1.0
         public int MaxLcScan { get; set; }
-
-
 
         #endregion
 
@@ -58,7 +53,6 @@ namespace DeconTools.Backend.Core
             return GetInterpolatedNet(scanNum);
         }
 
-
         public virtual double GetScanForNet(double net)
         {
             //need to find the two (scan,net) pairs that are the lower and upper boundaries of the input NET
@@ -66,13 +60,11 @@ namespace DeconTools.Backend.Core
 
             var closestNETPair = new KeyValuePair<int, float>();
 
-
             var lowerScan = MinLcScan;
             var upperScan = MaxLcScan;
 
             float lowerNET = 0;
             float upperNET = 1;
-
 
             //first find the closest ScanNET pair
             var diff = double.MaxValue;
@@ -127,10 +119,8 @@ namespace DeconTools.Backend.Core
                 }
             }
 
-
             if (upperScan <= lowerScan)    //this happens at the MinScan
             {
-
                 return lowerScan;
             }
 
@@ -150,13 +140,7 @@ namespace DeconTools.Backend.Core
             }
 
             return xValue;
-
-
-
-
         }
-
-
 
         public virtual void CreateDefaultScanToNETAlignmentData()
         {
@@ -166,16 +150,12 @@ namespace DeconTools.Backend.Core
 
             for (var i = MinLcScan; i <= MaxLcScan; i++)
             {
-                var snp = new ScanNETPair(i, i/(float) MaxLcScan);
+                var snp = new ScanNETPair(i, i / (float)MaxLcScan);
                 scanNETList.Add(snp);
             }
 
             SetScanToNETAlignmentData(scanNETList);
-
-
         }
-
-
 
         public void SetScanToNETAlignmentData(List<ScanNETPair> scanNETList)
         {
@@ -183,40 +163,32 @@ namespace DeconTools.Backend.Core
             var netVals = scanNETList.Select(p => p.NET).ToArray();
 
             SetScanToNETAlignmentData(scanVals, netVals);
-
         }
 
         public virtual void SetScanToNETAlignmentData(double[] scanVals, double[] netVals)
         {
             ScanToNETAlignmentData.Clear();
 
-
             for (var i = 0; i < scanVals.Length; i++)
             {
-                var scanToAdd = (int) (Math.Round(scanVals[i]));
+                var scanToAdd = (int)(Math.Round(scanVals[i]));
 
                 if (!ScanToNETAlignmentData.ContainsKey(scanToAdd))
                 {
-                    ScanToNETAlignmentData.Add(scanToAdd, (float) netVals[i]);
+                    ScanToNETAlignmentData.Add(scanToAdd, (float)netVals[i]);
                 }
             }
-
         }
-
-
-
 
         private double GetInterpolatedNet(int scanNum)
         {
             if (scanNum < MinLcScan) return MinLcScan;
             var maxScan = MaxLcScan;
 
-
             double lowerNET = 0;
             double upperNET = 1;
             var lowerScan = MinLcScan;
             var upperScan = maxScan;
-
 
             var found = false;
             var currentScan = scanNum;
@@ -243,14 +215,12 @@ namespace DeconTools.Backend.Core
                     upperNET = ScanToNETAlignmentData[upperScan];
                     found = true;
                 }
-
             }
 
             var slope = (upperNET - lowerNET) / (upperScan - lowerScan);
             var yIntercept = (upperNET - slope * upperScan);
 
             return (scanNum * slope + yIntercept);
-
         }
 
         #endregion

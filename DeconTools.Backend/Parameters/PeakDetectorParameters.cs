@@ -6,7 +6,6 @@ namespace DeconTools.Backend.Parameters
     [Serializable]
     public class PeakDetectorParameters : ParametersBase
     {
-
         #region Constructors
         public PeakDetectorParameters()
         {
@@ -52,7 +51,7 @@ namespace DeconTools.Backend.Parameters
             PeakToBackgroundRatio = GetDoubleValue(xElement, "PeakBackgroundRatio", PeakToBackgroundRatio);
             SignalToNoiseThreshold = GetDoubleValue(xElement, "SignalToNoiseThreshold", SignalToNoiseThreshold);
             IsDataThresholded = GetBoolVal(xElement, "IsDataThresholded", IsDataThresholded);
-            PeakFitType = (Globals.PeakFitType) GetEnum(xElement, "PeakFitType", PeakFitType.GetType(),PeakFitType);
+            PeakFitType = (Globals.PeakFitType)GetEnum(xElement, "PeakFitType", PeakFitType.GetType(), PeakFitType);
 
             //TODO: move this parameter
             PeaksAreStored = GetBoolVal(xElement, "WritePeaksToTextFile", PeaksAreStored);

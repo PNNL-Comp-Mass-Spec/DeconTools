@@ -27,5 +27,4 @@ namespace DeconTools.Workflows.Backend.Core
             return string.Format("ID: {0}, MZ: {1}, ChargeState: {2}", ID, MZ, ChargeState);
         }
     }
-
 }

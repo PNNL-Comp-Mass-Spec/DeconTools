@@ -4,7 +4,7 @@ using DeconTools.Backend.DTO;
 
 namespace DeconTools.Backend.Core
 {
-    public class ElutingPeak:IDisposable
+    public class ElutingPeak : IDisposable
     {
         #region Constructors
 
@@ -27,7 +27,6 @@ namespace DeconTools.Backend.Core
             NumberOfPeaks = 0;
             NumberOfPeaksFlag = 0;
             NumberOfPeaksMode = "Current"; //"Current" for current peak or "NewPeak" for possible next peak after this one
-
         }
 
         #endregion
@@ -76,7 +75,6 @@ namespace DeconTools.Backend.Core
         /// Aggregate intensity across mass
         /// </summary>
         public double AggregateIntensity { get; set; }
-
 
         #endregion
 

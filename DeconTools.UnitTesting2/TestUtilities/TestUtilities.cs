@@ -44,7 +44,6 @@ namespace DeconTools.UnitTesting2
                     Console.WriteLine("The method 'AreIsosResultsTheSame' found at least one differing IsosResult at index = " + i);
                     return false;
                 }
-
             }
             return true;
         }
@@ -188,12 +187,10 @@ namespace DeconTools.UnitTesting2
 
                 i++;
             }
-
         }
 
         public static void DisplayRunInformation(Run run)
         {
-
             Console.WriteLine("Dataset name = " + run.DatasetName);
             Console.WriteLine("Dataset path = " + run.DatasetDirectoryPath);
             Console.WriteLine("MinScan = " + run.MinLCScan);
@@ -202,7 +199,6 @@ namespace DeconTools.UnitTesting2
             Console.WriteLine("MassIsAligned = " + run.MassIsAligned);
             Console.WriteLine("NETIsAligned = " + run.NETIsAligned);
         }
-
 
         public static IqTarget GetIQTargetStandard(int standardNum)
         {
@@ -218,13 +214,11 @@ namespace DeconTools.UnitTesting2
             target.ElutionTimeTheor = 0.227147;
             target.MZTheor = target.MonoMassTheor / target.ChargeState + Globals.PROTON_MASS;
 
-
             var theorFeatureGenerator = new JoshTheorFeatureGenerator();
             target.TheorIsotopicProfile = theorFeatureGenerator.GenerateTheorProfile(target.EmpiricalFormula, target.ChargeState);
 
             return target;
         }
-
 
         public static PeptideTarget GetMassTagStandard(int standardNum)
         {
@@ -241,8 +235,6 @@ namespace DeconTools.UnitTesting2
             mt.MZ = mt.MonoIsotopicMass / mt.ChargeState + Globals.PROTON_MASS;
 
             return mt;
-
-
         }
 
         public static List<PeptideTarget> CreateTestMassTagList()
@@ -262,7 +254,6 @@ namespace DeconTools.UnitTesting2
             mtList.Add(mt);
             return mtList;
         }
-
 
         public static List<PeptideTarget> CreateN14N15TestMassTagList()
         {
@@ -285,7 +276,6 @@ namespace DeconTools.UnitTesting2
 
         public static void DisplayXYValues(Run run)
         {
-
         }
 
         public static void DisplayMSLevelData(Run run)
@@ -299,7 +289,6 @@ namespace DeconTools.UnitTesting2
                 sb.Append("\t");
                 sb.Append(run.GetMSLevel(i));
                 sb.Append("\n");
-
             }
 
             Console.WriteLine(sb.ToString());
@@ -326,14 +315,10 @@ namespace DeconTools.UnitTesting2
                     {
                         sb.Append(", ");
                     }
-
                 }
                 sb.Append(Environment.NewLine);
-
-
             }
             Console.WriteLine(sb.ToString());
-
         }
 
         public static List<Peak> GeneratePeakList(ScanSet scanSet)
@@ -361,7 +346,6 @@ namespace DeconTools.UnitTesting2
         public static Run GetStandardUIMFRun()
         {
             return new UIMFRun(uimfTestFile);
-
         }
 
         public static List<PeptideTarget> CreateO16O18TestMassTagList1()
@@ -393,7 +377,6 @@ namespace DeconTools.UnitTesting2
                     writer.WriteLine("{0}\t{1}", xyData.Xvalues[i], xyData.Yvalues[i]);
                 }
             }
-
         }
 
         public static void DisplayMSPeakResults(List<Backend.DTO.MSPeakResult> list)
@@ -421,7 +404,6 @@ namespace DeconTools.UnitTesting2
             var xyData = tempRun.GetMassSpectrum(new ScanSet(0));
 
             return xyData;
-
         }
     }
 }

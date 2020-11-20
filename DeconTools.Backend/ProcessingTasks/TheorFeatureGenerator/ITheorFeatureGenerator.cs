@@ -4,7 +4,7 @@ using DeconTools.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
 {
-    public abstract class ITheorFeatureGenerator:Task
+    public abstract class ITheorFeatureGenerator : Task
     {
         #region Constructors
         #endregion
@@ -33,6 +33,5 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
 
             GenerateTheorFeature(resultList.Run.CurrentMassTag);
         }
-
     }
 }

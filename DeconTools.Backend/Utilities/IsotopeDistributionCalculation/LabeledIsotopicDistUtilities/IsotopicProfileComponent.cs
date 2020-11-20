@@ -4,14 +4,12 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.LabeledIso
 {
     public class IsotopicProfileComponent
     {
-
         public IsotopicProfileComponent(IsotopicProfile iso, double fraction, double percentLabeling = 0)
         {
             IsotopicProfile = iso;
             Fraction = fraction;
             PercentLabeling = percentLabeling;
         }
-
 
         public IsotopicProfile IsotopicProfile { get; set; }
 
@@ -20,8 +18,5 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.LabeledIso
         public double PercentLabeling { get; set; }
 
         public string Description { get; set; }
-
-
-
     }
 }

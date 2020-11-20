@@ -25,7 +25,6 @@ namespace DeconTools.Backend.Core
             return new ScanSet(primaryScan, scansToSum);
         }
 
-
         public ScanSet CreateScanSet(Run run, int primaryScan, int startScan, int stopScan)
         {
             var currentLevel = run.GetMSLevel(primaryScan);
@@ -38,14 +37,12 @@ namespace DeconTools.Backend.Core
                 {
                     scansToSum.Add(i);
                 }
-
             }
             return CreateScanSet(run, primaryScan, scansToSum);
 
             //return new ScanSet(primaryScan, scansToSum.ToArray());
 
         }
-
 
         public ScanSet CreateScanSet(Run run, int scan, int scansSummed)
         {
@@ -64,7 +61,6 @@ namespace DeconTools.Backend.Core
 
         }
 
-
         public void TrimScans(ScanSet scanSet, int maxScansAllowed)
         {
             Check.Require(maxScansAllowed > 0, "Scans cannot be trimmed to fewer than one");
@@ -82,7 +78,6 @@ namespace DeconTools.Backend.Core
 
                 scanSet.IndexValues = newScans;
             }
-
         }
 
         #endregion
@@ -103,7 +98,6 @@ namespace DeconTools.Backend.Core
                 currentScan--;
             }
             return lowerScans;
-
         }
         private IEnumerable<int> GetUpperScans(Run run, int startingScan, int currentMSLevel, int numUpperScansToGet)
         {
@@ -123,9 +117,7 @@ namespace DeconTools.Backend.Core
                 currentScan++;
             }
             return scans;
-
         }
-
 
         #region Private Methods
         #endregion

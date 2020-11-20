@@ -8,7 +8,6 @@
 // in compliance with the License.  You may obtain a copy of the License at
 // http://www.apache.org/licenses/LICENSE-2.0
 
-
 using System;
 using MathNet.Numerics.LinearAlgebra.Double;
 
@@ -106,15 +105,14 @@ namespace DeconTools.Backend.ProcessingTasks.Smoothers
             return returnYValues;
         }
 
-
-
         public override XYData Smooth(XYData xyData)
         {
             if (xyData == null || xyData.Xvalues.Length == 0) return xyData;
 
             var smoothedData = Smooth(xyData.Yvalues);
 
-            var returnVals = new XYData {
+            var returnVals = new XYData
+            {
                 Xvalues = xyData.Xvalues,
                 Yvalues = smoothedData
             };
@@ -142,11 +140,5 @@ namespace DeconTools.Backend.ProcessingTasks.Smoothers
 
             return smoothingFilters;
         }
-
-
-
     }
-
-
-
 }

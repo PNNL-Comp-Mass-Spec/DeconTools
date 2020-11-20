@@ -10,16 +10,12 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
 {
     public class SmartChromPeakSelectorUIMF : SmartChromPeakSelector
     {
-
-
         #region Constructors
         public SmartChromPeakSelectorUIMF(SmartChromPeakSelectorParameters parameters)
             : base(parameters)
         {
-
         }
         #endregion
-
 
         protected override void UpdateResultWithChromPeakAndLCScanInfo(TargetedResultBase result, ChromPeak bestPeak)
         {
@@ -138,8 +134,6 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
             resultList.Run.CurrentScanSet=ChromPeakUtilities.GetLCScanSetForChromPeakUIMF(bestChromPeak, resultList.Run, Parameters.NumScansToSum);
 
             UpdateResultWithChromPeakAndLCScanInfo(currentResult, bestChromPeak);
-
-
         }
 
         protected new virtual ChromPeak determineBestChromPeak(List<ChromPeakQualityData> peakQualityList, TargetedResultBase currentResult)
@@ -174,7 +168,6 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
                 {
                     if (_parameters.MultipleHighQualityMatchesAreAllowed)
                     {
-
                         if (filteredList1[0].Abundance >= filteredList1[1].Abundance)
                         {
                             bestPeak = filteredList1[0].Peak;
@@ -207,6 +200,5 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
 
             return bestPeak;
         }
-
     }
 }

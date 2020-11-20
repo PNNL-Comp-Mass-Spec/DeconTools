@@ -39,7 +39,6 @@ namespace DeconTools.Workflows.Backend.Core
 
         public double MZObs { get; set; }
 
-
         public double MonoMassObsCalibrated { get; set; }
 
         public double MZObsCalibrated { get; set; }
@@ -86,7 +85,6 @@ namespace DeconTools.Workflows.Backend.Core
 
         #region Public Methods
 
-
         public string ToStringWithDetailedReport()
         {
             var sb = new StringBuilder();
@@ -115,7 +113,6 @@ namespace DeconTools.Workflows.Backend.Core
             sb.Append("MassSpectrum length" + delim + (IqResultDetail.MassSpectrum == null ? "[null]" : IqResultDetail.MassSpectrum.Xvalues.Length.ToString()) + Environment.NewLine);
 
             return sb.ToString();
-
         }
 
         public string ToStringAsSingleRow()
@@ -133,7 +130,6 @@ namespace DeconTools.Workflows.Backend.Core
         {
             result.ParentResult = this;
             _childResults.Add(result);
-
         }
 
         public void RemoveResult(IqResult result)
@@ -162,7 +158,6 @@ namespace DeconTools.Workflows.Backend.Core
             IqResultDetail.MassSpectrum = null;
         }
 
-
         public IEnumerable<IqResult>ChildResults()
         {
             return _childResults;
@@ -173,14 +168,11 @@ namespace DeconTools.Workflows.Backend.Core
             return _childResults.Any();
         }
 
-
         public bool HasParent => ParentResult != null;
 
         /// <summary>
         /// This property allows assigning one of the child results as being the best or favored one.
         /// </summary>
         public IqResult FavoriteChild { get; set; }
-       
-
     }
 }

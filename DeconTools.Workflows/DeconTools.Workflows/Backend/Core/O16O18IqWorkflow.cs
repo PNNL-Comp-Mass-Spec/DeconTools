@@ -8,7 +8,6 @@ namespace DeconTools.Workflows.Backend.Core
 {
     public class O16O18IqWorkflow : ChargeStateChildIqWorkflow
     {
-
         #region Constructors
         public O16O18IqWorkflow(Run run, TargetedWorkflowParameters parameters)
             : base(run, parameters)
@@ -16,9 +15,6 @@ namespace DeconTools.Workflows.Backend.Core
             ChromatogramCorrelator = new O16O18ChromCorrelator(parameters.ChromSmootherNumPointsInSmooth, 0.01,
                                                                     parameters.ChromGenTolerance,
                                                                     parameters.ChromGenToleranceUnit);
-
-
-
         }
 
         public O16O18IqWorkflow(TargetedWorkflowParameters parameters)
@@ -54,7 +50,6 @@ namespace DeconTools.Workflows.Backend.Core
 
             result.NumChromPeaksWithinTolerance = result.ChromPeakList.Count;
 
-          
             //Creates a ChromPeakIqTarget for each peak found
             foreach (ChromPeak peak in result.ChromPeakList)
             {
@@ -96,11 +91,9 @@ namespace DeconTools.Workflows.Backend.Core
             return new O16O18IqResult(target);
         }
 
-
         protected override void InitializeChromPeakAnalyzerWorkflow()
         {
             ChromPeakAnalyzerIqWorkflow = new O16O18ChromPeakAnalyzerIqWorkflow(Run, WorkflowParameters);
         }
-
     }
 }

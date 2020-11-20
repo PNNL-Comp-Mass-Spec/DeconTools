@@ -5,7 +5,6 @@ namespace DeconTools.Workflows.Backend.Core
 {
     public class BasicIqWorkflow:IqWorkflow
     {
-
         #region Constructors
         public BasicIqWorkflow(Run run, TargetedWorkflowParameters parameters)
             : base(run, parameters)
@@ -17,9 +16,6 @@ namespace DeconTools.Workflows.Backend.Core
         {
         }
         #endregion
-
-
-      
 
         public override TargetedWorkflowParameters WorkflowParameters { get; set; }
         public override IqResultExporter CreateExporter()

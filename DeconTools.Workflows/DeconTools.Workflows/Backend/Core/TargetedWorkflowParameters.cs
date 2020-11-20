@@ -5,7 +5,6 @@ namespace DeconTools.Workflows.Backend.Core
 {
     public abstract class TargetedWorkflowParameters : WorkflowParameters
     {
-
         #region Constructors
         protected TargetedWorkflowParameters()
         {
@@ -34,14 +33,11 @@ namespace DeconTools.Workflows.Backend.Core
             ProcessMsMs = false;
 
             SmartChromPeakSelectorNumMSSummed = 1;
-
         }
 
-        
         #endregion
 
         #region Properties
-        
 
         /// <summary>
         /// Mass-related tolerance used when generating the chromatogram
@@ -52,20 +48,17 @@ namespace DeconTools.Workflows.Backend.Core
         /// Tolerance Unit used in conjunction with ChromGenTolerance. Either PPM or MZ (this means m/z or Thompson units).  Default = PPM
         /// </summary>
         public DeconTools.Backend.Globals.ToleranceUnit ChromGenToleranceUnit { get; set; }
-        
-        
+
         public double ChromPeakDetectorPeakBR { get; set; }
         public double ChromPeakDetectorSigNoise { get; set; }
         public int ChromSmootherNumPointsInSmooth { get; set; }
-        
-        
+
         /// <summary>
         /// The tolerance for the normalized elution time, which is used in defining the range of the extracted
         /// ion chromatogram, and in the scoring and selection of the chromatographic peaks (ChromPeakSelector)
         /// </summary>
         public double ChromNETTolerance { get; set; }
-        
-        
+
         public int NumMSScansToSum { get; set; }
         public double MSPeakDetectorPeakBR { get; set; }
         public double MSPeakDetectorSigNoise { get; set; }
@@ -74,24 +67,18 @@ namespace DeconTools.Workflows.Backend.Core
         public DeconTools.Backend.Globals.ResultType ResultType { get; set; }
         public bool ChromatogramCorrelationIsPerformed { get; set; }
         public bool ProcessMsMs { get; set; }
-        
 
-        
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public DeconTools.Backend.Globals.PeakSelectorMode ChromPeakSelectorMode { get; set; }
 
-
-
-
         /// <summary>
-        /// The MS peak detection PeakBR that is used in forming the _peaks.txt file that 
+        /// The MS peak detection PeakBR that is used in forming the _peaks.txt file that
         /// contains the peak-level information on which extracted ion chromatograms are based
         /// </summary>
         public double ChromGenSourceDataPeakBR { get; set; }
-        
-        
+
         /// <summary>
         /// The MS peak detection SigNoise threshold that is used in forming the _peaks.txt
         /// file that contains the peak-level information on which extracted ion chromatograms
@@ -99,9 +86,8 @@ namespace DeconTools.Workflows.Backend.Core
         /// </summary>
         public double ChromGenSourceDataSigNoise { get; set; }
 
-
         /// <summary>
-        /// Number of chrom peaks allowed. For example if this is set to '5' 
+        /// Number of chrom peaks allowed. For example if this is set to '5'
         /// and 6 peaks were found within the tolerance, then the selected best peak is set to
         /// null indicating a failed execution
         /// </summary>
@@ -111,12 +97,12 @@ namespace DeconTools.Workflows.Backend.Core
         /// If true, and if there are multiple high quality Features found for a given mass tag, will select the most abundant targeted Feature found within the given tolerances
         /// If false, and if there are multiple high quality Features, will reject them all and report no Feature found. This is a way of being very strict. Good for targeted Alignment
         /// Default = true;
-        /// 
+        ///
         /// </summary>
         public bool MultipleHighQualityMatchesAreAllowed { get; set; }
 
         /// <summary>
-        /// Static or dynamic summing across an elution peak. E.g. in static mode the same number of scans are summed. 
+        /// Static or dynamic summing across an elution peak. E.g. in static mode the same number of scans are summed.
         /// In dynamic, the number of scans summed depends on the width of the peak
         /// </summary>
         public SummingModeEnum SummingMode { get; set; }
@@ -128,27 +114,22 @@ namespace DeconTools.Workflows.Backend.Core
         public double AreaOfPeakToSumInDynamicSumming { get; set; }
 
         /// <summary>
-        /// In dynamic summing we sum across an elution peak. Some peaks are huge and we might not want to sum that much. So we can use this value to set the max. 
-        /// 
+        /// In dynamic summing we sum across an elution peak. Some peaks are huge and we might not want to sum that much. So we can use this value to set the max.
+        ///
         /// </summary>
         public int MaxScansSummedInDynamicSumming { get; set; }
 
         /// <summary>
-        /// If a Smart chrom peak selector is used, this is the number of MS scans that are summed duing the chrom peak selection method. 
+        /// If a Smart chrom peak selector is used, this is the number of MS scans that are summed duing the chrom peak selection method.
         /// </summary>
         public int SmartChromPeakSelectorNumMSSummed { get; set; }
 
-
         #endregion
-
 
         //public override string WorkflowType
         //{
         //    get { throw new NotImplementedException(); }
         //}
-
-
-
 
         //public override void LoadParameters(string xmlFilename)
         //{
@@ -157,7 +138,6 @@ namespace DeconTools.Workflows.Backend.Core
         //    XDocument doc = XDocument.Load(xmlFilename);
 
         //    var query = doc.Element("WorkflowParameters").Elements();
-
 
         //    Dictionary<string, string> parameterTableFromXML = new Dictionary<string, string>();
 
@@ -186,12 +166,9 @@ namespace DeconTools.Workflows.Backend.Core
         //    this.NumChromPeaksAllowedDuringSelection = Convert.ToInt32(parameterTableFromXML["NumChromPeaksAllowedDuringSelection"]);
         //}
 
-
         protected T StringToEnum<T>(string name)
         {
             return (T)Enum.Parse(typeof(T), name);
         }
-
-        
     }
 }

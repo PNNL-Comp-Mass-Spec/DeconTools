@@ -5,7 +5,6 @@ namespace DeconTools.Backend
 {
     public class Globals
     {
-
         public const double PROTON_MASS = 1.00727649;
         public const double MASS_DIFF_BETWEEN_ISOTOPICPEAKS = 1.00235;
         public const double N14_MASS = 14.003074007418;    // IUPAC, 2002
@@ -60,7 +59,6 @@ namespace DeconTools.Backend
             ERROR
         }
 
-
         public enum PeakDetectorType
         {
             DeconTools,
@@ -93,13 +91,11 @@ namespace DeconTools.Backend
 
         }
 
-
         public enum ExporterType
         {
             Text,
             Sqlite
         }
-
 
         public enum PeakSelectorMode            //for selecting the best peak from a list of peaks
         {
@@ -110,7 +106,6 @@ namespace DeconTools.Backend
             N15IntelligentMode,
             SmartUIMF
         }
-
 
         public enum MassTagDBImporterMode
         {
@@ -193,12 +188,10 @@ namespace DeconTools.Backend
             ITERATIVE
         }
 
-
         public enum SmoothingType
         {
             SavitzkyGolay
         }
-
 
         public enum ElutionTimeUnit
         {
@@ -218,7 +211,6 @@ namespace DeconTools.Backend
             MixedProfileAndCentroided
         }
 
-
         public enum ChromatogramGeneratorMode
         {
             MZ_BASED,
@@ -228,16 +220,10 @@ namespace DeconTools.Backend
             O16O18_THREE_MONOPEAKS
         }
 
-
         public enum ToleranceUnit
         {
             PPM,
             MZ
         }
-
-
-
-
-
     }
 }

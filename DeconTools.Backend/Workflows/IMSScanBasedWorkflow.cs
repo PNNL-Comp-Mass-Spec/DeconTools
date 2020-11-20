@@ -11,7 +11,6 @@ namespace DeconTools.Backend.Workflows
 {
     public abstract class IMSScanBasedWorkflow : ScanBasedWorkflow
     {
-
         protected UIMFDriftTimeExtractor UimfDriftTimeExtractor;
         protected UIMF_TICExtractor UimfTicExtractor;
         protected SaturationDetector SaturationDetector;
@@ -79,7 +78,6 @@ namespace DeconTools.Backend.Workflows
             }
             else
             {
-
                 var sumAcrossIMSScans = NewDeconToolsParameters.MSGeneratorParameters.SumSpectraAcrossIms;
 
                 int numIMSScanToSum;
@@ -92,10 +90,8 @@ namespace DeconTools.Backend.Workflows
                     numIMSScanToSum = 1;
                 }
 
-                uimfRun.IMSScanSetCollection.Create(Run,uimfRun.MinIMSScan,uimfRun.MaxIMSScan,numIMSScanToSum, 1);
-
+                uimfRun.IMSScanSetCollection.Create(Run, uimfRun.MinIMSScan, uimfRun.MaxIMSScan, numIMSScanToSum, 1);
             }
-
         }
 
         protected override void ExecutePreprocessHook()
@@ -176,8 +172,6 @@ namespace DeconTools.Backend.Workflows
             }
 
             BackgroundWorker?.ReportProgress((int)mCachedUserState.PercentDone, mCachedUserState);
-
         }
-
     }
 }

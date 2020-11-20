@@ -31,7 +31,6 @@ namespace DeconTools.UnitTesting2.Utilities
             Assert.AreEqual(1194.59929m, (decimal)Math.Round(utils.GetMonoIsotopicMassForPeptideSequence(testSequence2), 5));
 
             Assert.AreEqual("C107H159N29O30S2", utils.GetEmpiricalFormulaForPeptideSequence(testSequence4));
-           
 
             Console.WriteLine(utils.GetEmpiricalFormulaForPeptideSequence(testSequence3));
 
@@ -47,19 +46,12 @@ namespace DeconTools.UnitTesting2.Utilities
 
             var testSequence2 = "K.IPNFWVTTFVNHPQVSALLGEEDEEALHYLTR*.V";
 
-
             var empiricalFormula1 = utils.GetEmpiricalFormulaForPeptideSequence(testSequence1);
 
             var empiricalFormula2 = utils.GetEmpiricalFormulaForPeptideSequence(testSequence2);
 
-
             Assert.AreEqual(empiricalFormula1, empiricalFormula2);
             Assert.AreEqual((decimal)Math.Round(utils.GetMonoIsotopicMassForPeptideSequence(testSequence1), 5), (decimal)Math.Round(utils.GetMonoIsotopicMassForPeptideSequence(testSequence2), 5));
-        
         }
-
-
-
-
     }
 }

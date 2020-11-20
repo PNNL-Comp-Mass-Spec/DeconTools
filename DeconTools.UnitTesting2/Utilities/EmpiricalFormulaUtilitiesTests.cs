@@ -4,7 +4,6 @@ using NUnit.Framework;
 
 namespace DeconTools.UnitTesting2.Utilities
 {
-
     [Category("MustPass")]
     [TestFixture]
     public class EmpiricalFormulaUtilitiesTests
@@ -17,7 +16,7 @@ namespace DeconTools.UnitTesting2.Utilities
 
             Assert.AreEqual(-3, formulaDictionary["H"]);
             Assert.AreEqual(-1, formulaDictionary["N"]);
-            
+
             var parsedFormula = EmpiricalFormulaUtilities.GetEmpiricalFormulaFromElementTable(formulaDictionary);
         }
 
@@ -28,18 +27,12 @@ namespace DeconTools.UnitTesting2.Utilities
 
             var formulaDictionary = EmpiricalFormulaUtilities.ParseEmpiricalFormulaString(formula);
 
-
             Assert.AreEqual(8, formulaDictionary["2H"]);
             Assert.AreEqual(26, formulaDictionary["H"]);
             Assert.AreEqual(1, formulaDictionary["S"]);
 
-
             var parsedFormula = EmpiricalFormulaUtilities.GetEmpiricalFormulaFromElementTable(formulaDictionary);
-
-
-
         }
-
 
         [Test]
         public void parseUnimodStyleFormulaTest2A()
@@ -48,18 +41,12 @@ namespace DeconTools.UnitTesting2.Utilities
 
             var formulaDictionary = EmpiricalFormulaUtilities.ParseEmpiricalFormulaString(formula);
 
-
             Assert.AreEqual(8, formulaDictionary["2H"]);
             Assert.AreEqual(26, formulaDictionary["H"]);
             Assert.AreEqual(1, formulaDictionary["S"]);
 
-
             var parsedFormula = EmpiricalFormulaUtilities.GetEmpiricalFormulaFromElementTable(formulaDictionary);
-
-
-
         }
-
 
         [Test]
         public void parseUnimodStyleFormulaTest2B()
@@ -68,19 +55,12 @@ namespace DeconTools.UnitTesting2.Utilities
 
             var formulaDictionary = EmpiricalFormulaUtilities.ParseDoubleEmpiricalFormulaString(formula);
 
-
             Assert.AreEqual(8, formulaDictionary["2H"]);
             Assert.AreEqual(26, formulaDictionary["H"]);
             Assert.AreEqual(1, formulaDictionary["S"]);
 
-
             var parsedFormula = EmpiricalFormulaUtilities.GetEmpiricalFormulaFromElementTable(formulaDictionary);
-
-
-
         }
-
-
 
         [Test]
         public void parseUnimodStyleFormulaTest3()
@@ -92,7 +72,6 @@ namespace DeconTools.UnitTesting2.Utilities
             Assert.AreEqual(34, formulaDictionary["C"]);
             Assert.AreEqual(32, formulaDictionary["H"]);
             Assert.AreEqual(1, formulaDictionary["Fe"]);
-
         }
 
         [Test]
@@ -105,9 +84,7 @@ namespace DeconTools.UnitTesting2.Utilities
             Assert.AreEqual(34, formulaDictionary["C"]);
             Assert.AreEqual(32, formulaDictionary["H"]);
             Assert.AreEqual(1, formulaDictionary["Fe"]);
-
         }
-
 
         [Test]
         public void ParseUnimodStyleTest5()
@@ -122,8 +99,6 @@ namespace DeconTools.UnitTesting2.Utilities
             Assert.AreEqual(10, formulaDictionary["15N"]);
         }
 
-
-
         [Test]
         public void ParseUnimodStyleTest5B()
         {
@@ -137,7 +112,6 @@ namespace DeconTools.UnitTesting2.Utilities
             Assert.AreEqual(10, formulaDictionary["15N"]);
         }
 
-
         [Test]
         public void ParseUnimodStyleTest5C()
         {
@@ -150,8 +124,6 @@ namespace DeconTools.UnitTesting2.Utilities
             Assert.AreEqual(1, formulaDictionary["13C"]);
             Assert.AreEqual(10.343, formulaDictionary["15N"]);
         }
-
-
 
         [Test]
         public void addUnimodFormulaTest1()
@@ -168,7 +140,6 @@ namespace DeconTools.UnitTesting2.Utilities
             Console.WriteLine("Modified peptide= " + modFormula);
 
             Assert.AreEqual("C35H61N11O12S", modFormula);
-
         }
 
         [Test]
@@ -179,8 +150,6 @@ namespace DeconTools.UnitTesting2.Utilities
             var peptideUtils = new PeptideUtils();
             var baseFormula = peptideUtils.GetEmpiricalFormulaForPeptideSequence(testPeptide);
 
-            
-
             var mod = "H(-3) N(-1)";
             var modFormula = EmpiricalFormulaUtilities.AddFormula(baseFormula, mod);
 
@@ -188,10 +157,7 @@ namespace DeconTools.UnitTesting2.Utilities
             Console.WriteLine("Modified peptide= " + modFormula);
 
             Assert.AreEqual("C33H55N9O11S", modFormula);
-
         }
-
-
 
         [Test]
         public void GetMonoisotopicMassFromEmpiricalFormulaTest1()
@@ -217,7 +183,6 @@ namespace DeconTools.UnitTesting2.Utilities
             Assert.IsTrue(monomass > 0);
             Console.WriteLine("monoisotopic mass= \t" + monomass);
         }
-
 
         [Test]
         public void AddAcetylationTest1()
@@ -282,7 +247,7 @@ namespace DeconTools.UnitTesting2.Utilities
             Console.WriteLine(formula + "\t" + massUnmodified);
             Console.WriteLine(empiricalFormula + "\t" + massModified);
             Console.WriteLine("diff= " + diff);
-            
+
             Assert.AreEqual(80.0, diff);
         }
     }

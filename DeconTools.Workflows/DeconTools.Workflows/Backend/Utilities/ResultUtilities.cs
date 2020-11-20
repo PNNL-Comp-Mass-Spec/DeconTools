@@ -26,22 +26,14 @@ namespace DeconTools.Workflows.Backend.Utilities
                             headerWasWritten = true;
                         }
 
-
                         while (!reader.EndOfStream)
                         {
                             var line = reader.ReadLine();
                             writer.WriteLine(line);
                         }
-
-
                     }
-
-
                 }
-
             }
-
         }
-
     }
 }

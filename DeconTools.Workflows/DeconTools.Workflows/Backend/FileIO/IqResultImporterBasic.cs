@@ -5,7 +5,6 @@ namespace DeconTools.Workflows.Backend.FileIO
 {
     public class IqResultImporterBasic : IqResultImporter
     {
-
         public IqResultImporterBasic(string filename)
             : base(filename)
         {
@@ -14,9 +13,6 @@ namespace DeconTools.Workflows.Backend.FileIO
         protected override void ConvertTextToDataObject(ref IqResult iqResult, List<string> rowData)
         {
             GetBasicIqResultData(ref iqResult, rowData);
-
-
-
         }
 
         protected override IqResult CreateIqResult()

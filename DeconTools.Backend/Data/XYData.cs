@@ -13,7 +13,6 @@ namespace DeconTools.Backend
     /// <remarks>Although the arrays will typically have the same number of data points, this is not a requirement</remarks>
     public class XYData
     {
-
         /// <summary>
         /// Constructor
         /// </summary>
@@ -84,7 +83,6 @@ namespace DeconTools.Backend
                 Xvalues[i] = xVals[i];
                 Yvalues[i] = yVals[i];
             }
-
         }
 
         /// <summary>
@@ -134,7 +132,6 @@ namespace DeconTools.Backend
             for (var i = 0; i < inputVals.Length; i++)
             {
                 outputVals[i] = inputVals[i];
-
             }
 
             return outputVals;
@@ -154,7 +151,6 @@ namespace DeconTools.Backend
             for (var i = 0; i < inputVals.Length; i++)
             {
                 outputVals[i] = inputVals[i];
-
             }
 
             return outputVals;
@@ -180,14 +176,12 @@ namespace DeconTools.Backend
                 {
                     indexOfClosest = i;
                     minDiff = currentDiff;
-
                 }
                 else
                 {
                     numWrongDirection++;
                     if (numWrongDirection > 3) break;    //three values in a row that indicate we are moving away from the target val
                 }
-
             }
 
             return indexOfClosest;
@@ -276,7 +270,6 @@ namespace DeconTools.Backend
         /// <remarks>Assumes the data in Xvalues is sorted</remarks>
         public XYData TrimData(double xMin, double xMax, double tolerance = 0.1)
         {
-
             if (Xvalues == null || Yvalues == null || Xvalues.Length == 0 || Yvalues.Length == 0) return this;
 
             var currentMinXValue = Xvalues[0];
@@ -332,7 +325,6 @@ namespace DeconTools.Backend
                     tempXVals.Add(Xvalues[i]);
                     tempYVals.Add(Yvalues[i]);
                 }
-
             }
 
             data.Xvalues = tempXVals.ToArray();
@@ -354,7 +346,6 @@ namespace DeconTools.Backend
             for (var i = 0; i < Yvalues.Length; i++)
             {
                 Yvalues[i] = Yvalues[i] / maxVal;
-
             }
         }
 
@@ -439,6 +430,5 @@ namespace DeconTools.Backend
             }
             Console.WriteLine("--------------------------- end ---------------------------------------");
         }
-
     }
 }

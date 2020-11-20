@@ -25,7 +25,6 @@ namespace DeconTools.Backend.Utilities
             {
                 //define start m/z and stop m/z based on peak m/z and width
 
-
                 var peakSigma = peak.Width / 2.35;      //   width@half-height =  2.35σ   (Gaussian peak theory)
                 var startMZ = peak.XValue - peakSigma * 2;   // width at base = 4σ;
                 var stopMZ = peak.XValue + peakSigma * 2;
@@ -51,15 +50,11 @@ namespace DeconTools.Backend.Utilities
                         {
                             break;    //  went past the stopMZ. So break out and go onto the next peak.
                         }
-
                     }
-
-
                 }
             }
             return area;
         }
-
 
         #endregion
 
@@ -83,10 +78,7 @@ namespace DeconTools.Backend.Utilities
             {
                 dataPoint.Height = dataPoint.Height / maxIntensity * intensityForNormalization;
             }
-
-
         }
-
 
         public static void NormalizeIsotopicProfileToSpecificPeak(IsotopicProfile profile, int indexOfPeakUsedForNormalization, float intensityForNormalization = 1.0f)
         {
@@ -105,9 +97,7 @@ namespace DeconTools.Backend.Utilities
             {
                 dataPoint.Height = dataPoint.Height / intensityTargetPeak * intensityForNormalization;
             }
-
         }
-
 
         /// <summary>
         /// Aligns an isotopic profile based on a source isotopic profile.
@@ -138,18 +128,11 @@ namespace DeconTools.Backend.Utilities
                 offset = iso1.Peaklist[0].XValue - iso2.Peaklist[0].XValue;
             }
 
-
             foreach (var peak in iso2.Peaklist)
             {
                 peak.XValue = peak.XValue + offset;
-
             }
-
-
         }
-
-
-
 
         public static void DisplayIsotopicProfileData(IsotopicProfile profile)
         {
@@ -195,10 +178,8 @@ namespace DeconTools.Backend.Utilities
 
             foreach (var peak in msPeakList)
             {
-
                 if (peak.Height >= intensityCutoff)
                     filteredMSPeakList.Add(peak);
-
             }
 
             return filteredMSPeakList;

@@ -2,7 +2,7 @@
 
 namespace DeconTools.Backend.ProcessingTasks.ResultExporters.MassTagResultExporters
 {
-    public abstract class IMassTagResultExporter:Task
+    public abstract class IMassTagResultExporter : Task
     {
         #region Constructors
         #endregion

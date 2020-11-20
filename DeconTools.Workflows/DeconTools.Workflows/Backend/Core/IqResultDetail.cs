@@ -15,17 +15,13 @@ namespace DeconTools.Workflows.Backend.Core
         /// <summary>
         /// Not used by new workflows. Remove When Ready
         /// </summary>
-
         public List<ChromPeakQualityData> ChromPeakQualityData { get; set; }
 
         #endregion
 
         #region Public Methods
 
-
-
         #endregion
-
 
     }
 }

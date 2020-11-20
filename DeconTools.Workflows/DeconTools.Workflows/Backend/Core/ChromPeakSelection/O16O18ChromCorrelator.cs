@@ -7,9 +7,7 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
         public O16O18ChromCorrelator(int numPointsInSmoother, double minRelativeIntensityForChromCorr, double chromTolerance, DeconTools.Backend.Globals.ToleranceUnit toleranceUnit)
             : base(numPointsInSmoother, minRelativeIntensityForChromCorr, chromTolerance, toleranceUnit)
         {
-
         }
-
 
         public override ChromCorrelationData CorrelateData(Run run, IqResult iqResult, int startScan, int stopScan)
         {

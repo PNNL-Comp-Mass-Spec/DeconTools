@@ -12,8 +12,6 @@ namespace DeconTools.Backend.Core
 
         #region Properties
 
-
-
         #endregion
 
         #region Public Methods

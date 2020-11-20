@@ -46,23 +46,14 @@ namespace DeconTools.Workflows.Backend.Core
         {
             MsLeftTrimAmount = 5;
             MsRightTrimAmount = 5;
-
-
-
-
         }
 
         public N14N15Workflow2(TargetedWorkflowParameters parameters)
             : this(null, parameters)
         {
-
         }
 
-
         #endregion
-
-
-
 
         #region Workflow Members
 
@@ -98,7 +89,6 @@ namespace DeconTools.Workflows.Backend.Core
 
             //now process the N15 profile
 
-
             ExecuteTask(chromGenN15);
             ExecuteTask(chromSmoother);
 
@@ -120,7 +110,6 @@ namespace DeconTools.Workflows.Backend.Core
                 }
             }
 
-
             ExecuteTask(MSGenerator);
             updateMassSpectrumXYValues(Run.XYData);
 
@@ -133,7 +122,6 @@ namespace DeconTools.Workflows.Backend.Core
 
             ExecuteTask(resultValidatorN15);
             ExecuteTask(quantifier);
-
         }
 
         protected override void DoPostInitialization()
@@ -173,9 +161,7 @@ namespace DeconTools.Workflows.Backend.Core
                 IterativeTffMinRelIntensityForPeakInclusion = 0.5
             };
 
-
             chromPeakSelectorN14 = new SmartChromPeakSelector(smartChromPeakSelectorParams);
-
 
             var chromPeakSelectorParameters = new ChromPeakSelectorParameters
             {
@@ -184,7 +170,6 @@ namespace DeconTools.Workflows.Backend.Core
                 PeakSelectorMode = DeconTools.Backend.Globals.PeakSelectorMode.N15IntelligentMode
             };
 
-
             chromPeakSelectorN15 = new BasicChromPeakSelector(chromPeakSelectorParameters)
             {
                 IsotopicProfileType = DeconTools.Backend.Globals.IsotopicProfileType.LABELED
@@ -192,7 +177,6 @@ namespace DeconTools.Workflows.Backend.Core
 
             msPeakDetector = new DeconToolsPeakDetectorV2(_workflowParameters.MSPeakDetectorPeakBR,
                 _workflowParameters.MSPeakDetectorSigNoise, DeconTools.Backend.Globals.PeakFitType.QUADRATIC, false);
-
 
             var iterativeTFFParameters = new IterativeTFFParameters
             {
@@ -222,9 +206,7 @@ namespace DeconTools.Workflows.Backend.Core
             ChromatogramXYData = new XYData();
             MassSpectrumXYData = new XYData();
             ChromPeaksDetected = new List<ChromPeak>();
-
         }
-
 
         #endregion
 
@@ -232,6 +214,5 @@ namespace DeconTools.Workflows.Backend.Core
         {
             return DeconTools.Backend.Globals.ResultType.N14N15_TARGETED_RESULT;
         }
-
     }
 }

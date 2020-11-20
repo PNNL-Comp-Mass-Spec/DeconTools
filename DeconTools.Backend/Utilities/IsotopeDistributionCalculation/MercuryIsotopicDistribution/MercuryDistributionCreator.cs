@@ -68,7 +68,6 @@ namespace DeconTools.Backend.Utilities
                     closestPeak = peak;
                     diff = currentDiff;
                 }
-
             }
             return closestPeak;
         }
@@ -119,7 +118,6 @@ namespace DeconTools.Backend.Utilities
         {
             var closestPeak = findClosestPeak(IsotopicProfile.Peaklist, targetMZ);
             return (targetMZ - closestPeak.XValue);
-
         }
 
         /// <summary>

@@ -12,19 +12,16 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
         readonly TomTheorFeatureGenerator _FeatureGenerator = new TomTheorFeatureGenerator();
         readonly N15IsotopeProfileGenerator _N15IsotopicProfileGenerator = new N15IsotopeProfileGenerator();
 
-
         #region Constructors
         public LabeledMultiPeakChromGeneratorTask()
             : this(3, 25)
         {
-
         }
 
         public LabeledMultiPeakChromGeneratorTask(int numPeakForGeneratingChrom, double toleranceInPPM)
         {
             NumPeaksForGeneratingChrom = numPeakForGeneratingChrom;
             ToleranceInPPM = toleranceInPPM;
-
         }
         #endregion
 
@@ -59,9 +56,6 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
             n14n15result.UnlabeledPeakChromData = chromExtractor.GetChromatogramsForIsotopicProfilePeaks(resultList.MSPeakResultList, resultList.Run.CurrentMassTag.IsotopicProfile);
             n14n15result.LabeledPeakChromData = chromExtractor.GetChromatogramsForIsotopicProfilePeaks(resultList.MSPeakResultList, labeledProfile);
-
-
-
         }
     }
 }

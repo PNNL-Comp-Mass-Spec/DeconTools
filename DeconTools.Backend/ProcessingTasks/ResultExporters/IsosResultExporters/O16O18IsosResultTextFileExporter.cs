@@ -6,12 +6,10 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
 {
     public sealed class O16O18IsosResultTextFileExporter : IsosResultTextFileExporter
     {
-
         #region Constructors
         public O16O18IsosResultTextFileExporter(string fileName)
             : this(fileName, 10000)
         {
-
         }
 
         public O16O18IsosResultTextFileExporter(string fileName, int triggerValueToExport)
@@ -22,7 +20,6 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
             FileName = fileName;
 
             initializeAndWriteHeader();
-
         }
 
         #endregion
@@ -82,7 +79,5 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
 
             return string.Join(Delimiter.ToString(), data);
         }
-
-
     }
 }

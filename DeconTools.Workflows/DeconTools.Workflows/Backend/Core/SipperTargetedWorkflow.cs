@@ -18,8 +18,6 @@ namespace DeconTools.Workflows.Backend.Core
         {
             MsRightTrimAmount = 100;
             MsLeftTrimAmount = 3;
-
-
         }
 
         public SipperTargetedWorkflow(TargetedWorkflowParameters parameters)
@@ -59,10 +57,7 @@ namespace DeconTools.Workflows.Backend.Core
 
             //always do ChromCorrelation whether you want it or not!
             _workflowParameters.ChromatogramCorrelationIsPerformed = true;
-
         }
-
-
 
         protected override void ExecutePostWorkflowHook()
         {
@@ -80,7 +75,6 @@ namespace DeconTools.Workflows.Backend.Core
             var peakNumList = new List<double>();
             var rsquaredvalList = new List<double>();
 
-
             var counter = 0;
             foreach (var val in _quantifier.ChromatogramRSquaredVals)
             {
@@ -93,18 +87,13 @@ namespace DeconTools.Workflows.Backend.Core
             ChromCorrelationRSquaredVals.Xvalues = peakNumList.ToArray();
             ChromCorrelationRSquaredVals.Yvalues = rsquaredvalList.ToArray();
 
-
             NormalizedIso = _quantifier.NormalizedIso;
             NormalizedAdjustedIso = _quantifier.NormalizedAdjustedIso;
 
             SubtractedIso = _quantifier.HighQualitySubtractedProfile;
 
             FitScoreData = _quantifier.FitScoreData;
-
-
         }
-
-
 
         #endregion
 
@@ -123,9 +112,6 @@ namespace DeconTools.Workflows.Backend.Core
         public Dictionary<decimal, double> FitScoreData { get; set; }
 
         #endregion
-
-
-
 
     }
 }

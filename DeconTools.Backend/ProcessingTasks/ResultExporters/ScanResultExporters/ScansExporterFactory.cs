@@ -4,7 +4,6 @@ namespace DeconTools.Backend.Data
 {
     public class ScansExporterFactory
     {
-
         public static ScanResultExporter CreateScansExporter(Globals.MSFileType fileType, Globals.ExporterType exporterType, string outputFileName)
         {
             ScanResultExporter scansExporter;
@@ -42,10 +41,6 @@ namespace DeconTools.Backend.Data
                     break;
             }
             return scansExporter;
-
         }
-
-
-
     }
 }

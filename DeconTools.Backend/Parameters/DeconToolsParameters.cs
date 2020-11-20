@@ -8,7 +8,6 @@ namespace DeconTools.Backend.Parameters
     [Serializable]
     public class DeconToolsParameters
     {
-
         #region Constructors
 
         public DeconToolsParameters()
@@ -79,7 +78,6 @@ namespace DeconTools.Backend.Parameters
             ScanBasedWorkflowParameters.LoadParametersV2(miscElement);
             ScanBasedWorkflowParameters.LoadParametersV2(peakDetectionElement);
         }
-
 
         public void Save(string xmlFilename)
         {

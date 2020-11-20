@@ -8,7 +8,6 @@ namespace DeconTools.Backend.FileIO
 {
     public class MassAlignmentInfoToTextExporter : TextFileExporter<KeyValuePair<int, float>>
     {
-
         #region Constructors
         public MassAlignmentInfoToTextExporter(string exportFilename) : base(exportFilename) { }
         #endregion
@@ -29,7 +28,6 @@ namespace DeconTools.Backend.FileIO
 
             using (var writer = File.AppendText(FileName))
             {
-
                 var data = new List<string>();
 
                 for (var i = 0; i < alignmentInfo.marrMassFncMZInput.Length; i++)
@@ -41,14 +39,12 @@ namespace DeconTools.Backend.FileIO
                     data.Add(DblToString(alignmentInfo.marrMassFncTimePPMOutput[i], 5));
 
                     writer.WriteLine(string.Join(Delimiter.ToString(), data));
-
                 }
 
                 writer.Flush();
                 writer.Close();
             }
         }
-
 
         protected override string buildResultOutput(KeyValuePair<int, float> scanNetPair)
         {
@@ -66,7 +62,6 @@ namespace DeconTools.Backend.FileIO
             };
 
             return string.Join(Delimiter.ToString(), data);
-
         }
         #region Private Methods
 

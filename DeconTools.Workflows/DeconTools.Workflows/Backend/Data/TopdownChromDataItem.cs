@@ -4,7 +4,6 @@ namespace DeconTools.Workflows.Backend.Data
 {
     public class TopdownChromDataItem
     {
-
         #region Constructors
         #endregion
 
@@ -14,14 +13,9 @@ namespace DeconTools.Workflows.Backend.Data
 
         public SortedDictionary<int, double> ChromData { get; set; }
 
-
         #endregion
 
         #region Public Methods
-
-        
-
-
 
         #endregion
 

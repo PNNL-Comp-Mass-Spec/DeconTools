@@ -24,8 +24,7 @@ namespace DeconTools.Backend.Core
 
         public string Display()
         {
-              return (Peak.XValue.ToString("0.00") + "\t" + Peak.NETValue.ToString("0.0000") + "\t" + Abundance + "\t" + FitScore.ToString("0.0000") + "\t" + InterferenceScore.ToString("0.000") + "\t" + IsIsotopicProfileFlagged);
+            return (Peak.XValue.ToString("0.00") + "\t" + Peak.NETValue.ToString("0.0000") + "\t" + Abundance + "\t" + FitScore.ToString("0.0000") + "\t" + InterferenceScore.ToString("0.000") + "\t" + IsIsotopicProfileFlagged);
         }
-
     }
 }

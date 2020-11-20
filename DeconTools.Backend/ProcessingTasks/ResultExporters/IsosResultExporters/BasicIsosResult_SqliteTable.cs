@@ -3,7 +3,7 @@ using DeconTools.Utilities.SqliteUtils;
 
 namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
 {
-    public sealed class BasicIsosResult_SqliteTable:Table
+    public sealed class BasicIsosResult_SqliteTable : Table
     {
         #region Constructors
         public BasicIsosResult_SqliteTable(string tableName)
@@ -26,7 +26,6 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
                 new Field("mono_plus2_abundance", "INTEGER"),
                 new Field("flag", "INTEGER")
             };
-
         }
         #endregion
 
@@ -42,7 +41,6 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
 
         #region Private Methods
         #endregion
-
 
     }
 }

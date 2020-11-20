@@ -4,7 +4,7 @@ using DeconTools.Backend.Core;
 
 namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
 {
-    public abstract class IsosResultSqliteExporter:IsosResultExporter
+    public abstract class IsosResultSqliteExporter : IsosResultExporter
     {
         protected DbConnection cnn;
 

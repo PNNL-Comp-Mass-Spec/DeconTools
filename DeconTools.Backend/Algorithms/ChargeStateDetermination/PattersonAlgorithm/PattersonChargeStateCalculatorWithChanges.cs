@@ -7,7 +7,6 @@ using DeconTools.Backend.Utilities;
 
 namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgorithm
 {
-
     /// <summary>
     /// This class is very similar to the PattersonChargeStateCalculator.
     /// Paul Kline (SULI intern) made some changes (Aug 2013) and wanted to temporarily
@@ -33,18 +32,14 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
         #region Public Methods
         public int GetChargeState(XYData rawData, List<Peak> peakList, MSPeak peak)
         {
-
             //look in rawData to the left (-0.1) and right (+1.1) of peak
             var minus = 0.1;
             var plus = 1.1;
 
             double fwhm = peak.Width;
 
-
             var leftIndex = MathUtils.GetClosest(rawData.Xvalues, peak.XValue - fwhm - minus);
             var rightIndex = MathUtils.GetClosest(rawData.Xvalues, peak.XValue + fwhm + plus);
-
-
 
             var filteredXYData = getFilteredXYData(rawData, leftIndex, rightIndex);
             var minMZ = filteredXYData.Xvalues[0];
@@ -79,9 +74,6 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
             //    }
             //}
 
-
-
-
             //int numL;
             //if (pointCounter>5)
             //{
@@ -103,7 +95,6 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
             //    if (numPoints < 5)
             //        return -1;
 
-
             //    if (numPoints < desiredNumPoints)
             //    {
             //        pointMultiplier = Math.Max(5, pointMultiplier);
@@ -113,8 +104,6 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
             //    {
             //        numL = numPoints;
             //    }
-
-
 
             // }
 
@@ -131,8 +120,6 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
 
             sw.Stop();
             //Console.WriteLine("spline time = " + sw.ElapsedMilliseconds);
-
-
 
             // DisplayXYVals(filteredXYData);
 
@@ -151,12 +138,8 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
                 evenlySpacedXYData.Yvalues[i] = yVal;
             }
 
-
-
-
             //Console.WriteLine();
             //DisplayXYVals(evenlySpacedXYData);
-
 
             var autoCorrScores = ACss(evenlySpacedXYData.Yvalues);
 
@@ -168,7 +151,6 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
 
             // DisplayXYVals(tempXYData);
 
-
             var startingIndex = 0;
             while (startingIndex < numL - 1 && autoCorrScores[startingIndex] > autoCorrScores[startingIndex + 1])
             {
@@ -177,7 +159,6 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
 
             var bestAutoCorrScore = -1.0;
             var bestChargeState = -1;
-
 
             GetHighestChargeStatePeak(minMZ, maxMZ, startingIndex, autoCorrScores, _maxCharge, ref bestAutoCorrScore, ref bestChargeState);
 
@@ -199,7 +180,6 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
                         skip = true;
                         break;
                     }
-
                 }
 
                 if (skip) continue;
@@ -235,31 +215,19 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
                         {
                             return tempChargeState;
                         }
-
-
                     }
-
-
                 }
-
             }
 
             return returnChargeStateVal;
-
-
-
 
             //StringBuilder sb = new StringBuilder();
             //foreach (var item in chargeStatesAndScores)
             //{
             //    sb.Append(item.Key + "\t" + item.Value + "\n");
 
-
             //}
             //Console.WriteLine(sb.ToString());
-
-
-
 
             //StringBuilder sb = new StringBuilder();
             //foreach (var item in autoCorrScores)
@@ -280,21 +248,16 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
 
         #region Private Methods
 
-
         private double[] ACss(IReadOnlyList<double> inData)
         {
-
-
             var numPoints = inData.Count;
             var outData = new double[numPoints];
-
 
             double sum = 0;
 
             for (var i = 0; i < numPoints; i++)
             {
                 sum += inData[i];
-
             }
 
             var average = sum / numPoints;
@@ -317,9 +280,6 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
                 {
                     outData[i] = (sum / numPoints);
                 }
-
-
-
             }
             //for (int i = 0; i < outData.Length; i++)
             //{
@@ -327,9 +287,7 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
 
             //}
             return outData;
-
         }
-
 
         private void GenerateChargeStateData(
             double minMZ, double maxMZ,
@@ -353,13 +311,11 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
                 {
                     var currentChargeState = (numPoints / ((maxMZ - minMZ) * (i - 1)));
 
-
                     // var tempAutoCorrScore = autoCorrScores[i];
                     var currentAutoCorrScore = autoCorrScores[i - 1];
 
                     //Console.WriteLine(i+ "\tCurrent charge state=\t" + currentChargeState + "\tcurrent corr score= \t" +
                     //                  currentAutoCorrScore +"\tComparedCorrScore= \t"+tempAutoCorrScore);
-
 
                     if ((currentAutoCorrScore > bestAutoCorrScore * 0.1) && (currentChargeState < 1.0 * maxCharge))
                     {
@@ -369,12 +325,8 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
                     }
                 }
                 wasGoingUp = goingUp;
-
             }
-
         }
-
-
 
         private void GetHighestChargeStatePeak
             (double minMZ, double maxMZ,
@@ -399,7 +351,6 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
                     var currentAutoCorrScore = autoCorrelationScores[i - 1];
                     if (Math.Abs(currentAutoCorrScore / autoCorrelationScores[0]) > 0.05 && chargeState <= maxChargeState)
                     {
-
                         if (Math.Abs(currentAutoCorrScore) > bestAutoCorrectionScore)
                         {
                             bestAutoCorrectionScore = Math.Abs(currentAutoCorrScore);
@@ -410,7 +361,6 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
 
                 wasGoingUp = goingUp;
             }
-
         }
 
         [Obsolete("Unused")]
@@ -421,7 +371,6 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
             {
                 sb.Append(xyData.Xvalues[i] + "\t" + xyData.Yvalues[i]);
                 sb.Append(Environment.NewLine);
-
             }
 
             Console.WriteLine(sb.ToString());
@@ -441,13 +390,10 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
             {
                 outputXYData.Xvalues[i] = inputXYData.Xvalues[leftIndex + i];
                 outputXYData.Yvalues[i] = inputXYData.Yvalues[leftIndex + i];
-
             }
 
             return outputXYData;
         }
-
-
 
         #endregion
     }

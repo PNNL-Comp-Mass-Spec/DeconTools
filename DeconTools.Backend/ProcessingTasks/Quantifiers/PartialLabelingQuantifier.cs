@@ -11,7 +11,6 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
 {
     public class PartialLabelingQuantifier
     {
-
         private readonly List<IsotopicProfile> _theorLabeledProfiles;
         readonly PeakLeastSquaresFitter _leastSquaresFitter = new PeakLeastSquaresFitter();
         private readonly IterativeTFF _iterativeTff;
@@ -49,10 +48,7 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
             NumRightZeroPads = numRightZeroPads;
 
             IsTheoreticalTrimmedDownToObserved = isTheorProfileTrimmed;
-
-
         }
-
 
         public double MinLabelAmount { get; set; }
         public double MaxLabelAmount { get; set; }
@@ -69,14 +65,9 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
         /// </summary>
         public bool IsTheoreticalTrimmedDownToObserved { get; set; }
 
-
-
         public int NumLeftZeroPads { get; set; }
 
         public int NumRightZeroPads { get; set; }
-
-
-
 
         public IsotopicProfileComponent FindBestLabeledProfile(TargetBase target, List<Peak> massSpectrumPeakList, XYData massSpectrumXYData = null)
         {
@@ -98,8 +89,6 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
                                                                                      _heavyIsotope, labelAmount,
                                                                                      target.ChargeState);
 
-
-
                 var indexOfMostAbundantTheorPeak = theorIso.GetIndexOfMostIntensePeak();
                 var indexOfCorrespondingObservedPeak = PeakUtilities.getIndexOfClosestValue(massSpectrumPeakList,
                     theorIso.getMostIntensePeak().XValue, 0, massSpectrumPeakList.Count - 1, 0.1);
@@ -120,29 +109,23 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
 
                     obsPeakListForFitter = FilterPeaksBasedOnBasePeakList(theorPeakListForFitter, massSpectrumPeakList);
 
-
                     AddLeftZeroPads(obsPeakListForFitter, NumLeftZeroPads, theorIso.ChargeState);
                     AddRightZeroPads(obsPeakListForFitter, NumRightZeroPads, theorIso.ChargeState);
-
 
                     if (IsTheoreticalTrimmedDownToObserved)
                     {
                         theorPeakListForFitter = FilterPeaksBasedOnBasePeakList(obsPeakListForFitter, theorPeakListForFitter);
                     }
 
-
-
                     //foreach (var peak in obsPeakListForFitter)
                     //{
                     //    Console.WriteLine(peak.XValue + "\t" + peak.Height);
                     //}
 
-
                     //foreach (var peak in theorPeakListForFitter)
                     //{
                     //    Console.WriteLine(peak.XValue + "\t" + peak.Height);
                     //}
-
 
                     const int numPeaksToTheLeftForScoring = 0;
                     fitScore = _leastSquaresFitter.GetFit(theorPeakListForFitter, obsPeakListForFitter, 0, 30, numPeaksToTheLeftForScoring, out var ionCountUsed);
@@ -154,10 +137,8 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
                 {
                     bestFitScore = fitScore;
 
-
                     if (massSpectrumXYData == null)
                     {
-
                         bestIso = new IsotopicProfile {
                             Peaklist = new List<MSPeak>()
                         };
@@ -168,12 +149,10 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
                         }
 
                         bestIso.ChargeState = theorIso.ChargeState;
-
                     }
                     else
                     {
                         bestIso = _iterativeTff.IterativelyFindMSFeature(massSpectrumXYData, theorIso);
-
                     }
 
                     if (bestIso != null) bestIso.Score = fitScore;
@@ -187,8 +166,6 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
 
             var isoComponent = new IsotopicProfileComponent(bestIso, 0, bestLabelAmount);
             return isoComponent;
-
-
         }
 
         private List<Peak> FilterPeaksBasedOnBasePeakList(List<Peak> basePeaklist, List<Peak> inputPeakList)
@@ -209,7 +186,6 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
                 {
                     trimmedPeakList.Add(foundPeaks.OrderByDescending(p => p.Height).First());
                 }
-
             }
 
             //if we can't find any observed peaks, we won't trim anything. Just return the original list
@@ -218,8 +194,6 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
                 return basePeaklist;
             }
             return trimmedPeakList;
-
-
         }
 
         private void AddRightZeroPads(ICollection<Peak> theorPeakListForFitter, int numRightZeroPads, int chargeState)
@@ -228,11 +202,9 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
 
             for (var i = 0; i < numRightZeroPads; i++)
             {
-
                 var mzForAddedPeak = mzInitial + (i + 1) * Globals.MASS_DIFF_BETWEEN_ISOTOPICPEAKS / chargeState;
                 theorPeakListForFitter.Add(new Peak(mzForAddedPeak, 0, 0));
             }
-
         }
 
         private void AddLeftZeroPads(IList<Peak> theorPeakListForFitter, int numLeftZeroPads, int chargeState)
@@ -248,7 +220,6 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
 
         private List<Peak> ApplySmartTrimming(List<Peak> theorPeakList, List<Peak> massSpectrumPeakList)
         {
-
             var trimmedPeakList = new List<Peak>();
 
             foreach (var peak in theorPeakList)
@@ -268,8 +239,6 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
                 return theorPeakList;
             }
             return trimmedPeakList;
-
-
         }
     }
 }

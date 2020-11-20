@@ -6,14 +6,12 @@ using Mapack;
 
 namespace DeconTools.Backend.Algorithms
 {
-
     /// <summary>
     /// Calculates the distribution of labeled atoms. i.e fraction of species that have 0 label, 1 label, 2 label, etc.
     /// Based on work by Chik et al, 2006.  https://www.ncbi.nlm.nih.gov/pubmed/16383329 (DOI: 10.1021/ac050988l)
     /// </summary>
     public class LabelingDistributionCalculator
     {
-
         #region Constructors
         #endregion
 
@@ -53,15 +51,12 @@ namespace DeconTools.Backend.Algorithms
 
             var degreesFreedom = matrixLength - truncatedTheorIntensities.Count + 1;
 
-
             double[] xVals;
 
             double[] yVals;
 
-
             if (degreesFreedom > 1)
             {
-
                 var theorMatrix = buildMatrix(truncatedTheorIntensities, matrixLength, degreesFreedom);
 
                 var obsMatrix = buildMatrix(truncatedObsIntensities, matrixLength, 1);
@@ -77,8 +72,6 @@ namespace DeconTools.Backend.Algorithms
                     xVals[i] = i;
                     yVals[i] = solvedMatrix[i, 0];
                 }
-
-
             }
             else
             {
@@ -89,17 +82,12 @@ namespace DeconTools.Backend.Algorithms
                 yVals[0] = 1;
             }
 
-
-
             numLabelVals = xVals;
             labelDistributionVals = yVals;
-
         }
-
 
         public void OutputLabelingInfo(List<double> distributionData, out double fractionUnlabeled, out double fractionLabeled, out double averageLabelsIncorporated)
         {
-
             Check.Require(distributionData != null && distributionData.Count > 0, "distributionData is empty in call to OutputLabelingInfo");
             if (distributionData == null)
             {
@@ -119,7 +107,6 @@ namespace DeconTools.Backend.Algorithms
             //    dotProducts.Add(numLabels*distributionData[numLabels]);
             //}
 
-
             //averageLabelsIncorporated = dotProducts.Sum() / 1;
 
             if (fractionLabeled > 0)
@@ -131,23 +118,18 @@ namespace DeconTools.Backend.Algorithms
                     dotProducts.Add(numLabels * distributionData[numLabels]);
                 }
 
-
                 averageLabelsIncorporated = dotProducts.Sum() / sum;
             }
             else
             {
                 averageLabelsIncorporated = 0;
             }
-
-
-
         }
 
         private Matrix buildMatrix(IReadOnlyCollection<double> intensityVals, int matrixLength, int degreesFreedom)
         {
             Check.Require(degreesFreedom > 0, "Degrees of freedom too low. Matrix width cannot be less than 1");
             var matrix = new Matrix(matrixLength, degreesFreedom);
-
 
             var sumIntensities = intensityVals.Sum();
 
@@ -162,8 +144,6 @@ namespace DeconTools.Backend.Algorithms
             }
 
             return matrix;
-
-
         }
 
         private List<double> TruncateList(IReadOnlyList<double> intensityVals, bool useRelIntensity, double intensityThresh, int numPeaksForAbsoluteTruncation)
@@ -204,7 +184,6 @@ namespace DeconTools.Backend.Algorithms
                     {
                         truncatedVals.Add(intensityVal);    //all intensity values are added, even if they are below threshold, for the left side of an isotopic profile.
                     }
-
                 }
             }
             else
@@ -215,15 +194,12 @@ namespace DeconTools.Backend.Algorithms
                 {
                     truncatedVals.Add(intensityVals[i]);
                 }
-
             }
 
             return truncatedVals;
-
         }
 
         #endregion
-
 
     }
 }

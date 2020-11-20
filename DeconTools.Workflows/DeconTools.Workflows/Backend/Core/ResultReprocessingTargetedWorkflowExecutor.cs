@@ -13,7 +13,6 @@ namespace DeconTools.Workflows.Backend.Core
         private TargetedResultDTO _currentResult;
         private string _currentDatasetName;
 
-
         #region Constructors
         #endregion
 
@@ -37,8 +36,6 @@ namespace DeconTools.Workflows.Backend.Core
         {
         }
 
-
-
         public override void Execute()
         {
             if (string.IsNullOrEmpty(ExecutorParameters.TargetsFilePath))
@@ -51,14 +48,12 @@ namespace DeconTools.Workflows.Backend.Core
                 throw new FileNotFoundException("File not found error for the TargetsFilePath. Check your parameter file for " + ExecutorParameters.TargetsFilePath);
             }
 
-
             TargetedResultFromTextImporter resultImporter = new UnlabeledTargetedResultFromTextImporter(ExecutorParameters.TargetsFilePath);
             var allResults = resultImporter.Import();
 
             var resultsSortedByDataset = allResults.Results.OrderBy(p => p.DatasetName).ToList();
 
             var totalResults = resultsSortedByDataset.Count();
-
 
             ResultRepository.Clear();
 
@@ -70,11 +65,9 @@ namespace DeconTools.Workflows.Backend.Core
                 resultCounter++;
                 _currentResult = result;
 
-
                 if (result.DatasetName != _currentDatasetName)
                 {
                     Run?.Close();
-
 
                     InitializeRun(result.DatasetName);
 
@@ -84,7 +77,6 @@ namespace DeconTools.Workflows.Backend.Core
                     }
 
                     _currentDatasetName = Run.DatasetName;
-
                 }
 
                 SetCurrentWorkflowTarget(result);
@@ -93,7 +85,6 @@ namespace DeconTools.Workflows.Backend.Core
                 {
                     TargetedWorkflow.Execute();
                     ResultRepository.AddResult(TargetedWorkflow.Result);
-
                 }
                 catch (Exception ex)
                 {
@@ -114,11 +105,7 @@ namespace DeconTools.Workflows.Backend.Core
                 }
 
                 ReportProcessingProgress(progressString, resultCounter);
-
             }
-
-
-
         }
         private void SetCurrentWorkflowTarget(TargetedResultDTO result)
         {
@@ -129,7 +116,6 @@ namespace DeconTools.Workflows.Backend.Core
             target.EmpiricalFormula = result.EmpiricalFormula;
             target.ID = (int)result.TargetID;
 
-
             target.IsotopicProfile = null;   //workflow will determine this
 
             target.MZ = result.MonoMZ;
@@ -137,10 +123,6 @@ namespace DeconTools.Workflows.Backend.Core
             target.ScanLCTarget = result.ScanLC;
 
             Run.CurrentMassTag = target;
-
-
-
         }
-
     }
 }

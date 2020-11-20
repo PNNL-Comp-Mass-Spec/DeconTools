@@ -16,14 +16,13 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
     {
         public void OldPeakDetectorTest1()
         {
-
             Run run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
             var scan = new ScanSet(6005);
 
-
             var generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
-            var peakDetector = new DeconToolsPeakDetectorV2(1.3, 2, Globals.PeakFitType.QUADRATIC, true) {
+            var peakDetector = new DeconToolsPeakDetectorV2(1.3, 2, Globals.PeakFitType.QUADRATIC, true)
+            {
                 IsDataThresholded = true
             };
 
@@ -34,14 +33,11 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
             var peaks = peakDetector.FindPeaks(run.XYData, 481.1, 481.4);
 
             TestUtilities.DisplayPeaks(peaks);
-
-
         }
 
         [Test]
         public void NewPeakDetectorTest2()
         {
-
             Run run = new XCaliburRun2(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
             var scan = new ScanSet(6005);
@@ -92,7 +88,6 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
                         found = true;
                         break;
                     }
-
                 }
 
                 if (!found)
@@ -134,7 +129,6 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
 
             Assert.IsTrue(run.CurrentBackgroundIntensity > 0);
             Assert.AreEqual(run.CurrentBackgroundIntensity, peakDetector.BackgroundIntensity);
-
         }
 
         public void CheckBackgroundIntensityTest1()
@@ -151,7 +145,6 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
                 PeakFitType = Globals.PeakFitType.QUADRATIC,
                 IsDataThresholded = true
             };
-
 
             var oldPeakDetector = new DeconToolsPeakDetectorV2(1.3, 2, Globals.PeakFitType.QUADRATIC, true);
             peakDetector.IsDataThresholded = true;
@@ -181,7 +174,6 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
                 IsDataThresholded = true
             };
 
-
             var oldPeakDetector = new DeconToolsPeakDetectorV2(1.3, 2, Globals.PeakFitType.QUADRATIC, true);
             peakDetector.IsDataThresholded = true;
 
@@ -193,17 +185,13 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
 
             var mzStop = 585.35;
 
-
             var peaks = peakDetector.FindPeaks(run.XYData.Xvalues, run.XYData.Yvalues, mzStart, mzStop);
 
             var oldPeaks = oldPeakDetector.FindPeaks(run.XYData, mzStart, mzStop);
 
-
             TestUtilities.DisplayPeaks(peaks);
 
             TestUtilities.DisplayPeaks(oldPeaks);
-
-
         }
 
         public void CalcOfFwhmByOldPeakdetector_Test1()
@@ -221,7 +209,6 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
                 IsDataThresholded = true
             };
 
-
             var oldPeakDetector = new DeconToolsPeakDetectorV2(1.3, 2, Globals.PeakFitType.QUADRATIC, true);
             peakDetector.IsDataThresholded = true;
 
@@ -233,11 +220,9 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
 
             var mzStop = 693.2;
 
-
             var peaks = peakDetector.FindPeaks(run.XYData.Xvalues, run.XYData.Yvalues, mzStart, mzStop);
 
             var oldPeaks = oldPeakDetector.FindPeaks(run.XYData, mzStart, mzStop);
-
 
             TestUtilities.DisplayPeaks(peaks);
 
@@ -250,7 +235,6 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
             var run = new RunFactory().CreateRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
             var scan = new ScanSet(6006);   //this is a centroided MS2 scan
-
 
             var generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
             var peakDetector = new DeconToolsPeakDetectorV2(0, 0, Globals.PeakFitType.QUADRATIC, true)
@@ -272,7 +256,6 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
             //TestUtilities.DisplayXYValues(run.XYData);
             //TestUtilities.DisplayPeaks(run.PeakList);
 
-
         }
 
         [Test]
@@ -281,7 +264,6 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
             var run = new RunFactory().CreateRun(FileRefs.RawDataMSFiles.OrbitrapStdFile1);
 
             var scan = new ScanSet(6006);   //this is a MS2 scan
-
 
             var generator = MSGeneratorFactory.CreateMSGenerator(run.MSFileType);
 
@@ -308,7 +290,6 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSPeakDetectionTests
             Assert.AreEqual(run.XYData.Xvalues.Length, run.PeakList.Count);
             //TestUtilities.DisplayXYValues(run.XYData);
             //TestUtilities.DisplayPeaks(run.PeakList);
-
 
         }
     }

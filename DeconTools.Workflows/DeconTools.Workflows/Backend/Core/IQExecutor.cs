@@ -58,7 +58,6 @@ namespace DeconTools.Workflows.Backend.Core
 
         #region Properties
 
-
         protected IqMassAndNetAligner IqMassAndNetAligner { get; set; }
 
         private Run _run;
@@ -73,7 +72,6 @@ namespace DeconTools.Workflows.Backend.Core
         }
 
         private WorkflowExecutorBaseParameters _parameters;
-
 
         protected WorkflowExecutorBaseParameters Parameters
         {
@@ -115,7 +113,6 @@ namespace DeconTools.Workflows.Backend.Core
 
         #region Public Methods
 
-
         public void SetupMassAndNetAlignment(string alignmentFolder = "")
         {
             WorkflowExecutorBaseParameters massNetAlignerParameters = new BasicTargetedWorkflowExecutorParameters
@@ -147,7 +144,6 @@ namespace DeconTools.Workflows.Backend.Core
             //Get a suitable targets file for alignment. These are grabbed from the ..\AlignmentInfo folder.
             var targetFileForAlignment = GetTargetFilePathForIqAlignment(out var candidateTargetsFilePath);
 
-
             if (string.IsNullOrEmpty(targetFileForAlignment))
             {
                 IqLogger.LogMessage("Alignment not performed - No suitable target file found for use in alignment.");
@@ -174,7 +170,6 @@ namespace DeconTools.Workflows.Backend.Core
             IqMassAndNetAligner.LoadAndInitializeTargets(targetFileForAlignment);
 
             SetMassTagReferencesForNetAlignment();
-
         }
 
         private void SetMassTagReferencesForNetAlignment()
@@ -192,7 +187,6 @@ namespace DeconTools.Workflows.Backend.Core
                 IqLogger.LogMessage("IQ Net aligner INACTIVE - no reference tags were loaded. You need to define 'TargetsUsedForLookupFilePath'");
             }
         }
-
 
         public void DoAlignment()
         {
@@ -215,9 +209,7 @@ namespace DeconTools.Workflows.Backend.Core
                 var exportedGraphBaseFilename = Path.Combine(_alignmentFolder, Run.DatasetName);
 
                 IqMassAndNetAligner.ExportGraphs(exportedGraphBaseFilename);
-
             }
-
         }
 
         public void Execute()
@@ -273,15 +265,10 @@ namespace DeconTools.Workflows.Backend.Core
             Console.WriteLine();
         }
 
-
         public virtual void LoadAndInitializeTargets()
         {
             LoadAndInitializeTargets(Parameters.TargetsFilePath);
-
-
-
         }
-
 
         public virtual void LoadAndInitializeTargets(string targetsFilePath)
         {
@@ -309,7 +296,6 @@ namespace DeconTools.Workflows.Backend.Core
 
             IqLogger.LogMessage("Targets Loaded Successfully. Total targets loaded= " + Targets.Count);
         }
-
 
         protected virtual void ExportResults(IqResult iqResult)
         {
@@ -377,7 +363,6 @@ namespace DeconTools.Workflows.Backend.Core
             }
 
             if (!Directory.Exists(_alignmentFolder)) Directory.CreateDirectory(_alignmentFolder);
-
         }
 
         /// <summary>
@@ -397,7 +382,6 @@ namespace DeconTools.Workflows.Backend.Core
             if (string.IsNullOrEmpty(_alignmentFolder))
             {
                 SetupAlignmentFolder(_alignmentFolder);
-
             }
 
             //first look for _fht.txt file (MSGF output)
@@ -436,14 +420,11 @@ namespace DeconTools.Workflows.Backend.Core
             }
 
             if (!Directory.Exists(_resultsDirectory)) Directory.CreateDirectory(_resultsDirectory);
-
-
         }
 
         #endregion
 
         #region Private Methods
-
 
         private string CreatePeaksForChromSourceData()
         {
@@ -458,15 +439,12 @@ namespace DeconTools.Workflows.Backend.Core
                 LCScanMax = Run.GetMaxPossibleLCScanNum()
             };
 
-
             var peakCreator = new PeakDetectAndExportWorkflow(Run, parameters, _backgroundWorker);
             peakCreator.Execute();
 
             var peaksFilename = Path.Combine(Run.DatasetDirectoryPath, Run.DatasetName + "_peaks.txt");
             return peaksFilename;
-
         }
-
 
         private string GetPossiblePeaksFile()
         {
@@ -481,8 +459,6 @@ namespace DeconTools.Workflows.Backend.Core
 
             return string.Empty;
         }
-
-
 
         public void LoadChromData(Run run)
         {
@@ -510,8 +486,6 @@ namespace DeconTools.Workflows.Backend.Core
             IqLogger.LogMessage("Peak Loading Complete. Number of peaks loaded= " + Run.ResultCollection.MSPeakResultList.Count.ToString("#,##0"));
         }
 
-
-
         private void SetupLogging()
         {
             string loggingDirectory;
@@ -523,7 +497,6 @@ namespace DeconTools.Workflows.Backend.Core
             {
                 loggingDirectory = Path.Combine(Parameters.OutputDirectoryBase, "IqLogs");
             }
-
 
             if (!Directory.Exists(loggingDirectory))
                 Directory.CreateDirectory(loggingDirectory);

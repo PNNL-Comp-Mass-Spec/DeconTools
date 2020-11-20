@@ -4,8 +4,6 @@ namespace DeconTools.Workflows.Backend.Core
 {
     public class BasicTargetedWorkflow : TargetedWorkflow
     {
-
-
         #region Constructors
 
         public BasicTargetedWorkflow(Run run, TargetedWorkflowParameters parameters)
@@ -17,15 +15,12 @@ namespace DeconTools.Workflows.Backend.Core
         {
         }
 
-
         #endregion
-
 
         protected override DeconTools.Backend.Globals.ResultType GetResultType()
         {
             return DeconTools.Backend.Globals.ResultType.BASIC_TARGETED_RESULT;
         }
-
 
         protected override void ExecutePostWorkflowHook()
         {
@@ -37,10 +32,7 @@ namespace DeconTools.Workflows.Backend.Core
                {
                    Result.IntensityAggregate = Result.IntensityAggregate * Result.NumMSScansSummed;
                }
-
             }
-
         }
-
     }
 }

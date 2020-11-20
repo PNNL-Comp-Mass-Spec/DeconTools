@@ -11,13 +11,10 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
 {
     public sealed class UIMFIsosResultSqliteExporter : IsosResultSqliteExporter
     {
-
-
         #region Constructors
         public UIMFIsosResultSqliteExporter(string fileName)
             : this(fileName, 10000)
         {
-
         }
 
         public UIMFIsosResultSqliteExporter(string fileName, int triggerValue)
@@ -28,7 +25,6 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
             if (File.Exists(fileName)) File.Delete(fileName);
 
             TriggerToExport = triggerValue;
-
 
             var fact = DbProviderFactories.GetFactory("System.Data.SQLite");
             cnn = fact.CreateConnection();
@@ -97,7 +93,6 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
                     var tia_origIntensParam = new SQLiteParameter();
                     var flagCodeParam = new SQLiteParameter();
 
-
                     int n;
 
                     mycommand.CommandText = "INSERT INTO T_MSFeatures ([feature_id],[frame_num],[ims_scan_num],[charge],[abundance],[mz],[fit],[average_mw],[monoisotopic_mw],[mostabundant_mw],[fwhm],[signal_noise],[mono_abundance],[mono_plus2_abundance],[ims_drift_time],[orig_intensity],[TIA_orig_intensity],[flag]) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
@@ -144,9 +139,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
                     }
                 }
                 mytransaction.Commit();
-
             }
-
         }
     }
 }

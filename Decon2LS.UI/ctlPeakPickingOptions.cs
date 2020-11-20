@@ -63,16 +63,16 @@ namespace Decon2LS
         /// <summary>
         /// Clean up any resources being used.
         /// </summary>
-        protected override void Dispose( bool disposing )
+        protected override void Dispose(bool disposing)
         {
-            if( disposing )
+            if (disposing)
             {
-                if(components != null)
+                if (components != null)
                 {
                     components.Dispose();
                 }
             }
-            base.Dispose( disposing );
+            base.Dispose(disposing);
         }
 
         #region Component Designer generated code
@@ -381,17 +381,12 @@ namespace Decon2LS
             this.panel1.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.ResumeLayout(false);
-
         }
         #endregion
 
         private void comboBox1_SelectionIndexChanged(object sender, System.EventArgs e)
         {
-
         }
-
-
-
 
         private void textBox_BkgRatio_Enter(object sender, System.EventArgs e)
         {
@@ -409,7 +404,6 @@ namespace Decon2LS
             label_apex_tip.Visible = false;
             label_quadratic_tip.Visible = false;
             label_lorentzian_tip.Visible = false;
-
         }
 
         private void textBox_SNR_Enter(object sender, System.EventArgs e)
@@ -428,7 +422,6 @@ namespace Decon2LS
             label_apex_tip.Visible = false;
             label_quadratic_tip.Visible = false;
             label_lorentzian_tip.Visible = false;
-
         }
 
         private void textBox_SNR_Leave(object sender, System.EventArgs e)
@@ -447,7 +440,6 @@ namespace Decon2LS
             label_apex_tip.Visible = true;
             label_quadratic_tip.Visible = true;
             label_lorentzian_tip.Visible = true;
-
         }
 
         private void textBox_BkgRatio_Leave(object sender, System.EventArgs e)
@@ -466,29 +458,28 @@ namespace Decon2LS
             label_apex_tip.Visible = true;
             label_quadratic_tip.Visible = true;
             label_lorentzian_tip.Visible = true;
-
         }
 
         public double PeakBackgroundRatio
         {
             set
             {
-                mtextBgRatio.Text = Convert.ToString(value) ;
+                mtextBgRatio.Text = Convert.ToString(value);
             }
             get
             {
-                return Convert.ToDouble(mtextBgRatio.Text) ;
+                return Convert.ToDouble(mtextBgRatio.Text);
             }
         }
         public double SignalToNoiseThreshold
         {
             set
             {
-                mtextSNR.Text = Convert.ToString(value) ;
+                mtextSNR.Text = Convert.ToString(value);
             }
             get
             {
-                return Convert.ToDouble(mtextSNR.Text) ;
+                return Convert.ToDouble(mtextSNR.Text);
             }
         }
         public DeconToolsV2.Peaks.PEAK_FIT_TYPE PeakFitType
@@ -497,29 +488,29 @@ namespace Decon2LS
             {
                 if (mcmbPeakFitType.SelectedIndex == 0)
                 {
-                    return DeconToolsV2.Peaks.PEAK_FIT_TYPE.Apex ;
+                    return DeconToolsV2.Peaks.PEAK_FIT_TYPE.Apex;
                 }
                 else if (mcmbPeakFitType.SelectedIndex == 1)
                 {
-                    return DeconToolsV2.Peaks.PEAK_FIT_TYPE.Lorentzian ;
+                    return DeconToolsV2.Peaks.PEAK_FIT_TYPE.Lorentzian;
                 }
-                return DeconToolsV2.Peaks.PEAK_FIT_TYPE.Quadratic ;
+                return DeconToolsV2.Peaks.PEAK_FIT_TYPE.Quadratic;
             }
             set
             {
                 switch (value)
                 {
                     case DeconToolsV2.Peaks.PEAK_FIT_TYPE.Apex:
-                        mcmbPeakFitType.SelectedIndex = 0 ;
-                        break ;
+                        mcmbPeakFitType.SelectedIndex = 0;
+                        break;
                     case DeconToolsV2.Peaks.PEAK_FIT_TYPE.Lorentzian:
-                        mcmbPeakFitType.SelectedIndex = 1 ;
-                        break ;
+                        mcmbPeakFitType.SelectedIndex = 1;
+                        break;
                     case DeconToolsV2.Peaks.PEAK_FIT_TYPE.Quadratic:
-                        mcmbPeakFitType.SelectedIndex = 2 ;
-                        break ;
+                        mcmbPeakFitType.SelectedIndex = 2;
+                        break;
                     default:
-                        break ;
+                        break;
                 }
             }
         }

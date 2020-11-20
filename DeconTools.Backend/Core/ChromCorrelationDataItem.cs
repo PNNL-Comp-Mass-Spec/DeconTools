@@ -3,7 +3,6 @@ namespace DeconTools.Backend.Core
 {
     public class ChromCorrelationDataItem
     {
-
         #region Constructors
         public ChromCorrelationDataItem()
         {
@@ -19,7 +18,6 @@ namespace DeconTools.Backend.Core
             CorrelationSlope = correlationSlope;
         }
 
-
         #endregion
 
         #region Properties
@@ -32,9 +30,8 @@ namespace DeconTools.Backend.Core
 
         public override string ToString()
         {
-            return CorrelationSlope.ToString() + "; "+ CorrelationIntercept.ToString() + "; "+
+            return CorrelationSlope.ToString() + "; " + CorrelationIntercept.ToString() + "; " +
                    CorrelationRSquaredVal.ToString();
         }
-
     }
 }

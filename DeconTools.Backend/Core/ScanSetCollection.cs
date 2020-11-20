@@ -40,13 +40,10 @@ namespace DeconTools.Backend.Core
 
         public void Create(Run run, bool sumAllScans = true, bool processMSMS = true)
         {
-
             ScanSetList = new List<ScanSet>();
-
 
             var minScan = GetMinScan(run);
             var maxScan = GetMaxScan(run);
-
 
             if (sumAllScans)
             {
@@ -59,13 +56,11 @@ namespace DeconTools.Backend.Core
                     {
                         firstMS1Scan = i;
                         break;
-
                     }
                 }
 
                 if (firstMS1Scan == -1)   // Never found a single MS1 scan in the whole dataset
                 {
-
                 }
                 else
                 {
@@ -74,11 +69,9 @@ namespace DeconTools.Backend.Core
 
                     ScanSetList.Add(scanSet);
                 }
-
             }
             else
             {
-
                 for (var i = minScan; i <= maxScan; i++)
                 {
                     var msLevel = run.GetMSLevel(i);
@@ -88,10 +81,7 @@ namespace DeconTools.Backend.Core
                         ScanSetList.Add(new ScanSet(i));
                     }
                 }
-
             }
-
-
         }
 
         #region Properties
@@ -117,7 +107,6 @@ namespace DeconTools.Backend.Core
 
         //    ScanSetCollection scanSetCollection = new ScanSetCollection();
 
-
         //    if (scanStart < minPossibleScanIndex)
         //    {
         //        scanStart = minPossibleScanIndex;
@@ -137,7 +126,6 @@ namespace DeconTools.Backend.Core
         //    {
         //        scanStop = maxPossibleScanIndex;
         //    }
-
 
         //    int numLowerScansToGet = (numScansSummed - 1) / 2;
         //    int numUpperScansToGet = (numScansSummed - 1) / 2;
@@ -159,7 +147,6 @@ namespace DeconTools.Backend.Core
         //        //add middle scan
         //        scansToSum.Add(currentScan);
 
-
         //        //add upper scans
         //        scansCounter = 0;
         //        int upperScan = currentScan + 1;
@@ -176,13 +163,10 @@ namespace DeconTools.Backend.Core
 
         //    return scanSetCollection;
 
-
-
         //}
 
         protected virtual void CreateScanSets(Run run, int scanStart, int scanStop, int numScansSummed, int scanIncrement, bool processMSMS = false, bool sumConsecutiveMsMs = true)
         {
-
             ScanSetList = new List<ScanSet>();
 
             var minPossibleScanIndex = GetMinScan(run);
@@ -316,7 +300,6 @@ namespace DeconTools.Backend.Core
                 ScanSetList.Add(scanSet);
                 run.PrimaryLcScanNumbers.Add(scanSet.PrimaryScanNumber);
             }
-
         }
 
         private static List<int> GetLowerScans(Run run, int startingScan, int currentMSLevel, int numLowerScansToGet)
@@ -333,11 +316,8 @@ namespace DeconTools.Backend.Core
                     scansCounter++;
                 }
                 currentScan--;
-
-
             }
             return lowerScans;
-
         }
         private static List<int> GetUpperScans(Run run, int startingScan, int currentMSLevel, int numUpperScansToGet)
         {
@@ -355,11 +335,8 @@ namespace DeconTools.Backend.Core
                     scansCounter++;
                 }
                 currentScan++;
-
-
             }
             return scans;
-
         }
 
         public ScanSet GetScanSet(int primaryNum)
@@ -367,7 +344,6 @@ namespace DeconTools.Backend.Core
             if (ScanSetList == null || ScanSetList.Count == 0) return null;
 
             return (ScanSetList.Find(p => p.PrimaryScanNumber == primaryNum));
-
         }
 
         public ScanSet GetNextMSScanSet(Run run, int primaryNum, bool ascending)

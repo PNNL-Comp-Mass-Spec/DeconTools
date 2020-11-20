@@ -16,7 +16,6 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
         {
             // ReSharper disable once VirtualMemberCallInConstructor
             ToleranceInPPM = parameters.ToleranceInPPM;
-
         }
 
         #endregion
@@ -58,7 +57,6 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
                     break;
             }
 
-
             for (var i = 0; i < MaxPeaksToInclude; i++)
             {
                 if (i < iso.Peaklist.Count) continue;
@@ -69,7 +67,8 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
                 var intensity = _valueForAppendedTheorPeaks;
                 var fwhm = lastPeak.Width;
 
-                var newPeak = new MSPeak(mz, intensity, fwhm) {
+                var newPeak = new MSPeak(mz, intensity, fwhm)
+                {
                     MSFeatureID = lastPeak.MSFeatureID
                 };
 
@@ -85,17 +84,14 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
                 }
             }
 
-
             return iso;
         }
-
 
         // Sipper's key method. Sipper will try to pull out low level C13-related peaks. So
         // it will not stop as early as the BasicTFF, but will iterate more times to pull
         // out the smaller intensity C13-related peaks
         public override IsotopicProfile IterativelyFindMSFeature(XYData massSpecXyData, IsotopicProfile theorIso, out List<Peak> peakList)
         {
-
             IsotopicProfile foundIso = null;
 
             //start with high PeakBR and ratchet it down, so as to detect more peaks with each pass.  Stop when you find the isotopic profile.
@@ -127,15 +123,12 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
                 {
                     break;
                 }
-
             }
-
 
             if (foundIso != null)
             {
                 AddZeroIntensityPeaks(foundIso, theorIso, 0.02d);
             }
-
 
             return foundIso;
         }
@@ -144,7 +137,6 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
         {
             var clonedTheor = theorIso.CloneIsotopicProfile();
 
-
             clonedTheor.Peaklist = clonedTheor.Peaklist.Where(p => p.Height > minIntensityThreshold).ToList();
 
             foreach (var msPeak in clonedTheor.Peaklist)
@@ -152,17 +144,12 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
                 msPeak.Height = 0;
             }
 
-
             combineIsotopicProfiles(foundIso, clonedTheor);
-
-
         }
 
         private void combineIsotopicProfiles(IsotopicProfile baseIso, IsotopicProfile addedIso, double toleranceInPPM = 50)
         {
-
             var toleranceInMZ = toleranceInPPM * baseIso.MonoPeakMZ / 1e6;
-
 
             foreach (var msPeak in addedIso.Peaklist)
             {
@@ -176,7 +163,6 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             }
 
             baseIso.Peaklist = baseIso.Peaklist.OrderBy(p => p.XValue).ToList();
-
         }
 
         #endregion

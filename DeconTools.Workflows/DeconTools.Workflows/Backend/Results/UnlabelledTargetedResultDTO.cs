@@ -2,7 +2,6 @@
 {
     public class UnlabeledTargetedResultDTO : TargetedResultDTO
     {
-
         #region Constructors
         public UnlabeledTargetedResultDTO()
         {
@@ -11,7 +10,6 @@
             TargetID = 0;
             NET = 0;
             NumChromPeaksWithinTol = 0;
-
         }
         #endregion
 
@@ -43,10 +41,7 @@
 
         //}
 
-
         #region Properties
-
-
 
         #endregion
 
@@ -57,8 +52,6 @@
         #region Private Methods
 
         #endregion
-
-
 
     }
 }

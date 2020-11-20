@@ -3,7 +3,7 @@ using DeconTools.Utilities.SqliteUtils;
 
 namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
 {
-    public sealed class MSPeakTable :Table
+    public sealed class MSPeakTable : Table
     {
         #region Constructors
         public MSPeakTable(string tableName)
@@ -18,7 +18,6 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
                 new Field("fwhm", "FLOAT"),
                 new Field("msfeatureID", "FLOAT")
             };
-
         }
         #endregion
 
@@ -31,12 +30,10 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
 
         #region Public Methods
 
-
         #endregion
 
         #region Private Methods
         #endregion
-
 
     }
 }

@@ -9,8 +9,8 @@ namespace DeconTools.Backend.Utilities.IqLogger
     {
         static IqLogger()
         {
-
-            Log = new FileLogger {
+            Log = new FileLogger
+            {
                 LogLevel = BaseLogger.LogLevels.INFO
             };
 
@@ -40,7 +40,7 @@ namespace DeconTools.Backend.Utilities.IqLogger
         /// </summary>
         /// <param name="datasetName"></param>
         /// <param name="logDirectory"></param>
-        public static void InitializeIqLog (string datasetName, string logDirectory)
+        public static void InitializeIqLog(string datasetName, string logDirectory)
         {
             if (string.IsNullOrWhiteSpace(logDirectory))
                 LogDirectory = string.Empty;
@@ -106,7 +106,6 @@ namespace DeconTools.Backend.Utilities.IqLogger
             Log.Info(message);
             Console.WriteLine(message);
         }
-
 
         /// <summary>
         /// Log a message, level warn

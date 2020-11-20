@@ -78,7 +78,6 @@ namespace TargetedWorkflowConsole
 
                 // Success
                 return 0;
-
             }
             catch (Exception ex)
             {
@@ -86,7 +85,6 @@ namespace TargetedWorkflowConsole
                 System.Threading.Thread.Sleep(1500);
                 return ex.GetHashCode();
             }
-
         }
 
         private static void ReportError(string message)
@@ -128,6 +126,5 @@ namespace TargetedWorkflowConsole
             Console.WriteLine("  " + string.Join("   ", MassTagFromMSAlignFileImporter.GetRequiredMSAlignColumns()));
             Console.WriteLine();
         }
-
     }
 }

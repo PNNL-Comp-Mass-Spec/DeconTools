@@ -6,8 +6,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 {
     public class N14N15ResultObject
     {
-
-        public string  DatasetName { get; set; }
+        public string DatasetName { get; set; }
 
         public PeptideTarget MassTag { get; set; }
 
@@ -16,7 +15,6 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
         public List<Peak> ChromPeakSelectedUnlabeled { get; set; }
         public List<Peak> ChromPeakSelectedLabeled { get; set; }
-
 
         public N14N15ResultObject(string datasetName, PeptideTarget mt)
         {
@@ -27,12 +25,10 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             ChromListUnlabeled = new List<XYData>();
             ChromPeakSelectedLabeled = new List<Peak>();
             ChromPeakSelectedUnlabeled = new List<Peak>();
-
         }
 
         internal void DisplaySelectedChromPeaks(List<Peak> chromPeakList)
         {
-
             foreach (var item in chromPeakList)
             {
                 if (item != null)

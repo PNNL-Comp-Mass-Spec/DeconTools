@@ -16,7 +16,7 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
         {
             var testFile = FileRefs.PeakDataFiles.OrbitrapOldDecon2LSPeakFile;
 
-            var msPeakList=new List<MSPeakResult>();
+            var msPeakList = new List<MSPeakResult>();
 #if !Disable_DeconToolsV2
             var importer = new DeconEngineClasses.PeakImporterFromOldPeakDatFile(testFile);
             importer.ImportPeaks(msPeakList);
@@ -40,7 +40,5 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
             Console.Write(sb.ToString());
 #endif
         }
-
-
     }
 }

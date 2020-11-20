@@ -63,7 +63,7 @@ namespace Decon2LS
         private System.Windows.Forms.TextBox mtxtMaxMass;
         private System.Windows.Forms.Label mlblMinIonCountHelp;
         private System.Windows.Forms.Panel panel1;
-        /// <summary> 
+        /// <summary>
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.Container components = null;
@@ -77,24 +77,24 @@ namespace Decon2LS
 
         }
 
-        /// <summary> 
+        /// <summary>
         /// Clean up any resources being used.
         /// </summary>
-        protected override void Dispose( bool disposing )
+        protected override void Dispose(bool disposing)
         {
-            if( disposing )
+            if (disposing)
             {
-                if(components != null)
+                if (components != null)
                 {
                     components.Dispose();
                 }
             }
-            base.Dispose( disposing );
+            base.Dispose(disposing);
         }
 
         #region Component Designer generated code
-        /// <summary> 
-        /// Required method for Designer support - do not modify 
+        /// <summary>
+        /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
@@ -591,216 +591,208 @@ namespace Decon2LS
             this.groupBox4.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
-
         }
         #endregion
 
         private void mtxtMinScanEnter(object sender, System.EventArgs e)
         {
-            mlblMinMassHelp.Visible = false ; 
-            mlblMaxMassHelp.Visible = false ; 
-            mlblMaxScanHelp.Visible = false ; 
-            mlblMinScanHelp.Visible = true ; 			
-            mlbConsiderChargeHelp.Visible = false ;
-            mlblCCMassHelp.Visible = false ; 
-            mlblProtonMassHelp.Visible = false ; 
-    
-            mlblOutputTypeHelp.Visible = false ; 
-            mlblOutputTypeCDTAHelp.Visible = false ; 
-            mlblOutputTypeDTAHelp.Visible = false ; 
-            mlblOutputTypeLogHelp.Visible = false ; 
-            mlbOutputTypeMGFHelp.Visible = false ; 
-            
-            mlblWindowSizeHelp.Visible = false ; 	
-            mlblMinIonCountHelp.Visible = false ; 
-            
+            mlblMinMassHelp.Visible = false;
+            mlblMaxMassHelp.Visible = false;
+            mlblMaxScanHelp.Visible = false;
+            mlblMinScanHelp.Visible = true;
+            mlbConsiderChargeHelp.Visible = false;
+            mlblCCMassHelp.Visible = false;
+            mlblProtonMassHelp.Visible = false;
+
+            mlblOutputTypeHelp.Visible = false;
+            mlblOutputTypeCDTAHelp.Visible = false;
+            mlblOutputTypeDTAHelp.Visible = false;
+            mlblOutputTypeLogHelp.Visible = false;
+            mlbOutputTypeMGFHelp.Visible = false;
+
+            mlblWindowSizeHelp.Visible = false;
+            mlblMinIonCountHelp.Visible = false;
         }
 
         private void mtxtMinMassEnter(object sender, System.EventArgs e)
         {
-            mlblMinMassHelp.Visible = true ; 
-            mlblMaxMassHelp.Visible = false ; 
-            mlblMaxScanHelp.Visible = false ; 
-            mlblMinScanHelp.Visible = false ; 			
-            mlbConsiderChargeHelp.Visible = false ;
-            mlblCCMassHelp.Visible = false ; 
-            mlblProtonMassHelp.Visible = false ; 
-    
-            mlblOutputTypeHelp.Visible = false ; 
-            mlblOutputTypeCDTAHelp.Visible = false ; 
-            mlblOutputTypeDTAHelp.Visible = false ; 
-            mlblOutputTypeLogHelp.Visible = false ; 
-            mlbOutputTypeMGFHelp.Visible = false ; 
-            
-            mlblMinIonCountHelp.Visible = false ; 
-            mlblWindowSizeHelp.Visible = false ; 		
-            
+            mlblMinMassHelp.Visible = true;
+            mlblMaxMassHelp.Visible = false;
+            mlblMaxScanHelp.Visible = false;
+            mlblMinScanHelp.Visible = false;
+            mlbConsiderChargeHelp.Visible = false;
+            mlblCCMassHelp.Visible = false;
+            mlblProtonMassHelp.Visible = false;
+
+            mlblOutputTypeHelp.Visible = false;
+            mlblOutputTypeCDTAHelp.Visible = false;
+            mlblOutputTypeDTAHelp.Visible = false;
+            mlblOutputTypeLogHelp.Visible = false;
+            mlbOutputTypeMGFHelp.Visible = false;
+
+            mlblMinIonCountHelp.Visible = false;
+            mlblWindowSizeHelp.Visible = false;
         }
 
         private void mtxtMaxScanEnter(object sender, System.EventArgs e)
         {
-            mlblMinMassHelp.Visible = false ; 
-            mlblMaxMassHelp.Visible = false ; 
-            mlblMaxScanHelp.Visible = true ; 
-            mlblMinScanHelp.Visible = false ; 			
-            mlbConsiderChargeHelp.Visible = false ;
-            mlblCCMassHelp.Visible = false ; 
-            mlblProtonMassHelp.Visible = false ;	
-            mlblOutputTypeHelp.Visible = false ; 
-            mlblOutputTypeCDTAHelp.Visible = false ; 
-            mlblOutputTypeDTAHelp.Visible = false ; 
-            mlblOutputTypeLogHelp.Visible = false ; 
-            mlbOutputTypeMGFHelp.Visible = false ; 			
-            mlblWindowSizeHelp.Visible = false ; 
-            mlblMinIonCountHelp.Visible = false ; 
-        
-            
+            mlblMinMassHelp.Visible = false;
+            mlblMaxMassHelp.Visible = false;
+            mlblMaxScanHelp.Visible = true;
+            mlblMinScanHelp.Visible = false;
+            mlbConsiderChargeHelp.Visible = false;
+            mlblCCMassHelp.Visible = false;
+            mlblProtonMassHelp.Visible = false;
+            mlblOutputTypeHelp.Visible = false;
+            mlblOutputTypeCDTAHelp.Visible = false;
+            mlblOutputTypeDTAHelp.Visible = false;
+            mlblOutputTypeLogHelp.Visible = false;
+            mlbOutputTypeMGFHelp.Visible = false;
+            mlblWindowSizeHelp.Visible = false;
+            mlblMinIonCountHelp.Visible = false;
         }
 
         private void mtxtMaxMassEnter(object sender, System.EventArgs e)
         {
-            mlblMinMassHelp.Visible = false ; 
-            mlblMaxMassHelp.Visible = true ; 
-            mlblMaxScanHelp.Visible = false ; 
-            mlblMinScanHelp.Visible = false ; 			
-            mlbConsiderChargeHelp.Visible = false ;
-            mlblCCMassHelp.Visible = false ; 
-            mlblProtonMassHelp.Visible = false ; 	
-            mlblOutputTypeHelp.Visible = false ; 
-            mlblOutputTypeCDTAHelp.Visible = false ; 
-            mlblOutputTypeDTAHelp.Visible = false ; 
-            mlblOutputTypeLogHelp.Visible = false ; 
-            mlbOutputTypeMGFHelp.Visible = false ; 			
-            mlblMinIonCountHelp.Visible = false ; 
-            mlblWindowSizeHelp.Visible = false ; 
+            mlblMinMassHelp.Visible = false;
+            mlblMaxMassHelp.Visible = true;
+            mlblMaxScanHelp.Visible = false;
+            mlblMinScanHelp.Visible = false;
+            mlbConsiderChargeHelp.Visible = false;
+            mlblCCMassHelp.Visible = false;
+            mlblProtonMassHelp.Visible = false;
+            mlblOutputTypeHelp.Visible = false;
+            mlblOutputTypeCDTAHelp.Visible = false;
+            mlblOutputTypeDTAHelp.Visible = false;
+            mlblOutputTypeLogHelp.Visible = false;
+            mlbOutputTypeMGFHelp.Visible = false;
+            mlblMinIonCountHelp.Visible = false;
+            mlblWindowSizeHelp.Visible = false;
         }
 
         private void mtxtMinIonCountEnter(object sender, System.EventArgs e)
         {
-            mlblMinMassHelp.Visible = false ; 
-            mlblMaxMassHelp.Visible = false ; 
-            mlblMaxScanHelp.Visible = false ; 
-            mlblMinScanHelp.Visible = true ; 			
-            mlbConsiderChargeHelp.Visible = false ;
-            mlblCCMassHelp.Visible = false ; 
-            mlblProtonMassHelp.Visible = false ; 	
-            mlblOutputTypeHelp.Visible = false ; 
-            mlblOutputTypeCDTAHelp.Visible = false ; 
-            mlblOutputTypeDTAHelp.Visible = false ; 
-            mlblOutputTypeLogHelp.Visible = false ; 
-            mlbOutputTypeMGFHelp.Visible = false ; 			
-            mlblMinIonCountHelp.Visible = true ; 
-            mlblWindowSizeHelp.Visible = false ; 					
+            mlblMinMassHelp.Visible = false;
+            mlblMaxMassHelp.Visible = false;
+            mlblMaxScanHelp.Visible = false;
+            mlblMinScanHelp.Visible = true;
+            mlbConsiderChargeHelp.Visible = false;
+            mlblCCMassHelp.Visible = false;
+            mlblProtonMassHelp.Visible = false;
+            mlblOutputTypeHelp.Visible = false;
+            mlblOutputTypeCDTAHelp.Visible = false;
+            mlblOutputTypeDTAHelp.Visible = false;
+            mlblOutputTypeLogHelp.Visible = false;
+            mlbOutputTypeMGFHelp.Visible = false;
+            mlblMinIonCountHelp.Visible = true;
+            mlblWindowSizeHelp.Visible = false;
         }
 
         private void mcmbOutputType_Click(object sender, System.EventArgs e)
         {
-            mlblMinMassHelp.Visible = false ; 
-            mlblMaxMassHelp.Visible = false ; 
-            mlblMaxScanHelp.Visible = false ; 
-            mlblMinScanHelp.Visible = false ; 			
-            mlbConsiderChargeHelp.Visible = false ;
-            mlblCCMassHelp.Visible = false ; 
-            mlblProtonMassHelp.Visible = false ; 	
-            mlblOutputTypeHelp.Visible = true ; 
-            mlblOutputTypeCDTAHelp.Visible = true ; 
-            mlblOutputTypeDTAHelp.Visible = true ; 
-            mlblOutputTypeLogHelp.Visible = true ; 
-            mlbOutputTypeMGFHelp.Visible = true ;			
-            mlblMinIonCountHelp.Visible = false; 
-            mlblWindowSizeHelp.Visible = false ; 			
+            mlblMinMassHelp.Visible = false;
+            mlblMaxMassHelp.Visible = false;
+            mlblMaxScanHelp.Visible = false;
+            mlblMinScanHelp.Visible = false;
+            mlbConsiderChargeHelp.Visible = false;
+            mlblCCMassHelp.Visible = false;
+            mlblProtonMassHelp.Visible = false;
+            mlblOutputTypeHelp.Visible = true;
+            mlblOutputTypeCDTAHelp.Visible = true;
+            mlblOutputTypeDTAHelp.Visible = true;
+            mlblOutputTypeLogHelp.Visible = true;
+            mlbOutputTypeMGFHelp.Visible = true;
+            mlblMinIonCountHelp.Visible = false;
+            mlblWindowSizeHelp.Visible = false;
         }
 
         private void mchkConsiderCharge_Enter(object sender, System.EventArgs e)
         {
-            mlblMinMassHelp.Visible = false ; 
-            mlblMaxMassHelp.Visible = false ; 
-            mlblMaxScanHelp.Visible = false ; 
-            mlblMinScanHelp.Visible = false ; 			
-            mlbConsiderChargeHelp.Visible = true ;
-            mlblCCMassHelp.Visible = false ; 
-            mlblProtonMassHelp.Visible = false ; 	
-            mlblOutputTypeHelp.Visible = false ; 
-            mlblOutputTypeCDTAHelp.Visible = false ; 
-            mlblOutputTypeDTAHelp.Visible = false ; 
-            mlblOutputTypeLogHelp.Visible = false ; 
-            mlbOutputTypeMGFHelp.Visible = false ; 			
-            mlblMinIonCountHelp.Visible = false ; 
-            mlblWindowSizeHelp.Visible = false ; 	
+            mlblMinMassHelp.Visible = false;
+            mlblMaxMassHelp.Visible = false;
+            mlblMaxScanHelp.Visible = false;
+            mlblMinScanHelp.Visible = false;
+            mlbConsiderChargeHelp.Visible = true;
+            mlblCCMassHelp.Visible = false;
+            mlblProtonMassHelp.Visible = false;
+            mlblOutputTypeHelp.Visible = false;
+            mlblOutputTypeCDTAHelp.Visible = false;
+            mlblOutputTypeDTAHelp.Visible = false;
+            mlblOutputTypeLogHelp.Visible = false;
+            mlbOutputTypeMGFHelp.Visible = false;
+            mlblMinIonCountHelp.Visible = false;
+            mlblWindowSizeHelp.Visible = false;
         }
 
         private void mchkConsiderCharge_CheckedChanged(object sender, System.EventArgs e)
         {
-            mlabelChargeToConsider.Enabled = mchkConsiderCharge.Checked ; 
-            mtxtConsiderCharge.Enabled = mchkConsiderCharge.Checked ; 
+            mlabelChargeToConsider.Enabled = mchkConsiderCharge.Checked;
+            mtxtConsiderCharge.Enabled = mchkConsiderCharge.Checked;
         }
 
         private void mtxtCCMass_Enter(object sender, System.EventArgs e)
         {
-            mlblMinMassHelp.Visible = false ; 
-            mlblMaxMassHelp.Visible = false ; 
-            mlblMaxScanHelp.Visible = false ; 
-            mlblMinScanHelp.Visible = false ; 			
-            mlbConsiderChargeHelp.Visible = false ;
-            mlblCCMassHelp.Visible = true ; 
-            mlblProtonMassHelp.Visible = false ; 	
-            mlblOutputTypeHelp.Visible = false ; 
-            mlblOutputTypeCDTAHelp.Visible = false ; 
-            mlblOutputTypeDTAHelp.Visible = false ; 
-            mlblOutputTypeLogHelp.Visible = false ; 
-            mlbOutputTypeMGFHelp.Visible = false ;			
-            mlblMinIonCountHelp.Visible = false ; 
-            mlblWindowSizeHelp.Visible = false ; 	
+            mlblMinMassHelp.Visible = false;
+            mlblMaxMassHelp.Visible = false;
+            mlblMaxScanHelp.Visible = false;
+            mlblMinScanHelp.Visible = false;
+            mlbConsiderChargeHelp.Visible = false;
+            mlblCCMassHelp.Visible = true;
+            mlblProtonMassHelp.Visible = false;
+            mlblOutputTypeHelp.Visible = false;
+            mlblOutputTypeCDTAHelp.Visible = false;
+            mlblOutputTypeDTAHelp.Visible = false;
+            mlblOutputTypeLogHelp.Visible = false;
+            mlbOutputTypeMGFHelp.Visible = false;
+            mlblMinIonCountHelp.Visible = false;
+            mlblWindowSizeHelp.Visible = false;
         }
 
         private void mtxtProtonMass_Enter(object sender, System.EventArgs e)
         {
-            mlblMinMassHelp.Visible = false ; 
-            mlblMaxMassHelp.Visible = false ; 
-            mlblMaxScanHelp.Visible = false ; 
-            mlblMinScanHelp.Visible = false ; 			
-            mlbConsiderChargeHelp.Visible = false ;
-            mlblCCMassHelp.Visible = false ; 
-            mlblProtonMassHelp.Visible = true ; 	
-            mlblOutputTypeHelp.Visible = false ; 
-            mlblOutputTypeCDTAHelp.Visible = false ; 
-            mlblOutputTypeDTAHelp.Visible = false ; 
-            mlblOutputTypeLogHelp.Visible = false ; 
-            mlbOutputTypeMGFHelp.Visible = false ; 			
-            mlblMinIonCountHelp.Visible = false ; 
-            mlblWindowSizeHelp.Visible = false ; 
+            mlblMinMassHelp.Visible = false;
+            mlblMaxMassHelp.Visible = false;
+            mlblMaxScanHelp.Visible = false;
+            mlblMinScanHelp.Visible = false;
+            mlbConsiderChargeHelp.Visible = false;
+            mlblCCMassHelp.Visible = false;
+            mlblProtonMassHelp.Visible = true;
+            mlblOutputTypeHelp.Visible = false;
+            mlblOutputTypeCDTAHelp.Visible = false;
+            mlblOutputTypeDTAHelp.Visible = false;
+            mlblOutputTypeLogHelp.Visible = false;
+            mlbOutputTypeMGFHelp.Visible = false;
+            mlblMinIonCountHelp.Visible = false;
+            mlblWindowSizeHelp.Visible = false;
         }
 
         private void mTxtWindowSize_Enter(object sender, System.EventArgs e)
         {
-            mlblMinMassHelp.Visible = false ; 
-            mlblMaxMassHelp.Visible = false ; 
-            mlblMaxScanHelp.Visible = false ; 
-            mlblMinScanHelp.Visible = false ; 			
-            mlbConsiderChargeHelp.Visible = false ;
-            mlblCCMassHelp.Visible = false ; 
-            mlblProtonMassHelp.Visible = false ; 	
-            mlblOutputTypeHelp.Visible = false ; 
-            mlblOutputTypeCDTAHelp.Visible = false ; 
-            mlblOutputTypeDTAHelp.Visible = false ; 
-            mlblOutputTypeLogHelp.Visible = false ; 
-            mlbOutputTypeMGFHelp.Visible = false ; 			
-            mlblMinIonCountHelp.Visible = false ; 
-            mlblWindowSizeHelp.Visible = true ; 
+            mlblMinMassHelp.Visible = false;
+            mlblMaxMassHelp.Visible = false;
+            mlblMaxScanHelp.Visible = false;
+            mlblMinScanHelp.Visible = false;
+            mlbConsiderChargeHelp.Visible = false;
+            mlblCCMassHelp.Visible = false;
+            mlblProtonMassHelp.Visible = false;
+            mlblOutputTypeHelp.Visible = false;
+            mlblOutputTypeCDTAHelp.Visible = false;
+            mlblOutputTypeDTAHelp.Visible = false;
+            mlblOutputTypeLogHelp.Visible = false;
+            mlbOutputTypeMGFHelp.Visible = false;
+            mlblMinIonCountHelp.Visible = false;
+            mlblWindowSizeHelp.Visible = true;
         }
 
-
-
-        
         public int MaximumScanToConsider
         {
             set
             {
-                mtxtMaxScan.Text = Convert.ToString(value) ; 				
+                mtxtMaxScan.Text = Convert.ToString(value);
             }
             get
             {
-                return Convert.ToInt32(mtxtMaxScan.Text) ; 
+                return Convert.ToInt32(mtxtMaxScan.Text);
             }
         }
 
@@ -808,11 +800,11 @@ namespace Decon2LS
         {
             set
             {
-                mtxtMinScan.Text = Convert.ToString(value) ; 				
+                mtxtMinScan.Text = Convert.ToString(value);
             }
             get
             {
-                return Convert.ToInt32(mtxtMinScan.Text) ; 
+                return Convert.ToInt32(mtxtMinScan.Text);
             }
         }
 
@@ -820,11 +812,11 @@ namespace Decon2LS
         {
             set
             {
-                mtxtMinMass.Text = Convert.ToString(value) ; 				
+                mtxtMinMass.Text = Convert.ToString(value);
             }
             get
             {
-                return Convert.ToDouble(mtxtMinMass.Text) ; 
+                return Convert.ToDouble(mtxtMinMass.Text);
             }
         }
 
@@ -832,11 +824,11 @@ namespace Decon2LS
         {
             set
             {
-                mtxtMaxMass.Text = Convert.ToString(value) ; 				
+                mtxtMaxMass.Text = Convert.ToString(value);
             }
             get
             {
-                return Convert.ToDouble(mtxtMaxMass.Text) ; 
+                return Convert.ToDouble(mtxtMaxMass.Text);
             }
         }
 
@@ -844,11 +836,11 @@ namespace Decon2LS
         {
             set
             {
-                mtxtMinIonCount.Text = Convert.ToString(value) ; 				
+                mtxtMinIonCount.Text = Convert.ToString(value);
             }
             get
             {
-                return Convert.ToInt16(mtxtMinIonCount.Text) ; 
+                return Convert.ToInt16(mtxtMinIonCount.Text);
             }
         }
 
@@ -858,42 +850,42 @@ namespace Decon2LS
             {
                 if (mcmbOutputType.SelectedIndex == 0)
                 {
-                    return DeconToolsV2.DTAGeneration.OUTPUT_TYPE.DTA ;
+                    return DeconToolsV2.DTAGeneration.OUTPUT_TYPE.DTA;
                 }
                 else if (mcmbOutputType.SelectedIndex == 1)
                 {
-                    return DeconToolsV2.DTAGeneration.OUTPUT_TYPE.LOG ; 
+                    return DeconToolsV2.DTAGeneration.OUTPUT_TYPE.LOG;
                 }
                 else if (mcmbOutputType.SelectedIndex == 2)
                 {
-                    return DeconToolsV2.DTAGeneration.OUTPUT_TYPE.MGF ; 
+                    return DeconToolsV2.DTAGeneration.OUTPUT_TYPE.MGF;
                 }
                 else if (mcmbOutputType.SelectedIndex == 3)
                 {
-                    return DeconToolsV2.DTAGeneration.OUTPUT_TYPE.CDTA ; 
+                    return DeconToolsV2.DTAGeneration.OUTPUT_TYPE.CDTA;
                 }
 
-                return DeconToolsV2.DTAGeneration.OUTPUT_TYPE.DTA ; 
+                return DeconToolsV2.DTAGeneration.OUTPUT_TYPE.DTA;
             }
             set
             {
                 switch (value)
                 {
                     case DeconToolsV2.DTAGeneration.OUTPUT_TYPE.DTA:
-                        mcmbOutputType.SelectedIndex = 0 ; 
-                        break ; 
+                        mcmbOutputType.SelectedIndex = 0;
+                        break;
                     case DeconToolsV2.DTAGeneration.OUTPUT_TYPE.LOG:
-                        mcmbOutputType.SelectedIndex = 1 ; 
-                        break ; 
+                        mcmbOutputType.SelectedIndex = 1;
+                        break;
                     case DeconToolsV2.DTAGeneration.OUTPUT_TYPE.MGF:
-                        mcmbOutputType.SelectedIndex = 2 ; 
-                        break ; 
+                        mcmbOutputType.SelectedIndex = 2;
+                        break;
                     case DeconToolsV2.DTAGeneration.OUTPUT_TYPE.CDTA:
-                        mcmbOutputType.SelectedIndex = 3 ; 
-                        break ; 
+                        mcmbOutputType.SelectedIndex = 3;
+                        break;
                     default:
-                        mcmbOutputType.SelectedIndex = 0 ; 
-                        break ; 
+                        mcmbOutputType.SelectedIndex = 0;
+                        break;
                 }
             }
         }
@@ -902,12 +894,12 @@ namespace Decon2LS
         {
             set
             {
-                mchkConsiderCharge.Checked = value ; 
+                mchkConsiderCharge.Checked = value;
             }
 
             get
             {
-                return mchkConsiderCharge.Checked ; 
+                return mchkConsiderCharge.Checked;
             }
         }
 
@@ -915,11 +907,11 @@ namespace Decon2LS
         {
             set
             {
-                mtxtConsiderCharge.Text = Convert.ToString(value) ; 
+                mtxtConsiderCharge.Text = Convert.ToString(value);
             }
             get
             {
-                return Convert.ToInt16(mtxtConsiderCharge.Text) ; 
+                return Convert.ToInt16(mtxtConsiderCharge.Text);
             }
         }
 
@@ -927,24 +919,24 @@ namespace Decon2LS
         {
             set
             {
-                mtxtCCMass.Text = Convert.ToString(value) ; 
+                mtxtCCMass.Text = Convert.ToString(value);
             }
             get
             {
-                return Convert.ToDouble(mtxtCCMass.Text) ; 
+                return Convert.ToDouble(mtxtCCMass.Text);
             }
         }
-        
+
         public double ProtonMass
         {
             set
             {
-                mtxtProtonMass.Text  = Convert.ToString(value) ; 
+                mtxtProtonMass.Text = Convert.ToString(value);
             }
-                
+
             get
             {
-                return Convert.ToDouble(mtxtProtonMass.Text) ; 
+                return Convert.ToDouble(mtxtProtonMass.Text);
             }
         }
 
@@ -952,11 +944,11 @@ namespace Decon2LS
         {
             set
             {
-                mTxtWindowSize.Text = Convert.ToString(value) ; 
+                mTxtWindowSize.Text = Convert.ToString(value);
             }
             get
             {
-                return Convert.ToInt16(mTxtWindowSize.Text) ; 
+                return Convert.ToInt16(mTxtWindowSize.Text);
             }
         }
     }

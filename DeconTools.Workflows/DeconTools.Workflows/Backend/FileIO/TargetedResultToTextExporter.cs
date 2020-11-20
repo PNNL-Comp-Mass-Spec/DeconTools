@@ -9,7 +9,6 @@ namespace DeconTools.Workflows.Backend.FileIO
 {
     public abstract class TargetedResultToTextExporter : TextFileExporter<TargetedResultDTO>
     {
-
         public static TargetedResultToTextExporter CreateExporter(WorkflowParameters workflowParameters, string outputFileName)
         {
             TargetedResultToTextExporter exporter;
@@ -50,16 +49,13 @@ namespace DeconTools.Workflows.Backend.FileIO
             }
 
             return exporter;
-
         }
-
 
         #region Constructors
 
         protected TargetedResultToTextExporter(string filename) : base(filename, '\t') { }
 
         #endregion
-
 
         protected override string buildResultOutput(TargetedResultDTO result)
         {
@@ -74,7 +70,6 @@ namespace DeconTools.Workflows.Backend.FileIO
             sb.Append(Delimiter);
             sb.Append(addAdditionalInfo(result));
             return sb.ToString();
-
         }
 
         protected virtual string addAdditionalInfo(TargetedResultDTO result)
@@ -112,7 +107,6 @@ namespace DeconTools.Workflows.Backend.FileIO
             };
 
             return string.Join(Delimiter.ToString(), data);
-
         }
 
         protected override string buildHeaderLine()

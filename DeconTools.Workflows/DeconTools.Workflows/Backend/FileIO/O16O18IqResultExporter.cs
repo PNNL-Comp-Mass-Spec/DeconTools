@@ -5,7 +5,6 @@ namespace DeconTools.Workflows.Backend.FileIO
 {
     public class O16O18IqResultExporter:IqResultExporter
     {
-
         #region Constructors
         #endregion
 

@@ -24,7 +24,6 @@ namespace DeconTools.Workflows.Backend.FileIO
 
         public SipperResultFromTextImporter(string filename) : base(filename) { }
 
-
         protected override TargetedResultDTO ConvertTextToDataObject(List<string> processedData)
         {
             var result = new SipperLcmsFeatureTargetedResultDTO();
@@ -56,7 +55,6 @@ namespace DeconTools.Workflows.Backend.FileIO
             result.ContiguousnessScore = ParseIntField(LookupData(processedData, _contigScoreHeaders));
             result.RSquaredValForRatioCurve = ParseDoubleField(LookupData(processedData, _RSquaredForRatio));
             return result;
-
         }
 
         private double[] ConvertLabelDistStringToArray(string labelDistString)
@@ -75,17 +73,14 @@ namespace DeconTools.Workflows.Backend.FileIO
                 if (parsedOk)
                 {
                     labelDistVals.Add(val);
-
                 }
                 else
                 {
                     return null;
                 }
-
             }
 
             return labelDistVals.ToArray();
-
         }
     }
 }

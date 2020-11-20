@@ -124,7 +124,6 @@ namespace DeconTools.Workflows.Backend.FileIO
                 {_modPhosphorylation, KnownModIDs.Phospho},
                 {_modPyroglutamate, KnownModIDs.PyroGlu}
             };
-
         }
 
         public int DataRowsProcessed { get; private set; }
@@ -155,7 +154,6 @@ namespace DeconTools.Workflows.Backend.FileIO
 
             using (var reader = new StreamReader(new FileStream(_filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)))
             {
-
                 if (reader.EndOfStream)
                 {
                     reader.Close();
@@ -464,7 +462,6 @@ namespace DeconTools.Workflows.Backend.FileIO
                 {
                     empiricalFormula = EmpiricalFormulaUtilities.SubtractFormula(empiricalFormula, empiricalFormulaForMod);
                 }
-
             }
 
             return empiricalFormula;
@@ -517,7 +514,6 @@ namespace DeconTools.Workflows.Backend.FileIO
                     success = DefineMapping(columnHeaderToIndexMap, knownColumnName, knownColumn.Key, columnMapping, headerColumnNames);
                     if (success)
                         break;
-
                 }
 
                 if (success)

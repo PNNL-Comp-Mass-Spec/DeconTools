@@ -3,8 +3,6 @@ namespace DeconTools.Workflows.Backend.Results
 {
     public class N14N15TargetedResultDTO : UnlabeledTargetedResultDTO
     {
-
-
         #region Properties
 
         public int ScanN15 { get; set; }
@@ -25,10 +23,7 @@ namespace DeconTools.Workflows.Backend.Results
         public float RatioContributionN15 { get; set; }
         public float Ratio { get; set; }
 
-
         #endregion
-
-
 
     }
 }

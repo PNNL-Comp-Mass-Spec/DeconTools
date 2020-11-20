@@ -6,7 +6,6 @@ namespace DeconTools.Backend.Parameters
     [Serializable]
     public abstract class ParametersBase
     {
-
         #region Constructors
         #endregion
 
@@ -34,19 +33,16 @@ namespace DeconTools.Backend.Parameters
 
             if (parameter == null)
             {
-
                 return defaultVal;
             }
 
-            if (!Enum.IsDefined(enumType,parameter.Value))
+            if (!Enum.IsDefined(enumType, parameter.Value))
             {
                 //Log.Warn("Trying to load Enum using an illegal value. Enum= " + enumType + "; Value= " + parameter.Value);
                 return defaultVal;
             }
 
             return Enum.Parse(enumType, parameter.Value, true);
-
-
         }
 
         protected bool GetBoolVal(XElement element, string elementName, bool defaultVal = false)
@@ -69,8 +65,6 @@ namespace DeconTools.Backend.Parameters
             }
 
             return val;
-
-
         }
 
         protected double GetDoubleValue(XElement element, string elementName, double defaultVal = 0)
@@ -91,7 +85,6 @@ namespace DeconTools.Backend.Parameters
             {
                 val = defaultVal;
             }
-
 
             return val;
         }
@@ -115,10 +108,8 @@ namespace DeconTools.Backend.Parameters
                 val = defaultVal;
             }
 
-
             return val;
         }
-
 
         protected string GetStringValue(XElement element, string elementName, string defaultVal = "")
         {
@@ -127,7 +118,6 @@ namespace DeconTools.Backend.Parameters
             if (parameter == null)
             {
                 return defaultVal;
-
             }
             return parameter.Value;
         }
@@ -137,7 +127,6 @@ namespace DeconTools.Backend.Parameters
         #region Private Methods
 
         #endregion
-
 
     }
 }

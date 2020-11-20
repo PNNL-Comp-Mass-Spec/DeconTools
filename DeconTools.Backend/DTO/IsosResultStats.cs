@@ -7,10 +7,9 @@ namespace DeconTools.Backend.DTO
     {
         public List<IsosResult> Results { get; set; }
 
-        public IsosResultStats(List<IsosResult>isosResults)
+        public IsosResultStats(List<IsosResult> isosResults)
         {
             Results = isosResults;
-
         }
 
         public double FitAverage { get; set; }
@@ -18,6 +17,5 @@ namespace DeconTools.Backend.DTO
         public int Count { get; set; }
 
         public string Description { get; set; }
-
     }
 }

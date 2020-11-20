@@ -21,7 +21,6 @@ namespace DeconTools.Workflows.Backend.FileIO
         readonly string[] _ratioHeaders = { "ratio" };
         readonly string[] _monoMZN14Headers = { "MZ1" , "MonoMZ" };
 
-
         #region Constructors
         public N14N15TargetedResultFromTextImporter(string filename) : base(filename) { }
         #endregion
@@ -51,12 +50,8 @@ namespace DeconTools.Workflows.Backend.FileIO
 
             r.NumChromPeaksWithinTolN15 = ParseShortField(LookupData(processedData, _numChromPeaksWithinTolN15Headers));
             r.NumQualityChromPeaksWithinTolN15 = ParseShortField(LookupData(processedData, _numQualityChromPeaksWithinTolN15Headers));
-     
+
             return result;
-
-
         }
-
-       
     }
 }

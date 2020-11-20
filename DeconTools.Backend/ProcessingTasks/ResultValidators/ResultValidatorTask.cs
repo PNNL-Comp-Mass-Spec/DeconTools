@@ -15,7 +15,6 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
                 new LeftOfMonoPeakLooker(),
                 new IsotopicProfileInterferenceScorer(minRelIntensityForScore, usePeakBasedInterferenceValue)
             };
-
         }
         #endregion
 
@@ -38,20 +37,13 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
             //iterate over each ms feature
             foreach (var msFeature in resultList.IsosResultBin)
             {
-
                 //execute each validator
                 foreach (var validator in ResultValidatorColl)
                 {
                     validator.CurrentResult = msFeature;
                     validator.Execute(resultList);
-
                 }
-
-
-
             }
-
-
         }
     }
 }

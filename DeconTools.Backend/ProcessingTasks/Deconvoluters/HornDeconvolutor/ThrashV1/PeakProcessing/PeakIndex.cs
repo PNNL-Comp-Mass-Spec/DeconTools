@@ -115,7 +115,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                 }
 
                 var ratio = (maxVal - mzVal) * 1.0 / (maxVal - minVal);
-                var midIndex = (int) (startIndex * ratio + stopIndex * (1 - ratio) + 0.5);
+                var midIndex = (int)(startIndex * ratio + stopIndex * (1 - ratio) + 0.5);
                 if (midIndex == startIndex)
                     midIndex = startIndex + 1;
                 else if (midIndex == stopIndex)
@@ -171,7 +171,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             else
                 step = vec[startIndex] - vec[startIndex - 1];
 
-            var moveBy = (int) (distanceToGo / step);
+            var moveBy = (int)(distanceToGo / step);
             var nextIndex = startIndex + moveBy;
 
             if (nextIndex < 0)

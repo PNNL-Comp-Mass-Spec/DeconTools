@@ -8,10 +8,8 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
 
     }
 
-
     public class ChromPeakSelectorParameters
     {
-
         #region Constructors
         public ChromPeakSelectorParameters()
         {
@@ -34,12 +32,10 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
             AreaOfPeakToSumInDynamicSumming = parameters.AreaOfPeakToSumInDynamicSumming;
         }
 
-
         #endregion
 
         #region Properties
-        
-        
+
         /// <summary>
         /// Number of MS scans to sum after the Chrom peak has been selected
         /// </summary>
@@ -49,12 +45,10 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
 
         public DeconTools.Backend.Globals.PeakSelectorMode PeakSelectorMode { get; set; }
 
-
         /// <summary>
         /// Summing mode. Static indicates that the number of scans summed is always the same. Dynamic indicates that the number of scans summed is variable
         /// </summary>
         public SummingModeEnum SummingMode { get; set; }
-
 
         public int MaxScansSummedInDynamicSumming { get; set; }
 
@@ -62,7 +56,6 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
         /// Area of peak to sum, based on units of sigma. Eg a value of '2' means +/- 2 sigma; thus 4 sigma or ~ 95% of a gaussian peak will be summed
         /// </summary>
         public double AreaOfPeakToSumInDynamicSumming { get; set; }
-
 
         #endregion
 

@@ -15,11 +15,8 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
 
             var loader = new ViperMassCalibrationLoader(testFile);
 
-            var calibrationData=  loader.ImportMassCalibrationData();
+            var calibrationData = loader.ImportMassCalibrationData();
             Console.WriteLine(calibrationData.MassError);
-
-
         }
-
     }
 }

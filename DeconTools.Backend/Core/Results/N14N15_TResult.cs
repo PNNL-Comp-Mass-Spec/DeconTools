@@ -6,7 +6,6 @@ namespace DeconTools.Backend.Core
 {
     public class N14N15_TResult : TargetedResultBase
     {
-
         #region Constructors
 
         public N14N15_TResult() : base() { }
@@ -19,9 +18,7 @@ namespace DeconTools.Backend.Core
 
         public IsotopicProfile IsotopicProfileLabeled { get; set; }
 
-
         public IsotopicProfile TheorIsotopicProfileLabeled { get; set; }
-
 
         public int NumChromPeaksWithinToleranceForN15Profile { get; set; }
         public ChromPeak ChromPeakSelectedN15 { get; set; }
@@ -33,8 +30,6 @@ namespace DeconTools.Backend.Core
         public double RatioN14N15 { get; set; }
         public double RatioContributionN14 { get; set; }
         public double RatioContributionN15 { get; set; }
-
-
 
         /// <summary>
         /// Store chromatogram data for one or more peaks from the unlabeled isotopic profile
@@ -95,7 +90,6 @@ namespace DeconTools.Backend.Core
         {
             if (ChromPeakSelectedN15 == null) return -1;
             return ChromPeakSelectedN15.NETValue;
-
         }
 
         public MSPeak GetMonoisotopicPeakForLabeledProfile()
@@ -133,9 +127,5 @@ namespace DeconTools.Backend.Core
         {
             TheorIsotopicProfileLabeled = theorLabeledIso;
         }
-
-
-
-
     }
 }

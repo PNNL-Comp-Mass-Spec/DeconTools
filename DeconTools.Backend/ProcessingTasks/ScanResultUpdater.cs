@@ -7,7 +7,6 @@ namespace DeconTools.Backend.ProcessingTasks
 {
     public class ScanResultUpdater : Task
     {
-
         public bool MS2_IsOutputted { get; set; }
 
         public ScanResultUpdater()
@@ -19,7 +18,6 @@ namespace DeconTools.Backend.ProcessingTasks
         {
             MS2_IsOutputted = ms2IsOutputted;
         }
-
 
         public override void Execute(ResultCollection resultList)
         {
@@ -42,16 +40,11 @@ namespace DeconTools.Backend.ProcessingTasks
                 scanIsMS2 = (resultList.Run.GetMSLevel(resultList.Run.CurrentScanSet.PrimaryScanNumber) == 2);
             }
 
-
-
-
             if (!MS2_IsOutputted && scanIsMS2)
             {
-
             }
             else
             {
-
                 var srf = new ScanResultFactory();
                 var scanResult = srf.CreateScanResult(resultList.Run);
 
@@ -61,7 +54,6 @@ namespace DeconTools.Backend.ProcessingTasks
                     //Console.WriteLine("ScanResult isotopic profiles = \t" + scanResult.NumIsotopicProfiles);
                 }
             }
-
         }
     }
 }

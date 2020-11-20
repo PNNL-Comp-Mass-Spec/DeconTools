@@ -3,7 +3,7 @@ using DeconTools.Utilities.SqliteUtils;
 
 namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
 {
-    public sealed class UIMFScanResult_SqliteTable:Table
+    public sealed class UIMFScanResult_SqliteTable : Table
     {
         #region Constructors
         public UIMFScanResult_SqliteTable(string tableName)
@@ -22,7 +22,6 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
                 new Field("frame_pressure_unsmoothed", "FLOAT"),
                 new Field("frame_pressure_smoothed", "FLOAT")
             };
-
         }
         #endregion
 
@@ -38,7 +37,6 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
 
         #region Private Methods
         #endregion
-
 
     }
 }

@@ -7,14 +7,12 @@ namespace DeconTools.Backend.Utilities
 {
     public class Logger_Importer
     {
-
         public static void displayLogFile(string logTestFile)
         {
             if (!File.Exists(logTestFile))
             {
                 Console.WriteLine("Log file couldn't be loaded. Check path etc.");
                 throw new FileNotFoundException("Log file couldn't be loaded. Check path");
-
             }
             var sr = new StreamReader(logTestFile);
 
@@ -38,13 +36,11 @@ namespace DeconTools.Backend.Utilities
                     sb.Append(match.Groups["features"].Value);
                     sb.Append(Environment.NewLine);
                 }
-
             }
 
             Console.Write(sb.ToString());
 
             sr.Close();
-
         }
     }
 }

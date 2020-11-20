@@ -22,9 +22,9 @@ namespace Decon2LS
     /// </summary>
     public class ctlAveragineOptions : System.Windows.Forms.UserControl
     {
-        private const string mstrProteinAveragine = "C4.9384 H7.7583 N1.3577 O1.4773 S0.0417" ;
-        private const string mstrDNAAveragine = "C3.9 H4.9 N1.5 O2.4 P0.4" ;
-        private const string mstrRNAAveragine = "C3.8 H4.7 N1.5 O2.8 P0.4" ;
+        private const string mstrProteinAveragine = "C4.9384 H7.7583 N1.3577 O1.4773 S0.0417";
+        private const string mstrDNAAveragine = "C3.9 H4.9 N1.5 O2.4 P0.4";
+        private const string mstrRNAAveragine = "C3.8 H4.7 N1.5 O2.8 P0.4";
 
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox groupBox2;
@@ -37,7 +37,7 @@ namespace Decon2LS
         private System.Windows.Forms.RadioButton mradioButtonProtein;
         private System.Windows.Forms.TextBox mTextCustomAveragine;
         private System.Windows.Forms.TextBox mTextTagFormula;
-        /// <summary> 
+        /// <summary>
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.Container components = null;
@@ -51,24 +51,24 @@ namespace Decon2LS
 
         }
 
-        /// <summary> 
+        /// <summary>
         /// Clean up any resources being used.
         /// </summary>
-        protected override void Dispose( bool disposing )
+        protected override void Dispose(bool disposing)
         {
-            if( disposing )
+            if (disposing)
             {
-                if(components != null)
+                if (components != null)
                 {
                     components.Dispose();
                 }
             }
-            base.Dispose( disposing );
+            base.Dispose(disposing);
         }
 
         #region Component Designer generated code
-        /// <summary> 
-        /// Required method for Designer support - do not modify 
+        /// <summary>
+        /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
@@ -206,7 +206,6 @@ namespace Decon2LS
             this.groupBox2.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
             this.ResumeLayout(false);
-
         }
         #endregion
 
@@ -216,39 +215,39 @@ namespace Decon2LS
             {
                 if (mradioButtonProtein.Checked)
                 {
-                    return mstrProteinAveragine ;
+                    return mstrProteinAveragine;
                 }
                 else if (mradioButtonDNA.Checked)
                 {
-                    return mstrDNAAveragine ;
+                    return mstrDNAAveragine;
                 }
                 else if (mradioButtonRNA.Checked)
                 {
-                    return mstrRNAAveragine ;
+                    return mstrRNAAveragine;
                 }
                 else
                 {
-                    return mTextCustomAveragine.Text ; 
+                    return mTextCustomAveragine.Text;
                 }
             }
             set
-            {				
+            {
                 if (value == mstrProteinAveragine)
                 {
-                    mradioButtonProtein.Checked = true ; 
+                    mradioButtonProtein.Checked = true;
                 }
                 else if (value == mstrDNAAveragine)
                 {
-                    mradioButtonDNA.Checked = true ;
+                    mradioButtonDNA.Checked = true;
                 }
                 else if (value == mstrRNAAveragine)
                 {
-                    mradioButtonRNA.Checked = true ; 
+                    mradioButtonRNA.Checked = true;
                 }
                 else
                 {
-                    mTextCustomAveragine.Text = value ; 
-                    mradioButtonCustom.Checked = true ; 
+                    mTextCustomAveragine.Text = value;
+                    mradioButtonCustom.Checked = true;
                 }
             }
         }
@@ -256,11 +255,11 @@ namespace Decon2LS
         {
             get
             {
-                return mTextTagFormula.Text ; 
+                return mTextTagFormula.Text;
             }
             set
             {
-                mTextTagFormula.Text = value ; 
+                mTextTagFormula.Text = value;
             }
         }
     }

@@ -17,7 +17,6 @@ namespace DeconTools.Workflows.Backend.FileIO
         protected string[] MonoMassTheorHeaders = { "MonomassTheor" };
         protected string[] MzTheorHeaders = { "MzTheor" };
 
-
         protected string[] ElutionTimeTheorHeaders = { "ElutionTimeTheor" };
         protected string[] TargetScanHeaders = { "targetScan" };
         protected string[] MonomassObsHeaders = { "MonoMassObs" };
@@ -74,7 +73,6 @@ namespace DeconTools.Workflows.Backend.FileIO
                 {
                     sr.Close();
                     throw new InvalidDataException("There is no data in file " + PRISM.PathUtils.CompactPathString(IqResultFilePath, 60));
-
                 }
 
                 var headerLine = sr.ReadLine();
@@ -86,7 +84,6 @@ namespace DeconTools.Workflows.Backend.FileIO
                 {
                     throw new InvalidDataException("There is a problem with the column headers in file " + PRISM.PathUtils.CompactPathString(IqResultFilePath, 60));
                 }
-
 
                 var lineCounter = 1;   //used for tracking which line is being processed.
 
@@ -109,10 +106,8 @@ namespace DeconTools.Workflows.Backend.FileIO
                     ConvertTextToDataObject(ref iqResult, processedData);
                     resultList.Add(iqResult);
                     lineCounter++;
-
                 }
                 sr.Close();
-
             }
             return resultList;
         }
@@ -122,7 +117,6 @@ namespace DeconTools.Workflows.Backend.FileIO
 
         protected void GetBasicIqResultData(ref IqResult result, List<string> rowData)
         {
-
             result.Target.ID = ParseIntField(rowData, TargetIDHeaders, 0);
             result.Target.ChargeState = ParseIntField(rowData, ChargeStateHeaders, 0);
             result.Target.MonoMassTheor = ParseDoubleField(rowData, MonoMassTheorHeaders, 0);
@@ -142,12 +136,10 @@ namespace DeconTools.Workflows.Backend.FileIO
             result.MZObsCalibrated = ParseDoubleField(rowData, MZObsCalibratedHeaders, 0);
             result.MonoMassObsCalibrated = ParseDoubleField(rowData, MonomassObsCalibratedHeaders, 0);
 
-
             result.NumChromPeaksWithinTolerance = ParseIntField(rowData, ChromPeaksWithinTolHeaders);
 
             result.MassErrorBefore = (result.MonoMassObs - result.Target.MonoMassTheor) / result.Target.MonoMassTheor * 1e6;
             result.MassErrorAfter = (result.MonoMassObsCalibrated - result.Target.MonoMassTheor) / result.Target.MonoMassTheor * 1e6;
-
         }
 
         protected virtual bool ValidateHeaders()
@@ -188,7 +180,6 @@ namespace DeconTools.Workflows.Backend.FileIO
             _columnHeaders = ProcessLine(headerLine);
             _columnIndexTable = new Dictionary<string, int>();
 
-
             for (var i = 0; i < _columnHeaders.Count; i++)
             {
                 var header = _columnHeaders[i].ToLower();
@@ -197,9 +188,7 @@ namespace DeconTools.Workflows.Backend.FileIO
                 {
                     _columnIndexTable.Add(header, i);
                 }
-
             }
-
         }
 
         private string ParseStringField(List<string> rowData, IEnumerable<string> headers, string defaultVal = "")
@@ -295,7 +284,6 @@ namespace DeconTools.Workflows.Backend.FileIO
                 return defaultVal;
             }
 
-
             short result;
             if (Int16.TryParse(rowValueString, out result))
             {
@@ -303,8 +291,6 @@ namespace DeconTools.Workflows.Backend.FileIO
             }
 
             return defaultVal;
-
-
         }
 
         private bool ParseBoolField(List<string> rowData, IEnumerable<string> headers, bool defaultVal = false)
@@ -319,7 +305,6 @@ namespace DeconTools.Workflows.Backend.FileIO
             if (rowValueString == "1" || rowValueString == "true")
             {
                 return true;
-
             }
 
             if (rowValueString == "0" || rowValueString == "false")
@@ -328,13 +313,10 @@ namespace DeconTools.Workflows.Backend.FileIO
             }
 
             return defaultVal;
-
-
         }
 
         private string LookupData(List<string> row, IEnumerable<string> possibleColumnHeaders, string defaultValue)
         {
-
             foreach (var possibleHeader in possibleColumnHeaders)
             {
                 var columnIndex = GetColumnIndexForHeader(possibleHeader);
@@ -345,14 +327,11 @@ namespace DeconTools.Workflows.Backend.FileIO
             }
 
             return defaultValue;
-
         }
 
         private int GetColumnIndexForHeader(string columnHeader)
         {
-
             columnHeader = columnHeader.ToLower();
-
 
             if (_columnIndexTable.ContainsKey(columnHeader))
             {
@@ -363,19 +342,6 @@ namespace DeconTools.Workflows.Backend.FileIO
         }
 
         #endregion
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     }
 }

@@ -7,7 +7,6 @@ namespace IQ.ViewModel
 {
     public class AutoprocessorViewModel : ViewModelBase
     {
-
         private BackgroundWorker _backgroundWorker;
 
         #region Constructors
@@ -16,10 +15,6 @@ namespace IQ.ViewModel
         {
             ExecutorParameters = new BasicTargetedWorkflowExecutorParameters();
             TargetedWorkflowParameters = new BasicTargetedWorkflowParameters();
-
-
-
-
         }
 
         #endregion
@@ -63,7 +58,6 @@ namespace IQ.ViewModel
                 OnPropertyChanged("WorkflowParametersFilePath");
             }
         }
-
 
         public string TargetsFilePath
         {
@@ -114,8 +108,6 @@ namespace IQ.ViewModel
 
         public void Execute()
         {
-
-
             if (_backgroundWorker != null && _backgroundWorker.IsBusy)
             {
                 GeneralStatusMessage = "Already processing.... please wait or click 'Cancel'";
@@ -123,7 +115,6 @@ namespace IQ.ViewModel
             }
 
             GeneralStatusMessage = "IQ working....";
-
 
             _backgroundWorker = new BackgroundWorker();
             _backgroundWorker.WorkerSupportsCancellation = true;
@@ -133,11 +124,6 @@ namespace IQ.ViewModel
             _backgroundWorker.ProgressChanged += _backgroundWorker_ProgressChanged;
             _backgroundWorker.RunWorkerCompleted += _backgroundWorker_RunWorkerCompleted;
             _backgroundWorker.RunWorkerAsync();
-
-
-
-
-
         }
 
         public void CancelProcessing()
@@ -153,8 +139,6 @@ namespace IQ.ViewModel
         {
             BackgroundWorker worker = (BackgroundWorker)sender;
 
-
-
             var executor = new BasicTargetedWorkflowExecutor(ExecutorParameters, DatasetPath, worker);
             executor.Execute();
 
@@ -162,7 +146,6 @@ namespace IQ.ViewModel
             {
                 e.Cancel = true;
             }
-
         }
 
         void _backgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -182,7 +165,6 @@ namespace IQ.ViewModel
             }
         }
 
-
         void _backgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             PercentProgress = e.ProgressPercentage;
@@ -194,7 +176,6 @@ namespace IQ.ViewModel
                     var info = (TargetedWorkflowExecutorProgressInfo)e.UserState;
                     if (info.IsGeneralProgress)
                     {
-
                         var infostrings = info.ProgressInfoString.Split(new string[] { Environment.NewLine },
                                                                         StringSplitOptions.RemoveEmptyEntries);
 
@@ -206,9 +187,6 @@ namespace IQ.ViewModel
                                 GeneralStatusMessage = infostring;
                             }
                         }
-
-
-
                     }
                     else
                     {
@@ -235,7 +213,6 @@ namespace IQ.ViewModel
                             {
                                 currentTargetString = currentTargetString + "\nTarget not found";
                             }
-
                         }
 
                         GeneralStatusMessage = "Processed target " + currentTargetString;
@@ -246,13 +223,6 @@ namespace IQ.ViewModel
                     Console.WriteLine(e.UserState);
                 }
             }
-
-
-
-
-
         }
-
-
     }
 }

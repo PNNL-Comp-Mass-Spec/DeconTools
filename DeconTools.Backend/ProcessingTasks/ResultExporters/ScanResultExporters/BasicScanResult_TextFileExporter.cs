@@ -5,9 +5,8 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
 {
     public class BasicScanResult_TextFileExporter : ScanResult_TextFileExporter
     {
-
         #region Constructors
-        public BasicScanResult_TextFileExporter(string fileName) : base(fileName) {}
+        public BasicScanResult_TextFileExporter(string fileName) : base(fileName) { }
 
         #endregion
 
@@ -26,9 +25,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
                 result.Description
             };
 
-
             return string.Join(Delimiter.ToString(), data);
-
         }
 
         protected override string buildHeaderLine()
@@ -46,7 +43,5 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
 
             return string.Join(Delimiter.ToString(), data);
         }
-
-
     }
 }

@@ -9,12 +9,10 @@ using PNNLOmics.Data;
 using PRISM;
 using ThermoRawFileReader;
 
-
 namespace DeconTools.Backend.Runs
 {
     public sealed class XCaliburRun2 : Run
     {
-
         private readonly XRawFileIO mRawFileReader;
 
         #region Constructors
@@ -182,12 +180,12 @@ namespace DeconTools.Backend.Runs
 
         public override PrecursorInfo GetPrecursorInfo(int scanNum)
         {
-
             var scanInfo = GetScanInfo(scanNum);
             XRawFileIO.ExtractParentIonMZFromFilterText(scanInfo, out var precursorMz, out var msLevel, out var fragmentationType);
             var ionMode = XRawFileIO.DetermineIonizationMode(scanInfo);
 
-            var precursor = new PrecursorInfo {
+            var precursor = new PrecursorInfo
+            {
                 MSLevel = msLevel
             };
 
@@ -235,7 +233,6 @@ namespace DeconTools.Backend.Runs
                         precursor.FragmentationType = FragmentionType.None;
                         break;
                 }
-
             }
             else
             {
@@ -397,7 +394,7 @@ namespace DeconTools.Backend.Runs
             }
             catch (AccessViolationException)
             {
-               // Ignore errors here
+                // Ignore errors here
             }
 
             base.Close();
@@ -420,6 +417,5 @@ namespace DeconTools.Backend.Runs
             var success = mRawFileReader.GetScanInfo(scanNumber, out scanInfo);
             return success;
         }
-
     }
 }

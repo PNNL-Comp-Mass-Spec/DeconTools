@@ -34,15 +34,13 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             var o18TheorProfileDoubleLabel = convertO16ProfileToO18(o16TheorFeature, 4);
             var o18DoubleLabelProfile = _iterativeTffStandard.IterativelyFindMSFeature(xyData, o18TheorProfileDoubleLabel);
 
-           IsotopicProfile foundO16O18Profile;
+            IsotopicProfile foundO16O18Profile;
 
             if (o16Profile == null)
             {
-
                 if (o18DoubleLabelProfile == null)
                 {
                     return null;
-
                 }
 
                 foundO16O18Profile = o18DoubleLabelProfile.CloneIsotopicProfile();
@@ -63,18 +61,14 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             lookForMissingPeaksAndInsertZeroIntensityPeaksWhenMissing(foundO16O18Profile, o16TheorFeature);
 
             return foundO16O18Profile;
-
-
         }
-
-
 
         #endregion
 
         #region Private Methods
         private IsotopicProfile convertO16ProfileToO18(IsotopicProfile theorFeature, int numPeaksToShift)
         {
-            var o18Iso = new IsotopicProfile {ChargeState = theorFeature.ChargeState, Peaklist = new List<MSPeak>()};
+            var o18Iso = new IsotopicProfile { ChargeState = theorFeature.ChargeState, Peaklist = new List<MSPeak>() };
             var mzBetweenIsotopes = 1.003 / theorFeature.ChargeState;
 
             foreach (var theorPeak in theorFeature.Peaklist)
@@ -84,7 +78,6 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
                 peak.XValue += numPeaksToShift * mzBetweenIsotopes;
 
                 o18Iso.Peaklist.Add(peak);
-
             }
 
             return o18Iso;
@@ -111,9 +104,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
                 {
                     break;
                 }
-
             }
-
 
             foundO16O18Profile.Peaklist = foundO16O18Profile.Peaklist.OrderBy(p => p.XValue).ToList();
         }
@@ -126,7 +117,6 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             var monoMz = theorFeature.getMonoPeak().XValue;
 
             const double toleranceInDa = 0.1;
-
 
             //this will iterate over the first five expected m/z values of a theoretical profile
             //and loosely try to the corresponding peak within the observed profile.
@@ -143,12 +133,9 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
                     o16O18Profile.Peaklist.Insert(i, new MSPeak(currentMz));
                 }
             }
-
-
         }
 
         #endregion
-
 
     }
 }

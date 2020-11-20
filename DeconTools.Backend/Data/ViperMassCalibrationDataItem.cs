@@ -6,7 +6,6 @@ namespace DeconTools.Backend.Data
     /// </summary>
     public class ViperMassCalibrationDataItem
     {
-
         #region Constructors
         #endregion
 

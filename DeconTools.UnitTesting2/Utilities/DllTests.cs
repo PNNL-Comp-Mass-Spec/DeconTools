@@ -23,7 +23,6 @@ namespace DeconTools.UnitTesting2.Utilities
             if (!Directory.Exists(outputDirectoryPath))
                 Directory.CreateDirectory(outputDirectoryPath);
 
-
             var directoryInfo = new DirectoryInfo(baseFolder);
             if (directoryInfo.Exists)
             {
@@ -56,7 +55,6 @@ namespace DeconTools.UnitTesting2.Utilities
                         var xAttribute = referenceItem.Attribute("Include");
                         if (xAttribute != null && xAttribute.Value.Contains("DeconEngineV2"))
                         {
-
                             Console.WriteLine("\t\t\t" + xAttribute.Value);
 
                             var hintPathElement = referenceItem.Descendants().FirstOrDefault(y => y.Name == msbuild + "HintPath");
@@ -73,16 +71,9 @@ namespace DeconTools.UnitTesting2.Utilities
                                 Console.WriteLine("\t\t\tHintPath = \t" + hintPathElement.Value);
                                 hintPathElement.Value = hintPath;
                             }
-
-
-
                         }
-
                     }
-
                 }
-
-
 
                 //foreach (var file in fileList)
                 //{
@@ -90,11 +81,9 @@ namespace DeconTools.UnitTesting2.Utilities
 
                 //    File.Copy(newProjectFile, file, true);
 
-
                 //}
 
             }
-
         }
 
         public static List<FileInfo> GetFileList(string fileSearchPattern, string rootDirectoryPath, bool includeSubdirectories = true)
@@ -107,8 +96,6 @@ namespace DeconTools.UnitTesting2.Utilities
                 return directory.GetFiles(fileSearchPattern, SearchOption.AllDirectories).ToList();
 
             return directory.GetFiles(fileSearchPattern, SearchOption.TopDirectoryOnly).ToList();
-
         }
-
     }
 }

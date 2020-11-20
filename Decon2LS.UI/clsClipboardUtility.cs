@@ -11,22 +11,19 @@ namespace Decon2LS
     {
         public clsClipboardUtility()
         {
-                        
         }
 
         public static void CopyXYValuesToClipboard(double[] xvals, double[] yvals)
         {
-            
-            var maxLength=0;
-            if (xvals.Length == 0 || yvals.Length==0)return;
-            
-            if (xvals.Length>=yvals.Length)	maxLength=yvals.Length;
-            else maxLength=xvals.Length;
+            var maxLength = 0;
+            if (xvals.Length == 0 || yvals.Length == 0) return;
 
-            var sb=new System.Text.StringBuilder();
+            if (xvals.Length >= yvals.Length) maxLength = yvals.Length;
+            else maxLength = xvals.Length;
 
+            var sb = new System.Text.StringBuilder();
 
-            for (var i=0;i<maxLength;i++)
+            for (var i = 0; i < maxLength; i++)
             {
                 sb.Append(xvals[i]);
                 sb.Append("\t");
@@ -34,28 +31,25 @@ namespace Decon2LS
                 sb.Append(Environment.NewLine);
             }
 
-            if (sb.ToString()==null || sb.ToString().Length==0)return;
+            if (sb.ToString() == null || sb.ToString().Length == 0) return;
 
             System.Windows.Forms.IDataObject dataobject = new DataObject();
-            dataobject.SetData(DataFormats.Text,true,sb.ToString());
-            System.Windows.Forms.Clipboard.SetDataObject(dataobject,true);
+            dataobject.SetData(DataFormats.Text, true, sb.ToString());
+            System.Windows.Forms.Clipboard.SetDataObject(dataobject, true);
         }
-
-
 
         public static void CopyXYValuesToClipboard(float[] xvals, float[] yvals)
         {
-            if (xvals==null || yvals==null)return;
-            if (xvals.Length==0 || yvals.Length==0)return;
-            
-            var convertedxvals=new double[xvals.Length];
-            var convertedyvals=new double[yvals.Length];
-            
-            xvals.CopyTo(convertedxvals,0);
-            yvals.CopyTo(convertedyvals,0);
+            if (xvals == null || yvals == null) return;
+            if (xvals.Length == 0 || yvals.Length == 0) return;
 
-            clsClipboardUtility.CopyXYValuesToClipboard(convertedxvals,convertedyvals);
+            var convertedxvals = new double[xvals.Length];
+            var convertedyvals = new double[yvals.Length];
+
+            xvals.CopyTo(convertedxvals, 0);
+            yvals.CopyTo(convertedyvals, 0);
+
+            clsClipboardUtility.CopyXYValuesToClipboard(convertedxvals, convertedyvals);
         }
-
     }
 }

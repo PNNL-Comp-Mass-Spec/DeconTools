@@ -11,7 +11,6 @@ namespace DeconTools.Workflows.Backend.Core
     /// </summary>
     public class TargetedWorkflowExecutorProgressInfo
     {
-
         public string ProgressInfoString { get; set; }
 
         public DateTime Time { get; set; }

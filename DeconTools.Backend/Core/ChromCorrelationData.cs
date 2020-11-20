@@ -7,7 +7,6 @@ namespace DeconTools.Backend.Core
 {
     public class ChromCorrelationData
     {
-
         #region Constructors
         public ChromCorrelationData()
         {
@@ -19,7 +18,6 @@ namespace DeconTools.Backend.Core
 
         public List<ChromCorrelationDataItem> CorrelationDataItems { get; set; }
 
-
         public double? RSquaredValsMedian
         {
             get
@@ -28,7 +26,7 @@ namespace DeconTools.Backend.Core
 
                 if (validItems.Any())
                 {
-                    return MathUtils.GetMedian(validItems.Select(r=>r.GetValueOrDefault()).ToList());
+                    return MathUtils.GetMedian(validItems.Select(r => r.GetValueOrDefault()).ToList());
                 }
                 return null;
             }
@@ -56,7 +54,7 @@ namespace DeconTools.Backend.Core
 
                 if (validItems.Count > 2)
                 {
-                    return MathUtils.GetStDev(validItems.Select(p=>p.GetValueOrDefault()).ToList());
+                    return MathUtils.GetStDev(validItems.Select(p => p.GetValueOrDefault()).ToList());
                 }
                 return null;
             }
@@ -68,7 +66,7 @@ namespace DeconTools.Backend.Core
 
         public void AddCorrelationData(double correlationSlope, double correlationIntercept, double correlationRSquaredVal)
         {
-            var data = new ChromCorrelationDataItem(correlationSlope,correlationIntercept,correlationRSquaredVal);
+            var data = new ChromCorrelationDataItem(correlationSlope, correlationIntercept, correlationRSquaredVal);
             CorrelationDataItems.Add(data);
         }
 
@@ -76,7 +74,6 @@ namespace DeconTools.Backend.Core
         {
             CorrelationDataItems.Add(chromCorrelationDataItem);
         }
-
 
         public string ToStringWithDetails()
         {

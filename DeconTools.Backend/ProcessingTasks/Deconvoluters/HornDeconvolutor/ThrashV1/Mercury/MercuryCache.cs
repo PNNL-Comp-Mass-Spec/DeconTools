@@ -172,14 +172,14 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         {
             // we're going to extract the peak tops for this distribution and add them to the array of distributions.
             var position = _isotopicDistributions.Count;
-            var key = (int) (observedMostAbundantMass + 0.5);
+            var key = (int)(observedMostAbundantMass + 0.5);
             if (_cachedIsotopeDistValues.ContainsKey(key))
             {
                 _cachedIsotopeDistValues[key].Add(position);
             }
             else
             {
-                _cachedIsotopeDistValues.Add(key, new List<int> {position});
+                _cachedIsotopeDistValues.Add(key, new List<int> { position });
             }
             //var amuPerValue = 1.0 / num_pts_per_amu;
             var dist = new IsotopicDistribution
@@ -213,7 +213,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             MaxPeakMz = _isotopicDistributions[position].MostAbundantMz;
             var numIsotopes = _isotopicDistributions[position].NumIsotopes;
 
-            var massRange = (int) (Math.Sqrt(1 + massVariance) * 10.0 / charge);
+            var massRange = (int)(Math.Sqrt(1 + massVariance) * 10.0 / charge);
             /* +/- 5 standard deviations : Multiply charged */
             /* Set to nearest (upper) power of 2 */
             for (var i = 1024; i > 0; i /= 2)
@@ -306,7 +306,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             intensities = new List<double>();
 
             var found = false;
-            var massVal = (int) (observedMostAbundantMass + 0.5);
+            var massVal = (int)(observedMostAbundantMass + 0.5);
             //[gord] masses are rounded off to an Int; so '0.5' is added to make sure rounding happens properly.
             var position = -1;
 

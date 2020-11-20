@@ -14,7 +14,7 @@ namespace DeconTools.UnitTesting2.DeconEngineClasses
         private readonly string m_filename;
         private int m_peakIndex;   //each imported peak is given an index
 
-        #region Constructors
+#region Constructors
         public PeakImporterFromOldPeakDatFile(string filename)
             : this(filename, null)
         {
@@ -32,9 +32,9 @@ namespace DeconTools.UnitTesting2.DeconEngineClasses
             backgroundWorker = bw;
         }
 
-        #endregion
+#endregion
 
-        #region Public Methods
+#region Public Methods
         public override void ImportPeaks(List<MSPeakResult> peakList)
         {
             m_peakIndex = 0;
@@ -64,9 +64,9 @@ namespace DeconTools.UnitTesting2.DeconEngineClasses
             }
         }
 
-        #endregion
+#endregion
 
-        #region Private Methods
+#region Private Methods
 
         private MSPeakResult ConvertDecon2LSPeakToPeakResult(Engine.Results.LcmsPeak p)
         {
@@ -86,7 +86,7 @@ namespace DeconTools.UnitTesting2.DeconEngineClasses
             return peakResult;
         }
 
-        #endregion
+#endregion
     }
 }
 #endif

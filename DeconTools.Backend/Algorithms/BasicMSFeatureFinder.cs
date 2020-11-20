@@ -17,9 +17,6 @@ namespace DeconTools.Backend.Algorithms
         public IsotopicProfile FindMSFeature(List<Peak> peakList, IsotopicProfile theorFeature, double toleranceInPPM, bool requireMonoPeak)
         {
             return null;
-
-
-
         }
         [Obsolete("Unused")]
         private Peak FindMostIntensePeak(IReadOnlyList<Peak> peaksWithinTol)
@@ -58,9 +55,6 @@ namespace DeconTools.Backend.Algorithms
 
             return closestPeak;
         }
-
-
-
 
         #endregion
 

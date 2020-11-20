@@ -9,17 +9,14 @@ namespace DeconTools.Workflows.Backend.Core
     /// </summary>
     public class ChromPeakIqTarget : IqTarget
     {
-
         #region Constructors
 
         public ChromPeakIqTarget ()
         {
-            
         }
 
         public ChromPeakIqTarget(IqWorkflow workflow) : base(workflow)
         {
-            
         }
 
         #endregion
@@ -29,8 +26,6 @@ namespace DeconTools.Workflows.Backend.Core
         public ChromPeak ChromPeak { get; set; }
 
         #endregion
-
-
 
     }
 }

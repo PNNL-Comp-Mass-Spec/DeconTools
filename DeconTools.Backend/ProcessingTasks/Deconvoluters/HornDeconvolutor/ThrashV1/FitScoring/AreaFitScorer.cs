@@ -47,7 +47,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             for (var pointNum = 0; pointNum < numPoints; pointNum++)
             {
                 var mz = TheoreticalDistMzs[pointNum] + mzDelta;
-                var theoreticalIntensity = (float) TheoreticalDistIntensities[pointNum];
+                var theoreticalIntensity = (float)TheoreticalDistIntensities[pointNum];
                 if (theoreticalIntensity >= minIntensityForScore)
                 {
                     // observed intensities have to be normalized so that the maximum intensity is 100,

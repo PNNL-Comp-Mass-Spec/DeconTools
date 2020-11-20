@@ -45,16 +45,16 @@ namespace Decon2LS
         /// <summary>
         /// Clean up any resources being used.
         /// </summary>
-        protected override void Dispose( bool disposing )
+        protected override void Dispose(bool disposing)
         {
-            if( disposing )
+            if (disposing)
             {
-                if(components != null)
+                if (components != null)
                 {
                     components.Dispose();
                 }
             }
-            base.Dispose( disposing );
+            base.Dispose(disposing);
         }
 
         #region Windows Form Designer generated code
@@ -143,41 +143,40 @@ namespace Decon2LS
             this.Controls.SetChildIndex(this.mPromptLabel, 0);
             this.Controls.SetChildIndex(this.mFloatInputTextBox, 0);
             this.ResumeLayout(false);
-
         }
         #endregion
 
         private void mFloatInputTextBox_Validating(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            try 
+            try
             {
                 this.mEditingValue = float.Parse(this.mFloatInputTextBox.Text);
-            } 
-            catch (Exception ex) 
+            }
+            catch (Exception ex)
             {
-                Console.WriteLine(ex.Message + ex.StackTrace) ; 
+                Console.WriteLine(ex.Message + ex.StackTrace);
             }
         }
 
-        public String Prompt 
+        public String Prompt
         {
-            get 
+            get
             {
                 return mPromptLabel.Text;
             }
-            set 
+            set
             {
                 mPromptLabel.Text = value;
             }
         }
 
-        public float EditingValue 
+        public float EditingValue
         {
-            get 
+            get
             {
                 return mEditingValue;
             }
-            set 
+            set
             {
                 mEditingValue = value;
                 this.mFloatInputTextBox.Text = value.ToString();

@@ -10,7 +10,6 @@ namespace DeconTools.Workflows.Backend.FileIO
 {
     public class TopDownIqResultExporter : IqLabelFreeResultExporter
     {
-
         #region Properties
 
         protected bool TargetOutputHeaderWritten { get; set; }
@@ -18,9 +17,7 @@ namespace DeconTools.Workflows.Backend.FileIO
 
         #endregion
 
-
         #region Public Methods
-
 
         /// <summary>
         /// Writes out both charge and target level output for Top Down Iq analysis
@@ -34,7 +31,6 @@ namespace DeconTools.Workflows.Backend.FileIO
             WriteOutTargetResults(fileName, iqResults);
             WriteOutChargeResults(fileName, iqResults);
         }
-
 
         /// <summary>
         /// Writes out the target level result output
@@ -79,7 +75,6 @@ namespace DeconTools.Workflows.Backend.FileIO
                 throw new IOException("Unable to open file for writing!", ex);
             }
         }
-
 
         /// <summary>
         /// Writes out the charge state level result output
@@ -130,7 +125,6 @@ namespace DeconTools.Workflows.Backend.FileIO
             }
         }
 
-
         /// <summary>
         /// Gets target output header
         /// </summary>
@@ -150,9 +144,7 @@ namespace DeconTools.Workflows.Backend.FileIO
             };
 
             return string.Join(Delimiter, data);
-
         }
-
 
         /// <summary>
         /// Gets charge output header
@@ -180,9 +172,7 @@ namespace DeconTools.Workflows.Backend.FileIO
             };
 
             return string.Join(Delimiter, data);
-
         }
-
 
         /// <summary>
         /// Combines charge state results into one line for target level output
@@ -192,7 +182,6 @@ namespace DeconTools.Workflows.Backend.FileIO
         /// <returns></returns>
         public string GetTargetResultAsString(IEnumerable<IqResult> results, bool includeHeader = false)
         {
-
             double abundance = 0, correlationMedian = 0;
             var chargeStateList = "";
             var fitScoreList = new List<double>();
@@ -254,8 +243,6 @@ namespace DeconTools.Workflows.Backend.FileIO
             return string.Join(Delimiter, data);
         }
 
-
-
         /// <summary>
         /// Gets charge results as strings, 1 line per result
         /// </summary>
@@ -301,9 +288,7 @@ namespace DeconTools.Workflows.Backend.FileIO
             }
 
             return string.Join(Delimiter, data);
-
         }
-
 
         #endregion
     }

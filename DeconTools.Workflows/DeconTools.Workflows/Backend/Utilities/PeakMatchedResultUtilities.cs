@@ -7,7 +7,6 @@ namespace DeconTools.Workflows.Backend.Utilities
 {
     public class PeakMatchedResultUtilities
     {
-
         #region Constructors
 
         public PeakMatchedResultUtilities(string dbServer, string dbSource, string resultTableName)
@@ -16,7 +15,6 @@ namespace DeconTools.Workflows.Backend.Utilities
             DbSource = dbSource;
             ResultTableName = resultTableName;
         }
-
 
         #endregion
 
@@ -27,9 +25,6 @@ namespace DeconTools.Workflows.Backend.Utilities
         public string DbServer { get; set; }
 
         public string ResultTableName { get; set; }
-
-
-
 
         #endregion
 
@@ -42,7 +37,6 @@ namespace DeconTools.Workflows.Backend.Utilities
             var fact = DbProviderFactories.GetFactory("System.Data.SqlClient");
             using (var cnn = fact.CreateConnection())
             {
-
                 cnn.ConnectionString = buildConnectionString();
                 cnn.Open();
 
@@ -59,16 +53,10 @@ namespace DeconTools.Workflows.Backend.Utilities
                     var reader = command.ExecuteReader();
 
                     ReadResultsFromDB(importedResults, reader);
-
-
                 }
-
-
             }
 
             return importedResults;
-
-
         }
 
         private void ReadResultsFromDB(List<TargetedResultDTO> results, DbDataReader reader)
@@ -81,10 +69,8 @@ namespace DeconTools.Workflows.Backend.Utilities
                 result.TargetID = readInt(reader, "UMC_Ind");
                 result.MatchedMassTagID = readInt(reader, "Mass_Tag_ID");
 
-
                 result.FailureType = "";
                 //result.FitScore = readFloat(reader,"
-
 
                 result.IndexOfMostAbundantPeak = -1;
 
@@ -109,8 +95,6 @@ namespace DeconTools.Workflows.Backend.Utilities
                 results.Add(result);
             }
         }
-
-
 
         #endregion
 
@@ -154,7 +138,6 @@ namespace DeconTools.Workflows.Backend.Utilities
 
         private string readString(DbDataReader reader, string columnName, string defaultVal = "")
         {
-
             if (!reader[columnName].Equals(DBNull.Value))
             {
                 return Convert.ToString(reader[columnName]);
@@ -167,7 +150,6 @@ namespace DeconTools.Workflows.Backend.Utilities
 
         private int readInt(DbDataReader reader, string columnName, int defaultVal = 0)
         {
-
             if (!reader[columnName].Equals(DBNull.Value))
             {
                 return Convert.ToInt32(reader[columnName]);
@@ -177,7 +159,6 @@ namespace DeconTools.Workflows.Backend.Utilities
                 return defaultVal;
             }
         }
-
 
         #endregion
 

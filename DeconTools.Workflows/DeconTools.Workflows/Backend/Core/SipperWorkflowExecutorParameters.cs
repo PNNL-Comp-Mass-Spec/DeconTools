@@ -2,7 +2,6 @@
 {
     public class SipperWorkflowExecutorParameters : WorkflowExecutorBaseParameters
     {
-
         #region Constructors
         #endregion
 

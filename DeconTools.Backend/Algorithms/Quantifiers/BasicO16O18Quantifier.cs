@@ -41,9 +41,7 @@ namespace DeconTools.Backend.Algorithms.Quantifiers
             intensityTheorI2 = 0;
             intensityTheorI4 = 0;
             adjustedI4Intensity = 0;
-
         }
-
 
         public double GetAdjusted_I0_I4_YeoRatio(IsotopicProfile iso, IsotopicProfile theorIso)
         {
@@ -57,12 +55,10 @@ namespace DeconTools.Backend.Algorithms.Quantifiers
             intensityTheorI2 = getI2Intensity(theorIso);
             intensityTheorI4 = GetI4Intensity(theorIso);
 
-
             var ratio = CalculateRatio(intensityTheorI0, intensityTheorI2, intensityTheorI4, intensityI0, intensityI2, intensityI4,
                                   out var adjI4Intensity);
 
             adjustedI4Intensity = adjI4Intensity;
-
 
             return ratio;
 
@@ -88,13 +84,10 @@ namespace DeconTools.Backend.Algorithms.Quantifiers
 
             //if (adjustedI4Intensity <= 0) adjustedI4Intensity = double.Epsilon;
 
-
             //ratio = intensityI0 / adjustedI4Intensity;
             //return ratio;
 
-
         }
-
 
         public double GetAdjustedRatioUsingChromCorrData(O16O18TargetedResultObject o16O18TargetedResultObject)
         {
@@ -121,14 +114,10 @@ namespace DeconTools.Backend.Algorithms.Quantifiers
                                                       ratioDoubleO18ToO16, out var adjRatioI0I4);
 
                 ratio = 1 / adjRatioI0I4;   //report the o16/o18 ratio
-
             }
 
             return ratio;
-
         }
-
-
 
         public double CalculateRatio(double theorI0, double theorI2, double theorI4, double i0, double i2, double i4, out double adjustedI4)
         {
@@ -149,18 +138,13 @@ namespace DeconTools.Backend.Algorithms.Quantifiers
                 {
                     //TODO:  if there is an intensity at I4, there should be something at I2.
                 }
-
             }
 
             if (adjustedI4 <= 0) adjustedI4 = double.Epsilon;
 
-
             var ratio = intensityI0 / adjustedI4;
             return ratio;
         }
-
-
-
 
         private double GetI4Intensity(IsotopicProfile iso)
         {
@@ -198,14 +182,10 @@ namespace DeconTools.Backend.Algorithms.Quantifiers
             return intensity;
         }
 
-
-
         #endregion
 
         #region Private Methods
         #endregion
-
-
 
         public double intensityI0 { get; set; }
 
@@ -220,7 +200,5 @@ namespace DeconTools.Backend.Algorithms.Quantifiers
         public double intensityTheorI4 { get; set; }
 
         public double adjustedI4Intensity { get; set; }
-
-
     }
 }

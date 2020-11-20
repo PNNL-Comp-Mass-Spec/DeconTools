@@ -3,8 +3,6 @@ namespace DeconTools.Workflows.Backend.Core
 {
     public class NETAndMassAlignerParameters
     {
-
-     
         public NETAndMassAlignerParameters()
         {
             //note: defaults are based on VIPER defaults
@@ -27,8 +25,6 @@ namespace DeconTools.Workflows.Backend.Core
             NumTimeSections = 100;
             SplitAlignmentInMZ = false;
             UsePromiscuousPoints = false;
-        
-                
         }
 
         public bool ApplyMassRecalibration { get; set; }
@@ -51,7 +47,6 @@ namespace DeconTools.Workflows.Backend.Core
         public int NumTimeSections { get; set; }
         public bool SplitAlignmentInMZ { get; set; }
         public bool UsePromiscuousPoints { get; set; }
-
 
             //mintNumTimeSections				= 100; 
             //mshortContractionFactor			= 3; 

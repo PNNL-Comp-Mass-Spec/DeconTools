@@ -9,7 +9,6 @@ using UIMFLibrary;
 
 namespace DeconTools.Backend.Runs
 {
-
     [Serializable]
     public sealed class UIMFRun : Run
     {
@@ -44,7 +43,6 @@ namespace DeconTools.Backend.Runs
         public UIMFRun(string uimfFilePath)
             : this()
         {
-
             Check.Require(File.Exists(uimfFilePath), "UIMF file does not exist.");
             DatasetFileOrDirectoryPath = uimfFilePath;
 
@@ -67,7 +65,6 @@ namespace DeconTools.Backend.Runs
 
             GetMSLevelInfo();
             ContainsMSMSData = CheckRunForMSMSData();
-
         }
 
         public UIMFRun(string fileName, int minFrame, int maxFrame)
@@ -82,7 +79,6 @@ namespace DeconTools.Backend.Runs
         {
             MinIMSScan = minScan;
             MaxIMSScan = maxScan;
-
         }
 
         #endregion
@@ -109,7 +105,6 @@ namespace DeconTools.Backend.Runs
 
         private bool CheckRunForMSMSData()
         {
-
             if (MS2Frames.Count == 0) return false;
 
             return true;
@@ -119,10 +114,7 @@ namespace DeconTools.Backend.Runs
 
         public override XYData XYData { get; set; }
 
-
-
         public IMSScanSetCollection IMSScanSetCollection { get; set; }
-
 
         public IMSScanSet CurrentIMSScanSet { get; set; }
 
@@ -136,7 +128,6 @@ namespace DeconTools.Backend.Runs
 
         public List<int> MS1Frames { get; set; }
         public List<int> MS2Frames { get; set; }
-
 
         #endregion
 
@@ -166,7 +157,6 @@ namespace DeconTools.Backend.Runs
         /// <returns></returns>
         public override int GetNumMSScans()
         {
-
             var numScansPerFrame = GetNumScansPerFrame();
 
             return numScansPerFrame * (MaxLCScan - MinLCScan + 1);
@@ -202,7 +192,6 @@ namespace DeconTools.Backend.Runs
             var maxScansPerFrame = scanCountsByFrame.Values.Max();
 
             return maxScansPerFrame;
-
         }
 
         public override int GetMinPossibleLCScanNum()
@@ -254,7 +243,6 @@ namespace DeconTools.Backend.Runs
             if (fp.FrameType == UIMFData.FrameType.Calibration) return 0;
 
             return 1;
-
         }
 
         public override XYData GetMassSpectrum(ScanSet scanSet, double minMZ, double maxMZ)
@@ -322,8 +310,6 @@ namespace DeconTools.Backend.Runs
                 Console.WriteLine("Error in UIMF GetMassSpectrum: " + ex.Message);
                 throw;
             }
-
-
         }
 
         public override double GetTime(int frameNum)
@@ -373,8 +359,6 @@ namespace DeconTools.Backend.Runs
             }
 
             return driftTime;
-
-
         }
 
         public double GetFramePressure(int frameNum)
@@ -386,13 +370,11 @@ namespace DeconTools.Backend.Runs
             }
 
             return _framePressuresUnsmoothed[frameNum];
-
         }
 
         public double GetFramePressureBack(int frameNum)
         {
             return GetFramePressure(frameNum);
-
         }
 
         public double GetFramePressureFront(int frameNum)
@@ -433,7 +415,6 @@ namespace DeconTools.Backend.Runs
                 int lowerFrame;
                 int upperFrame;
 
-
                 if (frame.PrimaryScanNumber < lowerFrameBoundary)
                 {
                     lowerFrame = minFrame;
@@ -461,11 +442,7 @@ namespace DeconTools.Backend.Runs
                     upperFrame = maxFrame;
                 }
 
-
-
                 frame.FramePressureSmoothed = GetAverageFramePressure(lowerFrame, upperFrame);
-
-
             }
         }
 
@@ -475,14 +452,11 @@ namespace DeconTools.Backend.Runs
 
             for (var i = lowerFrame; i <= upperFrame; i++)
             {
-
                 var framePressure = GetFramePressure(i);
                 if (framePressure > 0)
                 {
                     framePressures.Add(framePressure);
                 }
-
-
             }
 
             if (framePressures.Count > 0)
@@ -522,7 +496,6 @@ namespace DeconTools.Backend.Runs
             }
 
             Console.WriteLine();
-
         }
 
         //public int[][] GetFramesAndScanIntensitiesForAGivenMz(int startFrame, int endFrame, int frameType, int startScan, int endScan, double targetMz, double toleranceInMZ)
@@ -582,14 +555,12 @@ namespace DeconTools.Backend.Runs
 
         //}
 
-
         public XYData GetDriftTimeProfile(int frameNum, int startScan, int stopScan, double targetMZ, double toleranceInMZ)
         {
             int[] scanValues = null;
             int[] intensityVals = null;
 
             UIMFLibraryAdapter.getInstance(DatasetFileOrDirectoryPath).Reader.GetDriftTimeProfile(frameNum, frameNum, UIMFData.FrameType.MS1, startScan, stopScan, targetMZ, toleranceInMZ, ref scanValues, ref intensityVals);
-
 
             var xyData = new XYData();
 
@@ -605,7 +576,6 @@ namespace DeconTools.Backend.Runs
             }
 
             return xyData;
-
         }
 
         public override void Close()
@@ -627,7 +597,6 @@ namespace DeconTools.Backend.Runs
                 return 0;
 
             return (float)query.FirstOrDefault();
-
         }
 
         public XYData GetChromatogram(int startFrame, int stopFrame, int startIMSScan, int stopIMSScan, double targetMZ, double toleranceInPPM)
@@ -645,7 +614,6 @@ namespace DeconTools.Backend.Runs
                 var scan = new ScanSet(startIMSScan, startIMSScan, stopIMSScan);
                 var xyData = GetMassSpectrum(frameSet, scan, lowerMZ, upperMZ);
 
-
                 double sumIntensities = 0;
 
                 if (xyData?.Yvalues != null && xyData.Yvalues.Length > 0)
@@ -662,8 +630,6 @@ namespace DeconTools.Backend.Runs
                 Xvalues = frameVals.ToArray(),
                 Yvalues = intensityVals.ToArray()
             };
-
-
 
             return chromXYData;
         }
@@ -687,8 +653,6 @@ namespace DeconTools.Backend.Runs
 
             return sb.ToString();
         }
-
-
 
         #endregion
 
@@ -718,7 +682,6 @@ namespace DeconTools.Backend.Runs
             }
 
             return closestLCScan;
-
         }
     }
 }

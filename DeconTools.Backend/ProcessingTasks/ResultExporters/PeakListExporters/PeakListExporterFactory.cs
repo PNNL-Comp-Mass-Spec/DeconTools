@@ -4,12 +4,10 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.PeakListExporters
 {
     public class PeakListExporterFactory
     {
-
         public PeakListExporterFactory()
         {
-
         }
-       
+
         public static IPeakListExporter Create(Globals.ExporterType exporterType, Globals.MSFileType fileType, int triggerValue, string outputFileName)
         {
             IPeakListExporter exporter;
@@ -27,10 +25,6 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.PeakListExporters
                     break;
             }
             return exporter;
-
         }
-
-
-       
     }
 }

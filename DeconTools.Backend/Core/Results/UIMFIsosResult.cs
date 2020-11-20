@@ -23,7 +23,6 @@ namespace DeconTools.Backend.Core
             Run = run;
             ScanSet = lcScanSet;
             IMSScanSet = scanSet;
-
         }
 
         public IMSScanSet IMSScanSet { get; set; }

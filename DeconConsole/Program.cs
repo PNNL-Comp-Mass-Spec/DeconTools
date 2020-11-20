@@ -57,16 +57,13 @@ namespace DeconConsole
                     {
                         Directory.CreateDirectory(outputDirectory);
                         Console.WriteLine("Output directory created. " + outputDirectory);
-
                     }
                     catch (Exception exception)
                     {
-
                         Console.WriteLine("ERROR! Couldn't create output directory (" + outputDirectory + "): " + exception.Message);
                         return 3;
                     }
                 }
-
             }
 
             if (!IsFileValid(datasetFileOrDirectoryPath, out var datasetFileOrDirectory))

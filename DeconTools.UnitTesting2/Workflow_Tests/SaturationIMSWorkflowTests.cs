@@ -28,7 +28,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
                     PeakToBackgroundRatio = 4,
                     SignalToNoiseThreshold = 3
                 },
-                ThrashParameters = {MaxFit = 0.6},
+                ThrashParameters = { MaxFit = 0.6 },
                 MSGeneratorParameters =
                 {
                     UseLCScanRange = true,
@@ -42,15 +42,13 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
                     NumLCScansToSum = 1,
                     NumImsScansToSum = 1
                 },
-                MiscMSProcessingParameters = {UseZeroFilling = true}
+                MiscMSProcessingParameters = { UseZeroFilling = true }
             };
-
 
             parameters.ThrashParameters.MinIntensityForDeletion = 10;
             parameters.MiscMSProcessingParameters.SaturationThreshold = 12000;
 
             parameters.ScanBasedWorkflowParameters.ScanBasedWorkflowName = "standard";
-
 
             Console.WriteLine("---------------- No saturation correction ----------------");
             var workflow = ScanBasedWorkflow.CreateWorkflow(run, parameters);
@@ -82,9 +80,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             var massVariance = MathUtils.GetStDev(monoMasses);
             Console.WriteLine("Mass variance = " + massVariance);
 
-
             run.ResultCollection.ClearAllResults();
-
 
             Console.WriteLine("---------------- saturation corrected ----------------");
             parameters.ScanBasedWorkflowParameters.ScanBasedWorkflowName = "uimf_saturation_repair";
@@ -92,10 +88,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             workflow.ExportData = false;
             workflow.Execute();
 
-
-
             distinctItems = run.ResultCollection.ResultList.GroupBy(x => x.MSFeatureID).Select(y => y.First()).ToList();
-
 
             featureData = (from n in distinctItems
                            where (Math.Abs(n.IsotopicProfile.MonoIsotopicMass - melettinMonoMass)) < tolerance &&
@@ -108,10 +101,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
 
             massVariance = MathUtils.GetStDev(monoMasses);
             Console.WriteLine("Mass variance = " + massVariance);
-
-
         }
-
 
         [Test]
         public void saturatedFixingOnLeucinEncaphalinTest0()
@@ -126,7 +116,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
                     PeakToBackgroundRatio = 4,
                     SignalToNoiseThreshold = 3
                 },
-                ThrashParameters = {MaxFit = 0.6},
+                ThrashParameters = { MaxFit = 0.6 },
                 MSGeneratorParameters =
                 {
                     UseLCScanRange = true,
@@ -140,15 +130,13 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
                     NumLCScansToSum = 1,
                     NumImsScansToSum = 1
                 },
-                MiscMSProcessingParameters = {UseZeroFilling = true}
+                MiscMSProcessingParameters = { UseZeroFilling = true }
             };
-
 
             parameters.ThrashParameters.MinIntensityForDeletion = 10;
             parameters.MiscMSProcessingParameters.SaturationThreshold = 12000;
 
             parameters.ScanBasedWorkflowParameters.ScanBasedWorkflowName = "standard";
-
 
             Console.WriteLine("---------------- No saturation correction ----------------");
             var workflow = ScanBasedWorkflow.CreateWorkflow(run, parameters);
@@ -180,9 +168,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             var massVariance = MathUtils.GetStDev(monoMasses);
             Console.WriteLine("Mass variance = " + massVariance);
 
-
             run.ResultCollection.ClearAllResults();
-
 
             Console.WriteLine("---------------- saturation corrected ----------------");
             parameters.ScanBasedWorkflowParameters.ScanBasedWorkflowName = "uimf_saturation_repair";
@@ -190,10 +176,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             workflow.ExportData = false;
             workflow.Execute();
 
-
-
             distinctItems = run.ResultCollection.ResultList.GroupBy(x => x.MSFeatureID).Select(y => y.First()).ToList();
-
 
             featureData = (from n in distinctItems
                            where (Math.Abs(n.IsotopicProfile.MonoIsotopicMass - melettinMonoMass)) < tolerance &&
@@ -206,8 +189,6 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
 
             massVariance = MathUtils.GetStDev(monoMasses);
             Console.WriteLine("Mass variance = " + massVariance);
-
-
         }
 
         [Test]
@@ -223,7 +204,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
                     PeakToBackgroundRatio = 0.0,
                     SignalToNoiseThreshold = 0.0
                 },
-                ThrashParameters = {MaxFit = 0.6},
+                ThrashParameters = { MaxFit = 0.6 },
                 MSGeneratorParameters =
                 {
                     UseLCScanRange = true,
@@ -237,16 +218,14 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
                     NumLCScansToSum = 1,
                     NumImsScansToSum = 7
                 },
-                MiscMSProcessingParameters = {UseZeroFilling = true}
+                MiscMSProcessingParameters = { UseZeroFilling = true }
             };
-
 
             parameters.ThrashParameters.MinIntensityForDeletion = 10;
             parameters.ThrashParameters.MinIntensityForScore = 10;
             parameters.MiscMSProcessingParameters.SaturationThreshold = 12000;
             parameters.ThrashParameters.MinMSFeatureToBackgroundRatio = 0.5;
             parameters.ScanBasedWorkflowParameters.ScanBasedWorkflowName = "standard";
-
 
             Console.WriteLine("---------------- No saturation correction ----------------");
             var workflow = ScanBasedWorkflow.CreateWorkflow(run, parameters);
@@ -278,9 +257,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             var massVariance = MathUtils.GetStDev(monoMasses);
             Console.WriteLine("Mass variance = " + massVariance);
 
-
             run.ResultCollection.ClearAllResults();
-
 
             Console.WriteLine("---------------- saturation corrected ----------------");
             parameters.ScanBasedWorkflowParameters.ScanBasedWorkflowName = "uimf_saturation_repair";
@@ -288,10 +265,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             workflow.ExportData = false;
             workflow.Execute();
 
-
-
             distinctItems = run.ResultCollection.ResultList.GroupBy(x => x.MSFeatureID).Select(y => y.First()).ToList();
-
 
             featureData = (from n in distinctItems
                            where (Math.Abs(n.IsotopicProfile.MonoIsotopicMass - peptideMonoMass)) < tolerance &&
@@ -305,12 +279,8 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             massVariance = MathUtils.GetStDev(monoMasses);
             Console.WriteLine("Mass variance = " + massVariance);
 
-
             TestUtilities.DisplayMSFeatures(run.ResultCollection.ResultList);
-
         }
-
-
 
         [Test]
         public void TempSaturationFixingTestOnYehiaBSAData()
@@ -326,7 +296,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
                     PeakToBackgroundRatio = 4,
                     SignalToNoiseThreshold = 3
                 },
-                ThrashParameters = {MaxFit = 0.6},
+                ThrashParameters = { MaxFit = 0.6 },
                 MSGeneratorParameters =
                 {
                     UseLCScanRange = true,
@@ -340,9 +310,8 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
                     NumLCScansToSum = 1,
                     NumImsScansToSum = 7
                 },
-                MiscMSProcessingParameters = {UseZeroFilling = true}
+                MiscMSProcessingParameters = { UseZeroFilling = true }
             };
-
 
             parameters.ThrashParameters.MinIntensityForDeletion = 10;
             parameters.MiscMSProcessingParameters.SaturationThreshold = 6000;
@@ -368,7 +337,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
                     SignalToNoiseThreshold = 3,
                     IsDataThresholded = true
                 },
-                ThrashParameters = {MaxFit = 0.8},
+                ThrashParameters = { MaxFit = 0.8 },
                 MSGeneratorParameters =
                 {
                     UseLCScanRange = true,
@@ -382,10 +351,8 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
                     MinMZ = 475,
                     MaxMZ = 476
                 },
-                MiscMSProcessingParameters = {UseZeroFilling = true}
+                MiscMSProcessingParameters = { UseZeroFilling = true }
             };
-
-
 
             parameters.ThrashParameters.MinIntensityForDeletion = 10;
             parameters.ScanBasedWorkflowParameters.IsRefittingPerformed = false;
@@ -430,7 +397,6 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             //targetMass = 1224.5497;
             //chargeState = 1;
 
-
             //targetMass = 949.454723;
             //chargeState = 1;
             //minScan = 220;
@@ -468,7 +434,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
                     SignalToNoiseThreshold = 3,
                     IsDataThresholded = true
                 },
-                ThrashParameters = {MaxFit = 0.8},
+                ThrashParameters = { MaxFit = 0.8 },
                 MSGeneratorParameters =
                 {
                     UseLCScanRange = true,
@@ -482,7 +448,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
                     MinMZ = 525.2,
                     MaxMZ = 525.4
                 },
-                MiscMSProcessingParameters = {UseZeroFilling = true}
+                MiscMSProcessingParameters = { UseZeroFilling = true }
             };
 
             parameters.ThrashParameters.MinIntensityForDeletion = 10;
@@ -528,7 +494,6 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             //targetMass = 1224.5497;
             //chargeState = 1;
 
-
             //targetMass = 949.454723;
             //chargeState = 1;
             //minScan = 220;
@@ -551,8 +516,6 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
 #pragma warning restore 162
 
         }
-
-
 
         [Test]
         public void saturatedFixingTest2()
@@ -590,8 +553,6 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             var targetMass = 819.48169;    //elutes at 199 - 205
             var chargeState = 2;
 
-
-
             var tolerance = 0.3;
             var featureData =
                 (from n in distinctItems
@@ -606,9 +567,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             var massVariance = MathUtils.GetStDev(monoMasses);
             Console.WriteLine("Mass variance = " + massVariance);
             Console.WriteLine("Time taken = " + sw.ElapsedMilliseconds);
-
         }
-
 
         [Test]
         public void saturatedFixingTest_peaksNotExporting()
@@ -647,8 +606,6 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             var targetMass = 819.48169;    //elutes at 199 - 205
             var chargeState = 2;
 
-
-
             var tolerance = 0.3;
             var featureData =
                 (from n in distinctItems
@@ -663,7 +620,6 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             var massVariance = MathUtils.GetStDev(monoMasses);
             Console.WriteLine("Mass variance = " + massVariance);
             Console.WriteLine("Time taken = " + sw.ElapsedMilliseconds);
-
         }
 
         [Test]
@@ -680,7 +636,6 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             parameters.MSGeneratorParameters.UseLCScanRange = true;
             parameters.MSGeneratorParameters.MinLCScan = 394;
             parameters.MSGeneratorParameters.MaxLCScan = 404;
-
 
             var workflow = ScanBasedWorkflow.CreateWorkflow(run, parameters);
             workflow.ExportData = false;
@@ -704,8 +659,6 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             var targetMass = 1059.55169;
             var chargeState = 2;
 
-
-
             var tolerance = 0.3;
             var featureData =
                 (from n in distinctItems
@@ -720,9 +673,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             var massVariance = MathUtils.GetStDev(monoMasses);
             Console.WriteLine("Mass variance = " + massVariance);
             Console.WriteLine("Time taken = " + sw.ElapsedMilliseconds);
-
         }
-
 
         [Test]
         public void saturatedFixing_RedmineIssue966()
@@ -744,7 +695,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
                     PeakToBackgroundRatio = 4,
                     SignalToNoiseThreshold = 3
                 },
-                ThrashParameters = {MaxFit = 0.6},
+                ThrashParameters = { MaxFit = 0.6 },
                 MSGeneratorParameters =
                 {
                     UseLCScanRange = true,
@@ -756,7 +707,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
                     NumImsScansToSum = 3,
                     UseMZRange = false
                 },
-                MiscMSProcessingParameters = {UseZeroFilling = true}
+                MiscMSProcessingParameters = { UseZeroFilling = true }
             };
             parameters.ThrashParameters.MinIntensityForDeletion = 10;
 
@@ -799,11 +750,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             var massVariance = MathUtils.GetStDev(monoMasses);
             Console.WriteLine("Mass variance = " + massVariance);
             Console.WriteLine("Time taken = " + sw.ElapsedMilliseconds);
-
         }
-
-
-
 
         [Test]
         public void noFixingTest1()
@@ -830,15 +777,10 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
                 }
             };
 
-
-
-
             var workflow = ScanBasedWorkflow.CreateWorkflow(run, parameters);
 
             workflow.Execute();
-
         }
-
 
         [Test]
         public void WorkflowTypeIsCorrectTest1()
@@ -846,7 +788,8 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             var uimfFile = @"D:\Data\UIMF\Sarc_Main_Study_Controls\Sarc_P09_B06_0786_20Jul11_Cheetah_11-05-31.uimf";
 
             var run = new RunFactory().CreateRun(uimfFile);
-            var parameters = new DeconToolsParameters {
+            var parameters = new DeconToolsParameters
+            {
                 ScanBasedWorkflowParameters = {
                     ScanBasedWorkflowName = "standard"
                 }
@@ -858,11 +801,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             parameters.ScanBasedWorkflowParameters.ScanBasedWorkflowName = "uimf_saturation_repair";
             workflow = ScanBasedWorkflow.CreateWorkflow(run, parameters);
             Assert.IsTrue(workflow is SaturationIMSScanBasedWorkflow);
-
-
-
         }
-
 
         [Test]
         public void WorkflowTypeIsWrongTest1()
@@ -870,7 +809,8 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             var uimfFile = @"D:\Data\UIMF\Sarc_Main_Study_Controls\Sarc_P09_B06_0786_20Jul11_Cheetah_11-05-31.uimf";
 
             var run = new RunFactory().CreateRun(uimfFile);
-            var parameters = new DeconToolsParameters {
+            var parameters = new DeconToolsParameters
+            {
                 ScanBasedWorkflowParameters = {
                     ScanBasedWorkflowName = "incorrectTextProblem"
                 }
@@ -894,26 +834,16 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
 
         private static void OutputFeatureIntensityData(IReadOnlyCollection<UIMFIsosResult> featureData, int minFrame, int maxFrame, int maxScan, int minScan)
         {
-
-
-
-
             var sb = new StringBuilder();
             for (var scan = minScan; scan <= maxScan; scan++)
             {
-
-
-
                 for (var frame = minFrame; frame <= maxFrame; frame++)
                 {
-
                     if (frame == minFrame)
                     {
                         sb.Append(scan);
                         sb.Append("\t");
                     }
-
-
 
                     var feature =
                         (from n in featureData
@@ -939,7 +869,5 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
 
             Console.WriteLine(sb.ToString());
         }
-
-
     }
 }

@@ -14,7 +14,6 @@ namespace DeconTools.Backend.Runs
 
         private byte[] _pwizScanLevels;
 
-
         #region Constructors
 
         public MzRun()
@@ -61,9 +60,7 @@ namespace DeconTools.Backend.Runs
 
             MinLCScan = GetMinPossibleLCScanNum();
             MaxLCScan = GetMaxPossibleLCScanNum();
-
         }
-
 
         #endregion
 
@@ -102,8 +99,6 @@ namespace DeconTools.Backend.Runs
             }
 
             return -1;
-
-
         }
 
         public override int GetMSLevelFromRawData(int scanNum)
@@ -122,7 +117,6 @@ namespace DeconTools.Backend.Runs
             }
 
             return -1;
-
         }
 
         public override XYData GetMassSpectrum(ScanSet scanSet)

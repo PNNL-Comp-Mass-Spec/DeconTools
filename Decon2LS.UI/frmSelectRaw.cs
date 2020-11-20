@@ -161,7 +161,6 @@ namespace Decon2LS
             this.Name = "frmSelectRaw";
             this.Text = "Select Raw File";
             this.ResumeLayout(false);
-
         }
         #endregion
 
@@ -247,7 +246,6 @@ namespace Decon2LS
             {
                 MessageBox.Show(ex.ToString());
             }
-
         }
         private void mbtnAddSFolder_Click(object sender, System.EventArgs e)
         {

@@ -8,10 +8,6 @@ namespace DeconTools.UnitTesting2.Scripts
         [Test]
         public void Test1()
         {
-
-
-
         }
-
     }
 }

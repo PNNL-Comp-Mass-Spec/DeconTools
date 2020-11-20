@@ -25,9 +25,7 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
             Assert.AreEqual(481.27417, testResult.IsotopicProfile.GetMZ(), 0.00001);
             Assert.AreEqual(0.0056, testResult.IsotopicProfile.Score, 0.0001);
             Assert.AreEqual(0.0635, testResult.InterferenceScore, 0.0001);
-
         }
-
 
         [Test]
         [Ignore("Local files only")]
@@ -49,8 +47,6 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
             Assert.AreEqual(402.731689453125m, (decimal)testResult.IsotopicProfile.GetMZ());
             Assert.AreEqual(0.0735m, (decimal)testResult.IsotopicProfile.Score);
             Assert.AreEqual(0.66701m, (decimal)testResult.InterferenceScore);
-
-
         }
 
         [Test]
@@ -59,7 +55,6 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
         {
             var startFrame = 801;
             var stopFrame = 801;
-
 
             var testMSFeatureFile = FileRefs.RawDataBasePath + @"\Output\35min_QC_Shew_Formic_4T_1.8_500_20_30ms_fr1950_0000_Frames800_802_isos.csv";
             var importer = new IsosImporter(testMSFeatureFile, Backend.Globals.MSFileType.PNNL_UIMF, startFrame, stopFrame);
@@ -77,7 +72,6 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
             Assert.AreEqual(402.220489501953m, (decimal)testResult.IsotopicProfile.GetMZ());
             Assert.AreEqual(0.0619m, (decimal)testResult.IsotopicProfile.Score);
             Assert.AreEqual(0.38938m, (decimal)testResult.InterferenceScore);
-
 
             TestUtilities.DisplayMSFeatures(results);
         }

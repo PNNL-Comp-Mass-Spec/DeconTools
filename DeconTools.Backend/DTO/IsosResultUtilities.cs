@@ -20,19 +20,15 @@ namespace DeconTools.Backend.DTO
             EqualTo
         }
 
-
         public List<IsosResult> Results { get; set; }
 
         public IsosResultUtilities(List<IsosResult> results)
         {
-
             Results = results;
         }
 
-
         public IsosResultUtilities()
         {
-
         }
 
         public void LoadResults(string isosTextFile, Globals.MSFileType fileType)
@@ -41,7 +37,6 @@ namespace DeconTools.Backend.DTO
             try
             {
                 fileExists = File.Exists(isosTextFile);
-
             }
             catch (Exception)
             {
@@ -62,7 +57,6 @@ namespace DeconTools.Backend.DTO
             try
             {
                 fileExists = File.Exists(isosTextFile);
-
             }
             catch (Exception)
             {
@@ -80,9 +74,7 @@ namespace DeconTools.Backend.DTO
         public void LoadResults(string uimfIsos1, Globals.MSFileType mSFileType, int frameNum)
         {
             Check.Require(mSFileType == Globals.MSFileType.PNNL_UIMF, "This option only works for UIMF files");
-
         }
-
 
         public void FilterAndOutputIsos(string inputIsosFileName, int colIndex, double minVal, double maxVal, string outputIsosFilename)
         {
@@ -128,15 +120,10 @@ namespace DeconTools.Backend.DTO
                     if (writeOutCurrentLine)
                     {
                         sw.WriteLine(currentLine);
-
                     }
-
                 }
             }
-
-
         }
-
 
         public List<IsosResult> getUIMFResults(string uimfInputFile, int minFrame, int maxFrame)
         {
@@ -144,8 +131,6 @@ namespace DeconTools.Backend.DTO
             uimfIsoUtil.LoadResults(uimfInputFile, Globals.MSFileType.PNNL_UIMF, minFrame, maxFrame);
 
             // List<IsosResult> filteredIsos = new List<IsosResult>();
-
-
 
             //foreach (IsosResult result in uimfIsoUtil.Results)
             //{
@@ -194,14 +179,8 @@ namespace DeconTools.Backend.DTO
                     var isosResultsForFrame = convertIMFResultsToUIMFResults(currentFrame, isoUtil.Results);
 
                     returnedResults.AddRange(isosResultsForFrame);
-
                 }
-
-
             }
-
-
-
 
             return returnedResults;
         }
@@ -218,7 +197,6 @@ namespace DeconTools.Backend.DTO
 
             throw new Exception("Couldn't find frame number in IMF filename");
         }
-
 
         public List<IsosResult> convertIMFResultsToUIMFResults(int currentFrame, List<IsosResult> list)
         {
@@ -239,22 +217,18 @@ namespace DeconTools.Backend.DTO
             return returnedResults;
         }
 
-
         public List<IsosResult> getIsosResults(string isosInputFile, Globals.MSFileType fileType, int minScan, int maxScan)
         {
             var isoUtil = new IsosResultUtilities();
             isoUtil.LoadResults(isosInputFile, fileType);
             return isoUtil.Results.Where(p => p.ScanSet.PrimaryScanNumber >= minScan && p.ScanSet.PrimaryScanNumber <= maxScan).ToList();
-
         }
-
 
         public List<IsosResult> getIsosResults(string isosInputFile, Globals.MSFileType fileType)
         {
             var isoUtil = new IsosResultUtilities();
             isoUtil.LoadResults(isosInputFile, fileType);
             return isoUtil.Results;
-
         }
 
         public void replaceAbundanceWithMonoAbundance(List<IsosResult> isosResults)
@@ -265,7 +239,6 @@ namespace DeconTools.Backend.DTO
             }
         }
 
-
         public static List<IsosResult> GetIsosResultsByScan(List<IsosResult> inputList, int scanNum)
         {
             var results = new List<IsosResult>();
@@ -274,7 +247,6 @@ namespace DeconTools.Backend.DTO
 
             var scanNumList = query.ToArray();
 
-
             var indexOfScanNum = MathUtils.BinarySearch(scanNumList, scanNum, 0, scanNumList.Length - 1);
             if (indexOfScanNum == -1) return results;
 
@@ -282,15 +254,12 @@ namespace DeconTools.Backend.DTO
             var currentIdx = indexOfScanNum;
             if (indexOfScanNum > 0)
             {
-
                 while (inputList[currentIdx].ScanSet.PrimaryScanNumber == scanNum)
                 {
                     currentIdx--;
                 }
                 currentIdx++;
-
             }
-
 
             while (inputList[currentIdx].ScanSet.PrimaryScanNumber == scanNum)
             {
@@ -298,12 +267,8 @@ namespace DeconTools.Backend.DTO
                 currentIdx++;
             }
 
-
-
             return results;
-
         }
-
 
         public static List<IsosResult> GetIntersection(List<IsosResult> list1, List<IsosResult> list2)
         {
@@ -325,14 +290,8 @@ namespace DeconTools.Backend.DTO
                 }
             }
 
-
-
-
             return intersectedResults;
-
         }
-
-
 
         public string buildStatsForSingleIsosResultSet(List<IsosResult> resultList)
         {
@@ -354,7 +313,6 @@ namespace DeconTools.Backend.DTO
                 cs4results,
                 greaterThanCS4results };
 
-
             allResults.Description = "all";
             cs1results.Description = "1";
             cs2results.Description = "2";
@@ -374,7 +332,6 @@ namespace DeconTools.Backend.DTO
 
             foreach (var statItem in stats)
             {
-
                 statItem.FitAverage = getAverageScore(statItem.Results);
                 statItem.FitStdDev = getStdDevScore(statItem.Results);
                 statItem.Count = getCount(statItem.Results);
@@ -387,21 +344,10 @@ namespace DeconTools.Backend.DTO
                 sb.Append("\t");
                 sb.Append(statItem.FitStdDev.ToString("0.000"));
                 sb.Append(Environment.NewLine);
-
             }
 
             return sb.ToString();
-
-
-
-
-
-
         }
-
-
-
-
 
         public static List<IsosResult> getIsosResultsByChargeState(List<IsosResult> inputList, int chargeState, enumLinqOperator chargeOperator)
         {
@@ -429,8 +375,6 @@ namespace DeconTools.Backend.DTO
                     break;
             }
 
-
-
             return results;
         }
 
@@ -444,9 +388,6 @@ namespace DeconTools.Backend.DTO
 
             return inputList.Average(p => p.IsotopicProfile.Score);
             //return inputList.Where(p => p.IsotopicProfile.Score >= 0 && p.IsotopicProfile.Score <= 0.3).Average(p => p.IsotopicProfile.Score);
-
-
-
 
         }
 
@@ -463,7 +404,6 @@ namespace DeconTools.Backend.DTO
 
         }
 
-
         public static double getStdDevScore(List<IsosResult> inputList)
         {
             Check.Require(inputList != null, "IsosResult list is null");
@@ -476,11 +416,7 @@ namespace DeconTools.Backend.DTO
                             //where p.IsotopicProfile.Score >= 0 && p.IsotopicProfile.Score <= 0.3
                         select p.IsotopicProfile.Score;
 
-
-
-
             var scoreArray = query.ToArray();
-
 
             //List<double> vals = new List<double>();
             //foreach (IsosResult result in inputList)
@@ -489,11 +425,8 @@ namespace DeconTools.Backend.DTO
 
             //}
 
-
             return MathUtils.GetStDev(scoreArray);
-
         }
-
 
         public static void getSummaryStats1(List<IsosResult> inputList, StringBuilder sb)
         {
@@ -525,7 +458,6 @@ namespace DeconTools.Backend.DTO
             sb.Append("IsoResults charge state +4 = \t" + inputList.Count(p => p.IsotopicProfile.ChargeState == 4) + "\t" + inputList.Where(p => p.IsotopicProfile.ChargeState == 4).Average(n => n.IsotopicProfile.Score));
             sb.Append("\n");
 
-
             sb.Append("intensity 0 - 200000 \t" + inputList.Count(p => p.IntensityAggregate < 200000));
             sb.Append("\n");
             sb.Append("intensity 200000 - 500000 \t" + inputList.Count(p => p.IntensityAggregate >= 200000 && p.IntensityAggregate < 5e5));
@@ -540,10 +472,7 @@ namespace DeconTools.Backend.DTO
             sb.Append("\n");
             sb.Append("intensity > 8000000 \t" + inputList.Count(p => p.IntensityAggregate > 8e6));
             sb.Append("\n");
-
         }
-
-
 
         public static void DisplayResults(StringBuilder sb, List<IsosResult> list)
         {
@@ -570,8 +499,6 @@ namespace DeconTools.Backend.DTO
                 sb.Append("\t");
                 sb.Append(result.IsotopicProfile.IsSaturated);
                 sb.Append("\n");
-
-
             }
         }
     }

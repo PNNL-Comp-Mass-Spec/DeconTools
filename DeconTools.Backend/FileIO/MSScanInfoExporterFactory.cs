@@ -9,7 +9,6 @@ namespace DeconTools.Backend.FileIO
         #region Constructors
         public MSScanInfoExporterFactory()
         {
-
         }
         #endregion
 
@@ -19,7 +18,6 @@ namespace DeconTools.Backend.FileIO
         {
             Check.Assert(!string.IsNullOrEmpty(outputFileName), "MSScanInfoExporterFactory cannot work. OutputFileName is empty - which is bad.");
             ExporterBase<ScanResult> msFeatureExporter;
-
 
             switch (exporterType)
             {
@@ -53,8 +51,6 @@ namespace DeconTools.Backend.FileIO
             }
 
             return msFeatureExporter;
-
-
         }
         #endregion
 

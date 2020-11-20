@@ -4,7 +4,7 @@ using DeconTools.Utilities;
 
 namespace DeconTools.Backend.ProcessingTasks.Quantifiers
 {
-    public class O16O18QuantifierTask:Task
+    public class O16O18QuantifierTask : Task
     {
         readonly BasicO16O18Quantifier _quantifier;
 
@@ -12,9 +12,6 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
         public O16O18QuantifierTask()
         {
             _quantifier = new BasicO16O18Quantifier();
-
-
-
         }
 
         #endregion
@@ -31,7 +28,6 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
             o16o18result.IntensityI4Adjusted = _quantifier.adjustedI4Intensity;
 
             o16o18result.RatioO16O18FromChromCorr = _quantifier.GetAdjustedRatioUsingChromCorrData(result as O16O18TargetedResultObject);
-
         }
     }
 }

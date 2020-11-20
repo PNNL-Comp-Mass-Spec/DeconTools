@@ -3,12 +3,10 @@ namespace DeconTools.Backend.Core.Results
 {
     public class LcmsFeatureTargetedResult : TargetedResultBase
     {
-
         #region Constructors
 
         public LcmsFeatureTargetedResult()
         {
-
         }
 
         public LcmsFeatureTargetedResult(TargetBase target) : base(target) { }
@@ -31,6 +29,5 @@ namespace DeconTools.Backend.Core.Results
         {
             return base.ToString();
         }
-
     }
 }

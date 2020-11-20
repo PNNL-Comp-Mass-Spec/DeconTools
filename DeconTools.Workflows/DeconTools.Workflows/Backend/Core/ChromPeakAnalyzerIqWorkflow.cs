@@ -8,7 +8,6 @@ using DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders;
 using DeconTools.Backend.Utilities.IqLogger;
 using DeconTools.Workflows.Backend.Core.ChromPeakSelection;
 
-
 namespace DeconTools.Workflows.Backend.Core
 {
     /// <summary>
@@ -53,7 +52,6 @@ namespace DeconTools.Workflows.Backend.Core
         /// </summary>
         protected override void ExecuteWorkflow(IqResult result)
         {
-
             result.IsExported = false;
 
             if (MSGenerator == null)
@@ -82,10 +80,8 @@ namespace DeconTools.Workflows.Backend.Core
             //Find isotopic profile
             result.ObservedIsotopicProfile = TargetedMSFeatureFinder.IterativelyFindMSFeature(massSpectrumXYData, target.TheorIsotopicProfile, out var msPeakList);
 
-
             //Get NET Error
             var netError = target.ChromPeak.NETValue - target.ElutionTimeTheor;
-
 
             var leftOfMonoPeakLooker = new LeftOfMonoPeakLooker();
             var peakToTheLeft = leftOfMonoPeakLooker.LookforPeakToTheLeftOfMonoPeak(target.TheorIsotopicProfile.getMonoPeak(), target.ChargeState, msPeakList);
@@ -134,7 +130,6 @@ namespace DeconTools.Workflows.Backend.Core
             }
 
             Display(result);
-
         }
 
         //Writes IqResult Data to Console
@@ -156,6 +151,5 @@ namespace DeconTools.Workflows.Backend.Core
             IqLogger.LogDebug(("\t\t"+ target.ChromPeak.XValue.ToString("0.00") + "\t" + result.NETError.ToString("0.0000") + "\t" + result.MassErrorBefore.ToString("0.0000") + "\t" +
                 result.FitScore.ToString("0.0000") + "\t" + result.IsIsotopicProfileFlagged));
         }
-
     }
 }

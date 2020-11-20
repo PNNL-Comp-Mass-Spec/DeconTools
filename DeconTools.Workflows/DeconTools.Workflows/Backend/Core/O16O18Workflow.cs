@@ -13,9 +13,6 @@ namespace DeconTools.Workflows.Backend.Core
 
         public O16O18Workflow(Run run, TargetedWorkflowParameters parameters) : base(run,parameters)
         {
-            
-           
-           
         }
 
         public O16O18Workflow(TargetedWorkflowParameters parameters):this (null, parameters)
@@ -24,16 +21,13 @@ namespace DeconTools.Workflows.Backend.Core
 
         #endregion
 
-   
         #region IWorkflow Members
 
-       
         protected override void ExecutePostWorkflowHook()
         {
             base.ExecutePostWorkflowHook();
             ExecuteTask(_quant);
         }
-
 
         protected override void DoPostInitialization()
         {
@@ -42,13 +36,9 @@ namespace DeconTools.Workflows.Backend.Core
             _chromatogramCorrelator = new ChromatogramCorrelatorO16O18(_workflowParameters.ChromSmootherNumPointsInSmooth,
                                                                        _workflowParameters.ChromGenTolerance);
 
-
             _msfeatureFinder = new O16O18TargetedIterativeFeatureFinder(_iterativeTFFParameters);
             _quant = new O16O18QuantifierTask();
-
         }
-
-
 
         protected override DeconTools.Backend.Globals.ResultType GetResultType()
         {
@@ -57,7 +47,5 @@ namespace DeconTools.Workflows.Backend.Core
 
         #endregion
 
-        
-  
     }
 }

@@ -21,15 +21,11 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             MaxPeaksToInclude = 30;
             MinRelIntensityForPeakInclusion = parameters.MinimumRelIntensityForForPeakInclusion;
 
-
             NeedMonoIsotopicPeak = parameters.RequiresMonoIsotopicPeak;
             ToleranceInPPM = parameters.ToleranceInPPM;
 
             NumPeaksUsedInAbundance = parameters.NumPeaksUsedInAbundance;
             IsotopicProfileType = parameters.IsotopicProfileType;
-
-
-
 
             MSPeakDetector = new DeconToolsPeakDetectorV2(PeakDetectorPeakBR, peakDetectorSigNoiseRatioThreshold,
                  peakDetectorPeakFitType, peakDetectorIsDataThresholded);
@@ -41,7 +37,6 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             //this.MSPeakDetector.PeakFitType = _peakDetectorPeakFitType;
 
         }
-
 
         #endregion
 
@@ -61,13 +56,11 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
         /// </summary>
         public double MinRelIntensityForPeakInclusion { get; set; }
 
-
         #endregion
 
         #region Public Methods
         public override void Execute(ResultCollection resultList)
         {
-
             Check.Require(resultList?.Run != null, string.Format("{0} failed. Run is empty.", Name));
 
             if (resultList?.Run == null)
@@ -99,7 +92,6 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             }
 
             resultList.IsosResultBin.Add(result);
-
         }
 
         private double sumPeaks(IsotopicProfile profile, int numPeaksUsedInAbundance, int defaultVal)
@@ -109,7 +101,6 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             foreach (var peak in profile.Peaklist)
             {
                 peakListIntensities.Add(peak.Height);
-
             }
             peakListIntensities.Sort();
             peakListIntensities.Reverse();    // i know... this isn't the best way to do this!
@@ -121,19 +112,14 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
                 {
                     summedIntensities += peakListIntensities[i];
                 }
-
-
             }
 
             return summedIntensities;
-
         }
-
 
         public virtual IsotopicProfile IterativelyFindMSFeature(XYData massSpecXyData, IsotopicProfile theorIso)
         {
             return IterativelyFindMSFeature(massSpecXyData, theorIso, out _);
-
         }
 
         public virtual IsotopicProfile IterativelyFindMSFeature(XYData massSpecXyData, IsotopicProfile theorIso, out List<Peak> peakList)
@@ -144,12 +130,10 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
                 return null;
             }
 
-
             IsotopicProfile iso = null;
 
             MSPeakDetector.MinX = theorIso.MonoPeakMZ - 10;
             MSPeakDetector.MaxX = theorIso.MonoPeakMZ + 20;
-
 
             //start with high PeakBR and ratchet it down, so as to detect more peaks with each pass.  Stop when you find the isotopic profile.
             peakList = new List<Peak>();
@@ -158,16 +142,16 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             {
                 MSPeakDetector.PeakToBackgroundRatio = d;
 
-                peakList=  MSPeakDetector.FindPeaks(massSpecXyData.Xvalues, massSpecXyData.Yvalues);
+                peakList = MSPeakDetector.FindPeaks(massSpecXyData.Xvalues, massSpecXyData.Yvalues);
                 iso = FindMSFeature(peakList, theorIso);
 
                 bool isoIsGoodEnough;
 
-                if (iso==null)
+                if (iso == null)
                 {
                     isoIsGoodEnough = false;
                 }
-                else if (iso.Peaklist.Count<2)
+                else if (iso.Peaklist.Count < 2)
                 {
                     isoIsGoodEnough = false;
                 }
@@ -176,7 +160,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
                     double maxIntensity = iso.getMostIntensePeak().Height;
                     double minIntensityPeak = iso.Peaklist.Min(p => p.Height);
 
-                    if (minIntensityPeak/maxIntensity< MinRelIntensityForPeakInclusion)
+                    if (minIntensityPeak / maxIntensity < MinRelIntensityForPeakInclusion)
                     {
                         isoIsGoodEnough = true;
                     }
@@ -184,25 +168,19 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
                     {
                         isoIsGoodEnough = false;
                     }
-
                 }
 
                 if (isoIsGoodEnough)
                 {
                     break;
                 }
-
             }
 
             return iso;
-
         }
-
-
 
         private void AddFeatureToResult(TargetedResultBase result, IsotopicProfile iso)
         {
-
             //TODO:   the IsotopicProfileType is wrong...
 
             switch (IsotopicProfileType)
@@ -217,12 +195,9 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
                     result.IsotopicProfile = iso;
                     break;
             }
-
-
         }
 
         #endregion
-
 
     }
 }

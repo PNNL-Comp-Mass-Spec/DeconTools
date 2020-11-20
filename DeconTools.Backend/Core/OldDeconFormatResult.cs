@@ -1,7 +1,6 @@
 ﻿
 namespace DeconTools.Backend.Core
 {
-
     //this class was created for the purpose of interacting with older Decon2LS and it's clsProcRunner.cls
     //We needed a way of getting RAPID deconvoluted results into the clsProcRunner.  So this class was created
     //And the Rapid deconvolutor has a method that returns an array of this class.

@@ -15,12 +15,7 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
             mt.EmpiricalFormula = mt.GetEmpiricalFormulaFromTargetCode();
 
             Assert.AreEqual("C33H58N10O11S", mt.EmpiricalFormula);
-            Assert.AreEqual(33,mt.GetAtomCountForElement("C"));
-            
-
-            
+            Assert.AreEqual(33, mt.GetAtomCountForElement("C"));
         }
-
-
     }
 }

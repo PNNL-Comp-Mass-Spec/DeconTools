@@ -5,7 +5,6 @@ using DeconTools.Backend.ProcessingTasks.FitScoreCalculators;
 using DeconTools.Backend.Utilities;
 using DeconTools.Utilities;
 
-
 namespace DeconTools.Backend.ProcessingTasks.ResultValidators
 {
     public class LabeledIsotopicProfileScorer : ResultValidator
@@ -46,7 +45,6 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
 
             var isoN15 = n14n15result.IsotopicProfileLabeled;
 
-
             var scanPeaks = resultColl.Run.PeakList.Select(i => (MSPeak)i).ToList();
 
             // get i_score
@@ -56,7 +54,6 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
 
             var fitVal = getFitValue(resultColl.Run.XYData, n14n15result.Target.IsotopicProfileLabeled, isoN15);
             n14n15result.ScoreN15 = fitVal;
-
         }
 
         private double getFitValue(XYData rawXYData, IsotopicProfile theorIso, IsotopicProfile isoN15)

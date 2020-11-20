@@ -42,7 +42,7 @@ namespace DeconTools.Backend.ProcessingTasks
             PeakFitType = parameters.PeakFitType;
             SignalToNoiseThreshold = parameters.SignalToNoiseThreshold;
             PeakToBackgroundRatio = parameters.PeakToBackgroundRatio;
-            PeaksAreStored= parameters.PeaksAreStored;
+            PeaksAreStored = parameters.PeaksAreStored;
             MinX = parameters.MinX;
             MaxX = parameters.MaxX;
         }
@@ -89,7 +89,8 @@ namespace DeconTools.Backend.ProcessingTasks
 
             foreach (var p in peakList)
             {
-                var peak = new MSPeak(p.Mz, (int)p.Intensity, (float)p.FWHM, p.SignalToNoise) {
+                var peak = new MSPeak(p.Mz, (int)p.Intensity, (float)p.FWHM, p.SignalToNoise)
+                {
                     DataIndex = p.DataIndex         // this points to the index value of the raw xy values - I think
                 };
 
@@ -150,7 +151,6 @@ namespace DeconTools.Backend.ProcessingTasks
         }
 
         #endregion
-
 
         public override void Execute(ResultCollection resultList)
         {

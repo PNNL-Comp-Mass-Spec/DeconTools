@@ -33,9 +33,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
 
             Assert.AreEqual("QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18", run.DatasetName);
             Assert.AreEqual(@"\\proto-2\unitTest_Files\DeconTools_TestFiles\mzXML", run.DatasetDirectoryPath);
-
         }
-
 
         [Test]
         public void GetMassSpectrumTest1()
@@ -81,13 +79,11 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             }
 
             Assert.Fail("Exception was not caught; we expected an ArgumentOutOfRangeException to be thrown");
-
         }
 
         [Test]
         public void GetMSLevelsTest1()
         {
-
             var testscan = 6004;
             var testscan2 = 6005;
 
@@ -100,19 +96,15 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
 
             var scanTime = run.GetTime(testscan);
 
-
             Assert.AreEqual(1, run.GetMSLevel(testscan));
             Assert.AreEqual(2, run.GetMSLevel(testscan2));
 
             Assert.AreEqual(1961.65, (decimal)run.GetTime(testscan));
-
         }
-
 
         [Test]
         public void ValidateDataTest1()    //purpose is to compare
         {
-
             var testMz5File = @"\\proto-2\unitTest_Files\DeconTools_TestFiles\mzXML\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.mz5";
             var testThermoFile = FileRefs.RawDataMSFiles.OrbitrapStdFile1;
 
@@ -129,10 +121,8 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             mz5run.CurrentScanSet = testScanSet1;
             thermoRun.CurrentScanSet = testScanSetThermo;
 
-
             mz5run.XYData = mz5run.GetMassSpectrum(testScanSet1);
             thermoRun.XYData = thermoRun.GetMassSpectrum(testScanSetThermo);
-
 
             Assert.AreEqual(mz5run.XYData.Xvalues.Length, thermoRun.XYData.Xvalues.Length);
 
@@ -149,23 +139,18 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
 
             peakDetector.Execute(thermoRun.ResultCollection);
 
-
             //TestUtilities.DisplayPeaks(mz5run.PeakList);
 
             Console.WriteLine();
             Console.WriteLine();
 
             TestUtilities.DisplayPeaks(thermoRun.PeakList);
-
-
         }
-
 
         [Test]
         [Ignore("Local file")]
         public void ValidateDataTest_temp()    //purpose is to compare
         {
-
             var testMz5File = @"C:\Sipper\SipperDemo\RawDataFiles\Yellow_C13_070_23Mar10_Griffin_10-01-28.mz5";
             var testThermoFile =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\SIPPER_standard_testing\Yellow_C13_070_23Mar10_Griffin_10-01-28.raw";
@@ -184,10 +169,8 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             mz5run.CurrentScanSet = testScanSet1;
             thermoRun.CurrentScanSet = testScanSetThermo;
 
-
             mz5run.GetMassSpectrum(testScanSet1);
             thermoRun.GetMassSpectrum(testScanSetThermo);
-
 
             Assert.AreEqual(mz5run.XYData.Xvalues.Length, thermoRun.XYData.Xvalues.Length);
 
@@ -200,13 +183,9 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             peakDetector.PeakToBackgroundRatio = 3;
             peakDetector.SignalToNoiseThreshold = 2;
 
-
-
-
             peakDetector.Execute(mz5run.ResultCollection);
 
             //peakDetector.Execute(thermoRun.ResultCollection);
-
 
             TestUtilities.DisplayPeaks(mz5run.PeakList);
 
@@ -214,7 +193,6 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             Console.WriteLine();
 
             // TestUtilities.DisplayPeaks(thermoRun.PeakList);
-
 
         }
 
@@ -257,24 +235,20 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
 
             run.GetMSLevel(startScan);
 
-
             for (var i = startScan; i < stopScan; i++)
             {
                 scanSet = new ScanSet(i);
 
                 if (run.GetMSLevel(i) == 2) continue;
 
-
                 stopwatch.Start();
                 run.GetMassSpectrum(scanSet);
                 stopwatch.Stop();
-
 
                 times.Add(stopwatch.ElapsedMilliseconds);
 
                 stopwatch.Reset();
             }
-
 
             //foreach (var time in times)
             //{
@@ -282,12 +256,6 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             //}
 
             Console.WriteLine("Average = " + times.Average());
-
-
-
-
-
-
         }
 
         [Test]
@@ -308,8 +276,6 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
 
                 Console.WriteLine(scanSet + "\t" + level);
             }
-
         }
-
     }
 }

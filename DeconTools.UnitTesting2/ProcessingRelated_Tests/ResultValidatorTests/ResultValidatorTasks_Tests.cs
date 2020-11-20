@@ -10,7 +10,6 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.ResultValidatorTests
     [TestFixture]
     public class ResultValidatorTasks_Tests
     {
-
         [Test]
         public void deconWithTHRASH_Then_ValidateTest1()
         {

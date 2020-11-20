@@ -56,7 +56,6 @@ namespace DeconTools.Backend.Core
         /// </summary>
         public Globals.TargetedResultFailureType FailureType { get; set; }
 
-
         #endregion
 
         #region Public Methods
@@ -78,7 +77,6 @@ namespace DeconTools.Backend.Core
             {
                 sb.Append(scanNum);
                 sb.Append(", ");
-
             }
             sb.Append("} \n");
             if (IsotopicProfile?.Peaklist != null && IsotopicProfile.Peaklist.Count > 0)
@@ -88,8 +86,6 @@ namespace DeconTools.Backend.Core
             sb.Append("FitScore = " + Score.ToString("0.0000") + "\n");
             return sb.ToString();
         }
-
-
 
         #endregion
 
@@ -106,7 +102,6 @@ namespace DeconTools.Backend.Core
             return ScanSet.PrimaryScanNumber;
         }
 
-
         public double GetNET()
         {
             if (ChromPeakSelected == null)
@@ -117,7 +112,6 @@ namespace DeconTools.Backend.Core
             return ChromPeakSelected.NETValue;
         }
 
-
         public virtual double GetNETAlignmentError()
         {
             double theorNET = Target.NormalizedElutionTime;
@@ -125,7 +119,6 @@ namespace DeconTools.Backend.Core
 
             var netError = obsNET - theorNET;
             return netError;
-
         }
 
         public double GetMassErrorBeforeAlignmentInPPM()
@@ -135,9 +128,7 @@ namespace DeconTools.Backend.Core
 
             var massErrorInPPM = (observedMZ - theorMZ) / theorMZ * 1e6;
             return massErrorInPPM;
-
         }
-
 
         public double GetMassErrorAfterAlignmentInPPM()
         {
@@ -158,7 +149,7 @@ namespace DeconTools.Backend.Core
         /// <returns></returns>
         public virtual double GetCalibratedMonoisotopicMass()
         {
-           var monoMass = IsotopicProfile?.MonoIsotopicMass ?? 0;
+            var monoMass = IsotopicProfile?.MonoIsotopicMass ?? 0;
 
             if (Run.MassIsAligned)
             {
@@ -182,7 +173,6 @@ namespace DeconTools.Backend.Core
 
             return Target.IsotopicProfile.getMostIntensePeak().XValue;
         }
-
 
         public double GetMZOfObservedPeakClosestToTargetVal(double targetMZ)
         {
@@ -212,14 +202,12 @@ namespace DeconTools.Backend.Core
 
         public virtual void AddSelectedChromPeakAndScanSet(ChromPeak bestPeak, ScanSet scanSet, Globals.IsotopicProfileType isotopicProfileType)
         {
-
-            if (isotopicProfileType== Globals.IsotopicProfileType.UNLABELED)
+            if (isotopicProfileType == Globals.IsotopicProfileType.UNLABELED)
             {
-
                 ChromPeakSelected = bestPeak;
                 ScanSet = scanSet;
 
-                if (ScanSet!=null)
+                if (ScanSet != null)
                 {
                     NumMSScansSummed = ScanSet.IndexValues.Count;
                 }
@@ -235,20 +223,17 @@ namespace DeconTools.Backend.Core
                     FailedResult = false;
                     FailureType = Globals.TargetedResultFailureType.None;
                 }
-
             }
             else
             {
                 throw new NotSupportedException("Cannot add data for a labeled result in this base class");
             }
-
         }
 
         public virtual void AddNumChromPeaksWithinTolerance(int numChromPeaksWithinTolerance)
         {
             NumChromPeaksWithinTolerance = numChromPeaksWithinTolerance;
         }
-
 
         public virtual void ResetResult()
         {

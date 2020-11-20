@@ -20,43 +20,36 @@ namespace DeconTools.Backend.Utilities.SqliteNETUtils
 
         public static List<string> GetColumnNames(DbConnection cnn, string tableName)
         {
-
-            var columnNames=new List<string>();
+            var columnNames = new List<string>();
 
             Check.Assert(cnn is SQLiteConnection, "Method is for SQLite databases only.");
-            
+
             var myconnection = (SQLiteConnection)cnn;
 
             using (var mytransaction = myconnection.BeginTransaction())
             {
                 using (var mycommand = new SQLiteCommand(myconnection))
                 {
-                    mycommand.CommandText = "PRAGMA table_info("+tableName+");";
+                    mycommand.CommandText = "PRAGMA table_info(" + tableName + ");";
 
                     SQLiteDataReader reader;
                     try
                     {
                         reader = mycommand.ExecuteReader();
-
                     }
                     catch (Exception ex)
                     {
-                        throw new Exception("Couldn't read table information from SQLite database.\n\nDetails:"+ex.Message);
-
+                        throw new Exception("Couldn't read table information from SQLite database.\n\nDetails:" + ex.Message);
                     }
-                    
-                    
+
                     while (reader.Read())
                     {
                         columnNames.Add(reader.GetString(1));
                     }
-
                 }
             }
             return columnNames;
         }
-
-
 
         #endregion
 

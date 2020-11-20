@@ -8,7 +8,6 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
     [TestFixture]
     public class BrukerV3Tests
     {
-             
         [Test]
         public void runInitiation_Bruker9T_test1()
         {
@@ -73,18 +72,16 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             Assert.AreEqual(FileRefs.RawDataMSFiles.Bruker15TFile1, run.DatasetDirectoryPath);
         }
 
-
         [Test]
         public void GetSpectrum_Bruker9T_Test1()
         {
             var run = new BrukerV3Run(FileRefs.RawDataMSFiles.Bruker9TStandardFile1);
             var xyData = new XYData();
             var scanSet = new ScanSet(300);
-            xyData =run.GetMassSpectrum(scanSet);
+            xyData = run.GetMassSpectrum(scanSet);
             Assert.That(xyData.Xvalues != null);
             Assert.That(xyData.Xvalues.Length > 0);
             Assert.AreEqual(98897, xyData.Xvalues.Length);
-
         }
 
         [Test]
@@ -95,11 +92,10 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             var xyData = new XYData();
 
             var scanSet = new ScanSet(1000);
-            xyData =run.GetMassSpectrum(scanSet);
+            xyData = run.GetMassSpectrum(scanSet);
             Assert.That(xyData.Xvalues != null);
             Assert.That(xyData.Xvalues.Length > 0);
             Assert.AreEqual(211064, xyData.Xvalues.Length);
-
         }
 
         [Test]
@@ -109,14 +105,12 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
 
             var xyData = new XYData();
 
-            var scanSet = new ScanSet(1000,999,1001);
-            xyData =run.GetMassSpectrum(scanSet);
+            var scanSet = new ScanSet(1000, 999, 1001);
+            xyData = run.GetMassSpectrum(scanSet);
             Assert.That(xyData.Xvalues != null);
             Assert.That(xyData.Xvalues.Length > 0);
             Assert.AreEqual(211064, xyData.Xvalues.Length);
-
         }
-
 
         [Test]
         public void GetSpectrum_Bruker12T_fid_Test1()
@@ -124,11 +118,10 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             var run = new BrukerV3Run(FileRefs.RawDataMSFiles.BrukerSolarix12T_FID_File1);
             var xyData = new XYData();
             var scanSet = new ScanSet(0);
-            xyData =run.GetMassSpectrum(scanSet);
+            xyData = run.GetMassSpectrum(scanSet);
             Assert.That(xyData.Xvalues != null);
             Assert.That(xyData.Xvalues.Length > 0);
             Assert.AreEqual(369658, xyData.Xvalues.Length);
-
         }
 
         [Test]
@@ -140,11 +133,10 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             double minMZ = 700;
             double maxMZ = 701;
 
-            xyData=  run.GetMassSpectrum(scanSet,minMZ,maxMZ);
+            xyData = run.GetMassSpectrum(scanSet, minMZ, maxMZ);
             Assert.That(xyData.Xvalues != null);
             Assert.That(xyData.Xvalues.Length > 0);
             Assert.AreEqual(630, xyData.Xvalues.Length);
-
         }
 
         [Test]
@@ -153,12 +145,11 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             var run = new BrukerV3Run(FileRefs.RawDataMSFiles.BrukerSolarix12TFile1);
             var xyData = new XYData();
             var scanSet = new ScanSet(2);
-            xyData =run.GetMassSpectrum(scanSet);
+            xyData = run.GetMassSpectrum(scanSet);
             Assert.That(xyData.Xvalues != null);
             Assert.That(xyData.Xvalues.Length > 0);
             Assert.AreEqual(204162, xyData.Xvalues.Length);
         }
-
 
         [Test]
         public void GetSpectrum_Bruker15T_ser_Test1()
@@ -166,7 +157,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             var run = new BrukerV3Run(FileRefs.RawDataMSFiles.Bruker15TFile1);
             var xyData = new XYData();
             var scanSet = new ScanSet(2);
-            xyData =run.GetMassSpectrum(scanSet);
+            xyData = run.GetMassSpectrum(scanSet);
             Assert.That(xyData.Xvalues != null);
             Assert.That(xyData.Xvalues.Length > 0);
             Assert.AreEqual(209817, xyData.Xvalues.Length);
@@ -174,14 +165,13 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             //Assert.AreEqual(28962756691,(long)xyData.Yvalues.Sum());
         }
 
-
         [Test]
         public void GetSpectrum_Bruker15T_SummedMS_Test1()
         {
             var run = new BrukerV3Run(FileRefs.RawDataMSFiles.Bruker15TFile1);
             var xyData = new XYData();
-            var scanSet = new ScanSet(2,1,3);
-            xyData =run.GetMassSpectrum(scanSet);
+            var scanSet = new ScanSet(2, 1, 3);
+            xyData = run.GetMassSpectrum(scanSet);
             Assert.That(xyData.Xvalues != null);
             Assert.That(xyData.Xvalues.Length > 0);
             Assert.AreEqual(209817, xyData.Xvalues.Length);
@@ -190,8 +180,5 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             //Assert.AreEqual(86318972269, (long)xyData.Yvalues.Sum());
 
         }
-
-
-
     }
 }

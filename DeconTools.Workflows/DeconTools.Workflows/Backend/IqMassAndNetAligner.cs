@@ -28,12 +28,10 @@ namespace DeconTools.Workflows.Backend
         {
             IsDataExported = false;
 
-
             LoessBandwidthNetAlignment = 0.2;
             LoessBandwidthMassAlignment = 0.2;
 
             ScanToNetAlignmentData = new List<ScanNETPair>();
-
         }
 
         #endregion
@@ -63,7 +61,6 @@ namespace DeconTools.Workflows.Backend
             MassTagReferences = massTagReferences;
         }
 
-
         public override void LoadAndInitializeTargets(string targetsFilePath)
         {
             if (string.IsNullOrEmpty(targetsFilePath))
@@ -88,7 +85,6 @@ namespace DeconTools.Workflows.Backend
 
             foreach (var iqTarget in Targets)
             {
-
                 iqTarget.Code = _peptideUtils.CleanUpPeptideSequence(iqTarget.Code);
 
                 if (_peptideUtils.ValidateSequence(iqTarget.Code))
@@ -125,7 +121,6 @@ namespace DeconTools.Workflows.Backend
                             select grp.OrderBy(p => p.QualityScore).First()
                            ).ToList();
 
-
             Targets = filteredList;
 
             TargetedWorkflowParameters workflowParameters = new BasicTargetedWorkflowParameters();
@@ -140,7 +135,6 @@ namespace DeconTools.Workflows.Backend
             workflowAssigner.AssignWorkflowToParent(parentWorkflow, Targets);
             workflowAssigner.AssignWorkflowToChildren(childWorkflow, Targets);
 
-
             if (Targets.Count>0)
             {
                 IqLogger.LogMessage("IqMassAndNetAligner - Loaded " + Targets.Count + " targets for use in mass and net alignment");
@@ -150,14 +144,10 @@ namespace DeconTools.Workflows.Backend
                 IqLogger.LogMessage("IqMassAndNetAligner - NOTE - no targets have been loaded.");
             }
 
-
-
             //IqWorkflowAssigner workflowAssigner = new IqWorkflowAssigner();
             //workflowAssigner.AssignWorkflowToParent(workflow, Targets);
 
-
         }
-
 
         public void ExecuteAlignment()
         {
@@ -165,14 +155,11 @@ namespace DeconTools.Workflows.Backend
             NetAlignmentInfo = DoNetAlignment();
         }
 
-
         public void ExportGraphs(string baseFilename)
         {
             ExportMassAlignmentGraph1(baseFilename);
 
             ExportNetAlignmentGraph1(baseFilename);
-
-
         }
 
         private void ExportNetAlignmentGraph1(string baseFilename)
@@ -204,7 +191,6 @@ namespace DeconTools.Workflows.Backend
 
             graphGenerator.GraphPane.CurveList.Add(curveItem);
 
-
             graphGenerator.GraphPane.XAxis.Title.Text = "scan";
             graphGenerator.GraphPane.YAxis.Title.Text = "NET";
             graphGenerator.GraphPane.XAxis.Scale.MinAuto = true;
@@ -215,7 +201,6 @@ namespace DeconTools.Workflows.Backend
             graphGenerator.GraphPane.YAxis.Scale.Max = 1;
 
             graphGenerator.GraphPane.YAxis.Scale.Format = "0.0";
-
 
             graphGenerator.GraphPane.XAxis.Scale.FontSpec.Size = 12;
             var outputGraphFilename = baseFilename + "_netAlignment.png";
@@ -252,7 +237,6 @@ namespace DeconTools.Workflows.Backend
 
             graphGenerator.GraphPane.CurveList.Add(curveItem);
 
-
             graphGenerator.GraphPane.XAxis.Title.Text = "scan";
             graphGenerator.GraphPane.YAxis.Title.Text = "ppm error";
             graphGenerator.GraphPane.XAxis.Scale.MinAuto = true;
@@ -264,13 +248,11 @@ namespace DeconTools.Workflows.Backend
 
             graphGenerator.GraphPane.YAxis.Scale.Format = "#.#";
 
-
             graphGenerator.GraphPane.XAxis.Scale.FontSpec.Size = 12;
             var outputGraphFilename = baseFilename + "_massAlignment.png";
 
             graphGenerator.SaveGraph(outputGraphFilename);
         }
-
 
         public void LoadPreviousIqResults(string filename)
         {
@@ -278,10 +260,7 @@ namespace DeconTools.Workflows.Backend
             IqResultsForAlignment = importer.Import();
 
             IqLogger.LogMessage("IqMassAndNetAligner - Imported " + IqResultsForAlignment.Count + " IqResults for use in alignment. ");
-
-
         }
-
 
         public void ExportResults(string filename)
         {
@@ -299,9 +278,7 @@ namespace DeconTools.Workflows.Backend
             catch (Exception ex)
             {
                 IqLogger.LogMessage("Iq mass and NET aligner trying to export results but there was an error. Error details: " + ex.Message);
-
             }
-
         }
 
         #endregion
@@ -309,7 +286,6 @@ namespace DeconTools.Workflows.Backend
         #region Private Methods
 
         #endregion
-
 
         public MassAlignmentInfo DoMassAlignment(bool recollectResultsIfAlreadyPresent = false)
         {
@@ -322,24 +298,17 @@ namespace DeconTools.Workflows.Backend
                 IqResultsForAlignment = FilterAlignmentResults();
             }
 
-
-
-
             var massAlignmentDataForLoess = PrepareMassAlignmentDataForLoessSmoothing(IqResultsForAlignment);
-
 
             var iterationsForMassAlignment = 2;
             var loessInterpolatorForMassAlignment = new LoessInterpolator(LoessBandwidthMassAlignment, iterationsForMassAlignment);
 
-
             IqLogger.LogMessage("Applying Loess smoothing to mass alignment data. LoessBandwidth= "+ LoessBandwidthMassAlignment);
-
 
             var massAlignmentInfo = new MassAlignmentInfoBasic();
             massAlignmentInfo.ScanAndPpmShiftVals = new XYData();
             massAlignmentInfo.ScanAndPpmShiftVals.Xvalues = massAlignmentDataForLoess.Xvalues;
             massAlignmentInfo.ScanAndPpmShiftVals.Yvalues = loessInterpolatorForMassAlignment.Smooth(massAlignmentDataForLoess.Xvalues, massAlignmentDataForLoess.Yvalues);
-
 
             if (massAlignmentInfo.GetNumPoints() > 0)
             {
@@ -350,7 +319,6 @@ namespace DeconTools.Workflows.Backend
                 massAlignmentInfo.AveragePpmShift = double.NaN;
             }
 
-
             if (massAlignmentInfo.GetNumPoints() > 2)
             {
                 massAlignmentInfo.StDevPpmShiftData = MathUtils.GetStDev(massAlignmentInfo.ScanAndPpmShiftVals.Yvalues);
@@ -359,7 +327,6 @@ namespace DeconTools.Workflows.Backend
             {
                 massAlignmentInfo.StDevPpmShiftData = double.NaN;
             }
-
 
             IqLogger.LogMessage("Mass alignment complete using " + massAlignmentInfo.GetNumPoints() + " data points");
 
@@ -387,9 +354,6 @@ namespace DeconTools.Workflows.Backend
 
             var netAlignmentDataForLoess = PrepareNetAlignmentDataForLoessSmoothing();
 
-
-
-
             var iterationsForNetAlignment = 2;
 
             var loessInterpolatorForNetAlignment = new LoessInterpolator(LoessBandwidthNetAlignment, iterationsForNetAlignment);
@@ -409,12 +373,10 @@ namespace DeconTools.Workflows.Backend
                     var scanNETPair = new ScanNETPair(xval, yval);
                     scanToNetVals.Add(scanNETPair);
                 }
-
             }
 
             var netAlignmentInfo = new NetAlignmentInfoBasic(Run.MinLCScan, Run.MaxLCScan);
             netAlignmentInfo.SetScanToNETAlignmentData(scanToNetVals);
-
 
             IqLogger.LogMessage("NET alignment complete using " + scanToNetVals.Count + " data points.");
 
@@ -423,12 +385,7 @@ namespace DeconTools.Workflows.Backend
             return netAlignmentInfo;
         }
 
-
-
-
-
         protected List<IqResult> IqResultsForNetAlignment { get; set; }
-
 
         private XYData PrepareMassAlignmentDataForLoessSmoothing(List<IqResult> iqResultsForAlignment)
         {
@@ -436,7 +393,6 @@ namespace DeconTools.Workflows.Backend
 
             foreach (var iqResult in iqResultsForAlignment)
             {
-
                 decimal lcScan;
                 if (iqResult.ChromPeakSelected==null)
                 {
@@ -446,8 +402,6 @@ namespace DeconTools.Workflows.Backend
                 {
                     lcScan = (decimal)Math.Round(iqResult.ChromPeakSelected.XValue, 2);
                 }
-
-
 
                 var yval = iqResult.MassErrorBefore;
 
@@ -462,9 +416,7 @@ namespace DeconTools.Workflows.Backend
             xyDataForInterpolator.Yvalues = scanMassVals.Values.ToArray();
 
             return xyDataForInterpolator;
-
         }
-
 
         private List<ScanNETPair> PrepareNetAlignmentDataForLoessSmoothing()
         {
@@ -472,7 +424,6 @@ namespace DeconTools.Workflows.Backend
 
             foreach (var iqResult in IqResultsForNetAlignment)
             {
-
                 decimal lcScan;
                 if (iqResult.ChromPeakSelected == null)
                 {
@@ -491,7 +442,6 @@ namespace DeconTools.Workflows.Backend
                 }
             }
 
-
             var scanNETPairs = new List<ScanNETPair>();
             foreach (var pair in scanNetDictionary)
             {
@@ -500,10 +450,7 @@ namespace DeconTools.Workflows.Backend
             }
 
             return scanNETPairs;
-
         }
-
-
 
         private List<IqResult> FilterAlignmentResults()
         {
@@ -522,7 +469,6 @@ namespace DeconTools.Workflows.Backend
         {
             if (MassTagReferences == null || MassTagReferences.Count == 0) return results;
 
-
             var msgfIdsUsedInNetAlignment = new List<int>();
             var query = (from massTag in MassTagReferences
                          join result in results on massTag.Code equals result.Target.Code
@@ -531,7 +477,6 @@ namespace DeconTools.Workflows.Backend
                              MassTag = massTag,
                              MsgfTarget = result.Target
                          }).ToList();
-
 
             foreach (var thing in query)
             {

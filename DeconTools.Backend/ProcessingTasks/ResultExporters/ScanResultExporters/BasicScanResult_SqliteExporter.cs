@@ -9,7 +9,6 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
 {
     public sealed class BasicScanResult_SqliteExporter : ScanResult_SqliteExporter
     {
-
         #region Constructors
         public BasicScanResult_SqliteExporter(string fileName)
         {
@@ -81,7 +80,6 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
                     mycommand.Parameters.Add(num_peaksParam);
                     mycommand.Parameters.Add(num_deisotopedParam);
 
-
                     foreach (var item in rc.ScanResultList)
                     {
                         scanNumParam.Value = item.ScanSet.PrimaryScanNumber;
@@ -97,13 +95,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
                     }
                 }
                 mytransaction.Commit();
-
             }
-
         }
-
-
-
-
     }
 }

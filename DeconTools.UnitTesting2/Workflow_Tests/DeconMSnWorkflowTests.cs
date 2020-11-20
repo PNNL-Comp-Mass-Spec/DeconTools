@@ -28,7 +28,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             parameters.ThrashParameters.MinIntensityForScore = 1;
             parameters.ThrashParameters.MinMSFeatureToBackgroundRatio = 1;
 
-             var run = new RunFactory().CreateRun(testFile1);
+            var run = new RunFactory().CreateRun(testFile1);
 
             var expectedResultsFile1 = Path.Combine(run.DatasetDirectoryPath, run.DatasetName + ".mgf");
             var expectedResultsFile2 = Path.Combine(run.DatasetDirectoryPath, run.DatasetName + "_DeconMSn_log.txt");
@@ -57,7 +57,7 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
 
             var outputDirectoryPath = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\DeconMSn\Output";
 
-            var datasetName= RunUtilities.GetDatasetName(rawdataFile);
+            var datasetName = RunUtilities.GetDatasetName(rawdataFile);
 
             var expectedResultsFile1 = Path.Combine(outputDirectoryPath, datasetName + ".mgf");
             var expectedResultsFile2 = Path.Combine(outputDirectoryPath, datasetName + "_DeconMSn_log.txt");
@@ -75,7 +75,6 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             Assert.IsTrue(File.Exists(expectedResultsFile3));
         }
 
-
         [Category("ProblemTesting")]
         [Test]
         [Ignore("Local testing only")]
@@ -90,14 +89,12 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             workflow.Execute();
         }
 
-
         [Category("ProblemTesting")]
         [Test]
         [Ignore("Local testing only")]
         public void LowIntensityButGoodFeatureTest1()
         {
             var rawDataFile = @"D:\Data\DeconMSn_testing\QC_Shew_13_01_pt5_b_23Jan13_Cougar_12-02-27.raw";
-
 
             var parameters = new DeconToolsParameters();
             parameters.MSGeneratorParameters.UseLCScanRange = true;
@@ -132,17 +129,14 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
 
             var workflow = ScanBasedWorkflow.CreateWorkflow(localTestFile, parameterFile, outputDirectoryPath);
             workflow.Execute();
-
         }
 
         [Test]
         [Ignore("Local testing only")]
         public void WorkflowTesting2_SumLC5()
         {
-
             var localTestFile =
                 @"C:\Users\d3x720\Documents\Data\QCShew\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
-
 
             var parameters = new DeconToolsParameters();
             parameters.MSGeneratorParameters.UseLCScanRange = true;
@@ -163,9 +157,6 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
 
             var workflow = new DeconMSnWorkflow(parameters, run);
             workflow.Execute();
-
-
         }
-
     }
 }

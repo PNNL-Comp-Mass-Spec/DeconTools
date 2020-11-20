@@ -25,10 +25,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.TargetedFeatureFinderT
 
             var mt24702_charge3 = (from n in massTagColl.TargetList where n.ID == 24702 && n.ChargeState == 3 select n).First();
             var mt24702_charge4 = (from n in massTagColl.TargetList where n.ID == 24702 && n.ChargeState == 4 select n).First();
-
         }
-
-
 
         [Test]
         public void n14N15LabeledData_TFFTest1()
@@ -39,7 +36,6 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.TargetedFeatureFinderT
             //get sample MS from Test Data
             var massSpectrum = n14n15Util.GetSpectrumAMTTag23140708_Z3_Sum3();  //this is the diff b/w previous test and this one
             var mt23140708 = n14n15Util.CreateMT23140708_Z3();
-
 
             //get ms peaks
             var peakDet = new DeconToolsPeakDetectorV2(1.3, 2);
@@ -67,7 +63,6 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.TargetedFeatureFinderT
 
             Console.WriteLine(mt23140708.GetEmpiricalFormulaFromTargetCode());
 
-
             TestUtilities.DisplayIsotopicProfileData(mt23140708.IsotopicProfile);
 
             Console.WriteLine();
@@ -78,12 +73,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.TargetedFeatureFinderT
 
             Console.WriteLine();
             TestUtilities.DisplayIsotopicProfileData(n15profile);
-
-
-
         }
-
-
 
         [Test]
         public void getVeryLowN15ProfileWithIterativeTFFTest1()
@@ -91,9 +81,8 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.TargetedFeatureFinderT
             var n14n15Util = new N14N15TestingUtilities();
             //get sample MS from Test Data
 
-            var rf=new RunFactory();
+            var rf = new RunFactory();
             var run = rf.CreateRun(N14N15TestingUtilities.MS_AMTTag23085904_z2_sum1_lowN15);
-
 
             run.XYData = N14N15TestingUtilities.GetTestSpectrum(N14N15TestingUtilities.MS_AMTTag23085904_z2_sum1_lowN15);
 
@@ -107,13 +96,11 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.TargetedFeatureFinderT
             var theorN15FeatureGen = new TomTheorFeatureGenerator(Globals.LabelingType.N15, 0.005);
             theorN15FeatureGen.GenerateTheorFeature(mt23140708);
 
-
             var parameters = new IterativeTFFParameters
             {
                 IsotopicProfileType = Globals.IsotopicProfileType.LABELED,
                 ToleranceInPPM = 30
             };
-
 
             var itff = new IterativeTFF(parameters);
 
@@ -122,18 +109,11 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.TargetedFeatureFinderT
 
             var result = (N14N15_TResult)run.ResultCollection.GetTargetedResult(run.CurrentMassTag);
 
-
-
             Assert.IsNotNull(result.IsotopicProfileLabeled);
             Assert.AreEqual(82280, (int)result.IntensityAggregate);
             Assert.AreEqual(3, result.IsotopicProfileLabeled.MonoIsotopicPeakIndex);
 
             TestUtilities.DisplayIsotopicProfileData(result.IsotopicProfileLabeled);
-
         }
-
-
-
-
     }
 }

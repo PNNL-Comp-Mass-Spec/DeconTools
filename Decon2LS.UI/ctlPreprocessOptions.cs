@@ -46,8 +46,8 @@ namespace Decon2LS
         private System.Windows.Forms.TextBox mtxtA;
         private System.Windows.Forms.Label mlabelC;
         private System.Windows.Forms.Label mlabelB;
-        private System.Windows.Forms.Label mlabelA; 
-        /// <summary> 
+        private System.Windows.Forms.Label mlabelA;
+        /// <summary>
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.Container components = null;
@@ -60,33 +60,33 @@ namespace Decon2LS
             // TODO: Add any initialization after the InitializeComponent call
             foreach (DeconToolsV2.Readers.ApodizationType type in Enum.GetValues(typeof(DeconToolsV2.Readers.ApodizationType)))
             {
-                mcmbApodizationType.Items.Add(type.ToString()) ; 
+                mcmbApodizationType.Items.Add(type.ToString());
             }
             foreach (DeconToolsV2.Readers.CalibrationType type in Enum.GetValues(typeof(DeconToolsV2.Readers.CalibrationType)))
             {
-                mcmbCalibrationType.Items.Add(type.ToString()) ; 
+                mcmbCalibrationType.Items.Add(type.ToString());
             }
-            CalibrationType = DeconToolsV2.Readers.CalibrationType.UNDEFINED ; 
+            CalibrationType = DeconToolsV2.Readers.CalibrationType.UNDEFINED;
         }
 
-        /// <summary> 
+        /// <summary>
         /// Clean up any resources being used.
         /// </summary>
-        protected override void Dispose( bool disposing )
+        protected override void Dispose(bool disposing)
         {
-            if( disposing )
+            if (disposing)
             {
-                if(components != null)
+                if (components != null)
                 {
                     components.Dispose();
                 }
             }
-            base.Dispose( disposing );
+            base.Dispose(disposing);
         }
 
         #region Component Designer generated code
-        /// <summary> 
-        /// Required method for Designer support - do not modify 
+        /// <summary>
+        /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
@@ -406,87 +406,85 @@ namespace Decon2LS
             this.mpanelCalibrationConstants.PerformLayout();
             this.mpanelCalibrationType.ResumeLayout(false);
             this.ResumeLayout(false);
-
         }
         #endregion
 
-        private void SetApodizationControlsEnabled(bool enabled) 
+        private void SetApodizationControlsEnabled(bool enabled)
         {
-            mtxtMaxX.Enabled = enabled ; 
-            mtxtMinX.Enabled = enabled ; 
-            mtxtTrianglePercent.Enabled = enabled ; 
+            mtxtMaxX.Enabled = enabled;
+            mtxtMinX.Enabled = enabled;
+            mtxtTrianglePercent.Enabled = enabled;
         }
 
-        private void SetCalibrationControlsEnabled(bool enabled) 
+        private void SetCalibrationControlsEnabled(bool enabled)
         {
-            mpanelCalibrationConstants.Enabled = enabled ; 
-            mlabelA.Enabled = enabled ; 
-            mtxtA.Enabled = enabled ; 
-            mlabelB.Enabled = enabled ; 
-            mtxtB.Enabled = enabled ; 
-            mlabelC.Enabled = enabled ; 
-            mtxtC.Enabled = enabled ; 
+            mpanelCalibrationConstants.Enabled = enabled;
+            mlabelA.Enabled = enabled;
+            mtxtA.Enabled = enabled;
+            mlabelB.Enabled = enabled;
+            mtxtB.Enabled = enabled;
+            mlabelC.Enabled = enabled;
+            mtxtC.Enabled = enabled;
         }
 
         private void mcmbApodizationType_SelectedIndexChanged(object sender, System.EventArgs e)
         {
             if (mcmbApodizationType.SelectedIndex == -1 || mcmbApodizationType.Items[mcmbApodizationType.SelectedIndex].ToString() == DeconToolsV2.Readers.ApodizationType.NOAPODIZATION.ToString())
             {
-                SetApodizationControlsEnabled(false) ; 
+                SetApodizationControlsEnabled(false);
             }
             else
             {
-                SetApodizationControlsEnabled(true) ; 
-            }		
+                SetApodizationControlsEnabled(true);
+            }
         }
 
         private void mcmbCalibrationType_SelectedIndexChanged(object sender, System.EventArgs e)
         {
             if (mcmbCalibrationType.SelectedIndex == -1 || mcmbCalibrationType.Items[mcmbCalibrationType.SelectedIndex].ToString() == DeconToolsV2.Readers.CalibrationType.UNDEFINED.ToString())
             {
-                SetCalibrationControlsEnabled(false) ; 
+                SetCalibrationControlsEnabled(false);
             }
             else
             {
-                SetCalibrationControlsEnabled(true) ; 
-            }				
+                SetCalibrationControlsEnabled(true);
+            }
         }
-
 
         public DeconToolsV2.Readers.ApodizationType ApodizationType
         {
             get
             {
                 if (mcmbApodizationType.SelectedIndex == -1)
-                    return DeconToolsV2.Readers.ApodizationType.NOAPODIZATION ; 
+                    return DeconToolsV2.Readers.ApodizationType.NOAPODIZATION;
 
-                var selectedType = mcmbApodizationType.Items[mcmbApodizationType.SelectedIndex].ToString() ; 
+                var selectedType = mcmbApodizationType.Items[mcmbApodizationType.SelectedIndex].ToString();
                 foreach (DeconToolsV2.Readers.ApodizationType type in Enum.GetValues(typeof(DeconToolsV2.Readers.ApodizationType)))
                 {
                     if (type.ToString() == selectedType)
-                        return type ;
+                        return type;
                 }
-                return DeconToolsV2.Readers.ApodizationType.NOAPODIZATION ; 
+                return DeconToolsV2.Readers.ApodizationType.NOAPODIZATION;
             }
             set
             {
-                mcmbApodizationType.SelectedIndex = -1 ;
-                var selectedType = value.ToString() ; 
-                for (var i = 0 ; i < mcmbApodizationType.Items.Count ; i++)
+                mcmbApodizationType.SelectedIndex = -1;
+                var selectedType = value.ToString();
+                for (var i = 0; i < mcmbApodizationType.Items.Count; i++)
                 {
                     if (mcmbApodizationType.Items[i].ToString() == selectedType)
                     {
-                        mcmbApodizationType.SelectedIndex = i ; 
-                        return ; 
+                        mcmbApodizationType.SelectedIndex = i;
+                        return;
                     }
                 }
                 if (mcmbApodizationType.SelectedIndex == -1 || mcmbApodizationType.Items[mcmbApodizationType.SelectedIndex].ToString() == DeconToolsV2.Readers.ApodizationType.NOAPODIZATION.ToString())
                 {
-                    SetApodizationControlsEnabled(false) ; 
+                    SetApodizationControlsEnabled(false);
                 }
                 else
                 {
-                    SetApodizationControlsEnabled(true) ; 
+                    SetApodizationControlsEnabled(true);
                 }
             }
         }
@@ -495,11 +493,11 @@ namespace Decon2LS
         {
             set
             {
-                mtxtTrianglePercent.Text = Convert.ToString(value) ; 
+                mtxtTrianglePercent.Text = Convert.ToString(value);
             }
             get
             {
-                return Convert.ToInt32(mtxtTrianglePercent.Text) ; 
+                return Convert.ToInt32(mtxtTrianglePercent.Text);
             }
         }
 
@@ -507,22 +505,22 @@ namespace Decon2LS
         {
             set
             {
-                mtxtMinX.Text = Convert.ToString(value) ; 
+                mtxtMinX.Text = Convert.ToString(value);
             }
             get
             {
-                return Convert.ToDouble(mtxtMinX.Text) ; 
+                return Convert.ToDouble(mtxtMinX.Text);
             }
         }
         public double ApodizationMaxX
         {
             set
             {
-                mtxtMaxX.Text = Convert.ToString(value) ; 
+                mtxtMaxX.Text = Convert.ToString(value);
             }
             get
             {
-                return Convert.ToDouble(mtxtMaxX.Text) ; 
+                return Convert.ToDouble(mtxtMaxX.Text);
             }
         }
 
@@ -530,11 +528,11 @@ namespace Decon2LS
         {
             set
             {
-                mcmbNumZeroFills.SelectedIndex = Convert.ToInt32(value) ; 
+                mcmbNumZeroFills.SelectedIndex = Convert.ToInt32(value);
             }
             get
             {
-                return Convert.ToInt16(mcmbNumZeroFills.SelectedIndex) ; 
+                return Convert.ToInt16(mcmbNumZeroFills.SelectedIndex);
             }
         }
 
@@ -543,20 +541,20 @@ namespace Decon2LS
             get
             {
                 if (mcmbCalibrationType.SelectedIndex == -1)
-                    return DeconToolsV2.Readers.CalibrationType.UNDEFINED ; 
+                    return DeconToolsV2.Readers.CalibrationType.UNDEFINED;
 
-                var selectedType = mcmbCalibrationType.Items[mcmbCalibrationType.SelectedIndex].ToString() ; 
-                return (DeconToolsV2.Readers.CalibrationType) Enum.Parse(typeof(DeconToolsV2.Readers.CalibrationType), selectedType)  ;
+                var selectedType = mcmbCalibrationType.Items[mcmbCalibrationType.SelectedIndex].ToString();
+                return (DeconToolsV2.Readers.CalibrationType)Enum.Parse(typeof(DeconToolsV2.Readers.CalibrationType), selectedType);
             }
             set
             {
-                var selectedType = value.ToString() ; 
-                for (var i = 0 ; i < mcmbCalibrationType.Items.Count ; i++)
+                var selectedType = value.ToString();
+                for (var i = 0; i < mcmbCalibrationType.Items.Count; i++)
                 {
                     if (mcmbCalibrationType.Items[i].ToString() == selectedType)
                     {
-                        mcmbCalibrationType.SelectedIndex = i ; 
-                        return ; 
+                        mcmbCalibrationType.SelectedIndex = i;
+                        return;
                     }
                 }
             }
@@ -566,35 +564,34 @@ namespace Decon2LS
         {
             get
             {
-                return Convert.ToDouble(mtxtA.Text) ; 
+                return Convert.ToDouble(mtxtA.Text);
             }
             set
             {
-                mtxtA.Text = Convert.ToString(value) ;
+                mtxtA.Text = Convert.ToString(value);
             }
         }
         public double CalibrationConstB
         {
             get
             {
-                return Convert.ToDouble(mtxtB.Text) ; 
+                return Convert.ToDouble(mtxtB.Text);
             }
             set
             {
-                mtxtB.Text = Convert.ToString(value) ;
+                mtxtB.Text = Convert.ToString(value);
             }
         }
         public double CalibrationConstC
         {
             get
             {
-                return Convert.ToDouble(mtxtC.Text) ; 
+                return Convert.ToDouble(mtxtC.Text);
             }
             set
             {
-                mtxtC.Text = Convert.ToString(value) ;
+                mtxtC.Text = Convert.ToString(value);
             }
         }
-
     }
 }

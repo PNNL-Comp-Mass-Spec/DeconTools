@@ -6,8 +6,6 @@ namespace DeconTools.Backend.Utilities
 {
     public class DiagnosticUtilities
     {
-
-
         public static string GetCurrentProcessInfo()
         {
             var sb = new StringBuilder();
@@ -18,8 +16,6 @@ namespace DeconTools.Backend.Utilities
             sb.Append("; Private bytes =\t" + string.Format("{0:N0}", currentProcess.PrivateMemorySize64));
 
             return sb.ToString();
-
-
         }
 
         /// <summary>
@@ -40,9 +36,7 @@ namespace DeconTools.Backend.Utilities
             {
                 return ex.Message + ": " + path;
             }
-
         }
-
 
         #region Constructors
         #endregion

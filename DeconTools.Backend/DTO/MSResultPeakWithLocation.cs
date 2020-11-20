@@ -7,7 +7,6 @@ namespace DeconTools.Backend.DTO
 {
     public sealed class MSResultPeakWithLocation : Peak
     {
-
         private readonly ushort frameNumber;
         private readonly ushort scanNumber;
         private readonly Dictionary<ushort, List<ushort>> frameAndScansRange;
@@ -115,7 +114,6 @@ namespace DeconTools.Backend.DTO
             var mergedArray = new List<ushort>();
             while (index1 < end1 && index2 < end2)
             {
-
                 if (list1[index1] < list2[index2])
                 {
                     if (!valueMap.ContainsKey(list1[index1]))
@@ -131,7 +129,6 @@ namespace DeconTools.Backend.DTO
                     {
                         valueMap.Add(list2[index2], 1);
                         mergedArray.Add(list2[index2]);
-
                     }
                     index2++;
                 }
@@ -158,7 +155,6 @@ namespace DeconTools.Backend.DTO
                         mergedArray.Add(list1[i]);
                     }
                 }
-
             }
 
             return mergedArray;
@@ -166,7 +162,6 @@ namespace DeconTools.Backend.DTO
 
         public void UpdateFrameScansRange(Dictionary<ushort, List<ushort>> newRangeValues)
         {
-
             foreach (var key in newRangeValues.Keys.ToList())
             {
                 if (frameAndScansRange.ContainsKey(key))
@@ -176,7 +171,6 @@ namespace DeconTools.Backend.DTO
                     var newList = mergeSortUnique(prevSortedList, newRangeValues[key]);
 
                     frameAndScansRange[key] = newList;
-
                 }
                 else
                 {
@@ -184,10 +178,7 @@ namespace DeconTools.Backend.DTO
                     frameAndScansRange.Add(key, newRangeValues[key]);
                 }
             }
-
-
         }
-
 
         //checks if the given mass is within a tolerance of this feature
         public bool ContainsMass(double massValue, int toleranceInPPM)
@@ -201,7 +192,6 @@ namespace DeconTools.Backend.DTO
 
             return false;
         }
-
 
         public int ContainsPeak(Peak peak, ushort frameNum, ushort scanNum, ushort toleranceInPPM, ushort netRange, ushort driftRange)
         {
@@ -241,7 +231,6 @@ namespace DeconTools.Backend.DTO
                         //the scan we're interested in.
 
                     }
-
                 }
 
                 var netDiff = frameNumber.CompareTo(frameNum);

@@ -93,7 +93,7 @@ namespace Decon2LS
         {
             // Load the icons used for categorization info from embedded resources.
             MercuryIcon = PNNL.Controls.IconUtils.LoadIconFromAssembly(typeof(frmMercury), "Icons.Mercury.ico", 16, 16);
-            MercuryCategory = new PNNL.Controls.CategoryInfo[] {new PNNL.Controls.CategoryInfo("Mercury", MercuryIcon)};
+            MercuryCategory = new PNNL.Controls.CategoryInfo[] { new PNNL.Controls.CategoryInfo("Mercury", MercuryIcon) };
         }
 
         /// <summary>
@@ -170,7 +170,7 @@ namespace Decon2LS
             {
                 // Create the preview series and add it to the chart
                 this.mPreviewSeriesDataProvider =
-                    new MercuryDataProvider(new float[]{0, 0}, new float[]{1, 0});
+                    new MercuryDataProvider(new float[] { 0, 0 }, new float[] { 1, 0 });
 
                 //
                 // Required for Windows Form Designer support
@@ -227,7 +227,7 @@ namespace Decon2LS
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, ex.Message + ex.StackTrace) ;
+                MessageBox.Show(this, ex.Message + ex.StackTrace);
             }
         }
 
@@ -274,36 +274,32 @@ namespace Decon2LS
                 this.cmbCterm.Items.Add(MolecularFormula.Parse("H1 O1", "Free acid"));
                 this.cmbCterm.Items.Add(MolecularFormula.Parse("N1 H2", "Amide"));
 
-                mDNATranslator =  new MolecularFormulaTranslator();
+                mDNATranslator = new MolecularFormulaTranslator();
                 mDNATranslator.Add("A", MolecularFormula.Parse("C10 H13 N5 O3", "Aacid"));
                 mDNATranslator.Add("G", MolecularFormula.Parse("C10 H13 N5 O4", "Gacid"));
                 mDNATranslator.Add("C", MolecularFormula.Parse("C9 H13 N3 O4", "Cytosine"));
                 mDNATranslator.Add("T", MolecularFormula.Parse("C10 H14 N2 O5", "Tacid"));
                 mDNATranslator.Add("U", MolecularFormula.Parse("C9 H12 N2 O5", "Urasil"));
-
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, ex.Message + ex.StackTrace) ;
+                MessageBox.Show(this, ex.Message + ex.StackTrace);
             }
-
         }
-
-
 
         /// <summary>
         /// Clean up any resources being used.
         /// </summary>
-        protected override void Dispose( bool disposing )
+        protected override void Dispose(bool disposing)
         {
-            if( disposing )
+            if (disposing)
             {
-                if(components != null)
+                if (components != null)
                 {
                     components.Dispose();
                 }
             }
-            base.Dispose( disposing );
+            base.Dispose(disposing);
         }
 
         #region Windows Form Designer generated code
@@ -1597,7 +1593,6 @@ namespace Decon2LS
             ((System.ComponentModel.ISupportInitialize)(this.mErrorProvider)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.mWarningProvider)).EndInit();
             this.ResumeLayout(false);
-
         }
         #endregion
 
@@ -1623,7 +1618,7 @@ namespace Decon2LS
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, ex.Message + ex.StackTrace) ;
+                MessageBox.Show(this, ex.Message + ex.StackTrace);
             }
         }
 
@@ -1635,7 +1630,7 @@ namespace Decon2LS
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, ex.Message + ex.StackTrace) ;
+                MessageBox.Show(this, ex.Message + ex.StackTrace);
             }
         }
 
@@ -1647,7 +1642,7 @@ namespace Decon2LS
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, ex.Message + ex.StackTrace) ;
+                MessageBox.Show(this, ex.Message + ex.StackTrace);
             }
         }
 
@@ -1659,7 +1654,7 @@ namespace Decon2LS
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, ex.Message + ex.StackTrace) ;
+                MessageBox.Show(this, ex.Message + ex.StackTrace);
             }
         }
 
@@ -1671,7 +1666,7 @@ namespace Decon2LS
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, ex.Message + ex.StackTrace) ;
+                MessageBox.Show(this, ex.Message + ex.StackTrace);
             }
         }
 
@@ -1696,7 +1691,7 @@ namespace Decon2LS
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, ex.Message + ex.StackTrace) ;
+                MessageBox.Show(this, ex.Message + ex.StackTrace);
             }
         }
 
@@ -1708,7 +1703,7 @@ namespace Decon2LS
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, ex.Message + ex.StackTrace) ;
+                MessageBox.Show(this, ex.Message + ex.StackTrace);
             }
         }
 
@@ -1720,7 +1715,7 @@ namespace Decon2LS
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, ex.Message + ex.StackTrace) ;
+                MessageBox.Show(this, ex.Message + ex.StackTrace);
             }
         }
 
@@ -1735,7 +1730,7 @@ namespace Decon2LS
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, ex.Message + ex.StackTrace) ;
+                MessageBox.Show(this, ex.Message + ex.StackTrace);
             }
         }
 
@@ -1776,32 +1771,32 @@ namespace Decon2LS
                     this.mMercuryIsotopeDistribution.CalculateDistribution(
                     this.mMolecularFormula.ToElementTable());
 
-                var maxAbundance = float.NegativeInfinity ;
-                float sum = 0 ;
-                for (var ptNum = 0 ; ptNum < points.Length ; ptNum++)
+                var maxAbundance = float.NegativeInfinity;
+                float sum = 0;
+                for (var ptNum = 0; ptNum < points.Length; ptNum++)
                 {
-                    sum += points[ptNum].Y ;
+                    sum += points[ptNum].Y;
                     if (maxAbundance < points[ptNum].Y)
                     {
-                        maxAbundance = points[ptNum].Y ;
+                        maxAbundance = points[ptNum].Y;
                     }
                 }
-                var ratio = (100*maxAbundance)/sum ;
-                mtextBoxMostAbundant.Text = ratio.ToString("F2") ;
+                var ratio = (100 * maxAbundance) / sum;
+                mtextBoxMostAbundant.Text = ratio.ToString("F2");
 
                 if (!mcheckBoxAbsolute.Checked)
                 {
-                    for (var ptNum = 0 ; ptNum < points.Length ; ptNum++)
+                    for (var ptNum = 0; ptNum < points.Length; ptNum++)
                     {
-                        points[ptNum].Y = (points[ptNum].Y*100)/sum ;
+                        points[ptNum].Y = (points[ptNum].Y * 100) / sum;
                     }
-                    maxAbundance /= sum ;
+                    maxAbundance /= sum;
                 }
                 this.mPreviewSeriesDataProvider.SetData(points);
 
                 this.mPreviewSeries.PlotParams.Name = this.mMolecularFormula.ToSimpleOrganicElementalString();
-                this.mPreviewChart.ViewPortHistory.Clear() ;
-                this.mPreviewChart.AutoViewPort() ;
+                this.mPreviewChart.ViewPortHistory.Clear();
+                this.mPreviewChart.AutoViewPort();
 
                 // copy molecular weight results from the
                 this.mMonoMolecularWeightResultTextBox.Text =
@@ -1815,7 +1810,7 @@ namespace Decon2LS
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, ex.Message + ex.StackTrace) ;
+                MessageBox.Show(this, ex.Message + ex.StackTrace);
             }
         }
 
@@ -1837,13 +1832,13 @@ namespace Decon2LS
                     //Using Resolution, so update FWHM text box based on mass of current formula
                     var mass = this.mMercuryIsotopeDistribution.AverageMolecularMass;
                     var resolution = this.mMercuryIsotopeDistribution.Resolution;
-                    this.mFWHM  = mass/resolution;
+                    this.mFWHM = mass / resolution;
                     this.LoadFWHM();
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, ex.Message + ex.StackTrace) ;
+                MessageBox.Show(this, ex.Message + ex.StackTrace);
             }
         }
         #endregion
@@ -1858,7 +1853,7 @@ namespace Decon2LS
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, ex.Message + ex.StackTrace) ;
+                MessageBox.Show(this, ex.Message + ex.StackTrace);
             }
         }
 
@@ -1871,7 +1866,7 @@ namespace Decon2LS
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, ex.Message + ex.StackTrace) ;
+                MessageBox.Show(this, ex.Message + ex.StackTrace);
             }
         }
 
@@ -1956,7 +1951,7 @@ namespace Decon2LS
             catch (Exception ex)
             {
                 SetError(this.mChargeCarrierMassTextBox, frmMercury.CHARGE_CARRIER_ERROR_MESSAGE);
-                Console.WriteLine(ex.Message + ex.StackTrace) ;
+                Console.WriteLine(ex.Message + ex.StackTrace);
             }
             finally
             {
@@ -1993,7 +1988,7 @@ namespace Decon2LS
         {
             try
             {
-                mErrorProvider.Dispose() ;
+                mErrorProvider.Dispose();
                 this.mMolecularFormula = MolecularFormula.Parse(this.mMolecularFormulaTextBox.Text);
                 this.UpdateResolutionAndFWHM();
             }
@@ -2055,7 +2050,6 @@ namespace Decon2LS
         private void btnCopyToClipboard_Click(object sender, System.EventArgs e)
         {
             this.CopyDataFromPreviewToClipboard();
-
         }
 
         private void frmMercury_VisibleChanged(object sender, System.EventArgs e)
@@ -2069,7 +2063,7 @@ namespace Decon2LS
 
         private void mMercurySizeCombo_SelectedIndexChanged(object sender, System.EventArgs e)
         {
-            this.mMercuryIsotopeDistribution.MercurySize = (int) this.mMercurySizeCombo.SelectedItem;
+            this.mMercuryIsotopeDistribution.MercurySize = (int)this.mMercurySizeCombo.SelectedItem;
             this.LoadMercurySizeFromMercuryIsotopeDistribution();
             this.UpdatePreviewDistribution();
         }
@@ -2085,7 +2079,7 @@ namespace Decon2LS
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message + ex.StackTrace) ;
+                Console.WriteLine(ex.Message + ex.StackTrace);
             }
         }
 
@@ -2104,7 +2098,6 @@ namespace Decon2LS
             this.mResolutionMode = ResolutionMode.FWHM;
             this.UpdateResolutionAndFWHM();
         }
-
 
         /// <summary>
         /// Update the resolution mode to Resolution and change the color of the
@@ -2175,8 +2168,8 @@ namespace Decon2LS
                     // update using protein translation
                     var translator = mProteinTranslator;
                     var mf = translator.Translate(this.mProteinDNAEditorTextBox.Text, ".");
-                    var nEnd = (MolecularFormula) cmbNterm.SelectedItem;
-                    var cEnd = (MolecularFormula) cmbCterm.SelectedItem;
+                    var nEnd = (MolecularFormula)cmbNterm.SelectedItem;
+                    var cEnd = (MolecularFormula)cmbCterm.SelectedItem;
                     mf = mf.Add(nEnd, 1).Add(cEnd, 1);
 
                     SetFormula(mf, updatePreview);
@@ -2246,7 +2239,7 @@ namespace Decon2LS
             catch (Exception e)
             {
                 this.mErrorProvider.SetError(this.mProteinDNAEditorTextBox, "Input error");
-                Console.WriteLine(e.Message + e.StackTrace) ;
+                Console.WriteLine(e.Message + e.StackTrace);
             }
         }
 
@@ -2270,7 +2263,7 @@ namespace Decon2LS
         {
             set
             {
-                mMercuryIsotopeDistribution.ElementIsotopes = value ;
+                mMercuryIsotopeDistribution.ElementIsotopes = value;
             }
         }
 
@@ -2291,9 +2284,9 @@ namespace Decon2LS
 
         private void ProteinOrDNAButtonClickHandler(object sender, EventArgs args)
         {
-            var source = (Button) sender;
+            var source = (Button)sender;
             // Get the amino acid abbreviation from the tag of the button
-            var aminoAcid = (String) source.Tag;
+            var aminoAcid = (String)source.Tag;
             this.mProteinDNAEditorTextBox.Text += aminoAcid;
             this.UpdateFormulaFromProteinOrDNA(true);
         }
@@ -2303,14 +2296,10 @@ namespace Decon2LS
             UpdateFormulaFromProteinOrDNA(true);
         }
 
-
         private void CopyDataFromPreviewToClipboard()
         {
-            clsClipboardUtility.CopyXYValuesToClipboard(this.mPreviewSeriesDataProvider.xs,this.mPreviewSeriesDataProvider.ys);
-
+            clsClipboardUtility.CopyXYValuesToClipboard(this.mPreviewSeriesDataProvider.xs, this.mPreviewSeriesDataProvider.ys);
         }
-
-
     }
 
     /// <summary>
@@ -2360,16 +2349,15 @@ namespace Decon2LS
 
         protected override PNNL.Controls.IChartDataProvider CloneChartDataProvider()
         {
-            return new MercuryDataProvider((float[]) ((MercuryDataProvider) this.DataProvider).xs.Clone(),
-                (float[]) ((MercuryDataProvider) this.DataProvider).ys.Clone());
+            return new MercuryDataProvider((float[])((MercuryDataProvider)this.DataProvider).xs.Clone(),
+                (float[])((MercuryDataProvider)this.DataProvider).ys.Clone());
         }
-
 
         public override MenuItem[] GetCustomMenuItems(PNNL.Controls.ctlChartBase chartFor)
         {
             if (chartFor != this.mChartInitiallyIn)
             {
-                return new MenuItem[] {menuItemScaleHeight, menuItemMzOffset};
+                return new MenuItem[] { menuItemScaleHeight, menuItemMzOffset };
             }
             return base.GetCustomMenuItems(chartFor);
         }
@@ -2381,8 +2369,8 @@ namespace Decon2LS
         public override PNNL.Controls.clsSeries CopySeries()
         {
             var newSeries = new clsMercurySeries(
-                (MercuryDataProvider) this.CloneChartDataProvider(),
-                (PNNL.Controls.clsPlotParams) this.PlotParams.Clone(), null);
+                (MercuryDataProvider)this.CloneChartDataProvider(),
+                (PNNL.Controls.clsPlotParams)this.PlotParams.Clone(), null);
 
             return newSeries;
         }
@@ -2394,10 +2382,10 @@ namespace Decon2LS
                 var form = new frmFloatDialog();
                 form.Text = "Adjust Height Multiplier";
                 form.Prompt = "Multiplier";
-                form.EditingValue = ((MercuryDataProvider) this.DataProvider).HeightMultiplier;
+                form.EditingValue = ((MercuryDataProvider)this.DataProvider).HeightMultiplier;
                 if (form.ShowDialog() == DialogResult.OK)
                 {
-                    ((MercuryDataProvider) this.DataProvider).HeightMultiplier = form.EditingValue;
+                    ((MercuryDataProvider)this.DataProvider).HeightMultiplier = form.EditingValue;
                 }
             }
             catch (Exception ex)
@@ -2414,10 +2402,10 @@ namespace Decon2LS
                 var form = new frmFloatDialog();
                 form.Text = "Adjust m/z Offset";
                 form.Prompt = "m/z Offset";
-                form.EditingValue = ((MercuryDataProvider) this.DataProvider).MZOffset;
+                form.EditingValue = ((MercuryDataProvider)this.DataProvider).MZOffset;
                 if (form.ShowDialog() == DialogResult.OK)
                 {
-                    ((MercuryDataProvider) this.DataProvider).MZOffset = form.EditingValue;
+                    ((MercuryDataProvider)this.DataProvider).MZOffset = form.EditingValue;
                 }
             }
             catch (Exception ex)
@@ -2476,12 +2464,12 @@ namespace Decon2LS
         /// <param name="z"></param>
         protected override void PreProcess(ref float[] x, ref float[] y, ref float[] z)
         {
-            xs = (float[]) x.Clone();
-            ys = (float[]) y.Clone();
+            xs = (float[])x.Clone();
+            ys = (float[])y.Clone();
             Console.WriteLine("New mercury provider");
-//			for (int i = 0; i < x.Length; i++)
-//			{
-//			}
+            //			for (int i = 0; i < x.Length; i++)
+            //			{
+            //			}
             for (var i = 0; i < x.Length; i++)
             {
                 x[i] = x[i] + this.MZOffset;

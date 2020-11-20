@@ -5,7 +5,6 @@ namespace DeconTools.Workflows.Backend.Results
 {
     public class TargetedResultRepository
     {
-
         #region Constructors
 
         public TargetedResultRepository()

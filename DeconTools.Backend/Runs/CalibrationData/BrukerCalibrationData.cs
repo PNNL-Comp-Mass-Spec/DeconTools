@@ -5,7 +5,6 @@ namespace DeconTools.Backend.Runs.CalibrationData
 {
     public class BrukerCalibrationData : BrukerDataReader.GlobalParameters
     {
-   
         #region Properties
 
         /// <summary>
@@ -30,9 +29,9 @@ namespace DeconTools.Backend.Runs.CalibrationData
             base.Display();
 
             var sb = new StringBuilder();
-            sb.Append("FR_Low = " + FR_Low                 + Environment.NewLine);
-            sb.Append("NF =     " + NF                     + Environment.NewLine);
-            sb.Append("ByteOrder = " + ByteOrder           + Environment.NewLine);
+            sb.Append("FR_Low = " + FR_Low + Environment.NewLine);
+            sb.Append("NF =     " + NF + Environment.NewLine);
+            sb.Append("ByteOrder = " + ByteOrder + Environment.NewLine);
 
             Console.WriteLine(sb.ToString());
         }

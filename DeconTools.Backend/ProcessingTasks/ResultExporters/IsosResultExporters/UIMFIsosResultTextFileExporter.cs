@@ -11,7 +11,6 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
         public UIMFIsosResultTextFileExporter(string fileName)
             : this(fileName, 1000000)
         {
-
         }
 
         public UIMFIsosResultTextFileExporter(string fileName, int triggerValueToExport)
@@ -22,7 +21,6 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
             FileName = fileName;
 
             initializeAndWriteHeader();
-
         }
         #endregion
 

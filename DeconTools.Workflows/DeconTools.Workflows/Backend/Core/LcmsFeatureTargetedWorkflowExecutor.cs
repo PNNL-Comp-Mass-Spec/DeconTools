@@ -6,12 +6,9 @@ namespace DeconTools.Workflows.Backend.Core
 {
     public class LcmsFeatureTargetedWorkflowExecutor : TargetedWorkflowExecutor
     {
-
-
         #region Constructors
         public LcmsFeatureTargetedWorkflowExecutor(WorkflowExecutorBaseParameters parameters, string datasetPath) : base(parameters, datasetPath)
         {
-
         }
         #endregion
 
@@ -36,7 +33,6 @@ namespace DeconTools.Workflows.Backend.Core
 
             Check.Ensure(Targets != null && Targets.TargetList.Count > 0,
                          "Target massTags is empty. Check the path to the massTag data file.");
-
 
             _workflowParameters = WorkflowParameters.CreateParameters(ExecutorParameters.WorkflowParameterFile);
             _workflowParameters.LoadParameters(ExecutorParameters.WorkflowParameterFile);
@@ -64,11 +60,7 @@ namespace DeconTools.Workflows.Backend.Core
                     //TODO: use averagine
                 }
             }
-
-
         }
-
-
 
         #endregion
 

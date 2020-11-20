@@ -21,7 +21,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         ///     the minimum of these shoulders.
         /// </remarks>
         public double FindSignalToNoise(double yValue, List<double> intensities, int index)
-            // The place in arrDerivative the derivative crossed 0
+        // The place in arrDerivative the derivative crossed 0
         {
             double minIntensityLeft = 0, minIntensityRight = 0;
             if (yValue.Equals(0))
@@ -35,7 +35,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             for (var i = index; i > 0; i--)
             {
                 if (intensities[i + 1] >= intensities[i] && intensities[i - 1] > intensities[i])
-                    // Local minima here \/
+                // Local minima here \/
                 {
                     minIntensityLeft = intensities[i];
                     found = true;
@@ -50,7 +50,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             for (var i = index; i < intensities.Count - 1; i++)
             {
                 if (intensities[i + 1] >= intensities[i] && intensities[i - 1] > intensities[i])
-                    // Local minima here \/
+                // Local minima here \/
                 {
                     minIntensityRight = intensities[i];
                     found = true;

@@ -7,13 +7,11 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
         public BasicTFF()
             : this(5)     // default toleranceInPPM
         {
-
         }
 
         public BasicTFF(double toleranceInPPM)
-            : this(toleranceInPPM,true)
+            : this(toleranceInPPM, true)
         {
-
         }
 
         public BasicTFF(double toleranceInPPM, bool requiresMonoPeak)
@@ -27,7 +25,6 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             NeedMonoIsotopicPeak = requiresMonoPeak;
             IsotopicProfileType = isotopicProfileTarget;
             NumPeaksUsedInAbundance = 1;
-
         }
 
         #endregion

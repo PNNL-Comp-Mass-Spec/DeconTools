@@ -10,8 +10,6 @@ using System.Text;
 using System.Data.Odbc;
 using System.Data;
 
-
-
 namespace Decon2LS
 {
     /// <summary>
@@ -27,9 +25,6 @@ namespace Decon2LS
         private PNNL.Controls.ctlLineChart mctl_bpi;
 
         const double TIC_HEIGHT_RATIO = 0.5;
-
-
-
 
         private PNNL.Controls.ArrayChartDataProvider m_tic_chart_data_provider;
         private PNNL.Controls.clsSeries mobj_tic_series;
@@ -58,21 +53,18 @@ namespace Decon2LS
             Init();
 
             this.frmTICViewer_Resize(this, null);
-
         }
 
         private void Init()
         {
             try
             {
-
                 var shape = new PNNL.Controls.DiamondShape(3, false);
                 mobj_tic_plt_params = new PNNL.Controls.clsPlotParams(shape, Color.Red, false, true, true);
                 mobj_bpi_plt_params = new PNNL.Controls.clsPlotParams(shape, Color.Blue, false, true, true);
                 m_tic_chart_data_provider = new PNNL.Controls.ArrayChartDataProvider();
                 m_bpi_chart_data_provider = new PNNL.Controls.ArrayChartDataProvider();
                 mobjRawData = new DeconToolsV2.Readers.clsRawData();
-
             }
             catch (Exception ex)
             {
@@ -103,10 +95,8 @@ namespace Decon2LS
             }
         }
 
-
         public void LoadScansTICFile()
         {
-
             try
             {
                 mdata_tbl = new System.Data.DataTable();
@@ -158,7 +148,6 @@ namespace Decon2LS
                         new clsSpectraSeries(new PNNL.Controls.ArrayChartDataProvider(marr_scans, marr_bpi_values),
                         plotParams1, mFileNameForHeader);
 
-
                     mctl_tic.SeriesCollection.Add(mobj_tic_series);
                     mctl_bpi.SeriesCollection.Add(mobj_bpi_series);
                     m_tic_chart_data_provider.SetData(marr_scans, marr_tic_values);
@@ -166,7 +155,6 @@ namespace Decon2LS
                     mctl_bpi.Title = "BPI";
                     mctl_tic.Title = "TIC";
                     this.Text = mFileNameForHeader;
-
 
                     this.mctl_tic.ViewPortHistory.Clear();
                     this.mctl_bpi.ViewPortHistory.Clear();
@@ -177,8 +165,6 @@ namespace Decon2LS
                 MessageBox.Show(this, ex.Message + ex.StackTrace);
             }
         }
-
-
 
         /// <summary>
         /// Clean up any resources being used.
@@ -355,13 +341,11 @@ namespace Decon2LS
             ((System.ComponentModel.ISupportInitialize)(this.mctl_bpi)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.mctl_tic)).EndInit();
             this.ResumeLayout(false);
-
         }
         #endregion
 
         private void mctl_bpi_Load(object sender, System.EventArgs e)
         {
-
         }
 
         private void frmTICViewer_Resize(object sender, System.EventArgs e)
@@ -375,10 +359,7 @@ namespace Decon2LS
             this.mctl_bpi.Top = this.mctl_tic.Top + this.mctl_tic.Height;
             this.mctl_bpi.Width = this.Width;
             this.mctl_bpi.Height = this.Height - this.mctl_tic.Height - 40;
-
-
         }
-
 
         /*	/// <summary>
             /// Draws the line indicating the currently active spectrum scan in the
@@ -439,7 +420,5 @@ namespace Decon2LS
                 return series;
             }
         }
-
-
     }
 }

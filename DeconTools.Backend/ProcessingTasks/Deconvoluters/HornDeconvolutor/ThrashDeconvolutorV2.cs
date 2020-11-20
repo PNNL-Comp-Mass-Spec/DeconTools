@@ -39,7 +39,6 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
 
         public ThrashDeconvolutorV2() : this(new ThrashParameters()) { }
 
-
         #endregion
 
         #region Properties
@@ -56,7 +55,6 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
         #endregion
 
         #region Public Methods
-
 
         public override void Deconvolute(ResultCollection resultList)
         {
@@ -96,9 +94,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
                 {
                     AddDeconResult(resultList, result);
                 }
-
             }
-
         }
 
         /// <summary>
@@ -116,7 +112,6 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
             double minPeptideIntensity = 0, double
             minMSFeatureToBackgroundRatio = 3)
         {
-
             var isotopicProfiles = new List<IsotopicProfile>();
 
             if (Parameters.AreAllTheoreticalProfilesCachedBeforeStarting)
@@ -140,11 +135,9 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
             var listOfMonoMZs = new SortedDictionary<int, double>();
             var currentUniqueMSFeatureIDNum = 0;
 
-
             var peakCounter = -1;
             foreach (var msPeak in sortedPeakList)
             {
-
                 //if (msPeak.XValue > 579.53 && msPeak.XValue < 579.54)
                 //{
                 //    int x = 90;
@@ -154,13 +147,10 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
                 if (peaksAlreadyProcessed.Contains(msPeak))
                 {
                     continue;
-
                 }
 
                 var peakIsBelowIntensityThreshold = (msPeak.Height < minMSFeatureIntensity);
                 if (peakIsBelowIntensityThreshold) break;
-
-
 
                 peakCounter++;
 
@@ -168,7 +158,6 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
                 {
                     // Console.WriteLine(peakCounter);
                 }
-
 
                 //get potential charge states
                 var ppmTolerance = (msPeak.Width / 2.35) / msPeak.XValue * 1e6;    //   peak's sigma value / mz * 1e6
@@ -193,7 +182,6 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
                 foreach (var charge in potentialChargeStates)
                 {
                     reportString201 += charge + "\t";
-
                 }
                 IqLogger.LogTrace(reportString201 + "\n");
 
@@ -215,14 +203,12 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
                         //Paul edit. "&& indexMostAbundantPeakTheor>=0"
                         if (msFeature.Peaklist.Count > indexMostAbundantPeakTheor && indexMostAbundantPeakTheor >= 0)
                         {
-
                             msFeature.IntensityMostAbundantTheor = msFeature.Peaklist[indexMostAbundantPeakTheor].Height;
                         }
                         else
                         {
                             msFeature.IntensityMostAbundantTheor = msFeature.IntensityMostAbundant;
                         }
-
 
                         var msFeatureAlreadyPresentInAnotherChargeState = listOfMonoMZs.ContainsValue(msFeature.MonoPeakMZ);
 
@@ -234,9 +220,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
                         {
                             //Console.WriteLine( "Nope... not using this charge state... MSFeature already found with same MonoMZ. \tcurrent peak= \t" +msPeak.XValue.ToString("0.0000") + "\tmsfeature= " + msFeature);
                         }
-
                     }
-
                 }
 
                 IsotopicProfile isoProfile;
@@ -252,7 +236,6 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
                     sb.Append(msPeak.XValue.ToString("0.00000") + "\t" +
                               isoProfile.MonoPeakMZ.ToString("0.0000") + "\t" +
                               isoProfile.ChargeState + "\t" + isoProfile.Score + "\t" + ppmTolerance + "\n");
-
                 }
                 else
                 {
@@ -297,12 +280,11 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
                         {
                             #endregion
                             isoProfile = (from n in potentialMSFeaturesForGivenChargeState
-                                         where n.Score < 0.15
-                                         orderby n.ChargeState descending
-                                         select n).FirstOrDefault() ?? (from n in potentialMSFeaturesForGivenChargeState
-                                                                        orderby n.Score
-                                                                        select n).First();
-
+                                          where n.Score < 0.15
+                                          orderby n.ChargeState descending
+                                          select n).FirstOrDefault() ?? (from n in potentialMSFeaturesForGivenChargeState
+                                                                         orderby n.Score
+                                                                         select n).First();
 
                             #region Paul Addition
                         }
@@ -317,18 +299,15 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
                         //IqLogger.Log.Debug(reportString309);
                         #endregion
                     }
-
                 }
 
                 if (isoProfile != null)
                 {
-
                     listOfMonoMZs.Add(currentUniqueMSFeatureIDNum, isoProfile.MonoPeakMZ);
                     currentUniqueMSFeatureIDNum++;
 
                     isotopicProfiles.Add(isoProfile);
                     //hitcounter++;//Paul Addition
-
 
                     foreach (var peak in isoProfile.Peaklist)
                     {
@@ -340,9 +319,6 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
                         peaksAlreadyProcessed.Add(peak);
                     }
                 }
-
-
-
             }//end of foreach peak loop
 
             //Console.WriteLine(sb.ToString());
@@ -365,7 +341,6 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
             //NOTE: we don't need to do the reordering, but I do this so I can compare to the old THRASH
             uniqueIsotopicProfiles = uniqueIsotopicProfiles.OrderByDescending(p => p.IntensityMostAbundantTheor).ToList();
             return uniqueIsotopicProfiles;
-
         }
 
         private void LoadPeaks(Run run)
@@ -412,9 +387,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
                     {
                         potentialChargeStates.Add(j);
                     }
-
                 }
-
             }
 
             for (var i = indexOfCurrentPeak + 1; i < msPeakList.Count; i++)
@@ -437,7 +410,6 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
                     {
                         potentialChargeStates.Add(j);
                     }
-
                 }
             }
 
@@ -446,7 +418,6 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
             //
 
         }
-
 
         #endregion
 
@@ -466,9 +437,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
 
                 var profile = _isotopicDistCalculator.GetAveraginePattern(i);
                 _averagineProfileLookupTable.Add(i, profile);
-
             }
-
         }
 
         /// <summary>
@@ -488,7 +457,6 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
 
             var topIndexes = peakList.OrderByDescending(p => p.Value.Height).Take(numPeaks).Select(p => p.Key).ToList();
             return topIndexes;
-
         }
 
         private double GetReportedAbundance(IsotopicProfile profile, IsotopicProfile theoIsotopicProfile, int numPeaksUsedInAbundance = 1, int defaultVal = 0)
@@ -506,11 +474,9 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
                 {
                     summedIntensities += profile.Peaklist[i].Height;
                 }
-
             }
 
             return summedIntensities;
-
         }
 
         private IsotopicProfile GetMSFeature(List<Peak> msPeakList, XYData xyData, int chargeState, Peak msPeak, ref double bestFitVal, out IsotopicProfile theorIso)
@@ -573,7 +539,6 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
             }
 
             return sortedIsos;
-
         }
 
         private void PerformIterativeFittingAndGetAlignedProfile(XYData xyData, XYData theorXYData, int chargeState, ref IsotopicProfile theorIso, ref double bestFitVal)
@@ -628,7 +593,6 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
                 bestOffsetForTheorProfile = offsetForTheorProfile;
             }
 
-
             foreach (var theorMSPeak in theorIso.Peaklist)
             {
                 theorMSPeak.XValue = theorMSPeak.XValue + bestOffsetForTheorProfile;
@@ -638,7 +602,6 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
 
             theorIso.MonoIsotopicMass = (theorIso.MonoPeakMZ - Globals.PROTON_MASS) * chargeState;
             theorIso.MostAbundantIsotopeMass = (theorIso.getMostIntensePeak().XValue - Globals.PROTON_MASS) * chargeState;
-
         }
 
         private void CalculateMassesForIsotopicProfile(IsotopicProfile iso)
@@ -649,43 +612,32 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
 
             var indexMostAbundantPeak = iso.GetIndexOfMostIntensePeak();
 
-
             var mzMostAbundantPeak = iso.MostAbundantIsotopeMass / iso.ChargeState + Globals.PROTON_MASS;
 
             //start with most abundant peak and move to the LEFT and calculate m/z values
             for (var peakIndex = indexMostAbundantPeak; peakIndex >= 0; peakIndex--)
             {
-
                 var numPeaksToLeft = indexMostAbundantPeak - peakIndex;
                 var calcMZ = mzMostAbundantPeak - numPeaksToLeft * 1.00235 / iso.ChargeState;
 
                 iso.Peaklist[peakIndex].XValue = calcMZ;
-
             }
-
 
             //move to the RIGHT and calculate m/z values
             for (var peakIndex = indexMostAbundantPeak + 1; peakIndex < iso.Peaklist.Count; peakIndex++)
             {
-
                 var numPeaksToRight = peakIndex - indexMostAbundantPeak;
                 var calcMZ = mzMostAbundantPeak + numPeaksToRight * 1.00235 / iso.ChargeState;
 
                 iso.Peaklist[peakIndex].XValue = calcMZ;
-
             }
 
             iso.MonoPeakMZ = iso.getMonoPeak().XValue;
             iso.MonoIsotopicMass = (iso.MonoPeakMZ - Globals.PROTON_MASS) * iso.ChargeState;
-
-
-
-
         }
 
         private XYData GetTheoreticalIsotopicProfileXYData(IsotopicProfile iso, double fwhm, double minRelIntensity)
         {
-
             var xyData = new XYData();
             var xVals = new List<double>();
             var yVals = new List<double>();
@@ -700,7 +652,6 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
             msPeaks.Insert(0, zeroIntensityPeakToTheLeft);
 
             //TheorXYDataCalculationUtilities.GetTheoreticalIsotopicProfileXYData()
-
 
             for (var peakIndex = 0; peakIndex < msPeaks.Count; peakIndex++)
             {
@@ -718,14 +669,12 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
                             xVals.Add(tempXYData.Xvalues[j]);
                             yVals.Add(tempXYData.Yvalues[j]);
                         }
-
                     }
                     else
                     {
                         xVals.Add(tempXYData.Xvalues[j]);
                         yVals.Add(tempXYData.Yvalues[j]);
                     }
-
                 }
             }
             xyData.Xvalues = xVals.ToArray();
@@ -735,7 +684,6 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
         }
 
         #endregion
-
 
     }
 }

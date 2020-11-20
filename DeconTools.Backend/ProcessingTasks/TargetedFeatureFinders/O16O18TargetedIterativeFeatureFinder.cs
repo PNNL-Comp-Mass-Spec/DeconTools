@@ -13,11 +13,8 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
         public O16O18TargetedIterativeFeatureFinder(IterativeTFFParameters parameters) : base(parameters)
         {
-
             ToleranceInPPM = parameters.ToleranceInPPM;
             _iterativeTFFStandard = new IterativeTFF(parameters);
-
-
         }
 
         public override void Execute(ResultCollection resultList)
@@ -32,7 +29,6 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
                 return;
 
             var result = resultList.CurrentTargetedResult;
-
 
             if (resultList.Run.XYData?.Xvalues == null || resultList.Run.XYData.Xvalues.Length < 4)
             {
@@ -70,12 +66,10 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             //store best peakList for use in later tasks
             resultList.Run.PeakList = peakListToUseLater;
 
-
             IsotopicProfile foundO16O18Profile;
 
             if (o16profile == null)
             {
-
                 if (o18DoubleLabelProfile == null)
                 {
                     result.IsotopicProfile = null;
@@ -107,10 +101,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             result.IsotopicProfile = foundO16O18Profile;
 
             resultList.IsosResultBin.Add(result);
-
-
         }
-
 
         private void lookForMissingPeaksAndInsertZeroIntensityPeaksWhenMissing(IsotopicProfile o16o18Profile, IsotopicProfile theorFeature)
         {
@@ -121,7 +112,6 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             var monoMZ = theorFeature.getMonoPeak().XValue;
 
             var toleranceInDa = 0.1;
-
 
             //this will iterate over the first five expected m/z values of a theoretical profile
             //and loosely try to the corresponding peak within the observed profile.
@@ -138,11 +128,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
                     o16o18Profile.Peaklist.Insert(i, new MSPeak(currentMZ));
                 }
             }
-
-
         }
-
-
 
         private void addIsotopePeaks(IsotopicProfile foundO16O18Profile, IsotopicProfile profileToAdd, int numIsotopePeaksToAdd)
         {
@@ -166,13 +152,10 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
                 {
                     break;
                 }
-
             }
-
 
             foundO16O18Profile.Peaklist = foundO16O18Profile.Peaklist.OrderBy(p => p.XValue).ToList();
         }
-
 
         private IsotopicProfile convertO16ProfileToO18(IsotopicProfile theorFeature, int numPeaksToShift)
         {
@@ -182,10 +165,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
                 Peaklist = new List<MSPeak>()
             };
 
-
-
             var mzBetweenIsotopes = 1.003 / theorFeature.ChargeState;
-
 
             foreach (var theorPeak in theorFeature.Peaklist)
             {
@@ -194,7 +174,6 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
                 peak.XValue += numPeaksToShift * mzBetweenIsotopes;
 
                 o18Iso.Peaklist.Add(peak);
-
             }
 
             return o18Iso;
@@ -203,7 +182,6 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
         [Obsolete("Unused")]
         private IsotopicProfile getTheorProfile(TargetBase massTag, Globals.IsotopicProfileType isotopicProfileType)
         {
-
             switch (isotopicProfileType)
             {
                 case Globals.IsotopicProfileType.UNLABELED:
@@ -214,7 +192,6 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
                 default:
                     return massTag.IsotopicProfile;
-
             }
         }
     }

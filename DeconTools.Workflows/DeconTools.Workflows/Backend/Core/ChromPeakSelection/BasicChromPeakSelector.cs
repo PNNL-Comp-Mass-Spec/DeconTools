@@ -9,23 +9,19 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
     {
         #region Constructors
 
-
         public BasicChromPeakSelector(ChromPeakSelectorParameters parameters)
         {
             Parameters = parameters;
         }
 
-
         #endregion
 
         #region Properties
-
 
         //TODO:   figure out what uses this and why!   Default is 0 - that's all I know
         public int ScanOffSet { get; set; }
 
         public double ReferenceNETValueForReferenceMode { get; set; }
-
 
         public override Peak SelectBestPeak(List<ChromPeakQualityData> peakQualityList, bool filterOutFlaggedIsotopicProfiles)
         {
@@ -49,7 +45,6 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
 
             var result = resultList.GetTargetedResult(resultList.Run.CurrentMassTag);
 
-
             float normalizedElutionTime;
 
             if (result.Run.CurrentMassTag.ElutionTimeUnit == DeconTools.Backend.Globals.ElutionTimeUnit.ScanNum)
@@ -61,7 +56,6 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
                 normalizedElutionTime = resultList.Run.CurrentMassTag.NormalizedElutionTime;
             }
 
-
             var bestPeak = (ChromPeak)SelectBestPeak(Parameters.PeakSelectorMode,
                 resultList.Run.PeakList, normalizedElutionTime,
                 Parameters.NETTolerance, out var numPeaksWithinTolerance);
@@ -71,8 +65,6 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
             result.Run.CurrentScanSet= ChromPeakUtilities.GetLCScanSetForChromPeak(bestPeak, resultList.Run, Parameters.NumScansToSum);
 
             UpdateResultWithChromPeakAndLCScanInfo(result, bestPeak);
-
-
         }
 
         private Peak SelectBestPeak(
@@ -168,15 +160,10 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
 
                     numPeaksWithinTolerance = peaksWithinTol.Count;
 
-
-
                     break;
             }
 
             return bestPeak;
         }
-
-
-
     }
 }
