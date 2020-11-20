@@ -6,6 +6,7 @@ namespace DeconConsole
 {
     public static class Program
     {
+        // Ignore Spelling: Slysz, Jaitly
 
         public const string PROGRAM_DATE = "November 11, 2020";
 

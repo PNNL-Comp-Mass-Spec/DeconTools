@@ -25,6 +25,8 @@ namespace DeconTools.Backend.Workflows
 {
     public abstract class ScanBasedWorkflow
     {
+        // Ignore Spelling: deconmsn, uimf, Isos, deconvolutor
+
         private const int PeakListExporterTriggerValue = 10000;
 
         private bool _deconvolutorRequiresPeaksFile;
@@ -94,7 +96,7 @@ namespace DeconTools.Backend.Workflows
                 Logger.Instance.AddEntry("STACKTRACE = " + PRISM.StackTraceFormatter.GetExceptionStackTraceMultiLine(ex), true);
 
                 throw new ApplicationException(
-                    "A fatal error occured when connecting to the instrument data file. Could not create the Run object. Internal error message: " +
+                    "A fatal error occurred when connecting to the instrument data file. Could not create the Run object. Internal error message: " +
                     ex.Message + Environment.NewLine + Environment.NewLine + PRISM.StackTraceFormatter.GetExceptionStackTraceMultiLine(ex));
             }
 
