@@ -53,17 +53,20 @@ Source: Library\ThermoFisher.CommonCore.BackgroundSubtraction.dll               
 Source: Library\ThermoFisher.CommonCore.Data.dll                                          ; DestDir: {app}
 Source: Library\RawFileReaderLicense.doc                                                  ; DestDir: {app}
 
-Source: "Library\Agilent_D\MassHunter DataAccess Component MHDAC B.06.00\MassHunterDataAccessAssembly_64bit\bin\agtsampleinforw.dll"    ; DestDir: {app}
-Source: "Library\Agilent_D\MassHunter DataAccess Component MHDAC B.06.00\MassHunterDataAccessAssembly_64bit\bin\BaseCommon.dll"         ; DestDir: {app}
-Source: "Library\Agilent_D\MassHunter DataAccess Component MHDAC B.06.00\MassHunterDataAccessAssembly_64bit\bin\BaseDataAccess.dll"     ; DestDir: {app}
-Source: "Library\Agilent_D\MassHunter DataAccess Component MHDAC B.06.00\MassHunterDataAccessAssembly_64bit\bin\BaseTof.dll"            ; DestDir: {app}
-Source: "Library\Agilent_D\MassHunter DataAccess Component MHDAC B.06.00\MassHunterDataAccessAssembly_64bit\bin\MassSpecDataReader.dll" ; DestDir: {app}
+Source: Library\Agilent_D\agtsampleinforw.dll                                             ; DestDir: {app}
+Source: Library\Agilent_D\BaseCommon.dll                                                  ; DestDir: {app}
+Source: Library\Agilent_D\BaseDataAccess.dll                                              ; DestDir: {app}
+Source: Library\Agilent_D\BaseError.dll                                                   ; DestDir: {app}
+Source: Library\Agilent_D\BaseTof.dll                                                     ; DestDir: {app}
+Source: Library\Agilent_D\MassSpecDataReader.dll                                          ; DestDir: {app}
+Source: Library\Agilent_D\MIDAC.dll                                                       ; DestDir: {app}
+Source: Library\Agilent_D\BaseDataAccess.dll.config                                       ; DestDir: {app}
 
-Source: Readme.md                                                                            ; DestDir: {app}
-Source: RevisionHistory.txt                                                                  ; DestDir: {app}
-Source: Parameter_Files\SampleParameterFile.xml                                              ; DestDir: {app}
-Source: Parameter_Files\SampleParameterFile_SmallMolecule.xml                                ; DestDir: {app}
-Source: Parameter_Files\SampleParameterFileIMS.xml                                           ; DestDir: {app}
+Source: Readme.md                                                                         ; DestDir: {app}
+Source: RevisionHistory.txt                                                               ; DestDir: {app}
+Source: Parameter_Files\SampleParameterFile.xml                                           ; DestDir: {app}
+Source: Parameter_Files\SampleParameterFile_SmallMolecule.xml                             ; DestDir: {app}
+Source: Parameter_Files\SampleParameterFileIMS.xml                                        ; DestDir: {app}
 
 [Dirs]
 Name: {commonappdata}\DeconTools; Flags: uninsalwaysuninstall
@@ -92,7 +95,7 @@ AppPublisher=Pacific Northwest National Laboratory
 AppPublisherURL=http://omics.pnl.gov/software
 AppSupportURL=http://omics.pnl.gov/software
 AppUpdatesURL=http://omics.pnl.gov/software
-DefaultDirName={pf}\DeconTools
+DefaultDirName={autopf}\DeconTools
 DefaultGroupName=DeconTools
 AppCopyright=© PNNL
 ;LicenseFile=.\License.rtf
