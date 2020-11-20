@@ -4,10 +4,10 @@ using DeconTools.Backend.Workflows;
 
 namespace DeconConsole
 {
-    public class Program
+    public static class Program
     {
 
-        public const string PROGRAM_DATE = "March 6, 2020";
+        public const string PROGRAM_DATE = "November 11, 2020";
 
         public static int Main(string[] args)
         {
