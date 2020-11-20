@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<parameters>
+	<version>1.0</version>
+	<PeakParameters>
+		<PeakBackgroundRatio>3</PeakBackgroundRatio>
+		<SignalToNoiseThreshold>3</SignalToNoiseThreshold>
+		<PeakFitType>QUADRATIC</PeakFitType>
+		<WritePeaksToTextFile>True</WritePeaksToTextFile>
+		<IsDataThresholded>True</IsDataThresholded>
+	</PeakParameters>
+	<HornTransformParameters>
+		<TagFormula />
+		<AveragineFormula>C4.9384 H7.7583 N1.3577 O1.4773 S0.0417</AveragineFormula>
+		<DeleteIntensityThreshold>5</DeleteIntensityThreshold>
+		<MaxFit>0.3</MaxFit>
+		<MinIntensityForScore>10</MinIntensityForScore>
+		<MaxCharge>6</MaxCharge>
+		<MaxMW>15000</MaxMW>
+		<NumPeaksForShoulder>1</NumPeaksForShoulder>
+		<O16O18Media>False</O16O18Media>
+		<PeptideMinBackgroundRatio>7</PeptideMinBackgroundRatio>
+		<UseAbsolutePeptideIntensity>False</UseAbsolutePeptideIntensity>
+		<AbsolutePeptideIntensity>0</AbsolutePeptideIntensity>
+		<ThrashOrNot>True</ThrashOrNot>
+		<CheckAllPatternsAgainstChargeState1>True</CheckAllPatternsAgainstChargeState1>
+		<CompleteFit>False</CompleteFit>
+		<CCMass>1.00727649</CCMass>
+		<IsotopeFitType>AREA</IsotopeFitType>
+		<UseMercuryCaching>True</UseMercuryCaching>
+		<SumSpectra>False</SumSpectra>
+		<SumSpectraAcrossIms>True</SumSpectraAcrossIms>
+		<!-- This means to sum +/-1 scans around a center scan, giving a total of 3 scans summed -->
+		<NumberOfImsScansToSumOver>3</NumberOfImsScansToSumOver>
+		<NumberOfScansToAdvance>1</NumberOfScansToAdvance>
+		<SumSpectraAcrossScanRange>True</SumSpectraAcrossScanRange>
+		<!-- This means to sum across 3 LC scans/frames -->
+		<NumberOfScansToSumOver>3</NumberOfScansToSumOver>
+		<IsActualMonoMZUsed>False</IsActualMonoMZUsed>
+		<LeftFitStringencyFactor>1</LeftFitStringencyFactor>
+		<RightFitStringencyFactor>1</RightFitStringencyFactor>
+		<ReplaceRAPIDScoreWithHornFitScore>False</ReplaceRAPIDScoreWithHornFitScore>
+		<NumPeaksUsedInAbundance>1</NumPeaksUsedInAbundance>
+		<DeconvolutionType>ThrashV1</DeconvolutionType>
+	</HornTransformParameters>
+	<Miscellaneous>
+		<UseScanRange>False</UseScanRange>
+		<MinScan>-2147483648</MinScan>
+		<MaxScan>2147483647</MaxScan>
+		<UseMZRange>True</UseMZRange>
+		<MinMZ>75</MinMZ>
+		<MaxMZ>2000</MaxMZ>
+		<ApplySavitzkyGolay>False</ApplySavitzkyGolay>
+		<SGNumLeft>2</SGNumLeft>
+		<SGNumRight>2</SGNumRight>
+		<SGOrder>2</SGOrder>
+		<ZeroFillDiscontinousAreas>False</ZeroFillDiscontinousAreas>
+		<NumZerosToFill>3</NumZerosToFill>
+		<ProcessMSMS>True</ProcessMSMS>
+		<ExportFileType>TEXT</ExportFileType>
+		<Process_MS>True</Process_MS>
+		<!-- Thresholds to prevent DeconTools from running indefinitely or from getting hung up
+		     on a noisy scan or frame. MaxMinutesPerFrame only applies to IMS datasets -->
+		<MaxMinutesPerScan>4</MaxMinutesPerScan>
+		<MaxMinutesPerFrame>20</MaxMinutesPerFrame>
+		<MaxHoursPerDataset>400</MaxHoursPerDataset>
+	</Miscellaneous>
+</parameters>

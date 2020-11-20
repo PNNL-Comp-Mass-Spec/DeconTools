@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<parameters>
+	<version>1.0</version>
+	<PeakParameters>
+		<!-- Lower values for PeakBackgroundRatio and PeptideMinBackgroundRatio 
+		     will allow lower abundance ions to be deisotoped, 
+		     but will increase the processing time -->
+		<PeakBackgroundRatio>6</PeakBackgroundRatio>
+		<SignalToNoiseThreshold>3</SignalToNoiseThreshold>
+		<!-- Allowed values: APEX, LORENTZIAN, QUADRATIC -->
+		<PeakFitType>QUADRATIC</PeakFitType>
+		<!-- Set to True to create the _peaks.txt file -->
+		<WritePeaksToTextFile>False</WritePeaksToTextFile>
+		<!-- Set to True if the instrument thresholds the data when saving to disk -->
+		<IsDataThresholded>True</IsDataThresholded>
+	</PeakParameters>
+	<HornTransformParameters>
+		<TagFormula />
+		<AveragineFormula>C4.9384 H7.7583 N1.3577 O1.4773 S0.0417</AveragineFormula>
+		<DeleteIntensityThreshold>10</DeleteIntensityThreshold>
+		<!-- Maximum isotopic fit to allow, where fit is the difference between 
+		     the observed isotopic envelope and the theoretical envelope; 
+		     a fit of 0 means a perfect match -->
+		<MaxFit>0.6</MaxFit>
+		<MinIntensityForScore>10</MinIntensityForScore>
+		<!-- Maximum charge state -->
+		<MaxCharge>3</MaxCharge>
+		<!-- Maximum deisotoped molecular weight -->
+		<MaxMW>1500</MaxMW>
+		<NumPeaksForShoulder>1</NumPeaksForShoulder>
+		<O16O18Media>False</O16O18Media>
+		<!-- See note for PeakBackgroundRatio above -->
+		<PeptideMinBackgroundRatio>3</PeptideMinBackgroundRatio>
+		<UseAbsolutePeptideIntensity>False</UseAbsolutePeptideIntensity>
+		<AbsolutePeptideIntensity>4</AbsolutePeptideIntensity>
+		<ThrashOrNot>True</ThrashOrNot>
+		<!-- Set to True for samples where the majority of the true species are 1+, e.g. metabolomics -->
+		<CheckAllPatternsAgainstChargeState1>True</CheckAllPatternsAgainstChargeState1>
+		<CompleteFit>False</CompleteFit>
+		<!-- Charge carrier mass; set to 1.00727649 for positive ion mode or -1.00727649 for negative ion mode -->
+		<CCMass>-1.00727649</CCMass>
+		<!-- Allowed values: AREA, CHISQ, PEAK -->
+		<IsotopeFitType>AREA</IsotopeFitType>
+		<UseMercuryCaching>True</UseMercuryCaching>
+		<!-- Set to True to sum all of the spectra in the file together prior to processing -->
+		<SumSpectra>False</SumSpectra>
+		<!-- Set to True to sum the specified number of IMS scans within a frame (centered on the IMS scan of interest) -->
+		<SumSpectraAcrossIms>True</SumSpectraAcrossIms>
+		<!-- This means to sum 7 IMS scans total -->
+		<NumberOfImsScansToSumOver>7</NumberOfImsScansToSumOver>
+		<!-- Set to True to sum the specified number of scans (across the elution time range, centered on the scan of interest) -->
+		<SumSpectraAcrossScanRange>False</SumSpectraAcrossScanRange>
+		<!-- Not summing across frames -->
+		<NumberOfScansToSumOver>1</NumberOfScansToSumOver>
+		<IsActualMonoMZUsed>False</IsActualMonoMZUsed>
+		<LeftFitStringencyFactor>2.5</LeftFitStringencyFactor>
+		<RightFitStringencyFactor>0.5</RightFitStringencyFactor>
+		<ReplaceRAPIDScoreWithHornFitScore>False</ReplaceRAPIDScoreWithHornFitScore>
+		<!-- When 1, then the abundance of the most abundant peak in an isotopic envelope is reported.
+		     When 2 or larger, then will sum the specified number of peaks from the isotopic envelope -->
+		<NumPeaksUsedInAbundance>1</NumPeaksUsedInAbundance>
+		<!-- Allowed values: ThrashV1, ThrashV2, Rapid -->
+		<DeconvolutionType>ThrashV1</DeconvolutionType>
+	</HornTransformParameters>
+	<Miscellaneous>
+		<!-- Set to True to process a limited LC scan range -->
+		<UseScanRange>False</UseScanRange>
+		<MinScan>0</MinScan>
+		<MaxScan>4000</MaxScan>
+		<!-- Set to True to process a limited m/z range -->
+		<UseMZRange>True</UseMZRange>
+		<MinMZ>100</MinMZ>
+		<MaxMZ>1500</MaxMZ>
+		<ApplySavitzkyGolay>False</ApplySavitzkyGolay>
+		<SGNumLeft>2</SGNumLeft>
+		<SGNumRight>2</SGNumRight>
+		<SGOrder>2</SGOrder>
+		<!-- Set to True to add zeroes between data points far apart in m/z space -->
+		<ZeroFillDiscontinousAreas>True</ZeroFillDiscontinousAreas>
+		<NumZerosToFill>3</NumZerosToFill>
+		<!-- Set to True to deisotope MS/MS spectra -->
+		<ProcessMSMS>True</ProcessMSMS>
+		<!-- Allowed values: Text, Sqlite -->
+		<ExportFileType>TEXT</ExportFileType>
+		<!-- Set to True to process MS1 spectra -->
+		<Process_MS>True</Process_MS>
+		<!-- Allowed values: standard, uimf_standard, uimf_saturation_repair -->
+		<!-- Note: Do not sum across frames when applying saturation correction -->
+		<ScanBasedWorkflowType>uimf_saturation_repair</ScanBasedWorkflowType>
+		<!-- Threshold to use when the workflow is uimf_saturation_repair -->
+		<SaturationThreshold>50000</SaturationThreshold>
+		<!-- Thresholds to prevent DeconTools from running indefinitely or from getting hung up
+		     on a noisy scan or frame. MaxMinutesPerFrame only applies to IMS datasets -->
+		<MaxMinutesPerScan>4</MaxMinutesPerScan>
+		<MaxMinutesPerFrame>20</MaxMinutesPerFrame>
+		<MaxHoursPerDataset>400</MaxHoursPerDataset>
+	</Miscellaneous>
+</parameters>
