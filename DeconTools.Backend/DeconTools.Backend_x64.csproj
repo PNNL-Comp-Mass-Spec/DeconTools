@@ -43,17 +43,17 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Library\alglibnet2.dll</HintPath>
     </Reference>
-    <Reference Include="BaseCommon, Version=3.1.346.2, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="BaseCommon">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Library\Agilent_D\MassHunter DataAccess Component MHDAC B.06.00\MassHunterDataAccessAssembly_32bit\bin\BaseCommon.dll</HintPath>
+      <HintPath>..\Library\Agilent_D\BaseCommon.dll</HintPath>
     </Reference>
-    <Reference Include="BaseDataAccess, Version=3.1.346.2, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="BaseDataAccess">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Library\Agilent_D\MassHunter DataAccess Component MHDAC B.06.00\MassHunterDataAccessAssembly_32bit\bin\BaseDataAccess.dll</HintPath>
+      <HintPath>..\Library\Agilent_D\BaseDataAccess.dll</HintPath>
     </Reference>
-    <Reference Include="BaseTof, Version=1.0.4758.18585, Culture=neutral, processorArchitecture=x86">
+    <Reference Include="BaseTof">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Library\Agilent_D\MassHunter DataAccess Component MHDAC B.06.00\MassHunterDataAccessAssembly_64bit\bin\BaseTof.dll</HintPath>
+      <HintPath>..\Library\Agilent_D\BaseTof.dll</HintPath>
     </Reference>
     <Reference Include="BrukerDataReader, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
@@ -71,9 +71,9 @@
     <Reference Include="Mapack">
       <HintPath>..\Library\Mapack.dll</HintPath>
     </Reference>
-    <Reference Include="MassSpecDataReader, Version=3.1.346.2, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="MassSpecDataReader">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Library\Agilent_D\MassHunter DataAccess Component MHDAC B.06.00\MassHunterDataAccessAssembly_32bit\bin\MassSpecDataReader.dll</HintPath>
+      <HintPath>..\Library\Agilent_D\MassSpecDataReader.dll</HintPath>
     </Reference>
     <Reference Include="MSDBLibrary, Version=1.0.3603.29048, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
