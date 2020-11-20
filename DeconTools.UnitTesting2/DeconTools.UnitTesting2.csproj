@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -151,7 +151,6 @@
     <Compile Include="Run_relatedTests\MSDataFromTextFileTests.cs" />
     <Compile Include="ProcessingRelated_Tests\ChromatogramRelatedTests\PeakChromatogramOnUIMFData_Tests.cs" />
     <Compile Include="ProcessingRelated_Tests\ChromatogramRelatedTests\PeakChromatogramRelatedTests.cs" />
-    <Compile Include="ProcessingRelated_Tests\MSGeneratorTests\MSGeneratorFromPeakDataTests.cs" />
     <Compile Include="ProcessingRelated_Tests\MSGeneratorTests\SyntheticMSGeneratorTests.cs" />
     <Compile Include="ProcessingRelated_Tests\MSPeakDetectionTests\MSPeakDetectionTests.cs" />
     <Compile Include="ProcessingRelated_Tests\QuantificationTests\N14N15QuantificationTesting.cs" />
@@ -159,7 +158,6 @@
     <Compile Include="ProcessingRelated_Tests\TargetedFeatureFinderTests\TFFTests.cs" />
     <Compile Include="Run_relatedTests\RunFactory_tests.cs" />
     <Compile Include="Run_relatedTests\XCaliburRun2_Tests.cs" />
-    <Compile Include="Run_relatedTests\YAFMS_Tests.cs" />
     <Compile Include="Scripts\ChromatogramAnalysisScripts.cs" />
     <Compile Include="Scripts\ChromScripts.cs" />
     <Compile Include="Scripts\UIMFChromatogramScripts.cs" />
