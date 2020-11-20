@@ -14,6 +14,8 @@ namespace DeconTools.Backend.Workflows
 
         private readonly O16O18PeakDataAppender _o16O18PeakDataAppender = new O16O18PeakDataAppender();
         private int _scanCounter = 1;
+        private DateTime _lastProgressTime = DateTime.UtcNow;
+
         private const int NumScansBetweenProgress = 10;
 
         #region Constructors
@@ -23,7 +25,6 @@ namespace DeconTools.Backend.Workflows
         {
         }
         #endregion
-
 
         #region Public Methods
 
@@ -103,15 +104,19 @@ namespace DeconTools.Backend.Workflows
 
             BackgroundWorker?.ReportProgress((int)percentDone, userState);
 
-            if (_scanCounter % NumScansBetweenProgress == 0 || mShowTraceMessages)
+            var reportProgress = _scanCounter % NumScansBetweenProgress == 0 ||
+                                 DateTime.UtcNow.Subtract(_lastProgressTime).TotalMinutes > 5 ||
+                                 mShowTraceMessages;
+            if (!reportProgress)
+                return;
+
+            _lastProgressTime = DateTime.UtcNow;
+
+            Logger.Instance.AddEntry(progressMessage, true);
+
+            if (BackgroundWorker == null)
             {
-                Logger.Instance.AddEntry(progressMessage, true);
-
-                if (BackgroundWorker == null)
-                {
-                    Console.WriteLine(DateTime.Now + "\t" + progressMessage);
-                }
-
+                Console.WriteLine(DateTime.Now + "\t" + progressMessage);
             }
         }
 
