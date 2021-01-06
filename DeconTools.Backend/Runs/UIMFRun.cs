@@ -214,16 +214,49 @@ namespace DeconTools.Backend.Runs
 
         public override int GetMinPossibleLCScanNum()
         {
-            return 1;    //one-based frame num
+            if (mReader == null)
+            {
+                OpenUimfFile();
+            }
+
+            var frameList = mReader.GetMasterFrameList();
+            return GetMinPossibleLCScanNum(frameList);
+        }
+
+        private int GetMinPossibleLCScanNum(Dictionary<int, UIMFData.FrameType> frameList)
+        {
+            if (frameList.Count == 0)
+                return 1;
+
+            return frameList.Keys.Min();
         }
 
         public override int GetMaxPossibleLCScanNum()
         {
-            var maxPossibleFrameNumber = _globalParams.NumFrames;
+            if (mReader == null)
+            {
+                OpenUimfFile();
+            }
+
+            // The PNNL-Preprocessor supports combining frames by summing their data
+            // The first frame in the .UIMF file created when summing frames could have a frame number great than 1
+            // We therefore cannot use mGlobalParams.NumFrames to determine the maximum frame number
+
+            var frameList = mReader.GetMasterFrameList();
+            return GetMaxPossibleLCScanNum(frameList);
+        }
+
+        private int GetMaxPossibleLCScanNum(Dictionary<int, UIMFData.FrameType> frameList)
+        {
+            if (frameList.Count == 0)
+                return 1;
+
+            var maxPossibleFrameNumber = frameList.Keys.Max();
             var minPossibleFrameNumber = GetMinPossibleLCScanNum();
+
             if (maxPossibleFrameNumber < minPossibleFrameNumber)
             {
-                maxPossibleFrameNumber = minPossibleFrameNumber;
+                return minPossibleFrameNumber;
             }
 
             return maxPossibleFrameNumber;
@@ -443,7 +476,7 @@ namespace DeconTools.Backend.Runs
             var lowerFrameBoundary = (int)Math.Round(numPointsToSmooth / 2) - 1;    //zero-based
             var upperFrameBoundary = (int)Math.Round(numFrames - numPointsToSmooth / 2) - 1;   //zero-based
 
-            var maxFrame = _globalParams.NumFrames;
+            var maxFrame = GetMaxPossibleLCScanNum();
             var minFrame = GetMinPossibleLCScanNum();
 
             if (ScanSetCollection == null)
