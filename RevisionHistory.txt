@@ -1,5 +1,8 @@
 DeconTools DeconConsole / AutoProcessor Revision History
 
+Version 1.1.7675; January 5, 2021 mem
+	- Add support for .UIMF files where the first frame has a frame number greater than 1
+
 Version 1.1.7370; March 6, 2020 mem
 	- Update to .NET 4.7.2
 	- In DeconConsole, show the processing rate (scans/minute) and the the actual number of scans processed
