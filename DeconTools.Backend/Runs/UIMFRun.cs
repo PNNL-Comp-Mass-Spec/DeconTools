@@ -12,6 +12,8 @@ namespace DeconTools.Backend.Runs
     [Serializable]
     public sealed class UIMFRun : Run
     {
+        // Ignore Spelling: pos
+
         const double FramePressureStandard = 4.00000d;
 
         private DataReader mReader;
@@ -102,7 +104,8 @@ namespace DeconTools.Backend.Runs
 
         private bool CheckRunForMSMSData()
         {
-            if (MS2Frames.Count == 0) return false;
+            if (MS2Frames.Count == 0)
+                return false;
 
             return true;
         }
@@ -127,8 +130,6 @@ namespace DeconTools.Backend.Runs
         public List<int> MS2Frames { get; set; }
 
         #endregion
-
-        #region Public Methods
 
         /// <summary>
         /// The total number of frames in the run
@@ -250,8 +251,10 @@ namespace DeconTools.Backend.Runs
         /// <returns>1 for MS1 frames, 2 for MS2 frames, 0 for calibration frames, </returns>
         public override int GetMSLevelFromRawData(int frameNum)
         {
-            if (MS1Frames.BinarySearch(frameNum) >= 0) return 1;
-            if (MS2Frames.BinarySearch(frameNum) >= 0) return 2;
+            if (MS1Frames.BinarySearch(frameNum) >= 0)
+                return 1;
+            if (MS2Frames.BinarySearch(frameNum) >= 0)
+                return 2;
 
             var frameParams = mReader.GetFrameParams(frameNum);
 
@@ -285,8 +288,8 @@ namespace DeconTools.Backend.Runs
         /// <param name="maxMZ"></param>
         public override XYData GetMassSpectrum(ScanSet lcScanSet, ScanSet imsScanSet, double minMZ, double maxMZ)
         {
-            Check.Require(imsScanSet.GetScanCount() > 0, "Cannot get spectrum. Number of scans in ScanSet (imsScanSet) is 0");
-            Check.Require(lcScanSet.GetScanCount() > 0, "Cannot get spectrum. Number of frames in FrameSet (lcScanSet) is 0");
+            Check.Require(imsScanSet.GetScanCount() > 0, string.Format(
+                "Cannot get spectrum. Number of scans in ScanSet ({0}) is 0", nameof(imsScanSet)));
 
             Check.Require(lcScanSet.GetScanCount() > 0, string.Format(
                 "Cannot get spectrum. Number of frames in FrameSet ({0}) is 0", nameof(lcScanSet)));
@@ -559,7 +562,7 @@ namespace DeconTools.Backend.Runs
         //    List<ushort> frameNumbers = frameAndScans.Keys.ToList<ushort>();
         //    List<List<ushort>> scanNumbers = new List<List<ushort>>();
 
-        //    foreach (ushort frameNum in frameNumbers)
+        //    for each (var frameNum in frameNumbers)
         //    {
         //        List<ushort> scanList = frameAndScans[frameNum];
         //        scanNumbers.Add(scanList);
@@ -714,8 +717,6 @@ namespace DeconTools.Backend.Runs
 
             return sb.ToString();
         }
-
-        #endregion
 
         public int GetClosestMS1Frame(int lcScan)
         {

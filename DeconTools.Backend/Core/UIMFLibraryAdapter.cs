@@ -1,15 +1,14 @@
-﻿
-using System;
+﻿using System;
 
 namespace DeconTools.Backend.Core
 {
     /// <summary>
-    /// this class has been decommissioned. Delete after Jan 2011.
     /// Singleton class that functions to allow only one UIMF file to be opened at a time
     /// and keeps the file open allowing for more efficient use of the UIMFLibrary class.
     /// (instead of opening and closing it every time you want to retrieve information from
     /// the class)
     /// </summary>
+    [Obsolete("This class was listed as decommissioned in 2010, though it remained in use by the UIMFRun class through 2020")]
     public class UIMFLibraryAdapter
     {
         private static UIMFLibraryAdapter instance;
