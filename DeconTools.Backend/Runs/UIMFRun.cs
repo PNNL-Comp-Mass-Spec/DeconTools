@@ -14,11 +14,9 @@ namespace DeconTools.Backend.Runs
     {
         const double FramePressureStandard = 4.00000d;
 
-        /// <summary>
-        /// The frame type for MS1 scans. Some older UIMF files have '0'. Currently we are moving to '1' for MS1 and '2' for MS2, according to mzXML format.
-        /// </summary>
-        // private DataReader.FrameType _frameTypeForMS1;
-        private GlobalParams _globalParams;
+        private DataReader mReader;
+
+        private GlobalParams mGlobalParams;
 
         //private UIMFLibrary.DataReader m_reader;
         private readonly Dictionary<int, double> _framePressuresUnsmoothed;
@@ -46,9 +44,9 @@ namespace DeconTools.Backend.Runs
             Check.Require(File.Exists(uimfFilePath), "UIMF file does not exist.");
             DatasetFileOrDirectoryPath = uimfFilePath;
 
-            _globalParams = UIMFLibraryAdapter.getInstance(DatasetFileOrDirectoryPath).Reader.GetGlobalParams();
+            OpenUimfFile();
 
-            Check.Ensure(_globalParams != null, "UIMF file's Global parameters could not be initialized. Check UIMF file to make sure it is a valid file.");
+            Check.Ensure(mGlobalParams != null, "UIMF file's Global parameters could not be initialized. Check UIMF file to make sure it is a valid file.");
 
             var baseFilename = Path.GetFileName(DatasetFileOrDirectoryPath);
             if (baseFilename != null)
@@ -85,18 +83,18 @@ namespace DeconTools.Backend.Runs
 
         private void GetMSLevelInfo()
         {
-            _frameList = new SortedDictionary<int, UIMFData.FrameType>(UIMFLibraryAdapter.getInstance(DatasetFileOrDirectoryPath).Reader.GetMasterFrameList());
+            _frameList = new SortedDictionary<int, UIMFData.FrameType>(mReader.GetMasterFrameList());
 
             MS1Frames = new List<int>();
             MS2Frames = new List<int>();
 
-            var ms1Frames = UIMFLibraryAdapter.getInstance(DatasetFileOrDirectoryPath).Reader.GetFrameNumbers(UIMFData.FrameType.MS1);
+            var ms1Frames = mReader.GetFrameNumbers(UIMFData.FrameType.MS1);
             if (ms1Frames != null && ms1Frames.Length != 0)
             {
                 MS1Frames = ms1Frames.ToList();
             }
 
-            var ms2Frames = UIMFLibraryAdapter.getInstance(DatasetFileOrDirectoryPath).Reader.GetFrameNumbers(UIMFData.FrameType.MS2);
+            var ms2Frames = mReader.GetFrameNumbers(UIMFData.FrameType.MS2);
             if (ms2Frames != null && ms2Frames.Length != 0)
             {
                 MS2Frames = ms2Frames.ToList();
@@ -139,16 +137,22 @@ namespace DeconTools.Backend.Runs
         /// <returns></returns>
         public int GetNumFrames()
         {
-            if (_globalParams == null)
+            if (mReader == null)
             {
-                _globalParams = UIMFLibraryAdapter.getInstance(DatasetFileOrDirectoryPath).Reader.GetGlobalParams();
+                OpenUimfFile();
             }
-            return _globalParams.NumFrames;
+
+            return mGlobalParams.NumFrames;
         }
 
         public int GetNumBins()
         {
-            return _globalParams.Bins;
+            if (mReader == null)
+            {
+                OpenUimfFile();
+            }
+
+            return mGlobalParams.Bins;
         }
 
         /// <summary>
@@ -157,6 +161,11 @@ namespace DeconTools.Backend.Runs
         /// <returns></returns>
         public override int GetNumMSScans()
         {
+            if (mReader == null)
+            {
+                OpenUimfFile();
+            }
+
             var numScansPerFrame = GetNumScansPerFrame();
 
             return numScansPerFrame * (MaxLCScan - MinLCScan + 1);
@@ -169,12 +178,15 @@ namespace DeconTools.Backend.Runs
         /// <remarks>If frames have a varying number of scans, returns the maximum scan count in any frame</remarks>
         internal int GetNumScansPerFrame()
         {
+            if (mReader == null)
+            {
+                OpenUimfFile();
+            }
+
             var minFrame = MinLCScan;
             var maxFrame = MaxLCScan;
 
-            var reader = UIMFLibraryAdapter.getInstance(DatasetFileOrDirectoryPath).Reader;
-
-            var frameList = reader.GetMasterFrameList();
+            var frameList = mReader.GetMasterFrameList();
 
             // Keys in this dictionary are frame number; values are number of scans in that frame
             // Nominally all frames have the same number of scans, but this is not always the case
@@ -185,8 +197,14 @@ namespace DeconTools.Backend.Runs
                 if (!frameList.ContainsKey(frame))
                     continue;
 
-                var scansPerFrame = UIMFLibraryAdapter.getInstance(DatasetFileOrDirectoryPath).Reader.GetFrameParams(frame).Scans;
+                var scansPerFrame = mReader.GetFrameParams(frame).Scans;
                 scanCountsByFrame.Add(frame, scansPerFrame);
+            }
+
+            if (scanCountsByFrame.Count == 0)
+            {
+                // Discrepancy between minFrame and maxFrame vs. frameList
+                return 0;
             }
 
             var maxScansPerFrame = scanCountsByFrame.Values.Max();
@@ -273,18 +291,18 @@ namespace DeconTools.Backend.Runs
 
             try
             {
-                // Obtain an instance of the reader
-                var uimfReader = UIMFLibraryAdapter.getInstance(DatasetFileOrDirectoryPath).Reader;
-
                 // Prior to January 2015 the SpectrumCache class in the UIMFReader used Dictionary<int, int> for ListOfIntensityDictionaries
                 // This caused some datasets, e.g. EXP-Mix5_1um_pos_19Jan15_Columbia_DI, to run out of memory when caching 10 spectra
                 // The UIMFLibrary now uses List<int, int>, which takes up less memory (at the expense having slower lookups by BinNumber, though this does not affect DeconTools' use of the UIMFLibrary)
 
-                uimfReader.SpectraToCache = 10;
-                uimfReader.MaxSpectrumCacheMemoryMB = 750;
+                mReader.SpectraToCache = 10;
+                mReader.MaxSpectrumCacheMemoryMB = 750;
 
-                var nonZeroLength = uimfReader.GetSpectrum(
-                    frameLower, frameUpper, frameType, scanLower, scanUpper, minMZ, maxMZ, out var xVals, out var yVals);
+                mReader.GetSpectrum(
+                    startFrameNumber, endFrameNumber, frameType,
+                    startScanNumber, endScanNumber,
+                    minMZ, maxMZ,
+                    out var xVals, out var yVals);
 
                 var xyData = new XYData();
 
@@ -314,7 +332,12 @@ namespace DeconTools.Backend.Runs
 
         public override double GetTime(int frameNum)
         {
-            var fp = UIMFLibraryAdapter.getInstance(DatasetFileOrDirectoryPath).Reader.GetFrameParams(frameNum);
+            if (mReader == null)
+            {
+                OpenUimfFile();
+            }
+
+            var fp = mReader.GetFrameParams(frameNum);
             var time = fp.GetValueDouble(FrameParamKeyType.StartTimeMinutes);
             return time;
         }
@@ -326,6 +349,11 @@ namespace DeconTools.Backend.Runs
         /// <returns></returns>
         public int GetNumberOfConsecutiveMs2Frames(int frameNumber)
         {
+            if (mReader == null)
+            {
+                OpenUimfFile();
+            }
+
             var count = 0;
             if (_frameList[frameNumber] == UIMFData.FrameType.MS2)
             {
@@ -347,7 +375,12 @@ namespace DeconTools.Backend.Runs
 
         public double GetDriftTime(int frameNum, int scanNum)
         {
-            var fp = UIMFLibraryAdapter.getInstance(DatasetFileOrDirectoryPath).Reader.GetFrameParams(frameNum);
+            if (mReader == null)
+            {
+                OpenUimfFile();
+            }
+
+            var fp = mReader.GetFrameParams(frameNum);
             var avgTOFLength = fp.GetValueDouble(FrameParamKeyType.AverageTOFLength);
             var driftTime = avgTOFLength * (scanNum + 1) / 1e6;     //note that scanNum is zero-based.  Need to add one here
 
@@ -379,7 +412,7 @@ namespace DeconTools.Backend.Runs
 
         public double GetFramePressureFront(int frameNum)
         {
-            var fp = UIMFLibraryAdapter.getInstance(DatasetFileOrDirectoryPath).Reader.GetFrameParams(frameNum);
+            var fp = mReader.GetFrameParams(frameNum);
             var framePressureFront = fp.GetValueDouble(FrameParamKeyType.PressureFront);
 
             return framePressureFront;
@@ -469,6 +502,11 @@ namespace DeconTools.Backend.Runs
 
         public void GetFrameDataAllFrameSets()
         {
+            if (mReader == null)
+            {
+                OpenUimfFile();
+            }
+
             Check.Require(ScanSetCollection != null && ScanSetCollection.ScanSetList.Count > 0, "Cannot get frame data. FrameSet collection has not been defined.");
 
             Console.Write("Loading frame parameters ");
@@ -483,10 +521,10 @@ namespace DeconTools.Backend.Runs
             {
                 var frame = (LCScanSetIMS)scanSet;
 
-                var fp = UIMFLibraryAdapter.getInstance(DatasetFileOrDirectoryPath).Reader.GetFrameParams(frame.PrimaryScanNumber);
+                var fp = mReader.GetFrameParams(frame.PrimaryScanNumber);
                 frame.AvgTOFLength = fp.GetValueDouble(FrameParamKeyType.AverageTOFLength);
                 frame.FramePressureUnsmoothed =
-                    UIMFLibraryAdapter.getInstance(DatasetFileOrDirectoryPath).Reader.GetFramePressureForCalculationOfDriftTime(frame.PrimaryScanNumber);
+                    mReader.GetFramePressureForCalculationOfDriftTime(frame.PrimaryScanNumber);
 
                 if (DateTime.UtcNow.Subtract(dtLastProgress).TotalSeconds >= 1)
                 {
@@ -532,7 +570,12 @@ namespace DeconTools.Backend.Runs
 
         public Stack<int[]> GetDescendingBpiValuesByFramesAndScans()
         {
-            return UIMFLibraryAdapter.getInstance(DatasetFileOrDirectoryPath).Reader.GetFrameAndScanListByDescendingIntensity();
+            if (mReader == null)
+            {
+                OpenUimfFile();
+            }
+
+            return mReader.GetFrameAndScanListByDescendingIntensity();
         }
 
         //public void GetDriftTimeProfile(int frameStartIndex, int frameStopIndex, int startScan, int stopScan, double targetMZ, double toleranceInMZ)
@@ -560,7 +603,7 @@ namespace DeconTools.Backend.Runs
             int[] scanValues = null;
             int[] intensityVals = null;
 
-            UIMFLibraryAdapter.getInstance(DatasetFileOrDirectoryPath).Reader.GetDriftTimeProfile(frameNum, frameNum, UIMFData.FrameType.MS1, startScan, stopScan, targetMZ, toleranceInMZ, ref scanValues, ref intensityVals);
+            mReader.GetDriftTimeProfile(frameNum, frameNum, UIMFData.FrameType.MS1, startScan, stopScan, targetMZ, toleranceInMZ, ref scanValues, ref intensityVals);
 
             var xyData = new XYData();
 
@@ -580,17 +623,24 @@ namespace DeconTools.Backend.Runs
 
         public override void Close()
         {
-            if (UIMFLibraryAdapter.getInstance(DatasetFileOrDirectoryPath).Reader != null)
+            if (mReader != null)
             {
-                UIMFLibraryAdapter.getInstance(DatasetFileOrDirectoryPath).CloseCurrentUIMF();
+                mReader.Dispose();
+                mReader = null;
             }
 
             base.Close();
         }
 
+        private void OpenUimfFile()
+        {
+            mReader = new DataReader(DatasetFileOrDirectoryPath);
+            mGlobalParams = mReader.GetGlobalParams();
+        }
+
         public float GetTIC(int lcScan, int imsScan)
         {
-            var frameScans = UIMFLibraryAdapter.getInstance(DatasetFileOrDirectoryPath).Reader.GetFrameScans(lcScan);
+            var frameScans = mReader.GetFrameScans(lcScan);
             var query = (from item in frameScans where item.Scan == imsScan select item.TIC).ToList();
 
             if (query.Count == 0)
