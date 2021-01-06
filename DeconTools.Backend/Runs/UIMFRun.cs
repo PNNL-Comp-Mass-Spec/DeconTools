@@ -123,9 +123,6 @@ namespace DeconTools.Backend.Runs
         public int MinIMSScan { get; set; }
         public int MaxIMSScan { get; set; }
 
-        [Obsolete("CurrentFrameSet not used anymore. Use CurrentScanSet.", true)]
-        public ScanSet CurrentFrameSet { get; set; }
-
         public List<int> MS1Frames { get; set; }
         public List<int> MS2Frames { get; set; }
 
