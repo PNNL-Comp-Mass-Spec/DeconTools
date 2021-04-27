@@ -395,15 +395,15 @@ namespace DeconTools.Backend.Runs
 
             CalibrationData = new BrukerCalibrationData
             {
-                ML1 = Convert.ToDouble(paramList.First(p => p.Name == "ML1").Value),
-                ML2 = Convert.ToDouble(paramList.First(p => p.Name == "ML2").Value),
-                SampleRate = Convert.ToDouble(paramList.First(p => p.Name == "SW_h").Value) * 2,
-                NumValuesInScan = Convert.ToInt32(paramList.First(p => p.Name == "TD").Value),
-                FR_Low = Convert.ToDouble(paramList.First(p => p.Name == "FR_low").Value),
-                ByteOrder = Convert.ToInt32(paramList.First(p => p.Name == "BYTORDP").Value)
+                ML1 = double.Parse(paramList.First(p => p.Name == "ML1").Value, CultureInfo.InvariantCulture),
+                ML2 = double.Parse(paramList.First(p => p.Name == "ML2").Value, CultureInfo.InvariantCulture),
+                SampleRate = double.Parse(paramList.First(p => p.Name == "SW_h").Value, CultureInfo.InvariantCulture) * 2,
+                NumValuesInScan = int.Parse(paramList.First(p => p.Name == "TD").Value),
+                FR_Low = double.Parse(paramList.First(p => p.Name == "FR_low").Value, CultureInfo.InvariantCulture),
+                ByteOrder = int.Parse(paramList.First(p => p.Name == "BYTORDP").Value)
             };
 
-            //this.CalibrationData.NF = Convert.ToInt32(paramList.First(p => p.Name == "NF").Value);
+            //this.CalibrationData.NF = int.Parse(paramList.First(p => p.Name == "NF").Value);
 
             if (CalibrationData.SampleRate > CalibrationData.FR_Low)
             {

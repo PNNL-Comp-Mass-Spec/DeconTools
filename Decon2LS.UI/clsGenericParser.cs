@@ -1232,7 +1232,7 @@ namespace Decon2LS
             {
                 foreach (XmlElement xmlColumnWidth in xmlElement.ChildNodes)
                     if (xmlColumnWidth.Name == XML_COLUMN_WIDTH)
-                        alBuffer.Add(Convert.ToInt32(xmlColumnWidth.InnerText));
+                        alBuffer.Add(int.Parse(xmlColumnWidth.InnerText));
 
                 if (alBuffer.Count > 0)
                     this.ColumnWidths = ((int[])alBuffer.ToArray(typeof(int)));
@@ -1245,28 +1245,28 @@ namespace Decon2LS
             xmlElement = xmlConfig.DocumentElement[XML_MAX_BUFFER_SIZE];
 
             if ((xmlElement != null) && (xmlElement.InnerText != null))
-                this.MaxBufferSize = Convert.ToInt32(xmlElement.InnerText);
+                this.MaxBufferSize = int.Parse(xmlElement.InnerText);
 
             /////////////////////////////////////////////////////////////
 
             xmlElement = xmlConfig.DocumentElement[XML_MAX_ROWS];
 
             if ((xmlElement != null) && (xmlElement.InnerText != null))
-                this.MaxRows = Convert.ToInt32(xmlElement.InnerText);
+                this.MaxRows = int.Parse(xmlElement.InnerText);
 
             /////////////////////////////////////////////////////////////
 
             xmlElement = xmlConfig.DocumentElement[XML_SKIP_DATA_ROWS];
 
             if ((xmlElement != null) && (xmlElement.InnerText != null))
-                this.SkipDataRows = Convert.ToInt32(xmlElement.InnerText);
+                this.SkipDataRows = int.Parse(xmlElement.InnerText);
 
             /////////////////////////////////////////////////////////////
 
             xmlElement = xmlConfig.DocumentElement[XML_EXPECTED_COLUMN_COUNT];
 
             if ((xmlElement != null) && (xmlElement.InnerText != null))
-                this.ExpectedColumnCount = Convert.ToInt32(xmlElement.InnerText);
+                this.ExpectedColumnCount = int.Parse(xmlElement.InnerText);
 
             /////////////////////////////////////////////////////////////
 
@@ -1318,21 +1318,21 @@ namespace Decon2LS
             xmlElement = xmlConfig.DocumentElement[XML_TEXT_QUALIFIER];
 
             if ((xmlElement != null) && (xmlElement.InnerText != null) && (xmlElement.InnerText.Length > 0))
-                this.TextQualifier = Convert.ToChar(Convert.ToInt32(xmlElement.InnerText));
+                this.TextQualifier = Convert.ToChar(int.Parse(xmlElement.InnerText));
 
             /////////////////////////////////////////////////////////////
 
             xmlElement = xmlConfig.DocumentElement[XML_ESCAPE_CHARACTER];
 
             if ((xmlElement != null) && (xmlElement.InnerText != null) && (xmlElement.InnerText.Length > 0))
-                this.EscapeCharacter = Convert.ToChar(Convert.ToInt32(xmlElement.InnerText));
+                this.EscapeCharacter = Convert.ToChar(int.Parse(xmlElement.InnerText));
 
             /////////////////////////////////////////////////////////////
 
             xmlElement = xmlConfig.DocumentElement[XML_COMMENT_CHARACTER];
 
             if ((xmlElement != null) && (xmlElement.InnerText != null) && (xmlElement.InnerText.Length > 0))
-                this.CommentCharacter = Convert.ToChar(Convert.ToInt32(xmlElement.InnerText));
+                this.CommentCharacter = Convert.ToChar(int.Parse(xmlElement.InnerText));
         }
 
         #region Saving
@@ -2195,7 +2195,7 @@ namespace Decon2LS
                 saValues = strSafeString.Split(XML_SAFE_STRING_DELIMITER.ToCharArray());
 
                 foreach (var s in saValues)
-                    alChars.Add(Convert.ToChar(Convert.ToInt32(s)));
+                    alChars.Add(Convert.ToChar(int.Parse(s)));
 
                 return ((char[])alChars.ToArray(typeof(char)));
             }

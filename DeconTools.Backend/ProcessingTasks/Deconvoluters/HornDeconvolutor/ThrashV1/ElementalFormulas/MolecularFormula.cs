@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text.RegularExpressions;
 
 namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.ThrashV1.ElementalFormulas
@@ -90,7 +91,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                 double count = 1;
                 if (!string.IsNullOrWhiteSpace(countStr))
                 {
-                    count = Convert.ToDouble(countStr.Trim());
+                    count = double.Parse(countStr.Trim(), CultureInfo.InvariantCulture);
                 }
                 // now we should have a symbol and a count. Lets get the atomicity of the atom.
                 var elementIndex = atomicInformation.GetElementIndex(atomicSymbol);
@@ -176,7 +177,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                 {
                     count = 1;
                 }
-                count = Convert.ToDouble(formula.Substring(startIndex, stopIndex - startIndex));
+                count = double.Parse(formula.Substring(startIndex, stopIndex - startIndex), CultureInfo.InvariantCulture);
                 //count = Helpers.atof(formula.Substring(index));
                 // now we should have a symbol and a count. Lets get the atomicity of the atom.
                 var elementIndex = atomicInformation.GetElementIndex(atomicSymbol);

@@ -129,7 +129,7 @@ namespace DeconTools.Backend.ProcessingTasks
 
             double rapidsBackgroundIntensityParameter = (resultList.Run.CurrentBackgroundIntensity * minPeptideToBackgroundRatio);
 
-            Transformer.PerformTransform_cluster(Convert.ToSingle(rapidsBackgroundIntensityParameter),
+            Transformer.PerformTransform_cluster(float.Parse(rapidsBackgroundIntensityParameter),
                 ref xvals, ref yvals, ref rapidPeakList, ref chargeResults,
                 ref intensityResults, ref mzResults, ref scoreResults, ref avgmassResults,
                 ref massResults, ref mostAbundantMassResults);

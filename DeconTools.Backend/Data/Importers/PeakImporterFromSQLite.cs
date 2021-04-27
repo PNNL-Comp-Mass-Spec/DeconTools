@@ -60,7 +60,7 @@ namespace DeconTools.Backend.Data
                 using (var command = cnn.CreateCommand())
                 {
                     command.CommandText = "SELECT COUNT(*) FROM T_Peaks;";
-                    numRecords = Convert.ToInt32(command.ExecuteScalar());
+                    numRecords = int.Parse(command.ExecuteScalar().ToString());
                 }
 
                 using (var command = cnn.CreateCommand())

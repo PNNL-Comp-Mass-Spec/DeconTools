@@ -192,7 +192,7 @@ namespace DeconTools.Backend.DTO
 
             if (match.Success)
             {
-                return Convert.ToInt32(match.Groups["frameNum"].Value);
+                return int.Parse(match.Groups["frameNum"].Value);
             }
 
             throw new Exception("Couldn't find frame number in IMF filename");

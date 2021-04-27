@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Common;
+using System.Globalization;
 using DeconTools.Workflows.Backend.Results;
 
 namespace DeconTools.Workflows.Backend.Utilities
@@ -116,7 +117,7 @@ namespace DeconTools.Workflows.Backend.Utilities
         {
             if (!reader[columnName].Equals(DBNull.Value))
             {
-                return Convert.ToDouble(reader[columnName]);
+                return double.Parse(reader[columnName].ToString(), CultureInfo.InvariantCulture);
             }
             else
             {
@@ -128,7 +129,7 @@ namespace DeconTools.Workflows.Backend.Utilities
         {
             if (!reader[columnName].Equals(DBNull.Value))
             {
-                return Convert.ToSingle(reader[columnName]);
+                return float.Parse(reader[columnName].ToString(), CultureInfo.InvariantCulture);
             }
             else
             {
@@ -152,7 +153,7 @@ namespace DeconTools.Workflows.Backend.Utilities
         {
             if (!reader[columnName].Equals(DBNull.Value))
             {
-                return Convert.ToInt32(reader[columnName]);
+                return int.Parse(reader[columnName].ToString());
             }
             else
             {

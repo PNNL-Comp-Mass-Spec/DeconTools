@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.IO;
 using DeconTools.Backend.Core;
 using DeconTools.Backend.DTO;
@@ -102,26 +103,26 @@ namespace DeconTools.Backend.Data
             var columnCounter = 0;
 
             var processedLine = ProcessLine(line);
-            peakResult.PeakID = Convert.ToInt32(processedLine[columnCounter]);
+            peakResult.PeakID = int.Parse(processedLine[columnCounter]);
 
             //NOTE - for UIMF data the frame column is loaded into the 'Scan_num' property.  This is kind of ugly since there is
             //already a FrameNum property. I'm doing this so that we can process UIMF files in IQ.  We need to fix this later.
-            peakResult.Scan_num = Convert.ToInt32(processedLine[++columnCounter]);
+            peakResult.Scan_num = int.Parse(processedLine[++columnCounter]);
 
             //UIMF peak data contains an extra column
             if (_peaksAreFromUIMF) ++columnCounter;
 
-            var mz = Convert.ToDouble(processedLine[++columnCounter]);
-            var intensity = Convert.ToSingle(processedLine[++columnCounter]);
-            var fwhm = Convert.ToSingle(processedLine[++columnCounter]);
-            var sn = Convert.ToSingle(processedLine[++columnCounter]);
+            var mz = double.Parse(processedLine[++columnCounter], CultureInfo.InvariantCulture);
+            var intensity = float.Parse(processedLine[++columnCounter], CultureInfo.InvariantCulture);
+            var fwhm = float.Parse(processedLine[++columnCounter], CultureInfo.InvariantCulture);
+            var sn = float.Parse(processedLine[++columnCounter], CultureInfo.InvariantCulture);
 
             peakResult.MSPeak = new MSPeak(mz, intensity, fwhm, sn);
 
             if (_containsMSFeatureIDColumn)
             {
                 var currentCounter = ++columnCounter;
-                peakResult.MSPeak.MSFeatureID = Convert.ToInt32(processedLine[currentCounter]);
+                peakResult.MSPeak.MSFeatureID = int.Parse(processedLine[currentCounter]);
             }
 
             return peakResult;
@@ -136,20 +137,20 @@ namespace DeconTools.Backend.Data
                 throw new IOException("Trying to import peak data into UIMF data object, but not enough columns are present in the source text file");
             }
 
-            peakResult.PeakID = Convert.ToInt32(processedLine[0]);
-            peakResult.FrameNum = Convert.ToInt32(processedLine[1]);
-            peakResult.Scan_num = Convert.ToInt32(processedLine[2]);
+            peakResult.PeakID = int.Parse(processedLine[0]);
+            peakResult.FrameNum = int.Parse(processedLine[1]);
+            peakResult.Scan_num = int.Parse(processedLine[2]);
 
-            var mz = Convert.ToDouble(processedLine[3]);
-            var intensity = Convert.ToSingle(processedLine[4]);
-            var fwhm = Convert.ToSingle(processedLine[5]);
-            var sn = Convert.ToSingle(processedLine[6]);
+            var mz = double.Parse(processedLine[3], CultureInfo.InvariantCulture);
+            var intensity = float.Parse(processedLine[4], CultureInfo.InvariantCulture);
+            var fwhm = float.Parse(processedLine[5], CultureInfo.InvariantCulture);
+            var sn = float.Parse(processedLine[6], CultureInfo.InvariantCulture);
 
             peakResult.MSPeak = new MSPeak(mz, intensity, fwhm, sn);
 
             if (processedLine.Count > 7)
             {
-                peakResult.MSPeak.MSFeatureID = Convert.ToInt32(processedLine[7]);
+                peakResult.MSPeak.MSFeatureID = int.Parse(processedLine[7]);
             }
 
             return peakResult;

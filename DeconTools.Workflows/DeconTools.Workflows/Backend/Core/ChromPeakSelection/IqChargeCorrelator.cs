@@ -175,8 +175,8 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
         private void GetBaseScanRange(Peak referencePeak, out int startScan, out int stopScan)
         {
             var baseWidth = (4 * (referencePeak.Width / 2.35));
-            startScan = Convert.ToInt32(Math.Floor(referencePeak.XValue - (0.5 * baseWidth)));
-            stopScan = Convert.ToInt32(Math.Ceiling(referencePeak.XValue + (0.5 * baseWidth)));
+            startScan = (int)Math.Floor(referencePeak.XValue - 0.5 * baseWidth);
+            stopScan = (int)Math.Ceiling(referencePeak.XValue + 0.5 * baseWidth);
         }
 
         /// <summary>

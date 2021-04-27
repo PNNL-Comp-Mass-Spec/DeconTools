@@ -174,18 +174,18 @@ namespace DeconTools.Workflows.Backend.Core
     //            throw new System.IO.IOException("Trying to import peak data into UIMF data object, but not enough columns are present in the source text file");
     //        }
 
-    //        peakresult.PeakID = Convert.ToInt32(processedLine[0]);
-    //        peakresult.Frame_num = Convert.ToInt32(processedLine[1]);
-    //        peakresult.Scan_num = Convert.ToInt32(processedLine[2]);
+    //        peakresult.PeakID = int.Parse(processedLine[0]);
+    //        peakresult.Frame_num = int.Parse(processedLine[1]);
+    //        peakresult.Scan_num = int.Parse(processedLine[2]);
     //        peakresult.MSPeak = new DeconTools.Backend.Core.MSPeak();
-    //        peakresult.MSPeak.XValue = Convert.ToDouble(processedLine[3]);
-    //        peakresult.MSPeak.Height = Convert.ToSingle(processedLine[4]);
-    //        peakresult.MSPeak.Width = Convert.ToSingle(processedLine[5]);
-    //        peakresult.MSPeak.SignalToNoise = Convert.ToSingle(processedLine[6]);
+    //        peakresult.MSPeak.XValue = double.Parse(processedLine[3], CultureInfo.InvariantCulture);
+    //        peakresult.MSPeak.Height = float.Parse(processedLine[4], CultureInfo.InvariantCulture);
+    //        peakresult.MSPeak.Width = float.Parse(processedLine[5], CultureInfo.InvariantCulture);
+    //        peakresult.MSPeak.SignalToNoise = float.Parse(processedLine[6], CultureInfo.InvariantCulture);
 
     //        if (processedLine.Length > 7)
     //        {
-    //            peakresult.MSPeak.MSFeatureID = Convert.ToInt32(processedLine[7]);
+    //            peakresult.MSPeak.MSFeatureID = int.Parse(processedLine[7]);
     //        }
 
     //        return peakresult;

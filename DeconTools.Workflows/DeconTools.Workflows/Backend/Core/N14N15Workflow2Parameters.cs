@@ -51,26 +51,26 @@
         //    }
 
         //    ChromGeneratorMode = StringToEnum<DeconTools.Backend.Globals.ChromatogramGeneratorMode>(parameterTableFromXML["ChromGeneratorMode"]);
-        //    ChromNETTolerance = Convert.ToDouble(parameterTableFromXML["ChromNETTolerance"]);
-        //    ChromPeakDetectorPeakBR = Convert.ToDouble(parameterTableFromXML["ChromPeakDetectorPeakBR"]);
-        //    ChromPeakDetectorSigNoise = Convert.ToDouble(parameterTableFromXML["ChromPeakDetectorSigNoise"]);
-        //    ChromSmootherNumPointsInSmooth = Convert.ToInt32(parameterTableFromXML["ChromSmootherNumPointsInSmooth"]);
-        //    ChromGenTolerance = Convert.ToInt32(parameterTableFromXML["ChromGenTolerance"]);
-        //    MSPeakDetectorPeakBR = Convert.ToDouble(parameterTableFromXML["MSPeakDetectorPeakBR"]);
-        //    MSPeakDetectorSigNoise = Convert.ToDouble(parameterTableFromXML["MSPeakDetectorSigNoise"]);
-        //    MSToleranceInPPM = Convert.ToDouble(parameterTableFromXML["MSToleranceInPPM"]);
-        //    NumMSScansToSum = Convert.ToInt32(parameterTableFromXML["NumMSScansToSum"]);
+        //    ChromNETTolerance = double.Parse(parameterTableFromXML["ChromNETTolerance"], CultureInfo.InvariantCulture);
+        //    ChromPeakDetectorPeakBR = double.Parse(parameterTableFromXML["ChromPeakDetectorPeakBR"], CultureInfo.InvariantCulture);
+        //    ChromPeakDetectorSigNoise = double.Parse(parameterTableFromXML["ChromPeakDetectorSigNoise"], CultureInfo.InvariantCulture);
+        //    ChromSmootherNumPointsInSmooth = int.Parse(parameterTableFromXML["ChromSmootherNumPointsInSmooth"]);
+        //    ChromGenTolerance = int.Parse(parameterTableFromXML["ChromGenTolerance"]);
+        //    MSPeakDetectorPeakBR = double.Parse(parameterTableFromXML["MSPeakDetectorPeakBR"], CultureInfo.InvariantCulture);
+        //    MSPeakDetectorSigNoise = double.Parse(parameterTableFromXML["MSPeakDetectorSigNoise"], CultureInfo.InvariantCulture);
+        //    MSToleranceInPPM = double.Parse(parameterTableFromXML["MSToleranceInPPM"], CultureInfo.InvariantCulture);
+        //    NumMSScansToSum = int.Parse(parameterTableFromXML["NumMSScansToSum"]);
 
-        //    NumPeaksUsedInQuant = Convert.ToInt32(parameterTableFromXML["NumPeaksUsedInQuant"]);
-        //    SmartChromSelectorPeakBR = Convert.ToDouble(parameterTableFromXML["SmartChromSelectorPeakBR"]);
+        //    NumPeaksUsedInQuant = int.Parse(parameterTableFromXML["NumPeaksUsedInQuant"]);
+        //    SmartChromSelectorPeakBR = double.Parse(parameterTableFromXML["SmartChromSelectorPeakBR"], CultureInfo.InvariantCulture);
         //    SmartChromSelectorPeakSigNoiseRatio =
-        //        Convert.ToDouble(parameterTableFromXML["SmartChromSelectorPeakSigNoiseRatio"]);
+        //        double.Parse(parameterTableFromXML["SmartChromSelectorPeakSigNoiseRatio"], CultureInfo.InvariantCulture);
 
         //    TargetedFeatureFinderIsotopicProfileTargetType =
         //        StringToEnum<DeconTools.Backend.Globals.IsotopicProfileType>(
         //            parameterTableFromXML["TargetedFeatureFinderIsotopicProfileTargetType"]);
         //    TargetedFeatureFinderToleranceInPPM =
-        //        Convert.ToDouble(parameterTableFromXML["TargetedFeatureFinderToleranceInPPM"]);
+        //        double.Parse(parameterTableFromXML["TargetedFeatureFinderToleranceInPPM"], CultureInfo.InvariantCulture);
         //}
 
         public override Globals.TargetedWorkflowTypes WorkflowType => Globals.TargetedWorkflowTypes.N14N15Targeted1;

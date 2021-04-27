@@ -221,7 +221,7 @@ namespace DeconTools.Backend.FileIO
             var secondAttempt = ParseDoubleField(inputString);
             if (!double.IsNaN(secondAttempt))
             {
-                return Convert.ToInt32(secondAttempt);
+                return (int)secondAttempt;
             }
 
             return -1;

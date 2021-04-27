@@ -192,7 +192,7 @@ namespace Decon2LS
         {
             get
             {
-                return Convert.ToSingle(mtxtFocusMZ.Text);
+                return float.Parse(mtxtFocusMZ.Text);
             }
             set
             {
@@ -204,7 +204,7 @@ namespace Decon2LS
         {
             get
             {
-                return Convert.ToSingle(mtxtMZTolerance.Text);
+                return float.Parse(mtxtMZTolerance.Text);
             }
             set
             {
@@ -216,7 +216,7 @@ namespace Decon2LS
         {
             get
             {
-                return Convert.ToInt32(mtxtFocusScan.Text);
+                return int.Parse(mtxtFocusScan.Text);
             }
             set
             {

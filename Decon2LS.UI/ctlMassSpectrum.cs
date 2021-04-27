@@ -10,6 +10,7 @@
 using System;
 using System.Collections;
 using System.Drawing;
+using System.Globalization;
 using System.Windows.Forms;
 using System.Threading;
 using DeconTools.Backend.Utilities;
@@ -837,10 +838,10 @@ namespace Decon2LS
             {
                 var inputFrm = new frmFloatDialog();
                 inputFrm.Prompt = "Please enter # of points to fill";
-                inputFrm.EditingValue = Convert.ToSingle(mint_num_zero_fill_discontinuous);
+                inputFrm.EditingValue = mint_num_zero_fill_discontinuous;
                 if (inputFrm.ShowDialog() == DialogResult.OK)
                 {
-                    var num_zero_fill = Convert.ToInt32(inputFrm.EditingValue);
+                    var num_zero_fill = int.Parse(inputFrm.EditingValue.ToString(CultureInfo.InvariantCulture));
                     if (num_zero_fill < 1)
                     {
                         MessageBox.Show(this, "Please enter a positive value for number of points");
@@ -985,7 +986,7 @@ namespace Decon2LS
             mobj_PeakProcessor.SetOptions(mobjPeakParameters);
             mobj_peaks = new DeconToolsV2.Peaks.clsPeak[1];        //[gord] what's this doing?
             mobj_PeakProcessor.DiscoverPeaks(ref marr_current_mzs, ref marr_current_intensities, ref mobj_peaks,
-                Convert.ToSingle(mobjTransformParameters.MinMZ), Convert.ToSingle(mobjTransformParameters.MaxMZ));
+                (float)mobjTransformParameters.MinMZ, (float)mobjTransformParameters.MaxMZ);
             mdbl_current_background_intensity = mobj_PeakProcessor.GetBackgroundIntensity(ref marr_current_intensities);
 
             var peakMzs = new float[mobj_peaks.Length];
@@ -994,9 +995,9 @@ namespace Decon2LS
 
             for (var pkNum = 0; pkNum < mobj_peaks.Length; pkNum++)
             {
-                peakMzs[pkNum] = Convert.ToSingle(mobj_peaks[pkNum].Mz);
-                peakIntensities[pkNum] = Convert.ToSingle(mobj_peaks[pkNum].mdbl_intensity);
-                peakFWHMs[pkNum] = Convert.ToSingle(mobj_peaks[pkNum].mdbl_FWHM);
+                peakMzs[pkNum] = (float)mobj_peaks[pkNum].Mz;
+                peakIntensities[pkNum] = (float)mobj_peaks[pkNum].mdbl_intensity;
+                peakFWHMs[pkNum] = (float)mobj_peaks[pkNum].mdbl_FWHM;
             }
 
             mctl_spectra.AddPeaks(peakMzs, peakIntensities, peakFWHMs);
@@ -1052,7 +1053,7 @@ namespace Decon2LS
                         min_peptide_intensity = mobjTransformParameters.AbsolutePeptideIntensity;
                 }
 
-                mobjTransform.PerformTransform(Convert.ToSingle(mdbl_current_background_intensity), Convert.ToSingle(min_peptide_intensity), ref marr_current_mzs, ref marr_current_intensities, ref mobj_peaks, ref marr_transformResults);
+                mobjTransform.PerformTransform((float)mdbl_current_background_intensity, (float)min_peptide_intensity, ref marr_current_mzs, ref marr_current_intensities, ref mobj_peaks, ref marr_transformResults);
 
                 //the following should not be part of 'PerformTransform'
                 var chargePeaks = new PNNL.Controls.MS.clsChargePeak[marr_transformResults.Length];
@@ -1827,7 +1828,7 @@ namespace Decon2LS
             mobjRawData.GetFTICRTransient(ref marr_current_intensities);
             marr_current_time_domain_values = new float[marr_current_intensities.Length];
             for (var i = 0; i < marr_current_intensities.Length; i++)
-                marr_current_time_domain_values[i] = Convert.ToSingle((i * 1.0) / sampleRate);
+                marr_current_time_domain_values[i] = (float)(i * 1.0 / sampleRate);
 
             ClearSpectralChart();
             AddDataToSpectralChart();
@@ -1864,7 +1865,7 @@ namespace Decon2LS
                 mobjRawData.GetFTICRTransient(ref marr_current_intensities);
                 marr_current_time_domain_values = new float[marr_current_intensities.Length];
                 for (var i = 0; i < marr_current_intensities.Length; i++)
-                    marr_current_time_domain_values[i] = Convert.ToSingle((i * 1.0) / sampleRate);
+                    marr_current_time_domain_values[i] = (float)(i * 1.0 / sampleRate);
             }
 
             SetTimeDomainMenuItemsEnabled(mblnDisplayTimeDomain);
@@ -1894,7 +1895,7 @@ namespace Decon2LS
             mobjRawData.GetFTICRTransient(ref marr_current_intensities);
             marr_current_time_domain_values = new float[marr_current_intensities.Length];
             for (var i = 0; i < marr_current_intensities.Length; i++)
-                marr_current_time_domain_values[i] = Convert.ToSingle((i * 1.0) / sampleRate);
+                marr_current_time_domain_values[i] = (float)(i * 1.0 / sampleRate);
 
             ClearSpectralChart();
             AddDataToSpectralChart();

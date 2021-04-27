@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Xml.Linq;
 
 namespace DeconTools.Backend.Parameters
@@ -79,7 +80,7 @@ namespace DeconTools.Backend.Parameters
             double val;
             try
             {
-                val = Convert.ToDouble(parameter.Value);
+                val = double.Parse(parameter.Value, CultureInfo.InvariantCulture);
             }
             catch (Exception)
             {
@@ -101,7 +102,7 @@ namespace DeconTools.Backend.Parameters
             int val;
             try
             {
-                val = Convert.ToInt32(parameter.Value);
+                val = int.Parse(parameter.Value);
             }
             catch (Exception)
             {

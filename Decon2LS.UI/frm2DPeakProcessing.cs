@@ -233,7 +233,7 @@ namespace Decon2LS
 
                 for (var i = startIndex; i < marr_peaks.Length; i++)
                 {
-                    marr_scans[i - startIndex] = Convert.ToSingle(marr_peaks[i].ScanNum);
+                    marr_scans[i - startIndex] = marr_peaks[i].ScanNum;
                     marr_mzs[i - startIndex] = (float)marr_peaks[i].Mz;
                     marr_intensities[i - startIndex] = (float)marr_peaks[i].Intensity;
                 }
@@ -670,7 +670,7 @@ namespace Decon2LS
             var scan_focus = 0;
             // mz value will be drawn along the x axis.
             mz_focus = mctl_rawdata.GetChartX(mctl_rawdata.GetChartAreaX(e.X));
-            scan_focus = Convert.ToInt32(mctl_rawdata.GetChartY(mctl_rawdata.GetChartAreaY(e.Y)));
+            scan_focus = (int)mctl_rawdata.GetChartY(mctl_rawdata.GetChartAreaY(e.Y));
 
             mctl_rawdata.FocusMZ = mz_focus;
             mctl_rawdata.FocusScan = scan_focus;

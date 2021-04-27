@@ -196,9 +196,9 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             for (var elementNum = 0; elementNum < numElements; elementNum++)
             {
                 var atomicCount = empiricalFormula.ElementalComposition[elementNum];
-                //empiricalFormulaStr = string.Concat(empiricalFormulaStr, atomicInfo.ElementalIsotopesList[atomicCount.Index].Symbol, System.Convert.ToString(Convert.ToInt32(atomicCount.NumCopies)));
+                //empiricalFormulaStr = string.Concat(empiricalFormulaStr, atomicInfo.ElementalIsotopesList[atomicCount.Index].Symbol, System.Convert.ToString(int.Parse(atomicCount.NumCopies)));
                 formulaBuilder.Append(_elementIsotopeAbundance.ElementalIsotopesList[atomicCount.Index].Symbol);
-                formulaBuilder.Append(Convert.ToInt32(atomicCount.NumCopies));
+                formulaBuilder.Append((int)atomicCount.NumCopies);
             }
             //return empiricalFormulaStr;
             return formulaBuilder.ToString();

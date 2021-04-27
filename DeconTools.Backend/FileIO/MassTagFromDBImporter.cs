@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Common;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using DeconTools.Backend.Core;
@@ -243,10 +244,10 @@ namespace DeconTools.Backend.FileIO
                         var empiricalFormula = "";
 
                         if (!reader["Mass_Tag_ID"].Equals(DBNull.Value))
-                            mtid = Convert.ToInt32(reader["Mass_Tag_ID"]);
+                            mtid = int.Parse(reader["Mass_Tag_ID"].ToString());
                         if (!reader["Mod_Name"].Equals(DBNull.Value))
                             modName = Convert.ToString(reader["Mod_Name"]);
-                        if (!reader["Mod_Position"].Equals(DBNull.Value)) modPosition = Convert.ToInt32(reader["Mod_Position"]);
+                        if (!reader["Mod_Position"].Equals(DBNull.Value)) modPosition = int.Parse(reader["Mod_Position"].ToString());
                         if (!reader["Empirical_Formula"].Equals(DBNull.Value))
                             empiricalFormula = Convert.ToString(reader["Empirical_Formula"]);
 
@@ -307,28 +308,28 @@ namespace DeconTools.Backend.FileIO
                             progressCounter++;
 
                             if (!reader["Mass_Tag_ID"].Equals(DBNull.Value))
-                                massTag.ID = Convert.ToInt32(reader["Mass_Tag_ID"]);
+                                massTag.ID = int.Parse(reader["Mass_Tag_ID"].ToString(), CultureInfo.InvariantCulture);
                             if (!reader["Monoisotopic_Mass"].Equals(DBNull.Value))
-                                massTag.MonoIsotopicMass = Convert.ToDouble(reader["Monoisotopic_Mass"]);
+                                massTag.MonoIsotopicMass = double.Parse(reader["Monoisotopic_Mass"].ToString(), CultureInfo.InvariantCulture);
                             if (!reader["Peptide"].Equals(DBNull.Value))
                                 massTag.Code = Convert.ToString(reader["Peptide"]);
                             if (!reader["Charge_State"].Equals(DBNull.Value))
-                                massTag.ChargeState = Convert.ToInt16(reader["Charge_State"]);
+                                massTag.ChargeState = short.Parse(reader["Charge_State"].ToString(), CultureInfo.InvariantCulture);
                             if (!reader["Mod_Count"].Equals(DBNull.Value))
-                                massTag.ModCount = Convert.ToInt16(reader["Mod_Count"]);
+                                massTag.ModCount = short.Parse(reader["Mod_Count"].ToString(), CultureInfo.InvariantCulture);
                             if (!reader["Mod_Description"].Equals(DBNull.Value))
                                 massTag.ModDescription = Convert.ToString(reader["Mod_Description"]);
                             if (!reader["ObsCount"].Equals(DBNull.Value))
-                                massTag.ObsCount = Convert.ToInt32(reader["ObsCount"]);
+                                massTag.ObsCount = int.Parse(reader["ObsCount"].ToString(), CultureInfo.InvariantCulture);
                             if (massTag.ChargeState != 0)
                             {
                                 massTag.MZ = massTag.MonoIsotopicMass / massTag.ChargeState + Globals.PROTON_MASS;
                             }
 
                             if (!reader["Avg_GANET"].Equals(DBNull.Value))
-                                massTag.NormalizedElutionTime = Convert.ToSingle(reader["Avg_GANET"]);
+                                massTag.NormalizedElutionTime = float.Parse(reader["Avg_GANET"].ToString(), CultureInfo.InvariantCulture);
                             if (!reader["Ref_ID"].Equals(DBNull.Value))
-                                massTag.RefID = Convert.ToInt32(reader["Ref_ID"]);
+                                massTag.RefID = int.Parse(reader["Ref_ID"].ToString(), CultureInfo.InvariantCulture);
                             if (!reader["Reference"].Equals(DBNull.Value))
                                 massTag.GeneReference = Convert.ToString(reader["Reference"]);
                             if (!reader["Description"].Equals(DBNull.Value))

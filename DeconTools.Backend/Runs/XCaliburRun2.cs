@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using DeconTools.Backend.Core;
@@ -96,7 +97,7 @@ namespace DeconTools.Backend.Runs
 
                 if (scanInfo.TryGetScanEvent("MS2 Isolation Width:", out var value, true))
                 {
-                    return Convert.ToDouble(value);
+                    return double.Parse(value, CultureInfo.InvariantCulture);
                 }
 
                 return 0;

@@ -497,7 +497,7 @@ namespace Decon2LS
             }
             get
             {
-                return Convert.ToInt32(mtxtTrianglePercent.Text);
+                return int.Parse(mtxtTrianglePercent.Text);
             }
         }
 
@@ -528,7 +528,7 @@ namespace Decon2LS
         {
             set
             {
-                mcmbNumZeroFills.SelectedIndex = Convert.ToInt32(value);
+                mcmbNumZeroFills.SelectedIndex = value;
             }
             get
             {

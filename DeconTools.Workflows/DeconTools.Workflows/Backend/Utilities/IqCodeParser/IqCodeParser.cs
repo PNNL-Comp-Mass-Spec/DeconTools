@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text.RegularExpressions;
 using DeconTools.Backend.Utilities;
 using DeconTools.Backend.Utilities.IsotopeDistributionCalculation;
@@ -69,7 +70,7 @@ namespace DeconTools.Workflows.Backend.Utilities.IqCodeParser
             return empiricalFormula;
         }
 
-        //Extracts the PTM masses from the input seqence.
+        //Extracts the PTM masses from the input sequence.
         //Uses the regex PTMExpression to parse for the PTM in a give input format.
         public double PtmMassFromCode(string code)
         {
@@ -77,7 +78,7 @@ namespace DeconTools.Workflows.Backend.Utilities.IqCodeParser
             var masses = Regex.Matches(code, PtmExpression);
             foreach (Match match in masses)
             {
-                ptmMass += Convert.ToDouble(match.Value);
+                ptmMass += double.Parse(match.Value, CultureInfo.InvariantCulture);
             }
             return ptmMass;
         }
@@ -121,7 +122,7 @@ namespace DeconTools.Workflows.Backend.Utilities.IqCodeParser
             var masses = Regex.Matches(code, PtmExpression);
             foreach (Match match in masses)
             {
-                ptmMasses.Add(Convert.ToDouble(match.Value));
+                ptmMasses.Add(double.Parse(match.Value, CultureInfo.InvariantCulture));
             }
             return ptmMasses;
         }

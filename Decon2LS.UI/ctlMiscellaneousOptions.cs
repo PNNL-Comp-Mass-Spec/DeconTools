@@ -572,7 +572,7 @@ namespace Decon2LS
         {
             get
             {
-                return Convert.ToInt32(mtxtMinScan.Text);
+                return int.Parse(mtxtMinScan.Text);
             }
             set
             {
@@ -583,7 +583,7 @@ namespace Decon2LS
         {
             get
             {
-                return Convert.ToInt32(mtxtMaxScan.Text);
+                return int.Parse(mtxtMaxScan.Text);
             }
             set
             {

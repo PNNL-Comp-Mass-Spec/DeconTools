@@ -154,16 +154,16 @@ namespace DeconTools.Workflows.Backend.Core
         //    }
 
         //    this.ChromGeneratorMode = StringToEnum<ChromatogramGeneratorMode>(parameterTableFromXML["ChromGeneratorMode"]);
-        //    this.ChromNETTolerance = Convert.ToDouble(parameterTableFromXML["ChromNETTolerance"]);
-        //    this.ChromPeakDetectorPeakBR = Convert.ToDouble(parameterTableFromXML["ChromPeakDetectorPeakBR"]);
-        //    this.ChromPeakDetectorSigNoise = Convert.ToDouble(parameterTableFromXML["ChromPeakDetectorSigNoise"]);
-        //    this.ChromSmootherNumPointsInSmooth = Convert.ToInt32(parameterTableFromXML["ChromSmootherNumPointsInSmooth"]);
-        //    this.ChromGenTolerance = Convert.ToInt32(parameterTableFromXML["ChromGenTolerance"]);
-        //    this.MSPeakDetectorPeakBR = Convert.ToDouble(parameterTableFromXML["MSPeakDetectorPeakBR"]);
-        //    this.MSPeakDetectorSigNoise = Convert.ToDouble(parameterTableFromXML["MSPeakDetectorSigNoise"]);
-        //    this.MSToleranceInPPM = Convert.ToDouble(parameterTableFromXML["MSToleranceInPPM"]);
-        //    this.NumMSScansToSum = Convert.ToInt32(parameterTableFromXML["NumMSScansToSum"]);
-        //    this.NumChromPeaksAllowedDuringSelection = Convert.ToInt32(parameterTableFromXML["NumChromPeaksAllowedDuringSelection"]);
+        //    this.ChromNETTolerance = double.Parse(parameterTableFromXML["ChromNETTolerance"], CultureInfo.InvariantCulture);
+        //    this.ChromPeakDetectorPeakBR = double.Parse(parameterTableFromXML["ChromPeakDetectorPeakBR"], CultureInfo.InvariantCulture);
+        //    this.ChromPeakDetectorSigNoise = double.Parse(parameterTableFromXML["ChromPeakDetectorSigNoise"], CultureInfo.InvariantCulture);
+        //    this.ChromSmootherNumPointsInSmooth = int.Parse(parameterTableFromXML["ChromSmootherNumPointsInSmooth"]);
+        //    this.ChromGenTolerance = int.Parse(parameterTableFromXML["ChromGenTolerance"]);
+        //    this.MSPeakDetectorPeakBR = double.Parse(parameterTableFromXML["MSPeakDetectorPeakBR"], CultureInfo.InvariantCulture);
+        //    this.MSPeakDetectorSigNoise = double.Parse(parameterTableFromXML["MSPeakDetectorSigNoise"], CultureInfo.InvariantCulture);
+        //    this.MSToleranceInPPM = double.Parse(parameterTableFromXML["MSToleranceInPPM"], CultureInfo.InvariantCulture);
+        //    this.NumMSScansToSum = int.Parse(parameterTableFromXML["NumMSScansToSum"]);
+        //    this.NumChromPeaksAllowedDuringSelection = int.Parse(parameterTableFromXML["NumChromPeaksAllowedDuringSelection"]);
         //}
 
         protected T StringToEnum<T>(string name)

@@ -95,9 +95,9 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
             DLabelingAmount = 1 - molarMixingofH;
 
             //convert to floats
-            var labelingAmountFraction = Convert.ToSingle(fractionLabeling);
-            var HLabelingAmountMix = Convert.ToSingle(HLabelingAmount);
-            var DLabelingAmountMix = Convert.ToSingle(DLabelingAmount);
+            var labelingAmountFraction = (float)fractionLabeling;
+            var HLabelingAmountMix = (float)HLabelingAmount;
+            var DLabelingAmountMix = (float)DLabelingAmount;
 
             //initialization
             float maxHeightForNormalization = 0;
@@ -125,9 +125,9 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
 
                 peakH.Height = contributionH + contributionD;
 
-                //peakH.Height = peakH.Height + (1-Convert.ToSingle(fractionLabeling)) * peakD.Height +Convert.ToSingle(fractionLabeling) * peakD.Height;
+                //peakH.Height = peakH.Height + (1 - (float)fractionLabeling) * peakD.Height + (float)fractionLabeling * peakD.Height;
 
-                //find true hightes peak in combined distribusion
+                //find true highest peak in combined distribution
                 if (peakH.Height > maxHeightForNormalization)
                 {
                     maxHeightForNormalization = peakH.Height;

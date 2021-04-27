@@ -1087,7 +1087,7 @@ namespace Decon2LS
                 //				float []scan_values = new float[1] ;
                 //				float []intensity_values = new float[1] ;
                 //
-                //				mpbar_process.Value = Convert.ToInt32(mobj_decon.MassTransformProgress) ;
+                //				mpbar_process.Value = int.Parse(mobj_decon.MassTransformProgress) ;
                 //				if (mbln_display_on)
                 //				{
                 //					int current_scan = mobj_decon.CurrentScanNum ;
