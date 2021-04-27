@@ -1,5 +1,8 @@
 DeconTools DeconConsole / AutoProcessor Revision History
 
+Version 1.1.7787; April 27, 2021 mem
+	- Always treat a period as a decimal point when parsing numbers
+
 Version 1.1.7675; January 5, 2021 mem
 	- Add support for .UIMF files where the first frame has a frame number greater than 1
 
@@ -230,11 +233,3 @@ Version 1.0.3463; June 25, 2009 	gslysz
 	- Log files are given name similar to the file that was processed. 
 	- log files record version information of dlls. 
 	- new file selection UI
-
-
-
-
-
-
-
-	
