@@ -20,12 +20,13 @@ using DeconTools.Backend.Runs;
 using DeconTools.Backend.Utilities;
 using DeconTools.Backend.Utilities.IqLogger;
 using DeconTools.Utilities;
+using PRISM;
 
 namespace DeconTools.Backend.Workflows
 {
     public abstract class ScanBasedWorkflow
     {
-        // Ignore Spelling: deconmsn, uimf, Isos, deconvolutor
+        // Ignore Spelling: deconmsn, uimf, Isos, deconvolutor, workflow
 
         private const int PeakListExporterTriggerValue = 10000;
 
@@ -375,8 +376,13 @@ namespace DeconTools.Backend.Workflows
 
         private void LogError(Exception ex, string simpleErrorMessage)
         {
+            var stackTrace = PRISM.StackTraceFormatter.GetExceptionStackTraceMultiLine(ex);
+
             Logger.Instance.AddEntry(simpleErrorMessage);
-            Logger.Instance.AddEntry(PRISM.StackTraceFormatter.GetExceptionStackTraceMultiLine(ex), true);
+            Logger.Instance.AddEntry(stackTrace, true);
+
+            ConsoleMsgUtils.ShowWarning(simpleErrorMessage);
+            ConsoleMsgUtils.ShowWarning(stackTrace);
         }
 
         private void LoadPeaks(string userProvidedOutputDirectoryPath = null)
