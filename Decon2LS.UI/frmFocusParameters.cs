@@ -4,9 +4,9 @@
 // E-mail: navdeep.jaitly@pnl.gov or proteomics@pnnl.gov
 // Website: https://github.com/PNNL-Comp-Mass-Spec/ or https://panomics.pnnl.gov/ or https://www.pnnl.gov/integrative-omics
 // -------------------------------------------------------------------------------
-// 
+//
 // Licensed under the Apache License, Version 2.0; you may not use this file except
-// in compliance with the License.  You may obtain a copy of the License at 
+// in compliance with the License.  You may obtain a copy of the License at
 // http://www.apache.org/licenses/LICENSE-2.0
 
 using System;
@@ -78,9 +78,9 @@ namespace Decon2LS
             this.mbtnOK = new System.Windows.Forms.Button();
             this.mbtnCancel = new System.Windows.Forms.Button();
             this.SuspendLayout();
-            // 
+            //
             // label1
-            // 
+            //
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
             this.label1.Location = new System.Drawing.Point(96, 8);
             this.label1.Name = "label1";
@@ -88,27 +88,27 @@ namespace Decon2LS
             this.label1.TabIndex = 0;
             this.label1.Text = "MZ:";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
+            //
             // mtxtFocusMZ
-            // 
+            //
             this.mtxtFocusMZ.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
             this.mtxtFocusMZ.Location = new System.Drawing.Point(176, 7);
             this.mtxtFocusMZ.Name = "mtxtFocusMZ";
             this.mtxtFocusMZ.Size = new System.Drawing.Size(104, 26);
             this.mtxtFocusMZ.TabIndex = 1;
             this.mtxtFocusMZ.Text = "450.1";
-            // 
+            //
             // mtxtFocusScan
-            // 
+            //
             this.mtxtFocusScan.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
             this.mtxtFocusScan.Location = new System.Drawing.Point(176, 43);
             this.mtxtFocusScan.Name = "mtxtFocusScan";
             this.mtxtFocusScan.Size = new System.Drawing.Size(104, 26);
             this.mtxtFocusScan.TabIndex = 3;
             this.mtxtFocusScan.Text = "100";
-            // 
+            //
             // label2
-            // 
+            //
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
             this.label2.Location = new System.Drawing.Point(96, 44);
             this.label2.Name = "label2";
@@ -116,18 +116,18 @@ namespace Decon2LS
             this.label2.TabIndex = 2;
             this.label2.Text = "Scan #:";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
+            //
             // mtxtMZTolerance
-            // 
+            //
             this.mtxtMZTolerance.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
             this.mtxtMZTolerance.Location = new System.Drawing.Point(176, 81);
             this.mtxtMZTolerance.Name = "mtxtMZTolerance";
             this.mtxtMZTolerance.Size = new System.Drawing.Size(104, 26);
             this.mtxtMZTolerance.TabIndex = 5;
             this.mtxtMZTolerance.Text = "0.1";
-            // 
+            //
             // label3
-            // 
+            //
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
             this.label3.Location = new System.Drawing.Point(10, 81);
             this.label3.Name = "label3";
@@ -135,27 +135,27 @@ namespace Decon2LS
             this.label3.TabIndex = 4;
             this.label3.Text = "m/z Tolerance (Da):";
             this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
+            //
             // mbtnOK
-            // 
+            //
             this.mbtnOK.Location = new System.Drawing.Point(29, 121);
             this.mbtnOK.Name = "mbtnOK";
             this.mbtnOK.Size = new System.Drawing.Size(104, 29);
             this.mbtnOK.TabIndex = 6;
             this.mbtnOK.Text = "OK";
             this.mbtnOK.Click += new System.EventHandler(this.mbtnOK_Click);
-            // 
+            //
             // mbtnCancel
-            // 
+            //
             this.mbtnCancel.Location = new System.Drawing.Point(161, 120);
             this.mbtnCancel.Name = "mbtnCancel";
             this.mbtnCancel.Size = new System.Drawing.Size(104, 29);
             this.mbtnCancel.TabIndex = 7;
             this.mbtnCancel.Text = "Cancel";
             this.mbtnCancel.Click += new System.EventHandler(this.mbtnCancel_Click);
-            // 
+            //
             // frmFocusParameters
-            // 
+            //
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
             this.ClientSize = new System.Drawing.Size(288, 158);
             this.Controls.Add(this.mbtnCancel);

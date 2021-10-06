@@ -3,9 +3,9 @@
 // E-mail: navdeep.jaitly@pnl.gov or proteomics@pnnl.gov
 // Website: https://github.com/PNNL-Comp-Mass-Spec/ or https://panomics.pnnl.gov/ or https://www.pnnl.gov/integrative-omics
 // -------------------------------------------------------------------------------
-// 
+//
 // Licensed under the Apache License, Version 2.0; you may not use this file except
-// in compliance with the License.  You may obtain a copy of the License at 
+// in compliance with the License.  You may obtain a copy of the License at
 // http://www.apache.org/licenses/LICENSE-2.0
 
 using System;
@@ -99,34 +99,34 @@ namespace Decon2LS
             this.mbtn_cancel = new System.Windows.Forms.Button();
             this.mlbl_status = new System.Windows.Forms.Label();
             this.SuspendLayout();
-            // 
+            //
             // lblProgress
-            // 
+            //
             this.lblProgress.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
             this.lblProgress.Location = new System.Drawing.Point(8, 16);
             this.lblProgress.Name = "lblProgress";
             this.lblProgress.Size = new System.Drawing.Size(72, 16);
             this.lblProgress.TabIndex = 0;
             this.lblProgress.Text = "Progress:";
-            // 
+            //
             // mbar_progress
-            // 
+            //
             this.mbar_progress.Location = new System.Drawing.Point(72, 16);
             this.mbar_progress.Name = "mbar_progress";
             this.mbar_progress.Size = new System.Drawing.Size(176, 16);
             this.mbar_progress.TabIndex = 1;
-            // 
+            //
             // label1
-            // 
+            //
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
             this.label1.Location = new System.Drawing.Point(8, 40);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(48, 16);
             this.label1.TabIndex = 2;
             this.label1.Text = "Status:";
-            // 
+            //
             // mbtn_cancel
-            // 
+            //
             this.mbtn_cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.mbtn_cancel.Location = new System.Drawing.Point(96, 80);
             this.mbtn_cancel.Name = "mbtn_cancel";
@@ -134,16 +134,16 @@ namespace Decon2LS
             this.mbtn_cancel.TabIndex = 3;
             this.mbtn_cancel.Text = "Cancel";
             this.mbtn_cancel.Click += new System.EventHandler(this.mbtn_cancel_Click);
-            // 
+            //
             // mlbl_status
-            // 
+            //
             this.mlbl_status.Location = new System.Drawing.Point(72, 40);
             this.mlbl_status.Name = "mlbl_status";
             this.mlbl_status.Size = new System.Drawing.Size(176, 24);
             this.mlbl_status.TabIndex = 4;
-            // 
+            //
             // frmStatus
-            // 
+            //
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
             this.BackColor = System.Drawing.SystemColors.Control;
             this.CancelButton = this.mbtn_cancel;

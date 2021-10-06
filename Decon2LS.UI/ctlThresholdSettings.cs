@@ -3,9 +3,9 @@
 // E-mail: navdeep.jaitly@pnl.gov or proteomics@pnnl.gov
 // Website: https://github.com/PNNL-Comp-Mass-Spec/ or https://panomics.pnnl.gov/ or https://www.pnnl.gov/integrative-omics
 // -------------------------------------------------------------------------------
-// 
+//
 // Licensed under the Apache License, Version 2.0; you may not use this file except
-// in compliance with the License.  You may obtain a copy of the License at 
+// in compliance with the License.  You may obtain a copy of the License at
 // http://www.apache.org/licenses/LICENSE-2.0
 
 using System;
@@ -91,42 +91,42 @@ namespace Decon2LS
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.SuspendLayout();
-            // 
+            //
             // label3
-            // 
+            //
             this.label3.Location = new System.Drawing.Point(8, 16);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(96, 24);
             this.label3.TabIndex = 3;
             this.label3.Text = "Maximum Fit";
-            // 
+            //
             // mTextMaxFit
-            // 
+            //
             this.mTextMaxFit.Location = new System.Drawing.Point(128, 16);
             this.mTextMaxFit.Name = "mTextMaxFit";
             this.mTextMaxFit.Size = new System.Drawing.Size(40, 20);
             this.mTextMaxFit.TabIndex = 7;
             this.mTextMaxFit.Text = "0.1";
             this.mTextMaxFit.Enter += new System.EventHandler(this.textBox_max_fit_Enter);
-            // 
+            //
             // label5
-            // 
+            //
             this.label5.Location = new System.Drawing.Point(8, 48);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(168, 16);
             this.label5.TabIndex = 17;
             this.label5.Text = "Threshold Intensity for Deletion";
-            // 
+            //
             // label6
-            // 
+            //
             this.label6.Location = new System.Drawing.Point(256, 48);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(152, 16);
             this.label6.TabIndex = 20;
             this.label6.Text = "Threshold intensity for score";
-            // 
+            //
             // mTextDeletionIntensityThreshold
-            // 
+            //
             this.mTextDeletionIntensityThreshold.Location = new System.Drawing.Point(192, 48);
             this.mTextDeletionIntensityThreshold.Name = "mTextDeletionIntensityThreshold";
             this.mTextDeletionIntensityThreshold.Size = new System.Drawing.Size(40, 20);
@@ -134,9 +134,9 @@ namespace Decon2LS
             this.mTextDeletionIntensityThreshold.Text = "10";
             this.mTextDeletionIntensityThreshold.Leave += new System.EventHandler(this.textBox_IntDeletion_Leave);
             this.mTextDeletionIntensityThreshold.Enter += new System.EventHandler(this.textBox_IntDeletion_Enter);
-            // 
+            //
             // mTextScoreIntensityThreshold
-            // 
+            //
             this.mTextScoreIntensityThreshold.Location = new System.Drawing.Point(424, 48);
             this.mTextScoreIntensityThreshold.Name = "mTextScoreIntensityThreshold";
             this.mTextScoreIntensityThreshold.Size = new System.Drawing.Size(40, 20);
@@ -144,9 +144,9 @@ namespace Decon2LS
             this.mTextScoreIntensityThreshold.Text = "10";
             this.mTextScoreIntensityThreshold.Leave += new System.EventHandler(this.textBox_IntScore_Leave);
             this.mTextScoreIntensityThreshold.Enter += new System.EventHandler(this.textBox_IntScore_Enter);
-            // 
+            //
             // pictureBox_ThScore
-            // 
+            //
             this.pictureBox_ThScore.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox_ThScore.Image")));
             this.pictureBox_ThScore.Location = new System.Drawing.Point(16, 24);
             this.pictureBox_ThScore.Name = "pictureBox_ThScore";
@@ -155,9 +155,9 @@ namespace Decon2LS
             this.pictureBox_ThScore.TabIndex = 22;
             this.pictureBox_ThScore.TabStop = false;
             this.pictureBox_ThScore.Visible = false;
-            // 
+            //
             // groupBox1
-            // 
+            //
             this.groupBox1.Controls.Add(this.label_ThDeletion_tip);
             this.groupBox1.Controls.Add(this.label_max_fit_tip);
             this.groupBox1.Controls.Add(this.pictureBox_ThDeletion);
@@ -170,9 +170,9 @@ namespace Decon2LS
             this.groupBox1.TabIndex = 24;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Helpful Tips";
-            // 
+            //
             // label_ThDeletion_tip
-            // 
+            //
             this.label_ThDeletion_tip.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
             this.label_ThDeletion_tip.Location = new System.Drawing.Point(8, 296);
             this.label_ThDeletion_tip.Name = "label_ThDeletion_tip";
@@ -181,9 +181,9 @@ namespace Decon2LS
             this.label_ThDeletion_tip.Text = @"Sets the intensity threshold (normalized i.e. 0-100) that determines which areas of a peak are to be deleted. For example, in the figure, if the threshold was set to 10, then the colored regions of the peak (that correspond to 10-100) are kept while the others are deleted";
             this.label_ThDeletion_tip.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.label_ThDeletion_tip.Visible = false;
-            // 
+            //
             // label_max_fit_tip
-            // 
+            //
             this.label_max_fit_tip.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
             this.label_max_fit_tip.Location = new System.Drawing.Point(16, 304);
             this.label_max_fit_tip.Name = "label_max_fit_tip";
@@ -191,9 +191,9 @@ namespace Decon2LS
             this.label_max_fit_tip.TabIndex = 0;
             this.label_max_fit_tip.Text = "Maximum Fit: Sets the maximum fit between isotopic peaks (0-1)";
             this.label_max_fit_tip.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
+            //
             // pictureBox_ThDeletion
-            // 
+            //
             this.pictureBox_ThDeletion.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox_ThDeletion.Image")));
             this.pictureBox_ThDeletion.Location = new System.Drawing.Point(16, 24);
             this.pictureBox_ThDeletion.Name = "pictureBox_ThDeletion";
@@ -202,9 +202,9 @@ namespace Decon2LS
             this.pictureBox_ThDeletion.TabIndex = 23;
             this.pictureBox_ThDeletion.TabStop = false;
             this.pictureBox_ThDeletion.Visible = false;
-            // 
+            //
             // label_thscore_tip
-            // 
+            //
             this.label_thscore_tip.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
             this.label_thscore_tip.Location = new System.Drawing.Point(8, 296);
             this.label_thscore_tip.Name = "label_thscore_tip";
@@ -216,9 +216,9 @@ namespace Decon2LS
                 "ns.";
             this.label_thscore_tip.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.label_thscore_tip.Visible = false;
-            // 
+            //
             // groupBox2
-            // 
+            //
             this.groupBox2.Controls.Add(this.groupBox1);
             this.groupBox2.Controls.Add(this.groupBox3);
             this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -228,9 +228,9 @@ namespace Decon2LS
             this.groupBox2.TabIndex = 27;
             this.groupBox2.TabStop = false;
             this.groupBox2.Enter += new System.EventHandler(this.groupBox2_Enter);
-            // 
+            //
             // groupBox3
-            // 
+            //
             this.groupBox3.Controls.Add(this.label3);
             this.groupBox3.Controls.Add(this.mTextMaxFit);
             this.groupBox3.Controls.Add(this.label5);
@@ -243,9 +243,9 @@ namespace Decon2LS
             this.groupBox3.Size = new System.Drawing.Size(514, 72);
             this.groupBox3.TabIndex = 25;
             this.groupBox3.TabStop = false;
-            // 
+            //
             // ctlThresholdSettings
-            // 
+            //
             this.Controls.Add(this.groupBox2);
             this.Name = "ctlThresholdSettings";
             this.Size = new System.Drawing.Size(520, 456);

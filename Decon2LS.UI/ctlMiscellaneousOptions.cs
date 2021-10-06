@@ -3,9 +3,9 @@
 // E-mail: navdeep.jaitly@pnl.gov or proteomics@pnnl.gov
 // Website: https://github.com/PNNL-Comp-Mass-Spec/ or https://panomics.pnnl.gov/ or https://www.pnnl.gov/integrative-omics
 // -------------------------------------------------------------------------------
-// 
+//
 // Licensed under the Apache License, Version 2.0; you may not use this file except
-// in compliance with the License.  You may obtain a copy of the License at 
+// in compliance with the License.  You may obtain a copy of the License at
 // http://www.apache.org/licenses/LICENSE-2.0
 
 using System;
@@ -134,9 +134,9 @@ namespace Decon2LS
             this.panelMSMS.SuspendLayout();
             this.groupBoxMSMS.SuspendLayout();
             this.SuspendLayout();
-            // 
+            //
             // mpanelScanOptions
-            // 
+            //
             this.mpanelScanOptions.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.mpanelScanOptions.Controls.Add(this.mtxtMaxScan);
             this.mpanelScanOptions.Controls.Add(this.mlabelMaxScan);
@@ -149,9 +149,9 @@ namespace Decon2LS
             this.mpanelScanOptions.Name = "mpanelScanOptions";
             this.mpanelScanOptions.Size = new System.Drawing.Size(528, 32);
             this.mpanelScanOptions.TabIndex = 0;
-            // 
+            //
             // mtxtMaxScan
-            // 
+            //
             this.mtxtMaxScan.Dock = System.Windows.Forms.DockStyle.Left;
             this.mtxtMaxScan.Enabled = false;
             this.mtxtMaxScan.Location = new System.Drawing.Point(198, 5);
@@ -159,9 +159,9 @@ namespace Decon2LS
             this.mtxtMaxScan.Size = new System.Drawing.Size(59, 20);
             this.mtxtMaxScan.TabIndex = 3;
             this.mtxtMaxScan.Text = "1000";
-            // 
+            //
             // mlabelMaxScan
-            // 
+            //
             this.mlabelMaxScan.Dock = System.Windows.Forms.DockStyle.Left;
             this.mlabelMaxScan.Enabled = false;
             this.mlabelMaxScan.Location = new System.Drawing.Point(131, 5);
@@ -170,9 +170,9 @@ namespace Decon2LS
             this.mlabelMaxScan.TabIndex = 2;
             this.mlabelMaxScan.Text = "Max Scan:";
             this.mlabelMaxScan.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
+            //
             // mtxtMinScan
-            // 
+            //
             this.mtxtMinScan.Dock = System.Windows.Forms.DockStyle.Left;
             this.mtxtMinScan.Enabled = false;
             this.mtxtMinScan.Location = new System.Drawing.Point(72, 5);
@@ -180,9 +180,9 @@ namespace Decon2LS
             this.mtxtMinScan.Size = new System.Drawing.Size(59, 20);
             this.mtxtMinScan.TabIndex = 1;
             this.mtxtMinScan.Text = "1";
-            // 
+            //
             // mlabelMinScan
-            // 
+            //
             this.mlabelMinScan.Dock = System.Windows.Forms.DockStyle.Left;
             this.mlabelMinScan.Enabled = false;
             this.mlabelMinScan.Location = new System.Drawing.Point(5, 5);
@@ -191,9 +191,9 @@ namespace Decon2LS
             this.mlabelMinScan.TabIndex = 0;
             this.mlabelMinScan.Text = "Min Scan:";
             this.mlabelMinScan.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
+            //
             // panel2
-            // 
+            //
             this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel2.Controls.Add(this.mCheckUseScanRange);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
@@ -201,18 +201,18 @@ namespace Decon2LS
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(528, 40);
             this.panel2.TabIndex = 1;
-            // 
+            //
             // mCheckUseScanRange
-            // 
+            //
             this.mCheckUseScanRange.Location = new System.Drawing.Point(8, 8);
             this.mCheckUseScanRange.Name = "mCheckUseScanRange";
             this.mCheckUseScanRange.Size = new System.Drawing.Size(200, 24);
             this.mCheckUseScanRange.TabIndex = 0;
             this.mCheckUseScanRange.Text = "Specify Scan Range to Deisotope";
             this.mCheckUseScanRange.CheckedChanged += new System.EventHandler(this.mCheckUseScanRange_CheckedChanged);
-            // 
+            //
             // panel1
-            // 
+            //
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel1.Controls.Add(this.mgroupBoxSavGol);
             this.panel1.Controls.Add(this.mChkSmoothing);
@@ -222,9 +222,9 @@ namespace Decon2LS
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(528, 96);
             this.panel1.TabIndex = 2;
-            // 
+            //
             // mgroupBoxSavGol
-            // 
+            //
             this.mgroupBoxSavGol.Controls.Add(this.mtxtOrder);
             this.mgroupBoxSavGol.Controls.Add(this.mlblOrder);
             this.mgroupBoxSavGol.Controls.Add(this.mtxtRight);
@@ -238,9 +238,9 @@ namespace Decon2LS
             this.mgroupBoxSavGol.TabIndex = 1;
             this.mgroupBoxSavGol.TabStop = false;
             this.mgroupBoxSavGol.Text = "Savitzky Golay Options";
-            // 
+            //
             // mtxtOrder
-            // 
+            //
             this.mtxtOrder.Dock = System.Windows.Forms.DockStyle.Left;
             this.mtxtOrder.Enabled = false;
             this.mtxtOrder.Location = new System.Drawing.Point(275, 16);
@@ -248,9 +248,9 @@ namespace Decon2LS
             this.mtxtOrder.Size = new System.Drawing.Size(37, 20);
             this.mtxtOrder.TabIndex = 9;
             this.mtxtOrder.Text = "2";
-            // 
+            //
             // mlblOrder
-            // 
+            //
             this.mlblOrder.Dock = System.Windows.Forms.DockStyle.Left;
             this.mlblOrder.Enabled = false;
             this.mlblOrder.Location = new System.Drawing.Point(208, 16);
@@ -259,9 +259,9 @@ namespace Decon2LS
             this.mlblOrder.TabIndex = 8;
             this.mlblOrder.Text = "Order:";
             this.mlblOrder.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
+            //
             // mtxtRight
-            // 
+            //
             this.mtxtRight.Dock = System.Windows.Forms.DockStyle.Left;
             this.mtxtRight.Enabled = false;
             this.mtxtRight.Location = new System.Drawing.Point(179, 16);
@@ -269,9 +269,9 @@ namespace Decon2LS
             this.mtxtRight.Size = new System.Drawing.Size(29, 20);
             this.mtxtRight.TabIndex = 7;
             this.mtxtRight.Text = "2";
-            // 
+            //
             // mlblRight
-            // 
+            //
             this.mlblRight.Dock = System.Windows.Forms.DockStyle.Left;
             this.mlblRight.Enabled = false;
             this.mlblRight.Location = new System.Drawing.Point(112, 16);
@@ -280,9 +280,9 @@ namespace Decon2LS
             this.mlblRight.TabIndex = 6;
             this.mlblRight.Text = "Num Right:";
             this.mlblRight.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
+            //
             // mtxtLeft
-            // 
+            //
             this.mtxtLeft.Dock = System.Windows.Forms.DockStyle.Left;
             this.mtxtLeft.Enabled = false;
             this.mtxtLeft.Location = new System.Drawing.Point(70, 16);
@@ -290,9 +290,9 @@ namespace Decon2LS
             this.mtxtLeft.Size = new System.Drawing.Size(42, 20);
             this.mtxtLeft.TabIndex = 5;
             this.mtxtLeft.Text = "2";
-            // 
+            //
             // mlblLeft
-            // 
+            //
             this.mlblLeft.Dock = System.Windows.Forms.DockStyle.Left;
             this.mlblLeft.Enabled = false;
             this.mlblLeft.Location = new System.Drawing.Point(3, 16);
@@ -301,9 +301,9 @@ namespace Decon2LS
             this.mlblLeft.TabIndex = 4;
             this.mlblLeft.Text = "Num Left:";
             this.mlblLeft.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
+            //
             // mChkSmoothing
-            // 
+            //
             this.mChkSmoothing.Dock = System.Windows.Forms.DockStyle.Top;
             this.mChkSmoothing.Location = new System.Drawing.Point(5, 5);
             this.mChkSmoothing.Name = "mChkSmoothing";
@@ -311,9 +311,9 @@ namespace Decon2LS
             this.mChkSmoothing.TabIndex = 0;
             this.mChkSmoothing.Text = "Use Savitzky Golay to Smooth Data:";
             this.mChkSmoothing.CheckedChanged += new System.EventHandler(this.mChkSmoothing_CheckedChanged);
-            // 
+            //
             // mpanelMZOptions
-            // 
+            //
             this.mpanelMZOptions.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.mpanelMZOptions.Controls.Add(this.mtxtMaxMZ);
             this.mpanelMZOptions.Controls.Add(this.mlabelMaxMZ);
@@ -326,9 +326,9 @@ namespace Decon2LS
             this.mpanelMZOptions.Name = "mpanelMZOptions";
             this.mpanelMZOptions.Size = new System.Drawing.Size(528, 32);
             this.mpanelMZOptions.TabIndex = 3;
-            // 
+            //
             // mtxtMaxMZ
-            // 
+            //
             this.mtxtMaxMZ.Dock = System.Windows.Forms.DockStyle.Left;
             this.mtxtMaxMZ.Enabled = false;
             this.mtxtMaxMZ.Location = new System.Drawing.Point(198, 5);
@@ -336,9 +336,9 @@ namespace Decon2LS
             this.mtxtMaxMZ.Size = new System.Drawing.Size(59, 20);
             this.mtxtMaxMZ.TabIndex = 3;
             this.mtxtMaxMZ.Text = "2000";
-            // 
+            //
             // mlabelMaxMZ
-            // 
+            //
             this.mlabelMaxMZ.Dock = System.Windows.Forms.DockStyle.Left;
             this.mlabelMaxMZ.Enabled = false;
             this.mlabelMaxMZ.Location = new System.Drawing.Point(131, 5);
@@ -347,9 +347,9 @@ namespace Decon2LS
             this.mlabelMaxMZ.TabIndex = 2;
             this.mlabelMaxMZ.Text = "Max m/z:";
             this.mlabelMaxMZ.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
+            //
             // mtxtMinMZ
-            // 
+            //
             this.mtxtMinMZ.Dock = System.Windows.Forms.DockStyle.Left;
             this.mtxtMinMZ.Enabled = false;
             this.mtxtMinMZ.Location = new System.Drawing.Point(72, 5);
@@ -357,9 +357,9 @@ namespace Decon2LS
             this.mtxtMinMZ.Size = new System.Drawing.Size(59, 20);
             this.mtxtMinMZ.TabIndex = 1;
             this.mtxtMinMZ.Text = "400";
-            // 
+            //
             // mlabelMinMZ
-            // 
+            //
             this.mlabelMinMZ.Dock = System.Windows.Forms.DockStyle.Left;
             this.mlabelMinMZ.Enabled = false;
             this.mlabelMinMZ.Location = new System.Drawing.Point(5, 5);
@@ -368,9 +368,9 @@ namespace Decon2LS
             this.mlabelMinMZ.TabIndex = 0;
             this.mlabelMinMZ.Text = "Min m/z:";
             this.mlabelMinMZ.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
+            //
             // panel4
-            // 
+            //
             this.panel4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel4.Controls.Add(this.mCheckUseMZRange);
             this.panel4.Dock = System.Windows.Forms.DockStyle.Top;
@@ -378,18 +378,18 @@ namespace Decon2LS
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(528, 40);
             this.panel4.TabIndex = 4;
-            // 
+            //
             // mCheckUseMZRange
-            // 
+            //
             this.mCheckUseMZRange.Location = new System.Drawing.Point(8, 8);
             this.mCheckUseMZRange.Name = "mCheckUseMZRange";
             this.mCheckUseMZRange.Size = new System.Drawing.Size(200, 24);
             this.mCheckUseMZRange.TabIndex = 0;
             this.mCheckUseMZRange.Text = "Specify MZ Range to Deisotope";
             this.mCheckUseMZRange.CheckedChanged += new System.EventHandler(this.mCheckUseMZRange_CheckedChanged);
-            // 
+            //
             // panel3
-            // 
+            //
             this.panel3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel3.Controls.Add(this.mgroupZeroFill);
             this.panel3.Dock = System.Windows.Forms.DockStyle.Top;
@@ -397,9 +397,9 @@ namespace Decon2LS
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(528, 48);
             this.panel3.TabIndex = 5;
-            // 
+            //
             // mgroupZeroFill
-            // 
+            //
             this.mgroupZeroFill.Controls.Add(this.mtxtZeros);
             this.mgroupZeroFill.Controls.Add(this.mlblZeroFill);
             this.mgroupZeroFill.Controls.Add(this.mChkZeroFill);
@@ -410,9 +410,9 @@ namespace Decon2LS
             this.mgroupZeroFill.TabIndex = 1;
             this.mgroupZeroFill.TabStop = false;
             this.mgroupZeroFill.Text = "Zero Fill Options";
-            // 
+            //
             // mtxtZeros
-            // 
+            //
             this.mtxtZeros.Dock = System.Windows.Forms.DockStyle.Left;
             this.mtxtZeros.Enabled = false;
             this.mtxtZeros.Location = new System.Drawing.Point(256, 16);
@@ -420,9 +420,9 @@ namespace Decon2LS
             this.mtxtZeros.Size = new System.Drawing.Size(40, 20);
             this.mtxtZeros.TabIndex = 4;
             this.mtxtZeros.Text = "3";
-            // 
+            //
             // mlblZeroFill
-            // 
+            //
             this.mlblZeroFill.Dock = System.Windows.Forms.DockStyle.Left;
             this.mlblZeroFill.Enabled = false;
             this.mlblZeroFill.Location = new System.Drawing.Point(120, 16);
@@ -431,9 +431,9 @@ namespace Decon2LS
             this.mlblZeroFill.TabIndex = 3;
             this.mlblZeroFill.Text = "Number of Zeros To Fill";
             this.mlblZeroFill.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
+            //
             // mChkZeroFill
-            // 
+            //
             this.mChkZeroFill.Dock = System.Windows.Forms.DockStyle.Left;
             this.mChkZeroFill.Location = new System.Drawing.Point(3, 16);
             this.mChkZeroFill.Name = "mChkZeroFill";
@@ -441,9 +441,9 @@ namespace Decon2LS
             this.mChkZeroFill.TabIndex = 0;
             this.mChkZeroFill.Text = "Zero Fill Spectra";
             this.mChkZeroFill.CheckedChanged += new System.EventHandler(this.mCheckZeroFile_CheckedChanged);
-            // 
+            //
             // panelMSMS
-            // 
+            //
             this.panelMSMS.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panelMSMS.Controls.Add(this.groupBoxMSMS);
             this.panelMSMS.Dock = System.Windows.Forms.DockStyle.Top;
@@ -451,9 +451,9 @@ namespace Decon2LS
             this.panelMSMS.Name = "panelMSMS";
             this.panelMSMS.Size = new System.Drawing.Size(528, 48);
             this.panelMSMS.TabIndex = 6;
-            // 
+            //
             // groupBoxMSMS
-            // 
+            //
             this.groupBoxMSMS.Controls.Add(this.mchkProcessMSMS);
             this.groupBoxMSMS.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBoxMSMS.Location = new System.Drawing.Point(0, 0);
@@ -462,18 +462,18 @@ namespace Decon2LS
             this.groupBoxMSMS.TabIndex = 1;
             this.groupBoxMSMS.TabStop = false;
             this.groupBoxMSMS.Text = "MS/MS processing options";
-            // 
+            //
             // mchkProcessMSMS
-            // 
+            //
             this.mchkProcessMSMS.Dock = System.Windows.Forms.DockStyle.Left;
             this.mchkProcessMSMS.Location = new System.Drawing.Point(3, 16);
             this.mchkProcessMSMS.Name = "mchkProcessMSMS";
             this.mchkProcessMSMS.Size = new System.Drawing.Size(237, 21);
             this.mchkProcessMSMS.TabIndex = 0;
             this.mchkProcessMSMS.Text = "Deisotope High Resolution MS/MS";
-            // 
+            //
             // ctlMiscellaneousOptions
-            // 
+            //
             this.Controls.Add(this.panelMSMS);
             this.Controls.Add(this.panel3);
             this.Controls.Add(this.panel1);

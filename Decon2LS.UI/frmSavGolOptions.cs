@@ -3,9 +3,9 @@
 // E-mail: navdeep.jaitly@pnl.gov or proteomics@pnnl.gov
 // Website: https://github.com/PNNL-Comp-Mass-Spec/ or https://panomics.pnnl.gov/ or https://www.pnnl.gov/integrative-omics
 // -------------------------------------------------------------------------------
-// 
+//
 // Licensed under the Apache License, Version 2.0; you may not use this file except
-// in compliance with the License.  You may obtain a copy of the License at 
+// in compliance with the License.  You may obtain a copy of the License at
 // http://www.apache.org/licenses/LICENSE-2.0
 
 using System;
@@ -82,33 +82,33 @@ namespace Decon2LS
             this.mtxtOrder = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
-            // 
+            //
             // label1
-            // 
+            //
             this.label1.Location = new System.Drawing.Point(16, 28);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(104, 16);
             this.label1.TabIndex = 0;
             this.label1.Text = "# of points before:";
-            // 
+            //
             // label2
-            // 
+            //
             this.label2.Location = new System.Drawing.Point(16, 56);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(104, 16);
             this.label2.TabIndex = 1;
             this.label2.Text = "# of points after:";
-            // 
+            //
             // label3
-            // 
+            //
             this.label3.Location = new System.Drawing.Point(16, 84);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(104, 16);
             this.label3.TabIndex = 2;
             this.label3.Text = "Smoothing Order:";
-            // 
+            //
             // groupBox1
-            // 
+            //
             this.groupBox1.Controls.Add(this.mtxtOrder);
             this.groupBox1.Controls.Add(this.mtxtRight);
             this.groupBox1.Controls.Add(this.mtxtLeft);
@@ -121,51 +121,51 @@ namespace Decon2LS
             this.groupBox1.TabIndex = 3;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Options:";
-            // 
+            //
             // mbtnCancel
-            // 
+            //
             this.mbtnCancel.Location = new System.Drawing.Point(123, 128);
             this.mbtnCancel.Name = "mbtnCancel";
             this.mbtnCancel.Size = new System.Drawing.Size(69, 25);
             this.mbtnCancel.TabIndex = 4;
             this.mbtnCancel.Text = "Cancel";
             this.mbtnCancel.Click += new System.EventHandler(this.mbtnCancel_Click);
-            // 
+            //
             // mbtnOK
-            // 
+            //
             this.mbtnOK.Location = new System.Drawing.Point(32, 128);
             this.mbtnOK.Name = "mbtnOK";
             this.mbtnOK.Size = new System.Drawing.Size(69, 25);
             this.mbtnOK.TabIndex = 5;
             this.mbtnOK.Text = "OK";
             this.mbtnOK.Click += new System.EventHandler(this.mbtnOK_Click);
-            // 
+            //
             // mtxtLeft
-            // 
+            //
             this.mtxtLeft.Location = new System.Drawing.Point(137, 21);
             this.mtxtLeft.Name = "mtxtLeft";
             this.mtxtLeft.Size = new System.Drawing.Size(48, 20);
             this.mtxtLeft.TabIndex = 3;
             this.mtxtLeft.Text = "2";
-            // 
+            //
             // mtxtRight
-            // 
+            //
             this.mtxtRight.Location = new System.Drawing.Point(136, 51);
             this.mtxtRight.Name = "mtxtRight";
             this.mtxtRight.Size = new System.Drawing.Size(48, 20);
             this.mtxtRight.TabIndex = 4;
             this.mtxtRight.Text = "2";
-            // 
+            //
             // mtxtOrder
-            // 
+            //
             this.mtxtOrder.Location = new System.Drawing.Point(136, 80);
             this.mtxtOrder.Name = "mtxtOrder";
             this.mtxtOrder.Size = new System.Drawing.Size(48, 20);
             this.mtxtOrder.TabIndex = 5;
             this.mtxtOrder.Text = "2";
-            // 
+            //
             // frmSavGolOptions
-            // 
+            //
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
             this.ClientSize = new System.Drawing.Size(248, 158);
             this.Controls.Add(this.mbtnOK);

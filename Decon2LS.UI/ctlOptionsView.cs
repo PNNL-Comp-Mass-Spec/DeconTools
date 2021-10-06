@@ -3,9 +3,9 @@
 // E-mail: navdeep.jaitly@pnl.gov or proteomics@pnnl.gov
 // Website: https://github.com/PNNL-Comp-Mass-Spec/ or https://panomics.pnnl.gov/ or https://www.pnnl.gov/integrative-omics
 // -------------------------------------------------------------------------------
-// 
+//
 // Licensed under the Apache License, Version 2.0; you may not use this file except
-// in compliance with the License.  You may obtain a copy of the License at 
+// in compliance with the License.  You may obtain a copy of the License at
 // http://www.apache.org/licenses/LICENSE-2.0
 
 using System;
@@ -110,9 +110,9 @@ namespace Decon2LS
         {
             this.treeView1 = new System.Windows.Forms.TreeView();
             this.SuspendLayout();
-            // 
+            //
             // treeView1
-            // 
+            //
             this.treeView1.ImageIndex = -1;
             this.treeView1.Location = new System.Drawing.Point(8, 8);
             this.treeView1.Name = "treeView1";
@@ -120,9 +120,9 @@ namespace Decon2LS
             this.treeView1.Size = new System.Drawing.Size(264, 424);
             this.treeView1.TabIndex = 0;
             this.treeView1.Click += new System.EventHandler(this.treeView1_Click);
-            // 
+            //
             // ctlOptionsView
-            // 
+            //
             this.Controls.Add(this.treeView1);
             this.Name = "ctlOptionsView";
             this.Size = new System.Drawing.Size(520, 448);

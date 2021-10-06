@@ -3,9 +3,9 @@
 // E-mail: navdeep.jaitly@pnl.gov or proteomics@pnnl.gov
 // Website: https://github.com/PNNL-Comp-Mass-Spec/ or https://panomics.pnnl.gov/ or https://www.pnnl.gov/integrative-omics
 // -------------------------------------------------------------------------------
-// 
+//
 // Licensed under the Apache License, Version 2.0; you may not use this file except
-// in compliance with the License.  You may obtain a copy of the License at 
+// in compliance with the License.  You may obtain a copy of the License at
 // http://www.apache.org/licenses/LICENSE-2.0
 
 using System;
@@ -80,9 +80,9 @@ namespace Decon2LS
             this.panel2.SuspendLayout();
             this.panel4.SuspendLayout();
             this.SuspendLayout();
-            // 
+            //
             // label1
-            // 
+            //
             this.label1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.label1.Dock = System.Windows.Forms.DockStyle.Top;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
@@ -92,9 +92,9 @@ namespace Decon2LS
             this.label1.TabIndex = 0;
             this.label1.Text = "Decon2LS";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
+            //
             // mlinkLabelDownload
-            // 
+            //
             this.mlinkLabelDownload.Dock = System.Windows.Forms.DockStyle.Right;
             this.mlinkLabelDownload.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
             this.mlinkLabelDownload.Location = new System.Drawing.Point(450, 0);
@@ -102,11 +102,11 @@ namespace Decon2LS
             this.mlinkLabelDownload.Size = new System.Drawing.Size(224, 32);
             this.mlinkLabelDownload.TabIndex = 1;
             this.mlinkLabelDownload.TabStop = true;
-            this.mlinkLabelDownload.Text = "https://omics.pnl.gov/software or http://panomics.pnnl.gov";
+            this.mlinkLabelDownload.Text = "https://github.com/PNNL-Comp-Mass-Spec/ or https://panomics.pnnl.gov/ or https://www.pnnl.gov/integrative-omics";
             this.mlinkLabelDownload.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
+            //
             // panel1
-            // 
+            //
             this.panel1.Controls.Add(this.label2);
             this.panel1.Controls.Add(this.mlinkLabelDownload);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
@@ -114,9 +114,9 @@ namespace Decon2LS
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(674, 32);
             this.panel1.TabIndex = 2;
-            // 
+            //
             // label2
-            // 
+            //
             this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
             this.label2.Location = new System.Drawing.Point(0, 0);
@@ -125,9 +125,9 @@ namespace Decon2LS
             this.label2.TabIndex = 2;
             this.label2.Text = "Version. Download Latest version from: ";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
+            //
             // panel2
-            // 
+            //
             this.panel2.Controls.Add(this.richTextBox1);
             this.panel2.Controls.Add(this.panel4);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -135,9 +135,9 @@ namespace Decon2LS
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(674, 264);
             this.panel2.TabIndex = 3;
-            // 
+            //
             // richTextBox1
-            // 
+            //
             this.richTextBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.richTextBox1.Location = new System.Drawing.Point(0, 0);
             this.richTextBox1.Name = "richTextBox1";
@@ -170,27 +170,27 @@ namespace Decon2LS
                 "ES ANY WARRANTY, EXPRESS OR IMPLIED, OR ASSUMES ANY LIABILITY FOR THE USE OF THI" +
                 "S SOFTWARE.  This notice including this sentence must appear on any copies of th" +
                 "is computer software.";
-            // 
+            //
             // panel4
-            // 
+            //
             this.panel4.Controls.Add(this.mbuttonOK);
             this.panel4.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel4.Location = new System.Drawing.Point(0, 216);
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(674, 48);
             this.panel4.TabIndex = 2;
-            // 
+            //
             // mbuttonOK
-            // 
+            //
             this.mbuttonOK.Location = new System.Drawing.Point(256, 10);
             this.mbuttonOK.Name = "mbuttonOK";
             this.mbuttonOK.Size = new System.Drawing.Size(104, 24);
             this.mbuttonOK.TabIndex = 0;
             this.mbuttonOK.Text = "OK";
             this.mbuttonOK.Click += new System.EventHandler(this.mbuttonOK_Click);
-            // 
+            //
             // frmAbout
-            // 
+            //
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
             this.ClientSize = new System.Drawing.Size(674, 336);
             this.Controls.Add(this.panel2);

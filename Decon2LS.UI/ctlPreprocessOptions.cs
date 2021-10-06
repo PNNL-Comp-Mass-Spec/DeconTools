@@ -3,9 +3,9 @@
 // E-mail: navdeep.jaitly@pnl.gov or proteomics@pnnl.gov
 // Website: https://github.com/PNNL-Comp-Mass-Spec/ or https://panomics.pnnl.gov/ or https://www.pnnl.gov/integrative-omics
 // -------------------------------------------------------------------------------
-// 
+//
 // Licensed under the Apache License, Version 2.0; you may not use this file except
-// in compliance with the License.  You may obtain a copy of the License at 
+// in compliance with the License.  You may obtain a copy of the License at
 // http://www.apache.org/licenses/LICENSE-2.0
 
 using System;
@@ -125,9 +125,9 @@ namespace Decon2LS
             this.mpanelCalibrationConstants.SuspendLayout();
             this.mpanelCalibrationType.SuspendLayout();
             this.SuspendLayout();
-            // 
+            //
             // panel2
-            // 
+            //
             this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel2.Controls.Add(this.mpanelApodizationType);
             this.panel2.Controls.Add(this.panel1);
@@ -136,9 +136,9 @@ namespace Decon2LS
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(464, 64);
             this.panel2.TabIndex = 1;
-            // 
+            //
             // mpanelApodizationType
-            // 
+            //
             this.mpanelApodizationType.Controls.Add(this.mcmbApodizationType);
             this.mpanelApodizationType.Dock = System.Windows.Forms.DockStyle.Top;
             this.mpanelApodizationType.Location = new System.Drawing.Point(0, 32);
@@ -146,9 +146,9 @@ namespace Decon2LS
             this.mpanelApodizationType.Padding = new System.Windows.Forms.Padding(5);
             this.mpanelApodizationType.Size = new System.Drawing.Size(462, 40);
             this.mpanelApodizationType.TabIndex = 2;
-            // 
+            //
             // mcmbApodizationType
-            // 
+            //
             this.mcmbApodizationType.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mcmbApodizationType.Location = new System.Drawing.Point(5, 5);
             this.mcmbApodizationType.Name = "mcmbApodizationType";
@@ -156,9 +156,9 @@ namespace Decon2LS
             this.mcmbApodizationType.TabIndex = 0;
             this.mcmbApodizationType.Text = "Apodization Type";
             this.mcmbApodizationType.SelectedIndexChanged += new System.EventHandler(this.mcmbApodizationType_SelectedIndexChanged);
-            // 
+            //
             // panel1
-            // 
+            //
             this.panel1.Controls.Add(this.mtxtTrianglePercent);
             this.panel1.Controls.Add(this.label2);
             this.panel1.Controls.Add(this.mtxtMaxX);
@@ -171,18 +171,18 @@ namespace Decon2LS
             this.panel1.Padding = new System.Windows.Forms.Padding(5);
             this.panel1.Size = new System.Drawing.Size(462, 32);
             this.panel1.TabIndex = 1;
-            // 
+            //
             // mtxtTrianglePercent
-            // 
+            //
             this.mtxtTrianglePercent.Dock = System.Windows.Forms.DockStyle.Left;
             this.mtxtTrianglePercent.Location = new System.Drawing.Point(376, 5);
             this.mtxtTrianglePercent.Name = "mtxtTrianglePercent";
             this.mtxtTrianglePercent.Size = new System.Drawing.Size(64, 20);
             this.mtxtTrianglePercent.TabIndex = 5;
             this.mtxtTrianglePercent.Text = "0";
-            // 
+            //
             // label2
-            // 
+            //
             this.label2.Dock = System.Windows.Forms.DockStyle.Left;
             this.label2.Location = new System.Drawing.Point(213, 5);
             this.label2.Name = "label2";
@@ -190,18 +190,18 @@ namespace Decon2LS
             this.label2.TabIndex = 6;
             this.label2.Text = "Apodization Apex Position:";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
+            //
             // mtxtMaxX
-            // 
+            //
             this.mtxtMaxX.Dock = System.Windows.Forms.DockStyle.Left;
             this.mtxtMaxX.Location = new System.Drawing.Point(149, 5);
             this.mtxtMaxX.Name = "mtxtMaxX";
             this.mtxtMaxX.Size = new System.Drawing.Size(64, 20);
             this.mtxtMaxX.TabIndex = 4;
             this.mtxtMaxX.Text = "0.9437166";
-            // 
+            //
             // mlabelMaxX
-            // 
+            //
             this.mlabelMaxX.Dock = System.Windows.Forms.DockStyle.Left;
             this.mlabelMaxX.Location = new System.Drawing.Point(109, 5);
             this.mlabelMaxX.Name = "mlabelMaxX";
@@ -209,18 +209,18 @@ namespace Decon2LS
             this.mlabelMaxX.TabIndex = 3;
             this.mlabelMaxX.Text = "Max X:";
             this.mlabelMaxX.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
+            //
             // mtxtMinX
-            // 
+            //
             this.mtxtMinX.Dock = System.Windows.Forms.DockStyle.Left;
             this.mtxtMinX.Location = new System.Drawing.Point(45, 5);
             this.mtxtMinX.Name = "mtxtMinX";
             this.mtxtMinX.Size = new System.Drawing.Size(64, 20);
             this.mtxtMinX.TabIndex = 2;
             this.mtxtMinX.Text = "0";
-            // 
+            //
             // mlabelMinX
-            // 
+            //
             this.mlabelMinX.Dock = System.Windows.Forms.DockStyle.Left;
             this.mlabelMinX.Location = new System.Drawing.Point(5, 5);
             this.mlabelMinX.Name = "mlabelMinX";
@@ -228,9 +228,9 @@ namespace Decon2LS
             this.mlabelMinX.TabIndex = 1;
             this.mlabelMinX.Text = "Min X:";
             this.mlabelMinX.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
+            //
             // panelZeroFill
-            // 
+            //
             this.panelZeroFill.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panelZeroFill.Controls.Add(this.panel5);
             this.panelZeroFill.Dock = System.Windows.Forms.DockStyle.Top;
@@ -238,9 +238,9 @@ namespace Decon2LS
             this.panelZeroFill.Name = "panelZeroFill";
             this.panelZeroFill.Size = new System.Drawing.Size(464, 32);
             this.panelZeroFill.TabIndex = 2;
-            // 
+            //
             // panel5
-            // 
+            //
             this.panel5.Controls.Add(this.mcmbNumZeroFills);
             this.panel5.Controls.Add(this.label1);
             this.panel5.Dock = System.Windows.Forms.DockStyle.Top;
@@ -249,9 +249,9 @@ namespace Decon2LS
             this.panel5.Padding = new System.Windows.Forms.Padding(5);
             this.panel5.Size = new System.Drawing.Size(462, 30);
             this.panel5.TabIndex = 1;
-            // 
+            //
             // mcmbNumZeroFills
-            // 
+            //
             this.mcmbNumZeroFills.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mcmbNumZeroFills.Items.AddRange(new object[] {
             "0",
@@ -263,9 +263,9 @@ namespace Decon2LS
             this.mcmbNumZeroFills.Size = new System.Drawing.Size(361, 21);
             this.mcmbNumZeroFills.TabIndex = 1;
             this.mcmbNumZeroFills.Text = "Num Zero Fills";
-            // 
+            //
             // label1
-            // 
+            //
             this.label1.Dock = System.Windows.Forms.DockStyle.Left;
             this.label1.Location = new System.Drawing.Point(5, 5);
             this.label1.Name = "label1";
@@ -273,9 +273,9 @@ namespace Decon2LS
             this.label1.TabIndex = 2;
             this.label1.Text = "Num Zero Fills:";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
+            //
             // panelCalibration
-            // 
+            //
             this.panelCalibration.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panelCalibration.Controls.Add(this.mpanelCalibrationConstants);
             this.panelCalibration.Controls.Add(this.mpanelCalibrationType);
@@ -284,9 +284,9 @@ namespace Decon2LS
             this.panelCalibration.Name = "panelCalibration";
             this.panelCalibration.Size = new System.Drawing.Size(464, 64);
             this.panelCalibration.TabIndex = 3;
-            // 
+            //
             // mpanelCalibrationConstants
-            // 
+            //
             this.mpanelCalibrationConstants.Controls.Add(this.mtxtC);
             this.mpanelCalibrationConstants.Controls.Add(this.mlabelC);
             this.mpanelCalibrationConstants.Controls.Add(this.mtxtB);
@@ -299,18 +299,18 @@ namespace Decon2LS
             this.mpanelCalibrationConstants.Padding = new System.Windows.Forms.Padding(5);
             this.mpanelCalibrationConstants.Size = new System.Drawing.Size(462, 32);
             this.mpanelCalibrationConstants.TabIndex = 2;
-            // 
+            //
             // mtxtC
-            // 
+            //
             this.mtxtC.Dock = System.Windows.Forms.DockStyle.Left;
             this.mtxtC.Location = new System.Drawing.Point(280, 5);
             this.mtxtC.Name = "mtxtC";
             this.mtxtC.Size = new System.Drawing.Size(100, 20);
             this.mtxtC.TabIndex = 5;
             this.mtxtC.Text = "0";
-            // 
+            //
             // mlabelC
-            // 
+            //
             this.mlabelC.Dock = System.Windows.Forms.DockStyle.Left;
             this.mlabelC.Location = new System.Drawing.Point(255, 5);
             this.mlabelC.Name = "mlabelC";
@@ -318,18 +318,18 @@ namespace Decon2LS
             this.mlabelC.TabIndex = 6;
             this.mlabelC.Text = "C:";
             this.mlabelC.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
+            //
             // mtxtB
-            // 
+            //
             this.mtxtB.Dock = System.Windows.Forms.DockStyle.Left;
             this.mtxtB.Location = new System.Drawing.Point(155, 5);
             this.mtxtB.Name = "mtxtB";
             this.mtxtB.Size = new System.Drawing.Size(100, 20);
             this.mtxtB.TabIndex = 4;
             this.mtxtB.Text = "0";
-            // 
+            //
             // mlabelB
-            // 
+            //
             this.mlabelB.Dock = System.Windows.Forms.DockStyle.Left;
             this.mlabelB.Location = new System.Drawing.Point(130, 5);
             this.mlabelB.Name = "mlabelB";
@@ -337,18 +337,18 @@ namespace Decon2LS
             this.mlabelB.TabIndex = 3;
             this.mlabelB.Text = "B:";
             this.mlabelB.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
+            //
             // mtxtA
-            // 
+            //
             this.mtxtA.Dock = System.Windows.Forms.DockStyle.Left;
             this.mtxtA.Location = new System.Drawing.Point(30, 5);
             this.mtxtA.Name = "mtxtA";
             this.mtxtA.Size = new System.Drawing.Size(100, 20);
             this.mtxtA.TabIndex = 2;
             this.mtxtA.Text = "0";
-            // 
+            //
             // mlabelA
-            // 
+            //
             this.mlabelA.Dock = System.Windows.Forms.DockStyle.Left;
             this.mlabelA.Location = new System.Drawing.Point(5, 5);
             this.mlabelA.Name = "mlabelA";
@@ -356,9 +356,9 @@ namespace Decon2LS
             this.mlabelA.TabIndex = 1;
             this.mlabelA.Text = "A:";
             this.mlabelA.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
+            //
             // mpanelCalibrationType
-            // 
+            //
             this.mpanelCalibrationType.Controls.Add(this.mcmbCalibrationType);
             this.mpanelCalibrationType.Controls.Add(this.labelCalibrationType);
             this.mpanelCalibrationType.Dock = System.Windows.Forms.DockStyle.Top;
@@ -367,9 +367,9 @@ namespace Decon2LS
             this.mpanelCalibrationType.Padding = new System.Windows.Forms.Padding(5);
             this.mpanelCalibrationType.Size = new System.Drawing.Size(462, 30);
             this.mpanelCalibrationType.TabIndex = 1;
-            // 
+            //
             // mcmbCalibrationType
-            // 
+            //
             this.mcmbCalibrationType.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mcmbCalibrationType.Location = new System.Drawing.Point(96, 5);
             this.mcmbCalibrationType.Name = "mcmbCalibrationType";
@@ -377,9 +377,9 @@ namespace Decon2LS
             this.mcmbCalibrationType.TabIndex = 1;
             this.mcmbCalibrationType.Text = "Calibration Type";
             this.mcmbCalibrationType.SelectedIndexChanged += new System.EventHandler(this.mcmbCalibrationType_SelectedIndexChanged);
-            // 
+            //
             // labelCalibrationType
-            // 
+            //
             this.labelCalibrationType.Dock = System.Windows.Forms.DockStyle.Left;
             this.labelCalibrationType.Location = new System.Drawing.Point(5, 5);
             this.labelCalibrationType.Name = "labelCalibrationType";
@@ -387,9 +387,9 @@ namespace Decon2LS
             this.labelCalibrationType.TabIndex = 2;
             this.labelCalibrationType.Text = "Calibration Type:";
             this.labelCalibrationType.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
+            //
             // ctlPreprocessOptions
-            // 
+            //
             this.Controls.Add(this.panelCalibration);
             this.Controls.Add(this.panelZeroFill);
             this.Controls.Add(this.panel2);

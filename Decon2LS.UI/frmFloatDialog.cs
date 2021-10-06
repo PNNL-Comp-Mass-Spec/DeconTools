@@ -4,9 +4,9 @@
 // E-mail: navdeep.jaitly@pnl.gov or proteomics@pnnl.gov
 // Website: https://github.com/PNNL-Comp-Mass-Spec/ or https://panomics.pnnl.gov/ or https://www.pnnl.gov/integrative-omics
 // -------------------------------------------------------------------------------
-// 
+//
 // Licensed under the Apache License, Version 2.0; you may not use this file except
-// in compliance with the License.  You may obtain a copy of the License at 
+// in compliance with the License.  You may obtain a copy of the License at
 // http://www.apache.org/licenses/LICENSE-2.0
 
 using System;
@@ -68,9 +68,9 @@ namespace Decon2LS
             this.mPromptLabel = new System.Windows.Forms.Label();
             this.mFloatInputTextBox = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
-            // 
+            //
             // mPromptLabel
-            // 
+            //
             this.mPromptLabel.AccessibleDescription = resources.GetString("mPromptLabel.AccessibleDescription");
             this.mPromptLabel.AccessibleName = resources.GetString("mPromptLabel.AccessibleName");
             this.mPromptLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(resources.GetObject("mPromptLabel.Anchor")));
@@ -90,9 +90,9 @@ namespace Decon2LS
             this.mPromptLabel.Text = resources.GetString("mPromptLabel.Text");
             this.mPromptLabel.TextAlign = ((System.Drawing.ContentAlignment)(resources.GetObject("mPromptLabel.TextAlign")));
             this.mPromptLabel.Visible = ((bool)(resources.GetObject("mPromptLabel.Visible")));
-            // 
+            //
             // mFloatInputTextBox
-            // 
+            //
             this.mFloatInputTextBox.AccessibleDescription = resources.GetString("mFloatInputTextBox.AccessibleDescription");
             this.mFloatInputTextBox.AccessibleName = resources.GetString("mFloatInputTextBox.AccessibleName");
             this.mFloatInputTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(resources.GetObject("mFloatInputTextBox.Anchor")));
@@ -116,9 +116,9 @@ namespace Decon2LS
             this.mFloatInputTextBox.Visible = ((bool)(resources.GetObject("mFloatInputTextBox.Visible")));
             this.mFloatInputTextBox.WordWrap = ((bool)(resources.GetObject("mFloatInputTextBox.WordWrap")));
             this.mFloatInputTextBox.Validating += new System.ComponentModel.CancelEventHandler(this.mFloatInputTextBox_Validating);
-            // 
+            //
             // frmFloatDialog
-            // 
+            //
             this.AccessibleDescription = resources.GetString("$this.AccessibleDescription");
             this.AccessibleName = resources.GetString("$this.AccessibleName");
             this.AutoScaleBaseSize = ((System.Drawing.Size)(resources.GetObject("$this.AutoScaleBaseSize")));
