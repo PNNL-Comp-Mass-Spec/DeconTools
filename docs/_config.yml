@@ -1,4 +1,4 @@
 # Jekyll configuration
 name: DeconTools
-description: DeconTools software page
+description: Used to de-isotope mass spectra and to detect features from mass spectrometry data using observed isotopic signatures.
 url: https://pnnl-comp-mass-spec.github.io/DeconTools/
