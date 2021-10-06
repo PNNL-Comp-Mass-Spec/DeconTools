@@ -7,8 +7,8 @@ the quality of signature observed in the data.
 
 ## Installation
 
-Download the DeconTools installer from https://github.com/PNNL-Comp-Mass-Spec/DeconTools/releases \
-Preferably use the 64-bit installer: [DeconTools_Installer_x64.exe](https://github.com/PNNL-Comp-Mass-Spec/DeconTools/releases/download/v1.1.6397/DeconTools_Installer_x64.exe)
+Download the 64-bit DeconTools installer from https://github.com/PNNL-Comp-Mass-Spec/DeconTools/releases \
+* Alternatively, download `DeconTools_x64.zip`, which has the executables (DeconConsole.exe and DeconToolsAutoProcessV1.exe) and required DLLs
 
 ### Requirements
 
@@ -88,7 +88,7 @@ interference_score    | Measures the likelihood that another isotopic distributi
 
 ## Contacts
 
-Written by Gordon Slysz for the Department of Energy (PNNL, Richland, WA)
+Written by Gordon Slysz for the Department of Energy (PNNL, Richland, WA) \
 E-mail: matthew.monroe@pnnl.gov or proteomics@pnnl.gov \
 Website: https://github.com/PNNL-Comp-Mass-Spec/ or https://panomics.pnnl.gov/ or https://www.pnnl.gov/integrative-omics
 
