@@ -24,8 +24,8 @@ install the vendor-supplied data browsing software so that DeconTools has access
 * Bruker acqu files
 * IMS .UIMF files
 
-Download ProteoWizard from http://proteowizard.sourceforge.net/
-You typically will need the 64-bit version.
+Download ProteoWizard from https://proteowizard.sourceforge.io/
+* You typically will need the 64-bit version.
 
 ## Using DeconTools
 
@@ -90,7 +90,7 @@ interference_score    | Measures the likelihood that another isotopic distributi
 
 Written by Gordon Slysz for the Department of Energy (PNNL, Richland, WA)
 E-mail: matthew.monroe@pnnl.gov or proteomics@pnnl.gov \
-Website: https://omics.pnl.gov or https://panomics.pnl.gov/
+Website: https://github.com/PNNL-Comp-Mass-Spec/ or https://panomics.pnnl.gov/ or https://www.pnnl.gov/integrative-omics
 
 ## License
 

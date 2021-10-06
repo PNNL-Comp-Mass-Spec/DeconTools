@@ -1,8 +1,8 @@
 // Written by Navdeep Jaitly and Kyle Littlefield
 // for the Department of Energy (PNNL, Richland, WA)
 // Copyright 2006, Battelle Memorial Institute
-// E-mail: navdeep.jaitly@pnl.gov
-// Website: https://omics.pnl.gov/software or http://panomics.pnnl.gov
+// E-mail: navdeep.jaitly@pnl.gov or proteomics@pnnl.gov
+// Website: https://github.com/PNNL-Comp-Mass-Spec/ or https://panomics.pnnl.gov/ or https://www.pnnl.gov/integrative-omics
 // -------------------------------------------------------------------------------
 //
 // Licensed under the Apache License, Version 2.0; you may not use this file except

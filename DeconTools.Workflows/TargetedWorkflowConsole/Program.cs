@@ -35,7 +35,7 @@ namespace IQ.Console
                     ContactInfo = "Program written by Gordon Slysz for the Department of Energy (PNNL, Richland, WA) in 2010" +
                       Environment.NewLine + Environment.NewLine +
                       "E-mail: proteomics@pnnl.gov" + Environment.NewLine +
-                      "Website: https://panomics.pnnl.gov/ or https://omics.pnl.gov or https://github.com/PNNL-Comp-Mass-Spec",
+                      "Website: https://github.com/PNNL-Comp-Mass-Spec/ or https://panomics.pnnl.gov/ or https://www.pnnl.gov/integrative-omics",
 
                     UsageExamples = {
                         exeName + " Dataset.raw -w ExecutorParameters1.xml",
