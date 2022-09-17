@@ -88,7 +88,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             Run run = new XCaliburRun2(DeconTools.UnitTesting2.FileRefs.RawDataMSFiles.OrbitrapStdFile1, minScan, maxScan);
             var workflow = new WholisticChromBasedLCMSFeatureFinderWorkflow(run);
-           
+
             var peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(DeconTools.UnitTesting2.FileRefs.PeakDataFiles.OrbitrapPeakFile1);
             peakImporter.ImportPeaks(run.ResultCollection.MSPeakResultList);
 
@@ -115,7 +115,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             Run run = new XCaliburRun2(DeconTools.UnitTesting2.FileRefs.RawDataMSFiles.OrbitrapStdFile1, minScan, maxScan);
             var workflow = new WholisticChromBasedLCMSFeatureFinderWorkflow(run);
-           
+
             var peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(DeconTools.UnitTesting2.FileRefs.PeakDataFiles.OrbitrapPeakFile1);
             peakImporter.ImportPeaks(run.ResultCollection.MSPeakResultList);
 
@@ -146,7 +146,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             Run run = new XCaliburRun2(DeconTools.UnitTesting2.FileRefs.RawDataMSFiles.OrbitrapStdFile1);
             var workflow = new WholisticChromBasedLCMSFeatureFinderWorkflow(run);
-           
+
             var peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(DeconTools.UnitTesting2.FileRefs.PeakDataFiles.OrbitrapPeakFile1);
             peakImporter.ImportPeaks(run.ResultCollection.MSPeakResultList);
 

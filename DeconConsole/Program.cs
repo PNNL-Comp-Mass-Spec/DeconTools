@@ -8,7 +8,7 @@ namespace DeconConsole
     {
         // Ignore Spelling: Slysz, Jaitly
 
-        public const string PROGRAM_DATE = "April 27, 2021";
+        public const string PROGRAM_DATE = "September 16, 2022";
 
         public static int Main(string[] args)
         {
