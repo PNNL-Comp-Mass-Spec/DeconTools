@@ -7,8 +7,10 @@ using DeconTools.Workflows.Backend.FileIO;
 
 namespace TargetedWorkflowConsole
 {
-    class Program
+    internal static class Program
     {
+        // Ignore Spelling: workflow
+
         private const uint ENABLE_EXTENDED_FLAGS = 128U;
 
         [DllImport("kernel32.dll")]

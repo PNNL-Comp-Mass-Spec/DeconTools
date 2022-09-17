@@ -17,6 +17,8 @@ namespace DeconTools.Workflows.Backend.FileIO
 
     public class MassTagFromMSAlignFileImporter
     {
+        // Ignore Spelling: Acetyl, proteoform, Prsm
+
         /********** Magic number, how much to extend charge range by **********/
         /* For example, if this value is 3, charge range [5,8] becomes [2,11] */
         private const int EXTEND_CHARGE_RANGE = 3;
@@ -51,7 +53,7 @@ namespace DeconTools.Workflows.Backend.FileIO
         // ReSharper disable CommentTypo
 
         /// <summary>
-        /// Regex for matching peptides of the form:
+        /// RegEx for matching peptides of the form:
         /// K.(K)[42.010565]TAEKVDAKTEAVKKEVK.
         /// .(K)[42.010565]TAEKVDAKTEAVK.K
         /// M.AAKIRRQDEVIV(LAGKDK)[42.010565]GKRAKVAQV(LP)[109.10955].T
@@ -60,7 +62,7 @@ namespace DeconTools.Workflows.Backend.FileIO
             new Regex(@"^(?<Prefix>[A-Z]?\.)(?<StartingChars>[^(]*)\((?<ModifiedResidues>[A-Z]*)\)\[42\.[0-9]*\](?<RemainingChars>.*)", RegexOptions.Compiled);
 
         /// <summary>
-        /// Regex for matching peptides of the form
+        /// RegEx for matching peptides of the form
         /// K.(K)[Acetyl]TAEKVDAKTEAVKKEVK.
         /// M.AAKIRRQDEVIV(LAGKDK)[Acetyl]GKRAKVAQV(LP)[109.10955].T
         /// </summary>
@@ -68,7 +70,7 @@ namespace DeconTools.Workflows.Backend.FileIO
             new Regex(@"^(?<Prefix>[A-Z]?\.)(?<StartingChars>[^(]*)\((?<ModifiedResidues>[A-Z]*)\)\[Acetyl\](?<RemainingChars>.*)", RegexOptions.Compiled);
 
         /// <summary>
-        /// Regex for matching peptides of the form
+        /// RegEx for matching peptides of the form
         /// A.IRGATGLGLKEAKAMSEAAPVAVKEGV(S)[79.966]KEEAEALKKELVEAGASVEIK.
         /// A.IRGATGLGLKEAKAMSEAAPVAVKEGV(S)[80.04]KEEAEALKKELVEAGASVEIK.
         /// A.IRGATGLGLKEAKAMSEAAPVAVKEGV(S)[80]KEEAEALKKELVEAGASVEIK.
@@ -78,7 +80,7 @@ namespace DeconTools.Workflows.Backend.FileIO
             new Regex(@"^(?<Prefix>[A-Z]?\.)(?<StartingChars>[^(]*)\((?<ModifiedResidues>[A-Z]*[ST][A-Z]*)\)\[(?:79\.9[0-9]*|80\.0[0-9]*|80)\](?<RemainingChars>.*)", RegexOptions.Compiled);
 
         /// <summary>
-        /// Regex for matching peptides of the form:
+        /// RegEx for matching peptides of the form:
         /// S.(QSRVTSNG)[-17.02918]YGITKPLVAGNSKEAHAANRRIEAIVT.T
         /// A.(Q)[-17.03004]GVVHEGTVVDTMNGGGYTYVQIK.E
         /// </summary>
@@ -473,7 +475,7 @@ namespace DeconTools.Workflows.Backend.FileIO
         /// <param name="dataLine">Line of headers from the input file</param>
         /// <param name="columnMapping">Dictionary mapping from result column enum to column index</param>
         /// <param name="headerColumnNames">Dictionary mapping from result column enum to column name (for reporting warnings to the user)</param>
-        /// <returns></returns>
+        /// <returns>True if valid header names, false if missing one or more columns</returns>
         private bool GetColumnMapping(
             string dataLine,
             IDictionary<ResultColumnIDs, int> columnMapping,

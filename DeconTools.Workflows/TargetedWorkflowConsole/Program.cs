@@ -32,7 +32,7 @@ namespace IQ.Console
                 {
                     ProgramInfo = "This program runs Iq on one or more datasets.",
 
-                    ContactInfo = "Program written by Gordon Slysz for the Department of Energy (PNNL, Richland, WA) in 2010" +
+                    ContactInfo = "Program written by Gordon Slysz for the Department of Energy (PNNL, Richland, WA)" +
                       Environment.NewLine + Environment.NewLine +
                       "E-mail: proteomics@pnnl.gov" + Environment.NewLine +
                       "Website: https://github.com/PNNL-Comp-Mass-Spec/ or https://panomics.pnnl.gov/ or https://www.pnnl.gov/integrative-omics",

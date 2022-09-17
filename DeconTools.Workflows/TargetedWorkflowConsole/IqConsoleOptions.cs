@@ -6,6 +6,7 @@ namespace IQ.Console
     public class IqConsoleOptions
     {
         private const string PROGRAM_DATE = "March 5, 2020";
+        // Ignore Spelling: Orbitrap, workflow
 
         public IqConsoleOptions()
         {
@@ -148,7 +149,7 @@ namespace IQ.Console
                 System.Console.WriteLine("Processing MS/MS spectra");
 
             if (UseOldIq)
-                System.Console.WriteLine("Using Old Iq algorithm");
+                System.Console.WriteLine("Using Old IQ algorithm");
 
             if (OutputGraphs)
                 System.Console.WriteLine("Generating .png images of mass spectra for all the results. See folder 'OutputGraphs' ");
