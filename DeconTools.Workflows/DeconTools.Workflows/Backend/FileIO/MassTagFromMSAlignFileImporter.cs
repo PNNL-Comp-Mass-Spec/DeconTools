@@ -196,9 +196,7 @@ namespace DeconTools.Workflows.Backend.FileIO
                     //ensure that processed line is the same size as the header line
                     if (processedData.Count < columnMapping.Count)
                     {
-                        ConsoleMsgUtils.ShowWarning(string.Format("Error: Data in row #{0} is invalid: " +
-                                                                  "the number of columns does not match the number of headers",
-                                                                  lineCounter));
+                        ConsoleMsgUtils.ShowWarning("Error: Data in row #{0} is invalid: the number of columns does not match the number of headers", lineCounter);
                         continue;
                     }
 
@@ -523,21 +521,15 @@ namespace DeconTools.Workflows.Backend.FileIO
 
                 if (knownColumn.Value.Count == 1)
                 {
-                    ConsoleMsgUtils.ShowError(string.Format(
-                                                  "Header line of the input file does not contain {0}",
-                                                  knownColumn.Value.First()));
+                    ConsoleMsgUtils.ShowError("Header line of the input file does not contain {0}", knownColumn.Value.First());
                 }
                 else if (knownColumn.Value.Count > 1)
                 {
-                    ConsoleMsgUtils.ShowError(string.Format(
-                                                  "Header line of the input file does not contain {0} or {1}",
-                                                  knownColumn.Value[0], knownColumn.Value[1]));
+                    ConsoleMsgUtils.ShowError("Header line of the input file does not contain {0} or {1}", knownColumn.Value[0], knownColumn.Value[1]);
                 }
                 else
                 {
-                    ConsoleMsgUtils.ShowError(string.Format(
-                                                  "Programming bug: no column names defined for column Id {0}",
-                                                  knownColumn.Key));
+                    ConsoleMsgUtils.ShowError("Programming bug: no column names defined for column Id {0}", knownColumn.Key);
                 }
 
                 return false;
@@ -565,7 +557,7 @@ namespace DeconTools.Workflows.Backend.FileIO
             }
 
             var columnName = headerColumnNames[columnId];
-            ConsoleMsgUtils.ShowWarning(string.Format("Could not parse a double from '{0}' in column {1}", valueText, columnName));
+            ConsoleMsgUtils.ShowWarning("Could not parse a double from '{0}' in column {1}", valueText, columnName);
             return false;
         }
 
