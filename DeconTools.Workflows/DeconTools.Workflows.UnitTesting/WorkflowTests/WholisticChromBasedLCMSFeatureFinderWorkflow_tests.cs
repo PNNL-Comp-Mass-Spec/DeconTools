@@ -16,7 +16,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 {
     public class WholisticChromBasedLCMSFeatureFinderWorkflow_tests
     {
-
+#if !Disable_DeconToolsV2
         [Test]
         public void processOrbiWithNewWorkflowTest1()
         {
@@ -170,6 +170,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         }
 
 
-
+#endif
     }
 }
