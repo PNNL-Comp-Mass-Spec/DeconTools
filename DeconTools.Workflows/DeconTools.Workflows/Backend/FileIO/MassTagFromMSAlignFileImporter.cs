@@ -315,7 +315,7 @@ namespace DeconTools.Workflows.Backend.FileIO
 
                     /*
                     // Create range
-                    const int maxOffset = 0;
+                    int maxOffset = 0;
 
                     for (short offset = -maxOffset; offset <= maxOffset; offset++)
                     {
@@ -581,7 +581,7 @@ namespace DeconTools.Workflows.Backend.FileIO
             if (double.TryParse(valueText, out value))
                 return true;
 
-            if (valueText.ToLower() == "infinity")
+            if (string.Equals(valueText, "infinity", System.StringComparison.OrdinalIgnoreCase))
             {
                 value = float.MaxValue;
                 return true;
