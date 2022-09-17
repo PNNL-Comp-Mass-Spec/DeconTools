@@ -615,7 +615,7 @@ namespace DeconTools.Workflows.Backend.FileIO
 
         public static List<string> GetRequiredMSAlignColumns()
         {
-            var colNames = new List<string>
+            return new List<string>
             {
                 MSALIGN_PRSM_ID_HEADER,
                 SCAN_HEADER,
@@ -625,13 +625,11 @@ namespace DeconTools.Workflows.Backend.FileIO
                 PEPTIDE_HEADER,
                 E_VALUE_HEADER
             };
-
-            return colNames;
         }
 
         public static List<string> GetRequiredTopPICColumns()
         {
-            var colNames = new List<string>
+            return new List<string>
             {
                 TopPIC_PRSM_ID_HEADER,
                 TopPIC_SCAN_HEADER,
@@ -641,8 +639,6 @@ namespace DeconTools.Workflows.Backend.FileIO
                 TopPIC_PEPTIDE_HEADER,
                 TopPIC_E_VALUE_HEADER
             };
-
-            return colNames;
         }
 
         private bool RemoveModViaRegEx(
