@@ -201,19 +201,50 @@ namespace DeconTools.Workflows.Backend.FileIO
                     }
 
                     // Get Prsm_ID
-                    if (!GetInt(processedData, columnMapping, headerColumnNames, ResultColumnIDs.PrsmID, out var prsmId))
+                    if (!GetInt(processedData, columnMapping, headerColumnNames, ResultColumnIDs.PrsmID, out var prsmId, out var prsmWarning))
+                    {
+                        ConsoleMsgUtils.ShowWarning(prsmWarning);
                         continue;
+                    }
 
                     // Get scan
-                    if (!GetInt(processedData, columnMapping, headerColumnNames, ResultColumnIDs.Scan, out var scanLcTarget))
-                        continue;
+                    var validScan = GetInt(
+                        processedData, columnMapping, headerColumnNames, ResultColumnIDs.Scan,
+                        out var scanLcTarget, out var scanWarning);
 
                     // Get charge state
-                    if (!GetInt(processedData, columnMapping, headerColumnNames, ResultColumnIDs.Charge, out var chargeState))
-                        continue;
+                    var validCharge = GetInt(
+                        processedData, columnMapping, headerColumnNames, ResultColumnIDs.Charge,
+                        out var chargeState, out var chargeWarning);
 
                     // Get the peptide (with mod masses)
                     var peptideWithMods = processedData[columnMapping[ResultColumnIDs.Peptide]];
+
+                    if (string.IsNullOrWhiteSpace(peptideWithMods))
+                    {
+                        // ReSharper disable once ConvertIfStatementToSwitchStatement
+                        if (!validScan && !validCharge)
+                        {
+                            // Starting with TopPIC v1.5, additional proteins for each proteoform are listed on their own line, with several empty columns (including Scan and Charge)
+                            // Silently ignore this line
+                            continue;
+                        }
+
+                        if (!validScan)
+                        {
+                            ConsoleMsgUtils.ShowWarning(scanWarning);
+                        }
+                        else if (!validCharge)
+                        {
+                            ConsoleMsgUtils.ShowWarning(chargeWarning);
+                        }
+                        else
+                        {
+                            ConsoleMsgUtils.ShowWarning("Peptide column is empty");
+                        }
+
+                        continue;
+                    }
 
                     string empiricalFormula;
 
@@ -566,15 +597,19 @@ namespace DeconTools.Workflows.Backend.FileIO
             IReadOnlyDictionary<ResultColumnIDs, int> columnMapping,
             IReadOnlyDictionary<ResultColumnIDs, string> headerColumnNames,
             ResultColumnIDs columnId,
-            out int value)
+            out int value,
+            out string warning)
         {
             var valueText = processedData[columnMapping[columnId]];
 
             if (int.TryParse(valueText, out value))
+            {
+                warning = string.Empty;
                 return true;
+            }
 
             var columnName = headerColumnNames[columnId];
-            ConsoleMsgUtils.ShowWarning(string.Format("Could not parse an integer from '{0}' in column {1}", valueText, columnName));
+            warning = string.Format("Could not parse an integer from '{0}' in column {1}", valueText, columnName);
             return false;
         }
 
