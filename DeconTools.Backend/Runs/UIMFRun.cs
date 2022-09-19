@@ -464,7 +464,7 @@ namespace DeconTools.Backend.Runs
 
         public void SmoothFramePressuresInFrameSets()
         {
-            Check.Require(ScanSetCollection != null && ScanSetCollection.ScanSetList.Count > 0, "Cannot smooth frame pressures. FrameSet collection has not been defined.");
+            Check.Require(ScanSetCollection?.ScanSetList.Count > 0, "Cannot smooth frame pressures. FrameSet collection has not been defined.");
 
             var numFrames = GetNumFrames();
 
@@ -551,7 +551,7 @@ namespace DeconTools.Backend.Runs
                 OpenUimfFile();
             }
 
-            Check.Require(ScanSetCollection != null && ScanSetCollection.ScanSetList.Count > 0, "Cannot get frame data. FrameSet collection has not been defined.");
+            Check.Require(ScanSetCollection?.ScanSetList.Count > 0, "Cannot get frame data. FrameSet collection has not been defined.");
 
             Console.Write("Loading frame parameters ");
             var dtLastProgress = DateTime.UtcNow;

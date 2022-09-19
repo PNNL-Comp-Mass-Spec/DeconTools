@@ -81,7 +81,7 @@ namespace DeconTools.Backend.ProcessingTasks
 
         public override void Execute(ResultCollection resultList)
         {
-            Check.Require(resultList.MSPeakResultList != null && resultList.MSPeakResultList.Count > 0, "PeakChromatogramGenerator failed. No peaks.");
+            Check.Require(resultList.MSPeakResultList?.Count > 0, "PeakChromatogramGenerator failed. No peaks.");
             Check.Require(resultList.Run.CurrentMassTag != null, "PeakChromatogramGenerator failed. This requires a MassTag to be specified.");
             if (resultList.Run.CurrentMassTag == null)
                 return;
@@ -347,7 +347,7 @@ namespace DeconTools.Backend.ProcessingTasks
             {
                 var filteredChromVals = new Dictionary<int, double>();
 
-                var usePrimaryLcScanNumbers = usePrimaryLcScanNumberCache && run.PrimaryLcScanNumbers != null && run.PrimaryLcScanNumbers.Count > 0;
+                var usePrimaryLcScanNumbers = usePrimaryLcScanNumberCache && run.PrimaryLcScanNumbers?.Count > 0;
 
                 for (var i = 0; i < xyData.Xvalues.Length; i++)
                 {
@@ -422,7 +422,7 @@ namespace DeconTools.Backend.ProcessingTasks
         {
             var msPeakListAboveThreshold = IsotopicProfileUtilities.GetTopMSPeaks(iso.Peaklist, TopNPeaksLowerCutOff);
 
-            Check.Require(msPeakListAboveThreshold != null && msPeakListAboveThreshold.Count > 0, "PeakChromatogramGenerator failed. Attempted to generate chromatogram on unlabeled isotopic profile, but profile was never defined.");
+            Check.Require(msPeakListAboveThreshold?.Count > 0, "PeakChromatogramGenerator failed. Attempted to generate chromatogram on unlabeled isotopic profile, but profile was never defined.");
 
             var targetMZList = (from n in msPeakListAboveThreshold select n.XValue).ToList();
             return targetMZList;

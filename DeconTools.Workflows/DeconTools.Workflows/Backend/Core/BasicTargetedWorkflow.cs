@@ -26,7 +26,7 @@ namespace DeconTools.Workflows.Backend.Core
         {
             base.ExecutePostWorkflowHook();
 
-            if (Result != null && Result.Target != null && Result.IsotopicProfile!=null && Success)
+            if (Result?.Target != null && Result.IsotopicProfile!=null && Success)
             {
                if (Run.IsMsAbundanceReportedAsAverage)
                {

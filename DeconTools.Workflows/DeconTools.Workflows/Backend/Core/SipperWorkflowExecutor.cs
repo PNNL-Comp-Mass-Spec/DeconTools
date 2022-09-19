@@ -78,7 +78,7 @@ namespace DeconTools.Workflows.Backend.Core
                 }
             }
 
-            Check.Ensure(Targets != null && Targets.TargetList.Count > 0, "Failed to initialize - Target list is empty. Please check parameter file.");
+            Check.Ensure(Targets?.TargetList.Count > 0, "Failed to initialize - Target list is empty. Please check parameter file.");
 
             if (massTagIDsForFiltering.Count > 0)
             {

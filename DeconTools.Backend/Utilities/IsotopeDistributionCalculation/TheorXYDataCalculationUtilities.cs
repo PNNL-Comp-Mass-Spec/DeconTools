@@ -57,8 +57,7 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
 
         public static XYData GetTheoreticalIsotopicProfileXYData(IsotopicProfile isotopicProfile, double fwhm)
         {
-            Check.Require(isotopicProfile != null && isotopicProfile.Peaklist != null &&
-            isotopicProfile.Peaklist.Count > 0, "Cannot get theor isotopic profile. Input isotopic profile is empty.");
+            Check.Require(isotopicProfile != null && isotopicProfile.Peaklist?.Count > 0, "Cannot get theor isotopic profile. Input isotopic profile is empty.");
 
             var xydata = new XYData();
             var xvals = new List<double>();

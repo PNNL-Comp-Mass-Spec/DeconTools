@@ -151,7 +151,7 @@ namespace DeconTools.Backend.Core
 
         public MSPeak getMonoPeak()
         {
-            if (Peaklist != null && Peaklist.Count > 0)
+            if (Peaklist?.Count > 0)
             {
                 return Peaklist[0];
             }
@@ -202,8 +202,7 @@ namespace DeconTools.Backend.Core
 
         public XYData GetTheoreticalIsotopicProfileXYData(double fwhm)
         {
-            Check.Require(Peaklist != null &&
-                          Peaklist.Count > 0, "Cannot get theor isotopic profile. Input isotopic profile is empty.");
+            Check.Require(Peaklist?.Count > 0, "Cannot get theor isotopic profile. Input isotopic profile is empty.");
 
             var xyData = new XYData();
             var xVals = new List<double>();

@@ -72,9 +72,9 @@ namespace DeconTools.Backend.Data
             {
                 _header = reader.ReadLine();    //first line is the header line.
 
-                _peaksAreFromUIMF = _header != null && _header.Contains("frame");
+                _peaksAreFromUIMF = _header?.Contains("frame") == true;
 
-                _containsMSFeatureIDColumn = _header != null && _header.Contains("MSFeatureID");
+                _containsMSFeatureIDColumn = _header?.Contains("MSFeatureID") == true;
 
                 var progressCounter = 0;
                 var lastReportProgress = DateTime.UtcNow;

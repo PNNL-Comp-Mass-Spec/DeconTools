@@ -49,7 +49,7 @@ namespace DeconTools.Backend.ProcessingTasks.IsosMergerExporters
         public override void MergeAndExport(ResultCollection resultList)
         {
             Check.Require(resultList != null, "Scans merger failed. ResultCollection is null");
-            Check.Require(resultList.ScanResultList != null && resultList.ScanResultList.Count > 0, "Scans merger failed... there's a problem in the ScanResult List");
+            Check.Require(resultList.ScanResultList?.Count > 0, "Scans merger failed... there's a problem in the ScanResult List");
 
             var scanResult = resultList.ScanResultList[0];   // we only take the first one since we delete each scanResult after writing it out to file
 

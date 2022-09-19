@@ -92,7 +92,7 @@ namespace DeconTools.Workflows.Backend.Core
             }
             else
             {
-                Check.Require(Run.ResultCollection.MSPeakResultList != null && Run.ResultCollection.MSPeakResultList.Count > 0, "Dataset's Peak-level data is empty. This is needed for chromatogram generation.");
+                Check.Require(Run.ResultCollection.MSPeakResultList?.Count > 0, "Dataset's Peak-level data is empty. This is needed for chromatogram generation.");
 
                 //execute targeted feature finding to find the massTags in the raw data
 
@@ -212,7 +212,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         private List<TargetedResultBase> FindTargetsThatPassSpecifiedMassTolerance(double netGrouping, double chromTolerance)
         {
-            Check.Require(MassTagList != null && MassTagList.Count > 0, "MassTags have not been defined.");
+            Check.Require(MassTagList?.Count > 0, "MassTags have not been defined.");
             Check.Require(Run != null, "Run is null");
 
             var workflowParameters = _workflow.WorkflowParameters as TargetedWorkflowParameters;
@@ -271,7 +271,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         public List<TargetedResultBase> FindTargetsThatPassCriteria()
         {
-            Check.Require(MassTagList != null && MassTagList.Count > 0, "MassTags have not been defined.");
+            Check.Require(MassTagList?.Count > 0, "MassTags have not been defined.");
             Check.Require(Run != null, "Run is null");
 
             var resultsPassingCriteria = new List<TargetedResultBase>();
@@ -331,7 +331,7 @@ namespace DeconTools.Workflows.Backend.Core
                 var progressInfo2 = "NET grouping " + netGrouping.Lower + "-" + netGrouping.Upper + " COMPLETE. Found massTags= " + numPassingMassTagsInGrouping + "; Missing massTags = " + numFailingMassTagsInGrouping;
                 ReportProgress(progressPercentage, progressInfo2);
 
-                if (_backgroundWorker != null && _backgroundWorker.CancellationPending)
+                if (_backgroundWorker?.CancellationPending == true)
                 {
                     resultsPassingCriteria.Clear();
                     return resultsPassingCriteria;

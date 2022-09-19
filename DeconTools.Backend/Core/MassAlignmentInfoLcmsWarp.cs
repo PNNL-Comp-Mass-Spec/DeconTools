@@ -80,8 +80,8 @@ namespace DeconTools.Backend.Core
         {
             if (AlignmentInfo == null) return 0;
 
-            var alignmentInfoContainsScanInfo = (AlignmentInfo.marrMassFncTimeInput != null && AlignmentInfo.marrMassFncTimeInput.Length > 0);
-            var alignmentInfoContainsMZInfo = (AlignmentInfo.marrMassFncMZInput != null && AlignmentInfo.marrMassFncMZInput.Length > 0);
+            var alignmentInfoContainsScanInfo = (AlignmentInfo.marrMassFncTimeInput?.Length > 0);
+            var alignmentInfoContainsMZInfo = (AlignmentInfo.marrMassFncMZInput?.Length > 0);
 
             var canUseScanWhenGettingPPMShift = alignmentInfoContainsScanInfo && alignmentInfoContainsMZInfo && scan >= 0;
 

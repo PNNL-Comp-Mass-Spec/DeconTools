@@ -130,7 +130,7 @@ namespace DeconTools.Workflows.Backend.Core
 
             Targets = CreateTargets(ExecutorParameters.TargetType, currentTargetsFilePath);
 
-            Check.Ensure(Targets != null && Targets.TargetList.Count > 0,
+            Check.Ensure(Targets?.TargetList.Count > 0,
                          "Target massTags is empty (or all peptides contain unknown modifications). Check the path to the massTag data file.");
 
             if (Targets == null)
@@ -211,7 +211,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         protected virtual void UpdateTargetMissingInfo()
         {
-            var canUseReferenceMassTags = MassTagsForReference != null && MassTagsForReference.TargetList.Count > 0;
+            var canUseReferenceMassTags = MassTagsForReference?.TargetList.Count > 0;
 
             var massTagIDsAvailableForLookup = new List<int>();
 
@@ -493,7 +493,7 @@ namespace DeconTools.Workflows.Backend.Core
             if (runIsNotAligned && ExecutorParameters.TargetedAlignmentIsPerformed)
 #pragma warning restore 618
             {
-                Check.Ensure(MassTagsForTargetedAlignment != null && MassTagsForTargetedAlignment.TargetList.Count > 0, "MassTags for targeted alignment have not been defined. Check path within parameter file.");
+                Check.Ensure(MassTagsForTargetedAlignment?.TargetList.Count > 0, "MassTags for targeted alignment have not been defined. Check path within parameter file.");
 
                 ReportGeneralProgress("Performing TargetedAlignment using mass tags from file: " + GetTargetFilePathForIqAlignment());
                 ReportGeneralProgress("Total mass tags to be aligned = " + MassTagsForTargetedAlignment.TargetList.Count);

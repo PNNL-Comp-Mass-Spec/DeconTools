@@ -38,7 +38,7 @@ namespace DeconTools.Backend.FileIO
 
         public TargetCollection Import(List<int> TargetIDsToFilterOn)
         {
-            var filterOnTargetIDs = TargetIDsToFilterOn != null && TargetIDsToFilterOn.Count > 0;
+            var filterOnTargetIDs = TargetIDsToFilterOn?.Count > 0;
 
             var data = new TargetCollection();
 

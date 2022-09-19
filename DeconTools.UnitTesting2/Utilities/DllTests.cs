@@ -53,7 +53,7 @@ namespace DeconTools.UnitTesting2.Utilities
                     foreach (var referenceItem in referenceItems)
                     {
                         var xAttribute = referenceItem.Attribute("Include");
-                        if (xAttribute != null && xAttribute.Value.Contains("DeconEngineV2"))
+                        if (xAttribute?.Value.Contains("DeconEngineV2") == true)
                         {
                             Console.WriteLine("\t\t\t" + xAttribute.Value);
 

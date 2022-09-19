@@ -42,7 +42,7 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             if (theorFeature == null)
                 return null;
 
-            Check.Require(theorFeature.Peaklist != null && theorFeature.Peaklist.Count > 0, "Theoretical feature hasn't been defined.");
+            Check.Require(theorFeature.Peaklist?.Count > 0, "Theoretical feature hasn't been defined.");
 
             var outFeature = new IsotopicProfile
             {

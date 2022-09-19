@@ -281,7 +281,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         private void getRSquaredVal(IqResult result, out double? rSquaredVal, out double? slope)
         {
-            if (result.CorrelationData != null && result.CorrelationData.CorrelationDataItems.Count > 0)
+            if (result.CorrelationData?.CorrelationDataItems.Count > 0)
             {
                 rSquaredVal = result.CorrelationData.RSquaredValsMedian;
 

@@ -88,7 +88,7 @@ namespace DeconTools.Backend.Algorithms
 
         public void OutputLabelingInfo(List<double> distributionData, out double fractionUnlabeled, out double fractionLabeled, out double averageLabelsIncorporated)
         {
-            Check.Require(distributionData != null && distributionData.Count > 0, "distributionData is empty in call to OutputLabelingInfo");
+            Check.Require(distributionData?.Count > 0, "distributionData is empty in call to OutputLabelingInfo");
             if (distributionData == null)
             {
                 fractionUnlabeled = 0;

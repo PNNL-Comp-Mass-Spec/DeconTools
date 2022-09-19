@@ -94,7 +94,7 @@ namespace DeconTools.Workflows.Backend.Core
         {
             Check.Require(_workflowParameters != null, "Cannot validate workflow parameters. Parameters are null");
 
-            var pointsInSmoothIsEvenNumber = _workflowParameters != null && (_workflowParameters.ChromSmootherNumPointsInSmooth % 2 == 0);
+            var pointsInSmoothIsEvenNumber = (_workflowParameters?.ChromSmootherNumPointsInSmooth % 2 == 0);
             if (pointsInSmoothIsEvenNumber)
             {
                 throw new Exception("Points in chrom smoother is an even number, but must be an odd number.");

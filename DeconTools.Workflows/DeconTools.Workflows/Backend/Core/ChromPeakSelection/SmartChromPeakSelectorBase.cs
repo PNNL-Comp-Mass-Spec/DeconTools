@@ -232,7 +232,7 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
             pq.FitScore = currentResult.Score;
             pq.InterferenceScore = currentResult.InterferenceScore;
             pq.IsotopicProfile = currentResult.IsotopicProfile;
-            var resultHasFlags = (currentResult.Flags != null && currentResult.Flags.Count > 0);
+            var resultHasFlags = (currentResult.Flags?.Count > 0);
             pq.IsIsotopicProfileFlagged = resultHasFlags;
 
             pq.ScanLc = currentResult.Run.CurrentScanSet.PrimaryScanNumber;

@@ -42,7 +42,7 @@ namespace DeconTools.Backend.Core
         public double GetNETValueForScan(int scanNum)
         {
             double netVal = -1;
-            Check.Require(UMCList != null && UMCList.Count > 0, "Cannot retrieve NET value info. UMCs not loaded yet.");
+            Check.Require(UMCList?.Count > 0, "Cannot retrieve NET value info. UMCs not loaded yet.");
             if (UMCList == null)
                 return Double.NaN;
 

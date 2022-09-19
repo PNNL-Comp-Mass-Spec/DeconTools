@@ -103,7 +103,7 @@ namespace DeconTools.Backend.FileIO
             var fiFile = new FileInfo(filePath);
             var diDirectory = fiFile.Directory;
 
-            if (diDirectory != null && !diDirectory.Exists)
+            if (diDirectory?.Exists == false)
             {
                 diDirectory.Create();
             }

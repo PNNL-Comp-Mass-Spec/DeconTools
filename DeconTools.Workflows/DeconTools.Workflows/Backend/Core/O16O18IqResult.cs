@@ -60,7 +60,7 @@ namespace DeconTools.Workflows.Backend.Core
         {
             double failedValue = -1;
 
-            if (CorrelationData!=null && CorrelationData.CorrelationDataItems.Count>1)
+            if (CorrelationData?.CorrelationDataItems.Count > 1)
             {
                 var corr = CorrelationData.CorrelationDataItems[0].CorrelationRSquaredVal == null
                                ? failedValue
@@ -76,7 +76,7 @@ namespace DeconTools.Workflows.Backend.Core
         {
             double failedValue = -1;
 
-            if (CorrelationData != null && CorrelationData.CorrelationDataItems.Count > 1)
+            if (CorrelationData?.CorrelationDataItems.Count > 1)
             {
                 var corr = CorrelationData.CorrelationDataItems[1].CorrelationRSquaredVal == null
                                ? failedValue
@@ -92,7 +92,7 @@ namespace DeconTools.Workflows.Backend.Core
         {
             double failedValue = -1;
 
-            if (CorrelationData != null && CorrelationData.CorrelationDataItems.Count > 2)
+            if (CorrelationData?.CorrelationDataItems.Count > 2)
             {
                 var corr = CorrelationData.CorrelationDataItems[2].CorrelationRSquaredVal == null
                                ? failedValue
@@ -108,7 +108,7 @@ namespace DeconTools.Workflows.Backend.Core
         {
             double failedValue = -9999;
 
-            if (CorrelationData != null && CorrelationData.CorrelationDataItems.Count > 1)
+            if (CorrelationData?.CorrelationDataItems.Count > 1)
             {
                 var corr = CorrelationData.CorrelationDataItems[1].CorrelationSlope == null
                                ? failedValue
@@ -124,7 +124,7 @@ namespace DeconTools.Workflows.Backend.Core
         {
             double failedValue = -9999;
 
-            if (CorrelationData != null && CorrelationData.CorrelationDataItems.Count > 1)
+            if (CorrelationData?.CorrelationDataItems.Count > 1)
             {
                 var ratio = CorrelationData.CorrelationDataItems[0].CorrelationSlope == null
                                ? failedValue
@@ -140,7 +140,7 @@ namespace DeconTools.Workflows.Backend.Core
         {
             double failedValue = -9999;
 
-            if (CorrelationData != null && CorrelationData.CorrelationDataItems.Count > 2)
+            if (CorrelationData?.CorrelationDataItems.Count > 2)
             {
                 var slope = CorrelationData.CorrelationDataItems[2].CorrelationSlope == null
                                ? failedValue

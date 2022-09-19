@@ -100,7 +100,7 @@ namespace DeconTools.Backend.Runs
             if (m_spec == null) return -1;
 
             var timeRangeArr = m_spec.AcquiredTimeRange;
-            if (timeRangeArr != null && timeRangeArr.Length == 1)
+            if (timeRangeArr?.Length == 1)
             {
                 time = timeRangeArr[0].Start;
             }

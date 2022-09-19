@@ -89,7 +89,7 @@ namespace DeconTools.Backend.Algorithms
         //TODO:  make a ChromatogramObject that will help handle my MSPeakResults, etc.
         public XYData GenerateChromatogram(Dictionary<int, List<MSPeakResult>> groupedMsPeakList, int minScan, int maxScan, List<double> targetMZList, double tolerance, int chromIDToAssign, Globals.ToleranceUnit toleranceUnit = Globals.ToleranceUnit.PPM)
         {
-            Check.Require(groupedMsPeakList != null && groupedMsPeakList.Count > 0, "Cannot generate chromatogram. Source msPeakList is empty or hasn't been defined.");
+            Check.Require(groupedMsPeakList?.Count > 0, "Cannot generate chromatogram. Source msPeakList is empty or hasn't been defined.");
 
             var scanTolerance = 5;     // TODO:   keep an eye on this
 
@@ -159,7 +159,7 @@ namespace DeconTools.Backend.Algorithms
 
         public XYData GenerateChromatogram(List<MSPeakResult> msPeakList, int minScan, int maxScan, List<double> targetMZList, double tolerance, int chromIDToAssign, Globals.ToleranceUnit toleranceUnit = Globals.ToleranceUnit.PPM)
         {
-            Check.Require(msPeakList != null && msPeakList.Count > 0, "Cannot generate chromatogram. Source msPeakList is empty or hasn't been defined.");
+            Check.Require(msPeakList?.Count > 0, "Cannot generate chromatogram. Source msPeakList is empty or hasn't been defined.");
             if (msPeakList == null)
                 return null;
 

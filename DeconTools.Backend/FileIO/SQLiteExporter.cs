@@ -149,7 +149,7 @@ namespace DeconTools.Backend.FileIO
         protected virtual string BuildCreateTableSQLiteCommandString()
         {
             Check.Assert(!string.IsNullOrEmpty(TableName), string.Format("SQLite TableName has not been declared within {0}.", Name));
-            Check.Assert(FieldList != null && FieldList.Count > 0, string.Format("SQLite Table fields have not been declared within {0}.", Name));
+            Check.Assert(FieldList?.Count > 0, string.Format("SQLite Table fields have not been declared within {0}.", Name));
 
             if (FieldList == null)
                 return "";

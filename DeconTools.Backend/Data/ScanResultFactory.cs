@@ -45,8 +45,8 @@ namespace DeconTools.Backend.Data
                 return null;
             }
 
-            Check.Require(run.IMSScanSetCollection != null && run.IMSScanSetCollection.ScanSetList.Count > 0, "ScanResult creator failed...ScanSetCollection is empty");
-            Check.Require(run.ScanSetCollection != null && run.ScanSetCollection.ScanSetList.Count > 0, "ScanResult creator failed...FrameSetCollection is empty");
+            Check.Require(run.IMSScanSetCollection?.ScanSetList.Count > 0, "ScanResult creator failed...ScanSetCollection is empty");
+            Check.Require(run.ScanSetCollection?.ScanSetList.Count > 0, "ScanResult creator failed...FrameSetCollection is empty");
 
             var lcScanSetUIMF = (LCScanSetIMS)lcScanSet;
 

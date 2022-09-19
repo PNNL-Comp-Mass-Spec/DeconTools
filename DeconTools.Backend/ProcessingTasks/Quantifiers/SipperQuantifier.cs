@@ -349,7 +349,7 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
 
                 var highQualityRatioProfileData = GetIsoDataPassingChromCorrelation(result.ChromCorrelationData, ratioData);
 
-                if (highQualityRatioProfileData.Peaklist != null && highQualityRatioProfileData.Peaklist.Count > 0)
+                if (highQualityRatioProfileData.Peaklist?.Count > 0)
                 {
                     result.AreaUnderDifferenceCurve = HighQualitySubtractedProfile.Peaklist.Select(p => p.Height).Sum();
                 }
@@ -358,8 +358,7 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
                     result.AreaUnderDifferenceCurve = 0;
                 }
 
-                if (HighQualitySubtractedProfile.Peaklist != null &&
-                    HighQualitySubtractedProfile.Peaklist.Count > 0 &&
+                if (HighQualitySubtractedProfile.Peaklist?.Count > 0 &&
                     highQualityRatioProfileData.Peaklist != null)
                 {
                     result.AreaUnderRatioCurveRevised = highQualityRatioProfileData.Peaklist.Select(p => p.Height).Sum();

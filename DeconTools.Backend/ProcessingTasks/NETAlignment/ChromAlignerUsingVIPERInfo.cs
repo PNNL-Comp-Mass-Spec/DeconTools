@@ -29,8 +29,7 @@ namespace DeconTools.Backend.ProcessingTasks.NETAlignment
         public void Execute(Run run)
         {
             Check.Require(run != null, "'Run' has not be defined");
-            Check.Require(run.DatasetFileOrDirectoryPath != null &&
-                run.DatasetFileOrDirectoryPath.Length > 0, "MS data file ('run') has not been initialized");
+            Check.Require(run.DatasetFileOrDirectoryPath?.Length > 0, "MS data file ('run') has not been initialized");
             //Check.Require(run.ScanSetCollection != null && run.ScanSetCollection.ScanSetList.Count > 0, "ChromAligner failed. ScanSets have not been defined.");
 
             if (m_targetUMCFileStoringAlignmentInfo == null)

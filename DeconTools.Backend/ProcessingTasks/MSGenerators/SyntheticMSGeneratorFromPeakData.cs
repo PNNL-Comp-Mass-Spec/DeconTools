@@ -46,7 +46,7 @@ namespace DeconTools.Backend.ProcessingTasks.MSGenerators
             if (run == null)
                 return new XYData();
 
-            Check.Require(run.PeakList != null && run.PeakList.Count > 0, string.Format("{0} failed. Run has not been defined.", this.Name));
+            Check.Require(run.PeakList?.Count > 0, string.Format("{0} failed. Run has not been defined.", this.Name));
             if (run.PeakList == null)
                 return new XYData();
 

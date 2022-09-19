@@ -346,7 +346,7 @@ namespace IQ.Console
                             workflowParameters.ChromNETTolerance = 0.025;
                         }
 
-                        if (run.MassAlignmentInfo != null && run.MassAlignmentInfo.StDevPpmShiftData > 0)
+                        if (run.MassAlignmentInfo?.StDevPpmShiftData > 0)
                             workflowParameters.ChromGenTolerance = run.MassAlignmentInfo.StDevPpmShiftData * 3;
 
                         //define workflows for parentTarget and childTargets

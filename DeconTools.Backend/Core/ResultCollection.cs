@@ -78,7 +78,7 @@ namespace DeconTools.Backend.Core
 
         public Dictionary<int, List<MSPeakResult>> GetMsPeakResultsGroupedAndMzOrdered()
         {
-            if (msPeakResultsGroupedAndMzOrdered == null || !msPeakResultsGroupedAndMzOrdered.Any())
+            if (msPeakResultsGroupedAndMzOrdered?.Any() != true)
             {
                 msPeakResultsGroupedAndMzOrdered = new Dictionary<int, List<MSPeakResult>>();
 

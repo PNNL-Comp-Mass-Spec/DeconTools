@@ -439,7 +439,7 @@ namespace DeconTools.Workflows.Backend.FileIO
                              ON dbo.t_mass_tags.mass_tag_id = dbo.t_mass_tags_net.mass_tag_id
                         Order by MassTagID ");
 
-            Check.Require(massTagsToBeRetrieved != null && massTagsToBeRetrieved.Count > 0, "Importer is trying to import mass tag data, but list of MassTags has not been set.");
+            Check.Require(massTagsToBeRetrieved?.Count > 0, "Importer is trying to import mass tag data, but list of MassTags has not been set.");
             sb.Append("Mass_Tag_ID in (");
 
             if (massTagsToBeRetrieved == null)

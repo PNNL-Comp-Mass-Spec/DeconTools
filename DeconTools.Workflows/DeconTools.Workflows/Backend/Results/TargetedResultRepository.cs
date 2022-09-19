@@ -45,6 +45,6 @@ namespace DeconTools.Workflows.Backend.Results
             Results.Clear();
         }
 
-        public bool HasResults => (Results != null && Results.Count > 0);
+        public bool HasResults => (Results?.Count > 0);
     }
 }

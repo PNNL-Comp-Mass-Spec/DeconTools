@@ -31,7 +31,7 @@ namespace DeconTools.Workflows.Backend.Core
 
             UpdateTargetsWithMassTagInfo(Targets, MassTagsForReference);
 
-            Check.Ensure(Targets != null && Targets.TargetList.Count > 0,
+            Check.Ensure(Targets?.TargetList.Count > 0,
                          "Target massTags is empty. Check the path to the massTag data file.");
 
             _workflowParameters = WorkflowParameters.CreateParameters(ExecutorParameters.WorkflowParameterFile);

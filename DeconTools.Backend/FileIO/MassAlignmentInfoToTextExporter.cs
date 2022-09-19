@@ -21,7 +21,7 @@ namespace DeconTools.Backend.FileIO
             if (alignmentInfo == null)
                 return;
 
-            Check.Require(alignmentInfo.marrMassFncMZInput != null && alignmentInfo.marrMassFncMZInput.Length > 0, "Mass alignment data is empty.");
+            Check.Require(alignmentInfo.marrMassFncMZInput?.Length > 0, "Mass alignment data is empty.");
 
             if (alignmentInfo.marrMassFncMZInput == null)
                 return;
