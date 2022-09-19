@@ -23,11 +23,15 @@ namespace DeconTools.Backend.ProcessingTasks
         {
             Check.Require(resultList != null, "ResultCollection is null");
             if (resultList == null)
+            {
                 return;
+            }
 
             Check.Require(resultList.Run != null, "Run is null");
             if (resultList.Run == null)
+            {
                 return;
+            }
 
             bool scanIsMS2;
 

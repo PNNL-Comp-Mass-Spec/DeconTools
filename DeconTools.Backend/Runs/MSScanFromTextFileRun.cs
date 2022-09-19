@@ -39,7 +39,10 @@ namespace DeconTools.Backend.Runs
 
         internal XYData loadDataFromFile(string filename)
         {
-            if (m_delimiter == 0) m_delimiter = determineDelimiter(filename);
+            if (m_delimiter == 0)
+            {
+                m_delimiter = determineDelimiter(filename);
+            }
 
             var sr = new StreamReader(filename);
 
@@ -52,7 +55,9 @@ namespace DeconTools.Backend.Runs
             {
                 var line = sr.ReadLine();
                 if (string.IsNullOrWhiteSpace(line))
+                {
                     continue;
+                }
 
                 if (!foundStartOfXYData)     //contains header, but haven't found start of numerical data
                 {
@@ -100,7 +105,9 @@ namespace DeconTools.Backend.Runs
         private double ParseDoubleField(string inputString)
         {
             if (double.TryParse(inputString, out var result))
+            {
                 return result;
+            }
 
             return double.NaN;
         }
@@ -108,7 +115,9 @@ namespace DeconTools.Backend.Runs
         private float ParseFloatField(string inputString)
         {
             if (float.TryParse(inputString, out var result))
+            {
                 return result;
+            }
 
             return float.NaN;
         }
@@ -142,7 +151,9 @@ namespace DeconTools.Backend.Runs
                     counter++;
 
                     if (string.IsNullOrWhiteSpace(line))
+                    {
                         continue;
+                    }
 
                     if (!foundStartOfXYData)
                     {

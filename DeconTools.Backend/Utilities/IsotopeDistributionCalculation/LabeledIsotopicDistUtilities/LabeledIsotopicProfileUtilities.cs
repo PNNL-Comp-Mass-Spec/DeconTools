@@ -179,7 +179,10 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.LabeledIso
         private double CalculateAbundanceLightIsotope(string elementSymbol, int isotopeNum, double percentAddedLabeling)
         {
             var elementIsValid = ValidateElement(elementSymbol);
-            if (!elementIsValid) return 0;
+            if (!elementIsValid)
+            {
+                return 0;
+            }
 
             var key = elementSymbol + isotopeNum;
             var isotope = Constants.Elements[elementSymbol].IsotopeDictionary[key];
@@ -192,7 +195,10 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.LabeledIso
         private double CalculateAbundanceHeavyIsotope(string elementSymbol, int isotopeNum, double percentAddedLabeling)
         {
             var elementIsValid = ValidateElement(elementSymbol);
-            if (!elementIsValid) return 0;
+            if (!elementIsValid)
+            {
+                return 0;
+            }
 
             var key = elementSymbol + isotopeNum;
             var isotope = Constants.Elements[elementSymbol].IsotopeDictionary[key];

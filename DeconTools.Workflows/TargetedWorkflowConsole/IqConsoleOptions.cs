@@ -106,29 +106,41 @@ namespace IQ.Console
             System.Console.WriteLine("Workflow parameter file: " + WorkflowParameterFile);
 
             if (!string.IsNullOrEmpty(OutputDirectory))
+            {
                 System.Console.WriteLine("Output directory: " + OutputDirectory);
+            }
 
             System.Console.WriteLine();
             if (!string.IsNullOrEmpty(TargetsFile))
+            {
                 System.Console.WriteLine("Targets file: " + TargetsFile);
+            }
 
             if (!string.IsNullOrEmpty(ReferenceTargetFile))
+            {
                 System.Console.WriteLine("Reference targets file: " + ReferenceTargetFile);
+            }
 
             if (!string.IsNullOrEmpty(TargetFileForAlignment))
+            {
                 System.Console.WriteLine("Target file for alignment: " + TargetFileForAlignment);
+            }
 
             System.Console.WriteLine();
             System.Console.WriteLine("Use input scan: " + UseInputScan);
 
             if (!string.IsNullOrEmpty(TemporaryWorkingDirectory))
+            {
                 System.Console.WriteLine("Temporary working directory: " + TemporaryWorkingDirectory);
+            }
 
             System.Console.WriteLine();
             System.Console.WriteLine("IsAlignmentPerformed: " + IsAlignmentPerformed);
 
             if (string.IsNullOrEmpty(AlignmentParameterFile))
+            {
                 System.Console.WriteLine("AlignmentParameterFile: " + AlignmentParameterFile);
+            }
 
             System.Console.WriteLine("IsMassAlignmentPerformed: " + IsMassAlignmentPerformed);
             System.Console.WriteLine("IsNetAlignmentPerformed: " + IsNetAlignmentPerformed);
@@ -147,13 +159,19 @@ namespace IQ.Console
             }
 
             if (ChromGenSourceDataProcessMsMs)
+            {
                 System.Console.WriteLine("Processing MS/MS spectra");
+            }
 
             if (UseOldIq)
+            {
                 System.Console.WriteLine("Using Old IQ algorithm");
+            }
 
             if (OutputGraphs)
+            {
                 System.Console.WriteLine("Generating .png images of mass spectra for all the results. See folder 'OutputGraphs' ");
+            }
         }
 
         public bool ValidateArgs()

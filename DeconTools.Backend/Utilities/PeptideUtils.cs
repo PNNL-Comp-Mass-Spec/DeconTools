@@ -94,7 +94,10 @@ namespace DeconTools.Backend.Utilities
             peptideSequence = CleanUpPeptideSequence(peptideSequence);
 
             var sequenceIsValid = ValidateSequence(peptideSequence);
-            if (!sequenceIsValid) return string.Empty;
+            if (!sequenceIsValid)
+            {
+                return string.Empty;
+            }
 
             var outputEmpiricalFormula = "";
 
@@ -195,7 +198,10 @@ namespace DeconTools.Backend.Utilities
 
         public bool ValidateSequence(string peptideSequence)
         {
-            if (string.IsNullOrEmpty(peptideSequence)) return false;
+            if (string.IsNullOrEmpty(peptideSequence))
+            {
+                return false;
+            }
 
             foreach (var aminoAcid in peptideSequence)
             {

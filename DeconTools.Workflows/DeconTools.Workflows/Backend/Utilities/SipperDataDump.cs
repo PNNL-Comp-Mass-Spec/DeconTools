@@ -43,13 +43,17 @@ namespace DeconTools.Workflows.Backend.Utilities
             //Temporary Data Dumping Point
             //Data Dump also in TopDownIqTesting and ChromCorrelationData
             if (!(input is ChromPeakIqTarget target))
+            {
                 return;
+            }
 
             var status = "UNK";
             var result = target.GetResult();
 
             if (!(result.Target.ParentTarget is IqChargeStateTarget parent))
+            {
                 return;
+            }
 
             if (parent.ObservedScan != -1)
             {

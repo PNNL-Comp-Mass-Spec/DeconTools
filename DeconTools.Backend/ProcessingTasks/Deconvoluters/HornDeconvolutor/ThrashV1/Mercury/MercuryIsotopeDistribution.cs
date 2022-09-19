@@ -130,16 +130,22 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             // calculate Ap_subscript to from requested Res
             double aPSubscript;
             if (charge == 0)
+            {
                 aPSubscript = AverageMw / resolution * MercurySize * 2.0 / _massRange;
+            }
             else
+            {
                 aPSubscript = AverageMw / (resolution * Math.Abs(charge)) * MercurySize * 2.0 / _massRange;
+            }
 
             /* Allocate memory for Axis arrays */
             var numPoints = _massRange * PointsPerAmu;
             _frequencyData = new Complex[numPoints];
 
             if (charge == 0)
+            {
                 charge = 1;
+            }
 
             if (debug)
             {
@@ -178,7 +184,10 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             {
                 if (Math.Abs(y[i]) >= Math.Abs(y[i - 1]))
                 {
-                    if (Math.Abs(y[i]) > Math.Abs(y[i - 1])) lastDelta = 1;
+                    if (Math.Abs(y[i]) > Math.Abs(y[i - 1]))
+                    {
+                        lastDelta = 1;
+                    }
                 }
                 else
                 {
@@ -207,7 +216,9 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                 var atomicity = (int)formula.ElementalComposition[j].NumCopies;
 
                 if (atomicity == 0)
+                {
                     continue;
+                }
                 //int numIsotopes = ElementalIsotopeComposition.ElementalIsotopesList[elementIndex].NumberOfIsotopes;
                 var monoMw = ElementalIsotopeComposition.ElementalIsotopesList[elementIndex].Isotopes[0].Mass;
                 var avgMw = ElementalIsotopeComposition.ElementalIsotopesList[elementIndex].AverageMass;
@@ -229,9 +240,13 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             }
 
             if (charge == 0)
+            {
                 _massRange = (int)(Math.Sqrt(1 + MassVariance) * 10);
+            }
             else
+            {
                 _massRange = (int)(Math.Sqrt(1 + MassVariance) * 10.0 / charge);
+            }
             /* +/- 5 sd's : Multiply charged */
 
             /* Set to nearest (upper) power of 2 */
@@ -244,7 +259,9 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                 }
             }
             if (_massRange <= 0)
+            {
                 _massRange = 1;
+            }
         }
 
         /// <summary>
@@ -271,9 +288,13 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                     {
                         var expDenom = numPoints / sub * (numPoints / sub);
                         if (i <= numPoints / 2)
+                        {
                             apVal = Math.Exp(-(i - 1) * (i - 1) / expDenom);
+                        }
                         else
+                        {
                             apVal = Math.Exp(-(numPoints - i - 1) * (numPoints - i - 1) / expDenom);
+                        }
 
                         _frequencyData[i - 1] *= apVal;
                     }
@@ -282,9 +303,13 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                     for (i = 1; i <= numPoints; i++)
                     {
                         if (i <= numPoints / 2)
+                        {
                             apVal = Math.Exp(-(double)(i - 1) * (sub / 5000.0));
+                        }
                         else
+                        {
                             apVal = Math.Exp(-(double)(numPoints - i) * (sub / 5000.0));
+                        }
 
                         _frequencyData[i - 1] *= apVal;
                     }
@@ -319,7 +344,9 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             _mzList.Clear();
 
             if (charge == 0)
+            {
                 charge = 1;
+            }
 
             //[gord] fill mz and intensity arrays, ignoring minimum thresholds
             for (var i = numPoints / 2 + 1; i <= numPoints; i++)
@@ -397,13 +424,18 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                                 var symmetryRatioCalc1 = (y2Iso - y1Iso) * (x3Iso - x2Iso) -
                                                          (y3Iso - y2Iso) * (x2Iso - x1Iso);
                                 if (symmetryRatioCalc1.Equals(0)) //symmetrical
+                                {
                                     isotopeMzs.Add(x2Iso);
+                                }
                                 else
+                                {
                                     //not symmetrical...   gord:  I'm not sure how the center point is calculated... perhaps a midpoint calc?
                                     isotopeMzs.Add((x1Iso + x2Iso -
                                                     (y2Iso - y1Iso) * (x3Iso - x2Iso) * (x1Iso - x3Iso) /
                                                     ((y2Iso - y1Iso) * (x3Iso - x2Iso) -
                                                      (y3Iso - y2Iso) * (x2Iso - x1Iso))) / 2.0);
+                                }
+
                                 isotopeIntensities.Add(intensity);
                             }
                         }
@@ -418,12 +450,17 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
 
                             var dIso = (y2Iso - y1Iso) * (x3Iso - x2Iso) - (y3Iso - y2Iso) * (x2Iso - x1Iso);
                             if (dIso.Equals(0))
+                            {
                                 isotopeMzs.Add(x2Iso);
+                            }
                             else
+                            {
                                 isotopeMzs.Add((x1Iso + x2Iso -
                                                 (y2Iso - y1Iso) * (x3Iso - x2Iso) * (x1Iso - x3Iso) /
                                                 ((y2Iso - y1Iso) * (x3Iso - x2Iso) - (y3Iso - y2Iso) * (x2Iso - x1Iso))) /
                                                2.0);
+                            }
+
                             isotopeIntensities.Add(intensity);
                         }
                     }
@@ -464,17 +501,23 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             //[gord] determine if three points are symmetrical around the max point (X2,Y2)
             var symmetryRatioCalc = (y2 - y1) * (x3 - x2) - (y3 - y2) * (x2 - x1);
             if (symmetryRatioCalc.Equals(0)) //symmetrical
+            {
                 MaxPeakMz = x2;
+            }
             else //not symmetrical
+            {
                 MaxPeakMz = (x1 + x2 -
                              (y2 - y1) * (x3 - x2) * (x1 - x3) / ((y2 - y1) * (x3 - x2) - (y3 - y2) * (x2 - x1))) / 2.0;
+            }
             // remember that the mono isotopic mass is calculated using theoretical values rather than
             // fit with the fourier transformed point. Hence even if the monoisotopic mass is the most intense
             // its value might not match exactly with mdbl_most_intense_mw, hence check if they are the same
             // and set it.
             MostIntenseMw = MaxPeakMz * charge - ChargeCarrierMass * charge + MercuryCache.ElectronMass * charge;
             if (Math.Abs(MostIntenseMw - MonoMw) < 0.5 * 1.003 / charge)
+            {
                 MostIntenseMw = MonoMw;
+            }
         } /* End of OutputData() */
 
         public bool FindPeak(double minMz, double maxMz, out double mzValue, out double intensity)
@@ -487,7 +530,10 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             {
                 var mzLocal = _minMz + i * 1.0 / PointsPerAmu;
                 if (mzLocal > _maxMz || mzLocal > maxMz)
+                {
                     break;
+                }
+
                 if (mzLocal > _minMz && mzLocal > minMz)
                 {
                     if (_intensityList[i] > intensity)
@@ -499,7 +545,9 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             }
 
             if (maxIndex == -1)
+            {
                 return false;
+            }
 
             var x1 = _minMz + (maxIndex - 1) * 1.0 / PointsPerAmu;
             var x2 = x1 + 1.0 / PointsPerAmu;
@@ -515,9 +563,14 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             var d = (y2 - y1) * (x3 - x2) - (y3 - y2) * (x2 - x1);
 
             if (d.Equals(0))
+            {
                 mzValue = x2;
+            }
             else
+            {
                 mzValue = (x1 + x2 - (y2 - y1) * (x3 - x2) * (x1 - x3) / d) / 2.0;
+            }
+
             return true;
         }
 
@@ -552,7 +605,9 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                                 ElementalIsotopeComposition.ElementalIsotopesList[elementIndex].Isotopes[k].Mass /
                                 charge - averageMass / charge;
                             if (wrapFreq < 0)
+                            {
                                 wrapFreq += _massRange;
+                            }
                         }
                         x = 2 * Pi * wrapFreq * freq;
                         real += isotopeAbundance * Math.Cos(x);
@@ -562,13 +617,21 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                     tempr = Math.Sqrt(real * real + imag * imag);
                     r *= Math.Pow(tempr, atomicity);
                     if (real > 0)
+                    {
                         theta += atomicity * Math.Atan(imag / real);
+                    }
                     else if (real < 0)
+                    {
                         theta += atomicity * (Math.Atan(imag / real) + Pi);
+                    }
                     else if (imag > 0)
+                    {
                         theta += atomicity * Pi / 2;
+                    }
                     else
+                    {
                         theta += atomicity * -Pi / 2;
+                    }
                 }
                 /* Convert back to real:imag coordinates and store */
                 _frequencyData[i - 1] = new Complex(r * Math.Cos(theta), r * Math.Sin(theta));
@@ -600,7 +663,9 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                                 ElementalIsotopeComposition.ElementalIsotopesList[elementIndex].Isotopes[k].Mass /
                                 charge - averageMass / charge;
                             if (wrapFreq < 0)
+                            {
                                 wrapFreq += _massRange;
+                            }
                         }
 
                         x = 2 * Pi * wrapFreq * freq;

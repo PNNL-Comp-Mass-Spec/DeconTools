@@ -32,7 +32,9 @@ namespace DeconTools.Backend.Workflows
             var startTime = DateTime.UtcNow;
             var maxRuntimeHours = NewDeconToolsParameters.MiscMSProcessingParameters.MaxHoursPerDataset;
             if (maxRuntimeHours <= 0)
+            {
                 maxRuntimeHours = int.MaxValue;
+            }
 
             _scanCounter = 1;
             foreach (var scanSet in Run.ScanSetCollection.ScanSetList)
@@ -90,7 +92,10 @@ namespace DeconTools.Backend.Workflows
 
         public virtual void ReportProgress()
         {
-            if (Run.ScanSetCollection == null || Run.ScanSetCollection.ScanSetList.Count == 0) return;
+            if (Run.ScanSetCollection == null || Run.ScanSetCollection.ScanSetList.Count == 0)
+            {
+                return;
+            }
 
             var userState = new ScanBasedProgressInfo(Run, Run.CurrentScanSet);
 
@@ -105,7 +110,9 @@ namespace DeconTools.Backend.Workflows
                                  DateTime.UtcNow.Subtract(_lastProgressTime).TotalMinutes > 5 ||
                                  mShowTraceMessages;
             if (!reportProgress)
+            {
                 return;
+            }
 
             _lastProgressTime = DateTime.UtcNow;
 

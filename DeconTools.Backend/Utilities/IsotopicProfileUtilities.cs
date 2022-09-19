@@ -37,7 +37,10 @@ namespace DeconTools.Backend.Utilities
                     {
                         if (xVals[i] <= stopMZ)
                         {
-                            if (i == xVals.Length - 1) break;   // rare circumstance that m/z value is the last of the raw data points
+                            if (i == xVals.Length - 1)
+                            {
+                                break;   // rare circumstance that m/z value is the last of the raw data points
+                            }
 
                             var x1 = xVals[i];
                             var y1 = yVals[i];
@@ -107,12 +110,18 @@ namespace DeconTools.Backend.Utilities
         public static void AlignTwoIsotopicProfiles(IsotopicProfile iso1, IsotopicProfile iso2)
         {
             double offset;
-            if (iso2?.Peaklist == null || iso2.Peaklist.Count == 0) return;
+            if (iso2?.Peaklist == null || iso2.Peaklist.Count == 0)
+            {
+                return;
+            }
 
             var mostIntensePeak = iso2.getMostIntensePeak();
             var indexOfMostIntensePeak = iso2.Peaklist.IndexOf(mostIntensePeak);
 
-            if (iso1.Peaklist == null || iso1.Peaklist.Count == 0) return;
+            if (iso1.Peaklist == null || iso1.Peaklist.Count == 0)
+            {
+                return;
+            }
 
             var enoughPeaksInTarget = (indexOfMostIntensePeak <= iso1.Peaklist.Count - 1);
 
@@ -179,7 +188,9 @@ namespace DeconTools.Backend.Utilities
             foreach (var peak in msPeakList)
             {
                 if (peak.Height >= intensityCutoff)
+                {
                     filteredMSPeakList.Add(peak);
+                }
             }
 
             return filteredMSPeakList;

@@ -28,7 +28,9 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
 
             Check.Require(result != null, this.Name + " failed; This task requires a MassTagResult, which is null");
             if (result == null)
+            {
                 return;
+            }
 
             var fwhm = result.IsotopicProfile.GetFWHM();
         }

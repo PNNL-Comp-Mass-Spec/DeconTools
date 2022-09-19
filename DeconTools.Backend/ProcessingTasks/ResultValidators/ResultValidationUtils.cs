@@ -14,7 +14,10 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
         #region Public Methods
         public static int GetFlagCode(IList<ResultFlag> resultFlags)
         {
-            if (resultFlags == null || resultFlags.Count == 0) return -1;
+            if (resultFlags == null || resultFlags.Count == 0)
+            {
+                return -1;
+            }
 
             //TODO: add code later, but for now, will return 1;
             return 1;
@@ -29,7 +32,9 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
         {
             var flagCode = GetFlagCode(resultFlags);
             if (flagCode == -1)
+            {
                 return string.Empty;
+            }
 
             return flagCode.ToString();
         }

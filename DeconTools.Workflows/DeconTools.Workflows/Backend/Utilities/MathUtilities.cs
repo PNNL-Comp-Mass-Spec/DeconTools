@@ -9,7 +9,10 @@ namespace DeconTools.Workflows.Backend.Utilities
         public static double GetStDev(IEnumerable<double> vals)
         {
             double count = vals.Count();
-            if (count < 3) return double.MinValue;
+            if (count < 3)
+            {
+                return double.MinValue;
+            }
 
             var avg = vals.Average();
 

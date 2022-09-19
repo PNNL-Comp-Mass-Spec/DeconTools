@@ -626,7 +626,10 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             };
 
             var expectedPeaksFile = Path.Combine(run.DatasetDirectoryPath, run.DatasetName + "_peaks.txt");
-            if (File.Exists(expectedPeaksFile)) File.Delete(expectedPeaksFile);
+            if (File.Exists(expectedPeaksFile))
+            {
+                File.Delete(expectedPeaksFile);
+            }
 
             var workflow = new PeakDetectAndExportWorkflow(run, parameters);
             workflow.Execute();
@@ -730,7 +733,9 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
 
             var expectedPeaksFile = Path.Combine(run.DatasetDirectoryPath, run.DatasetName + "_peaks.txt");
             if (File.Exists(expectedPeaksFile))
+            {
                 File.Delete(expectedPeaksFile);
+            }
 
             var workflow = new PeakDetectAndExportWorkflow(run, parameters);
             workflow.Execute();

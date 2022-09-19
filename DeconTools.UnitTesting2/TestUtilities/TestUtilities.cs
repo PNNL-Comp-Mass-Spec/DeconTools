@@ -20,7 +20,10 @@ namespace DeconTools.UnitTesting2
 
         public static bool AreIsosResultsTheSame(List<IsosResult> resultList1, List<IsosResult> resultList2)
         {
-            if (resultList1.Count != resultList2.Count) return false;     //counts are different
+            if (resultList1.Count != resultList2.Count)
+            {
+                return false;     //counts are different
+            }
 
             for (var i = 0; i < resultList1.Count; i++)
             {

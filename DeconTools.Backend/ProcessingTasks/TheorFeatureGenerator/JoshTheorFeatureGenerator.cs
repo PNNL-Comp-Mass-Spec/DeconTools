@@ -133,7 +133,9 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
             iso.ChargeState = mt.ChargeState;
 
             if (iso.ChargeState != 0)
+            {
                 CalculateMassesForIsotopicProfile(iso, mt.MonoIsotopicMass, mt.ChargeState);
+            }
 
             return iso;
         }
@@ -142,7 +144,10 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
 
         private void CalculateMassesForIsotopicProfile(IsotopicProfile iso, double targetMonoMass, double targetChargeState)
         {
-            if (iso?.Peaklist == null) return;
+            if (iso?.Peaklist == null)
+            {
+                return;
+            }
 
             for (var i = 0; i < iso.Peaklist.Count; i++)
             {

@@ -43,7 +43,10 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
             var exportedAlignmentResultsFile =
              @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Unlabelled\AlignmentInfo\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_iqAlignmentResults.txt";
 
-            if (!File.Exists(exportedAlignmentResultsFile)) File.Delete(exportedAlignmentResultsFile);
+            if (!File.Exists(exportedAlignmentResultsFile))
+            {
+                File.Delete(exportedAlignmentResultsFile);
+            }
 
             IqTargetImporter massTagImporter = new BasicIqTargetImporter(massTagFilename);
             var massTagRefs = massTagImporter.Import();
@@ -65,7 +68,10 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
                 var childresults = iqResult.ChildResults();
                 foreach (var childresult in childresults)
                 {
-                    if (childresult.ObservedIsotopicProfile == null) continue;
+                    if (childresult.ObservedIsotopicProfile == null)
+                    {
+                        continue;
+                    }
 
                     sb.Append(childresult.Target.ID);
                     sb.Append("\t");
@@ -143,7 +149,10 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
             var exportedAlignmentResultsFile =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Unlabelled\AlignmentInfo\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_iqAlignmentResults.txt";
 
-            if (!File.Exists(exportedAlignmentResultsFile)) File.Delete(exportedAlignmentResultsFile);
+            if (!File.Exists(exportedAlignmentResultsFile))
+            {
+                File.Delete(exportedAlignmentResultsFile);
+            }
 
             massAndNetAligner.SetMassTagReferences(massTagRefs);
 
@@ -162,7 +171,10 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
                 var childresults = iqResult.ChildResults();
                 foreach (var childresult in childresults)
                 {
-                    if (childresult.ObservedIsotopicProfile == null) continue;
+                    if (childresult.ObservedIsotopicProfile == null)
+                    {
+                        continue;
+                    }
 
                     sb.Append(childresult.Target.ID);
                     sb.Append("\t");
@@ -271,7 +283,10 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
                 var childresults=  iqResult.ChildResults();
                 foreach (var childresult in childresults)
                 {
-                    if (childresult.ObservedIsotopicProfile == null) continue;
+                    if (childresult.ObservedIsotopicProfile == null)
+                    {
+                        continue;
+                    }
 
                     sb.Append(childresult.Target.ID);
                     sb.Append("\t");

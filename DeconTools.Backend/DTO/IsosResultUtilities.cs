@@ -82,7 +82,9 @@ namespace DeconTools.Backend.DTO
             using (var sw = new StreamWriter(outputIsosFilename))
             {
                 if (sr.EndOfStream)
+                {
                     return;
+                }
 
                 var header = sr.ReadLine();
                 sw.WriteLine(header);
@@ -91,7 +93,9 @@ namespace DeconTools.Backend.DTO
                 {
                     var currentLine = sr.ReadLine();
                     if (string.IsNullOrWhiteSpace(currentLine))
+                    {
                         continue;
+                    }
 
                     var splitLine = currentLine.Split(',');
 
@@ -248,7 +252,10 @@ namespace DeconTools.Backend.DTO
             var scanNumList = query.ToArray();
 
             var indexOfScanNum = MathUtils.BinarySearch(scanNumList, scanNum, 0, scanNumList.Length - 1);
-            if (indexOfScanNum == -1) return results;
+            if (indexOfScanNum == -1)
+            {
+                return results;
+            }
 
             //the found index might point to a isos result line that is mid way through the scan list.  So need to find the starting index
             var currentIdx = indexOfScanNum;
@@ -382,9 +389,14 @@ namespace DeconTools.Backend.DTO
         {
             Check.Require(inputList != null, "IsosResult list is null");
             if (inputList == null)
+            {
                 return double.NaN;
+            }
 
-            if (inputList.Count == 0) return double.NaN;
+            if (inputList.Count == 0)
+            {
+                return double.NaN;
+            }
 
             return inputList.Average(p => p.IsotopicProfile.Score);
             //return inputList.Where(p => p.IsotopicProfile.Score >= 0 && p.IsotopicProfile.Score <= 0.3).Average(p => p.IsotopicProfile.Score);
@@ -395,9 +407,14 @@ namespace DeconTools.Backend.DTO
         {
             Check.Require(inputList != null, "IsosResult list is null");
             if (inputList == null)
+            {
                 return -1;
+            }
 
-            if (inputList.Count == 0) return -1;
+            if (inputList.Count == 0)
+            {
+                return -1;
+            }
 
             return inputList.Count;
             //return inputList.Where(p => p.IsotopicProfile.Score >= 0 && p.IsotopicProfile.Score <= 0.3).Count();
@@ -408,9 +425,14 @@ namespace DeconTools.Backend.DTO
         {
             Check.Require(inputList != null, "IsosResult list is null");
             if (inputList == null)
+            {
                 return double.NaN;
+            }
 
-            if (inputList.Count == 0) return double.NaN;
+            if (inputList.Count == 0)
+            {
+                return double.NaN;
+            }
 
             var query = from p in inputList
                             //where p.IsotopicProfile.Score >= 0 && p.IsotopicProfile.Score <= 0.3
@@ -431,7 +453,9 @@ namespace DeconTools.Backend.DTO
         public static void getSummaryStats1(List<IsosResult> inputList, StringBuilder sb)
         {
             if (sb == null)
+            {
                 sb = new StringBuilder();
+            }
 
             sb.Append("Total isoResults = \t" + inputList.Count);
             sb.Append("\n");

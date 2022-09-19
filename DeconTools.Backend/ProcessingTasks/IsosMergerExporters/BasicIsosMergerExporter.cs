@@ -68,7 +68,11 @@ namespace DeconTools.Backend.ProcessingTasks
 
         public override void Cleanup()
         {
-            if (sw == null) return;
+            if (sw == null)
+            {
+                return;
+            }
+
             try
             {
                 sw.Close();

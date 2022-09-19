@@ -176,7 +176,9 @@ namespace DeconTools.Workflows.Backend.FileIO
             using (var cnn = fact.CreateConnection())
             {
                 if (cnn == null)
+                {
                     throw new Exception("Factory.CreateConnection returned a null DbConnection instance in GetMassTagDataFromDb");
+                }
 
                 cnn.ConnectionString = BuildConnectionString();
                 cnn.Open();
@@ -199,26 +201,47 @@ namespace DeconTools.Workflows.Backend.FileIO
                         progressCounter++;
 
                         if (!reader[0].Equals(DBNull.Value))
+                        {
                             target.ID = int.Parse(reader[0].ToString());
+                        }
+
                         if (!reader[1].Equals(DBNull.Value))
+                        {
                             target.MonoMassTheor = double.Parse(reader[1].ToString(), CultureInfo.InvariantCulture);
+                        }
+
                         if (!reader[2].Equals(DBNull.Value))
+                        {
                             target.ElutionTimeTheor = double.Parse(reader[2].ToString(), CultureInfo.InvariantCulture);
+                        }
 
                         if (!reader[3].Equals(DBNull.Value))
+                        {
                             target.ElutionTimeTheorVariation = double.Parse(reader[3].ToString(), CultureInfo.InvariantCulture);
+                        }
 
                         //if (!reader[4].Equals(DBNull.Value))
                         //    target.ElutionTimeTheor = double.Parse(reader[4].ToString(), CultureInfo.InvariantCulture);
 
                         if (!reader[5].Equals(DBNull.Value))
+                        {
                             target.QualityScore = double.Parse(reader[5].ToString(), CultureInfo.InvariantCulture);
+                        }
+
                         if (!reader[6].Equals(DBNull.Value))
+                        {
                             target.ModDescription = Convert.ToString(reader[6]);
+                        }
+
                         if (!reader[7].Equals(DBNull.Value))
+                        {
                             target.PmtQualityScore = int.Parse(reader[7].ToString());
+                        }
+
                         if (!reader[8].Equals(DBNull.Value))
+                        {
                             target.Code = Convert.ToString(reader[8]);
+                        }
 
                         if (!string.IsNullOrEmpty(target.ModDescription))
                         {
@@ -228,7 +251,9 @@ namespace DeconTools.Workflows.Backend.FileIO
                         iqTargetList.Add(target);
 
                         if (progressCounter % 100 == 0)
+                        {
                             IqLogger.LogDebug(progressCounter + " records loaded; " + reader[0]);
+                        }
                     }
                     reader.Close();
 
@@ -248,7 +273,9 @@ namespace DeconTools.Workflows.Backend.FileIO
             using (var cnn = fact.CreateConnection())
             {
                 if (cnn == null)
+                {
                     throw new Exception("Factory.CreateConnection returned a null DbConnection instance in GetModDataFromDb");
+                }
 
                 cnn.ConnectionString = BuildConnectionString();
                 cnn.Open();
@@ -268,12 +295,24 @@ namespace DeconTools.Workflows.Backend.FileIO
                         var empiricalFormula = "";
 
                         if (!reader["Mass_Tag_ID"].Equals(DBNull.Value))
+                        {
                             mtid = int.Parse(reader["Mass_Tag_ID"].ToString());
+                        }
+
                         if (!reader["Mod_Name"].Equals(DBNull.Value))
+                        {
                             modName = Convert.ToString(reader["Mod_Name"]);
-                        if (!reader["Mod_Position"].Equals(DBNull.Value)) modPosition = int.Parse(reader["Mod_Position"].ToString());
+                        }
+
+                        if (!reader["Mod_Position"].Equals(DBNull.Value))
+                        {
+                            modPosition = int.Parse(reader["Mod_Position"].ToString());
+                        }
+
                         if (!reader["Empirical_Formula"].Equals(DBNull.Value))
+                        {
                             empiricalFormula = Convert.ToString(reader["Empirical_Formula"]);
+                        }
 
                         var rowData = Tuple.Create(mtid, modName, modPosition, empiricalFormula);
 
@@ -347,7 +386,9 @@ namespace DeconTools.Workflows.Backend.FileIO
             using (var cnn = fact.CreateConnection())
             {
                 if (cnn == null)
+                {
                     throw new Exception("Factory.CreateConnection returned a null DbConnection instance in GetMassTagDataFromDb");
+                }
 
                 cnn.ConnectionString = BuildConnectionString();
                 cnn.Open();
@@ -374,31 +415,54 @@ namespace DeconTools.Workflows.Backend.FileIO
                             progressCounter++;
 
                             if (!reader[0].Equals(DBNull.Value))
+                            {
                                 target.ID = int.Parse(reader[0].ToString());
+                            }
+
                             if (!reader[1].Equals(DBNull.Value))
+                            {
                                 target.MonoMassTheor = double.Parse(reader[1].ToString(), CultureInfo.InvariantCulture);
+                            }
+
                             if (!reader[2].Equals(DBNull.Value))
+                            {
                                 target.ElutionTimeTheor = double.Parse(reader[2].ToString(), CultureInfo.InvariantCulture);
+                            }
 
                             if (!reader[3].Equals(DBNull.Value))
+                            {
                                 target.ElutionTimeTheorVariation = double.Parse(reader[3].ToString(), CultureInfo.InvariantCulture);
+                            }
 
                             //if (!reader[4].Equals(DBNull.Value))
                             //    target.ElutionTimeTheor = double.Parse(reader[4].ToString(), CultureInfo.InvariantCulture);
 
                             if (!reader[5].Equals(DBNull.Value))
+                            {
                                 target.QualityScore = double.Parse(reader[5].ToString(), CultureInfo.InvariantCulture);
+                            }
+
                             if (!reader[6].Equals(DBNull.Value))
+                            {
                                 target.ModDescription = Convert.ToString(reader[6]);
+                            }
+
                             if (!reader[7].Equals(DBNull.Value))
+                            {
                                 target.PmtQualityScore = int.Parse(reader[7].ToString());
+                            }
+
                             if (!reader[8].Equals(DBNull.Value))
+                            {
                                 target.Code = Convert.ToString(reader[8]);
+                            }
 
                             iqTargetList.Add(target);
 
                             if (progressCounter % 100 == 0)
+                            {
                                 Console.WriteLine(progressCounter + " records loaded; " + reader[0]);
+                            }
                         }
                         reader.Close();
                     }
@@ -443,7 +507,9 @@ namespace DeconTools.Workflows.Backend.FileIO
             sb.Append("Mass_Tag_ID in (");
 
             if (massTagsToBeRetrieved == null)
+            {
                 return sb.ToString();
+            }
 
             for (var i = 0; i < massTagsToBeRetrieved.Count; i++)
             {

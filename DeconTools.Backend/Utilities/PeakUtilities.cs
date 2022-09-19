@@ -15,7 +15,10 @@ namespace DeconTools.Backend.Utilities
             var targetIndex = getIndexOfClosestValue(inputList, targetVal, 0, inputList.Count - 1, toleranceInMZ);
             // look to the left for other peaks within the tolerance
 
-            if (targetIndex == -1) return outputList;
+            if (targetIndex == -1)
+            {
+                return outputList;
+            }
 
             if (targetIndex > 0)
             {
@@ -67,7 +70,10 @@ namespace DeconTools.Backend.Utilities
 
             // find a peak within the tolerance using a binary search method
             var targetIndex = getIndexOfClosestValue(inputList, targetVal, 0, inputList.Count - 1, toleranceInMZ);
-            if (targetIndex == -1) return outputList;
+            if (targetIndex == -1)
+            {
+                return outputList;
+            }
 
             // look to the left for other peaks within the tolerance
             if (targetIndex > 0)
@@ -77,7 +83,10 @@ namespace DeconTools.Backend.Utilities
                     var peak = inputList[i];
 
                     // Once we we reach a certain m/z, we can stop looking
-                    if (Math.Abs(targetVal - peak.XValue) > toleranceInMZ) break;
+                    if (Math.Abs(targetVal - peak.XValue) > toleranceInMZ)
+                    {
+                        break;
+                    }
 
                     outputList.Insert(0, peak);
                 }
@@ -94,7 +103,10 @@ namespace DeconTools.Backend.Utilities
                     var peak = inputList[i];
 
                     // Once we we reach a certain m/z, we can stop looking
-                    if (Math.Abs(targetVal - peak.XValue) > toleranceInMZ) break;
+                    if (Math.Abs(targetVal - peak.XValue) > toleranceInMZ)
+                    {
+                        break;
+                    }
 
                     outputList.Add(peak);
                 }
@@ -105,9 +117,15 @@ namespace DeconTools.Backend.Utilities
 
         public Peak GetBasePeak(List<Peak> peakList)
         {
-            if (peakList == null || peakList.Count == 0) return new Peak();
+            if (peakList == null || peakList.Count == 0)
+            {
+                return new Peak();
+            }
 
-            if (!(peakList[0] is MSPeak)) return null;
+            if (!(peakList[0] is MSPeak))
+            {
+                return null;
+            }
 
             var maxPeak = peakList[0];
 
@@ -169,7 +187,10 @@ namespace DeconTools.Backend.Utilities
 
         public static void TrimIsotopicProfile(IsotopicProfile isotopicProfile, double cutOff, bool neverTrimLeft = false, bool neverTrimRight = false)
         {
-            if (isotopicProfile?.Peaklist == null || isotopicProfile.Peaklist.Count == 0) return;
+            if (isotopicProfile?.Peaklist == null || isotopicProfile.Peaklist.Count == 0)
+            {
+                return;
+            }
 
             var indexOfMaxPeak = isotopicProfile.GetIndexOfMostIntensePeak();
             var trimmedPeakList = new List<MSPeak>();
@@ -206,7 +227,11 @@ namespace DeconTools.Backend.Utilities
 
         public static List<MSPeak> OrderPeaksByIntensityDesc(List<MSPeak> inputList)
         {
-            if (inputList == null || inputList.Count == 0) return null;
+            if (inputList == null || inputList.Count == 0)
+            {
+                return null;
+            }
+
             var outputList = new List<MSPeak> {
                 inputList[0]
             };

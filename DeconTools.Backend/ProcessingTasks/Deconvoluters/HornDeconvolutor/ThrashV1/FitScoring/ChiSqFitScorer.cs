@@ -24,7 +24,9 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             pointsUsed = 0;
             var numPoints = TheoreticalDistMzs.Count;
             if (numPoints < 3)
+            {
                 return 1;
+            }
 
             double fit = 0;
             double sum = 0;
@@ -72,7 +74,9 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         {
             var numPoints = TheoreticalDistMzs.Count;
             if (numPoints < 3)
+            {
                 return 1;
+            }
 
             double fit = 0;
             double sum = 0;

@@ -79,7 +79,10 @@ namespace DeconTools.Backend.Core
 
         public int GetScanNumN15()
         {
-            if (ScanSetForN15Profile == null) return -1;
+            if (ScanSetForN15Profile == null)
+            {
+                return -1;
+            }
             else
             {
                 return ScanSetForN15Profile.PrimaryScanNumber;
@@ -88,7 +91,11 @@ namespace DeconTools.Backend.Core
 
         public double GetNETN15()
         {
-            if (ChromPeakSelectedN15 == null) return -1;
+            if (ChromPeakSelectedN15 == null)
+            {
+                return -1;
+            }
+
             return ChromPeakSelectedN15.NETValue;
         }
 
@@ -104,7 +111,10 @@ namespace DeconTools.Backend.Core
             var nitrogenCount = Target.GetAtomCountForElement("N");
 
             var monoPeakForUnlabeled = IsotopicProfile.getMonoPeak();
-            if (monoPeakForUnlabeled == null) return null;
+            if (monoPeakForUnlabeled == null)
+            {
+                return null;
+            }
 
             var expectedMZForLabeled = monoPeakForUnlabeled.XValue + (Globals.N15_MASS - Globals.N14_MASS) * nitrogenCount / IsotopicProfile.ChargeState;
 

@@ -146,7 +146,9 @@ namespace DeconTools.Backend.Workflows
 
 #pragma warning disable 162
                     if (SKIP_DECONVOLUTION)
+                    {
                         continue;
+                    }
 #pragma warning restore 162
 
                     // Deconvolute Unsummed MSFeatures
@@ -197,7 +199,9 @@ namespace DeconTools.Backend.Workflows
                 double maxFrameMinutesAddon = 0;
                 var bufferMinutes = maxMinutesPerFrame * 0.2;
                 if (bufferMinutes < 1)
+                {
                     bufferMinutes = 1;
+                }
 
                 if (timeoutReached ||
                     DateTime.UtcNow.Subtract(frameStartTime).TotalMinutes + bufferMinutes >= maxMinutesPerFrame)
@@ -787,7 +791,11 @@ namespace DeconTools.Backend.Workflows
 
         private MSPeak GetPeakToTheLeftIfExists(IsotopicProfile isotopicProfile, IEnumerable<Peak> peakList)
         {
-            if (isotopicProfile == null) return null;
+            if (isotopicProfile == null)
+            {
+                return null;
+            }
+
             var monoPeak = isotopicProfile.getMonoPeak();
 
             const double maxPossiblePeakWidth = 0.1;

@@ -24,7 +24,10 @@ namespace DeconTools.Workflows.UnitTesting.FileIOTests.TargetedResultFileIOTests
 
             var exportedResultFile = Path.Combine(FileRefs.OutputFolderPath, "UnlabeledTargetedResultsExporterOutput1.txt");
 
-            if (File.Exists(exportedResultFile)) File.Delete(exportedResultFile);
+            if (File.Exists(exportedResultFile))
+            {
+                File.Delete(exportedResultFile);
+            }
 
             var run = RunUtilities.CreateAndAlignRun(testFile, peaksTestFile);
 

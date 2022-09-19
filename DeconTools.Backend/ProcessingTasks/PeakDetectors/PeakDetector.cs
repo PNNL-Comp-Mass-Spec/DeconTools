@@ -100,7 +100,10 @@ namespace DeconTools.Backend.ProcessingTasks.PeakDetectors
 
             Check.Require(currentScanSet != null, "the CurrentScanSet for the Run is null. This needs to be set.");
 
-            if (currentScanSet == null) return;
+            if (currentScanSet == null)
+            {
+                return;
+            }
 
             currentScanSet.BackgroundIntensity = BackgroundIntensity;
             currentScanSet.NumPeaks = run.PeakList.Count; //used in ScanResult

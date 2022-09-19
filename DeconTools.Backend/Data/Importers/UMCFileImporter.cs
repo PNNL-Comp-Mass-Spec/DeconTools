@@ -132,9 +132,21 @@ namespace DeconTools.Backend.Data
 
         private bool validateHeaders(IReadOnlyList<string> headers)
         {
-            if (headers.Count < 10) return false;
-            if (headers[0] != "UMCIndex") return false;
-            if (headers[1] != "ScanStart") return false;
+            if (headers.Count < 10)
+            {
+                return false;
+            }
+
+            if (headers[0] != "UMCIndex")
+            {
+                return false;
+            }
+
+            if (headers[1] != "ScanStart")
+            {
+                return false;
+            }
+
             return true;
         }
     }

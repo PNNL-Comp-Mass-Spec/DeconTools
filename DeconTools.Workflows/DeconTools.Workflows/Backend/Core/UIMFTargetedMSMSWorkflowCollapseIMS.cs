@@ -65,7 +65,10 @@ namespace DeconTools.Workflows.Backend.Core
 
         private void UpdateChromPeaksWithXYData()
         {
-            if (Run.XYData == null || Run.XYData.Xvalues == null) return;
+            if (Run.XYData == null || Run.XYData.Xvalues == null)
+            {
+                return;
+            }
 
             foreach (ChromPeak peak in Run.PeakList)
             {

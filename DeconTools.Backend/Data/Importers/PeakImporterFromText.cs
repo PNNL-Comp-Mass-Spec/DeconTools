@@ -27,7 +27,10 @@ namespace DeconTools.Backend.Data
 
         public PeakImporterFromText(string filename, BackgroundWorker bw)
         {
-            if (!File.Exists(filename)) throw new IOException("PeakImporter failed. File doesn't exist: " + DiagnosticUtilities.GetFullPathSafe(filename));
+            if (!File.Exists(filename))
+            {
+                throw new IOException("PeakImporter failed. File doesn't exist: " + DiagnosticUtilities.GetFullPathSafe(filename));
+            }
 
             var fi = new FileInfo(filename);
             numRecords = (int)(fi.Length / 1000 * 24);   // a way of approximating how many peaks there are... only for use with the backgroundWorker
@@ -110,7 +113,10 @@ namespace DeconTools.Backend.Data
             peakResult.Scan_num = int.Parse(processedLine[++columnCounter]);
 
             //UIMF peak data contains an extra column
-            if (_peaksAreFromUIMF) ++columnCounter;
+            if (_peaksAreFromUIMF)
+            {
+                ++columnCounter;
+            }
 
             var mz = double.Parse(processedLine[++columnCounter], CultureInfo.InvariantCulture);
             var intensity = float.Parse(processedLine[++columnCounter], CultureInfo.InvariantCulture);

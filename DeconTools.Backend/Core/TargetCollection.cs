@@ -59,7 +59,10 @@ namespace DeconTools.Backend.Core
 
         public void FilterOutDuplicates()
         {
-            if (TargetList == null || TargetList.Count == 0) return;
+            if (TargetList == null || TargetList.Count == 0)
+            {
+                return;
+            }
 
             var filteredList = new List<TargetBase>();
 

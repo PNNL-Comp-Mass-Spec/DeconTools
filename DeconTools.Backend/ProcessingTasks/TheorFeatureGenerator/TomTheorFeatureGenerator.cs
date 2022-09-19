@@ -42,7 +42,9 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
         {
             Check.Require(mt != null, "FeatureGenerator failed. MassTag not defined.");
             if (mt == null)
+            {
                 return;
+            }
 
             Check.Require(mt.EmpiricalFormula != null, "Theoretical feature generator failed. Can't retrieve empirical formula from Mass Tag");
 
@@ -78,7 +80,10 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
 
             PeakUtilities.TrimIsotopicProfile(iso, LowPeakCutOff);
             iso.ChargeState = mt.ChargeState;
-            if (iso.ChargeState != 0) calculateMassesForIsotopicProfile(iso, mt);
+            if (iso.ChargeState != 0)
+            {
+                calculateMassesForIsotopicProfile(iso, mt);
+            }
 
             return iso;
         }
@@ -90,7 +95,10 @@ namespace DeconTools.Backend.ProcessingTasks.TheorFeatureGenerator
 
         private void calculateMassesForIsotopicProfile(IsotopicProfile iso, TargetBase mt)
         {
-            if (iso?.Peaklist == null) return;
+            if (iso?.Peaklist == null)
+            {
+                return;
+            }
 
             for (var i = 0; i < iso.Peaklist.Count; i++)
             {

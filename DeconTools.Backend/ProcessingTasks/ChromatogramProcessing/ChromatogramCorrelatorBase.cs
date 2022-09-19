@@ -108,11 +108,15 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 
             Check.Require(chromData1?.Xvalues != null, "Chromatogram1 intensities are null");
             if (chromData1?.Xvalues == null)
+            {
                 return;
+            }
 
             Check.Require(chromData2?.Xvalues != null, "Chromatogram2 intensities are null");
             if (chromData2?.Xvalues == null)
+            {
                 return;
+            }
 
             Check.Require(Math.Abs(chromData1.Xvalues[0] - chromData2.Xvalues[0]) < float.Epsilon, "Correlation failed. Chromatograms being correlated do not have the same scan values!");
 
@@ -127,11 +131,15 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 
             Check.Require(chromIntensities1 != null, "Chromatogram1 intensities are null");
             if (chromIntensities1 == null)
+            {
                 return;
+            }
 
             Check.Require(chromIntensities2 != null, "Chromatogram2 intensities are null");
             if (chromIntensities2 == null)
+            {
                 return;
+            }
 
             Check.Require(chromIntensities1.Length == chromIntensities2.Length, "Correlation failed. Chromatogram1 and Chromatogram2 must be the same length");
 
@@ -155,16 +163,22 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
         {
             Check.Require(resultList.Run.CurrentMassTag != null, Name + " failed; CurrentMassTag is empty");
             if (resultList.Run.CurrentMassTag == null)
+            {
                 return;
+            }
 
             Check.Require(resultList.Run.CurrentMassTag.IsotopicProfile != null, Name + " failed; Theor isotopic profile is empty. Run a TheorFeatureGenerator");
             Check.Require(resultList.CurrentTargetedResult != null, Name + " failed; CurrentTargetedResult is empty.");
             if (resultList.CurrentTargetedResult == null)
+            {
                 return;
+            }
 
             Check.Require(resultList.CurrentTargetedResult.ChromPeakSelected != null, Name + " failed; ChromPeak was never selected.");
             if (resultList.CurrentTargetedResult.ChromPeakSelected == null)
+            {
                 return;
+            }
 
             Check.Require(resultList.CurrentTargetedResult.IsotopicProfile != null, Name + " failed; Isotopic profile is null.");
 
@@ -273,7 +287,10 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
         {
             var xyData = PeakChromGen.GenerateChromatogram(run, startScan, stopScan, baseMZValue, ChromTolerance, ChromToleranceUnit);
 
-            if (xyData == null || xyData.Xvalues.Length < 3) return null;
+            if (xyData == null || xyData.Xvalues.Length < 3)
+            {
+                return null;
+            }
 
             var basePeakChromXYData = Smoother.Smooth(xyData);
 
@@ -295,7 +312,10 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
         /// <returns></returns>
         protected XYData FillInAnyMissingValuesInChromatogram(XYData basePeakChromXYData, XYData chromPeakXYData)
         {
-            if (basePeakChromXYData?.Xvalues == null || basePeakChromXYData.Xvalues.Length == 0) return null;
+            if (basePeakChromXYData?.Xvalues == null || basePeakChromXYData.Xvalues.Length == 0)
+            {
+                return null;
+            }
 
             var filledInData = new SortedDictionary<int, double>();
 

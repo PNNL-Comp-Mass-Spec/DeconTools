@@ -17,7 +17,10 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.O16O18TraditionalProce
             var rawfilename = @"D:\Data\O16O18\GlueGrant\GG_MO_Trauma_374020_20May11_Sphinx_11-03-28.RAW";
             var exportedIsos = Path.Combine(Path.GetDirectoryName(rawfilename), Path.GetFileName(rawfilename).Replace(".RAW", "_test_isos.csv"));
 
-            if (File.Exists(exportedIsos)) File.Delete(exportedIsos);
+            if (File.Exists(exportedIsos))
+            {
+                File.Delete(exportedIsos);
+            }
 
             var run = new RunFactory().CreateRun(rawfilename);
 

@@ -63,7 +63,9 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
             }
 
             if (!(run is UIMFRun uimfRun))
+            {
                 throw new InvalidCastException("run is not of type UIMFRun; actually type " + run.GetType());
+            }
 
             var chromPeakScan = (int)Math.Round(chromPeak.XValue);
             var bestLCScan = uimfRun.GetClosestMS1Frame(chromPeakScan);

@@ -323,7 +323,9 @@ namespace DeconTools.Workflows.Backend.Core
                 for (var i = 1; i < targetsFileName.Length; i++)
                 {
                     if (!Run.DatasetName.StartsWith(targetsFileName.Substring(0, i), StringComparison.InvariantCultureIgnoreCase))
+                    {
                         break;
+                    }
 
                     startIndex = i;
                 }
@@ -337,7 +339,9 @@ namespace DeconTools.Workflows.Backend.Core
                     resultsFileName = Run.DatasetName + "_" + targetsFileName.Substring(startIndex) + "_iqResults.txt";
                 }
                 else
+                {
                     resultsFileName = Run.DatasetName + "_" + targetsFileName + "_iqResults.txt";
+                }
             }
             else
             {
@@ -362,7 +366,10 @@ namespace DeconTools.Workflows.Backend.Core
                 _alignmentFolder = Path.Combine(Parameters.OutputDirectoryBase, "AlignmentInfo");
             }
 
-            if (!Directory.Exists(_alignmentFolder)) Directory.CreateDirectory(_alignmentFolder);
+            if (!Directory.Exists(_alignmentFolder))
+            {
+                Directory.CreateDirectory(_alignmentFolder);
+            }
         }
 
         /// <summary>
@@ -419,7 +426,10 @@ namespace DeconTools.Workflows.Backend.Core
                 _resultsDirectory = Path.Combine(Parameters.OutputDirectoryBase, "IqResults");
             }
 
-            if (!Directory.Exists(_resultsDirectory)) Directory.CreateDirectory(_resultsDirectory);
+            if (!Directory.Exists(_resultsDirectory))
+            {
+                Directory.CreateDirectory(_resultsDirectory);
+            }
         }
 
         #endregion
@@ -499,7 +509,9 @@ namespace DeconTools.Workflows.Backend.Core
             }
 
             if (!Directory.Exists(loggingDirectory))
+            {
                 Directory.CreateDirectory(loggingDirectory);
+            }
 
             IqLogger.InitializeIqLog(_run.DatasetName, loggingDirectory);
         }

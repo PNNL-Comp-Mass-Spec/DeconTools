@@ -17,7 +17,10 @@ namespace DeconTools.Backend.Utilities
         /// <returns>Interpolated y value for the given target x value</returns>
         public static double GetInterpolatedValue(double x1, double x2, double y1, double y2, double targetXValue)
         {
-            if (Math.Abs(x1 - x2) < double.Epsilon) return y1;
+            if (Math.Abs(x1 - x2) < double.Epsilon)
+            {
+                return y1;
+            }
 
             var slope = (y2 - y1) / (x2 - x1);
             var yIntercept = y1 - (slope * x1);
@@ -94,10 +97,16 @@ namespace DeconTools.Backend.Utilities
         /// <returns>Index of the closest data point, or -1 if no match</returns>
         public static int GetClosest(double[] data, double targetVal, double tolerance = 0.1)
         {
-            if (data.Length == 0) return -1;
+            if (data.Length == 0)
+            {
+                return -1;
+            }
 
             var binarySearchIndex = BinarySearchWithTolerance(data, targetVal, 0, data.Length - 1, tolerance);
-            if (binarySearchIndex == -1) binarySearchIndex = 0;
+            if (binarySearchIndex == -1)
+            {
+                binarySearchIndex = 0;
+            }
 
             var indexIsBelowTarget = (data[binarySearchIndex] < targetVal);
 
@@ -156,7 +165,9 @@ namespace DeconTools.Backend.Utilities
             while (true)
             {
                 if (leftIndex > rightIndex)
+                {
                     return -1;
+                }
 
                 var middle = (leftIndex + rightIndex) / 2;
                 if (Math.Abs(targetVal - data[middle]) <= tolerance)
@@ -187,7 +198,9 @@ namespace DeconTools.Backend.Utilities
             while (true)
             {
                 if (leftIndex > rightIndex)
+                {
                     return -1;
+                }
 
                 var middle = (leftIndex + rightIndex) / 2;
                 if (targetVal == data[middle])

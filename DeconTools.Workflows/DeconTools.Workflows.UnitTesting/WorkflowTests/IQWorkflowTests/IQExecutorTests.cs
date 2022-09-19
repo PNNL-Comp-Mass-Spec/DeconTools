@@ -36,7 +36,10 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
             var resultsFolder = @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Unlabelled\Results";
 
             var expectedResultsFilename = Path.Combine(resultsFolder, RunUtilities.GetDatasetName(testFile) + "_iqResults.txt");
-            if (File.Exists(expectedResultsFilename)) File.Delete(expectedResultsFilename);
+            if (File.Exists(expectedResultsFilename))
+            {
+                File.Delete(expectedResultsFilename);
+            }
 
             WorkflowExecutorBaseParameters executorBaseParameters = new BasicTargetedWorkflowExecutorParameters();
             executorBaseParameters.ChromGenSourceDataPeakBR = 3;
@@ -85,7 +88,10 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
             var expectedResultsFilename = Path.Combine(executorBaseParameters.OutputDirectoryBase,
                                                           "IqResults",
                                                           RunUtilities.GetDatasetName(testFile) + "_iqResults.txt");
-            if (File.Exists(expectedResultsFilename)) File.Delete(expectedResultsFilename);
+            if (File.Exists(expectedResultsFilename))
+            {
+                File.Delete(expectedResultsFilename);
+            }
 
             var run = new RunFactory().CreateRun(testFile);
 
@@ -158,7 +164,10 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
             var expectedResultsFilename = Path.Combine(executorBaseParameters.OutputDirectoryBase,
                                                           "IqResults",
                                                           RunUtilities.GetDatasetName(testFile) + "_iqResults.txt");
-            if (File.Exists(expectedResultsFilename)) File.Delete(expectedResultsFilename);
+            if (File.Exists(expectedResultsFilename))
+            {
+                File.Delete(expectedResultsFilename);
+            }
 
             var run = new RunFactory().CreateRun(testFile);
 
@@ -229,7 +238,10 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
             var expectedResultsFilename = Path.Combine(executorBaseParameters.OutputDirectoryBase,
                                                           "IqResults",
                                                           RunUtilities.GetDatasetName(testFile) + "_iqResults.txt");
-            if (File.Exists(expectedResultsFilename)) File.Delete(expectedResultsFilename);
+            if (File.Exists(expectedResultsFilename))
+            {
+                File.Delete(expectedResultsFilename);
+            }
 
             var run = new RunFactory().CreateRun(testFile);
 
@@ -299,7 +311,10 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
             var run = new RunFactory().CreateRun(testFile);
 
             var expectedResultsFilename = executorBaseParameters.OutputDirectoryBase  +"\\IqResults\\" + RunUtilities.GetDatasetName(testFile) + "_iqResults.txt";
-            if (File.Exists(expectedResultsFilename)) File.Delete(expectedResultsFilename);
+            if (File.Exists(expectedResultsFilename))
+            {
+                File.Delete(expectedResultsFilename);
+            }
 
             var executor = new IqExecutor(executorBaseParameters, run);
             executor.ChromSourceDataFilePath = peaksTestFile;

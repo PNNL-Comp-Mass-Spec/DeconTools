@@ -25,10 +25,16 @@ namespace DeconTools.Backend.ProcessingTasks
         public override void Execute(ResultCollection resultList)
         {
             //don't do anything if there aren't any MSFeatures
-            if (resultList.IsosResultBin == null || resultList.IsosResultBin.Count == 0) return;
+            if (resultList.IsosResultBin == null || resultList.IsosResultBin.Count == 0)
+            {
+                return;
+            }
 
             //don't do anything if there aren't any peaks
-            if (resultList.Run.PeakList == null || resultList.Run.PeakList.Count == 0) return;
+            if (resultList.Run.PeakList == null || resultList.Run.PeakList.Count == 0)
+            {
+                return;
+            }
 
             foreach (var msFeature in resultList.IsosResultBin)
             {

@@ -30,7 +30,10 @@ namespace DeconTools.UnitTesting2.Scripts
             var run = new RunFactory().CreateRun(thermoFile1);
 
             var outputDirectoryForChromGraphs = @"\\protoapps\DataPkgs\Public\2012\684_DeconMSn_research1\ChromatogramImages";
-            if (!Directory.Exists(outputDirectoryForChromGraphs)) Directory.CreateDirectory(outputDirectoryForChromGraphs);
+            if (!Directory.Exists(outputDirectoryForChromGraphs))
+            {
+                Directory.CreateDirectory(outputDirectoryForChromGraphs);
+            }
 
             var scanSetCollection = new ScanSetCollection();
             var scanStart = run.MinLCScan;
@@ -119,7 +122,10 @@ namespace DeconTools.UnitTesting2.Scripts
                         scanCounter = 0;
                     }
                     var currentOutputDirectory = Path.Combine(outputDirectoryForChromGraphs, "bin" + currentBin);
-                    if (!Directory.Exists(currentOutputDirectory)) Directory.CreateDirectory(currentOutputDirectory);
+                    if (!Directory.Exists(currentOutputDirectory))
+                    {
+                        Directory.CreateDirectory(currentOutputDirectory);
+                    }
 
                     var baseFilename = Path.Combine(currentOutputDirectory,
                                                      scanSet.PrimaryScanNumber.ToString().PadLeft(5, '0') + "_mz" + precursorInfo.PrecursorMZ);
@@ -156,7 +162,10 @@ namespace DeconTools.UnitTesting2.Scripts
             var run = new RunFactory().CreateRun(thermoFile1);
 
             var outputDirectoryForChromGraphs = @"\\protoapps\DataPkgs\Public\2012\684_DeconMSn_research1\ChromatogramImages";
-            if (!Directory.Exists(outputDirectoryForChromGraphs)) Directory.CreateDirectory(outputDirectoryForChromGraphs);
+            if (!Directory.Exists(outputDirectoryForChromGraphs))
+            {
+                Directory.CreateDirectory(outputDirectoryForChromGraphs);
+            }
 
             var scanSetCollection = new ScanSetCollection();
             scanSetCollection.Create(run, 1, 1, true);
@@ -252,7 +261,10 @@ namespace DeconTools.UnitTesting2.Scripts
                         scanCounter = 0;
                     }
                     var currentOutputDirectory = Path.Combine(outputDirectoryForChromGraphs, "bin" + currentBin);
-                    if (!Directory.Exists(currentOutputDirectory)) Directory.CreateDirectory(currentOutputDirectory);
+                    if (!Directory.Exists(currentOutputDirectory))
+                    {
+                        Directory.CreateDirectory(currentOutputDirectory);
+                    }
 
                     var outputGraphFilename = Path.Combine(currentOutputDirectory,
                                                            scanSet.PrimaryScanNumber.ToString().PadLeft(5, '0') + "_mz" + precursorInfo.PrecursorMZ + "_chrom_smoothed.png");

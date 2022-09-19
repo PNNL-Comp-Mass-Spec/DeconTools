@@ -162,7 +162,10 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
 
         private void addMZInfoToTheorProfile(IsotopicProfile unlabeledProfile, IsotopicProfile labeledTheorProfile, int numDeuteriums, int chargeState)
         {
-            if (labeledTheorProfile.Peaklist == null || labeledTheorProfile.Peaklist.Count < 3) return;
+            if (labeledTheorProfile.Peaklist == null || labeledTheorProfile.Peaklist.Count < 3)
+            {
+                return;
+            }
 
             //assign the baseD mass
             labeledTheorProfile.MonoPeakMZ = unlabeledProfile.Peaklist[0].XValue + (Globals.Deuterium_MASS - Globals.Hydrogen_MASS) * (double)numDeuteriums / (double)chargeState;

@@ -184,11 +184,17 @@ namespace DeconTools.Workflows.Backend.Core
 
         private bool executeDecisionOnUsingTightTolerances(List<double> ppmErrors)
         {
-            if (ppmErrors.Count < 5) return false;
+            if (ppmErrors.Count < 5)
+            {
+                return false;
+            }
 
             var avgPPMError = ppmErrors.Average();
 
-            if (avgPPMError > 10) return false;
+            if (avgPPMError > 10)
+            {
+                return false;
+            }
 
             return true;
         }
@@ -425,21 +431,45 @@ namespace DeconTools.Workflows.Backend.Core
         {
             var passesCriteria = true;
 
-            if (result.FailedResult) return false;
+            if (result.FailedResult)
+            {
+                return false;
+            }
 
-            if (result.ChromPeakSelected == null) return false;
+            if (result.ChromPeakSelected == null)
+            {
+                return false;
+            }
 
-            if (result.IsotopicProfile == null) return false;
+            if (result.IsotopicProfile == null)
+            {
+                return false;
+            }
 
-            if (result.NumQualityChromPeaks > 1) return false;
+            if (result.NumQualityChromPeaks > 1)
+            {
+                return false;
+            }
 
-            if (result.Flags.Count > 0) return false;
+            if (result.Flags.Count > 0)
+            {
+                return false;
+            }
 
-            if (result.ChromPeakSelected.Height < AlignerParameters.MinimumChromPeakIntensityCriteria) return false;
+            if (result.ChromPeakSelected.Height < AlignerParameters.MinimumChromPeakIntensityCriteria)
+            {
+                return false;
+            }
 
-            if (result.Score > AlignerParameters.UpperFitScoreAllowedCriteria) return false;
+            if (result.Score > AlignerParameters.UpperFitScoreAllowedCriteria)
+            {
+                return false;
+            }
 
-            if (result.InterferenceScore > AlignerParameters.IScoreAllowedCriteria) return false;
+            if (result.InterferenceScore > AlignerParameters.IScoreAllowedCriteria)
+            {
+                return false;
+            }
 
             return passesCriteria;
         }
@@ -448,21 +478,45 @@ namespace DeconTools.Workflows.Backend.Core
         {
             var passesCriteria = true;
 
-            if (result.FailedResult) return false;
+            if (result.FailedResult)
+            {
+                return false;
+            }
 
-            if (result.ChromPeakSelected == null) return false;
+            if (result.ChromPeakSelected == null)
+            {
+                return false;
+            }
 
-            if (result.IsotopicProfile == null) return false;
+            if (result.IsotopicProfile == null)
+            {
+                return false;
+            }
 
-            if (result.NumQualityChromPeaks > AlignerParameters.NumChromPeaksAllowedDuringSelection) return false;
+            if (result.NumQualityChromPeaks > AlignerParameters.NumChromPeaksAllowedDuringSelection)
+            {
+                return false;
+            }
 
-            if (result.Flags.Count > 0) return false;
+            if (result.Flags.Count > 0)
+            {
+                return false;
+            }
 
-            if (result.ChromPeakSelected.Height < AlignerParameters.MinimumChromPeakIntensityCriteria) return false;
+            if (result.ChromPeakSelected.Height < AlignerParameters.MinimumChromPeakIntensityCriteria)
+            {
+                return false;
+            }
 
-            if (result.Score > AlignerParameters.UpperFitScoreAllowedCriteria) return false;
+            if (result.Score > AlignerParameters.UpperFitScoreAllowedCriteria)
+            {
+                return false;
+            }
 
-            if (result.InterferenceScore > AlignerParameters.IScoreAllowedCriteria) return false;
+            if (result.InterferenceScore > AlignerParameters.IScoreAllowedCriteria)
+            {
+                return false;
+            }
 
             return passesCriteria;
         }
@@ -471,10 +525,20 @@ namespace DeconTools.Workflows.Backend.Core
 
         public string GetAlignmentReport1()
         {
-            if (_netGroupings == null || _netGroupings.Count == 0) return string.Empty;
+            if (_netGroupings == null || _netGroupings.Count == 0)
+            {
+                return string.Empty;
+            }
 
-            if (NumFailuresPerNETGrouping.Count != _netGroupings.Count) return string.Empty;
-            if (NumSuccessesPerNETGrouping.Count != _netGroupings.Count) return string.Empty;
+            if (NumFailuresPerNETGrouping.Count != _netGroupings.Count)
+            {
+                return string.Empty;
+            }
+
+            if (NumSuccessesPerNETGrouping.Count != _netGroupings.Count)
+            {
+                return string.Empty;
+            }
 
             var sb = new StringBuilder();
             sb.Append("NETGrouping\tSuccesses\tFailures\n");

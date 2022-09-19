@@ -161,7 +161,9 @@ namespace DeconTools.Backend.Algorithms
         {
             Check.Require(msPeakList?.Count > 0, "Cannot generate chromatogram. Source msPeakList is empty or hasn't been defined.");
             if (msPeakList == null)
+            {
                 return null;
+            }
 
             var scanTolerance = 5;     // TODO:   keep an eye on this
 
@@ -280,7 +282,10 @@ namespace DeconTools.Backend.Algorithms
 
             for (var i = indexOfGoodStartingPoint; i < xyData.Xvalues.Length; i++)
             {
-                if (xyData.Xvalues[i] < lowerMZ) continue;
+                if (xyData.Xvalues[i] < lowerMZ)
+                {
+                    continue;
+                }
 
                 if (xyData.Xvalues[i] > upperMZ)
                 {
@@ -355,7 +360,10 @@ namespace DeconTools.Backend.Algorithms
             peakListMinScan -= leftZeroPadding;
             peakListMaxScan += rightZeroPadding;
 
-            if (peakListMinScan < 0) peakListMinScan = 0;
+            if (peakListMinScan < 0)
+            {
+                peakListMinScan = 0;
+            }
 
             //populate dictionary with zero intensities.
             var xyValues = new Dictionary<int, double>(peakListMaxScan - peakListMinScan + 1);

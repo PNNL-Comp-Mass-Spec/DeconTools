@@ -154,7 +154,10 @@ namespace DeconTools.Backend.Data
             else
             {
                 var flagNum = parseIntField(flagString);
-                if (flagNum == 1) result.Flags.Add(new PeakToTheLeftResultFlag());     // TODO: it'll be good to make a factory class for creating flags.
+                if (flagNum == 1)
+                {
+                    result.Flags.Add(new PeakToTheLeftResultFlag());     // TODO: it'll be good to make a factory class for creating flags.
+                }
             }
 
             result.IsotopicProfile.Peaklist.Add(peak);

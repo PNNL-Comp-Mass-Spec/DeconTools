@@ -48,7 +48,9 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             {
                 // for really high masses, some of the first few isotopes will not be present at all.
                 if (index == -1)
+                {
                     continue;
+                }
 
                 var mz1 = mzs[index];
                 var int1 = intensities[index];
@@ -109,7 +111,9 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             // separated peaks. So if there is a peak with just point point in it, there will be a discontinuous stretch on the x axis.
             // estimate that by using two times the expected mz spacing.
             if (mzs[1] - mzs[0] > 2 * mzSpacing && intensities[0] > threshold)
+            {
                 peakIndex.Add(0);
+            }
 
             var currentMz = mzs[0];
             var currentIntensity = intensities[0];
@@ -132,12 +136,16 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                 if (currentIntensity >= previousIntensity && currentIntensity > nextIntensity)
                 {
                     if (currentIntensity > threshold)
+                    {
                         peakIndex.Add(index);
+                    }
                 }
                 else if (previousMzDiff > 2 * mzSpacing && nextMzDiff > 2 * mzSpacing)
                 {
                     if (currentIntensity > threshold)
+                    {
                         peakIndex.Add(index);
+                    }
                 }
             }
 
@@ -225,7 +233,10 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                 }
             }
             if (massRange <= 0)
+            {
                 massRange = 1;
+            }
+
             var pointsPerAmu = MercurySize / massRange; /* Use maximum of 2048 real, 2048 imaginary points */
             var amuPerPoint = 1.0 / pointsPerAmu;
 
@@ -235,7 +246,10 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                 var mz = amuPerPoint * i;
                 var ratio = Math.Pow(GaussianProfileFactorValue, -1 * mz * mz / (halfFwhm * halfFwhm));
                 if (ratio < minTheoreticalIntensity / 100)
+                {
                     break;
+                }
+
                 numPts++;
             }
 

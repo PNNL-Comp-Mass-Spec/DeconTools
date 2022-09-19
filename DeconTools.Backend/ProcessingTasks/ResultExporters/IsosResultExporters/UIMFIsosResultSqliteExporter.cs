@@ -20,9 +20,14 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
         public UIMFIsosResultSqliteExporter(string fileName, int triggerValue)
         {
             if (string.IsNullOrWhiteSpace(fileName))
+            {
                 throw new ArgumentNullException(nameof(fileName));
+            }
 
-            if (File.Exists(fileName)) File.Delete(fileName);
+            if (File.Exists(fileName))
+            {
+                File.Delete(fileName);
+            }
 
             TriggerToExport = triggerValue;
 
@@ -30,7 +35,9 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
             cnn = fact.CreateConnection();
 
             if (cnn == null)
+            {
                 throw new Exception("Factory.CreateConnection returned a null DbConnection object in UIMFIsosResultSqliteExporter");
+            }
 
             cnn.ConnectionString = "Data Source=" + fileName;
 

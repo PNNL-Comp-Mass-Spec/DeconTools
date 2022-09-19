@@ -99,7 +99,9 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
             var massTag = resultList.Run.CurrentMassTag;
             Check.Require(massTag != null, Name + " failed. MassTag was not defined.");
             if (massTag == null)
+            {
                 return;
+            }
 
             var currentResult = resultList.GetTargetedResult(massTag);
 

@@ -31,11 +31,18 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
         {
             Check.Require(currentResult != null, string.Format("{0} failed. CurrentResult has not been defined.", this.Name));
 
-            if (currentResult.IsotopicProfile == null) return;
+            if (currentResult.IsotopicProfile == null)
+            {
+                return;
+            }
+
             var monoPeak = currentResult.IsotopicProfile.getMonoPeak();
 
             var peakToTheLeft = LookforPeakToTheLeftOfMonoPeak(monoPeak, currentResult.IsotopicProfile.ChargeState, resultColl.Run.PeakList);
-            if (peakToTheLeft == null) return;  // no peak found... so no problem.
+            if (peakToTheLeft == null)
+            {
+                return;  // no peak found... so no problem.
+            }
 
             if (peakToTheLeft.Height > monoPeak.Height * MinRatioToGiveFlag)    //if peak-to-the-left exceeds min Ratio, then flag it
             {
@@ -70,8 +77,10 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
                 return null;
             }
 
-
-            if (!(foundLeftOfMonoPeaks.OrderByDescending(p => p.Height).First() is MSPeak peakToTheLeft)) return null;
+            if (!(foundLeftOfMonoPeaks.OrderByDescending(p => p.Height).First() is MSPeak peakToTheLeft))
+            {
+                return null;
+            }
 
             if (peakToTheLeft.Height > monoPeak.Height * MinRatioToGiveFlag)
             {

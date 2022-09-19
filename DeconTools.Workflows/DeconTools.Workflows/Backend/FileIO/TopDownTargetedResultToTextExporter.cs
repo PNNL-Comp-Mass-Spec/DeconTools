@@ -27,14 +27,22 @@ namespace DeconTools.Workflows.Backend.FileIO
             var prsmList = new StringBuilder();
             foreach (var prsm in topDownResult.PrsmList)
             {
-                if (prsmList.Length > 0) prsmList.Append(", ");
+                if (prsmList.Length > 0)
+                {
+                    prsmList.Append(", ");
+                }
+
                 prsmList.Append(prsm);
             }
 
             var chargeList = new StringBuilder();
             foreach (var charge in topDownResult.ChargeStateList)
             {
-                if (chargeList.Length > 0) chargeList.Append(", ");
+                if (chargeList.Length > 0)
+                {
+                    chargeList.Append(", ");
+                }
+
                 chargeList.Append(charge);
             }
 

@@ -38,7 +38,10 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 
             var baseChromDataIsOK = basePeakChromXYData?.Xvalues != null && basePeakChromXYData.Xvalues.Length > 3;
 
-            if (!baseChromDataIsOK) return new ChromCorrelationData();
+            if (!baseChromDataIsOK)
+            {
+                return new ChromCorrelationData();
+            }
 
             ChromCorrelationDataItem o18SingleLabelChromCorrDataItem;
             if (indexO18SingleLabelPeak >= iso.Peaklist.Count)

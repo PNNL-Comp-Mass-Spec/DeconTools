@@ -176,13 +176,17 @@ namespace DeconTools.Workflows.Backend.FileIO
                 {
                     var dataLine = reader.ReadLine();
                     if (string.IsNullOrWhiteSpace(dataLine))
+                    {
                         continue;
+                    }
 
                     if (!headersParsed)
                     {
                         var success = GetColumnMapping(dataLine, columnMapping, headerColumnNames);
                         if (!success)
+                        {
                             throw new InvalidDataException("The input file is missing required headers " + _filename);
+                        }
 
                         headersParsed = true;
                         continue;
@@ -270,14 +274,18 @@ namespace DeconTools.Workflows.Backend.FileIO
 
                     // Get Protein_mass
                     if (!GetDouble(processedData, columnMapping, headerColumnNames, ResultColumnIDs.ProteinMass, out var proteinMass))
+                    {
                         continue;
+                    }
 
                     // Get protein name
                     var proteinName = processedData[columnMapping[ResultColumnIDs.ProteinName]];
 
                     // Get score
                     if (!GetDouble(processedData, columnMapping, headerColumnNames, ResultColumnIDs.EValue, out var eValueDbl))
+                    {
                         continue;
+                    }
 
                     float eValue;
                     if (eValueDbl > float.MaxValue)
@@ -428,7 +436,9 @@ namespace DeconTools.Workflows.Backend.FileIO
             IDictionary<ResultColumnIDs, string> headerColumnNames)
         {
             if (!columnHeaderToIndexMap.TryGetValue(columnNameToFind, out var columnIndex))
+            {
                 return false;
+            }
 
             columnMapping.Add(resultColumn, columnIndex);
             headerColumnNames.Add(resultColumn, columnNameToFind);
@@ -457,7 +467,9 @@ namespace DeconTools.Workflows.Backend.FileIO
                 }
 
                 if (matchCount == 0)
+                {
                     break;
+                }
             }
 
             // If the peptide sequence still has modifications, we can't get the empirical formula
@@ -544,11 +556,15 @@ namespace DeconTools.Workflows.Backend.FileIO
                 {
                     success = DefineMapping(columnHeaderToIndexMap, knownColumnName, knownColumn.Key, columnMapping, headerColumnNames);
                     if (success)
+                    {
                         break;
+                    }
                 }
 
                 if (success)
+                {
                     continue;
+                }
 
                 if (knownColumn.Value.Count == 1)
                 {
@@ -579,7 +595,9 @@ namespace DeconTools.Workflows.Backend.FileIO
             var valueText = processedData[columnMapping[columnId]];
 
             if (double.TryParse(valueText, out value))
+            {
                 return true;
+            }
 
             if (string.Equals(valueText, "infinity", System.StringComparison.OrdinalIgnoreCase))
             {
@@ -649,7 +667,9 @@ namespace DeconTools.Workflows.Backend.FileIO
             var match = modRegEx.Key.Match(peptideWithMods);
 
             if (!match.Success)
+            {
                 return false;
+            }
 
             var modType = modRegEx.Value;
             if (modCountsByType.TryGetValue(modType, out var modMatchCount))
@@ -666,7 +686,9 @@ namespace DeconTools.Workflows.Backend.FileIO
             var updatedPeptideWithMods = pieces["Prefix"].Value + pieces["StartingChars"] + pieces["ModifiedResidues"].Value + pieces["RemainingChars"].Value;
 
             if (string.Equals(updatedPeptideWithMods, peptideWithMods))
+            {
                 return false;
+            }
 
             peptideWithMods = string.Copy(updatedPeptideWithMods);
             return true;

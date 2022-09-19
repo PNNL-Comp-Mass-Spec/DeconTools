@@ -22,14 +22,19 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
 
         public PeakListSQLiteExporter(int triggerValue, string sqliteFilename)
         {
-            if (File.Exists(sqliteFilename)) File.Delete(sqliteFilename);
+            if (File.Exists(sqliteFilename))
+            {
+                File.Delete(sqliteFilename);
+            }
 
             var fact = DbProviderFactories.GetFactory("System.Data.SQLite");
 
             cnn = fact.CreateConnection();
 
             if (cnn == null)
+            {
                 throw new Exception("Factory.CreateConnection returned a null DbConnection instance in PeakListSQLiteExporter constructor");
+            }
 
             cnn.ConnectionString = "Data Source=" + sqliteFilename;
 

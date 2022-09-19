@@ -14,7 +14,10 @@ namespace DeconTools.Utilities
         {
             if (UseExceptions)
             {
-                if (!assertion) throw new PreconditionException(message);
+                if (!assertion)
+                {
+                    throw new PreconditionException(message);
+                }
             }
             else
             {
@@ -29,7 +32,10 @@ namespace DeconTools.Utilities
         {
             if (UseExceptions)
             {
-                if (!assertion) throw new PreconditionException(message, inner);
+                if (!assertion)
+                {
+                    throw new PreconditionException(message, inner);
+                }
             }
             else
             {
@@ -45,7 +51,10 @@ namespace DeconTools.Utilities
         {
             if (UseExceptions)
             {
-                if (!assertion) throw new PreconditionException("Precondition failed.");
+                if (!assertion)
+                {
+                    throw new PreconditionException("Precondition failed.");
+                }
             }
             else
             {
@@ -60,7 +69,10 @@ namespace DeconTools.Utilities
         {
             if (UseExceptions)
             {
-                if (!assertion) throw new PostconditionException(message);
+                if (!assertion)
+                {
+                    throw new PostconditionException(message);
+                }
             }
             else
             {
@@ -75,7 +87,10 @@ namespace DeconTools.Utilities
         {
             if (UseExceptions)
             {
-                if (!assertion) throw new PostconditionException(message, inner);
+                if (!assertion)
+                {
+                    throw new PostconditionException(message, inner);
+                }
             }
             else
             {
@@ -91,7 +106,10 @@ namespace DeconTools.Utilities
         {
             if (UseExceptions)
             {
-                if (!assertion) throw new PostconditionException("Postcondition failed.");
+                if (!assertion)
+                {
+                    throw new PostconditionException("Postcondition failed.");
+                }
             }
             else
             {
@@ -106,7 +124,10 @@ namespace DeconTools.Utilities
         {
             if (UseExceptions)
             {
-                if (!assertion) throw new InvariantException(message);
+                if (!assertion)
+                {
+                    throw new InvariantException(message);
+                }
             }
             else
             {
@@ -121,7 +142,10 @@ namespace DeconTools.Utilities
         {
             if (UseExceptions)
             {
-                if (!assertion) throw new InvariantException(message, inner);
+                if (!assertion)
+                {
+                    throw new InvariantException(message, inner);
+                }
             }
             else
             {
@@ -137,7 +161,10 @@ namespace DeconTools.Utilities
         {
             if (UseExceptions)
             {
-                if (!assertion) throw new InvariantException("Invariant failed.");
+                if (!assertion)
+                {
+                    throw new InvariantException("Invariant failed.");
+                }
             }
             else
             {
@@ -152,7 +179,10 @@ namespace DeconTools.Utilities
         {
             if (UseExceptions)
             {
-                if (!assertion) throw new AssertionException(message);
+                if (!assertion)
+                {
+                    throw new AssertionException(message);
+                }
             }
             else
             {
@@ -167,7 +197,10 @@ namespace DeconTools.Utilities
         {
             if (UseExceptions)
             {
-                if (!assertion) throw new AssertionException(message, inner);
+                if (!assertion)
+                {
+                    throw new AssertionException(message, inner);
+                }
             }
             else
             {
@@ -183,7 +216,10 @@ namespace DeconTools.Utilities
         {
             if (UseExceptions)
             {
-                if (!assertion) throw new AssertionException("Assertion failed.");
+                if (!assertion)
+                {
+                    throw new AssertionException("Assertion failed.");
+                }
             }
             else
             {

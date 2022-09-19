@@ -87,7 +87,9 @@ namespace DeconTools.Workflows.Backend.Core
             RunIsDisposed = true;
 
             if (Run != null)
+            {
                 DatasetPath = Run.DatasetDirectoryPath;
+            }
 
             _backgroundWorker = backgroundWorker;
 
@@ -134,7 +136,9 @@ namespace DeconTools.Workflows.Backend.Core
                          "Target massTags is empty (or all peptides contain unknown modifications). Check the path to the massTag data file.");
 
             if (Targets == null)
+            {
                 return;
+            }
 
             IqLogger.LogMessage("Total targets loaded= " + Targets.TargetList.Count);
 
@@ -603,7 +607,9 @@ namespace DeconTools.Workflows.Backend.Core
         protected virtual string GetOutputFilePath()
         {
             if (!string.IsNullOrWhiteSpace(_resultsDirectory))
+            {
                 return Path.Combine(_resultsDirectory, Run.DatasetName + "_results.txt");
+            }
 
             return Path.Combine(Run.DatasetName + "_results.txt");
         }
@@ -619,14 +625,20 @@ namespace DeconTools.Workflows.Backend.Core
             if (string.IsNullOrWhiteSpace(baseDirectory))
             {
                 if (Directory.Exists(DatasetPath))
+                {
                     resultsDirectoryPath = Path.Combine(DatasetPath, "Results");
+                }
                 else
                 {
                     var fiDatasetFile = new FileInfo(DatasetPath);
                     if (fiDatasetFile.Directory == null)
+                    {
                         resultsDirectoryPath = "Results";
+                    }
                     else
+                    {
                         resultsDirectoryPath = Path.Combine(fiDatasetFile.Directory.FullName, "Results");
+                    }
                 }
             }
             else
@@ -669,7 +681,11 @@ namespace DeconTools.Workflows.Backend.Core
 
                 foreach (var iqTarget in iqTargets)
                 {
-                    if (iqTarget.QualityScore > MsgfFdrScoreCutoff) continue;
+                    if (iqTarget.QualityScore > MsgfFdrScoreCutoff)
+                    {
+                        continue;
+                    }
+
                     targetUtilities.UpdateTargetMissingInfo(iqTarget);
 
                     TargetBase oldStyleTarget = new PeptideTarget();
@@ -698,7 +714,9 @@ namespace DeconTools.Workflows.Backend.Core
             var logDirectory = new DirectoryInfo(logDirectoryPath);
 
             if (!logDirectory.Exists)
+            {
                 logDirectory.Create();
+            }
 
             // The timestamp for the log file name is today's date, plus the number of milliseconds since midnight
             var logFilePath = Path.Combine(logDirectory.FullName,
@@ -792,7 +810,10 @@ namespace DeconTools.Workflows.Backend.Core
 
         protected void writeToLogFile(string stringToWrite)
         {
-            if (string.IsNullOrWhiteSpace(_loggingFileName)) return;
+            if (string.IsNullOrWhiteSpace(_loggingFileName))
+            {
+                return;
+            }
 
             using (var sw = new StreamWriter(new FileStream(_loggingFileName, FileMode.Append,
                 FileAccess.Write, FileShare.Read)))
@@ -948,7 +969,10 @@ namespace DeconTools.Workflows.Backend.Core
 
         private void CopyAlignmentInfoIfExists()
         {
-            if (string.IsNullOrWhiteSpace(_alignmentDirectory)) return;
+            if (string.IsNullOrWhiteSpace(_alignmentDirectory))
+            {
+                return;
+            }
 
             var dirInfo = new DirectoryInfo(_alignmentDirectory);
 
@@ -1025,7 +1049,10 @@ namespace DeconTools.Workflows.Backend.Core
 
         protected TargetCollection CreateTargets(Globals.TargetType targetType, string targetFilePath)
         {
-            if (string.IsNullOrWhiteSpace(targetFilePath)) return null;
+            if (string.IsNullOrWhiteSpace(targetFilePath))
+            {
+                return null;
+            }
 
             switch (targetType)
             {
@@ -1052,7 +1079,11 @@ namespace DeconTools.Workflows.Backend.Core
 
                 foreach (var iqTarget in iqTargets)
                 {
-                    if (iqTarget.QualityScore > MsgfFdrScoreCutoff) continue;
+                    if (iqTarget.QualityScore > MsgfFdrScoreCutoff)
+                    {
+                        continue;
+                    }
+
                     targetUtilities.UpdateTargetMissingInfo(iqTarget);
 
                     TargetBase oldStyleTarget = new LcmsFeatureTarget();

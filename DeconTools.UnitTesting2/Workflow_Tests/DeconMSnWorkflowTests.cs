@@ -34,9 +34,20 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             var expectedResultsFile2 = Path.Combine(run.DatasetDirectoryPath, run.DatasetName + "_DeconMSn_log.txt");
             var expectedResultsFile3 = Path.Combine(run.DatasetDirectoryPath, run.DatasetName + "_profile.txt");
 
-            if (File.Exists(expectedResultsFile1)) File.Delete(expectedResultsFile1);
-            if (File.Exists(expectedResultsFile2)) File.Delete(expectedResultsFile2);
-            if (File.Exists(expectedResultsFile3)) File.Delete(expectedResultsFile3);
+            if (File.Exists(expectedResultsFile1))
+            {
+                File.Delete(expectedResultsFile1);
+            }
+
+            if (File.Exists(expectedResultsFile2))
+            {
+                File.Delete(expectedResultsFile2);
+            }
+
+            if (File.Exists(expectedResultsFile3))
+            {
+                File.Delete(expectedResultsFile3);
+            }
 
             var workflow = new DeconMSnWorkflow(parameters, run);
             workflow.Execute();
@@ -63,9 +74,20 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             var expectedResultsFile2 = Path.Combine(outputDirectoryPath, datasetName + "_DeconMSn_log.txt");
             var expectedResultsFile3 = Path.Combine(outputDirectoryPath, datasetName + "_profile.txt");
 
-            if (File.Exists(expectedResultsFile1)) File.Delete(expectedResultsFile1);
-            if (File.Exists(expectedResultsFile2)) File.Delete(expectedResultsFile2);
-            if (File.Exists(expectedResultsFile3)) File.Delete(expectedResultsFile3);
+            if (File.Exists(expectedResultsFile1))
+            {
+                File.Delete(expectedResultsFile1);
+            }
+
+            if (File.Exists(expectedResultsFile2))
+            {
+                File.Delete(expectedResultsFile2);
+            }
+
+            if (File.Exists(expectedResultsFile3))
+            {
+                File.Delete(expectedResultsFile3);
+            }
 
             var workflow = ScanBasedWorkflow.CreateWorkflow(rawdataFile, parameterFile, outputDirectoryPath);
             workflow.Execute();

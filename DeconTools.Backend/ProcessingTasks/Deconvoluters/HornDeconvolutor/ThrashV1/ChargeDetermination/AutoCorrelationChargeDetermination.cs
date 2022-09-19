@@ -33,7 +33,9 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                 var sum = 0.0;
                 var topIndex = ivN - i - 1;
                 for (var j = 0; j < topIndex; j++)
+                {
                     sum += (iv[j] - average) * (iv[j + i] - average);
+                }
 
                 if (topIndex > 0)
                 {
@@ -42,7 +44,9 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                     //Ov.Add(sum/j);
                 }
                 else
+                {
                     ov.Add(0);
+                }
             }
             return ov;
         }
@@ -64,10 +68,14 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             var numL = numPts;
 
             if (numPts < 5)
+            {
                 return -1;
+            }
 
             if (numPts < 256)
+            {
                 numL = 10 * numPts;
+            }
 
             // TODO: PattersonChargeStateCalculator does a lot of funny stuff around here.
             // variable to help us perform spline interpolation.
@@ -119,11 +127,16 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
 
             var minN = 0;
             while (minN < numL - 1 && autoCorrelationScores[minN] > autoCorrelationScores[minN + 1])
+            {
                 minN++;
+            }
+
             var success = HighestChargeStatePeak(minMz, maxMz, minN, autoCorrelationScores, MaxCharge, out var bestAcScore, out _);
 
             if (!success)
+            {
                 return -1; // Didn't find anything
+            }
 
             // List to temporarily store charge list. These charges are calculated at peak values of auto correlation.
             // Now go back through the CS peaks and make a list of all CS that are at least 10% of the highest
@@ -134,7 +147,9 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             // TODO: PattersonChargeStateCalculator really doesn't match the following code.
             var fwhm = peak.FWHM; // Store a copy of the FWHM to avoid modifying the actual value
             if (fwhm > 0.1)
+            {
                 fwhm = 0.1;
+            }
 
             for (var i = 0; i < charges.Count; i++)
             {
@@ -150,7 +165,10 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                     }
                 }
                 if (skip)
+                {
                     continue;
+                }
+
                 if (tempChargeState > 0)
                 {
                     var peakA = peak.Mz + 1.0 / tempChargeState;
@@ -159,7 +177,9 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                     {
                         returnChargeStateVal = tempChargeState;
                         if (isoPeak.Mz * tempChargeState < 3000)
+                        {
                             break;
+                        }
                         // if the mass is greater than 3000, lets make sure that multiple isotopes exist.
                         peakA = peak.Mz - 1.03 / tempChargeState;
                         found = peakData.GetPeakFromAllOriginalIntensity(peakA - fwhm, peakA + fwhm, out isoPeak);
@@ -212,7 +232,10 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             for (var i = minN; i < numPts; i++)
             {
                 if (i < 2)
+                {
                     continue;
+                }
+
                 var goingUp = autoCorrelationScores[i] > autoCorrelationScores[i - 1];
 
                 if (wasGoingUp && !goingUp)
@@ -259,7 +282,10 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             for (var i = minN; i < numPts; i++)
             {
                 if (i < 2)
+                {
                     continue;
+                }
+
                 var goingUp = autoCorrelationScores[i] - autoCorrelationScores[i - 1] > 0;
                 if (wasGoingUp && !goingUp)
                 {

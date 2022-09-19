@@ -18,7 +18,9 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
             try
             {
                 if (File.Exists(_filename))
+                {
                     File.Delete(_filename);
+                }
             }
             catch (Exception ex)
             {

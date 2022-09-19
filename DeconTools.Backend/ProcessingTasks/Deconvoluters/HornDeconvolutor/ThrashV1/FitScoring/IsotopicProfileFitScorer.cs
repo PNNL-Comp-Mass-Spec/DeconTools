@@ -204,39 +204,59 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             {
                 var numpts = mzs.Count;
                 if (LastPointIndex >= numpts)
+                {
                     LastPointIndex = -1;
+                }
 
                 //since points are more likely to be searched in order.
                 if (LastPointIndex != -1 && Mz2 < mz)
                 {
                     if (LastPointIndex < numpts - 1 && mzs[LastPointIndex + 1] > mz)
+                    {
                         LastPointIndex++;
+                    }
                     else
+                    {
                         LastPointIndex = PeakIndex.GetNearestBinary(mzs, mz, LastPointIndex,
                             numpts - 1);
+                    }
                 }
                 else
+                {
                     LastPointIndex = PeakIndex.GetNearestBinary(mzs, mz, 0, numpts - 1);
+                }
+
                 if (LastPointIndex >= numpts)
+                {
                     return 0;
+                }
 
                 if (LastPointIndex < 0)
+                {
                     LastPointIndex = 0;
+                }
 
                 if (mzs[LastPointIndex] > mz)
                 {
                     while (LastPointIndex > 0 && mzs[LastPointIndex] > mz)
+                    {
                         LastPointIndex--;
+                    }
                 }
                 else
                 {
                     while (LastPointIndex < numpts && mzs[LastPointIndex] < mz)
+                    {
                         LastPointIndex++;
+                    }
+
                     LastPointIndex--;
                 }
 
                 if (LastPointIndex == numpts - 1)
+                {
                     LastPointIndex = numpts - 2;
+                }
 
                 Mz1 = mzs[LastPointIndex];
                 Mz2 = mzs[LastPointIndex + 1];
@@ -245,7 +265,9 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                 Intensity2 = intensities[LastPointIndex + 1];
             }
             if (Mz1.Equals(Mz2))
+            {
                 return Intensity1;
+            }
 
             return (mz - Mz1) / (Mz2 - Mz1) * (Intensity2 - Intensity1) + Intensity1;
         }
@@ -288,17 +310,24 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
 
             var index = PeakIndex.GetNearestBinary(TheoreticalDistMzs, minMz, 0, numPts - 1);
             if (index >= numPts)
+            {
                 return false;
+            }
 
             if (TheoreticalDistMzs[index] > minMz)
             {
                 while (index > 0 && TheoreticalDistMzs[index] > minMz)
+                {
                     index--;
+                }
             }
             else
             {
                 while (index < numPts && TheoreticalDistMzs[index] < minMz)
+                {
                     index++;
+                }
+
                 index--;
             }
 
@@ -309,7 +338,10 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             {
                 var mz = TheoreticalDistMzs[index];
                 if (mz > maxMz)
+                {
                     break;
+                }
+
                 if (mz > minMz)
                 {
                     if (TheoreticalDistIntensities[index] > intensity)
@@ -345,9 +377,13 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                     d -= (y3 - y2) * (x2 - x1); //
 
                     if (d.Equals(0))
+                    {
                         mzValue = x2;
+                    }
                     else
+                    {
                         mzValue = (x1 + x2 - (y2 - y1) * (x3 - x2) * (x1 - x3) / d) / 2.0;
+                    }
                     //[gord] what's this doing?? Looks like a mid-point calculation
                 }
                 else
@@ -374,7 +410,9 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                 //double mz = IsotopeMzs[isotope_num];
                 var intensity = IsotopeIntensities[isotopeNum];
                 if (intensity - minThreshold > 50)
+                {
                     return true;
+                }
             }
 
             return false;
@@ -514,7 +552,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             if (debug)
             {
                 Console.WriteLine("---------------------------------------- THEORETICAL PEAKS ------------------");
-                Console.WriteLine("Theoretical peak\t" + "Index\t" + "MZ\t" + "Intensity\t" + "FWHM\t" + "SigNoise");
+                Console.WriteLine("Theoretical peak\tIndex\tMZ\tIntensity\tFWHM\tSigNoise");
                 for (var i = 0; i < numpeaks; i++)
                 {
                     theorPeakData.GetPeak(i, out var theorpeak);
@@ -603,8 +641,11 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                 else
                 {
                     if (debug)
+                    {
                         Console.WriteLine("LEFT\t" + -1 + "\t" + -1 + "\t" + -1 + "\t" + -1 + "\t" + -1 + "\t" + -1 +
                                           "\t" + -1);
+                    }
+
                     fit = bestFit + 1000; // make the fit terrible
                 }
                 // TODO: Currently, if fit score is less than best_fit, iteration stops.  Future versions should continue attempted fitting if fit was within a specified range of the best fit
@@ -621,7 +662,9 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                 if (leftFitFactor <= leftFitStringencyFactor)
                 {
                     if (nextPeak.Intensity > peak.Intensity)
+                    {
                         peak.Intensity = nextPeak.Intensity;
+                    }
                     //maxY = peak.mdbl_intensity;
                     bestFit = fit;
                     bestFitCountBasis = fitCountBasis;
@@ -630,9 +673,14 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                 else
                 {
                     if (p1Fit.Equals(-1)) //[gord]   what is this doing?  Peak1 fit??
+                    {
                         p1Fit = fit;
+                    }
+
                     if (!CompleteFitThrash)
+                    {
                         break;
+                    }
                 }
             }
 
@@ -694,7 +742,9 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                 if (rightFitFactor <= rightFitStringencyFactor)
                 {
                     if (nextPeak.Intensity > peak.Intensity)
+                    {
                         peak.Intensity = nextPeak.Intensity;
+                    }
                     //maxY = peak.mdbl_intensity;
                     bestFit = fit;
                     bestFitCountBasis = fitCountBasis;
@@ -703,9 +753,14 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                 else
                 {
                     if (m1Fit.Equals(-1))
+                    {
                         m1Fit = fit;
+                    }
+
                     if (!CompleteFitThrash)
+                    {
                         break;
+                    }
                 }
             }
 
@@ -754,8 +809,10 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                 Environment.Exit(1);
             }
             if (debug)
+            {
                 Console.WriteLine("Getting isotope distribution for formula = " + formula + " mz = " + peak.Mz +
                                   " charge = " + chargeState);
+            }
 
             var resolution = peak.Mz / peak.FWHM;
 
@@ -770,7 +827,9 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
 
             var delta = peak.Mz - IsotopeDistribution.MaxPeakMz;
             if (debug)
+            {
                 Console.WriteLine("Going for first fit");
+            }
 
             return FitScore(peakData, chargeState, peak, delta, minTheoreticalIntensityForScore, out _, debug);
         }
@@ -947,7 +1006,9 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             }
 
             if (numFilteredTheorPeaks == 0)
+            {
                 return startingDelta;
+            }
 
             var deltaArray = new double[numFilteredTheorPeaks];
             var intensityArray = new double[numFilteredTheorPeaks];
@@ -979,7 +1040,9 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             }
 
             if (intensitySum.Equals(0))
+            {
                 return startingDelta; // no obs peaks found at all;  return default
+            }
 
             //now perform a weighted average
             double weightedDelta = 0;

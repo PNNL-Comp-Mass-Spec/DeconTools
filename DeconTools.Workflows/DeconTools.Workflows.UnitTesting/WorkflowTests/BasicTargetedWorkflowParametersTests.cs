@@ -14,7 +14,10 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         {
             var exportedParametersFile = Path.Combine(FileRefs.OutputFolderPath, "exportedBasicTargetedWorkflowParameters.xml");
 
-            if (File.Exists(exportedParametersFile)) File.Delete(exportedParametersFile);
+            if (File.Exists(exportedParametersFile))
+            {
+                File.Delete(exportedParametersFile);
+            }
 
             var parameters = new BasicTargetedWorkflowParameters();
             parameters.SaveParametersToXML(exportedParametersFile);

@@ -357,9 +357,20 @@ namespace DeconTools.Backend.Workflows
             _outputSummaryFilename = baseFileName + "_DeconMSn_log.txt";
             _outputParentProfileDataFilename = baseFileName + "_profile.txt";
 
-            if (File.Exists(_outputFileName)) File.Delete(_outputFileName);
-            if (File.Exists(_outputSummaryFilename)) File.Delete(_outputSummaryFilename);
-            if (File.Exists(_outputParentProfileDataFilename)) File.Delete(_outputParentProfileDataFilename);
+            if (File.Exists(_outputFileName))
+            {
+                File.Delete(_outputFileName);
+            }
+
+            if (File.Exists(_outputSummaryFilename))
+            {
+                File.Delete(_outputSummaryFilename);
+            }
+
+            if (File.Exists(_outputParentProfileDataFilename))
+            {
+                File.Delete(_outputParentProfileDataFilename);
+            }
         }
 
         protected override Globals.ResultType GetResultType()
@@ -369,7 +380,10 @@ namespace DeconTools.Backend.Workflows
 
         public virtual void ReportProgress()
         {
-            if (Run.ScanSetCollection == null || Run.ScanSetCollection.ScanSetList.Count == 0) return;
+            if (Run.ScanSetCollection == null || Run.ScanSetCollection.ScanSetList.Count == 0)
+            {
+                return;
+            }
 
             var userState = new ScanBasedProgressInfo(Run, Run.CurrentScanSet);
 

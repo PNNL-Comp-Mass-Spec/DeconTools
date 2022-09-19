@@ -10,14 +10,18 @@ namespace DeconTools.Backend.ProcessingTasks
         {
             Check.Require(resultList != null, "UIMF Drift Time extractor failed. ResultCollection is null");
             if (resultList == null)
+            {
                 return;
+            }
 
             Check.Require(resultList.Run != null, "UIMF Drift Time extractor failed. Run is null");
             Check.Require(resultList.Run is UIMFRun, "UIMF Drift Time extractor only works on UIMF files.");
 
             var uimfRun = (UIMFRun)resultList.Run;
             if (uimfRun == null)
+            {
                 return;
+            }
 
             foreach (var result in resultList.IsosResultBin)
             {

@@ -12,13 +12,18 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
         #region Constructors
         public BasicScanResult_SqliteExporter(string fileName)
         {
-            if (File.Exists(fileName)) File.Delete(fileName);
+            if (File.Exists(fileName))
+            {
+                File.Delete(fileName);
+            }
 
             var fact = DbProviderFactories.GetFactory("System.Data.SQLite");
             cnn = fact.CreateConnection();
 
             if (cnn == null)
+            {
                 throw new Exception("Factory.CreateConnection returned a null DbConnection instance in BasicScanResult_SqliteExporter");
+            }
 
             cnn.ConnectionString = "Data Source=" + fileName;
 

@@ -23,7 +23,10 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             parameters.OutputDirectory = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\TempOutput";
 
             var expectedPeaksFile = Path.Combine(parameters.OutputDirectory, run.DatasetName + "_peaks.txt");
-            if (File.Exists(expectedPeaksFile)) File.Delete(expectedPeaksFile);
+            if (File.Exists(expectedPeaksFile))
+            {
+                File.Delete(expectedPeaksFile);
+            }
 
             var workflow = new PeakDetectAndExportWorkflow(run,parameters);
             workflow.Execute();
@@ -80,7 +83,10 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             parameters.MS2PeakDetectorDataIsThresholded = true;
 
             var expectedPeaksFile = Path.Combine(run.DatasetDirectoryPath, run.DatasetName + "_peaks.txt");
-            if (File.Exists(expectedPeaksFile)) File.Delete(expectedPeaksFile);
+            if (File.Exists(expectedPeaksFile))
+            {
+                File.Delete(expectedPeaksFile);
+            }
 
             var workflow = new PeakDetectAndExportWorkflow(run, parameters);
             workflow.Execute();

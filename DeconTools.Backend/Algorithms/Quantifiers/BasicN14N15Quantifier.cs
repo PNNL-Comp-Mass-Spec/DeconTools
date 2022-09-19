@@ -117,12 +117,18 @@ namespace DeconTools.Backend.Algorithms.Quantifiers
 
             //find starting point (use binary search)
             var indexOfStartingPoint = MathUtils.BinarySearchWithTolerance(xVals, leftMostMZ, 0, xVals.Length - 1, 0.1);
-            if (indexOfStartingPoint == -1) indexOfStartingPoint = 0;
+            if (indexOfStartingPoint == -1)
+            {
+                indexOfStartingPoint = 0;
+            }
 
             var area1 = IsotopicProfileUtilities.CalculateAreaOfProfile(iso1, xVals, yVals, backgroundIntensity, ref indexOfStartingPoint);
             var area2 = IsotopicProfileUtilities.CalculateAreaOfProfile(iso2, xVals, yVals, backgroundIntensity, ref indexOfStartingPoint);
 
-            if (area1 < 0) area1 = 0;
+            if (area1 < 0)
+            {
+                area1 = 0;
+            }
 
             if (area2 > 0)
             {
@@ -149,7 +155,10 @@ namespace DeconTools.Backend.Algorithms.Quantifiers
         {
             double returnVal = -1;
 
-            if (iso1 == null || iso2 == null) return returnVal;
+            if (iso1 == null || iso2 == null)
+            {
+                return returnVal;
+            }
 
             double iso1MaxIntensity = iso1.getMostIntensePeak().Height;
             double iso2MaxIntensity = iso2.getMostIntensePeak().Height;

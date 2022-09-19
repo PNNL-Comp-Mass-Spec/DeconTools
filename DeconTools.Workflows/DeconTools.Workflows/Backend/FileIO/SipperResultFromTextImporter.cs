@@ -59,7 +59,10 @@ namespace DeconTools.Workflows.Backend.FileIO
 
         private double[] ConvertLabelDistStringToArray(string labelDistString)
         {
-            if (string.IsNullOrEmpty(labelDistString))return null;
+            if (string.IsNullOrEmpty(labelDistString))
+            {
+                return null;
+            }
 
             var delimiter = ',';
             var parsedLabelDistString = labelDistString.Split(delimiter);

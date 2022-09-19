@@ -36,7 +36,9 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
             var expectedLogFile = new FileInfo(Path.Combine(resultsFolder, "IqLogs", datasetName + "_IqLog.txt"));
 
             if (expectedLogFile.Exists)
+            {
                 expectedLogFile.Delete();
+            }
 
             // FileLogger.ChangeLogFileBaseName(expectedLogFile.FullName, false);
 
@@ -72,7 +74,9 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
             expectedLogFile.Refresh();
 
             if (!expectedLogFile.Exists)
+            {
                 return;
+            }
 
             Console.WriteLine("");
             Console.WriteLine("Log File");

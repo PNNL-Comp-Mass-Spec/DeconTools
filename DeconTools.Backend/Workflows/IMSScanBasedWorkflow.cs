@@ -148,7 +148,10 @@ namespace DeconTools.Backend.Workflows
                 string.IsNullOrWhiteSpace(mCachedProgressMessage) ||
                 DateTime.UtcNow.Subtract(mLastProgress).TotalSeconds >= 3)
             {
-                if (uimfRun.ScanSetCollection == null || uimfRun.ScanSetCollection.ScanSetList.Count == 0) return;
+                if (uimfRun.ScanSetCollection == null || uimfRun.ScanSetCollection.ScanSetList.Count == 0)
+                {
+                    return;
+                }
 
                 mCachedUserState = new ScanBasedProgressInfo(Run, uimfRun.CurrentScanSet, uimfRun.CurrentIMSScanSet);
                 var frameNum = uimfRun.ScanSetCollection.ScanSetList.IndexOf(uimfRun.CurrentScanSet);

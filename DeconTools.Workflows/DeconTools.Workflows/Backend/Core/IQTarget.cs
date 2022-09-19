@@ -63,7 +63,10 @@ namespace DeconTools.Workflows.Backend.Core
         {
             get
             {
-                if (ParentTarget == null) return 0;
+                if (ParentTarget == null)
+                {
+                    return 0;
+                }
 
                 return 1 + ParentTarget.NodeLevel;
             }
@@ -73,7 +76,10 @@ namespace DeconTools.Workflows.Backend.Core
         {
             get
             {
-                if (ParentTarget == null) return this;
+                if (ParentTarget == null)
+                {
+                    return this;
+                }
 
                 return ParentTarget.RootTarget;
             }

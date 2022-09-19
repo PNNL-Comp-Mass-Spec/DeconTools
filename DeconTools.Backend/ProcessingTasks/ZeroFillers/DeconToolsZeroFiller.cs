@@ -74,10 +74,14 @@ namespace DeconTools.Backend.ProcessingTasks.ZeroFillers
                 }
 
                 if (minDistance > maxZeroFillDistance)
+                {
                     minDistance = maxZeroFillDistance;
+                }
 
                 if (minDistance < 0.00001)
+                {
                     minDistance = 0.00001;
+                }
 
                 zeroFilledXVals.Add(x[0]);
                 zeroFilledYVals.Add(y[0]);
@@ -88,12 +92,16 @@ namespace DeconTools.Backend.ProcessingTasks.ZeroFillers
                 var lastX = x[0];
 
                 if (ShowTraceMessages)
+                {
                     Console.WriteLine("Starting ZeroFill for loop");
+                }
 
                 for (var index = 1; index < numPoints; index++)
                 {
                     if (ShowTraceMessages)
+                    {
                         Console.Write(index + " ");
+                    }
 
                     if (Math.Abs(x[index] - lastX) < double.Epsilon)
                     {
@@ -112,10 +120,14 @@ namespace DeconTools.Backend.ProcessingTasks.ZeroFillers
 
                     var diffThreshold = lastDiff;
                     if (diffThreshold > maxZeroFillDistance)
+                    {
                         diffThreshold = maxZeroFillDistance;
+                    }
 
                     if (diffThreshold < minDistance)
+                    {
                         diffThreshold = minDistance;
+                    }
 
                     if (currentDiff > differenceFactor * diffThreshold)
                     {
@@ -126,7 +138,10 @@ namespace DeconTools.Backend.ProcessingTasks.ZeroFillers
                             for (var pointNum = 0; pointNum < maxPointsToAdd; pointNum++)
                             {
                                 if (lastX >= x[index])
+                                {
                                     break;
+                                }
+
                                 lastX += diffThreshold;
                                 zeroFilledXVals.Add(lastX);
                                 zeroFilledYVals.Add(0);
@@ -140,7 +155,10 @@ namespace DeconTools.Backend.ProcessingTasks.ZeroFillers
                             for (var pointNum = 0; pointNum < maxPointsToAdd; pointNum++)
                             {
                                 if (lastX >= x[index])
+                                {
                                     break;
+                                }
+
                                 zeroFilledXVals.Add(lastX);
                                 zeroFilledYVals.Add(0);
                                 lastX += diffThreshold;
@@ -152,7 +170,10 @@ namespace DeconTools.Backend.ProcessingTasks.ZeroFillers
                             {
                                 lastX += diffThreshold;
                                 if (lastX >= x[index])
+                                {
                                     break;
+                                }
+
                                 zeroFilledXVals.Add(lastX);
                                 zeroFilledYVals.Add(0);
                             }
@@ -168,7 +189,9 @@ namespace DeconTools.Backend.ProcessingTasks.ZeroFillers
                         lastDiff = currentDiff;
 
                         if (lastDiff < minDistance)
+                        {
                             lastDiff = minDistance;
+                        }
 
                         lastDiffIndex = index;
                         lastX = x[index];
@@ -176,7 +199,9 @@ namespace DeconTools.Backend.ProcessingTasks.ZeroFillers
                 }
 
                 if (ShowTraceMessages)
+                {
                     Console.WriteLine();
+                }
 
                 var zeroFilledData = new XYData
                 {

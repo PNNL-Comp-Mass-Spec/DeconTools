@@ -37,7 +37,9 @@ namespace DeconTools.Backend.ProcessingTasks
         {
             Check.Require(run != null, "SaturationDetector failed. Run is null");
             if (run == null)
+            {
                 return;
+            }
 
             if (_msGenerator == null)
             {
@@ -46,8 +48,15 @@ namespace DeconTools.Backend.ProcessingTasks
 
             if (run is UIMFRun uimfRun)
             {
-                if (uimfRun.CurrentScanSet == null) throw new NullReferenceException("CurrentScanSet is null. You need to set it.");
-                if (uimfRun.CurrentIMSScanSet == null) throw new NullReferenceException("CurrentIMSScanSet is null. You need to set it.");
+                if (uimfRun.CurrentScanSet == null)
+                {
+                    throw new NullReferenceException("CurrentScanSet is null. You need to set it.");
+                }
+
+                if (uimfRun.CurrentIMSScanSet == null)
+                {
+                    throw new NullReferenceException("CurrentIMSScanSet is null. You need to set it.");
+                }
 
                 //this creates a FrameSet containing only the primary frame.  Therefore no summing will occur
                 var lcScanSet = new ScanSet(uimfRun.CurrentScanSet.PrimaryScanNumber);
@@ -64,7 +73,9 @@ namespace DeconTools.Backend.ProcessingTasks
             else
             {
                 if (run.CurrentScanSet == null)
+                {
                     throw new NullReferenceException("CurrentScanSet is null. You need to set it.");
+                }
 
                 //this creates a ScanSet containing only the primary scan.  Therefore no summing will occur
                 var scanSet = new ScanSet(run.CurrentScanSet.PrimaryScanNumber);
@@ -229,7 +240,9 @@ namespace DeconTools.Backend.ProcessingTasks
         {
             Check.Require(resultList != null, "OriginalIntensitiesExtractor failed. ResultCollection is null");
             if (resultList == null)
+            {
                 return;
+            }
 
             GetUnsummedIntensitiesAndDetectSaturation(resultList.Run, resultList.IsosResultBin);
         }

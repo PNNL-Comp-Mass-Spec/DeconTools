@@ -21,7 +21,9 @@ namespace DeconTools.UnitTesting2.Utilities
 
             var outputDirectoryPath = @"C:\temp\DeconToolsDllTesting";
             if (!Directory.Exists(outputDirectoryPath))
+            {
                 Directory.CreateDirectory(outputDirectoryPath);
+            }
 
             var directoryInfo = new DirectoryInfo(baseFolder);
             if (directoryInfo.Exists)
@@ -90,10 +92,14 @@ namespace DeconTools.UnitTesting2.Utilities
         {
             var directory = new DirectoryInfo(rootDirectoryPath);
             if (!directory.Exists)
+            {
                 return new List<FileInfo>();
+            }
 
             if (includeSubdirectories)
+            {
                 return directory.GetFiles(fileSearchPattern, SearchOption.AllDirectories).ToList();
+            }
 
             return directory.GetFiles(fileSearchPattern, SearchOption.TopDirectoryOnly).ToList();
         }

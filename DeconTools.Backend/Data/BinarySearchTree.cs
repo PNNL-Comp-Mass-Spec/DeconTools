@@ -83,10 +83,14 @@ namespace DeconTools.Backend.Data.Structures
                 var count = 0;
 
                 if (LeftChild != null)
+                {
                     count++;
+                }
 
                 if (RightChild != null)
+                {
                     count++;
+                }
 
                 return count;
             }
@@ -189,7 +193,9 @@ namespace DeconTools.Backend.Data.Structures
             else
             {
                 if (node.Parent == null)
+                {
                     node.Parent = head; //start at head
+                }
 
                 //Node is inserted on the left side if it is smaller or equal to the parent
                 var matchValue = comparer(node.Value, node.Parent.Value);
@@ -241,7 +247,9 @@ namespace DeconTools.Backend.Data.Structures
             while (node != null)
             {
                 if (!(node.Value is Peak thisFeature))
+                {
                     return null;
+                }
 
                 var ppmDifference = 1000000 * (massValue - thisFeature.XValue) / massValue;
                 var absolutePPMDifference = Math.Abs(ppmDifference);
@@ -323,7 +331,10 @@ namespace DeconTools.Backend.Data.Structures
             {
                 try
                 {
-                    if (!(node.Value is Peak msPeak1) || !(value is Peak msPeak2)) continue;
+                    if (!(node.Value is Peak msPeak1) || !(value is Peak msPeak2))
+                    {
+                        continue;
+                    }
 
                     var ppmDifference = 1000000 * (msPeak1.XValue - msPeak2.XValue) / msPeak1.XValue;
                     var absolutePPMDifference = Math.Abs(ppmDifference);
@@ -377,7 +388,9 @@ namespace DeconTools.Backend.Data.Structures
         public virtual bool Remove(BinaryTreeNode<T> removeNode)
         {
             if (removeNode == null || removeNode.Tree != this)
+            {
                 return false; //value doesn't exist or not of this tree
+            }
 
             //Note whether the node to be removed is the root of the tree
             var wasHead = (removeNode == head);
@@ -393,9 +406,13 @@ namespace DeconTools.Backend.Data.Structures
             {
                 //Remove node from its parent
                 if (removeNode.IsLeftChild)
+                {
                     removeNode.Parent.LeftChild = null;
+                }
                 else
+                {
                     removeNode.Parent.RightChild = null;
+                }
 
                 removeNode.Tree = null;
                 removeNode.Parent = null;
@@ -410,12 +427,18 @@ namespace DeconTools.Backend.Data.Structures
                     removeNode.LeftChild.Parent = removeNode.Parent; //update parent
 
                     if (wasHead)
+                    {
                         Root = removeNode.LeftChild; //update root reference if needed
+                    }
 
                     if (removeNode.IsLeftChild) //update the parent's child reference
+                    {
                         removeNode.Parent.LeftChild = removeNode.LeftChild;
+                    }
                     else
+                    {
                         removeNode.Parent.RightChild = removeNode.LeftChild;
+                    }
                 }
                 else //Has right child
                 {
@@ -423,12 +446,18 @@ namespace DeconTools.Backend.Data.Structures
                     removeNode.RightChild.Parent = removeNode.Parent; //update parent
 
                     if (wasHead)
+                    {
                         Root = removeNode.RightChild; //update root reference if needed
+                    }
 
                     if (removeNode.IsLeftChild) //update the parent's child reference
+                    {
                         removeNode.Parent.LeftChild = removeNode.RightChild;
+                    }
                     else
+                    {
                         removeNode.Parent.RightChild = removeNode.RightChild;
+                    }
                 }
 
                 removeNode.Tree = null;
@@ -486,7 +515,9 @@ namespace DeconTools.Backend.Data.Structures
             //Find the value's node in tree
             var valueNode = Find(value);
             if (value != null)
+            {
                 return GetHeight(valueNode);
+            }
 
             return 0;
         }
@@ -497,7 +528,9 @@ namespace DeconTools.Backend.Data.Structures
         public virtual int GetHeight(BinaryTreeNode<T> startNode)
         {
             if (startNode == null)
+            {
                 return 0;
+            }
 
             return 1 + Math.Max(GetHeight(startNode.LeftChild), GetHeight(startNode.RightChild));
         }
@@ -519,7 +552,9 @@ namespace DeconTools.Backend.Data.Structures
             var depth = 0;
 
             if (startNode == null)
+            {
                 return depth;
+            }
 
             var parentNode = startNode.Parent; //start a node above
             while (parentNode != null)
@@ -601,9 +636,13 @@ namespace DeconTools.Backend.Data.Structures
             for (var i = startIndex; i < array.Length; i++)
             {
                 if (enumerator.MoveNext())
+                {
                     array[i] = enumerator.Current;
+                }
                 else
+                {
                     break;
+                }
             }
 
             enumerator.Dispose();
@@ -638,7 +677,9 @@ namespace DeconTools.Backend.Data.Structures
             private void visitNode(BinaryTreeNode<T> node)
             {
                 if (node == null)
+                {
                     return;
+                }
 
                 visitNode(node.LeftChild);
                 traverseQueue.Enqueue(node);
@@ -663,9 +704,13 @@ namespace DeconTools.Backend.Data.Structures
             public bool MoveNext()
             {
                 if (traverseQueue.Count > 0)
+                {
                     current = traverseQueue.Dequeue();
+                }
                 else
+                {
                     current = null;
+                }
 
                 return (current != null);
             }
@@ -692,7 +737,9 @@ namespace DeconTools.Backend.Data.Structures
             private void visitNode(BinaryTreeNode<T> node)
             {
                 if (node == null)
+                {
                     return;
+                }
 
                 visitNode(node.LeftChild);
                 visitNode(node.RightChild);
@@ -717,9 +764,13 @@ namespace DeconTools.Backend.Data.Structures
             public bool MoveNext()
             {
                 if (traverseQueue.Count > 0)
+                {
                     current = traverseQueue.Dequeue();
+                }
                 else
+                {
                     current = null;
+                }
 
                 return (current != null);
             }
@@ -746,7 +797,9 @@ namespace DeconTools.Backend.Data.Structures
             private void visitNode(BinaryTreeNode<T> node)
             {
                 if (node == null)
+                {
                     return;
+                }
 
                 traverseQueue.Enqueue(node);
                 visitNode(node.LeftChild);
@@ -771,9 +824,13 @@ namespace DeconTools.Backend.Data.Structures
             public bool MoveNext()
             {
                 if (traverseQueue.Count > 0)
+                {
                     current = traverseQueue.Dequeue();
+                }
                 else
+                {
                     current = null;
+                }
 
                 return (current != null);
             }

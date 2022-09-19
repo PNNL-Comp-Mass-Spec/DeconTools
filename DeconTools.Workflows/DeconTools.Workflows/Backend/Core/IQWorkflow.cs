@@ -364,7 +364,10 @@ namespace DeconTools.Workflows.Backend.Core
 
         protected virtual float GetAbundance(IqResult result)
         {
-            if (result.ObservedIsotopicProfile == null) return 0;
+            if (result.ObservedIsotopicProfile == null)
+            {
+                return 0;
+            }
 
             var indexMostAbundantPeakTheor = result.Target.TheorIsotopicProfile.GetIndexOfMostIntensePeak();
 
@@ -382,9 +385,15 @@ namespace DeconTools.Workflows.Backend.Core
 
         protected virtual XYData TrimData(XYData xyData, double targetVal, double leftTrimAmount, double rightTrimAmount)
         {
-            if (xyData == null) return null;
+            if (xyData == null)
+            {
+                return null;
+            }
 
-            if (xyData.Xvalues == null || xyData.Xvalues.Length == 0) return xyData;
+            if (xyData.Xvalues == null || xyData.Xvalues.Length == 0)
+            {
+                return xyData;
+            }
 
             var leftTrimValue = targetVal - leftTrimAmount;
             var rightTrimValue = targetVal + rightTrimAmount;

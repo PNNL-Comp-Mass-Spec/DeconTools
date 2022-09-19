@@ -217,14 +217,19 @@ namespace DeconTools.Backend.FileIO
             //Console.WriteLine(queryString);
 
             var modContainingPeptides = (from n in data.TargetList where n.ModCount > 0 select n).ToList();
-            if (modContainingPeptides.Count == 0) return;
+            if (modContainingPeptides.Count == 0)
+            {
+                return;
+            }
 
             _massTagModData = new List<Tuple<int, string, int, string>>();
 
             using (var cnn = fact.CreateConnection())
             {
                 if (cnn == null)
+                {
                     throw new Exception("Factory.CreateConnection returned a null DbConnection instance in GetModDataFromDB");
+                }
 
                 cnn.ConnectionString = buildConnectionString();
                 cnn.Open();
@@ -244,12 +249,24 @@ namespace DeconTools.Backend.FileIO
                         var empiricalFormula = "";
 
                         if (!reader["Mass_Tag_ID"].Equals(DBNull.Value))
+                        {
                             mtid = int.Parse(reader["Mass_Tag_ID"].ToString());
+                        }
+
                         if (!reader["Mod_Name"].Equals(DBNull.Value))
+                        {
                             modName = Convert.ToString(reader["Mod_Name"]);
-                        if (!reader["Mod_Position"].Equals(DBNull.Value)) modPosition = int.Parse(reader["Mod_Position"].ToString());
+                        }
+
+                        if (!reader["Mod_Position"].Equals(DBNull.Value))
+                        {
+                            modPosition = int.Parse(reader["Mod_Position"].ToString());
+                        }
+
                         if (!reader["Empirical_Formula"].Equals(DBNull.Value))
+                        {
                             empiricalFormula = Convert.ToString(reader["Empirical_Formula"]);
+                        }
 
                         var rowData = Tuple.Create(mtid, modName, modPosition, empiricalFormula);
 
@@ -281,7 +298,9 @@ namespace DeconTools.Backend.FileIO
             using (var cnn = fact.CreateConnection())
             {
                 if (cnn == null)
+                {
                     throw new Exception("Factory.CreateConnection returned a null DbConnection object in GetMassTagDataFromDB");
+                }
 
                 cnn.ConnectionString = buildConnectionString();
                 cnn.Open();
@@ -308,37 +327,71 @@ namespace DeconTools.Backend.FileIO
                             progressCounter++;
 
                             if (!reader["Mass_Tag_ID"].Equals(DBNull.Value))
+                            {
                                 massTag.ID = int.Parse(reader["Mass_Tag_ID"].ToString(), CultureInfo.InvariantCulture);
+                            }
+
                             if (!reader["Monoisotopic_Mass"].Equals(DBNull.Value))
+                            {
                                 massTag.MonoIsotopicMass = double.Parse(reader["Monoisotopic_Mass"].ToString(), CultureInfo.InvariantCulture);
+                            }
+
                             if (!reader["Peptide"].Equals(DBNull.Value))
+                            {
                                 massTag.Code = Convert.ToString(reader["Peptide"]);
+                            }
+
                             if (!reader["Charge_State"].Equals(DBNull.Value))
+                            {
                                 massTag.ChargeState = short.Parse(reader["Charge_State"].ToString(), CultureInfo.InvariantCulture);
+                            }
+
                             if (!reader["Mod_Count"].Equals(DBNull.Value))
+                            {
                                 massTag.ModCount = short.Parse(reader["Mod_Count"].ToString(), CultureInfo.InvariantCulture);
+                            }
+
                             if (!reader["Mod_Description"].Equals(DBNull.Value))
+                            {
                                 massTag.ModDescription = Convert.ToString(reader["Mod_Description"]);
+                            }
+
                             if (!reader["ObsCount"].Equals(DBNull.Value))
+                            {
                                 massTag.ObsCount = int.Parse(reader["ObsCount"].ToString(), CultureInfo.InvariantCulture);
+                            }
+
                             if (massTag.ChargeState != 0)
                             {
                                 massTag.MZ = massTag.MonoIsotopicMass / massTag.ChargeState + Globals.PROTON_MASS;
                             }
 
                             if (!reader["Avg_GANET"].Equals(DBNull.Value))
+                            {
                                 massTag.NormalizedElutionTime = float.Parse(reader["Avg_GANET"].ToString(), CultureInfo.InvariantCulture);
+                            }
+
                             if (!reader["Ref_ID"].Equals(DBNull.Value))
+                            {
                                 massTag.RefID = int.Parse(reader["Ref_ID"].ToString(), CultureInfo.InvariantCulture);
+                            }
+
                             if (!reader["Reference"].Equals(DBNull.Value))
+                            {
                                 massTag.GeneReference = Convert.ToString(reader["Reference"]);
+                            }
+
                             if (!reader["Description"].Equals(DBNull.Value))
+                            {
                                 massTag.ProteinDescription = Convert.ToString(reader["Description"]);
+                            }
 
                             data.TargetList.Add(massTag);
 
                             if (progressCounter % 100 == 0)
+                            {
                                 Console.WriteLine(progressCounter + " records loaded; " + reader[0]);
+                            }
                         }
                         reader.Close();
                     }
@@ -420,7 +473,9 @@ namespace DeconTools.Backend.FileIO
                     sb.Append("WHERE (ObsRank in (1,2,3) and Mass_Tag_ID in (");
 
                     if (massTagsToBeRetrieved == null)
+                    {
                         break;
+                    }
 
                     for (var i = 0; i < massTagsToBeRetrieved.Count; i++)
                     {

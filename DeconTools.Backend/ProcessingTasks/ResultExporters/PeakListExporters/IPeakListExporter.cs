@@ -16,7 +16,10 @@ namespace DeconTools.Backend.ProcessingTasks.PeakListExporters
 
         public override void Execute(ResultCollection resultList)
         {
-            if (resultList.MSPeakResultList == null || resultList.MSPeakResultList.Count == 0) return;
+            if (resultList.MSPeakResultList == null || resultList.MSPeakResultList.Count == 0)
+            {
+                return;
+            }
 
             // check if peak results exceeds Trigger value or is the last Scan 
 

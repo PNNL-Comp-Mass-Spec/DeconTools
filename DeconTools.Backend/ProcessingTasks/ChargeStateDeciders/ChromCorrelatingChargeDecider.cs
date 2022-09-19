@@ -23,7 +23,10 @@ namespace DeconTools.Backend.ProcessingTasks.ChargeStateDeciders
 
         public override IsotopicProfile DetermineCorrectIsotopicProfile(List<IsotopicProfile> potentialIsotopicProfiles)
         {
-            if (null == potentialIsotopicProfiles || potentialIsotopicProfiles.Count == 0) return null;
+            if (null == potentialIsotopicProfiles || potentialIsotopicProfiles.Count == 0)
+            {
+                return null;
+            }
 
             CreatePeaksIfNeeded();//note: does not actually create peaks. Only loads them. An exception is thrown if it's not there.
             potentialIsotopicProfiles = potentialIsotopicProfiles.OrderByDescending(n => n.ChargeState).ToList();
@@ -396,13 +399,19 @@ namespace DeconTools.Backend.ProcessingTasks.ChargeStateDeciders
 
         private HashSet<int> GetIndexesWhoAreAFactorOfMe(int index, IReadOnlyList<int> chargeStates)
         {
-            if (index == chargeStates.Count - 1) return null;
+            if (index == chargeStates.Count - 1)
+            {
+                return null;
+            }
 
             var number = chargeStates[index];
             var indexesWhoAreFactorsOfMe = new HashSet<int>();
             for (var i = index + 1; i < chargeStates.Count; i++)
             {
-                if (number % chargeStates[i] == 0) indexesWhoAreFactorsOfMe.Add(i);
+                if (number % chargeStates[i] == 0)
+                {
+                    indexesWhoAreFactorsOfMe.Add(i);
+                }
             }
             return indexesWhoAreFactorsOfMe;
         }
@@ -481,7 +490,9 @@ namespace DeconTools.Backend.ProcessingTasks.ChargeStateDeciders
             if (_run.MSFileType == Globals.MSFileType.PNNL_UIMF)
             {
                 if (!(_run is UIMFRun uimfRun))
+                {
                     throw new InvalidCastException("_run is not of type UIMFRun");
+                }
 
                 var numTotalFrames = uimfRun.ScanSetCollection.ScanSetList.Count;
                 var frameCounter = 0;

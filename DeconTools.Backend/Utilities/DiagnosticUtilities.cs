@@ -26,7 +26,9 @@ namespace DeconTools.Backend.Utilities
         public static string GetFullPathSafe(string path)
         {
             if (string.IsNullOrWhiteSpace(path))
+            {
                 return "Error: Empty Path";
+            }
 
             try
             {

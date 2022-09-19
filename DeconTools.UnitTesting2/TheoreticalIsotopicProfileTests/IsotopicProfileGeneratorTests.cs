@@ -42,7 +42,9 @@ namespace DeconTools.UnitTesting2.TheoreticalIsotopicProfileTests
             for (var i = 0; i < xyData.Xvalues.Length; i += 5)
             {
                 if (xyData.Xvalues[i] > xStart + 2.5)
+                {
                     break;
+                }
 
                 Console.WriteLine("{0,-10:F4} {1,-10:F4}", xyData.Xvalues[i], xyData.Yvalues[i]);
             }

@@ -106,7 +106,10 @@ namespace DeconTools.Backend.Core
 
         public int GetAtomCountForElement(string elementSymbol)
         {
-            if (string.IsNullOrEmpty(EmpiricalFormula)) return 0;
+            if (string.IsNullOrEmpty(EmpiricalFormula))
+            {
+                return 0;
+            }
 
             if (ElementLookupTable.ContainsKey(elementSymbol))
             {

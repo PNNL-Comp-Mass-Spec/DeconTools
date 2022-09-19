@@ -60,13 +60,17 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
         {
             Check.Require(resultList.Run != null, "Cannot deconvolute. Run is null");
             if (resultList.Run == null)
+            {
                 return;
+            }
 
             Check.Require(resultList.Run.XYData != null, "Cannot deconvolute. No mass spec XY data found.");
             Check.Require(resultList.Run.PeakList != null, "Cannot deconvolute. Mass spec peak list is empty.");
 
             if (resultList.Run.PeakList == null)
+            {
                 return;
+            }
 
             _run = resultList.Run;
 
@@ -150,7 +154,10 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
                 }
 
                 var peakIsBelowIntensityThreshold = (msPeak.Height < minMSFeatureIntensity);
-                if (peakIsBelowIntensityThreshold) break;
+                if (peakIsBelowIntensityThreshold)
+                {
+                    break;
+                }
 
                 peakCounter++;
 
@@ -433,7 +440,9 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
             for (var i = startMass; i <= stopMass; i++)
             {
                 if (_averagineProfileLookupTable.ContainsKey(i))
+                {
                     continue;
+                }
 
                 var profile = _isotopicDistCalculator.GetAveraginePattern(i);
                 _averagineProfileLookupTable.Add(i, profile);
@@ -461,7 +470,10 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
 
         private double GetReportedAbundance(IsotopicProfile profile, IsotopicProfile theoIsotopicProfile, int numPeaksUsedInAbundance = 1, int defaultVal = 0)
         {
-            if (profile.Peaklist == null || profile.Peaklist.Count == 0) return defaultVal;
+            if (profile.Peaklist == null || profile.Peaklist.Count == 0)
+            {
+                return defaultVal;
+            }
 
             Check.Require(numPeaksUsedInAbundance > 0, "NumPeaksUsedInAbundance must greater than 0. Currently it is = " + numPeaksUsedInAbundance);
 
@@ -524,7 +536,10 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
         /// <returns></returns>
         private List<IsotopicProfile> removeDuplicatesFromFoundMSFeatures(List<IsotopicProfile> isotopicProfiles)
         {
-            if (isotopicProfiles.Count == 0) return isotopicProfiles;
+            if (isotopicProfiles.Count == 0)
+            {
+                return isotopicProfiles;
+            }
 
             var lastIndex = isotopicProfiles.Count - 1;
 
@@ -606,7 +621,10 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
 
         private void CalculateMassesForIsotopicProfile(IsotopicProfile iso)
         {
-            if (iso?.Peaklist == null) return;
+            if (iso?.Peaklist == null)
+            {
+                return;
+            }
 
             //start with most abundant peak.
 

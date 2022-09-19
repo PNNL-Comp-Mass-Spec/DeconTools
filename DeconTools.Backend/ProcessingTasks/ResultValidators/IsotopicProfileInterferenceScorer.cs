@@ -29,7 +29,10 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
 
         public override void ValidateResult(ResultCollection resultColl, IsosResult currentResult)
         {
-            if (currentResult.IsotopicProfile == null) return;
+            if (currentResult.IsotopicProfile == null)
+            {
+                return;
+            }
 
             Check.Require(currentResult != null, string.Format("{0} failed. CurrentResult has not been defined.", this.Name));
             if (resultColl.Run.PeakList == null || resultColl.Run.PeakList.Count == 0)

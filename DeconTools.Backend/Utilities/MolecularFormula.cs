@@ -70,7 +70,9 @@ namespace DeconTools.Backend.Utilities
             }
 
             if (partFormulas.ContainsKey(part))
+            {
                 partFormulas.Remove(part);
+            }
 
             Add(part, mf);
         }

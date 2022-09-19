@@ -21,7 +21,10 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.MassTagResultExport
 
         public BasicMTResultSQLiteExporter(string fileName, int triggerValue)
         {
-            if (File.Exists(fileName)) File.Delete(fileName);
+            if (File.Exists(fileName))
+            {
+                File.Delete(fileName);
+            }
 
             TriggerToExport = triggerValue;
 
@@ -29,7 +32,9 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.MassTagResultExport
             cnn = fact.CreateConnection();
 
             if (cnn == null)
+            {
                 throw new Exception("Factory.CreateConnection returned a null DbConnection instance in BasicMTResultSQLiteExporter");
+            }
 
             cnn.ConnectionString = "Data Source=" + fileName;
 

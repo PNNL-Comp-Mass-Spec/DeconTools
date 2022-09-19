@@ -47,7 +47,9 @@ namespace DeconTools.Workflows.Backend.FileIO
         private string GetLabelDistributionDataAsString(SipperLcmsFeatureTargetedResultDTO sipperResult)
         {
             if (sipperResult.LabelDistributionVals == null || sipperResult.LabelDistributionVals.Length == 0)
+            {
                 return string.Empty;
+            }
 
             var sb = new StringBuilder();
             var delim = ',';

@@ -63,7 +63,11 @@ namespace DeconTools.Backend.Core
         public double GetMZofMostAbundantPeak()
         {
             var mostIntensePeak = getMostIntensePeak();
-            if (mostIntensePeak == null) return -1;
+            if (mostIntensePeak == null)
+            {
+                return -1;
+            }
+
             return mostIntensePeak.XValue;
         }
 
@@ -79,7 +83,10 @@ namespace DeconTools.Backend.Core
 
         public int GetIndexOfMostIntensePeak()
         {
-            if (Peaklist == null || Peaklist.Count == 0) return -1;
+            if (Peaklist == null || Peaklist.Count == 0)
+            {
+                return -1;
+            }
 
             var indexOfMaxPeak = -1;
             float maxIntensity = 0;
@@ -97,7 +104,10 @@ namespace DeconTools.Backend.Core
 
         public MSPeak getMostIntensePeak()
         {
-            if (Peaklist == null || Peaklist.Count == 0) return null;
+            if (Peaklist == null || Peaklist.Count == 0)
+            {
+                return null;
+            }
 
             var maxPeak = new MSPeak(0);
 
@@ -123,19 +133,31 @@ namespace DeconTools.Backend.Core
 
         public double GetMonoAbundance()
         {
-            if (Peaklist == null || Peaklist.Count == 0) return 0;
+            if (Peaklist == null || Peaklist.Count == 0)
+            {
+                return 0;
+            }
+
             return Peaklist[0].Height;
         }
 
         public float GetMonoPlusTwoAbundance()
         {
-            if (Peaklist == null || Peaklist.Count < 3) return 0;
+            if (Peaklist == null || Peaklist.Count < 3)
+            {
+                return 0;
+            }
+
             return Peaklist[2].Height;
         }
 
         public double GetMZ()
         {
-            if (Peaklist == null || Peaklist.Count == 0) return -1;
+            if (Peaklist == null || Peaklist.Count == 0)
+            {
+                return -1;
+            }
+
             return Peaklist[0].XValue;
         }
 
@@ -161,7 +183,11 @@ namespace DeconTools.Backend.Core
 
         public double GetSummedIntensity()
         {
-            if (Peaklist == null) return -1;
+            if (Peaklist == null)
+            {
+                return -1;
+            }
+
             double summedIntensity = 0;
             foreach (var peak in Peaklist)
             {

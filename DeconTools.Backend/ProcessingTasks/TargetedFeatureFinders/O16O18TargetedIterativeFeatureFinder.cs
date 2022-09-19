@@ -21,12 +21,16 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
         {
             Check.Require(resultList?.Run != null, string.Format("{0} failed. Run is empty.", Name));
             if (resultList?.Run == null)
+            {
                 return;
+            }
 
             Check.Require(resultList.Run.CurrentMassTag != null, string.Format("{0} failed. CurrentMassTag hasn't been defined.", Name));
 
             if (resultList.Run.CurrentMassTag == null)
+            {
                 return;
+            }
 
             var result = resultList.CurrentTargetedResult;
 
@@ -105,7 +109,10 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
         private void lookForMissingPeaksAndInsertZeroIntensityPeaksWhenMissing(IsotopicProfile o16o18Profile, IsotopicProfile theorFeature)
         {
-            if (o16o18Profile.Peaklist.Count == 0) return;
+            if (o16o18Profile.Peaklist.Count == 0)
+            {
+                return;
+            }
 
             var mzDistanceBetweenIsotopes = 1.003 / o16o18Profile.ChargeState;
 
@@ -132,7 +139,10 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
         private void addIsotopePeaks(IsotopicProfile foundO16O18Profile, IsotopicProfile profileToAdd, int numIsotopePeaksToAdd)
         {
-            if (profileToAdd?.Peaklist == null || profileToAdd.Peaklist.Count == 0) return;
+            if (profileToAdd?.Peaklist == null || profileToAdd.Peaklist.Count == 0)
+            {
+                return;
+            }
 
             for (var i = 0; i < numIsotopePeaksToAdd; i++)
             {

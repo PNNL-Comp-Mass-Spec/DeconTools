@@ -54,7 +54,9 @@ namespace DeconTools.Backend.Utilities
             TimeOfLastUpdate = DateTime.Now;
 
             if (!writeCachedEntriesToDisk)
+            {
                 return;
+            }
 
             FlushLogEntries(Instance.OutputFilename);
         }
@@ -86,7 +88,9 @@ namespace DeconTools.Backend.Utilities
             if (string.IsNullOrWhiteSpace(outputFile))
             {
                 foreach (var item in LogEntryBuffer)
+                {
                     Console.WriteLine(item);
+                }
             }
             else
             {

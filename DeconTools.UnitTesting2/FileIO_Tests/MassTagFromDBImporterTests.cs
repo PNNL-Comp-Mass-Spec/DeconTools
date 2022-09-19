@@ -40,9 +40,13 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
             Assert.LessOrEqual(21, testPeptide.ObsCount);
 
             if (testPeptide.ChargeState == 1)
+            {
                 Assert.AreEqual(1305.70482909, testPeptide.MZ, 0.00001);
+            }
             else
+            {
                 Assert.AreEqual(653.35605279, testPeptide.MZ, 0.00001);
+            }
 
             Assert.AreEqual(0.3919196426, testPeptide.NormalizedElutionTime, 0.00001);
             Assert.AreEqual(371, testPeptide.RefID);
@@ -90,7 +94,9 @@ namespace DeconTools.UnitTesting2.FileIO_Tests
                 if (peptide.ID == massTagID)
                 {
                     if (peptide is PeptideTarget massTag)
+                    {
                         return massTag;
+                    }
 
                     Assert.Fail("Peptide found is not a PeptideTarget instance: " + peptide);
                 }

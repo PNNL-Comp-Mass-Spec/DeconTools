@@ -27,7 +27,9 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             var nextIndex = startIndex;
 
             if (nextIndex == 0)
+            {
                 return 0;
+            }
 
             var nextVal = vec[nextIndex];
             var bestDistance = Math.Abs(mzVal - nextVal);
@@ -43,7 +45,9 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                     nearestIndex = nextIndex;
                 }
                 if (nextIndex == 0)
+                {
                     break;
+                }
             }
             return nearestIndex;
         }
@@ -63,7 +67,9 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             var numPts = vec.Count;
 
             if (nextIndex >= numPts - 1)
+            {
                 return numPts - 1;
+            }
 
             var nextVal = vec[nextIndex];
             var bestDistance = Math.Abs(mzVal - nextVal);
@@ -81,7 +87,9 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                 }
 
                 if (nextIndex == numPts - 1)
+                {
                     break;
+                }
             }
             return nearestIndex;
         }
@@ -98,9 +106,14 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         {
             // TODO: Use built-in binary search?
             if (vec[startIndex] > mzVal)
+            {
                 return startIndex;
+            }
+
             if (vec[stopIndex] < mzVal)
+            {
                 return stopIndex;
+            }
 
             while (true)
             {
@@ -110,16 +123,23 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                 {
                     //return closer value.
                     if (Math.Abs(minVal - mzVal) < Math.Abs(maxVal - mzVal))
+                    {
                         return startIndex;
+                    }
+
                     return stopIndex;
                 }
 
                 var ratio = (maxVal - mzVal) * 1.0 / (maxVal - minVal);
                 var midIndex = (int)(startIndex * ratio + stopIndex * (1 - ratio) + 0.5);
                 if (midIndex == startIndex)
+                {
                     midIndex = startIndex + 1;
+                }
                 else if (midIndex == stopIndex)
+                {
                     midIndex = stopIndex - 1;
+                }
 
                 var midVal = vec[midIndex];
                 if (midVal >= mzVal)
@@ -129,7 +149,10 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                 else if (midIndex + 1 == stopIndex)
                 {
                     if (Math.Abs(midVal - mzVal) < Math.Abs(maxVal - mzVal))
+                    {
                         return midIndex;
+                    }
+
                     return stopIndex;
                 }
                 else
@@ -138,7 +161,10 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                     if (mzVal >= midVal && mzVal <= midNextVal)
                     {
                         if (mzVal - midVal < midNextVal - midVal)
+                        {
                             return midIndex;
+                        }
+
                         return midIndex + 1;
                     }
                     startIndex = midIndex + 1;
@@ -160,27 +186,44 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             // go and start there.
             var numPts = vec.Count - 1;
             if (mzVal >= vec[numPts])
+            {
                 return numPts;
+            }
+
             if (mzVal < vec[0])
+            {
                 return 0;
+            }
 
             var distanceToGo = mzVal - vec[startIndex];
             double step;
             if (startIndex < numPts)
+            {
                 step = vec[startIndex + 1] - vec[startIndex];
+            }
             else
+            {
                 step = vec[startIndex] - vec[startIndex - 1];
+            }
 
             var moveBy = (int)(distanceToGo / step);
             var nextIndex = startIndex + moveBy;
 
             if (nextIndex < 0)
+            {
                 nextIndex = 0;
+            }
+
             if (nextIndex > numPts)
+            {
                 nextIndex = numPts - 1;
+            }
 
             if (mzVal >= vec[nextIndex])
+            {
                 return LookRight(vec, mzVal, nextIndex);
+            }
+
             return LookLeft(vec, mzVal, nextIndex);
         }
     }

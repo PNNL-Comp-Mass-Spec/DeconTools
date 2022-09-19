@@ -45,7 +45,10 @@ namespace DeconTools.Backend.ProcessingTasks
             Check.Require(run is UIMFRun, "UIMF_MSGenerator can only be used with UIMF files");
             var uimfRun = (UIMFRun)(run);
 
-            if (lcScanSet == null || imsScanSet == null) return null;
+            if (lcScanSet == null || imsScanSet == null)
+            {
+                return null;
+            }
 
             var xyData = uimfRun.GetMassSpectrum(lcScanSet, imsScanSet, MinMZ, MaxMZ);
 

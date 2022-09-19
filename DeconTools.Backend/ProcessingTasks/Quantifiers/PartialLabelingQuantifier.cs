@@ -155,7 +155,11 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
                         bestIso = _iterativeTff.IterativelyFindMSFeature(massSpectrumXYData, theorIso);
                     }
 
-                    if (bestIso != null) bestIso.Score = fitScore;
+                    if (bestIso != null)
+                    {
+                        bestIso.Score = fitScore;
+                    }
+
                     bestLabelAmount = labelAmount;
                 }
 

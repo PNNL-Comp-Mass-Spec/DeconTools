@@ -26,8 +26,15 @@ namespace DeconTools.Backend.Data
 
         protected virtual void reportProgress(int peaksLoaded, ref DateTime lastReportProgress, ref DateTime lastReportProgressConsole)
         {
-            if (numRecords == 0) return;
-            if (peaksLoaded % 1000 != 0) return;
+            if (numRecords == 0)
+            {
+                return;
+            }
+
+            if (peaksLoaded % 1000 != 0)
+            {
+                return;
+            }
 
             var percentProgress = (int)(peaksLoaded / (double)numRecords * 100);
 

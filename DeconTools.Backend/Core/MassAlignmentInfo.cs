@@ -20,7 +20,10 @@ namespace DeconTools.Backend.Core
 
         public int GetNumPoints()
         {
-            if (ScanAndPpmShiftVals == null) return 0;
+            if (ScanAndPpmShiftVals == null)
+            {
+                return 0;
+            }
 
             return ScanAndPpmShiftVals.Xvalues.Length;
         }

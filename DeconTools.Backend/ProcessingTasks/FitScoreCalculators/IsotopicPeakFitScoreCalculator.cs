@@ -43,12 +43,16 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
         {
             Check.Require(resultList.Run.CurrentMassTag != null, this.Name + " failed; CurrentMassTag is empty");
             if (resultList.Run.CurrentMassTag == null)
+            {
                 return;
+            }
 
             Check.Require(resultList.Run.XYData?.Xvalues != null && resultList.Run.XYData.Xvalues.Length > 0, Name + " failed; Run's XY data is empty. Need to Run an MSGenerator");
             Check.Require(resultList.CurrentTargetedResult != null, "No MassTagResult has been generated for CurrentMassTag");
             if (resultList.CurrentTargetedResult == null)
+            {
                 return;
+            }
 
             IsotopicProfile theorProfile;
             switch (IsotopicProfileType)
@@ -109,7 +113,9 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
                 out _);
 
             if (double.IsNaN(fitVal) || fitVal > 1)
+            {
                 return 1;
+            }
 
             return fitVal;
         }

@@ -229,10 +229,14 @@ namespace DeconTools.Backend.Core
             foreach (var item in XYData.Xvalues)
             {
                 if (item < minMZ)
+                {
                     continue;
+                }
 
                 if (item > maxMZ)
+                {
                     break;
+                }
 
                 numPointsToAdd++;
             }
@@ -244,10 +248,14 @@ namespace DeconTools.Backend.Core
             for (var i = 0; i < XYData.Xvalues.Length; i++)
             {
                 if (XYData.Xvalues[i] < minMZ)
+                {
                     continue;
+                }
 
                 if (XYData.Xvalues[i] > maxMZ)
+                {
                     break;
+                }
 
                 xVals[counter] = XYData.Xvalues[i];
                 yVals[counter] = XYData.Yvalues[i];
@@ -286,7 +294,10 @@ namespace DeconTools.Backend.Core
                 case Globals.ScanSelectionMode.ASCENDING:
                     for (var i = inputScan; i <= MaxLCScan; i++)     // MaxScan is an index value
                     {
-                        if (GetMSLevel(i) == 1) return i;
+                        if (GetMSLevel(i) == 1)
+                        {
+                            return i;
+                        }
                     }
                     // reached end of scans. Don't want to throw a nasty error, so return what was inputted.
                     return inputScan;
@@ -294,7 +305,10 @@ namespace DeconTools.Backend.Core
                 case Globals.ScanSelectionMode.DESCENDING:
                     for (var i = inputScan; i >= MinLCScan; i--)
                     {
-                        if (GetMSLevel(i) == 1) return i;
+                        if (GetMSLevel(i) == 1)
+                        {
+                            return i;
+                        }
                     }
                     //reached starting scan. No MS-level scan was found.  Simply return what was inputted.
                     return inputScan;
@@ -302,7 +316,11 @@ namespace DeconTools.Backend.Core
                 case Globals.ScanSelectionMode.CLOSEST:
                     var upperScan = -1;
                     var lowerScan = -1;
-                    if (GetMSLevel(inputScan) == 1) return inputScan;
+                    if (GetMSLevel(inputScan) == 1)
+                    {
+                        return inputScan;
+                    }
+
                     for (var i = inputScan; i <= MaxLCScan; i++)
                     {
                         if (GetMSLevel(i) == 1)
@@ -320,9 +338,20 @@ namespace DeconTools.Backend.Core
                         }
                     }
 
-                    if (upperScan == -1 && lowerScan == -1) return inputScan;
-                    if (upperScan == -1 && lowerScan != -1) return lowerScan;
-                    if (lowerScan == -1 && upperScan != -1) return upperScan;
+                    if (upperScan == -1 && lowerScan == -1)
+                    {
+                        return inputScan;
+                    }
+
+                    if (upperScan == -1 && lowerScan != -1)
+                    {
+                        return lowerScan;
+                    }
+
+                    if (lowerScan == -1 && upperScan != -1)
+                    {
+                        return upperScan;
+                    }
 
                     if (Math.Abs(upperScan - inputScan) < Math.Abs(lowerScan - inputScan))
                     {
@@ -433,9 +462,15 @@ namespace DeconTools.Backend.Core
 
         public virtual void UpdateNETValuesInScanSetCollection()
         {
-            if (NetAlignmentInfo == null) return;
+            if (NetAlignmentInfo == null)
+            {
+                return;
+            }
 
-            if (ScanSetCollection == null) return;
+            if (ScanSetCollection == null)
+            {
+                return;
+            }
 
             foreach (var scan in ScanSetCollection.ScanSetList)
             {
@@ -451,7 +486,10 @@ namespace DeconTools.Backend.Core
         /// <returns></returns>
         public double GetAlignedMZ(double observedMZ, double scan = -1)
         {
-            if (MassAlignmentInfo == null) return observedMZ;
+            if (MassAlignmentInfo == null)
+            {
+                return observedMZ;
+            }
 
             var ppmShift = MassAlignmentInfo.GetPpmShift(observedMZ, (int)scan);
 
@@ -467,7 +505,10 @@ namespace DeconTools.Backend.Core
         /// <returns></returns>
         public double GetTargetMZAligned(double theorMZ, double scan = -1)
         {
-            if (MassAlignmentInfo == null) return theorMZ;
+            if (MassAlignmentInfo == null)
+            {
+                return theorMZ;
+            }
 
             var ppmShift = MassAlignmentInfo.GetPpmShift(theorMZ, (int)scan);
 

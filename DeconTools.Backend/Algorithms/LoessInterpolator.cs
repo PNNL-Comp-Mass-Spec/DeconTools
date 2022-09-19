@@ -107,7 +107,9 @@ namespace DeconTools.Backend.Algorithms
             // This is equivalent to doing 'robustnessIterations+1' robustness iterations
             // starting with all robustness weights set to 1.
             for (var i = 0; i < robustnessWeights.Length; i++)
+            {
                 robustnessWeights[i] = 1;
+            }
 
             for (var iteration = 0; iteration <= robustnessIterations; ++iteration)
             {

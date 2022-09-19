@@ -105,7 +105,9 @@ namespace DeconTools.Backend.Runs
         private bool CheckRunForMSMSData()
         {
             if (MS2Frames.Count == 0)
+            {
                 return false;
+            }
 
             return true;
         }
@@ -192,7 +194,9 @@ namespace DeconTools.Backend.Runs
             for (var frame = minFrame; frame <= maxFrame; frame++)
             {
                 if (!frameList.ContainsKey(frame))
+                {
                     continue;
+                }
 
                 var scansPerFrame = mReader.GetFrameParams(frame).Scans;
                 scanCountsByFrame.Add(frame, scansPerFrame);
@@ -223,7 +227,9 @@ namespace DeconTools.Backend.Runs
         private int GetMinPossibleLCScanNum(Dictionary<int, UIMFData.FrameType> frameList)
         {
             if (frameList.Count == 0)
+            {
                 return 1;
+            }
 
             return frameList.Keys.Min();
         }
@@ -246,7 +252,9 @@ namespace DeconTools.Backend.Runs
         private int GetMaxPossibleLCScanNum(Dictionary<int, UIMFData.FrameType> frameList)
         {
             if (frameList.Count == 0)
+            {
                 return 1;
+            }
 
             var maxPossibleFrameNumber = frameList.Keys.Max();
             var minPossibleFrameNumber = GetMinPossibleLCScanNum();
@@ -282,9 +290,14 @@ namespace DeconTools.Backend.Runs
         public override int GetMSLevelFromRawData(int frameNum)
         {
             if (MS1Frames.BinarySearch(frameNum) >= 0)
+            {
                 return 1;
+            }
+
             if (MS2Frames.BinarySearch(frameNum) >= 0)
+            {
                 return 2;
+            }
 
             var frameParams = mReader.GetFrameParams(frameNum);
 
@@ -688,7 +701,9 @@ namespace DeconTools.Backend.Runs
             var query = (from item in frameScans where item.Scan == imsScan select item.TIC).ToList();
 
             if (query.Count == 0)
+            {
                 return 0;
+            }
 
             return (float)query.FirstOrDefault();
         }

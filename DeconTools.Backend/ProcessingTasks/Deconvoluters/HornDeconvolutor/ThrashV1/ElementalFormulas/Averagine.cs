@@ -137,10 +137,14 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                         }
                     }
                     if (elementNumAlreadyPushed == -1)
+                    {
                         empiricalFormula.ElementalComposition.Add(elementCount);
+                    }
                     else
+                    {
                         empiricalFormula.ElementalComposition[elementNumAlreadyPushed].NumCopies +=
                             elementCount.NumCopies;
+                    }
                 }
             }
 
@@ -148,7 +152,10 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             // much of a distortion in the isotope profile.
             var remainderMass = mw - averageMass;
             if (_useTag)
+            {
                 remainderMass += _tagMass;
+            }
+
             var hydrogenCount =
                 (int)
                     (remainderMass / _elementIsotopeAbundance.ElementalIsotopesList[_hydrogenElementIndex].AverageMass +

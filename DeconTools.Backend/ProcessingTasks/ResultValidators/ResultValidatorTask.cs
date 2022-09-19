@@ -32,7 +32,10 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
 
         public override void Execute(ResultCollection resultList)
         {
-            if (resultList.IsosResultBin == null || resultList.IsosResultBin.Count == 0) return;
+            if (resultList.IsosResultBin == null || resultList.IsosResultBin.Count == 0)
+            {
+                return;
+            }
 
             //iterate over each ms feature
             foreach (var msFeature in resultList.IsosResultBin)

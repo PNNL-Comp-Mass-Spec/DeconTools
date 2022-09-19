@@ -84,7 +84,10 @@ namespace DeconTools.Backend.Core
 
             foreach (var value in IndexValues)
             {
-                if (value < lowVal) lowVal = value;
+                if (value < lowVal)
+                {
+                    lowVal = value;
+                }
             }
             return lowVal;
         }
@@ -94,14 +97,21 @@ namespace DeconTools.Backend.Core
             var highVal = -1;
             foreach (var value in IndexValues)
             {
-                if (value > highVal) highVal = value;
+                if (value > highVal)
+                {
+                    highVal = value;
+                }
             }
             return highVal;
         }
 
         internal int Count()
         {
-            if (IndexValues == null || IndexValues.Count == 0) return 0;
+            if (IndexValues == null || IndexValues.Count == 0)
+            {
+                return 0;
+            }
+
             return IndexValues.Count;
         }
 

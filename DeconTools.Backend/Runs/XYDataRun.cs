@@ -20,7 +20,10 @@ namespace DeconTools.Backend.Runs
         public override int GetNumMSScans()
         {
             if (xyData.Xvalues == null || xyData.Yvalues == null ||
-                xyData.Xvalues.Length == 0 || xyData.Yvalues.Length == 0) return 0;
+                xyData.Xvalues.Length == 0 || xyData.Yvalues.Length == 0)
+            {
+                return 0;
+            }
 
             return 1;      // there is only one MS scan in this type of Run
         }

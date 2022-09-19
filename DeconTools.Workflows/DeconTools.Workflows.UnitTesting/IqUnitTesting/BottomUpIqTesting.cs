@@ -34,7 +34,10 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
             var expectedResultsFilename = Path.Combine(executorBaseParameters.OutputDirectoryBase,
                                                           "IqResults",
                                                           RunUtilities.GetDatasetName(testFile) + "_iqResults.txt");
-            if (File.Exists(expectedResultsFilename)) File.Delete(expectedResultsFilename);
+            if (File.Exists(expectedResultsFilename))
+            {
+                File.Delete(expectedResultsFilename);
+            }
 
             var run = new RunFactory().CreateRun(testFile);
 

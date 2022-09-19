@@ -30,7 +30,10 @@ namespace DeconTools.Backend.Data
 
         public void ExtractKeyCalibrationValues()
         {
-            if (_calibrationDataItems.Count == 0) return;
+            if (_calibrationDataItems.Count == 0)
+            {
+                return;
+            }
 
             MassError = (from n in _calibrationDataItems where n.Comment.ToLower() == "maximum" select n.MassErrorPpm).FirstOrDefault();
 

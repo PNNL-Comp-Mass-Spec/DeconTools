@@ -94,7 +94,10 @@ namespace DeconTools.Backend.Data
 
         private void writeUIMFIsosResults(TextWriter sw, ResultCollection results, IReadOnlyList<OriginalIntensitiesDTO> origIntensitiesCollection)
         {
-            if (results == null) return;
+            if (results == null)
+            {
+                return;
+            }
 
             Check.Require(results.ResultList.Count == origIntensitiesCollection.Count, "OriginalIntensities Data Transfer Object should have the same number of results as in the IsosResult object");
 

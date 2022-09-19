@@ -191,9 +191,13 @@ namespace DeconTools.Workflows.Backend.FileIO
                 var value = LookupData(dummyData, item.Value, "Missing");
 
                 if (value == "Defined")
+                {
                     HeaderSectionsFound.Add(item.Key, true);
+                }
                 else
+                {
                     HeaderSectionsFound.Add(item.Key, false);
+                }
             }
         }
 

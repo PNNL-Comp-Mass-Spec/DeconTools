@@ -14,7 +14,9 @@ namespace DeconTools.Backend.Utilities
             var cnn = fact.CreateConnection();
 
             if (cnn == null)
+            {
                 throw new Exception("Factory.CreateConnection returned a null DbConnection object in UpdateUIMFFileWithTOFCorrectionTime");
+            }
 
             cnn.ConnectionString = "Data Source=" + filePath;
 
@@ -66,7 +68,9 @@ namespace DeconTools.Backend.Utilities
             var cnn = fact.CreateConnection();
 
             if (cnn == null)
+            {
                 throw new Exception("Factory.CreateConnection returned a null DbConnection object in UpdateUIMFFileWithCalibrationConstants");
+            }
 
             cnn.ConnectionString = "Data Source=" + filePath;
 

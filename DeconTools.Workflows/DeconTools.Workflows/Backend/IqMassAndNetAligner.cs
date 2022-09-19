@@ -467,7 +467,10 @@ namespace DeconTools.Workflows.Backend
 
         private List<IqResult> UpdateMsgfTargetsWithDatabaseNetValues(List<IqResult> results)
         {
-            if (MassTagReferences == null || MassTagReferences.Count == 0) return results;
+            if (MassTagReferences == null || MassTagReferences.Count == 0)
+            {
+                return results;
+            }
 
             var msgfIdsUsedInNetAlignment = new List<int>();
             var query = (from massTag in MassTagReferences

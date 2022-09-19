@@ -21,7 +21,10 @@ namespace DeconTools.Backend.Core
             var scanVals = massAlignmentData.Select(p => p.scan).ToArray();
             var scanPPMCorrVals = massAlignmentData.Select(p => p.scanPPMCorrection).ToArray();
 
-            if (AlignmentInfo == null) AlignmentInfo = new MultiAlignEngine.Alignment.clsAlignmentFunction(MultiAlignEngine.Alignment.enmCalibrationType.HYBRID_CALIB, MultiAlignEngine.Alignment.enmAlignmentType.NET_MASS_WARP);
+            if (AlignmentInfo == null)
+            {
+                AlignmentInfo = new MultiAlignEngine.Alignment.clsAlignmentFunction(MultiAlignEngine.Alignment.enmCalibrationType.HYBRID_CALIB, MultiAlignEngine.Alignment.enmAlignmentType.NET_MASS_WARP);
+            }
 
             AlignmentInfo.marrMassFncMZInput = new float[mzVals.Length];
             AlignmentInfo.marrMassFncMZPPMOutput = new float[mzVals.Length];
@@ -55,9 +58,11 @@ namespace DeconTools.Backend.Core
             //}
 
             if (AlignmentInfo == null)
+            {
                 AlignmentInfo =
                     new MultiAlignEngine.Alignment.clsAlignmentFunction(MultiAlignEngine.Alignment.enmCalibrationType.HYBRID_CALIB,
                                                                         MultiAlignEngine.Alignment.enmAlignmentType.NET_MASS_WARP);
+            }
 
             AlignmentInfo.marrMassFncMZInput = new float[mzVals.Length];
             AlignmentInfo.marrMassFncMZPPMOutput = new float[mzVals.Length];
@@ -78,7 +83,10 @@ namespace DeconTools.Backend.Core
 
         public override double GetPpmShift(double mz, int scan = -1)
         {
-            if (AlignmentInfo == null) return 0;
+            if (AlignmentInfo == null)
+            {
+                return 0;
+            }
 
             var alignmentInfoContainsScanInfo = (AlignmentInfo.marrMassFncTimeInput?.Length > 0);
             var alignmentInfoContainsMZInfo = (AlignmentInfo.marrMassFncMZInput?.Length > 0);

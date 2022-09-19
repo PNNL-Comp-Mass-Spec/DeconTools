@@ -40,7 +40,9 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
         {
             Check.Require(theorFeature != null, "Theoretical feature hasn't been defined.");
             if (theorFeature == null)
+            {
                 return null;
+            }
 
             Check.Require(theorFeature.Peaklist?.Count > 0, "Theoretical feature hasn't been defined.");
 
@@ -202,7 +204,9 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
         {
             Check.Require(resultList?.Run != null, string.Format("{0} failed. Run is empty.", Name));
             if (resultList?.Run == null)
+            {
                 return;
+            }
 
             Check.Require(resultList.Run.CurrentMassTag != null, string.Format("{0} failed. CurrentMassTag hasn't been defined.", Name));
 
@@ -249,11 +253,15 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             Check.Require(run.CurrentMassTag != null, "Run's 'CurrentMassTag' has not been declared");
 
             if (run.CurrentMassTag == null)
+            {
                 return null;
+            }
 
             Check.Require(run.CurrentMassTag.IsotopicProfile != null, "Run's 'IsotopicProfile' has not been declared");
             if (run.CurrentMassTag?.IsotopicProfile == null)
+            {
                 return null;
+            }
 
             switch (IsotopicProfileType)
             {
@@ -265,7 +273,9 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
                 case Globals.IsotopicProfileType.LABELED:
                     Check.Require(run.CurrentMassTag.IsotopicProfileLabeled != null, "Target's labeled theoretical isotopic profile has not been established");
                     if (run.CurrentMassTag?.IsotopicProfileLabeled == null)
+                    {
                         return null;
+                    }
 
                     iso = run.CurrentMassTag.IsotopicProfileLabeled.CloneIsotopicProfile();
                     break;
@@ -343,7 +353,11 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
         private double sumPeaks(IsotopicProfile profile, int numPeaksUsedInAbundance, int defaultVal)
         {
-            if (profile.Peaklist == null || profile.Peaklist.Count == 0) return defaultVal;
+            if (profile.Peaklist == null || profile.Peaklist.Count == 0)
+            {
+                return defaultVal;
+            }
+
             var peakListIntensities = new List<float>();
             foreach (var peak in profile.Peaklist)
             {

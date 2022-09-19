@@ -62,7 +62,10 @@ namespace DeconTools.UnitTesting2.Utilities
 
             Assert.AreEqual(mathUtilsExpectedY, mathUtilsResult, Math.Abs(mathUtilsExpectedY / 10000.0));
 
-            if (double.IsNaN(mathNetExpectedY)) return;
+            if (double.IsNaN(mathNetExpectedY))
+            {
+                return;
+            }
 
             if (double.IsNegativeInfinity(mathNetExpectedY) || double.IsPositiveInfinity(mathNetExpectedY))
             {
@@ -295,7 +298,9 @@ namespace DeconTools.UnitTesting2.Utilities
             {
                 var nextValue = currentValue + currentValue * 0.05 * rand.NextDouble();
                 if (nextValue >= double.MaxValue)
+                {
                     break;
+                }
 
                 values.Add(nextValue);
                 currentValue = nextValue;

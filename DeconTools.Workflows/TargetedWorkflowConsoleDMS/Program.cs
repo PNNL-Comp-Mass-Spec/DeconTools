@@ -71,7 +71,9 @@ namespace TargetedWorkflowConsole
                 }
 
                 if (args.Length == 3)
+                {
                     workflowParameters.TargetsFilePath = args[2];
+                }
 
                 var workflowExecutor = TargetedWorkflowExecutorFactory.CreateTargetedWorkflowExecutor(workflowParameters, datasetPath);
                 workflowExecutor.Execute();

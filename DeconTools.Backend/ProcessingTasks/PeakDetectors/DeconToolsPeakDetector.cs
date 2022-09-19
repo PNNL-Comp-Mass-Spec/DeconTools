@@ -112,7 +112,10 @@ namespace DeconTools.Backend.ProcessingTasks
         /// <returns></returns>
         public override List<Peak> FindPeaks(XYData xyData, double minX = 0, double maxX = 0)
         {
-            if (xyData?.Xvalues == null || xyData.Xvalues.Length == 0) return null;
+            if (xyData?.Xvalues == null || xyData.Xvalues.Length == 0)
+            {
+                return null;
+            }
 
             var xVals = xyData.Xvalues.ToList();
             var yVals = xyData.Yvalues.ToList();

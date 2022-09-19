@@ -97,7 +97,10 @@ namespace DeconTools.Backend.Runs
                 getAgilentSpectrum(scanNum);
             }
 
-            if (m_spec == null) return -1;
+            if (m_spec == null)
+            {
+                return -1;
+            }
 
             var timeRangeArr = m_spec.AcquiredTimeRange;
             if (timeRangeArr?.Length == 1)
@@ -190,7 +193,10 @@ namespace DeconTools.Backend.Runs
             Check.Require(scanSet != null, "Can't get mass spectrum; inputted set of scans is null");
             Check.Require(scanSet.IndexValues.Count > 0, "Can't get mass spectrum; no scan numbers inputted");
 
-            if (scanSet == null) return null;
+            if (scanSet == null)
+            {
+                return null;
+            }
 
             var xyData = new XYData();
             if (scanSet.IndexValues.Count == 1)            //this is the case of only wanting one MS spectrum
@@ -249,7 +255,10 @@ namespace DeconTools.Backend.Runs
             Check.Require(scanSet != null, "Can't get mass spectrum; inputted set of scans is null");
             Check.Require(scanSet.IndexValues.Count > 0, "Can't get mass spectrum; no scan numbers inputted");
 
-            if (scanSet == null) return null;
+            if (scanSet == null)
+            {
+                return null;
+            }
 
             var xyData = new XYData();
 
@@ -318,7 +327,10 @@ namespace DeconTools.Backend.Runs
                 }
             }
 
-            if (mz_intensityPair.Count == 0) return;
+            if (mz_intensityPair.Count == 0)
+            {
+                return;
+            }
 
             var summedXVals = mz_intensityPair.Keys.ToList();
             xVals = new double[summedXVals.Count];

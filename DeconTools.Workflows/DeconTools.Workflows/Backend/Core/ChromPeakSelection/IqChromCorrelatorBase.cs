@@ -268,7 +268,10 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
         /// <returns></returns>
         protected XYData FillInAnyMissingValuesInChromatogram(double[] scanList, XYData chromPeakXyData)
         {
-            if (scanList == null || scanList.Length == 0) return null;
+            if (scanList == null || scanList.Length == 0)
+            {
+                return null;
+            }
 
             var filledInData = new SortedDictionary<int, double>();
 

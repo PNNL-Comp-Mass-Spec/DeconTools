@@ -333,7 +333,9 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
 
             var outputDirectory = new DirectoryInfo(@"C:\Temp\ThrashTesting");
             if (!outputDirectory.Exists)
+            {
                 outputDirectory.Create();
+            }
 
             var outputFilename = Path.Combine(outputDirectory.FullName, "exportedIsos.csv");
             var exporter = IsosExporterFactory.CreateIsosExporter(run.ResultCollection.ResultType, Globals.ExporterType.Text, outputFilename);

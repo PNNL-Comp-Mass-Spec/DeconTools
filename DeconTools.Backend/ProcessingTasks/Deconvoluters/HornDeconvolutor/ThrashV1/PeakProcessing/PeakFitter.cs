@@ -63,14 +63,23 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         public double Fit(int index, List<double> mzs, List<double> intensities)
         {
             if (_peakFitType == PeakFitType.Apex)
+            {
                 return mzs[index];
+            }
+
             if (_peakFitType == PeakFitType.Quadratic)
+            {
                 return QuadraticFit(mzs, intensities, index);
+            }
+
             if (_peakFitType == PeakFitType.Lorentzian)
             {
                 var fwhm = _peakStatistician.FindFwhm(mzs, intensities, index);
                 if (!fwhm.Equals(0))
+                {
                     return LorentzianFit(mzs, intensities, index, fwhm);
+                }
+
                 return mzs[index];
             }
             return 0.0;
@@ -86,9 +95,14 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         private double QuadraticFit(IReadOnlyList<double> mzs, IReadOnlyList<double> intensities, int index)
         {
             if (index < 1)
+            {
                 return mzs[0];
+            }
+
             if (index >= mzs.Count - 1)
+            {
                 return mzs[mzs.Count - 1];
+            }
 
             var x1 = mzs[index - 1];
             var x2 = mzs[index];
@@ -99,7 +113,10 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
 
             var d = (y2 - y1) * (x3 - x2) - (y3 - y2) * (x2 - x1);
             if (d.Equals(0))
+            {
                 return x2; // no good.  Just return the known peak
+            }
+
             d = (x1 + x2 - (y2 - y1) * (x3 - x2) * (x1 - x3) / d) / 2.0;
             return d; // Calculated new peak.  Return it.
         }
@@ -119,9 +136,14 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             var e = Math.Abs((vo - mzs[index + 1]) / 100);
 
             if (index < 1)
+            {
                 return mzs[index];
+            }
+
             if (index == mzs.Count)
+            {
                 return mzs[index];
+            }
 
             var leftStart = PeakIndex.GetNearest(mzs, vo + fwhm, index) + 1;
             var leftStop = PeakIndex.GetNearest(mzs, vo - fwhm, index) - 1;
@@ -133,7 +155,9 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                 vo += e;
                 currentE = LorentzianLS(mzs, intensities, a, fwhm, vo, leftStart, leftStop);
                 if (currentE > lastE)
+                {
                     break;
+                }
             }
 
             vo -= e;
@@ -144,7 +168,9 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                 vo -= e;
                 currentE = LorentzianLS(mzs, intensities, a, fwhm, vo, leftStart, leftStop);
                 if (currentE > lastE)
+                {
                     break;
+                }
             }
             vo += e;
             return vo;

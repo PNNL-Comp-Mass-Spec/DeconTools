@@ -20,7 +20,9 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
         protected override void UpdateResultWithChromPeakAndLCScanInfo(TargetedResultBase result, ChromPeak bestPeak)
         {
             if (!(result.Run is UIMFRun uimfRun))
+            {
                 throw new InvalidCastException("result.Run is not of type UIMFRun in UpdateResultWithChromPeakAndLCScanInfo");
+            }
 
             result.ChromPeakSelected = bestPeak;
 

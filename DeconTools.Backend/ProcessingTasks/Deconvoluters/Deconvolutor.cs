@@ -37,7 +37,10 @@ namespace DeconTools.Backend.ProcessingTasks
 
         protected virtual void GatherMSFeatureStatistics(Run run)
         {
-            if (run.ResultCollection.IsosResultBin == null || run.ResultCollection.IsosResultBin.Count == 0) return;
+            if (run.ResultCollection.IsosResultBin == null || run.ResultCollection.IsosResultBin.Count == 0)
+            {
+                return;
+            }
 
             ScanSet currentScanset;
 
@@ -52,14 +55,19 @@ namespace DeconTools.Backend.ProcessingTasks
 
             Check.Require(currentScanset != null, "the CurrentScanSet for the Run is null. This needs to be set.");
             if (currentScanset == null)
+            {
                 return;
+            }
 
             currentScanset.NumIsotopicProfiles = run.ResultCollection.IsosResultBin.Count;    //used in ScanResult
         }
 
         private void associatePeaksToMSFeatureID(ResultCollection resultList)
         {
-            if (resultList.IsosResultBin == null || resultList.IsosResultBin.Count == 0) return;
+            if (resultList.IsosResultBin == null || resultList.IsosResultBin.Count == 0)
+            {
+                return;
+            }
 
             foreach (var msFeature in resultList.IsosResultBin)
             {
@@ -75,7 +83,10 @@ namespace DeconTools.Backend.ProcessingTasks
             //remove the result if it was a result of a different scan. Otherwise keep it
             //this allows running of two back-to-back deconvolutors without clearing the results
             //between deconvolutions.   Going backwards through the list prevents exceptions.
-            if (resultList.IsosResultBin == null || resultList.IsosResultBin.Count == 0) return;
+            if (resultList.IsosResultBin == null || resultList.IsosResultBin.Count == 0)
+            {
+                return;
+            }
 
             if (resultList.Run is UIMFRun)
             {
@@ -102,7 +113,9 @@ namespace DeconTools.Backend.ProcessingTasks
         {
             Check.Require(baseResultList != null, "Deconvolutor problem. Can't combine results. Base resultList is null.");
             if (baseResultList == null)
+            {
                 return;
+            }
 
             Check.Require(addedResult != null, "Deconvolutor problem. Can't combine results. Added IsosResult is null.");
 

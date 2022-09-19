@@ -94,7 +94,9 @@ namespace IQ.Console
 
                     var success = ProcessDataset(options, datasetNameOrPath);
                     if (success)
+                    {
                         break;
+                    }
                 }
 
                 IqLogger.FlushPendingMessages();
@@ -156,10 +158,14 @@ namespace IQ.Console
 
                 var targetType = GetParameter(parameterList, "TargetType", "DatabaseTarget");
                 if (string.Equals(targetType, "LcmsFeature", StringComparison.CurrentCultureIgnoreCase))
+                {
                     executorParameters.TargetType = Globals.TargetType.LcmsFeature;
+                }
 
                 if (string.Equals(targetType, "DatabaseTarget", StringComparison.CurrentCultureIgnoreCase))
+                {
                     executorParameters.TargetType = Globals.TargetType.DatabaseTarget;
+                }
 
                 executorParameters.OutputDirectoryBase = GetParameter(parameterList, "ResultsFolder", executorParameters.OutputDirectoryBase);
 
@@ -181,10 +187,14 @@ namespace IQ.Console
             var boolString = GetParameter(parameterList, parameterName, string.Empty);
 
             if (string.IsNullOrWhiteSpace(boolString))
+            {
                 return valueIfMissing;
+            }
 
             if (bool.TryParse(boolString, out var boolValue))
+            {
                 return boolValue;
+            }
 
             return valueIfMissing;
         }
@@ -192,7 +202,9 @@ namespace IQ.Console
         private static string GetParameter(IDictionary<string, string> parameterList, string parameterName, string valueIfMissing)
         {
             if (parameterList.TryGetValue(parameterName, out var value))
+            {
                 return value;
+            }
 
             return valueIfMissing;
         }
@@ -335,7 +347,9 @@ namespace IQ.Console
                         }
 
                         if (run.MassAlignmentInfo?.StDevPpmShiftData > 0)
+                        {
                             workflowParameters.ChromGenTolerance = run.MassAlignmentInfo.StDevPpmShiftData * 3;
+                        }
 
                         //define workflows for parentTarget and childTargets
                         // Note: this is currently hard-coded to user O16O18IqWorkflow
@@ -358,9 +372,13 @@ namespace IQ.Console
             {
                 string datasetNameToShow;
                 if (datasetNameOrPath.Contains(Path.PathSeparator.ToString()))
+                {
                     datasetNameToShow = PathUtils.CompactPathString(datasetNameOrPath, 60);
+                }
                 else
+                {
                     datasetNameToShow = datasetNameOrPath;
+                }
 
                 IqLogger.LogError("Error processing dataset " + datasetNameToShow, ex);
                 return false;

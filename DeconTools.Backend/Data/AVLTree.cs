@@ -114,7 +114,9 @@ namespace DeconTools.Backend.Data.Structures
             var removed = base.Remove(valueNode);
 
             if (!removed)
+            {
                 return false; //removing failed, no need to rebalance
+            }
 
             //Balance going up the tree
             while (parentNode != null)
@@ -122,7 +124,9 @@ namespace DeconTools.Backend.Data.Structures
                 var balance = getBalance(parentNode);
 
                 if (Math.Abs(balance) == 1) //1, -1
+                {
                     break; //height hasn't changed, can stop
+                }
 
                 if (Math.Abs(balance) == 2) //2, -2
                 {
@@ -195,7 +199,9 @@ namespace DeconTools.Backend.Data.Structures
             var pivot = root?.RightChild;
 
             if (pivot == null)
+            {
                 return;
+            }
 
             var rootParent = root.Parent; //original parent of root node
             var isLeftChild = (rootParent != null) && rootParent.LeftChild == root; //whether the root was the parent's left node
@@ -210,18 +216,26 @@ namespace DeconTools.Backend.Data.Structures
             pivot.Parent = rootParent;
 
             if (root.RightChild != null)
+            {
                 root.RightChild.Parent = root;
+            }
 
             //Update the entire tree's Root if necessary
             if (makeTreeRoot)
+            {
                 pivot.Tree.Root = pivot;
+            }
 
             //Update the original parent's child node
             if (isLeftChild)
+            {
                 rootParent.LeftChild = pivot;
+            }
             else
             if (rootParent != null)
+            {
                 rootParent.RightChild = pivot;
+            }
         }
 
         /// <summary>
@@ -232,7 +246,9 @@ namespace DeconTools.Backend.Data.Structures
             var pivot = root?.LeftChild;
 
             if (pivot == null)
+            {
                 return;
+            }
 
             var rootParent = root.Parent; //original parent of root node
             var isLeftChild = (rootParent != null) && rootParent.LeftChild == root; //whether the root was the parent's left node
@@ -247,18 +263,26 @@ namespace DeconTools.Backend.Data.Structures
             pivot.Parent = rootParent;
 
             if (root.LeftChild != null)
+            {
                 root.LeftChild.Parent = root;
+            }
 
             //Update the entire tree's Root if necessary
             if (makeTreeRoot)
+            {
                 pivot.Tree.Root = pivot;
+            }
 
             //Update the original parent's child node
             if (isLeftChild)
+            {
                 rootParent.LeftChild = pivot;
+            }
             else
             if (rootParent != null)
+            {
                 rootParent.RightChild = pivot;
+            }
         }
     }
 }

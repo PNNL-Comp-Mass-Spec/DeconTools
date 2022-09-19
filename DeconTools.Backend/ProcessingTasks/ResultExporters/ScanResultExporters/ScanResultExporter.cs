@@ -15,7 +15,10 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
         int _indexOfLastScanResultWritten = -1;
         public override void Execute(ResultCollection resultList)
         {
-            if (resultList.ScanResultList == null || resultList.ScanResultList.Count == 0) return;
+            if (resultList.ScanResultList == null || resultList.ScanResultList.Count == 0)
+            {
+                return;
+            }
 
             var currentScanResultIndex = resultList.ScanResultList.Count - 1;
 

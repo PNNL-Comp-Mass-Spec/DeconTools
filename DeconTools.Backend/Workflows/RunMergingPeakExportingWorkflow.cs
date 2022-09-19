@@ -170,7 +170,10 @@ namespace DeconTools.Backend.Workflows
 
         public virtual void ReportProgress()
         {
-            if (Run.ScanSetCollection == null || Run.ScanSetCollection.ScanSetList.Count == 0) return;
+            if (Run.ScanSetCollection == null || Run.ScanSetCollection.ScanSetList.Count == 0)
+            {
+                return;
+            }
 
             var userState = new ScanBasedProgressInfo(Run, Run.CurrentScanSet);
 

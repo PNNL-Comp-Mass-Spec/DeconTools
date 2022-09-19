@@ -14,7 +14,10 @@ namespace DeconTools.Backend.Workflows
             if (CurrentRun is UIMFRun uimfRun)
             {
                 if (imsScanSet == null)
+                {
                     throw new NullReferenceException("ScanBasedProgressInfo error. You need to provide a valid IMSScanSet");
+                }
+
                 uimfRun.CurrentIMSScanSet = imsScanSet;
             }
         }
@@ -27,9 +30,16 @@ namespace DeconTools.Backend.Workflows
 
         public int GetScanOrFrameNum()
         {
-            if (CurrentRun == null) return -1;
+            if (CurrentRun == null)
+            {
+                return -1;
+            }
 
-            if (CurrentScanSet == null) return -1;
+            if (CurrentScanSet == null)
+            {
+                return -1;
+            }
+
             return CurrentScanSet.PrimaryScanNumber;
         }
     }

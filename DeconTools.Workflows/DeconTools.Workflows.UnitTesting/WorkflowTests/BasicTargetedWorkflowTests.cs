@@ -339,7 +339,9 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
                 {
                     var correlationSlope = result.ChromCorrelationData.CorrelationDataItems[i].CorrelationSlope;
                     if (correlationSlope != null)
+                    {
                         correctedRatio = (double) correlationSlope;
+                    }
                 }
                 else
                 {

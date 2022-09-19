@@ -125,8 +125,16 @@ namespace DeconTools.Backend
         /// <returns></returns>
         public static double[] ConvertFloatsToDouble(float[] inputVals)
         {
-            if (inputVals == null) return null;
-            if (inputVals.Length == 0) return null;
+            if (inputVals == null)
+            {
+                return null;
+            }
+
+            if (inputVals.Length == 0)
+            {
+                return null;
+            }
+
             var outputVals = new double[inputVals.Length];
 
             for (var i = 0; i < inputVals.Length; i++)
@@ -144,8 +152,16 @@ namespace DeconTools.Backend
         /// <returns></returns>
         public static double[] ConvertIntsToDouble(int[] inputVals)
         {
-            if (inputVals == null) return null;
-            if (inputVals.Length == 0) return null;
+            if (inputVals == null)
+            {
+                return null;
+            }
+
+            if (inputVals.Length == 0)
+            {
+                return null;
+            }
+
             var outputVals = new double[inputVals.Length];
 
             for (var i = 0; i < inputVals.Length; i++)
@@ -180,7 +196,10 @@ namespace DeconTools.Backend
                 else
                 {
                     numWrongDirection++;
-                    if (numWrongDirection > 3) break;    //three values in a row that indicate we are moving away from the target val
+                    if (numWrongDirection > 3)
+                    {
+                        break;    //three values in a row that indicate we are moving away from the target val
+                    }
                 }
             }
 
@@ -199,7 +218,9 @@ namespace DeconTools.Backend
             for (var i = 0; i < Xvalues.Length; i++)
             {
                 if (i == yDataCount)
+                {
                     break;
+                }
 
                 if (Yvalues[i] > maxY)
                 {
@@ -224,7 +245,9 @@ namespace DeconTools.Backend
             for (var i = 0; i < Xvalues.Length; i++)
             {
                 if (i == yDataCount)
+                {
                     break;
+                }
 
                 if (Xvalues[i] >= xMin && Xvalues[i] <= xMax)
                 {
@@ -270,7 +293,10 @@ namespace DeconTools.Backend
         /// <remarks>Assumes the data in Xvalues is sorted</remarks>
         public XYData TrimData(double xMin, double xMax, double tolerance = 0.1)
         {
-            if (Xvalues == null || Yvalues == null || Xvalues.Length == 0 || Yvalues.Length == 0) return this;
+            if (Xvalues == null || Yvalues == null || Xvalues.Length == 0 || Yvalues.Length == 0)
+            {
+                return this;
+            }
 
             var currentMinXValue = Xvalues[0];
             var currentMaxXValue = Xvalues[Xvalues.Length - 1];
@@ -289,7 +315,9 @@ namespace DeconTools.Backend
             var numPoints = indexClosestXValMax - indexClosestXValMin + 1;
 
             if (numPoints <= 0)
+            {
                 throw new InvalidOperationException("indexClosestXValMin > indexClosestXValMax in XYData.TrimData; Xvalues is likely not sorted");
+            }
 
             data.Xvalues = new double[numPoints];
             data.Yvalues = new double[numPoints];
@@ -318,7 +346,9 @@ namespace DeconTools.Backend
             for (var i = 0; i < Xvalues.Length; i++)
             {
                 if (i == yDataCount)
+                {
                     break;
+                }
 
                 if (Yvalues[i] > 0)
                 {
@@ -341,7 +371,9 @@ namespace DeconTools.Backend
             var maxVal = GetMaxY();
 
             if (Math.Abs(maxVal) < double.Epsilon)
+            {
                 return;
+            }
 
             for (var i = 0; i < Yvalues.Length; i++)
             {
@@ -374,10 +406,14 @@ namespace DeconTools.Backend
         public static XYData GetFilteredXYValues(XYData data, double minX, double maxX, int startingIndex = 0)
         {
             if (data == null || startingIndex >= data.Xvalues.Length)
+            {
                 return null;
+            }
 
             if (startingIndex < 0)
+            {
                 startingIndex = 0;
+            }
 
             var yDataCount = data.Yvalues.Length;
 
@@ -387,10 +423,14 @@ namespace DeconTools.Backend
             for (var i = startingIndex; i < data.Xvalues.Length; i++)
             {
                 if (i == yDataCount)
+                {
                     break;
+                }
 
                 if (data.Xvalues[i] < minX)
+                {
                     continue;
+                }
 
                 if (data.Xvalues[i] > maxX)
                 {
@@ -402,7 +442,9 @@ namespace DeconTools.Backend
             }
 
             if (xVals.Count == 0)
+            {
                 return null;
+            }
 
             var returnedData = new XYData
             {
@@ -424,7 +466,9 @@ namespace DeconTools.Backend
             for (var i = 0; i < Xvalues.Length; i++)
             {
                 if (i == yDataCount)
+                {
                     break;
+                }
 
                 Console.WriteLine("{0}\t{1}", Xvalues[i], Yvalues[i]);
             }

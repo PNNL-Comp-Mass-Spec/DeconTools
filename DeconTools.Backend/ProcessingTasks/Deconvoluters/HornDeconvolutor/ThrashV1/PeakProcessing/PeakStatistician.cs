@@ -25,10 +25,14 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         {
             double minIntensityLeft = 0, minIntensityRight = 0;
             if (yValue.Equals(0))
+            {
                 return 0;
+            }
 
             if (index <= 0 || index >= intensities.Count - 1)
+            {
                 return 0;
+            }
 
             // Find the first local minimum as we go down the m/z range.
             var found = false;
@@ -43,7 +47,9 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                 }
             }
             if (!found)
+            {
                 minIntensityLeft = intensities[0];
+            }
 
             found = false;
             //// Find the first local minimum as we go up the m/z range.
@@ -58,15 +64,23 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                 }
             }
             if (!found)
+            {
                 minIntensityRight = intensities[intensities.Count - 1];
+            }
+
             if (minIntensityLeft.Equals(0))
             {
                 if (minIntensityRight.Equals(0))
+                {
                     return 100;
+                }
+
                 return 1.0 * yValue / minIntensityRight;
             }
             if (minIntensityRight < minIntensityLeft && !minIntensityRight.Equals(0))
+            {
                 return 1.0 * yValue / minIntensityRight;
+            }
 
             return 1.0 * yValue / minIntensityLeft;
         }
@@ -88,13 +102,17 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             double signalToNoise = 0.0)
         {
             if (intensities[dataIndex].Equals(0))
+            {
                 return 0.0;
+            }
 
             var peakHalf = intensities[dataIndex] / 2.0;
             var mass = mzs[dataIndex];
 
             if (dataIndex <= 0 || dataIndex >= mzs.Count - 1)
+            {
                 return 0;
+            }
 
             // internal variable to store temporary m/z values. It also guarantees a workspace that doesn't need to be reallocated all the time.
             var mzTempList = new List<double>();
@@ -142,12 +160,16 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                             }
 
                             if (j == points)
+                            {
                                 return 0.0;
+                            }
                             // coe is coefficients found by curve regression.
                             var iStat = CurveReg(intensityTempList, mzTempList, points, out var coe, 1, out _);
                             // only if successful calculation of peak was done, should we change upper.
                             if (iStat != -1)
+                            {
                                 upper = coe[1] * peakHalf + coe[0];
+                            }
                         }
                     }
                     break;
@@ -195,12 +217,16 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                             }
 
                             if (j == points)
+                            {
                                 return 0.0;
+                            }
                             // coe is coefficients found by curve regression.
                             var iStat = CurveReg(intensityTempList, mzTempList, points, out var coe, 1, out _);
                             // only if successful calculation of peak was done, should we change lower.
                             if (iStat != -1)
+                            {
                                 lower = coe[1] * peakHalf + coe[0];
+                            }
                         }
                     }
                     break;
@@ -208,9 +234,15 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             }
 
             if (upper.Equals(0.0))
+            {
                 return 2 * Math.Abs(mass - lower);
+            }
+
             if (lower.Equals(0.0))
+            {
                 return 2 * Math.Abs(mass - upper);
+            }
+
             return Math.Abs(upper - lower);
         }
 

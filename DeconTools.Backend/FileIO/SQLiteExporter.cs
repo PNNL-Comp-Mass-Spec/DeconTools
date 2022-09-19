@@ -46,7 +46,9 @@ namespace DeconTools.Backend.FileIO
             Check.Assert(!string.IsNullOrEmpty(FileName), Name + " failed. Illegal filename.");
             Check.Assert(m_dbConnection != null, string.Format("{0} failed. No connection was made to a database", Name));
             if (m_dbConnection == null)
+            {
                 return;
+            }
 
             Check.Assert(m_dbConnection.State == System.Data.ConnectionState.Open, string.Format("{0} failed. Connection to database is not open", Name));
 
@@ -73,13 +75,18 @@ namespace DeconTools.Backend.FileIO
         #region Private Methods
         protected virtual void InitializeAndBuildTable()
         {
-            if (File.Exists(FileName)) File.Delete(FileName);
+            if (File.Exists(FileName))
+            {
+                File.Delete(FileName);
+            }
 
             DbProviderFactory fact = new SQLiteFactory();
             m_dbConnection = fact.CreateConnection();
 
             if (m_dbConnection == null)
+            {
                 return;
+            }
 
             m_dbConnection.ConnectionString = "Data Source=" + FileName;
 
@@ -152,7 +159,9 @@ namespace DeconTools.Backend.FileIO
             Check.Assert(FieldList?.Count > 0, string.Format("SQLite Table fields have not been declared within {0}.", Name));
 
             if (FieldList == null)
+            {
                 return "";
+            }
 
             var sb = new StringBuilder();
             sb.Append("CREATE TABLE ");

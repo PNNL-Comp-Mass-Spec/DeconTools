@@ -43,9 +43,13 @@ namespace DeconTools.Backend.Utilities.IqLogger
         public static void InitializeIqLog(string datasetName, string logDirectory)
         {
             if (string.IsNullOrWhiteSpace(logDirectory))
+            {
                 LogDirectory = string.Empty;
+            }
             else
+            {
                 LogDirectory = logDirectory;
+            }
 
             ChangeLogLocation(LogDirectory, datasetName, "_IqLog.txt");
         }
@@ -69,10 +73,15 @@ namespace DeconTools.Backend.Utilities.IqLogger
         public static void LogTrace(string message)
         {
             if (!VerboseLogging)
+            {
                 return;
+            }
 
             if (Log.LogLevel < BaseLogger.LogLevels.DEBUG)
+            {
                 Log.LogLevel = BaseLogger.LogLevels.DEBUG;
+            }
+
             Log.Debug(message);
         }
 

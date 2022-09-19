@@ -23,11 +23,16 @@ namespace DeconTools.Backend.ProcessingTasks.MSGenerators
         {
             Check.Require(run != null, "MS_Generator failed;  'Run' has not yet been defined");
             if (run == null)
+            {
                 return null;
+            }
 
             Check.Require(!(run is UIMFRun), "MS Generator failed; You tried to use the 'Generic_MS_Generator.' Try using the 'UIMF_MSGenerator' instead");
 
-            if (lcScanSet == null) return null;
+            if (lcScanSet == null)
+            {
+                return null;
+            }
 
             var xyData = run.GetMassSpectrum(lcScanSet, MinMZ, MaxMZ);
 

@@ -37,8 +37,15 @@ namespace DeconTools.Backend.DTO
 
                 var resultsWithinMassTol = query.ToList();
 
-                if (resultsWithinMassTol.Count > 1) Console.WriteLine("Scan = " + result.ScanSet.PrimaryScanNumber + "; m/z = " + result.IsotopicProfile.MonoPeakMZ);
-                if (resultsWithinMassTol.Count > 0) intersectedResults.Add(resultsWithinMassTol[0]);
+                if (resultsWithinMassTol.Count > 1)
+                {
+                    Console.WriteLine("Scan = " + result.ScanSet.PrimaryScanNumber + "; m/z = " + result.IsotopicProfile.MonoPeakMZ);
+                }
+
+                if (resultsWithinMassTol.Count > 0)
+                {
+                    intersectedResults.Add(resultsWithinMassTol[0]);
+                }
             }
 
             return intersectedResults;

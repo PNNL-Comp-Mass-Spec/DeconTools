@@ -60,12 +60,18 @@ namespace DeconTools.UnitTesting2.Utilities
         private void offsetDistribution(XYData theorXYData, IsotopicProfile theorIsotopicProfile, IsotopicProfile observedIsotopicProfile)
         {
             double offset;
-            if (theorIsotopicProfile?.Peaklist == null || theorIsotopicProfile.Peaklist.Count == 0) return;
+            if (theorIsotopicProfile?.Peaklist == null || theorIsotopicProfile.Peaklist.Count == 0)
+            {
+                return;
+            }
 
             var mostIntensePeak = theorIsotopicProfile.getMostIntensePeak();
             var indexOfMostIntensePeak = theorIsotopicProfile.Peaklist.IndexOf(mostIntensePeak);
 
-            if (observedIsotopicProfile.Peaklist == null || observedIsotopicProfile.Peaklist.Count == 0) return;
+            if (observedIsotopicProfile.Peaklist == null || observedIsotopicProfile.Peaklist.Count == 0)
+            {
+                return;
+            }
 
             var enoughPeaksInTarget = (indexOfMostIntensePeak <= observedIsotopicProfile.Peaklist.Count - 1);
 

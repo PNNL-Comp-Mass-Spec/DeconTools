@@ -109,7 +109,10 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
         {
             double fBase = 0f;
             for (var i = 0; i < 5; i++)
+            {
                 fBase += aafIsosm[i][0] * afFormula[i];
+            }
+
             return fBase;
         }
 
@@ -117,14 +120,27 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
         {
             double fBase = 0f;
             if (bLabel == false)
+            {
                 for (var i = 0; i < 5; i++)
+                {
                     fBase += aafIsosm[i][0] * afFormula[i];
+                }
+            }
             else
+            {
                 for (var i = 0; i < 5; i++)
+                {
                     if (i == 2)
+                    {
                         fBase += fN15m * afFormula[i];
+                    }
                     else
+                    {
                         fBase += aafIsosm[i][0] * afFormula[i];
+                    }
+                }
+            }
+
             return fBase;
         }
         public string GetClosestAvnFormula(double inputMass, bool hasLabel)
@@ -134,7 +150,9 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
             var fNumAvn = inputMass / fAvnMass;
             var averagineIntArray = new int[5];
             for (var i = 0; i < 5; i++)
+            {
                 averagineIntArray[i] = (int)System.Math.Round(afAvn[i] * fNumAvn);
+            }
 
             //I will reverse these to report  C H N O S
             var numHydrogens = averagineIntArray[0];
@@ -151,9 +169,13 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
             var averagineFormula = GetClosestAvnFormula(fInputMass, bLabel);
 
             if (bLabel == false)
+            {
                 return GetIsotopePattern(averagineFormula, aafIsos);
+            }
             else
+            {
                 return GetIsotopePattern(averagineFormula, aafN15Isos);
+            }
         }
 
         public IsotopicProfile GetIsotopePattern(string empiricalFormula)
@@ -190,33 +212,61 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
                     aafIons[i0, i1] = System.Math.Pow(10, fLogTotal);
                     maxIndices[i0] = i1;
                     if (i1 > 1 && fLogTotalLast > fLogTotal && aafIons[i0, i1] < EPS)
+                    {
                         break;
+                    }
+
                     fLogTotalLast = fLogTotal;
                 }
             }
 
             var maxOffset = 1;
             for (var i = 0; i <= maxIndices[0]; i++)
+            {
                 for (var j = 0; j <= maxIndices[1]; j++)
+                {
                     for (var k = 0; k <= maxIndices[2]; k++)
+                    {
                         for (var l = 0; l <= maxIndices[3]; l++)
+                        {
                             for (var m = 0; m <= maxIndices[4]; m++)
                             {
                                 var offset = i + j + k + 2 * l + 2 * m; // O and S are +2
                                 var fIntTmp = aafIons[0, i] * aafIons[1, j] *
                                               aafIons[2, k] * aafIons[3, l] * aafIons[4, m];
-                                if (offset > maxOffset) maxOffset = offset;
+                                if (offset > maxOffset)
+                                {
+                                    maxOffset = offset;
+                                }
+
                                 afIonIntensity[offset] += fIntTmp;
                             }
+                        }
+                    }
+                }
+            }
             // normalize
             double max = 0;
             for (var j1 = 0; j1 <= maxOffset; j1++)
-                if (afIonIntensity[j1] > max) max = afIonIntensity[j1];
-            for (var j1 = 0; j1 <= maxOffset; j1++) afIonIntensity[j1] /= max;
+            {
+                if (afIonIntensity[j1] > max)
+                {
+                    max = afIonIntensity[j1];
+                }
+            }
+
+            for (var j1 = 0; j1 <= maxOffset; j1++)
+            {
+                afIonIntensity[j1] /= max;
+            }
+
             var isoCluster = new IsotopicProfile();
 
             for (var j1 = 0; j1 < afIonIntensity.Length && j1 <= maxOffset; j1++)
+            {
                 isoCluster.Peaklist.Add(new MSPeak(0.0f, (float)afIonIntensity[j1], 0.0f, 0.0f));
+            }
+
             return isoCluster;
         }
 

@@ -182,7 +182,11 @@ namespace DeconTools.Backend.Core
 
         private double GetInterpolatedNet(int scanNum)
         {
-            if (scanNum < MinLcScan) return MinLcScan;
+            if (scanNum < MinLcScan)
+            {
+                return MinLcScan;
+            }
+
             var maxScan = MaxLcScan;
 
             double lowerNET = 0;

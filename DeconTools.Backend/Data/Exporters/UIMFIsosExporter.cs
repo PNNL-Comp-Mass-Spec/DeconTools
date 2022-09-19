@@ -78,7 +78,10 @@ namespace DeconTools.Backend.Data
             sw.Close();
             deserializer.Close();
 
-            if (!deleteBinaryFileAfterUse) return;
+            if (!deleteBinaryFileAfterUse)
+            {
+                return;
+            }
 
             try
             {
@@ -95,7 +98,10 @@ namespace DeconTools.Backend.Data
 
         private void WriteUIMFIsosResults(TextWriter sw, ResultCollection results)
         {
-            if (results == null) return;
+            if (results == null)
+            {
+                return;
+            }
 
             var data = new List<string>();
 

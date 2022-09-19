@@ -13,13 +13,18 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
         #region Constructors
         public UIMFScanResult_SqliteExporter(string fileName)
         {
-            if (File.Exists(fileName)) File.Delete(fileName);
+            if (File.Exists(fileName))
+            {
+                File.Delete(fileName);
+            }
 
             var fact = DbProviderFactories.GetFactory("System.Data.SQLite");
             cnn = fact.CreateConnection();
 
             if (cnn == null)
+            {
                 throw new Exception("Factory.CreateConnection returned a null DbConnection instance in UIMFScanResult_SqliteExporter constructor");
+            }
 
             cnn.ConnectionString = "Data Source=" + fileName;
 

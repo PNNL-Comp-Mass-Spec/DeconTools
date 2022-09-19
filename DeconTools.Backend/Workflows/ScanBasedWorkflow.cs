@@ -73,12 +73,16 @@ namespace DeconTools.Backend.Workflows
             {
                 var datasetFolder = new DirectoryInfo(datasetFileName);
                 if (!datasetFolder.Exists)
+                {
                     throw new FileNotFoundException("Dataset file (or folder) not found: " + datasetFile);
+                }
             }
 
             var paramFile = new FileInfo(parameterFile);
             if (!paramFile.Exists)
+            {
                 throw new FileNotFoundException("Parameter file not found: " + parameterFile);
+            }
 
             // Initialize a new Run
             Run run;
@@ -197,7 +201,9 @@ namespace DeconTools.Backend.Workflows
         {
             Check.Assert(Run != null, "Cannot initialize workflow. Run is null");
             if (Run == null)
+            {
                 return;
+            }
 
             Check.Assert(NewDeconToolsParameters != null, "Cannot initialize workflow. Parameters are null");
 
@@ -416,7 +422,9 @@ namespace DeconTools.Backend.Workflows
             var expectedPeaksFile = Path.Combine(outputDirectoryPath, Run.DatasetName + "_peaks.txt");
 
             if (!File.Exists(expectedPeaksFile))
+            {
                 return false;
+            }
 
             // Open the file and confirm that it has at least one row of data
             var rowCount = 0;
@@ -429,7 +437,9 @@ namespace DeconTools.Backend.Workflows
                 {
                     var line = peaksFile.ReadLine();
                     if (!string.IsNullOrWhiteSpace(line))
+                    {
                         rowCount++;
+                    }
                 }
             }
 
@@ -564,7 +574,9 @@ namespace DeconTools.Backend.Workflows
         private void ShowTraceMessageIfEnabled(string currentTask)
         {
             if (mShowTraceMessages)
+            {
                 Console.WriteLine("Scan {0}: {1}", Run.CurrentScanSet, currentTask);
+            }
         }
 
         #endregion
@@ -591,7 +603,10 @@ namespace DeconTools.Backend.Workflows
 
         protected virtual Globals.ResultType GetResultType()
         {
-            if (Run is UIMFRun) return Globals.ResultType.UIMF_TRADITIONAL_RESULT;
+            if (Run is UIMFRun)
+            {
+                return Globals.ResultType.UIMF_TRADITIONAL_RESULT;
+            }
 
 #if !Disable_DeconToolsV2
             if (Run is IMFRun) return Globals.ResultType.IMS_TRADITIONAL_RESULT;

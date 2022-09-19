@@ -74,7 +74,10 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             {
                 if (xyData.Xvalues[i] > (testMZ - 0.1) && xyData.Xvalues[i] < (testMZ + 0.1))
                 {
-                    if (xyData.Yvalues[i] > maxIntensityForTestMZ) maxIntensityForTestMZ = (int)xyData.Yvalues[i];
+                    if (xyData.Yvalues[i] > maxIntensityForTestMZ)
+                    {
+                        maxIntensityForTestMZ = (int)xyData.Yvalues[i];
+                    }
                 }
             }
 
@@ -99,7 +102,10 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             {
                 if (xyData.Xvalues[i] > (testMZ - 0.1) && xyData.Xvalues[i] < (testMZ + 0.1))
                 {
-                    if (xyData.Yvalues[i] > maxIntensityForTestMZ) maxIntensityForTestMZ = (int)xyData.Yvalues[i];
+                    if (xyData.Yvalues[i] > maxIntensityForTestMZ)
+                    {
+                        maxIntensityForTestMZ = (int)xyData.Yvalues[i];
+                    }
                 }
             }
 

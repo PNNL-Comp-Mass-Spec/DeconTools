@@ -181,9 +181,15 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         public static bool PeakIntensityComparison(ThrashV1Peak pk1, ThrashV1Peak pk2)
         {
             if (pk1.Intensity > pk2.Intensity)
+            {
                 return true;
+            }
+
             if (pk1.Intensity < pk2.Intensity)
+            {
                 return false;
+            }
+
             return pk1.Mz > pk2.Mz;
         }
 #endif

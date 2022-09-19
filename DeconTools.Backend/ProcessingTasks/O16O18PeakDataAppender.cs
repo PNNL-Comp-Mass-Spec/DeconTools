@@ -11,9 +11,15 @@ namespace DeconTools.Backend.ProcessingTasks
 
         public override void Execute(ResultCollection resultList)
         {
-            if (resultList.IsosResultBin == null || resultList.IsosResultBin.Count == 0) return;
+            if (resultList.IsosResultBin == null || resultList.IsosResultBin.Count == 0)
+            {
+                return;
+            }
 
-            if (resultList.Run.PeakList == null || resultList.Run.PeakList.Count == 0) return;
+            if (resultList.Run.PeakList == null || resultList.Run.PeakList.Count == 0)
+            {
+                return;
+            }
 
             AppendO16O18PeakInfo(resultList.Run.PeakList, resultList.IsosResultBin as List<IsosResult>);
         }
@@ -24,9 +30,14 @@ namespace DeconTools.Backend.ProcessingTasks
             foreach (var isosResult in resultList)
             {
                 if (!(isosResult is O16O18IsosResult msFeature))
+                {
                     continue;
+                }
 
-                if (msFeature.IsotopicProfile == null) continue;
+                if (msFeature.IsotopicProfile == null)
+                {
+                    continue;
+                }
 
                 var monoMZ = msFeature.IsotopicProfile.GetMZ();
 
@@ -78,9 +89,15 @@ namespace DeconTools.Backend.ProcessingTasks
 
         private Peak GetBestPeak(IReadOnlyList<Peak> peaksWithinTol, double targetMZ)
         {
-            if (peaksWithinTol.Count == 0) return null;
+            if (peaksWithinTol.Count == 0)
+            {
+                return null;
+            }
 
-            if (peaksWithinTol.Count == 1) return peaksWithinTol[0];
+            if (peaksWithinTol.Count == 1)
+            {
+                return peaksWithinTol[0];
+            }
 
             var diff = double.MaxValue;
             Peak bestPeak = null;

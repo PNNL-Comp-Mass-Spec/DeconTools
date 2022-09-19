@@ -35,7 +35,9 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             {
                 case Globals.IsotopicProfileType.UNLABELED:
                     if (run.CurrentMassTag?.IsotopicProfile == null)
+                    {
                         return null;
+                    }
 
                     Check.Require(run.CurrentMassTag.IsotopicProfile != null, "Target's theoretical isotopic profile has not been established");
                     iso = run.CurrentMassTag.IsotopicProfile.CloneIsotopicProfile();
@@ -43,7 +45,9 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
                 case Globals.IsotopicProfileType.LABELED:
                     if (run.CurrentMassTag?.IsotopicProfileLabeled == null)
+                    {
                         return null;
+                    }
 
                     Check.Require(run.CurrentMassTag.IsotopicProfileLabeled != null, "Target's labeled theoretical isotopic profile has not been established");
                     iso = run.CurrentMassTag.IsotopicProfileLabeled.CloneIsotopicProfile();
@@ -51,7 +55,9 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
                 default:
                     if (run.CurrentMassTag?.IsotopicProfile == null)
+                    {
                         return null;
+                    }
 
                     iso = run.CurrentMassTag.IsotopicProfile.CloneIsotopicProfile();
                     break;
@@ -59,7 +65,10 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
             for (var i = 0; i < MaxPeaksToInclude; i++)
             {
-                if (i < iso.Peaklist.Count) continue;
+                if (i < iso.Peaklist.Count)
+                {
+                    continue;
+                }
 
                 var lastPeak = iso.Peaklist[iso.Peaklist.Count - 1];
 

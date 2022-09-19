@@ -204,9 +204,15 @@ namespace DeconTools.Backend.Core
             {
                 var currentMSLevel = run.GetMSLevel(i);
 
-                if (run is UIMFRun && currentMSLevel == 0) continue;  // This is a calibration frame; skip it
+                if (run is UIMFRun && currentMSLevel == 0)
+                {
+                    continue;  // This is a calibration frame; skip it
+                }
 
-                if (!processMSMS && currentMSLevel > 1) continue;     // if we process only MS-level and scan i is an MSMS scan, then loop
+                if (!processMSMS && currentMSLevel > 1)
+                {
+                    continue;     // if we process only MS-level and scan i is an MSMS scan, then loop
+                }
 
                 ScanSet scanSet;
                 if (currentMSLevel == 1)
@@ -257,7 +263,10 @@ namespace DeconTools.Backend.Core
 
                             var indexOfCurrentFrame = uimfRun.MS2Frames.IndexOf(i);
 
-                            if (indexOfCurrentFrame < 0) continue;
+                            if (indexOfCurrentFrame < 0)
+                            {
+                                continue;
+                            }
 
                             var lowerIndex = indexOfCurrentFrame - numberOfFrameIndexesToSkip;
                             var upperIndex = indexOfCurrentFrame + numberOfFrameIndexesToSkip;
@@ -341,14 +350,20 @@ namespace DeconTools.Backend.Core
 
         public ScanSet GetScanSet(int primaryNum)
         {
-            if (ScanSetList == null || ScanSetList.Count == 0) return null;
+            if (ScanSetList == null || ScanSetList.Count == 0)
+            {
+                return null;
+            }
 
             return (ScanSetList.Find(p => p.PrimaryScanNumber == primaryNum));
         }
 
         public ScanSet GetNextMSScanSet(Run run, int primaryNum, bool ascending)
         {
-            if (ScanSetList == null || ScanSetList.Count == 0) return null;
+            if (ScanSetList == null || ScanSetList.Count == 0)
+            {
+                return null;
+            }
 
             var scan = ScanSetList.Find(p => p.PrimaryScanNumber == primaryNum);
 
@@ -371,7 +386,11 @@ namespace DeconTools.Backend.Core
 
         public int GetLastScanSet()
         {
-            if (ScanSetList == null || ScanSetList.Count == 0) return -1;
+            if (ScanSetList == null || ScanSetList.Count == 0)
+            {
+                return -1;
+            }
+
             return ScanSetList[ScanSetList.Count - 1].PrimaryScanNumber;
         }
     }

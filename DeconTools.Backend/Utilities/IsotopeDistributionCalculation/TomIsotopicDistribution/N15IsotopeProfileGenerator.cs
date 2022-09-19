@@ -87,7 +87,10 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.TomIsotopi
 
         private void addMZInfoToTheorProfile(IsotopicProfile unlabeledProfile, IsotopicProfile labeledTheorProfile, int numNitrogens, int chargeState)
         {
-            if (labeledTheorProfile.Peaklist == null || labeledTheorProfile.Peaklist.Count < 3) return;
+            if (labeledTheorProfile.Peaklist == null || labeledTheorProfile.Peaklist.Count < 3)
+            {
+                return;
+            }
 
             //assign the baseN15 mass
             labeledTheorProfile.MonoPeakMZ = unlabeledProfile.Peaklist[0].XValue + (Globals.N15_MASS - Globals.N14_MASS) * (double)numNitrogens / (double)chargeState;

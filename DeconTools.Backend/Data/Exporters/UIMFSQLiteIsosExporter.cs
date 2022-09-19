@@ -80,7 +80,10 @@ namespace DeconTools.Backend.Data
 
         private void exportSQLiteUIMFIsosResults(ResultCollection results)
         {
-            if (results == null) return;
+            if (results == null)
+            {
+                return;
+            }
 
             //Insert records to MS_Features table
             //Insert records in bulk mood, 500 records each time

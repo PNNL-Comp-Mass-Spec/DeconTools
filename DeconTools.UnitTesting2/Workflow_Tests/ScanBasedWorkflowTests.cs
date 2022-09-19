@@ -27,9 +27,20 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             var expectedScansFile = Path.Combine(run.DatasetDirectoryPath, run.DatasetName + "_scans.csv");
             var expectedPeaksFile = Path.Combine(run.DatasetDirectoryPath, run.DatasetName + "_peaks.txt");
 
-            if (File.Exists(expectedIsosFile)) File.Delete(expectedIsosFile);
-            if (File.Exists(expectedScansFile)) File.Delete(expectedScansFile);
-            if (File.Exists(expectedPeaksFile)) File.Delete(expectedPeaksFile);
+            if (File.Exists(expectedIsosFile))
+            {
+                File.Delete(expectedIsosFile);
+            }
+
+            if (File.Exists(expectedScansFile))
+            {
+                File.Delete(expectedScansFile);
+            }
+
+            if (File.Exists(expectedPeaksFile))
+            {
+                File.Delete(expectedPeaksFile);
+            }
 
             var allPeaksFilepath = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\Orbitrap\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_peaksFULL.txt";
             File.Copy(allPeaksFilepath, allPeaksFilepath.Replace("FULL", ""));
@@ -73,9 +84,20 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             var expectedScansFile = Path.Combine(run.DatasetDirectoryPath, run.DatasetName + "_scans.csv");
             var expectedPeaksFile = Path.Combine(run.DatasetDirectoryPath, run.DatasetName + "_peaks.txt");
 
-            if (File.Exists(expectedIsosFile)) File.Delete(expectedIsosFile);
-            if (File.Exists(expectedScansFile)) File.Delete(expectedScansFile);
-            if (File.Exists(expectedPeaksFile)) File.Delete(expectedPeaksFile);
+            if (File.Exists(expectedIsosFile))
+            {
+                File.Delete(expectedIsosFile);
+            }
+
+            if (File.Exists(expectedScansFile))
+            {
+                File.Delete(expectedScansFile);
+            }
+
+            if (File.Exists(expectedPeaksFile))
+            {
+                File.Delete(expectedPeaksFile);
+            }
 
             var parameters = new DeconToolsParameters();
             parameters.LoadFromOldDeconToolsParameterFile(parameterFile);
@@ -121,8 +143,15 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             var expectedScansFile = Path.Combine(run.DatasetDirectoryPath, run.DatasetName + "_scans.csv");
             var expectedPeaksFile = Path.Combine(run.DatasetDirectoryPath, run.DatasetName + "_peaks.txt");
 
-            if (File.Exists(expectedIsosFile)) File.Delete(expectedIsosFile);
-            if (File.Exists(expectedScansFile)) File.Delete(expectedScansFile);
+            if (File.Exists(expectedIsosFile))
+            {
+                File.Delete(expectedIsosFile);
+            }
+
+            if (File.Exists(expectedScansFile))
+            {
+                File.Delete(expectedScansFile);
+            }
             //if (File.Exists(expectedPeaksFile)) File.Delete(expectedPeaksFile);
 
             var parameters = new DeconToolsParameters();
@@ -162,9 +191,20 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             var expectedScansFile = Path.Combine(run.DatasetDirectoryPath, run.DatasetName + "_scans.csv");
             var expectedPeaksFile = Path.Combine(run.DatasetDirectoryPath, run.DatasetName + "_peaks.txt");
 
-            if (File.Exists(expectedIsosFile)) File.Delete(expectedIsosFile);
-            if (File.Exists(expectedScansFile)) File.Delete(expectedScansFile);
-            if (File.Exists(expectedPeaksFile)) File.Delete(expectedPeaksFile);
+            if (File.Exists(expectedIsosFile))
+            {
+                File.Delete(expectedIsosFile);
+            }
+
+            if (File.Exists(expectedScansFile))
+            {
+                File.Delete(expectedScansFile);
+            }
+
+            if (File.Exists(expectedPeaksFile))
+            {
+                File.Delete(expectedPeaksFile);
+            }
 
             var parameters = new DeconToolsParameters();
             parameters.LoadFromOldDeconToolsParameterFile(parameterFile);
@@ -203,9 +243,20 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             var expectedScansFile = Path.Combine(run.DatasetDirectoryPath, run.DatasetName + "_scans.csv");
             var expectedPeaksFile = Path.Combine(run.DatasetDirectoryPath, run.DatasetName + "_peaks.txt");
 
-            if (File.Exists(expectedIsosFile)) File.Delete(expectedIsosFile);
-            if (File.Exists(expectedScansFile)) File.Delete(expectedScansFile);
-            if (File.Exists(expectedPeaksFile)) File.Delete(expectedPeaksFile);
+            if (File.Exists(expectedIsosFile))
+            {
+                File.Delete(expectedIsosFile);
+            }
+
+            if (File.Exists(expectedScansFile))
+            {
+                File.Delete(expectedScansFile);
+            }
+
+            if (File.Exists(expectedPeaksFile))
+            {
+                File.Delete(expectedPeaksFile);
+            }
 
             var parameters = new DeconToolsParameters();
             parameters.LoadFromOldDeconToolsParameterFile(parameterFile);
@@ -255,9 +306,20 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             var expectedScansFile = Path.Combine(run.DatasetDirectoryPath, run.DatasetName + "_scans.csv");
             var expectedPeaksFile = Path.Combine(run.DatasetDirectoryPath, run.DatasetName + "_peaks.txt");
 
-            if (File.Exists(expectedIsosFile)) File.Delete(expectedIsosFile);
-            if (File.Exists(expectedScansFile)) File.Delete(expectedScansFile);
-            if (File.Exists(expectedPeaksFile)) File.Delete(expectedPeaksFile);
+            if (File.Exists(expectedIsosFile))
+            {
+                File.Delete(expectedIsosFile);
+            }
+
+            if (File.Exists(expectedScansFile))
+            {
+                File.Delete(expectedScansFile);
+            }
+
+            if (File.Exists(expectedPeaksFile))
+            {
+                File.Delete(expectedPeaksFile);
+            }
 
             var parameters = new DeconToolsParameters();
             parameters.LoadFromOldDeconToolsParameterFile(parameterFile);
@@ -296,9 +358,20 @@ namespace DeconTools.UnitTesting2.Workflow_Tests
             var expectedScansFile = Path.Combine(run.DatasetDirectoryPath, run.DatasetName + "_scans.csv");
             var expectedPeaksFile = Path.Combine(run.DatasetDirectoryPath, run.DatasetName + "_peaks.txt");
 
-            if (File.Exists(expectedIsosFile)) File.Delete(expectedIsosFile);
-            if (File.Exists(expectedScansFile)) File.Delete(expectedScansFile);
-            if (File.Exists(expectedPeaksFile)) File.Delete(expectedPeaksFile);
+            if (File.Exists(expectedIsosFile))
+            {
+                File.Delete(expectedIsosFile);
+            }
+
+            if (File.Exists(expectedScansFile))
+            {
+                File.Delete(expectedScansFile);
+            }
+
+            if (File.Exists(expectedPeaksFile))
+            {
+                File.Delete(expectedPeaksFile);
+            }
 
             var parameters = new DeconToolsParameters();
             parameters.LoadFromOldDeconToolsParameterFile(parameterFile);

@@ -64,7 +64,9 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
             Check.Require(resultList?.Run != null, string.Format("{0} failed. Run is empty.", Name));
 
             if (resultList?.Run == null)
+            {
                 return;
+            }
 
             Check.Require(resultList.Run.CurrentMassTag != null, string.Format("{0} failed. CurrentMassTag hasn't been defined.", Name));
 
@@ -96,7 +98,11 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
         private double sumPeaks(IsotopicProfile profile, int numPeaksUsedInAbundance, int defaultVal)
         {
-            if (profile.Peaklist == null || profile.Peaklist.Count < numPeaksUsedInAbundance) return defaultVal;
+            if (profile.Peaklist == null || profile.Peaklist.Count < numPeaksUsedInAbundance)
+            {
+                return defaultVal;
+            }
+
             var peakListIntensities = new List<float>();
             foreach (var peak in profile.Peaklist)
             {

@@ -82,7 +82,10 @@ namespace DeconTools.Workflows.Backend.Data
 
         public void AddChromDataItem (XYData chromData)
         {
-            if (chromData == null || chromData.Xvalues == null || chromData.Xvalues.Length < 1) return;
+            if (chromData == null || chromData.Xvalues == null || chromData.Xvalues.Length < 1)
+            {
+                return;
+            }
 
             var chromDataItem = new TopdownChromDataItem();
             chromDataItem.ChromData = new SortedDictionary<int, double>();

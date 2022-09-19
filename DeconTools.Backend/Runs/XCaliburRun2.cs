@@ -30,7 +30,9 @@ namespace DeconTools.Backend.Runs
             DatasetFileOrDirectoryPath = thermoRawFilePath;
             var baseFilename = Path.GetFileName(DatasetFileOrDirectoryPath);
             if (baseFilename == null)
+            {
                 throw new FileNotFoundException("Unable to determine the filename for " + thermoRawFilePath);
+            }
 
             DatasetName = baseFilename.Substring(0, baseFilename.LastIndexOf('.'));
             DatasetDirectoryPath = Path.GetDirectoryName(thermoRawFilePath);
@@ -75,7 +77,9 @@ namespace DeconTools.Backend.Runs
         public override bool IsDataCentroided(int scanNum)
         {
             if (!TryGetScanInfo(scanNum, out var scanInfo))
+            {
                 return false;
+            }
 
             return scanInfo.IsCentroided;
         }
@@ -83,7 +87,9 @@ namespace DeconTools.Backend.Runs
         public override double GetIonInjectionTimeInMilliseconds(int scanNum)
         {
             if (!TryGetScanInfo(scanNum, out var scanInfo))
+            {
                 return 0;
+            }
 
             return scanInfo.IonInjectionTime;
         }
@@ -93,7 +99,9 @@ namespace DeconTools.Backend.Runs
             try
             {
                 if (!TryGetScanInfo(scanNum, out var scanInfo))
+                {
                     return 0;
+                }
 
                 if (scanInfo.TryGetScanEvent("MS2 Isolation Width:", out var value, true))
                 {
@@ -117,7 +125,9 @@ namespace DeconTools.Backend.Runs
         public override double GetTime(int scanNum)
         {
             if (!TryGetScanInfo(scanNum, out var scanInfo))
+            {
                 return 0;
+            }
 
             return scanInfo.RetentionTime;
         }
@@ -145,7 +155,9 @@ namespace DeconTools.Backend.Runs
         public override int GetMSLevelFromRawData(int scanNum)
         {
             if (!TryGetScanInfo(scanNum, out var scanInfo))
+            {
                 return 0;
+            }
 
             return scanInfo.MSLevel;
         }
@@ -153,7 +165,9 @@ namespace DeconTools.Backend.Runs
         public override double GetTICFromInstrumentInfo(int scanNum)
         {
             if (!TryGetScanInfo(scanNum, out var scanInfo))
+            {
                 return 0;
+            }
 
             return scanInfo.TotalIonCurrent;
         }
@@ -166,7 +180,9 @@ namespace DeconTools.Backend.Runs
         public string GetTuneData()
         {
             if (mRawFileReader.FileInfo.TuneMethods.Count == 0)
+            {
                 return string.Empty;
+            }
 
             var tuneMethod = mRawFileReader.FileInfo.TuneMethods[0];
             var tuneNames = new List<string>();
@@ -253,7 +269,9 @@ namespace DeconTools.Backend.Runs
         {
             Check.Require(scanSet != null, "Can't get mass spectrum; inputted set of scans is null");
             if (scanSet == null)
+            {
                 return null;
+            }
 
             Check.Require(scanSet.IndexValues.Count > 0, "Can't get mass spectrum; no scan numbers inputted");
 
@@ -322,7 +340,9 @@ namespace DeconTools.Backend.Runs
                 var xValue = massIntensityPairs[0, i];
 
                 if (xValue < minMZ || xValue > maxMZ)
+                {
                     continue;
+                }
 
                 var yValue = massIntensityPairs[1, i];
 
@@ -358,7 +378,9 @@ namespace DeconTools.Backend.Runs
         public override string GetScanInfo(int scanNum)
         {
             if (!TryGetScanInfo(scanNum, out var scanInfo))
+            {
                 return "Invalid scan number: " + scanNum;
+            }
 
             return scanInfo.FilterText;
         }

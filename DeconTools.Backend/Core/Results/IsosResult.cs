@@ -22,7 +22,9 @@ namespace DeconTools.Backend.Core
         public override string ToString()
         {
             if (IsotopicProfile == null)
+            {
                 return base.ToString();
+            }
 
             var data = new List<string>
             {

@@ -264,7 +264,9 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                 }
             }
             if (!found)
+            {
                 return;
+            }
 
             found = false;
             if (_peakMzToIndexDict.ContainsKey(peak.Mz))
@@ -314,14 +316,22 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                 var mz = item.Key;
 
                 if (mz > stopMz)
+                {
                     return;
+                }
 
                 var peakIndex = item.Value;
 
                 if (mz < startMz)
+                {
                     continue;
+                }
+
                 if (debug)
+                {
                     Console.Error.WriteLine("\tRemoving peak" + PeakTops[peakIndex].Mz);
+                }
+
                 RemovePeak(PeakTops[peakIndex]);
             }
         }
@@ -387,7 +397,10 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                 var peakIndex = item.Value;
                 var mzVal = item.Key;
                 if (mzVal > stopMz)
+                {
                     return found;
+                }
+
                 if (PeakTops[peakIndex].Intensity > peak.Intensity && mzVal >= startMz)
                 {
                     peak = new ThrashV1Peak(PeakTops[peakIndex]);
@@ -419,7 +432,10 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                 var peakIndex = item.Value;
                 var mzVal = item.Key;
                 if (mzVal > stopMz)
+                {
                     return found;
+                }
+
                 if (PeakTops[peakIndex].Intensity >= peak.Intensity && mzVal >= startMz)
                 {
                     //double thisMz = PeakTops[peakIndex].Mz;
@@ -453,9 +469,15 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                 var peakIndex = item.Value;
                 var mzVal = item.Key;
                 if (mzVal.Equals(excludeMass))
+                {
                     continue;
+                }
+
                 if (mzVal > stopMz)
+                {
                     return found;
+                }
+
                 if (PeakTops[peakIndex].Intensity >= peak.Intensity && mzVal >= startMz)
                 {
                     //double thisMz = PeakTops[peakIndex].Mz;
@@ -490,9 +512,15 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                 var peakIndex = item.Value;
                 var mzVal = item.Key;
                 if (mzVal.Equals(excludeMass))
+                {
                     continue;
+                }
+
                 if (mzVal > stopMz)
+                {
                     return found;
+                }
+
                 var dataIndex = PeakTops[peakIndex].DataIndex;
                 if (IntensityList[dataIndex] >= peak.Intensity && mzVal >= startMz)
                 {
@@ -527,7 +555,10 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                 var peakIndex = item.Value;
                 var mzVal = item.Key;
                 if (mzVal < startMz)
+                {
                     return found;
+                }
+
                 if (PeakTops[peakIndex].Intensity > peak.Intensity && mzVal >= startMz &&
                     mzVal <= stopMz)
                 {
@@ -559,7 +590,10 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                 var peakIndex = item.Value;
                 var mzVal = item.Key;
                 if (mzVal > stopMz)
+                {
                     return found;
+                }
+
                 if (mzVal >= startMz && Math.Abs(mzVal - mz) < Math.Abs(peak.Mz - mz))
                 {
                     peak = new ThrashV1Peak(PeakTops[peakIndex]);
@@ -591,7 +625,10 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                 var peakIndex = item.Value;
                 var mzVal = item.Key;
                 if (mzVal > stopMz)
+                {
                     return found;
+                }
+
                 if (mzVal >= startMz && Math.Abs(mzVal - mz) < Math.Abs(peak.Mz - mz))
                 {
                     peak = new ThrashV1Peak(PeakTops[peakIndex]);
@@ -656,7 +693,9 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                 var inFront = GetPeak(mz + 0.00001, mz + tolerance, out _);
 
                 if (inBack || inFront)
+                {
                     tempPeakTops.Add(peakTop);
+                }
             }
             PeakTops.Clear();
             PeakTops.AddRange(tempPeakTops);
@@ -736,7 +775,9 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                         index++;
                     }
                     if (peak.Intensity <= 0)
+                    {
                         peak.Mz = 0;
+                    }
                 }
             }
         }
@@ -793,26 +834,38 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                         index++;
                     }
                     if (peak.Intensity <= 0)
+                    {
                         peak.Mz = 0;
+                    }
                 }
                 else
                 {
                     var startIndex = PeakIndex.GetNearestBinary(MzList, startMz, 0, numPts - 1);
 
                     if (startIndex > numPts - 1)
+                    {
                         startIndex = numPts - 1;
+                    }
+
                     if (startIndex < 0)
+                    {
                         startIndex = 0;
+                    }
 
                     if (MzList[startIndex] > startMz)
                     {
                         while (startIndex > 0 && MzList[startIndex] > startMz)
+                        {
                             startIndex--;
+                        }
                     }
                     else
                     {
                         while (startIndex < numPts && MzList[startIndex] < startMz)
+                        {
                             startIndex++;
+                        }
+
                         startIndex--;
                     }
 
@@ -821,7 +874,10 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                         var mz = MzList[i];
                         var intensity = IntensityList[i];
                         if (mz > stopMz)
+                        {
                             break;
+                        }
+
                         if (intensity > peak.Intensity)
                         {
                             peak.Mz = mz;

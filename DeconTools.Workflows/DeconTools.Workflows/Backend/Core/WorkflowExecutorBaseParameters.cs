@@ -43,7 +43,9 @@ namespace DeconTools.Workflows.Backend.Core
             get
             {
                 if (string.IsNullOrWhiteSpace(mOutputDirectoryBase))
+                {
                     return string.Empty;
+                }
 
                 return mOutputDirectoryBase;
             }

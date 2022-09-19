@@ -69,7 +69,10 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
             set
             {
                 _chromToleranceInPPM = value;
-                if (_chromatogramCorrelatorTask != null) _chromatogramCorrelatorTask.ChromTolerance = _chromToleranceInPPM;
+                if (_chromatogramCorrelatorTask != null)
+                {
+                    _chromatogramCorrelatorTask.ChromTolerance = _chromToleranceInPPM;
+                }
             }
         }
 
@@ -81,7 +84,9 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
             {
                 _minimumRelativeIntensityForChromCorr = value;
                 if (_chromatogramCorrelatorTask != null)
+                {
                     _chromatogramCorrelatorTask.MinimumRelativeIntensityForChromCorr = _minimumRelativeIntensityForChromCorr;
+                }
             }
         }
 
@@ -93,7 +98,9 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
             {
                 _numPointsInSmoother = value;
                 if (_chromatogramCorrelatorTask != null)
+                {
                     _chromatogramCorrelatorTask.NumPointsInSmoother = _numPointsInSmoother;
+                }
             }
         }
 
@@ -120,7 +127,9 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
             Check.Require(resultList.Run.CurrentMassTag != null, Name + " failed; CurrentMassTag is empty");
 
             if (resultList.Run.CurrentMassTag == null)
+            {
                 return;
+            }
 
             Check.Require(resultList.Run.CurrentMassTag.IsotopicProfile != null, Name + " failed; Theor isotopic profile is empty. Run a TheorFeatureGenerator");
 
@@ -398,7 +407,9 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
             var contiguousnessScore = 0;
 
             if (subtractedIsoData == null || subtractedIsoData.Peaklist.Count == 0)
+            {
                 return contiguousnessScore;
+            }
 
             var lastPeakWasAboveZero = false;
             foreach (var peak in subtractedIsoData.Peaklist)
@@ -556,7 +567,10 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
 
         private List<double> AdjustLabelDistributionVals(IList<double> labelDistributionVals)
         {
-            if (labelDistributionVals == null || labelDistributionVals.Count == 0) return new List<double>();
+            if (labelDistributionVals == null || labelDistributionVals.Count == 0)
+            {
+                return new List<double>();
+            }
 
             //first, will set the negative values to zero. (cannot have a negative label distribution)
             for (var i = 0; i < labelDistributionVals.Count; i++)

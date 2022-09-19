@@ -63,7 +63,9 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
                 var pointMultiplier = (int)Math.Ceiling(desiredNumPoints / (double)numPoints);
 
                 if (numPoints < 5)
+                {
                     return -1;
+                }
 
                 if (numPoints < desiredNumPoints)
                 {
@@ -131,7 +133,10 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
 
             GetHighestChargeStatePeak(minMZ, maxMZ, startingIndex, autoCorrScores, MaxCharge, ref bestAutoCorrScore, ref bestChargeState);
 
-            if (bestChargeState == -1) return -1;
+            if (bestChargeState == -1)
+            {
+                return -1;
+            }
 
             var returnChargeStateVal = -1;
 
@@ -151,7 +156,10 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
                     }
                 }
 
-                if (skip) continue;
+                if (skip)
+                {
+                    continue;
+                }
 
                 if (tempChargeState > 0)
                 {
@@ -250,7 +258,10 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
 
             for (var i = startingIndex; i < numPoints; i++)
             {
-                if (i < 2) continue;
+                if (i < 2)
+                {
+                    continue;
+                }
 
                 var goingUp = autoCorrScores[i] > autoCorrScores[i - 1];
 
@@ -288,7 +299,10 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
 
             for (var i = startingIndex; i < numPoints; i++)
             {
-                if (i < 2) continue;
+                if (i < 2)
+                {
+                    continue;
+                }
 
                 var goingUp = (autoCorrelationScores[i] - autoCorrelationScores[i - 1]) > 0;
                 if (wasGoingUp && !goingUp)

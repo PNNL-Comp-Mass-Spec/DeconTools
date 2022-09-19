@@ -78,7 +78,10 @@ namespace DeconTools.Backend.Utilities
         public static Dictionary<string, double> ParseDoubleEmpiricalFormulaString(string empiricalFormula)
         {
             var parsedFormula = new Dictionary<string, double>();
-            if (string.IsNullOrEmpty(empiricalFormula)) return parsedFormula;
+            if (string.IsNullOrEmpty(empiricalFormula))
+            {
+                return parsedFormula;
+            }
 
             var formulaIsUniModFormat = empiricalFormula.Contains("(");
 
@@ -114,7 +117,10 @@ namespace DeconTools.Backend.Utilities
 
                             var elementCountString = item.Groups[3].Value;
 
-                            if (string.IsNullOrEmpty(elementSymbol)) continue;
+                            if (string.IsNullOrEmpty(elementSymbol))
+                            {
+                                continue;
+                            }
 
                             double numAtoms;
                             if (elementCountString.Length > 0)

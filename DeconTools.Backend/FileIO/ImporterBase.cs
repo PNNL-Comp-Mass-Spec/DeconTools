@@ -111,7 +111,9 @@ namespace DeconTools.Backend.FileIO
         protected bool ParseBoolField(string inputString)
         {
             if (bool.TryParse(inputString, out var result))
+            {
                 return result;
+            }
 
             return false;
         }
@@ -141,7 +143,9 @@ namespace DeconTools.Backend.FileIO
         protected short ParseShortField(string inputString)
         {
             if (Int16.TryParse(inputString, out var result))
+            {
                 return result;
+            }
 
             return 0;
         }
@@ -166,7 +170,9 @@ namespace DeconTools.Backend.FileIO
         protected double ParseDoubleField(string inputString)
         {
             if (double.TryParse(inputString, out var result))
+            {
                 return result;
+            }
 
             return double.NaN;
         }
@@ -191,7 +197,9 @@ namespace DeconTools.Backend.FileIO
         protected float ParseFloatField(string inputString)
         {
             if (float.TryParse(inputString, out var result))
+            {
                 return result;
+            }
 
             return float.NaN;
         }
@@ -216,7 +224,9 @@ namespace DeconTools.Backend.FileIO
         protected int ParseIntField(string inputString)
         {
             if (int.TryParse(inputString, out var result))
+            {
                 return result;
+            }
 
             var secondAttempt = ParseDoubleField(inputString);
             if (!double.IsNaN(secondAttempt))
@@ -247,7 +257,9 @@ namespace DeconTools.Backend.FileIO
         protected long ParseLongField(string inputString)
         {
             if (long.TryParse(inputString, out var result))
+            {
                 return result;
+            }
 
             return -1;
         }

@@ -37,7 +37,9 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
         {
             Check.Require(resultList.Run.CurrentMassTag != null, string.Format("{0} failed. Mass tags haven't been defined.", Name));
             if (resultList.Run.CurrentMassTag == null)
+            {
                 return;
+            }
 
             resultList.ResultType = Globals.ResultType.N14N15_TARGETED_RESULT;
 

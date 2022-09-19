@@ -48,10 +48,16 @@ namespace DeconTools.Workflows.Backend.Core
 
         protected override void ExecutePreProcessingHook()
         {
-            if (!(ExecutorParameters is TopDownTargetedWorkflowExecutorParameters executor)) return;
+            if (!(ExecutorParameters is TopDownTargetedWorkflowExecutorParameters executor))
+            {
+                return;
+            }
 
             //If user wants to save to Excel, we need to make sure that the underlying parameters supports saving chromatogram data
-            if (!executor.ExportChromatogramData) return;
+            if (!executor.ExportChromatogramData)
+            {
+                return;
+            }
 
             if (TargetedWorkflow is TopDownTargetedWorkflow workflow &&
                 workflow.WorkflowParameters is TopDownTargetedWorkflowParameters workflowParams)
@@ -171,7 +177,10 @@ namespace DeconTools.Workflows.Backend.Core
                 }
 
                 var outputDebugFolder = Path.Combine(ExecutorParameters.OutputDirectoryBase, "Testing");
-                if (!Directory.Exists(outputDebugFolder)) Directory.CreateDirectory(outputDebugFolder);
+                if (!Directory.Exists(outputDebugFolder))
+                {
+                    Directory.CreateDirectory(outputDebugFolder);
+                }
 
                 var chromDataFilename = Path.Combine(outputDebugFolder, "chromData_" + counter.ToString("0").PadLeft(4, '0') + ".txt");
 
@@ -205,7 +214,9 @@ namespace DeconTools.Workflows.Backend.Core
             }
 
             if (!Directory.Exists(resultsDirectoryPath))
+            {
                 Directory.CreateDirectory(resultsDirectoryPath);
+            }
 
             return Path.Combine(resultsDirectoryPath, Run.DatasetName + "_quant.txt");
         }
@@ -254,10 +265,16 @@ namespace DeconTools.Workflows.Backend.Core
             {
                 var result = (TopDownTargetedResultDTO)results[i];
                 result.PrsmList = new HashSet<int>();
-                if (result.MatchedMassTagID > 0) result.PrsmList.Add(result.MatchedMassTagID);
+                if (result.MatchedMassTagID > 0)
+                {
+                    result.PrsmList.Add(result.MatchedMassTagID);
+                }
 
                 result.ChargeStateList = new List<int>();
-                if (result.ChromPeakSelectedHeight > 0) result.ChargeStateList.Add(result.ChargeState);
+                if (result.ChromPeakSelectedHeight > 0)
+                {
+                    result.ChargeStateList.Add(result.ChargeState);
+                }
 
                 var havePrsmData = false;
                 if (_prsmData.ContainsKey(result.MatchedMassTagID))
@@ -272,10 +289,16 @@ namespace DeconTools.Workflows.Backend.Core
                 {
                     var otherResult = (TopDownTargetedResultDTO)results[j];
 
-                    if (!result.PeptideSequence.Equals(otherResult.PeptideSequence)) continue;
+                    if (!result.PeptideSequence.Equals(otherResult.PeptideSequence))
+                    {
+                        continue;
+                    }
 
                     // Add other Prsm
-                    if (otherResult.MatchedMassTagID > 0) result.PrsmList.Add(otherResult.MatchedMassTagID);
+                    if (otherResult.MatchedMassTagID > 0)
+                    {
+                        result.PrsmList.Add(otherResult.MatchedMassTagID);
+                    }
 
                     // Add other charge state to list and chrom peak to quantitation
                     if (otherResult.ChromPeakSelectedHeight > 0)

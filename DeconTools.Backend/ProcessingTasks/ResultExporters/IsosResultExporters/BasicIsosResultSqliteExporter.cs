@@ -19,7 +19,10 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
 
         public BasicIsosResultSqliteExporter(string fileName, int triggerValue)
         {
-            if (File.Exists(fileName)) File.Delete(fileName);
+            if (File.Exists(fileName))
+            {
+                File.Delete(fileName);
+            }
 
             TriggerToExport = triggerValue;
 
@@ -27,7 +30,9 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.IsosResultExporters
             cnn = fact.CreateConnection();
 
             if (cnn == null)
+            {
                 throw new Exception("Factory.CreateConnection returned a null DbConnection instance in BasicIsosResultSqliteExporter constructor");
+            }
 
             cnn.ConnectionString = "Data Source=" + fileName;
 

@@ -116,7 +116,10 @@ namespace DeconTools.Workflows.Backend.Core
                 _resultsDirectory = Path.Combine(Parameters.OutputDirectoryBase, "IqResults");
             }
 
-            if (!Directory.Exists(_resultsDirectory)) Directory.CreateDirectory(_resultsDirectory);
+            if (!Directory.Exists(_resultsDirectory))
+            {
+                Directory.CreateDirectory(_resultsDirectory);
+            }
         }
 
         private string GetDefaultOutputDirectory()

@@ -41,7 +41,10 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\O16O18_standard_testing\Test1_VladAlz\Targets\MT_Human_ALZ_O18_P836\MassTags_PMT2.txt";
 
             var expectedResultsFilename = Path.Combine(executorParameters.OutputDirectoryBase, "IqResults", RunUtilities.GetDatasetName(testDatasetPath) + "_iqResults.txt");
-            if (File.Exists(expectedResultsFilename)) File.Delete(expectedResultsFilename);
+            if (File.Exists(expectedResultsFilename))
+            {
+                File.Delete(expectedResultsFilename);
+            }
 
             var autoSavedExecutorParametersFile =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\O16O18_standard_testing\Test1_VladAlz\Parameters\ExecutorParameters1_autosaved.xml";

@@ -20,7 +20,10 @@ namespace DeconTools.Backend.Algorithms
 
             var o16profile = basicFeatureFinder.FindMSFeature(peakList, theorFeature, toleranceInPPM, false);
 
-            if (o16profile == null) return null;
+            if (o16profile == null)
+            {
+                return null;
+            }
 
             o16profile.ChargeState = theorFeature.ChargeState;
 
@@ -46,7 +49,10 @@ namespace DeconTools.Backend.Algorithms
 
         private void addIsotopePeaks(IsotopicProfile foundO16O18Profile, IsotopicProfile profileToAdd, int numIsotopePeaksToAdd)
         {
-            if (profileToAdd?.Peaklist == null || profileToAdd.Peaklist.Count == 0) return;
+            if (profileToAdd?.Peaklist == null || profileToAdd.Peaklist.Count == 0)
+            {
+                return;
+            }
 
             for (var i = 0; i < numIsotopePeaksToAdd; i++)
             {
@@ -63,7 +69,10 @@ namespace DeconTools.Backend.Algorithms
 
         private void lookForMissingPeaksAndInsertZeroIntensityPeaksWhenMissing(IsotopicProfile o16o18Profile, IsotopicProfile theorFeature)
         {
-            if (o16o18Profile.Peaklist.Count == 0) return;
+            if (o16o18Profile.Peaklist.Count == 0)
+            {
+                return;
+            }
 
             var mzDistanceBetweenIsotopes = 1.003 / o16o18Profile.ChargeState;
 

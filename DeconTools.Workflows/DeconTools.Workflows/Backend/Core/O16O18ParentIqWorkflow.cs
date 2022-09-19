@@ -167,7 +167,10 @@ namespace DeconTools.Workflows.Backend.Core
 
                     if (GraphsAreOutputted)
                     {
-                        if (_graphGenerator == null) _graphGenerator = new BasicGraphControl();
+                        if (_graphGenerator == null)
+                        {
+                            _graphGenerator = new BasicGraphControl();
+                        }
 
                         ExportGraphs(childStateIqResult);
                     }
@@ -182,7 +185,10 @@ namespace DeconTools.Workflows.Backend.Core
                 OutputDirectoryForGraphs = Path.Combine(Run.DatasetDirectoryPath, "OutputGraphs");
             }
 
-            if (!Directory.Exists(OutputDirectoryForGraphs)) Directory.CreateDirectory(OutputDirectoryForGraphs);
+            if (!Directory.Exists(OutputDirectoryForGraphs))
+            {
+                Directory.CreateDirectory(OutputDirectoryForGraphs);
+            }
 
             ExportMassSpectrumGraph(result);
             ExportChromGraph(result);
@@ -334,9 +340,15 @@ namespace DeconTools.Workflows.Backend.Core
         {
             var filteredChargeStateResults = result.ChildResults().Where(p => p.FavoriteChild != null).ToList();
 
-            if (filteredChargeStateResults.Count == 0) return null;
+            if (filteredChargeStateResults.Count == 0)
+            {
+                return null;
+            }
 
-            if (filteredChargeStateResults.Count == 1) return filteredChargeStateResults[0];
+            if (filteredChargeStateResults.Count == 1)
+            {
+                return filteredChargeStateResults[0];
+            }
 
             //now to deal with the tough issue of multiple charge states having a possible results.
 

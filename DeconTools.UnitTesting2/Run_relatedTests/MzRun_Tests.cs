@@ -239,7 +239,10 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             {
                 scanSet = new ScanSet(i);
 
-                if (run.GetMSLevel(i) == 2) continue;
+                if (run.GetMSLevel(i) == 2)
+                {
+                    continue;
+                }
 
                 stopwatch.Start();
                 run.GetMassSpectrum(scanSet);

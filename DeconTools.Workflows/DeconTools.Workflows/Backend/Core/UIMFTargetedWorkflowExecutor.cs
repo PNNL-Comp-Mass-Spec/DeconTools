@@ -78,7 +78,9 @@ namespace DeconTools.Workflows.Backend.Core
         protected override void ExecutePreProcessingHook()
         {
             if (!(TargetedWorkflow is UIMFTargetedMSMSWorkflowCollapseIMS uimfTargetedMsmsWorkflowCollapseIMS))
+            {
                 return;
+            }
 
             uimfTargetedMsmsWorkflowCollapseIMS.Run?.ResultCollection?.MassTagResultList.Clear();
 

@@ -24,12 +24,16 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
             Check.Require(theorXYData?.Xvalues != null && theorXYData.Yvalues != null,
                 "AreaFitter failed. Theoretical XY data is null");
             if (theorXYData?.Xvalues == null || theorXYData.Yvalues == null)
+            {
                 return 0;
+            }
 
             Check.Require(observedXYData != null,
                 "AreaFitter failed. Observed XY data is null");
             if (observedXYData == null)
+            {
                 return 0;
+            }
 
             Check.Require(observedXYData.Xvalues != null && observedXYData.Yvalues != null,
                           "AreaFitter failed. Observed XY X values or Y values are null");
@@ -140,7 +144,9 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
             }
 
             if (theoreticalValues.Count == 0 || Math.Abs(sumOfSquaredTheorIntens) < double.Epsilon)
+            {
                 return -1;
+            }
 
             //StringBuilder sb = new StringBuilder();
             //TestUtilities.GetXYValuesToStringBuilder(sb, theoreticalValues.ToArray(), interpolatedValues.ToArray());
@@ -163,7 +169,10 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
 
             foreach (var d in values)
             {
-                if (d > max) max = d;
+                if (d > max)
+                {
+                    max = d;
+                }
             }
 
             return max;

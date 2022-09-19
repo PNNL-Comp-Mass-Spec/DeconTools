@@ -76,9 +76,13 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             if (_isDataThresholded)
             {
                 if (!_signalToNoiseThreshold.Equals(0))
+                {
                     _backgroundIntensity = _peakIntensityThreshold / _signalToNoiseThreshold;
+                }
                 else
+                {
                     _backgroundIntensity = 1;
+                }
             }
         }
 
@@ -102,11 +106,17 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             if (_isDataThresholded)
             {
                 if (!_signalToNoiseThreshold.Equals(0))
+                {
                     _backgroundIntensity = threshold / _signalToNoiseThreshold;
+                }
                 else if (!threshold.Equals(0))
+                {
                     _backgroundIntensity = threshold;
+                }
                 else
+                {
                     _backgroundIntensity = 1;
+                }
             }
         }
 
@@ -166,7 +176,9 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         public int DiscoverPeaks(List<double> mzList, List<double> intensityList, double startMz, double stopMz)
         {
             if (intensityList.Count < 1)
+            {
                 return 0;
+            }
 
             PeakData.Clear();
             var numDataPts = intensityList.Count;
@@ -174,9 +186,14 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             var startIndex = PeakIndex.GetNearestBinary(mzList, startMz, 0, numDataPts - 1);
             var stopIndex = PeakIndex.GetNearestBinary(mzList, stopMz, startIndex, numDataPts - 1);
             if (startIndex <= 0)
+            {
                 startIndex = 1;
+            }
+
             if (stopIndex >= mzList.Count - 2)
+            {
                 stopIndex = mzList.Count - 2;
+            }
 
             for (var index = startIndex; index <= stopIndex; index++)
             {
@@ -208,9 +225,13 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                         double signalToNoise;
 
                         if (!_isDataThresholded)
+                        {
                             signalToNoise = PeakStatistician.FindSignalToNoise(currentIntensity, intensityList, index);
+                        }
                         else
+                        {
                             signalToNoise = currentIntensity / _backgroundIntensity;
+                        }
 
                         // Run Full-Width Half-Max algorithm to try and squeak out a higher SN
                         if (signalToNoise < _signalToNoiseThreshold)
@@ -227,9 +248,13 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
 
                                 var sumIntensity = lowIntensity + highIntensity;
                                 if (sumIntensity > 0)
+                                {
                                     signalToNoise = 2.0 * currentIntensity / sumIntensity;
+                                }
                                 else
+                                {
                                     signalToNoise = 10;
+                                }
                             }
                         }
                         // Found a peak
@@ -257,7 +282,9 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                             }
                             if (index > 0 && index < numDataPts
                                 && incremented)
+                            {
                                 index--;
+                            }
                         }
                     }
                 }
@@ -323,7 +350,10 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
         public int DiscoverPeaks(List<double> mzList, List<double> intensityList)
         {
             if (mzList.Count == 0)
+            {
                 return 0;
+            }
+
             var minMz = mzList[0];
             var maxMz = mzList[mzList.Count - 1];
             return DiscoverPeaks(mzList, intensityList, minMz, maxMz);

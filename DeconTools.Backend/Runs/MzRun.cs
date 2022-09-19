@@ -140,7 +140,11 @@ namespace DeconTools.Backend.Runs
         {
             var xyData = GetMassSpectrum(scanSet);
 
-            if (xyData.Xvalues == null || xyData.Xvalues.Length <= 0) return xyData;
+            if (xyData.Xvalues == null || xyData.Xvalues.Length <= 0)
+            {
+                return xyData;
+            }
+
             if (minMZ > xyData.Xvalues[0] || maxMZ < xyData.Xvalues[xyData.Xvalues.Length - 1])
             {
                 xyData = xyData.TrimData(minMZ, maxMZ);

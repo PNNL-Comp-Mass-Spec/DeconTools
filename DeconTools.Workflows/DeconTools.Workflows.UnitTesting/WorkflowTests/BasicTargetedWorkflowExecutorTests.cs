@@ -345,8 +345,15 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             {
                 var mzalignmentFile = Path.Combine(rawFileInfo.DirectoryName, testDatasetName + "_mzAlignment.txt");
                 var netAlignmentFile = Path.Combine(rawFileInfo.DirectoryName, testDatasetName + "_netAlignment.txt");
-                if (File.Exists(mzalignmentFile)) File.Delete(mzalignmentFile);
-                if (File.Exists(netAlignmentFile)) File.Delete(netAlignmentFile);
+                if (File.Exists(mzalignmentFile))
+                {
+                    File.Delete(mzalignmentFile);
+                }
+
+                if (File.Exists(netAlignmentFile))
+                {
+                    File.Delete(netAlignmentFile);
+                }
             }
 
 #pragma warning disable 618
@@ -428,8 +435,15 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             {
                 var mzalignmentFile = Path.Combine(rawFileInfo.DirectoryName, testDatasetName + "_mzAlignment.txt");
                 var netAlignmentFile = Path.Combine(rawFileInfo.DirectoryName, testDatasetName + "_netAlignment.txt");
-                if (File.Exists(mzalignmentFile)) File.Delete(mzalignmentFile);
-                if (File.Exists(netAlignmentFile)) File.Delete(netAlignmentFile);
+                if (File.Exists(mzalignmentFile))
+                {
+                    File.Delete(mzalignmentFile);
+                }
+
+                if (File.Exists(netAlignmentFile))
+                {
+                    File.Delete(netAlignmentFile);
+                }
             }
 
             TargetedWorkflowExecutor executor = new BasicTargetedWorkflowExecutor(executorParameters, testDatasetPath);

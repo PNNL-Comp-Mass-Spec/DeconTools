@@ -72,7 +72,11 @@ namespace DeconTools.Backend.Core
         #region Public Methods
         public ScanResult GetCurrentScanResult()
         {
-            if (ScanResultList == null || ScanResultList.Count == 0) return null;
+            if (ScanResultList == null || ScanResultList.Count == 0)
+            {
+                return null;
+            }
+
             return ScanResultList[ScanResultList.Count - 1];
         }
 
@@ -99,7 +103,10 @@ namespace DeconTools.Backend.Core
 
         public int getTotalIsotopicProfiles()
         {
-            if (ScanResultList == null) return 0;
+            if (ScanResultList == null)
+            {
+                return 0;
+            }
 
             var totIsotopicProfiles = 0;
             foreach (var scanResult in ScanResultList)
@@ -305,7 +312,9 @@ namespace DeconTools.Backend.Core
             Check.Require(results != null, "Can't retrieve IsosResults. Input list is null");
 
             if (results == null)
+            {
                 return null;
+            }
 
             var queryList = from n in results.ResultList
                             where n.ScanSet == results.Run.CurrentScanSet

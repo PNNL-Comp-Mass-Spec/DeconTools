@@ -22,7 +22,9 @@ namespace DeconTools.Backend.Utilities
             {
                 var currentLine = sr.ReadLine();
                 if (string.IsNullOrWhiteSpace(currentLine))
+                {
                     continue;
+                }
 
                 var match = Regex.Match(currentLine, @"(?<date>.+)\tProcessed scan/frame\s+(?<scan>\d+),\s+(?<percentcomplete>[0-9.]+)%\s+complete,\s+(?<features>\d+)");
                 if (match.Success)

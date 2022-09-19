@@ -84,7 +84,9 @@ namespace DeconTools.Backend.ProcessingTasks
             Check.Require(resultList.MSPeakResultList?.Count > 0, "PeakChromatogramGenerator failed. No peaks.");
             Check.Require(resultList.Run.CurrentMassTag != null, "PeakChromatogramGenerator failed. This requires a MassTag to be specified.");
             if (resultList.Run.CurrentMassTag == null)
+            {
                 return;
+            }
 
             Check.Require(Math.Abs(resultList.Run.CurrentMassTag.MZ) > float.Epsilon, "PeakChromatogramGenerator failed. MassTag's MZ hasn't been specified.");
 
@@ -118,14 +120,27 @@ namespace DeconTools.Backend.ProcessingTasks
                 maxNetVal = netElutionTime + ChromWindowWidthForNonAlignedData;
             }
 
-            if (minNetVal < 0) minNetVal = 0;
-            if (maxNetVal > 1) maxNetVal = 1;
+            if (minNetVal < 0)
+            {
+                minNetVal = 0;
+            }
+
+            if (maxNetVal > 1)
+            {
+                maxNetVal = 1;
+            }
 
             var lowerScan = (int)Math.Floor(resultList.Run.NetAlignmentInfo.GetScanForNet(minNetVal));
-            if (lowerScan == -1) lowerScan = resultList.Run.MinLCScan;
+            if (lowerScan == -1)
+            {
+                lowerScan = resultList.Run.MinLCScan;
+            }
 
             var upperScan = (int)Math.Ceiling(resultList.Run.NetAlignmentInfo.GetScanForNet(maxNetVal));
-            if (upperScan == -1) upperScan = resultList.Run.MaxLCScan;
+            if (upperScan == -1)
+            {
+                upperScan = resultList.Run.MaxLCScan;
+            }
 
             List<double> targetMZList;
 
@@ -233,14 +248,27 @@ namespace DeconTools.Backend.ProcessingTasks
                     maxNetVal = (float)(elutionTimeCenter + ChromWindowWidthForNonAlignedData);
                 }
 
-                if (minNetVal < 0) minNetVal = 0;
-                if (maxNetVal > 1) maxNetVal = 1;
+                if (minNetVal < 0)
+                {
+                    minNetVal = 0;
+                }
+
+                if (maxNetVal > 1)
+                {
+                    maxNetVal = 1;
+                }
 
                 lowerScan = (int)Math.Floor(run.NetAlignmentInfo.GetScanForNet(minNetVal));
-                if (lowerScan == -1) lowerScan = run.MinLCScan;
+                if (lowerScan == -1)
+                {
+                    lowerScan = run.MinLCScan;
+                }
 
                 upperScan = (int)Math.Ceiling(run.NetAlignmentInfo.GetScanForNet(maxNetVal));
-                if (upperScan == -1) upperScan = run.MaxLCScan;
+                if (upperScan == -1)
+                {
+                    upperScan = run.MaxLCScan;
+                }
             }
             else if (elutionTimeUnit == Globals.ElutionTimeUnit.ScanNum)
             {
@@ -256,8 +284,15 @@ namespace DeconTools.Backend.ProcessingTasks
                 }
             }
 
-            if (lowerScan == -1) lowerScan = run.MinLCScan;
-            if (upperScan == -1) upperScan = run.MaxLCScan;
+            if (lowerScan == -1)
+            {
+                lowerScan = run.MinLCScan;
+            }
+
+            if (upperScan == -1)
+            {
+                upperScan = run.MaxLCScan;
+            }
 
             var midScan = (int)((lowerScan + (double)upperScan) / 2);
 
@@ -335,7 +370,10 @@ namespace DeconTools.Backend.ProcessingTasks
 
         private XYData FilterOutDataBasedOnMsMsLevel(Run run, XYData xyData, int msLevelToUse = 1, bool usePrimaryLcScanNumberCache = true)
         {
-            if (xyData == null || xyData.Xvalues.Length == 0) return xyData;
+            if (xyData == null || xyData.Xvalues.Length == 0)
+            {
+                return xyData;
+            }
 
             var filteredXyData = new XYData
             {
@@ -386,7 +424,10 @@ namespace DeconTools.Backend.ProcessingTasks
 
         private double getAlignedMZValue(double targetMZ, Run run, int lcScan)
         {
-            if (run == null) return targetMZ;
+            if (run == null)
+            {
+                return targetMZ;
+            }
 
             if (run.MassIsAligned)
             {
@@ -449,7 +490,10 @@ namespace DeconTools.Backend.ProcessingTasks
                 }
 
                 //case of being at the beginning of the scan list
-                if (leftScanPtr < 0) leftScanPtr = 0;
+                if (leftScanPtr < 0)
+                {
+                    leftScanPtr = 0;
+                }
 
                 //this loop adds zeros to the left of a chrom value
                 for (var i = leftScanPtr; i < centerScanPtr; i++)
@@ -533,8 +577,15 @@ namespace DeconTools.Backend.ProcessingTasks
             peakListMinScan -= leftZeroPadding;
             peakListMaxScan += rightZeroPadding;
 
-            if (peakListMinScan < run.MinLCScan) peakListMinScan = run.MinLCScan;
-            if (peakListMaxScan > run.MaxLCScan) peakListMaxScan = run.MaxLCScan;
+            if (peakListMinScan < run.MinLCScan)
+            {
+                peakListMinScan = run.MinLCScan;
+            }
+
+            if (peakListMaxScan > run.MaxLCScan)
+            {
+                peakListMaxScan = run.MaxLCScan;
+            }
 
             //populate array with zero intensities.
             var xyValues = new SortedDictionary<int, double>();

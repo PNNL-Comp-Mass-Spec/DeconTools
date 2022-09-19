@@ -26,7 +26,9 @@ namespace DeconTools.Backend.Core
         protected void ShowTraceMessageIfEnabled(string currentTask)
         {
             if (ShowTraceMessages)
+            {
                 Console.WriteLine(currentTask);
+            }
         }
 
         #endregion

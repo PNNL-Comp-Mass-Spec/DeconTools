@@ -81,7 +81,9 @@ namespace DeconTools.Backend.Core
         public MSPeakResult GetMSPeakResultRepresentative()
         {
             if (PeakList == null || PeakList.Count == 0)
+            {
                 return null;
+            }
 
             return PeakList[0];
         }

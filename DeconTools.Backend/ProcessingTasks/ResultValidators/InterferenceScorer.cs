@@ -27,9 +27,15 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
 
         public double GetInterferenceScore(IsotopicProfile observedIso, List<Peak> observedMSPeaks)
         {
-            if (observedIso == null) return 1.0;
+            if (observedIso == null)
+            {
+                return 1.0;
+            }
 
-            if (observedMSPeaks.Count == 0) return 1.0;
+            if (observedMSPeaks.Count == 0)
+            {
+                return 1.0;
+            }
 
             var leftBoundary = observedIso.getMonoPeak().XValue - 1.1;
             var rightMostPeak = observedIso.Peaklist[observedIso.Peaklist.Count - 1];
@@ -40,9 +46,15 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
 
         public double GetInterferenceScore(IsotopicProfile observedIso, List<Peak> observedMSPeaks, double minMz, double maxMz)
         {
-            if (observedIso == null) return 1.0;
+            if (observedIso == null)
+            {
+                return 1.0;
+            }
 
-            if (observedMSPeaks.Count == 0) return 1.0;
+            if (observedMSPeaks.Count == 0)
+            {
+                return 1.0;
+            }
 
             var scanPeaks = observedMSPeaks.Select(i => (MSPeak)i).ToList();
 
@@ -99,7 +111,10 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
                 }
 
                 currentIndex++;
-                if (currentIndex >= xyData.Xvalues.Length) break;
+                if (currentIndex >= xyData.Xvalues.Length)
+                {
+                    break;
+                }
             }
 
             var interferenceScore = 1 - (sumPeakIntensities / sumIntensities);
@@ -123,12 +138,17 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
 
             var maxPeak = GetMaxPeak(targetPeaks);
 
-            if (maxPeak == null) return -1;
+            if (maxPeak == null)
+            {
+                return -1;
+            }
 
             foreach (var currentPeak in allPeaks)
             {
                 if (currentPeak.XValue <= leftBoundary || currentPeak.XValue >= rightBoundary)
+                {
                     continue;
+                }
 
                 var currentRelIntensity = currentPeak.Height / maxPeak.Height;
                 if (currentRelIntensity >= MinRelativeIntensity)
@@ -140,7 +160,9 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
             foreach (var currentPeak in targetPeaks)
             {
                 if (currentPeak.XValue <= leftBoundary || currentPeak.XValue >= rightBoundary)
+                {
                     continue;
+                }
 
                 var currentRelIntensity = currentPeak.Height / maxPeak.Height;
                 if (currentRelIntensity >= MinRelativeIntensity)

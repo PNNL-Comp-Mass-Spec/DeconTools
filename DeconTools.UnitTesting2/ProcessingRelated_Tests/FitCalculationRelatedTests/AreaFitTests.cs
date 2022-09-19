@@ -44,7 +44,9 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.FitCalculationRelatedT
             decon.Execute(results);
 
             if (results.ResultList.Count == 0)
+            {
                 Assert.Fail("Result list is empty");
+            }
 
             var result1 = results.ResultList[0];
 
@@ -72,7 +74,9 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.FitCalculationRelatedT
                 fitValsByShift.Add(shift, fitval);
 
                 if (!double.IsNaN(fitval))
+                {
                     bestFitViaShifting = Math.Min(bestFitViaShifting, fitval);
+                }
             }
 
             Console.WriteLine("{0,-8}  {1}", "Shift", "Fit");
@@ -162,7 +166,9 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.FitCalculationRelatedT
             decon.Execute(results);
 
             if (results.ResultList.Count == 0)
+            {
                 Assert.Fail("Result list is empty");
+            }
 
             var result1 = results.ResultList[1];
             var resolution = result1.IsotopicProfile.GetMZofMostAbundantPeak() / result1.IsotopicProfile.GetFWHM();
@@ -207,7 +213,9 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.FitCalculationRelatedT
             decon.Execute(results);
 
             if (results.ResultList.Count == 0)
+            {
                 Assert.Fail("Result list is empty");
+            }
 
             var result1 = results.ResultList[0];
             var resolution = result1.IsotopicProfile.GetMZofMostAbundantPeak() / result1.IsotopicProfile.GetFWHM();

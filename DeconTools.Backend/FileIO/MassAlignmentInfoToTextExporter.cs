@@ -19,12 +19,16 @@ namespace DeconTools.Backend.FileIO
             Check.Require(alignmentInfo != null, "Alignment object is empty");
 
             if (alignmentInfo == null)
+            {
                 return;
+            }
 
             Check.Require(alignmentInfo.marrMassFncMZInput?.Length > 0, "Mass alignment data is empty.");
 
             if (alignmentInfo.marrMassFncMZInput == null)
+            {
                 return;
+            }
 
             using (var writer = File.AppendText(FileName))
             {

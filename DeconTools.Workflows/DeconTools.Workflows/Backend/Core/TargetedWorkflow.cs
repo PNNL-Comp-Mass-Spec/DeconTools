@@ -133,7 +133,9 @@ namespace DeconTools.Workflows.Backend.Core
         {
             Check.Require(Run != null, "Run is null");
             if (Run == null)
+            {
                 return;
+            }
 
             Run.ResultCollection.ResultType = GetResultType();
 
@@ -233,10 +235,14 @@ namespace DeconTools.Workflows.Backend.Core
         protected virtual XYData TrimData(XYData xyData, double targetVal, double leftTrimAmount, double rightTrimAmount)
         {
             if (xyData == null)
+            {
                 return null;
+            }
 
             if (xyData.Xvalues == null || xyData.Xvalues.Length == 0)
+            {
                 return xyData;
+            }
 
             var leftTrimValue = targetVal - leftTrimAmount;
             var rightTrimValue = targetVal + rightTrimAmount;
@@ -333,7 +339,10 @@ namespace DeconTools.Workflows.Backend.Core
 
         public override void InitializeRunRelatedTasks()
         {
-            if (Run == null) return;
+            if (Run == null)
+            {
+                return;
+            }
 
             base.InitializeRunRelatedTasks();
 

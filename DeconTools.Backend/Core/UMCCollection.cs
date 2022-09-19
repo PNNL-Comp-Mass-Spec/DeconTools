@@ -44,7 +44,9 @@ namespace DeconTools.Backend.Core
             double netVal = -1;
             Check.Require(UMCList?.Count > 0, "Cannot retrieve NET value info. UMCs not loaded yet.");
             if (UMCList == null)
+            {
                 return Double.NaN;
+            }
 
             var distinctItems = UMCList.GroupBy(p => p.ScanClassRep).Select(p => p.First());
             var tempUMCs = distinctItems.ToList();
@@ -63,7 +65,10 @@ namespace DeconTools.Backend.Core
 
         public List<UMC> FilterUMCsByMassTagMatch(List<int> massTagIDList)
         {
-            if (UMCList == null || UMCList.Count == 0) return UMCList;
+            if (UMCList == null || UMCList.Count == 0)
+            {
+                return UMCList;
+            }
 
             var filteredUMCs = new List<UMC>();
 
@@ -73,7 +78,11 @@ namespace DeconTools.Backend.Core
             {
                 if (massTagIDList.Contains(umc.MassTagID))
                 {
-                    if (alreadyAddedMassTags.Contains(umc.MassTagID)) continue;
+                    if (alreadyAddedMassTags.Contains(umc.MassTagID))
+                    {
+                        continue;
+                    }
+
                     filteredUMCs.Add(umc);
                     alreadyAddedMassTags.Add(umc.MassTagID);
                 }
@@ -84,7 +93,11 @@ namespace DeconTools.Backend.Core
 
         public List<UMC> FilterOutPairedData()
         {
-            if (UMCList == null || UMCList.Count == 0) return UMCList;
+            if (UMCList == null || UMCList.Count == 0)
+            {
+                return UMCList;
+            }
+
             var filteredUMCs = new List<UMC>();
 
             var alreadyAddedMassTags = new List<int>();
@@ -92,7 +105,11 @@ namespace DeconTools.Backend.Core
             {
                 if (umc.PairIndex != -1)
                 {
-                    if (alreadyAddedMassTags.Contains(umc.MassTagID)) continue;
+                    if (alreadyAddedMassTags.Contains(umc.MassTagID))
+                    {
+                        continue;
+                    }
+
                     filteredUMCs.Add(umc);
                     alreadyAddedMassTags.Add(umc.MassTagID);
                 }

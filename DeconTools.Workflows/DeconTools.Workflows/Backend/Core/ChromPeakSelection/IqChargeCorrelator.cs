@@ -47,7 +47,10 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
             foreach (var referenceTarget in sortedTargetList)
             {
                 //Checks to see if reference peak is in availableTargets list
-                if (!availableTargets.Contains(referenceTarget)) continue;
+                if (!availableTargets.Contains(referenceTarget))
+                {
+                    continue;
+                }
 
                 //New ChargeCorrelationItem for the reference peak
                 var referenceCorrelationData = new ChargeCorrelationItem(referenceTarget);
@@ -63,7 +66,10 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
                 foreach (var correlatingTarget in targetList)
                 {
                     //Checks if target is available
-                    if (!availableTargets.Contains(correlatingTarget)) continue;
+                    if (!availableTargets.Contains(correlatingTarget))
+                    {
+                        continue;
+                    }
 
                     //Checks if the peak to be correlated has an XValue that falls within the base peak range of the reference peak
                     if (correlatingTarget.ChromPeak.XValue > startScan && correlatingTarget.ChromPeak.XValue < stopScan)

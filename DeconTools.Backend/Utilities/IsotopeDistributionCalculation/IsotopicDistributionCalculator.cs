@@ -88,7 +88,10 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
         /// </summary>
         public void ResetToUnlabeled()
         {
-            if (elementalSymbol == "") return;
+            if (elementalSymbol == "")
+            {
+                return;
+            }
 
             Constants.Elements[elementalSymbol].IsotopeDictionary[elementalSymbol + lightIsotopeNum].NaturalAbundance =
                 naturalAbundanceLight;
@@ -367,9 +370,20 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
         /// <returns></returns>
         public static double LogAChooseB(int a, int b) // 10 choose 2 returns 10.9/1.2
         {
-            if (a == 0) return 0.0f;
-            if (b == 0) return 0.0f;
-            if (a == b) return 0.0f;
+            if (a == 0)
+            {
+                return 0.0f;
+            }
+
+            if (b == 0)
+            {
+                return 0.0f;
+            }
+
+            if (a == b)
+            {
+                return 0.0f;
+            }
 
             var total = LogFactorial(a) - LogFactorial(b) - LogFactorial(a - b);
             return total;

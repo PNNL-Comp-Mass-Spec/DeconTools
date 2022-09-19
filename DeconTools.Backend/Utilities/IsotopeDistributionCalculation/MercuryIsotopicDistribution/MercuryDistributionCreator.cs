@@ -54,8 +54,15 @@ namespace DeconTools.Backend.Utilities
 
         private MSPeak findClosestPeak(IReadOnlyCollection<MSPeak> list, double targetMZ)
         {
-            if (list == null) return null;
-            if (list.Count == 0) return null;
+            if (list == null)
+            {
+                return null;
+            }
+
+            if (list.Count == 0)
+            {
+                return null;
+            }
 
             var diff = double.MaxValue;
             var closestPeak = new MSPeak(0);
@@ -134,12 +141,18 @@ namespace DeconTools.Backend.Utilities
             double offset;
 
             getIsotopicProfile();    //this generates the peakList from the theor dist
-            if (IsotopicProfile?.Peaklist == null || IsotopicProfile.Peaklist.Count == 0) return;
+            if (IsotopicProfile?.Peaklist == null || IsotopicProfile.Peaklist.Count == 0)
+            {
+                return;
+            }
 
             var mostIntensePeak = IsotopicProfile.getMostIntensePeak();
             var indexOfMostIntensePeak = IsotopicProfile.Peaklist.IndexOf(mostIntensePeak);
 
-            if (targetIsotopicProfile.Peaklist == null || targetIsotopicProfile.Peaklist.Count == 0) return;
+            if (targetIsotopicProfile.Peaklist == null || targetIsotopicProfile.Peaklist.Count == 0)
+            {
+                return;
+            }
 
             var enoughPeaksInTarget = (indexOfMostIntensePeak <= targetIsotopicProfile.Peaklist.Count - 1);
 

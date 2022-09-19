@@ -99,7 +99,11 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
             }
 
             var maxObs = observedIntensitiesUsedInCalc.Max();
-            if (Math.Abs(maxObs) < float.Epsilon) maxObs = double.PositiveInfinity;
+            if (Math.Abs(maxObs) < float.Epsilon)
+            {
+                maxObs = double.PositiveInfinity;
+            }
+
             Utilities.IqLogger.IqLogger.LogTrace("Max Observed Intensity: " + maxObs);
 
             var normalizedObs = observedIntensitiesUsedInCalc.Select(p => p / maxObs).ToList();

@@ -57,21 +57,31 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
                 var fitVal = areaFitter.GetFit(theorXYData, result.Run.XYData, 0.1, out _);
 
                 if (double.IsNaN(fitVal) || fitVal > 1)
+                {
                     result.IsotopicProfile.Score = 1;
+                }
                 else
+                {
                     result.IsotopicProfile.Score = fitVal;
+                }
             }
         }
 
         private void offsetDistribution(XYData theorXYData, IsotopicProfile theorIsotopicProfile, IsotopicProfile observedIsotopicProfile)
         {
             double offset;
-            if (theorIsotopicProfile?.Peaklist == null || theorIsotopicProfile.Peaklist.Count == 0) return;
+            if (theorIsotopicProfile?.Peaklist == null || theorIsotopicProfile.Peaklist.Count == 0)
+            {
+                return;
+            }
 
             var mostIntensePeak = theorIsotopicProfile.getMostIntensePeak();
             var indexOfMostIntensePeak = theorIsotopicProfile.Peaklist.IndexOf(mostIntensePeak);
 
-            if (observedIsotopicProfile.Peaklist == null || observedIsotopicProfile.Peaklist.Count == 0) return;
+            if (observedIsotopicProfile.Peaklist == null || observedIsotopicProfile.Peaklist.Count == 0)
+            {
+                return;
+            }
 
             var enoughPeaksInTarget = (indexOfMostIntensePeak <= observedIsotopicProfile.Peaklist.Count - 1);
 

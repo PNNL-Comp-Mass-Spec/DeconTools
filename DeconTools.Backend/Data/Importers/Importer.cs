@@ -12,7 +12,10 @@ namespace DeconTools.Backend.Data
         protected string lookup(List<string> data, List<string> headers, string targetHeader)
         {
             var columnIndex = getIndexForTableHeader(headers, targetHeader, false);
-            if (columnIndex == -1) return "";
+            if (columnIndex == -1)
+            {
+                return "";
+            }
 
             return data[columnIndex];
         }
@@ -20,37 +23,54 @@ namespace DeconTools.Backend.Data
         protected bool parseBoolField(string inputString)
         {
             if (bool.TryParse(inputString, out var result))
+            {
                 return result;
+            }
+
             return false;     //TODO:  need to figure out the default value
         }
 
         protected short parseShortField(string inputString)
         {
             if (Int16.TryParse(inputString, out var result))
+            {
                 return result;
+            }
+
             return 0;
         }
 
         protected double parseDoubleField(string inputString)
         {
             if (double.TryParse(inputString, out var result))
+            {
                 return result;
+            }
+
             return double.NaN;
         }
 
         protected float parseFloatField(string inputString)
         {
             if (float.TryParse(inputString, out var result))
+            {
                 return result;
+            }
+
             return float.NaN;
         }
 
         protected int parseIntField(string inputString)
         {
-            if (string.IsNullOrEmpty(inputString)) return -1;
+            if (string.IsNullOrEmpty(inputString))
+            {
+                return -1;
+            }
 
             if (int.TryParse(inputString, out var result))
+            {
                 return result;
+            }
 
             var secondAttempt = parseDoubleField(inputString);
             if (!double.IsNaN(secondAttempt))

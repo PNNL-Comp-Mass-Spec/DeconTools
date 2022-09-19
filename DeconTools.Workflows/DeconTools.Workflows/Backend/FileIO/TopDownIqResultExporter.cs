@@ -252,7 +252,9 @@ namespace DeconTools.Workflows.Backend.FileIO
         public string GetChargeResultAsString (IqResult result, bool includeHeader = false)
         {
             if (result.Target.ChargeState == 0 || result.Abundance <= 0)
+            {
                 return null;
+            }
 
             var data = new List<string>
             {

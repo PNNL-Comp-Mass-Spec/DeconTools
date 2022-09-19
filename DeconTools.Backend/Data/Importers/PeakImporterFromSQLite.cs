@@ -44,7 +44,9 @@ namespace DeconTools.Backend.Data
             using (var cnn = fact.CreateConnection())
             {
                 if (cnn == null)
+                {
                     throw new Exception("Factory.CreateConnection returned a null DbConnection instance in ImportPeaks");
+                }
 
                 cnn.ConnectionString = "Data Source=" + _sqLiteFilename;
 

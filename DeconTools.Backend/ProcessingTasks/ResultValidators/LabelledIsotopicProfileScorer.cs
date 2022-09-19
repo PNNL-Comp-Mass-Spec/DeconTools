@@ -41,7 +41,10 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
             Check.Require(n14n15result.Target.IsotopicProfileLabeled != null, "Cannot validate labeled isotopic profile. Theoretical profile was not defined.");
 
             // stop, but don't throw an error if there is no labeled isotopic profile.
-            if (n14n15result.IsotopicProfileLabeled == null) return;
+            if (n14n15result.IsotopicProfileLabeled == null)
+            {
+                return;
+            }
 
             var isoN15 = n14n15result.IsotopicProfileLabeled;
 
@@ -72,7 +75,9 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
             var fitVal = areaFitter.GetFit(theorXYData, rawXYData, 0.1);
 
             if (double.IsNaN(fitVal) || fitVal > 1)
+            {
                 return 1;
+            }
 
             return fitVal;
         }

@@ -27,7 +27,10 @@ namespace DeconTools.Utilities
         private float parseFloatField(string inputString)
         {
             if (float.TryParse(inputString, out var result))
+            {
                 return result;
+            }
+
             return float.NaN;
         }
 

@@ -62,7 +62,9 @@ namespace DeconTools.Workflows.Backend.Results
         private static void AddAdditionalInfo(TargetedResultDTO tr, SipperLcmsTargetedResult result)
         {
             if (!(tr is SipperLcmsFeatureTargetedResultDTO r))
+            {
                 return;
+            }
 
             r.MatchedMassTagID = ((LcmsFeatureTarget)result.Target).FeatureToMassTagID;
             r.AreaUnderDifferenceCurve = result.AreaUnderDifferenceCurve;
@@ -92,7 +94,9 @@ namespace DeconTools.Workflows.Backend.Results
         private static void AddAdditionalInfo(TargetedResultDTO tr, TopDownTargetedResult result)
         {
             if (!(tr is TopDownTargetedResultDTO r))
+            {
                 return;
+            }
 
             r.PrsmList = null;
             r.ChargeStateList = null;
@@ -110,7 +114,9 @@ namespace DeconTools.Workflows.Backend.Results
         private static void AddAdditionalInfo(TargetedResultDTO tr, N14N15_TResult result)
         {
             if (!(tr is N14N15TargetedResultDTO r))
+            {
                 return;
+            }
 
             r.FitScoreN15 = (float)result.ScoreN15;
             r.IScoreN15 = (float)result.InterferenceScoreN15;
@@ -143,7 +149,9 @@ namespace DeconTools.Workflows.Backend.Results
         private static void AddAdditionalInfo(TargetedResultDTO tr, O16O18TargetedResultObject result)
         {
             if (!(tr is O16O18TargetedResultDTO r))
+            {
                 return;
+            }
 
             r.IntensityI0 = GetIntensityFromIso(result.IsotopicProfile, 0);
             r.IntensityI2 = GetIntensityFromIso(result.IsotopicProfile, 2);
@@ -163,7 +171,9 @@ namespace DeconTools.Workflows.Backend.Results
         private static void AddAdditionalInfo(TargetedResultDTO tr, DeuteratedTargetedResultObject result)
         {
             if (!(tr is DeuteratedTargetedResultDTO r))
+            {
                 return;
+            }
 
             r.HydrogenI0 = result.HydrogenI0;
             r.HydrogenI1 = result.HydrogenI1;
@@ -197,7 +207,10 @@ namespace DeconTools.Workflows.Backend.Results
 
         private static float GetIntensityFromIso(IsotopicProfile isotopicProfile, int indexOfPeak)
         {
-            if (isotopicProfile?.Peaklist == null || isotopicProfile.Peaklist.Count == 0) return -1;
+            if (isotopicProfile?.Peaklist == null || isotopicProfile.Peaklist.Count == 0)
+            {
+                return -1;
+            }
 
             if (indexOfPeak >= isotopicProfile.Peaklist.Count)
             {

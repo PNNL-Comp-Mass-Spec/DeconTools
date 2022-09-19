@@ -39,10 +39,14 @@ namespace DeconTools.Backend.ProcessingTasks.Smoothers
         public double[] Smooth(double[] inputValues)
         {
             if (PointsForSmoothing < 3)
+            {
                 throw new ArgumentOutOfRangeException(nameof(PointsForSmoothing), "PointsForSmoothing must be an odd number 3 or higher");
+            }
 
             if (PointsForSmoothing % 2 == 0)
+            {
                 throw new ArgumentOutOfRangeException(nameof(PointsForSmoothing), "PointsForSmoothing must be an odd number 3 or higher");
+            }
 
             var colCount = inputValues.Length;
             var returnYValues = new double[colCount];
@@ -98,7 +102,10 @@ namespace DeconTools.Backend.ProcessingTasks.Smoothers
             {
                 for (var i = 0; i < returnYValues.Length; i++)
                 {
-                    if (returnYValues[i] < 0) returnYValues[i] = 0;
+                    if (returnYValues[i] < 0)
+                    {
+                        returnYValues[i] = 0;
+                    }
                 }
             }
 
@@ -107,7 +114,10 @@ namespace DeconTools.Backend.ProcessingTasks.Smoothers
 
         public override XYData Smooth(XYData xyData)
         {
-            if (xyData == null || xyData.Xvalues.Length == 0) return xyData;
+            if (xyData == null || xyData.Xvalues.Length == 0)
+            {
+                return xyData;
+            }
 
             var smoothedData = Smooth(xyData.Yvalues);
 

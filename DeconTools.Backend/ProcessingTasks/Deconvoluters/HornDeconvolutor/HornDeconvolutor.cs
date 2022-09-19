@@ -326,7 +326,9 @@ namespace DeconTools.Backend.ProcessingTasks
             var minPeptideIntensity = (float)(resultList.Run.CurrentBackgroundIntensity * MinPeptideBackgroundRatio);
 
             if (resultList.Run.XYData == null)
+            {
                 return;
+            }
 
             resultList.Run.XYData.GetXYValuesAsSingles(out var xVals, out var yVals);
 
@@ -334,7 +336,9 @@ namespace DeconTools.Backend.ProcessingTasks
             mTransformResults = new HornTransformResults[0];
 
             if (resultList.Run.PeakList == null || resultList.Run.PeakList.Count == 0)
+            {
                 return;
+            }
 
             mPeakList = resultList.Run.PeakList.Select(x => new ThrashV1Peak(x as MSPeak)).ToArray();
 
@@ -359,7 +363,9 @@ namespace DeconTools.Backend.ProcessingTasks
             //}
 
             if (ShowTraceMessages)
+            {
                 Console.WriteLine();
+            }
 
             PerformTransform(
                 backgroundIntensity, minPeptideIntensity, MaxProcessingTimeMinutes,
@@ -384,7 +390,9 @@ namespace DeconTools.Backend.ProcessingTasks
             var numPoints = mzs.Length;
 
             if (mzs.Length == 0)
+            {
                 return;
+            }
 
             // mzs should be in sorted order
             double minMz = mzs[0];
@@ -422,7 +430,9 @@ namespace DeconTools.Backend.ProcessingTasks
                         Convert.ToString(numTotalPeaks), " peaks.");
                 }
                 if (currentPeak.Intensity < minPeptideIntensity)
+                {
                     break;
+                }
 
                 //--------------------- Transform performed ------------------------------
                 var foundTransform = FindTransform(peakData, ref currentPeak, out var transformRecord, backgroundIntensity);
@@ -579,10 +589,14 @@ namespace DeconTools.Backend.ProcessingTasks
             }
 
             if (bestFit > MaxFitAllowed) // check if fit is good enough
+            {
                 return false;
+            }
 
             if (ShowTraceMessages)
+            {
                 Console.Error.WriteLine("\tBack with fit = " + record.Fit);
+            }
 
             // Applications using this DLL should use Abundance instead of AbundanceInt
             record.Abundance = peak.Intensity;
@@ -644,7 +658,9 @@ namespace DeconTools.Backend.ProcessingTasks
 
             double maxMz = 0;
             if (IsO16O18Data)
+            {
                 maxMz = (monoMw + 3.5) / chargeState + ChargeCarrierMass;
+            }
 
             var numUnprocessedPeaks = peakData.GetNumUnprocessedPeaks();
             if (numUnprocessedPeaks == 0)
@@ -656,7 +672,10 @@ namespace DeconTools.Backend.ProcessingTasks
             if (clearSpectrum)
             {
                 if (debug)
+                {
                     Console.Error.WriteLine("Deleting main peak :" + peak.Mz);
+                }
+
                 SetPeakToZero(peak.DataIndex, ref peakData.IntensityList, debug);
             }
 
@@ -684,7 +703,10 @@ namespace DeconTools.Backend.ProcessingTasks
                 if (nextPeak.Mz.Equals(0))
                 {
                     if (debug)
+                    {
                         Console.Error.WriteLine("\t\tNo peak found.");
+                    }
+
                     break;
                 }
                 if (debug)
@@ -716,7 +738,10 @@ namespace DeconTools.Backend.ProcessingTasks
                 if (nextPeak.Mz.Equals(0))
                 {
                     if (debug)
+                    {
                         Console.Error.WriteLine("\t\tNo peak found.");
+                    }
+
                     break;
                 }
                 if (debug)
@@ -746,13 +771,19 @@ namespace DeconTools.Backend.ProcessingTasks
                 var currentPeak = new ThrashV1Peak(peakData.PeakTops[currentIndex]);
                 var isotopeNum = (int)(Math.Abs((currentPeak.Mz - peak.Mz) * chargeState / 1.003) + 0.5);
                 if (currentPeak.Mz < peak.Mz)
+                {
                     isotopeNum = -1 * isotopeNum;
+                }
+
                 if (isotopeNum > lastIsotopeNumObserved)
                 {
                     lastIsotopeNumObserved = isotopeNum;
                     numIsotopesObserved++;
                     if (numIsotopesObserved > MaxIsotopes)
+                    {
                         break;
+                    }
+
                     record.IsotopePeakIndices.Add(peakIndices[i]);
                 }
                 else
@@ -773,19 +804,25 @@ namespace DeconTools.Backend.ProcessingTasks
             //double mz1, mz2;
 
             if (debug)
+            {
                 Console.Error.WriteLine("\t\tNum Peaks for Shoulder =" + NumAllowedShoulderPeaks);
+            }
 
             for (var i = index - 1; i >= 0; i--)
             {
                 var thisIntensity = intensities[i];
                 if (thisIntensity <= lastIntensity)
+                {
                     count = 0;
+                }
                 else
                 {
                     count++;
                     //mz1 = mzs[i];
                     if (count >= NumAllowedShoulderPeaks)
+                    {
                         break;
+                    }
                 }
                 intensities[i] = 0;
                 lastIntensity = thisIntensity;
@@ -797,13 +834,17 @@ namespace DeconTools.Backend.ProcessingTasks
             {
                 var thisIntensity = intensities[i];
                 if (thisIntensity <= lastIntensity)
+                {
                     count = 0;
+                }
                 else
                 {
                     count++;
                     //mz2 = mzs[i];
                     if (count >= NumAllowedShoulderPeaks)
+                    {
                         break;
+                    }
                 }
                 intensities[i] = 0;
                 lastIntensity = thisIntensity;
@@ -874,7 +915,9 @@ namespace DeconTools.Backend.ProcessingTasks
             resultList.MSScanCounter++;
 
             if (!processingWasAborted)
+            {
                 return;
+            }
 
             string messageBase;
 
@@ -920,7 +963,9 @@ namespace DeconTools.Backend.ProcessingTasks
         private double SumPeaks(IsotopicProfile profile, double defaultVal)
         {
             if (profile.Peaklist == null || profile.Peaklist.Count == 0)
+            {
                 return defaultVal;
+            }
 
             var peakListIntensities = new List<float>();
             foreach (var peak in profile.Peaklist)
@@ -944,14 +989,18 @@ namespace DeconTools.Backend.ProcessingTasks
         private void GetIsotopicProfile(IReadOnlyList<int> peakIndexList, IReadOnlyList<ThrashV1Peak> peakData, ref IsotopicProfile profile)
         {
             if (peakIndexList == null || peakIndexList.Count == 0)
+            {
                 return;
+            }
 
             var deconMonoIsotopicPeak = peakData[peakIndexList[0]];
 
             profile.Peaklist.Add(deconMonoIsotopicPeak);
 
             if (peakIndexList.Count == 1)
+            {
                 return; //only one peak in the DeconEngine's profile
+            }
 
             for (var i = 1; i < peakIndexList.Count; i++) //start with second peak and add each peak to profile
             {
