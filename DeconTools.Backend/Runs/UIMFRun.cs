@@ -761,7 +761,7 @@ namespace DeconTools.Backend.Runs
             }
 
             var closestLCScan = MinLCScan;
-            var smallestDiff = Int32.MaxValue;
+            var smallestDiff = int.MaxValue;
 
             foreach (var t in MS1Frames)
             {

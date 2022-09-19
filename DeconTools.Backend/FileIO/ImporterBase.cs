@@ -215,7 +215,7 @@ namespace DeconTools.Backend.FileIO
 
         protected int ParseIntField(string inputString)
         {
-            if (Int32.TryParse(inputString, out var result))
+            if (int.TryParse(inputString, out var result))
                 return result;
 
             var secondAttempt = ParseDoubleField(inputString);
@@ -236,7 +236,7 @@ namespace DeconTools.Backend.FileIO
                 return defaultVal;
             }
 
-            if (Int32.TryParse(rowValueString, out var result))
+            if (int.TryParse(rowValueString, out var result))
             {
                 return result;
             }
@@ -246,7 +246,7 @@ namespace DeconTools.Backend.FileIO
 
         protected long ParseLongField(string inputString)
         {
-            if (Int64.TryParse(inputString, out var result))
+            if (long.TryParse(inputString, out var result))
                 return result;
 
             return -1;
@@ -261,7 +261,7 @@ namespace DeconTools.Backend.FileIO
                 return defaultVal;
             }
 
-            if (Int64.TryParse(rowValueString, out var result))
+            if (long.TryParse(rowValueString, out var result))
             {
                 return result;
             }

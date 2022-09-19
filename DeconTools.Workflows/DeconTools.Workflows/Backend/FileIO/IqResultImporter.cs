@@ -212,7 +212,7 @@ namespace DeconTools.Workflows.Backend.FileIO
                 return defaultVal;
             }
 
-            if (Int32.TryParse(rowValueString, out var result))
+            if (int.TryParse(rowValueString, out var result))
             {
                 return result;
             }
@@ -229,7 +229,7 @@ namespace DeconTools.Workflows.Backend.FileIO
                 return defaultVal;
             }
 
-            if (Int64.TryParse(rowValueString, out var result))
+            if (long.TryParse(rowValueString, out var result))
             {
                 return result;
             }
