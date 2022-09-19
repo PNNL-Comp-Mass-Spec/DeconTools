@@ -268,11 +268,11 @@ namespace DeconTools.UnitTesting2.Scripts
                         {
                             if (outputOrigIntensity)
                             {
-                                basePeakIntensity = (int)imsScanResults.First().IsotopicProfile.getMostIntensePeak().Height;
+                                basePeakIntensity = (int)imsScanResults[0].IsotopicProfile.getMostIntensePeak().Height;
                             }
                             else
                             {
-                                basePeakIntensity = (int)imsScanResults.First().IntensityAggregate;
+                                basePeakIntensity = (int)imsScanResults[0].IntensityAggregate;
                             }
                         }
 

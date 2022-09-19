@@ -134,7 +134,7 @@ namespace DeconTools.Workflows.Backend.Core
 
                 var allChromVals = topDownChromData.GetChromData();
 
-                var lengthOfScanArray = allChromVals.First().Xvalues.Length;
+                var lengthOfScanArray = allChromVals[0].Xvalues.Length;
 
                 //add headers
                 for (var i = 0; i < resultsForProtein.Count; i++)

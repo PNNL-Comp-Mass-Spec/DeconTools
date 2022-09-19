@@ -180,7 +180,7 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
 
                 if (foundPeaks.Count == 1)
                 {
-                    trimmedPeakList.Add(foundPeaks.First());
+                    trimmedPeakList.Add(foundPeaks[0]);
                 }
                 else if (foundPeaks.Count > 1)
                 {
@@ -209,7 +209,7 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
 
         private void AddLeftZeroPads(IList<Peak> theorPeakListForFitter, int numLeftZeroPads, int chargeState)
         {
-            var mzInitial = theorPeakListForFitter.First().XValue;
+            var mzInitial = theorPeakListForFitter[0].XValue;
 
             for (var i = 0; i < numLeftZeroPads; i++)
             {

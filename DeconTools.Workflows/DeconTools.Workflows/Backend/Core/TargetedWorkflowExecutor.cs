@@ -313,7 +313,7 @@ namespace DeconTools.Workflows.Backend.Core
 
             if (possibleTargetFiles.Count == 1)
             {
-                return possibleTargetFiles.First().FullName;
+                return possibleTargetFiles[0].FullName;
             }
 
             var sb = new StringBuilder();

@@ -231,7 +231,7 @@ namespace DeconTools.Backend.Workflows
                         }
                         else if (candidateMS1Features.Count == 1)
                         {
-                            selectedMS1Feature = candidateMS1Features.First();
+                            selectedMS1Feature = candidateMS1Features[0];
                             break;   //we found something, so no need for any further attempts
                         }
                         else
@@ -243,7 +243,7 @@ namespace DeconTools.Backend.Workflows
                             }
                             else if (highQualityCandidates.Count == 1)
                             {
-                                selectedMS1Feature = highQualityCandidates.First();
+                                selectedMS1Feature = highQualityCandidates[0];
                             }
                             else
                             {
@@ -288,7 +288,7 @@ namespace DeconTools.Backend.Workflows
                         }
                         else if (candidatePeaks.Count == 1)
                         {
-                            selectedPeak = candidatePeaks.First();
+                            selectedPeak = candidatePeaks[0];
                         }
                         else
                         {

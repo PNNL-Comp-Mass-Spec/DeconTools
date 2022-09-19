@@ -285,7 +285,7 @@ namespace DeconTools.Workflows.Backend.Core
             {
                 rSquaredVal = result.CorrelationData.RSquaredValsMedian;
 
-                slope = result.CorrelationData.CorrelationDataItems.First().CorrelationSlope;
+                slope = result.CorrelationData.CorrelationDataItems[0].CorrelationSlope;
             }
             else
             {
@@ -336,20 +336,20 @@ namespace DeconTools.Workflows.Backend.Core
 
             if (filteredChargeStateResults.Count == 0) return null;
 
-            if (filteredChargeStateResults.Count == 1) return filteredChargeStateResults.First();
+            if (filteredChargeStateResults.Count == 1) return filteredChargeStateResults[0];
 
             //now to deal with the tough issue of multiple charge states having a possible results.
 
-            var filter2 = filteredChargeStateResults.Where(p => p.CorrelationData.CorrelationDataItems.First().CorrelationRSquaredVal > 0.7).ToList();
+            var filter2 = filteredChargeStateResults.Where(p => p.CorrelationData.CorrelationDataItems[0].CorrelationRSquaredVal > 0.7).ToList();
 
             if (filter2.Count == 0)
             {
-                filter2 = filteredChargeStateResults.Where(p => p.CorrelationData.CorrelationDataItems.First().CorrelationRSquaredVal > 0.5).ToList();
+                filter2 = filteredChargeStateResults.Where(p => p.CorrelationData.CorrelationDataItems[0].CorrelationRSquaredVal > 0.5).ToList();
             }
 
             if (filter2.Count == 0)
             {
-                filter2 = filteredChargeStateResults.Where(p => p.CorrelationData.CorrelationDataItems.First().CorrelationRSquaredVal > 0.3).ToList();
+                filter2 = filteredChargeStateResults.Where(p => p.CorrelationData.CorrelationDataItems[0].CorrelationRSquaredVal > 0.3).ToList();
             }
 
             if (filter2.Count == 0)
@@ -360,7 +360,7 @@ namespace DeconTools.Workflows.Backend.Core
 
             if (filter2.Count == 1)
             {
-                return filter2.First();
+                return filter2[0];
             }
 
             if (filter2.Count > 1)
@@ -410,7 +410,7 @@ namespace DeconTools.Workflows.Backend.Core
                 }
                 else if (furtherFilteredResults.Count == 1)
                 {
-                    bestChromPeakResult = furtherFilteredResults.First();
+                    bestChromPeakResult = furtherFilteredResults[0];
                 }
                 else   //still more than one candidate.  Will try to use another filter
                 {
@@ -435,7 +435,7 @@ namespace DeconTools.Workflows.Backend.Core
                     }
                     else if (level3FilteredResults.Count == 1)
                     {
-                        bestChromPeakResult = level3FilteredResults.First();
+                        bestChromPeakResult = level3FilteredResults[0];
                     }
                     else
                     {

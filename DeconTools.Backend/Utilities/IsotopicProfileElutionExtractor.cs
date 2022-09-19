@@ -62,7 +62,7 @@ namespace DeconTools.Backend.Utilities
             //gather relevant peaks.
             var scanTolerance = 5;     // TODO:   keep an eye on this
 
-            minScan = scans.First();
+            minScan = scans[0];
             maxScan = scans.Last();
 
             var indexOfLowerScan = getIndexOfClosestScanValue(msPeakList, minScan, 0, msPeakList.Count - 1, scanTolerance);

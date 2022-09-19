@@ -255,7 +255,7 @@ namespace DeconTools.Backend.Utilities
                 return null;
             }
 
-            var minScan = filteredPeakList.First().Scan_num;
+            var minScan = filteredPeakList[0].Scan_num;
             var maxScan = filteredPeakList.Last().Scan_num;
 
             var scanAndIntensityList = new Dictionary<int, double>();

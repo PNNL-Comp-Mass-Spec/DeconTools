@@ -131,7 +131,7 @@ namespace DeconTools.Backend.ProcessingTasks
             //Find peaks using DeconEngine
             if (Math.Abs(minX) < float.Epsilon && Math.Abs(maxX) < float.Epsilon)
             {
-                minX = xyData.Xvalues.First();
+                minX = xyData.Xvalues[0];
                 maxX = xyData.Xvalues.Last();
             }
 

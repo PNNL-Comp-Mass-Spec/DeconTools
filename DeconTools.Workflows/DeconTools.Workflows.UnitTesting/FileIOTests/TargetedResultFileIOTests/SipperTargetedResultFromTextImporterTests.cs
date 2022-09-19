@@ -23,7 +23,7 @@ namespace DeconTools.Workflows.UnitTesting.FileIOTests.TargetedResultFileIOTests
             Assert.IsNotNull(results);
             Assert.IsTrue(results.Results.Count > 0);
 
-            var testResult1 = results.Results.First() as SipperLcmsFeatureTargetedResultDTO;
+            var testResult1 = results.Results[0] as SipperLcmsFeatureTargetedResultDTO;
 
             Assert.IsNotNull(testResult1);
             Assert.IsNotNull(testResult1.LabelDistributionVals);

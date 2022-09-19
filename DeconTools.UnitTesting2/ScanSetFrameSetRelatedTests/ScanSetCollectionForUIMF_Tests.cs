@@ -144,7 +144,7 @@ namespace DeconTools.UnitTesting2.ScanSetFrameSetRelatedTests
             }
 
             var testFrame0 = uimfRun.ScanSetCollection.ScanSetList[3];
-            Assert.AreEqual(1, testFrame0.IndexValues.First());
+            Assert.AreEqual(1, testFrame0.IndexValues[0]);
             Assert.AreEqual(7, testFrame0.IndexValues.Count);
             Assert.AreEqual(7, testFrame0.IndexValues.Last());
         }

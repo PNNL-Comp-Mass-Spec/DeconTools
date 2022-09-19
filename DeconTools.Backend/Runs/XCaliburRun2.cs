@@ -168,7 +168,7 @@ namespace DeconTools.Backend.Runs
             if (mRawFileReader.FileInfo.TuneMethods.Count == 0)
                 return string.Empty;
 
-            var tuneMethod = mRawFileReader.FileInfo.TuneMethods.First();
+            var tuneMethod = mRawFileReader.FileInfo.TuneMethods[0];
             var tuneNames = new List<string>();
 
             foreach (var item in tuneMethod.Settings)

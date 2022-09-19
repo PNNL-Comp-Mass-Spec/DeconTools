@@ -58,7 +58,7 @@ namespace DeconTools.Workflows.UnitTesting.ChromCorrelatorTests
                 var correlator = new O16O18ChromCorrelator(7, 0.1, 20, Globals.ToleranceUnit.PPM);
                 var corrData = correlator.CorrelateData(run, result, 5700, 6500);
 
-                var corrDataItem1 = corrData.CorrelationDataItems.First();
+                var corrDataItem1 = corrData.CorrelationDataItems[0];
                 Console.WriteLine("z= \t"+  childTarget.ChargeState + "\tCorrelationData (slope,intercept,rsquared)= \t" +  corrDataItem1);
             }
         }

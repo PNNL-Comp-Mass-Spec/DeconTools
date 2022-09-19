@@ -214,7 +214,7 @@ namespace DeconTools.Backend.Utilities
 
                 if (umcFileCount == 1)
                 {
-                    var targetUmcFileName = umcFileInfo.First().FullName;
+                    var targetUmcFileName = umcFileInfo[0].FullName;
 
                     var importer = new UMCFileImporter(targetUmcFileName, '\t');
                     var umcList = importer.Import();

@@ -58,7 +58,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             //executor.Targets.TargetList = executor.Targets.TargetList.Where(p => p.ID == testTargetID).ToList();
 
             executor.InitializeRun(testDatasetPath);
-            executor.Run.CurrentMassTag = executor.Targets.TargetList.First();
+            executor.Run.CurrentMassTag = executor.Targets.TargetList[0];
             double[] chromParamValues = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10,15,25};
 
             //chromPeakBRValues =new double[] {10,15,25};

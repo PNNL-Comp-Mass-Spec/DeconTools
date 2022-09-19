@@ -354,7 +354,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
             var massAndNetAligner = new IqMassAndNetAligner(parameters, run);
             massAndNetAligner.LoadAndInitializeTargets();
 
-            var testNET = massAndNetAligner.Targets.First().ElutionTimeTheor;
+            var testNET = massAndNetAligner.Targets[0].ElutionTimeTheor;
 
             var query = (from massTag in massTagRefs
                          join target in massAndNetAligner.Targets on massTag.Code equals target.Code
@@ -372,7 +372,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
 
             var targets = query.Select(p => p.MSGFTarget).ToList();
 
-          var testNETAfter = massAndNetAligner.Targets.First().ElutionTimeTheor;
+          var testNETAfter = massAndNetAligner.Targets[0].ElutionTimeTheor;
             Console.WriteLine("NET before= " + testNET);
             Console.WriteLine("NET before= " + testNETAfter);
         }

@@ -552,7 +552,7 @@ namespace DeconTools.Workflows.Backend.FileIO
 
                 if (knownColumn.Value.Count == 1)
                 {
-                    ConsoleMsgUtils.ShowError("Header line of the input file does not contain {0}", knownColumn.Value.First());
+                    ConsoleMsgUtils.ShowError("Header line of the input file does not contain {0}", knownColumn.Value[0]);
                 }
                 else if (knownColumn.Value.Count > 1)
                 {

@@ -97,7 +97,7 @@ namespace DeconTools.Workflows.Backend.Core
             var fitTolerance = 0.5;
             var correlationTolerance = 0.95;
 
-            var minCharge = (IqChargeStateTarget) childTargets.First();
+            var minCharge = (IqChargeStateTarget) childTargets[0];
             var maxCharge = (IqChargeStateTarget) childTargets.Last();
 
             if (minCharge.GetResult().IqResultDetail.Chromatogram != null)

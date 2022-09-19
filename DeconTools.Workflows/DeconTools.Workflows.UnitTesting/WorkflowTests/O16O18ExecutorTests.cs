@@ -251,7 +251,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             var importer = new O16O18TargetedResultFromTextImporter(expectedResultsFilename);
             var results = importer.Import().Results;
-            var result1 = results.First();
+            var result1 = results[0];
 
             Console.WriteLine(result1.ToStringWithDetailsAsRow());
         }
@@ -288,7 +288,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             var importer = new O16O18TargetedResultFromTextImporter(expectedResultsFilename);
             var results = importer.Import().Results;
-            var result1 = results.First();
+            var result1 = results[0];
 
             Console.WriteLine(result1.ToStringWithDetailsAsRow());
         }

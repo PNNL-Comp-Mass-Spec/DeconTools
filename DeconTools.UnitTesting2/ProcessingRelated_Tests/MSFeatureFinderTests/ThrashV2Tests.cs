@@ -166,7 +166,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
             deconvolutor.Execute(run.ResultCollection);
 
             Assert.IsTrue(run.ResultCollection.ResultList.Count > 0);
-            var result1 = run.ResultCollection.ResultList.First();
+            var result1 = run.ResultCollection.ResultList[0];
             Assert.AreEqual(1, result1.IsotopicProfile.ChargeState);
 
             Console.WriteLine("--------- Prefer +1 charge state ----------------");
@@ -184,7 +184,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.MSFeatureFinderTests
             TestUtilities.DisplayMSFeatures(run.ResultCollection.ResultList);
 
             Assert.IsTrue(run.ResultCollection.ResultList.Count > 0);
-            result1 = run.ResultCollection.ResultList.First();
+            result1 = run.ResultCollection.ResultList[0];
 
             Assert.AreEqual(3, result1.IsotopicProfile.ChargeState);
         }

@@ -73,7 +73,7 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
                     }
                     else if (foundPeaks.Count == 1)
                     {
-                        obsIntensity = foundPeaks.First().Height;
+                        obsIntensity = foundPeaks[0].Height;
                         Utilities.IqLogger.IqLogger.LogTrace("Observed Peak Selected!	Peak Height: " + foundPeaks[0].Height + " Peak X-Value " + foundPeaks[0].XValue);
                     }
                     else

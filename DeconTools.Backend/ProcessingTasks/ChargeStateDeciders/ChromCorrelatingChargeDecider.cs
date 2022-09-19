@@ -35,7 +35,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChargeStateDeciders
 
             double bestScore = -1;
 
-            var index = potentialIsotopicProfiles.First().MonoIsotopicPeakIndex;
+            var index = potentialIsotopicProfiles[0].MonoIsotopicPeakIndex;
             if (index == -1)
             {
                 index = 0;
@@ -44,7 +44,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChargeStateDeciders
             //IqLogger.Log.Debug(reportString1);
 
             //with line spaces
-            var reportString1 = "\nM/Z : " + potentialIsotopicProfiles.First().Peaklist[index].XValue + "\n";
+            var reportString1 = "\nM/Z : " + potentialIsotopicProfiles[0].Peaklist[index].XValue + "\n";
             IqLogger.LogTrace(reportString1);
             foreach (var potentialFeature in potentialIsotopicProfiles)
             {
@@ -217,7 +217,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChargeStateDeciders
                 if (contendingCharges.Count == 1)//if there is only one left after it's own factors are removed, it's that one.
                 {
                     // IqLogger.Log.Debug("\nWas only one contender\n");
-                    return potentialIsotopicProfiles.ElementAt(Array.IndexOf(chargeStates, contendingCharges.First()));
+                    return potentialIsotopicProfiles.ElementAt(Array.IndexOf(chargeStates, contendingCharges[0]));
                 }
             }
             #endregion

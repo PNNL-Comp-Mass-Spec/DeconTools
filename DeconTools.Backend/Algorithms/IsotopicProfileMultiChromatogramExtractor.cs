@@ -45,7 +45,7 @@ namespace DeconTools.Backend.Algorithms
 
             foreach (var peak in topTheorIsoPeaks)
             {
-                var xyData = chromGen.GenerateChromatogram(peakList, peakList.First().Scan_num, peakList.Last().Scan_num, peak.XValue, m_toleranceInPPM);
+                var xyData = chromGen.GenerateChromatogram(peakList, peakList[0].Scan_num, peakList.Last().Scan_num, peak.XValue, m_toleranceInPPM);
 
                 if (filterOutMSMSScans && ms1LevelScanTable != null)
                 {
