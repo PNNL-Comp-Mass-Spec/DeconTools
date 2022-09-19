@@ -169,7 +169,7 @@ namespace DeconTools.Workflows.Backend.Core
                 using (var command = cnn.CreateCommand())
                 {
                     var queryString =
-                        @"SELECT * FROM " + table + " ORDER BY Dataset,UMC_Ind";
+                        "SELECT * FROM " + table + " ORDER BY Dataset,UMC_Ind";
 
                     command.CommandText = queryString;
                     command.CommandTimeout = 60;
@@ -197,7 +197,7 @@ namespace DeconTools.Workflows.Backend.Core
                 using (var command = cnn.CreateCommand())
                 {
                     var queryString =
-                        @"SELECT * FROM " + table + " where Dataset = '" +
+                        "SELECT * FROM " + table + " where Dataset = '" +
                         datasetName + "' ORDER BY UMC_Ind";
 
                     command.CommandText = queryString;

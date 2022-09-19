@@ -11,7 +11,7 @@ namespace DeconTools.UnitTesting2.Utilities
         [Test]
         public void parseUnimodStyleFormulaTest1()
         {
-            var formula = @"H(-3) N(-1)";
+            var formula = "H(-3) N(-1)";
             var formulaDictionary = EmpiricalFormulaUtilities.ParseEmpiricalFormulaString(formula);
 
             Assert.AreEqual(-3, formulaDictionary["H"]);
@@ -23,7 +23,7 @@ namespace DeconTools.UnitTesting2.Utilities
         [Test]
         public void parseUnimodStyleFormulaTest2()
         {
-            var formula = @"H26 2H(8) C20 N4 O5 S";
+            var formula = "H26 2H(8) C20 N4 O5 S";
 
             var formulaDictionary = EmpiricalFormulaUtilities.ParseEmpiricalFormulaString(formula);
 
@@ -37,7 +37,7 @@ namespace DeconTools.UnitTesting2.Utilities
         [Test]
         public void parseUnimodStyleFormulaTest2A()
         {
-            var formula = @"H26 2H(8) C20 N4 O5 S";
+            var formula = "H26 2H(8) C20 N4 O5 S";
 
             var formulaDictionary = EmpiricalFormulaUtilities.ParseEmpiricalFormulaString(formula);
 
@@ -51,7 +51,7 @@ namespace DeconTools.UnitTesting2.Utilities
         [Test]
         public void parseUnimodStyleFormulaTest2B()
         {
-            var formula = @"H26 2H(8) C20 N4 O5 S";
+            var formula = "H26 2H(8) C20 N4 O5 S";
 
             var formulaDictionary = EmpiricalFormulaUtilities.ParseDoubleEmpiricalFormulaString(formula);
 
@@ -65,7 +65,7 @@ namespace DeconTools.UnitTesting2.Utilities
         [Test]
         public void parseUnimodStyleFormulaTest3()
         {
-            var formula = @"H32 C34 N4 O4 Fe";
+            var formula = "H32 C34 N4 O4 Fe";
 
             var formulaDictionary = EmpiricalFormulaUtilities.ParseEmpiricalFormulaString(formula);
 
@@ -77,7 +77,7 @@ namespace DeconTools.UnitTesting2.Utilities
         [Test]
         public void parseUnimodStyleFormulaTest4()
         {
-            var formula = @"H32C34N4O4Fe";
+            var formula = "H32C34N4O4Fe";
 
             var formulaDictionary = EmpiricalFormulaUtilities.ParseEmpiricalFormulaString(formula);
 

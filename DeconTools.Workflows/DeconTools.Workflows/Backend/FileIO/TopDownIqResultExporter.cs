@@ -39,7 +39,7 @@ namespace DeconTools.Workflows.Backend.FileIO
         /// <param name="results"></param>
         public void WriteOutTargetResults(string fileName, IEnumerable<IqResult> results)
         {
-            const string targetFileExt = @"_IqResults.txt";
+            const string targetFileExt = "_IqResults.txt";
 
             var filePath = fileName + targetFileExt;
 
@@ -83,7 +83,7 @@ namespace DeconTools.Workflows.Backend.FileIO
         /// <param name="results"></param>
         public void WriteOutChargeResults(string fileName, IEnumerable<IqResult> results)
         {
-            const string chargeFileExt = @"_ChargeStateVerboseOutput.txt";
+            const string chargeFileExt = "_ChargeStateVerboseOutput.txt";
 
             var filePath = fileName + chargeFileExt;
 

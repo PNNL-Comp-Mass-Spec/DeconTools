@@ -217,7 +217,7 @@ namespace DeconTools.UnitTesting2.Run_relatedTests
             var scan = new ScanSet(msmsScanNum1);
 
             var scanInfoString = run.GetScanInfo(scan.PrimaryScanNumber);
-            Assert.AreEqual(@"ITMS + c NSI d Full ms2 543.80@cid35.00 [135.00-2000.00]", scanInfoString);
+            Assert.AreEqual("ITMS + c NSI d Full ms2 543.80@cid35.00 [135.00-2000.00]", scanInfoString);
         }
 
         [Test]

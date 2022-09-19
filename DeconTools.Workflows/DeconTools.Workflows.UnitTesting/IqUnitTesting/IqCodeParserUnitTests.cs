@@ -88,7 +88,7 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
         {
             var parser = new IqCodeParser();
 
-            var exampleSequence = @"A.ADLEDNMDILNDNLKVVEKTDSAPELKAALTKMRAAALDAQKATPPKLEDKAPDSPEMKDFRHGFDILVGQIDGALKLANEGNVKEAKAAAEALKTTRNTYHKKYR.";
+            var exampleSequence = "A.ADLEDNMDILNDNLKVVEKTDSAPELKAALTKMRAAALDAQKATPPKLEDKAPDSPEMKDFRHGFDILVGQIDGALKLANEGNVKEAKAAAEALKTTRNTYHKKYR.";
             var empiricalFormula = parser.GetEmpiricalFormulaFromSequence(exampleSequence);
             Console.WriteLine(empiricalFormula);
             Assert.AreEqual("C507H832N144O163S3", empiricalFormula);
@@ -100,7 +100,7 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
         {
             var parser = new IqCodeParser();
 
-            var testSequence = @".MITGIQITKA(AN)[1.02]DDLLNSFWLLDSEKGEARCIVAKAGYAEDEVVAVSKLGDIEYREVPVEVKPEVRVEGGQHLNVNVLRRETLEDAVKHPEKYPQLTI(RV)[-.99]S.G";
+            var testSequence = ".MITGIQITKA(AN)[1.02]DDLLNSFWLLDSEKGEARCIVAKAGYAEDEVVAVSKLGDIEYREVPVEVKPEVRVEGGQHLNVNVLRRETLEDAVKHPEKYPQLTI(RV)[-.99]S.G";
 
             var empiricalFormula = parser.GetEmpiricalFormulaFromSequence(testSequence);
             Console.WriteLine(empiricalFormula);

@@ -46,7 +46,7 @@ namespace DeconTools.Workflows.Backend.Utilities
                     string queryString;
 
                     queryString =
-                        @"SELECT * FROM " + ResultTableName + " where Dataset = '" +
+                        "SELECT * FROM " + ResultTableName + " where Dataset = '" +
                         datasetName + "'";
 
                     command.CommandText = queryString;

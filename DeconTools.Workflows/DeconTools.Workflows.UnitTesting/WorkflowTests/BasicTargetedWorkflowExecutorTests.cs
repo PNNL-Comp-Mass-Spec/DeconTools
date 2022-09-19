@@ -238,7 +238,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         [Test]
         public void ExecutorTest2()
         {
-            var executorParamFile = baseFolder + @"\Parameters" + "\\" + @"QCShew_OrbiStandard_workflowExecutorParameters.xml";
+            var executorParamFile = baseFolder + @"\Parameters" + "\\" + "QCShew_OrbiStandard_workflowExecutorParameters.xml";
 
             var testDatasetPath = baseFolder +"\\"+ "QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
 
