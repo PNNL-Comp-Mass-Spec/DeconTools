@@ -99,7 +99,7 @@ namespace DeconTools.Backend.Algorithms.Quantifiers
 
             if (o16O18TargetedResultObject.ChromCorrelationData == null) return -1;
 
-            var noO16PeakPresent = !o16O18TargetedResultObject.ChromCorrelationData.CorrelationDataItems.Any();
+            var noO16PeakPresent = o16O18TargetedResultObject.ChromCorrelationData.CorrelationDataItems.Count == 0;
             if (noO16PeakPresent)
             {
                 ratio = 0;

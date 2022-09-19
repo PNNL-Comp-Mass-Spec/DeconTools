@@ -16,7 +16,7 @@ namespace DeconTools.Backend.ProcessingTasks.ChromatogramProcessing
 
             if (result is O16O18TargetedResultObject o16O18Result)
             {
-                if (chromCorrData.CorrelationDataItems.Any())
+                if (chromCorrData.CorrelationDataItems.Count > 0)
                 {
                     o16O18Result.ChromCorrO16O18SingleLabel = chromCorrData.CorrelationDataItems[0].CorrelationRSquaredVal;
                     o16O18Result.ChromCorrO16O18DoubleLabel = chromCorrData.CorrelationDataItems[1].CorrelationRSquaredVal;

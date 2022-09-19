@@ -189,7 +189,7 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
             }
 
             //if we can't find any observed peaks, we won't trim anything. Just return the original list
-            if (!trimmedPeakList.Any())
+            if (trimmedPeakList.Count == 0)
             {
                 return basePeaklist;
             }
@@ -227,14 +227,14 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
                 var mzTolerance = _toleranceInPPM * peak.XValue / 1e6;
                 var foundPeaks = PeakUtilities.GetPeaksWithinTolerance(massSpectrumPeakList, peak.XValue,
                                                                        mzTolerance);
-                if (foundPeaks.Any())
+                if (foundPeaks.Count > 0)
                 {
                     trimmedPeakList.Add(peak);
                 }
             }
 
             //if we can't find any observed peaks, we won't trim anything. Just return the original list
-            if (!trimmedPeakList.Any())
+            if (trimmedPeakList.Count == 0)
             {
                 return theorPeakList;
             }

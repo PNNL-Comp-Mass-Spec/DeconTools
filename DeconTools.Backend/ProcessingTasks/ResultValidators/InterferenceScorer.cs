@@ -29,7 +29,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
         {
             if (observedIso == null) return 1.0;
 
-            if (!observedMSPeaks.Any()) return 1.0;
+            if (observedMSPeaks.Count == 0) return 1.0;
 
             var leftBoundary = observedIso.getMonoPeak().XValue - 1.1;
             var rightMostPeak = observedIso.Peaklist[observedIso.Peaklist.Count - 1];
@@ -42,7 +42,7 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
         {
             if (observedIso == null) return 1.0;
 
-            if (!observedMSPeaks.Any()) return 1.0;
+            if (observedMSPeaks.Count == 0) return 1.0;
 
             var scanPeaks = observedMSPeaks.Select(i => (MSPeak)i).ToList();
 

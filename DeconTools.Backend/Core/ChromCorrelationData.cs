@@ -24,7 +24,7 @@ namespace DeconTools.Backend.Core
             {
                 var validItems = CorrelationDataItems.Select(p => p.CorrelationRSquaredVal).Where(n => n.HasValue).ToList();
 
-                if (validItems.Any())
+                if (validItems.Count > 0)
                 {
                     return MathUtils.GetMedian(validItems.Select(r => r.GetValueOrDefault()).ToList());
                 }
@@ -38,7 +38,7 @@ namespace DeconTools.Backend.Core
             {
                 var validItems = CorrelationDataItems.Select(p => p.CorrelationRSquaredVal).Where(n => n.HasValue).ToList();
 
-                if (validItems.Any())
+                if (validItems.Count > 0)
                 {
                     return validItems.Average();
                 }

@@ -145,7 +145,7 @@ namespace DeconTools.Backend.Algorithms
 
             XYData chromData = null;
 
-            if (!tempPeakList.Any())
+            if (tempPeakList.Count == 0)
             {
                 //TODO: we want to return 0 intensity values. But need to make sure there are no downstream problems with this change.
             }
@@ -203,7 +203,7 @@ namespace DeconTools.Backend.Algorithms
                     }
                 }
 
-                if (!tempPeakList.Any())
+                if (tempPeakList.Count == 0)
                 {
                     //TODO: we want to return 0 intensity values. But need to make sure there are no downstream problems with this change.
                 }

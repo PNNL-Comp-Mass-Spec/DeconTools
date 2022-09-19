@@ -89,7 +89,7 @@ namespace DeconTools.Workflows.Backend.Core
             if (!_headerLogged)
             {
                 _headerLogged = true;
-                IqLogger.LogMessage("\t" + "TargetID" + "\t\t\t" + "M/Z" + "\t" + "Charge" + "\t" + "LCScan" + "\t" + "RSquared" + "\t" + "Slope");
+                IqLogger.LogMessage("\tTargetID\t\t\tM/Z\tCharge\tLCScan\tRSquared\tSlope");
             }
 
             IqLogger.LogMessage("\t" + result.Target.ID + "\t\t\t" + favMz.ToString("0.000") + "\t" + favChargeState + "\t" + result.LcScanObs + "\t" + rSquaredVal + "\t" + slope);

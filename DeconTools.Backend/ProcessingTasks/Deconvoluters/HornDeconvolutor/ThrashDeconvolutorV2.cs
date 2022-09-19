@@ -524,7 +524,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
         /// <returns></returns>
         private List<IsotopicProfile> removeDuplicatesFromFoundMSFeatures(List<IsotopicProfile> isotopicProfiles)
         {
-            if (!isotopicProfiles.Any()) return isotopicProfiles;
+            if (isotopicProfiles.Count == 0) return isotopicProfiles;
 
             var lastIndex = isotopicProfiles.Count - 1;
 

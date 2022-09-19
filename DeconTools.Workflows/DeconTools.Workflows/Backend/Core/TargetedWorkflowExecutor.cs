@@ -938,7 +938,7 @@ namespace DeconTools.Workflows.Backend.Core
             }
 
             // Grab the primary LC Scan numbers if they are not already filled out
-            if (!Run.PrimaryLcScanNumbers.Any())
+            if (Run.PrimaryLcScanNumbers.Count == 0)
             {
                 Run.PrimaryLcScanNumbers = RunUtilities.FindPrimaryLcScanNumbers(Run.ResultCollection.MSPeakResultList);
             }

@@ -139,7 +139,7 @@ namespace DeconTools.Backend.Utilities
             var peakImporter = new PeakImporterFromText(expectedPeaksFile, bw);
             peakImporter.ImportPeaks(run.ResultCollection.MSPeakResultList);
 
-            if (!run.PrimaryLcScanNumbers.Any())
+            if (run.PrimaryLcScanNumbers.Count == 0)
             {
                 run.PrimaryLcScanNumbers = FindPrimaryLcScanNumbers(run.ResultCollection.MSPeakResultList);
             }

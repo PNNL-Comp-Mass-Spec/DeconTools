@@ -82,7 +82,7 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
 
             var targets=  importer.Import();
             Assert.IsNotNull(targets);
-            Assert.IsTrue(targets.Any());
+            Assert.IsTrue(targets.Count > 0);
 
             Assert.IsTrue(targets.Count > 10);
             foreach (var iqTarget in targets.Take(10))
@@ -99,7 +99,7 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
 
             var targets = importer.Import();
             Assert.IsNotNull(targets);
-            Assert.IsTrue(targets.Any());
+            Assert.IsTrue(targets.Count > 0);
 
             var utilities = new IqTargetUtilities();
 
@@ -125,7 +125,7 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
 
             var targets = importer.Import();
             Assert.IsNotNull(targets);
-            Assert.IsTrue(targets.Any());
+            Assert.IsTrue(targets.Count > 0);
 
             Assert.IsTrue(targets.Count > 0);
             foreach (var iqTarget in targets.Take(10))

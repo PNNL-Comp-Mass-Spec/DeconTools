@@ -133,7 +133,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         public bool HasChildren()
         {
-            return _childTargets.Any();
+            return _childTargets.Count > 0;
         }
 
         public bool HasParent => ParentTarget != null;
