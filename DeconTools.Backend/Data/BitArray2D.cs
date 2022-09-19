@@ -131,7 +131,7 @@ namespace DeconTools.Backend.Data.Structures
 
         //    if (bitArray.Length % 8 != 0)
         //    {
-        //        num_bytes += 1;
+        //        num_bytes++;
         //    }
 
         //    var bytes = new byte[num_bytes];

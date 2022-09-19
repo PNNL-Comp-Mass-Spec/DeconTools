@@ -140,7 +140,7 @@ namespace DeconTools.Backend.Runs
         {
             var xyData = GetMassSpectrum(scanSet);
 
-            if (xyData.Xvalues == null || xyData.Xvalues.Length <= 0)
+            if (xyData.Xvalues == null || xyData.Xvalues.Length == 0)
             {
                 return xyData;
             }
