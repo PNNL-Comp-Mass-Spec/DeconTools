@@ -240,8 +240,7 @@ namespace DeconTools.Backend.Data.Structures
 
             while (node != null)
             {
-                var thisFeature = node.Value as Peak;
-                if (thisFeature == null)
+                if (!(node.Value is Peak thisFeature))
                     return null;
 
                 var ppmDifference = 1000000 * (massValue - thisFeature.XValue) / massValue;
@@ -275,8 +274,7 @@ namespace DeconTools.Backend.Data.Structures
                 try
                 {
                     // ReSharper disable once SuspiciousTypeConversion.Global
-                    var thisFeature = node.Value as MSResultPeakWithLocation;
-                    if (thisFeature == null)
+                    if (!(node.Value is MSResultPeakWithLocation thisFeature))
                     {
                         Console.WriteLine("BinarySearchTree: The node is not of type MSResultPeakWithLocation");
                         continue;
@@ -325,10 +323,7 @@ namespace DeconTools.Backend.Data.Structures
             {
                 try
                 {
-                    var msPeak1 = node.Value as Peak;
-                    var msPeak2 = value as Peak;
-
-                    if (msPeak1 == null || msPeak2 == null) continue;
+                    if (!(node.Value is Peak msPeak1) || !(value is Peak msPeak2)) continue;
 
                     var ppmDifference = 1000000 * (msPeak1.XValue - msPeak2.XValue) / msPeak1.XValue;
                     var absolutePPMDifference = Math.Abs(ppmDifference);

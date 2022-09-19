@@ -40,8 +40,7 @@ namespace DeconTools.Workflows.Backend.Core
                 MSGenerator.IsTICRequested = false;
             }
 
-            var target = result.Target as ChromPeakIqTarget;
-            if (target == null)
+            if (!(result.Target is ChromPeakIqTarget target))
             {
                 throw new NullReferenceException("The ChromPeakAnalyzerIqWorkflow only works with the ChromPeakIqTarget.");
             }

@@ -21,9 +21,9 @@ namespace DeconTools.Backend.Utilities.Converters
 
             foreach (var peak in peakList)
             {
-                if (peak is MSPeak)
+                if (peak is MSPeak msPeak)
                 {
-                    msPeakList.Add((MSPeak)peak);
+                    msPeakList.Add(msPeak);
                 }
             }
             return msPeakList;

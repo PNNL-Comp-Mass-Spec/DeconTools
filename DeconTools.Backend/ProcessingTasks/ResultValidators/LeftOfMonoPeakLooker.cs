@@ -70,9 +70,8 @@ namespace DeconTools.Backend.ProcessingTasks.ResultValidators
                 return null;
             }
 
-            var peakToTheLeft = foundLeftOfMonoPeaks.OrderByDescending(p => p.Height).First() as MSPeak;
 
-            if (peakToTheLeft == null) return null;
+            if (!(foundLeftOfMonoPeaks.OrderByDescending(p => p.Height).First() is MSPeak peakToTheLeft)) return null;
 
             if (peakToTheLeft.Height > monoPeak.Height * MinRatioToGiveFlag)
             {

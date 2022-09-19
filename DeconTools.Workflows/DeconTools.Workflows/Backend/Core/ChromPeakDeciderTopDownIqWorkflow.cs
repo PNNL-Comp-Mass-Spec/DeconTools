@@ -189,9 +189,7 @@ namespace DeconTools.Workflows.Backend.Core
         /// <param name="result"></param>
         private void PerformChargeCorrelation(IqResult result)
         {
-            var iqChargeCorrelator = ChromatogramCorrelator as IqChargeCorrelator;
-            var topDownIqResult = result as TopDownIqResult;
-            if (iqChargeCorrelator != null && topDownIqResult != null)
+            if (ChromatogramCorrelator is IqChargeCorrelator iqChargeCorrelator && result is TopDownIqResult topDownIqResult)
             {
                 topDownIqResult.ChargeCorrelationData = iqChargeCorrelator.CorrelateData(GetAllChromPeakIqTargets(result), Run);
             }

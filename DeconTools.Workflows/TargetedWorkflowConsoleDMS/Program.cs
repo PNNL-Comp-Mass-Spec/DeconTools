@@ -64,9 +64,7 @@ namespace TargetedWorkflowConsole
 
             try
             {
-                var workflowParameters = WorkflowParameters.CreateParameters(fileInfo.FullName) as WorkflowExecutorBaseParameters;
-
-                if (workflowParameters == null)
+                if (!(WorkflowParameters.CreateParameters(fileInfo.FullName) is WorkflowExecutorBaseParameters workflowParameters))
                 {
                     ReportError("Workflow parameters created from " + args[1] + " are null");
                     return -6;
