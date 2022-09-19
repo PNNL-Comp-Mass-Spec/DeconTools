@@ -33,8 +33,10 @@ namespace DeconTools.Workflows.Backend.Core
 
         public List<IqTarget> GetTargetsFromNodelLevel(IqTarget target, int level)
         {
-            var iqTargetList = new List<IqTarget>();
-            iqTargetList.Add(target);
+            var iqTargetList = new List<IqTarget>
+            {
+                target
+            };
 
             return GetTargetsFromNodelLevel(iqTargetList, level);
         }
@@ -305,8 +307,10 @@ namespace DeconTools.Workflows.Backend.Core
             var selectID = target.ID;
             var selectChargeState = target.ChargeState;
 
-            var targetList = new List<IqTarget>();
-            targetList.Add(tempTarget);
+            var targetList = new List<IqTarget>
+            {
+                tempTarget
+            };
 
             var nodeLevelTargets = util.GetTargetsFromNodelLevel(targetList, target.NodeLevel);
 

@@ -98,8 +98,10 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
 
             Assert.AreEqual(5, nodeLevelCount);
 
-            var targetList = new List<IqTarget>();
-            targetList.Add(iqTarget1);
+            var targetList = new List<IqTarget>
+            {
+                iqTarget1
+            };
 
             var level2Targets=  util.GetTargetsFromNodelLevel(targetList, 2);
 

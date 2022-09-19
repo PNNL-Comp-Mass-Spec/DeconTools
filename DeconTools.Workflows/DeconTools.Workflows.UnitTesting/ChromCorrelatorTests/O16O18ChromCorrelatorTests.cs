@@ -36,8 +36,10 @@ namespace DeconTools.Workflows.UnitTesting.ChromCorrelatorTests
             iqTarget.ID = 1093;
             iqTarget.ChargeState = 0;
 
-            var iqTargetList = new List<IqTarget>();
-            iqTargetList.Add(iqTarget);
+            var iqTargetList = new List<IqTarget>
+            {
+                iqTarget
+            };
 
             var utilities = new IqTargetUtilities();
             utilities.CreateChildTargets(iqTargetList);

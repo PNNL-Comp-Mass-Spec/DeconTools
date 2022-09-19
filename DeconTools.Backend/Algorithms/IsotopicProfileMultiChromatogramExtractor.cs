@@ -84,8 +84,10 @@ namespace DeconTools.Backend.Algorithms
         #region Private Methods
         private IList<Peak> getTopPeaks(IsotopicProfile theorIso1, int numPeaks)
         {
-            IList<Peak> sortedList = new List<Peak>();
-            sortedList.Add(theorIso1.Peaklist[0]);
+            IList<Peak> sortedList = new List<Peak>
+            {
+                theorIso1.Peaklist[0]
+            };
 
             for (var i = 1; i < theorIso1.Peaklist.Count; i++)
             {

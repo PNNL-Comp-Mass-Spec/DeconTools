@@ -52,8 +52,10 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
             target.EmpiricalFormula = oldStyleTarget.EmpiricalFormula;
             target.ChargeState = oldStyleTarget.ChargeState;
 
-            var targets = new List<IqTarget>(1);
-            targets.Add(target);
+            var targets = new List<IqTarget>(1)
+            {
+                target
+            };
 
             var executor = new IqExecutor(executorBaseParameters, run);
             //executor.ChromSourceDataFilePath = peaksTestFile;
