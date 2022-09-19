@@ -265,7 +265,7 @@ namespace DeconTools.Workflows.Backend.Core
             {
                 var result = (TopDownTargetedResultDTO)results[i];
                 result.PrsmList = new HashSet<int>();
-                if (result.MatchedMassTagID > 0)
+                if (result.MatchedMassTagID >= 0)
                 {
                     result.PrsmList.Add(result.MatchedMassTagID);
                 }
@@ -295,7 +295,7 @@ namespace DeconTools.Workflows.Backend.Core
                     }
 
                     // Add other Prsm
-                    if (otherResult.MatchedMassTagID > 0)
+                    if (otherResult.MatchedMassTagID >= 0)
                     {
                         result.PrsmList.Add(otherResult.MatchedMassTagID);
                     }

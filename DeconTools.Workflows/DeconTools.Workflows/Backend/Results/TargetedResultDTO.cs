@@ -25,6 +25,10 @@ namespace DeconTools.Workflows.Backend.Results
 
         public string ErrorDescription { get; set; }
 
+        /// <summary>
+        /// ID of the matching Mass Tag ID (or Prsm_ID when the input is a TopPIC_PrSMs.txt file)
+        /// </summary>
+        /// <remarks>-1 if undefined, since TopPIC Prsm_IDs are 0 based</remarks>
         public int MatchedMassTagID { get; set; }
 
         public string EmpiricalFormula { get; set; }

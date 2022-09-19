@@ -7,7 +7,7 @@ namespace IQ.Console
     {
         // Ignore Spelling: Orbitrap, workflow
 
-        private const string PROGRAM_DATE = "September 16, 2022";
+        private const string PROGRAM_DATE = "September 19, 2022";
 
         public IqConsoleOptions()
         {
