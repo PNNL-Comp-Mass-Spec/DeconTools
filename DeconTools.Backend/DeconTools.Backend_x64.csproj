@@ -99,21 +99,6 @@
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <Reference Include="ThermoFisher.CommonCore.BackgroundSubtraction">
-      <HintPath>..\Library\ThermoFisher.CommonCore.BackgroundSubtraction.dll</HintPath>
-    </Reference>
-    <Reference Include="ThermoFisher.CommonCore.Data">
-      <HintPath>..\Library\ThermoFisher.CommonCore.Data.dll</HintPath>
-    </Reference>
-    <Reference Include="ThermoFisher.CommonCore.MassPrecisionEstimator">
-      <HintPath>..\Library\ThermoFisher.CommonCore.MassPrecisionEstimator.dll</HintPath>
-    </Reference>
-    <Reference Include="ThermoFisher.CommonCore.RawFileReader">
-      <HintPath>..\Library\ThermoFisher.CommonCore.RawFileReader.dll</HintPath>
-    </Reference>
-    <Reference Include="ThermoRawFileReader">
-      <HintPath>..\Library\ThermoRawFileReader.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Algorithms\BasicMSFeatureFinder.cs" />
@@ -502,6 +487,9 @@
       <Version>2.7.0</Version>
     </PackageReference>
     <PackageReference Include="System.Data.SQLite.Core" Version="1.0.111" />
+    <PackageReference Include="ThermoRawFileReader">
+      <Version>4.1.42</Version>
+    </PackageReference>
     <PackageReference Include="UIMFLibrary">
       <Version>3.7.8</Version>
     </PackageReference>
