@@ -16,7 +16,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
     [Category("Functional")]
     public class O16O18ExecutorTests
     {
-
         [Test]
         [Category("MustPass")]
         public void IqExecutor_StandardO16O18Testing_VladAlz()
@@ -41,11 +40,8 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             executorParameters.ReferenceTargetsFilePath =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\O16O18_standard_testing\Test1_VladAlz\Targets\MT_Human_ALZ_O18_P836\MassTags_PMT2.txt";
 
-
             var expectedResultsFilename = Path.Combine(executorParameters.OutputDirectoryBase, "IqResults", RunUtilities.GetDatasetName(testDatasetPath) + "_iqResults.txt");
             if (File.Exists(expectedResultsFilename)) File.Delete(expectedResultsFilename);
-
-
 
             var autoSavedExecutorParametersFile =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\O16O18_standard_testing\Test1_VladAlz\Parameters\ExecutorParameters1_autosaved.xml";
@@ -58,7 +54,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\O16O18_standard_testing\Test1_VladAlz\Targets\MT_Human_ALZ_O18_P836\MassTags_PMT2_First60.txt";
 
             targetsFile = @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\O16O18_standard_testing\Test1_VladAlz\Targets\MT_Human_ALZ_O18_P836\MassTags_PMT2.txt";
-
 
             executor.LoadAndInitializeTargets(targetsFile);
             executor.SetupMassAndNetAlignment();
@@ -89,14 +84,11 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             Assert.AreEqual(0.32678m, (decimal)result1.ElutionTimeObs);
             Assert.AreEqual(4545, result1.LcScanObs);
             Assert.AreEqual(0.02,(decimal)result1.FitScore);
-            
         }
-
 
         public void ProblemTesting_correlationProb1()
         {
             //see JIRA https://jira.pnnl.gov/jira/browse/OMCS-628
-
 
             var executorParameters = new BasicTargetedWorkflowExecutorParameters();
 
@@ -136,9 +128,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             executor.Execute();
         }
 
-
-
-
         [Test]
         [Category("MustPass")]
         public void StandardO16O18Testing_VladAlz()
@@ -166,7 +155,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             executor.Targets.TargetList =
                 executor.Targets.TargetList.Where(p => p.ID == testTarget).ToList();
 
-
             //executor.InitializeRun(testDatasetPath);
             //executor.TargetedWorkflow.Run = executor.Run;
 
@@ -178,12 +166,11 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             //    workflow.Execute();
             //    var result = workflow.Result as DeconTools.Backend.Core.Results.LcmsFeatureTargetedResult;
 
-
             //}
 
             executor.Execute();
 
-            var expectedResultsFilename = Path.Combine(executorParameters.OutputDirectoryBase, 
+            var expectedResultsFilename = Path.Combine(executorParameters.OutputDirectoryBase,
                                                           "Results",
                                                           executor.TargetedWorkflow.Run.DatasetName + "_Results.txt");
 
@@ -203,9 +190,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             Assert.IsTrue(result1.ChromCorrO16O18DoubleLabel > 0);
 
             Console.WriteLine(result1.ToStringWithDetailsAsRow());
-
         }
-
 
         [Test]
         public void tempTest1()
@@ -220,7 +205,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             executorParameters.TargetedAlignmentWorkflowParameterFile =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\O16O18_standard_testing\Test1_VladAlz\Parameters\TargetedAlignmentWorkflowParameters1.xml";
 
-
             //executorParameters.AlignmentInfoFolder = 
 
             //string testDatasetPath = @"D:\Data\O16O18\Vlad_Mouse\mhp_plat_test_1_14April13_Frodo_12-12-04.raw";
@@ -230,17 +214,13 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
         }
 
-
-
         [Category("ProblemTesting")]
         [Test]
         public void O16O18Workflow_ProblemCaseTesting1()
         {
-
             //This is a nice case where the O16 is quite low and can be missed. In the current settings
             //the O16Chrom is null (by itself), so the chrom correlation fails.
             //Thus quant based on chrom corr fails, but quant based on O16O18 feature finding succeeds. 
-
 
             //7673789
 
@@ -265,7 +245,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             executor.Execute();
 
-            var expectedResultsFilename = Path.Combine(executorParameters.OutputDirectoryBase, 
+            var expectedResultsFilename = Path.Combine(executorParameters.OutputDirectoryBase,
                                                           "Results",
                                                           executor.TargetedWorkflow.Run.DatasetName + "_results.txt");
 
@@ -274,15 +254,12 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             var result1 = results.First();
 
             Console.WriteLine(result1.ToStringWithDetailsAsRow());
-
         }
-
 
         [Category("ProblemTesting")]
         [Test]
         public void O16O18Workflow_ProblemCaseTesting2()
         {
-
             var executorParametersFile =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\O16O18_standard_testing\Test1_VladAlz\Parameters\ExecutorParameters1.xml";
 
@@ -291,7 +268,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             executorParameters.TargetsFilePath =
                 @"\\protoapps\DataPkgs\Public\2012\641_Alz_O16O18_dataprocessing2\Targets\MT_Human_ALZ_O18_P852\MassTags_PMT2.txt";
-
 
             var testDatasetPath =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\O16O18_standard_testing\Test1_VladAlz\RawData\Alz_P01_A01_097_26Apr12_Roc_12-03-15.RAW";
@@ -315,9 +291,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             var result1 = results.First();
 
             Console.WriteLine(result1.ToStringWithDetailsAsRow());
-
         }
-
-
     }
 }

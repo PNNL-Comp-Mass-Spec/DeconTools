@@ -14,9 +14,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             var parameters = new N14N15Workflow2Parameters();
             parameters.SaveParametersToXML(exportedParametersFile);
-
         }
-
 
         [Test]
         public void importParametersTest1()
@@ -27,8 +25,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             Assert.AreEqual("N14N15Targeted1", wp.WorkflowType.ToString());
             Assert.IsTrue(wp is N14N15Workflow2Parameters);
-
         }
-
     }
 }

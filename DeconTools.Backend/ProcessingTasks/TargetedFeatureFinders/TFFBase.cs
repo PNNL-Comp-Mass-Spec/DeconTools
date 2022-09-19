@@ -196,9 +196,6 @@ namespace DeconTools.Backend.ProcessingTasks.TargetedFeatureFinders
 
             outFeature.MonoPeakMZ = monoIsotopicPeakMZ;
             outFeature.MonoIsotopicMass = monoIsotopicMass;
-
-
-
         }
 
         public override void Execute(ResultCollection resultList)

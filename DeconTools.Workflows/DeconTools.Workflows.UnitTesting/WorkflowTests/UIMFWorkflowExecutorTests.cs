@@ -15,7 +15,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
         private string uimfMsMsFile = @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\UIMF_Targeted_MSMS_Testing\RawData\SarcCtrl_P21_1mgml_IMS6_AgTOF07_210min_CID_01_05Oct12_Frodo.UIMF";
 
-
         [Test]
         public void Test1()
         {
@@ -31,14 +30,12 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             var outputExecutorParameterFilename = executorParameterFilename.Replace(".xml", "_autoGen.xml");
             executorParameters.SaveParametersToXML(outputExecutorParameterFilename);
 
-
             var testTarget = 7563580;
 
             var executor = new BasicTargetedWorkflowExecutor(executorParameters, testDatasetPath);
             executor.Targets.TargetList = executor.Targets.TargetList.Where(p => p.ID == testTarget).ToList();
 
             executor.Execute();
-
         }
 
         [Test]
@@ -148,6 +145,5 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             var executor = new UIMFTargetedWorkflowExecutor(executorParameters, workflowParameters, datasetPath);
             executor.Execute();
         }
-
     }
 }

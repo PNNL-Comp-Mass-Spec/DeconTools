@@ -29,7 +29,6 @@ namespace DeconTools.Workflows.UnitTesting
             var mtimporter = new MassTagFromTextFileImporter(massTagFile);
             mtc = mtimporter.Import();
 
-
             var parameters = new NETAndMassAlignerParameters();
             var aligner = new NETAndMassAligner();
 
@@ -48,7 +47,7 @@ namespace DeconTools.Workflows.UnitTesting
 
             var netAfterAlignment = run.NetAlignmentInfo.GetNETValueForScan(scan);
             var mzAfterAlignment = run.GetAlignedMZ(obsMZ);
-            
+
             Console.WriteLine("NET before alignment = " + netBeforeAlignment);
             Console.WriteLine("NET after alignment = " + netAfterAlignment);
 
@@ -57,8 +56,6 @@ namespace DeconTools.Workflows.UnitTesting
             Console.WriteLine("MZ after alignment =  " + mzAfterAlignment);
             Console.WriteLine("PPMDiff before alignment = " + (theorMZ - mzBeforeAlignment)/theorMZ*1e6);
             Console.WriteLine("PPMDiff after alignment =  " + (theorMZ - mzAfterAlignment) / theorMZ * 1e6);
-
         }
-
     }
 }

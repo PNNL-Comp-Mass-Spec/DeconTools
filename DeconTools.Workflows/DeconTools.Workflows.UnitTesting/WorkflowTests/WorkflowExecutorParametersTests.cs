@@ -6,7 +6,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 {
     public class WorkflowExecutorParametersTests
     {
-
         [Test]
         public void exportParametersTest1()
         {
@@ -20,15 +19,12 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             parameters.TargetsFilePath = @"d:\temp\MassTags\massTagsToBeTargeted.txt";
             parameters.TargetsBaseFolder = @"d:\temp";
 
-
             parameters.TargetedAlignmentWorkflowParameterFile = @"d:\temp\Parameters\targetedAlignmentParameters.xml";
             parameters.WorkflowParameterFile = @"d:\temp\Parameters\WorkflowParameters.xml";
             parameters.TargetsBaseFolder = @"d:\temp";
 
             parameters.SaveParametersToXML(exportedParametersFile);
-
         }
-
 
         [Test]
         public void exportParametersTest2()
@@ -46,11 +42,8 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             parameters.TargetedAlignmentWorkflowParameterFile = @"d:\temp\Parameters\targetedAlignmentParameters.xml";
             parameters.WorkflowParameterFile = @"d:\temp\Parameters\WorkflowParameters.xml";
 
-
             parameters.SaveParametersToXML(exportedParametersFile);
-
         }
-
 
         [Test]
         public void importParametersTest1()
@@ -69,7 +62,5 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             Assert.AreEqual(@"d:\temp\Parameters\WorkflowParameters.xml", parameters.WorkflowParameterFile);
             Assert.AreEqual(@"d:\temp", parameters.TargetsBaseFolder);
         }
-
-
     }
 }

@@ -32,19 +32,14 @@ namespace DeconTools.Workflows.UnitTesting
             var mtimporter = new MassTagFromTextFileImporter(massTagFile);
             mtc = mtimporter.Import();
 
-
             var parameters = new NETAndMassAlignerParameters();
             var aligner = new NETAndMassAligner();
 
             aligner.SetFeaturesToBeAligned(repo.Results);
             aligner.SetReferenceMassTags(mtc.TargetList);
 
-
-
-
             var sb = new StringBuilder();
             sb.Append("theorMZ\tobsMZ\talignedMZ\tppmErrorBefore\tppmErrorAfter\n");
-
 
             parameters.MassCalibrationWindow = 50;
             parameters.MassCalibrationNumMassDeltaBins = 100;
@@ -70,10 +65,8 @@ namespace DeconTools.Workflows.UnitTesting
                     var ppmErrorBefore = (theorMZ - obsMZ) / theorMZ * 1e6;
                     var ppmErrorAfter = (theorMZ - alignedMZ) / theorMZ * 1e6;
 
-
                     sb.Append(result.TargetID + "\t" + result.ScanLC + "\t" + theorMZ.ToString("0.00000") + "\t" + obsMZ.ToString("0.00000") + "\t" + alignedMZ.ToString("0.00000") + "\t" + ppmErrorBefore.ToString("0.0") + "\t" + ppmErrorAfter.ToString("0.0"));
                     sb.Append(Environment.NewLine);
-
 
                     ppmErrorsAfter.Add(ppmErrorAfter);
                     ppmErrorsBefore.Add(ppmErrorBefore);
@@ -87,14 +80,8 @@ namespace DeconTools.Workflows.UnitTesting
                 //Console.WriteLine("Average ppm error before alignment = " + ppmErrorsBefore.Average().ToString("0.00"));
                 //Console.WriteLine("Average ppm error after alignment = " + ppmErrorsAfter.Average().ToString("0.00"));
 
-
             }
-
-
-
-
         }
-
 
         [Test]
         public void AlignmentParameterTesting2()
@@ -113,19 +100,14 @@ namespace DeconTools.Workflows.UnitTesting
             var mtimporter = new MassTagFromTextFileImporter(massTagFile);
             mtc = mtimporter.Import();
 
-
             var parameters = new NETAndMassAlignerParameters();
             var aligner = new NETAndMassAligner();
 
             aligner.SetFeaturesToBeAligned(repo.Results);
             aligner.SetReferenceMassTags(mtc.TargetList);
 
-
-
-
             var sb = new StringBuilder();
             sb.Append("mtid\tscanLC\ttheorMZ\tobsMZ\talignedMZ\tppmErrorBefore\tppmErrorAfter\n");
-
 
             parameters.MassCalibrationWindow = 20;
             parameters.MassCalibrationNumMassDeltaBins = 100;
@@ -133,8 +115,6 @@ namespace DeconTools.Workflows.UnitTesting
            // int[] massCalXSliceValues = { 3, 6, 9, 12, 15 };
 
             int[] massCalXSliceValues = { 15 };
-
-
 
             foreach (var xsliceVal in massCalXSliceValues)
             {
@@ -155,10 +135,8 @@ namespace DeconTools.Workflows.UnitTesting
                     var ppmErrorBefore = (theorMZ - obsMZ) / theorMZ * 1e6;
                     var ppmErrorAfter = (theorMZ - alignedMZ) / theorMZ * 1e6;
 
-
                     sb.Append(result.TargetID + "\t" + result.ScanLC + "\t" + theorMZ.ToString("0.00000") + "\t" + obsMZ.ToString("0.00000") + "\t" + alignedMZ.ToString("0.00000") + "\t" + ppmErrorBefore.ToString("0.0") + "\t" + ppmErrorAfter.ToString("0.0"));
                     sb.Append(Environment.NewLine);
-
 
                     ppmErrorsAfter.Add(ppmErrorAfter);
                     ppmErrorsBefore.Add(ppmErrorBefore);
@@ -173,24 +151,12 @@ namespace DeconTools.Workflows.UnitTesting
                 Console.WriteLine();
 
                 Console.WriteLine(xsliceVal + "\t" + ppmErrorsBefore.Average().ToString("0.00") + "\t" + ppmErrorsAfter.Average().ToString("0.00"));
-
-
-
-
             }
-
-
-
-
         }
-
-
 
         [Test]
         public void AlignmentParameterTesting3()
         {
-
-
             var run = new RunFactory().CreateRun(@"D:\Data\Orbitrap\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW");
 
             var alignmentFeaturesFile = @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\AlignmentInfo\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_READONLY_alignedFeatures.txt";
@@ -203,19 +169,14 @@ namespace DeconTools.Workflows.UnitTesting
             var mtimporter = new MassTagFromTextFileImporter(massTagFile);
             mtc = mtimporter.Import();
 
-
             var parameters = new NETAndMassAlignerParameters();
             var aligner = new NETAndMassAligner();
 
             aligner.SetFeaturesToBeAligned(repo.Results);
             aligner.SetReferenceMassTags(mtc.TargetList);
 
-
-
-
             var sb = new StringBuilder();
             sb.Append("mtid\tscanLC\ttheorMZ\tobsMZ\talignedMZ\tppmErrorBefore\tppmErrorAfter\n");
-
 
             parameters.MassCalibrationWindow = 50;
             parameters.MassCalibrationNumMassDeltaBins = 100;
@@ -223,8 +184,6 @@ namespace DeconTools.Workflows.UnitTesting
             int[] massCalXSliceValues = { 3, 6, 9, 12, 15, 16, 17, 18, 19, 20 };
 
             //int[] massCalXSliceValues = { 9 };
-
-
 
             foreach (var xsliceVal in massCalXSliceValues)
             {
@@ -245,10 +204,8 @@ namespace DeconTools.Workflows.UnitTesting
                     var ppmErrorBefore = (theorMZ - obsMZ) / theorMZ * 1e6;
                     var ppmErrorAfter = (theorMZ - alignedMZ) / theorMZ * 1e6;
 
-
                     sb.Append(result.TargetID + "\t" + result.ScanLC + "\t" + theorMZ.ToString("0.00000") + "\t" + obsMZ.ToString("0.00000") + "\t" + alignedMZ.ToString("0.00000") + "\t" + ppmErrorBefore.ToString("0.0") + "\t" + ppmErrorAfter.ToString("0.0"));
                     sb.Append(Environment.NewLine);
-
 
                     ppmErrorsAfter.Add(ppmErrorAfter);
                     ppmErrorsBefore.Add(ppmErrorBefore);
@@ -263,19 +220,8 @@ namespace DeconTools.Workflows.UnitTesting
                 //Console.WriteLine();
 
                 Console.WriteLine(xsliceVal + "\t" + filterWithGrubbsApplied(ppmErrorsBefore).Average().ToString("0.00") + "\t" + filterWithGrubbsApplied(ppmErrorsAfter).Average().ToString("0.00"));
-
-
-
-
-
-
             }
-
-
-
-
         }
-
 
         [Test]
         public void Issue0724_AlignmentProblemsTest1()
@@ -293,20 +239,14 @@ namespace DeconTools.Workflows.UnitTesting
             var mtimporter = new MassTagFromTextFileImporter(massTagFile);
             mtc = mtimporter.Import();
 
-
-
             var parameters = new NETAndMassAlignerParameters();
             var aligner = new NETAndMassAligner();
 
             aligner.SetFeaturesToBeAligned(repo.Results);
             aligner.SetReferenceMassTags(mtc.TargetList);
 
-
-
-
             var sb = new StringBuilder();
             sb.Append("mtid\tscanLC\ttheorMZ\tobsMZ\talignedMZ\tppmErrorBefore\tppmErrorAfter\n");
-
 
             parameters.MassCalibrationWindow = 50;
             parameters.MassCalibrationNumMassDeltaBins = 100;
@@ -314,8 +254,6 @@ namespace DeconTools.Workflows.UnitTesting
              int[] massCalXSliceValues = { 3, 6, 9, 12, 15, 16, 17, 18, 19, 20 };
 
             //int[] massCalXSliceValues = { 6 };
-
-
 
             foreach (var xsliceVal in massCalXSliceValues)
             {
@@ -336,10 +274,8 @@ namespace DeconTools.Workflows.UnitTesting
                     var ppmErrorBefore = (theorMZ - obsMZ) / theorMZ * 1e6;
                     var ppmErrorAfter = (theorMZ - alignedMZ) / theorMZ * 1e6;
 
-
                     sb.Append(result.TargetID + "\t" + result.ScanLC + "\t" + theorMZ.ToString("0.00000") + "\t" + obsMZ.ToString("0.00000") + "\t" + alignedMZ.ToString("0.00000") + "\t" + ppmErrorBefore.ToString("0.0") + "\t" + ppmErrorAfter.ToString("0.0"));
                     sb.Append(Environment.NewLine);
-
 
                     ppmErrorsAfter.Add(ppmErrorAfter);
                     ppmErrorsBefore.Add(ppmErrorBefore);
@@ -354,16 +290,8 @@ namespace DeconTools.Workflows.UnitTesting
                 //Console.WriteLine();
 
                 Console.WriteLine(xsliceVal + "\t" + filterWithGrubbsApplied(ppmErrorsBefore).Average().ToString("0.00") + "\t" + filterWithGrubbsApplied(ppmErrorsAfter).Average().ToString("0.00"));
-
-
-
-
             }
-
-
-
         }
-
 
         public List<double> filterWithGrubbsApplied(List<double> vals)
         {
@@ -381,11 +309,9 @@ namespace DeconTools.Workflows.UnitTesting
                 {
                     filteredVals.Add(item);
                 }
-
             }
 
             return filteredVals;
-
         }
 
         public double getStDev(List<double> vals)
@@ -402,14 +328,12 @@ namespace DeconTools.Workflows.UnitTesting
             return stdev;
         }
 
-
         [Test]
         public void Issue0725_AlignmentProblemsTest1()
         {
             var run = new RunFactory().CreateRun(@"D:\Data\Orbitrap\Issue0725_badAlignment\QC_Shew_10_03-2_100min_06May10_Tiger_10-04-08.RAW");
 
             var alignmentFeaturesFile = run.DatasetFileOrDirectoryPath.Replace(".RAW", "_alignedFeatures.txt");
-
 
             var importer = new UnlabeledTargetedResultFromTextImporter(alignmentFeaturesFile);
             var repo = importer.Import();
@@ -420,30 +344,21 @@ namespace DeconTools.Workflows.UnitTesting
             var mtimporter = new MassTagFromTextFileImporter(massTagFile);
             mtc = mtimporter.Import();
 
-
-
             var parameters = new NETAndMassAlignerParameters();
             var aligner = new NETAndMassAligner();
 
             aligner.SetFeaturesToBeAligned(repo.Results);
             aligner.SetReferenceMassTags(mtc.TargetList);
 
-
-
-
             var sb = new StringBuilder();
             sb.Append("mtid\tscanLC\ttheorMZ\tobsMZ\talignedMZ\tppmErrorBefore\tppmErrorAfter\n");
-
 
             parameters.MassCalibrationWindow = 50;
             parameters.MassCalibrationNumMassDeltaBins = 100;
 
-
             int[] massCalXSliceValues = { 3, 6, 9, 10, 12, 15,18,20 };
 
             //int[] massCalXSliceValues = { 6 };
-
-
 
             foreach (var xsliceVal in massCalXSliceValues)
             {
@@ -484,13 +399,7 @@ namespace DeconTools.Workflows.UnitTesting
                 //Console.WriteLine();
 
                 Console.WriteLine(xsliceVal + "\t" + filterWithGrubbsApplied(ppmErrorsBefore).Average().ToString("0.00") + "\t" + filterWithGrubbsApplied(ppmErrorsAfter).Average().ToString("0.00"));
-
-
-
-
             }
-
         }
-
     }
 }

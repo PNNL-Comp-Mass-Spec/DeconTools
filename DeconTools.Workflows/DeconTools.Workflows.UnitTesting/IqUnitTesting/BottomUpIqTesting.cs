@@ -14,7 +14,6 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
 {
     public class BottomUpIqTesting
     {
-
         [Test]
         public void ExecutorTest1()
         {
@@ -32,12 +31,10 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
             executorBaseParameters.OutputDirectoryBase =
                 @"\\protoapps\UserData\Fujimoto\SangtaeBottomUp\Results";
 
-
             var expectedResultsFilename = Path.Combine(executorBaseParameters.OutputDirectoryBase,
                                                           "IqResults",
                                                           RunUtilities.GetDatasetName(testFile) + "_iqResults.txt");
             if (File.Exists(expectedResultsFilename)) File.Delete(expectedResultsFilename);
-
 
             var run = new RunFactory().CreateRun(testFile);
 
@@ -80,6 +77,5 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
                 }
             }
         }
-
     }
 }

@@ -20,16 +20,12 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
                 };
             //executorParameters.TargetType = Globals.TargetType.LcmsFeature;
 
-
             var testDatasetPath = @"D:\Data\From_Scott\Gly08_Velos4_Jaguar_200nL_Sp01_3X_7uL_1000A_31Aug12.raw";
-
-
 
             TargetedWorkflowExecutor executor = new BasicTargetedWorkflowExecutor(executorParameters, testDatasetPath);
 
             //executor.Targets.TargetList = executor.Targets.TargetList.Where(p => p.ID == 18).ToList();
             executor.Execute();
-
         }
 
     //    [Ignore("For dev only")]
@@ -41,10 +37,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
                 TargetsFilePath = @"\\protoapps\DataPkgs\Public\2013\686_IQ_analysis_of_heme_peptides\Targets\SL-MtoA_peptides_formulas.txt"
             };
 
-
             var testDatasetPath = @"D:\Data\From_EricMerkley\HisHemeSL-MtrA_002_2Feb11_Sphinx_10-12-01.RAW";
-
-
 
             var workflowParameters = new BasicTargetedWorkflowParameters
             {
@@ -58,7 +51,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             var testTargetID = 750;
             var testTargetZ = 5;
-
 
             executor.Targets.TargetList = executor.Targets.TargetList.Where(p => p.ID == testTargetID
                 && p.ChargeState == testTargetZ).ToList();
@@ -88,12 +80,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
                 {
                     Console.WriteLine(chrompeak.XValue.ToString("0.0000") + "\t" + chrompeak.Height.ToString("0") + "\t" + chrompeak.Width.ToString("0.000"));
                 }
-
             }
-
-
-
-
 
             foreach (var chrompeak in executor.TargetedWorkflow.ChromPeaksDetected)
             {
@@ -110,12 +97,10 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
         }
 
-
   //      [Ignore("For dev only")]
         [Test]
         public void LocalQCShewProcessingTest1()
         {
-
             var parameterFileName = @"C:\Users\d3x720\Documents\Data\QCShew\IQ\IQExecutorParameterFile1.xml";
 
             var executorParameters = new BasicTargetedWorkflowExecutorParameters
@@ -125,9 +110,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             executorParameters.SaveParametersToXML(parameterFileName);
 
-
             var workflowParameters=new BasicTargetedWorkflowParameters();
-
 
             var workflow = new BasicTargetedWorkflow(workflowParameters);
 
@@ -138,13 +121,10 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             var testTargetID = 24749;
             var testTargetZ = 3;
 
-
-
             executor.Targets.TargetList = executor.Targets.TargetList.Where(p => p.ID == testTargetID
                 && p.ChargeState == testTargetZ).ToList();
 
             executor.Execute();
-
 
             //TestUtilities.DisplayXYValues(executor.TargetedWorkflow.ChromatogramXYData);
 
@@ -152,10 +132,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             {
                 Console.WriteLine(chrompeak.XValue.ToString("0.0000") + "\t"+ chrompeak.Height.ToString("0") + "\t"+chrompeak.Width.ToString("0.000") + "\n");
             }
-
-
         }
-
 
         [Test]
         public void ChaoChaoPeptidomicsTesting1()
@@ -183,14 +160,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             TargetedWorkflowExecutor executor = new BasicTargetedWorkflowExecutor(parameters, rawDatafile);
             executor.Execute();
-
-
-
-
-
-
         }
-
-
     }
 }

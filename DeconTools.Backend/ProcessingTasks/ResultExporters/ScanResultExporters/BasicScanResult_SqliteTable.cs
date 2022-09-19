@@ -23,7 +23,6 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
             };
         }
 
-
         #endregion
 
         #region Properties

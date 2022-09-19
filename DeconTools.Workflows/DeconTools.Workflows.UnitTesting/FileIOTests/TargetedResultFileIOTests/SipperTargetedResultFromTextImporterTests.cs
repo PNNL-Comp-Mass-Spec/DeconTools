@@ -31,10 +31,6 @@ namespace DeconTools.Workflows.UnitTesting.FileIOTests.TargetedResultFileIOTests
             Assert.IsTrue(testResult1.LabelDistributionVals.Length > 0);
 
             Console.WriteLine(testResult1.ToStringWithDetailsAsRow());
-
-
-
         }
-
     }
 }

@@ -33,7 +33,6 @@ namespace DeconTools.Workflows.Backend.Core
             util.CopyTargetProperties(target, this);
         }
 
-
         #region Properties
 
         public int ID { get; set; }
@@ -54,9 +53,7 @@ namespace DeconTools.Workflows.Backend.Core
 
         public double ElutionTimeTheor { get; set; }
 
-
         public int ScanLC { get; set; }
-
 
         public IqTarget ParentTarget { get; set; }
 
@@ -146,9 +143,6 @@ namespace DeconTools.Workflows.Backend.Core
         /// </summary>
         public double QualityScore { get; set; }
 
-
-
-
         public void AddTarget(IqTarget target)
         {
             target.ParentTarget = this;
@@ -188,7 +182,6 @@ namespace DeconTools.Workflows.Backend.Core
             return (ID + "; " + Code + "; " + EmpiricalFormula + "; " + MonoMassTheor.ToString("0.0000"));
         }
 
-
         /// <summary>
         /// RefineChildTargets is meant to implement a method to properly add or remove child targets from a parent based on some type of parameters.
         /// EG: Top down uses RefineIqTarget to remove redundant charge state targets and add missing charge state targets as well.
@@ -199,5 +192,3 @@ namespace DeconTools.Workflows.Backend.Core
         }
     }
 }
-
-

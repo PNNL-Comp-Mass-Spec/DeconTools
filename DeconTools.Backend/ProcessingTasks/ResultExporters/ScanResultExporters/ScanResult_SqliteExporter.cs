@@ -10,7 +10,6 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
         #region Properties
         #endregion
 
-
         #region Public Methods
         public override void ExportScanResults(DeconTools.Backend.Core.ResultCollection resultList)
         {

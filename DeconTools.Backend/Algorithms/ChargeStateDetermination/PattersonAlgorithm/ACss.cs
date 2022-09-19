@@ -11,7 +11,6 @@ namespace DeconTools.Backend.Algorithms.ChargeStateDetermination.PattersonAlgori
 
         #region Public Methods
 
-
         #endregion
 
         #region Private Methods

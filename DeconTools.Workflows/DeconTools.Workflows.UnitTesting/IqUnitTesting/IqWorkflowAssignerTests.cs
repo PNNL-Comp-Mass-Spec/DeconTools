@@ -22,7 +22,6 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
             IqTarget childTarget2 = new IqChargeStateTarget();
             IqTarget childTarget3 = new IqChargeStateTarget();
 
-
             parentTarget.AddTarget(childTarget1);
             parentTarget.AddTarget(childTarget2);
             parentTarget.AddTarget(childTarget3);
@@ -42,9 +41,6 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
             }
 
             Assert.IsTrue(parentTarget.Workflow is O16O18IqWorkflow);
-
-
         }
-
     }
 }

@@ -48,7 +48,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
 
             Console.WriteLine(target.EmpiricalFormula + "\t" + target.ChargeState);
 
-
             target.DoWorkflow();
             var result=  target.GetResult();
 
@@ -56,9 +55,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
 
             var reportString = result.ToStringWithDetailedReport();
             Console.WriteLine(reportString);
-
         }
-
 
         [Test]
         public void FailureToFindAnyChromatogramDataTest1()
@@ -69,11 +66,8 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
 
             var run = RunUtilities.CreateAndLoadPeaks(testFile, peaksTestFile);
 
-
             TargetedWorkflowParameters parameters = new BasicTargetedWorkflowParameters();
             parameters.ChromGenTolerance = 1;    //very narrow tolerance
-
-
 
             IqWorkflow iqWorkflow = new BasicIqWorkflow(run, parameters);
             IqTarget target = new IqChargeStateTarget(iqWorkflow);
@@ -81,7 +75,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
             target.EmpiricalFormula = DeconTools.Backend.Utilities.IsotopeDistributionCalculation.IsotopicDistributionCalculator.Instance.GetAveragineFormulaAsString(1399);
             target.ElutionTimeTheor = 0.3;
             target.ChargeState = 1;
-
 
             target.DoWorkflow();
             var result = target.GetResult();
@@ -92,9 +85,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
 
             var reportString = result.ToStringWithDetailedReport();
             Console.WriteLine(reportString);
-
-
         }
-
     }
 }

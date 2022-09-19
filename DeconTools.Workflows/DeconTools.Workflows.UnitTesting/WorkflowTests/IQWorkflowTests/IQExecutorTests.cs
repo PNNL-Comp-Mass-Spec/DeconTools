@@ -13,7 +13,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
     [TestFixture]
     public class IQExecutorTests
     {
-
         [Test]
         public void Isotest1()
         {
@@ -22,9 +21,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
             Console.WriteLine(empForumla);
 
             var formulaTable = IsotopicDistributionCalculator.Instance.GetAveragineFormulaAsTable(inputMass);
-
-
-
         }
 
         [Category("MustPass")]
@@ -42,12 +38,10 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
             var expectedResultsFilename = Path.Combine(resultsFolder, RunUtilities.GetDatasetName(testFile) + "_iqResults.txt");
             if (File.Exists(expectedResultsFilename)) File.Delete(expectedResultsFilename);
 
-
             WorkflowExecutorBaseParameters executorBaseParameters = new BasicTargetedWorkflowExecutorParameters();
             executorBaseParameters.ChromGenSourceDataPeakBR = 3;
             executorBaseParameters.ChromGenSourceDataSigNoise = 2;
             executorBaseParameters.TargetsFilePath = targetsFile;
-
 
             //create no more than two charge state targets per peptide
             executorBaseParameters.MaxNumberOfChargeStateTargetsToCreate = 2;
@@ -68,14 +62,9 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
 
                 Console.WriteLine(iqTarget + "\t" + numChildTargets);
             }
-
-
         }
 
-
         //"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Unlabelled\Targets\QCShew_Formic_MassTags_Bin10_singleTest1.txt"
-
-
 
         [Category("MustPass")]
         [Test]
@@ -117,7 +106,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
             workflowAssigner.AssignWorkflowToParent(parentWorkflow, executor.Targets);
             workflowAssigner.AssignWorkflowToChildren(childWorkflow, executor.Targets);
 
-
             //Main line for executing IQ:
             executor.Execute();
 
@@ -147,9 +135,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
 
             //the results in the Executor are in the a Result tree. So there should be just 10.
             Assert.AreEqual(10, executor.Results.Count);
-
         }
-
 
         [Category("MustPass")]
         [Test]
@@ -192,11 +178,8 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
             workflowAssigner.AssignWorkflowToParent(parentWorkflow, executor.Targets);
             workflowAssigner.AssignWorkflowToChildren(childWorkflow, executor.Targets);
 
-
-
             executor.SetupMassAndNetAlignment();
             executor.DoAlignment();
-
 
             //Main line for executing IQ:
             executor.Execute();
@@ -227,11 +210,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
 
             //the results in the Executor are in the a Result tree. So there should be just 10.
             Assert.AreEqual(10, executor.Results.Count);
-
         }
-
-
-
 
         [Test]
         public void ExecutorTest1()
@@ -247,12 +226,10 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
             executorBaseParameters.TargetsFilePath = targetsFile;
             executorBaseParameters.OutputDirectoryBase = @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Unlabelled";
 
-
             var expectedResultsFilename = Path.Combine(executorBaseParameters.OutputDirectoryBase,
                                                           "IqResults",
                                                           RunUtilities.GetDatasetName(testFile) + "_iqResults.txt");
             if (File.Exists(expectedResultsFilename)) File.Delete(expectedResultsFilename);
-
 
             var run = new RunFactory().CreateRun(testFile);
 
@@ -274,7 +251,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
             var workflowAssigner = new IqWorkflowAssigner();
             workflowAssigner.AssignWorkflowToParent(parentWorkflow, executor.Targets);
             workflowAssigner.AssignWorkflowToChildren(childWorkflow, executor.Targets);
-
 
             //Main line for executing IQ:
             executor.Execute();
@@ -304,7 +280,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
             //Assert.AreEqual(10, executor.Results.Count);
         }
 
-
         [Category("MustPass")]
         [Test]
         public void Executor_loadAlignment_Test1()
@@ -323,10 +298,8 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
             executorBaseParameters.OutputDirectoryBase = @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Unlabelled";
             var run = new RunFactory().CreateRun(testFile);
 
-
             var expectedResultsFilename = executorBaseParameters.OutputDirectoryBase  +"\\IqResults\\" + RunUtilities.GetDatasetName(testFile) + "_iqResults.txt";
             if (File.Exists(expectedResultsFilename)) File.Delete(expectedResultsFilename);
-
 
             var executor = new IqExecutor(executorBaseParameters, run);
             executor.ChromSourceDataFilePath = peaksTestFile;
@@ -336,10 +309,8 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
 
             executor.Targets = (from n in executor.Targets where n.ID == 27168 select n).ToList();
 
-
             executor.SetupMassAndNetAlignment();
             executor.DoAlignment();
-
 
             var targetedWorkflowParameters = new BasicTargetedWorkflowParameters();
             targetedWorkflowParameters.ChromNETTolerance = 0.1;
@@ -351,7 +322,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
             var workflowAssigner = new IqWorkflowAssigner();
             workflowAssigner.AssignWorkflowToParent(parentWorkflow, executor.Targets);
             workflowAssigner.AssignWorkflowToChildren(childWorkflow, executor.Targets);
-
 
             //Main line for executing IQ:
             executor.Execute();
@@ -380,7 +350,5 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
             //the results in the Executor are in the a Result tree. So there should be just 10.
             Assert.AreEqual(10, executor.Results.Count);
         }
-
-
     }
 }

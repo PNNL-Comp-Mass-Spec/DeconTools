@@ -23,6 +23,5 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             var parameters = new TargetedAlignerWorkflowParameters();
             parameters.LoadParameters(importedParametersFile);
         }
-
     }
 }

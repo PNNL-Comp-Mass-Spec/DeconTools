@@ -37,7 +37,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             executorParameters.SaveParametersToXML(outputFileName);
         }
 
-
         [Test]
         public void DemoParameterTest1()
         {
@@ -45,7 +44,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             var executorParameters = new BasicTargetedWorkflowExecutorParameters();
             executorParameters.SaveParametersToXML(outputFileName);
         }
-
 
         [Test]
         public void LoadExecutorParametersTest1()
@@ -56,13 +54,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             Assert.AreEqual(1500,(int)executorParameters.MaxMzForDefiningChargeStateTargets);
             Assert.AreEqual(100, executorParameters.MaxNumberOfChargeStateTargetsToCreate);
-
         }
-
-
-
-
-
 
         [Category("MustPass")]
         [Test]
@@ -124,7 +116,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             Console.WriteLine("ppmError before= \t" + result.MassErrorBeforeAlignment);
             Console.WriteLine("ppmError after= \t" + result.MassErrorAfterAlignment);
 
-
             Console.WriteLine("Database NET= " + result.Target.NormalizedElutionTime);
             Console.WriteLine("Result NET= " + result.GetNET());
             Console.WriteLine("Result NET Error= " + result.GetNETAlignmentError());
@@ -133,9 +124,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         //Dataset	TargetID	Code	EmpiricalFormula	ChargeState	Scan	ScanStart	ScanEnd	NumMSSummed	NET	NETError	NumChromPeaksWithinTol	NumQualityChromPeaksWithinTol	MonoisotopicMass	MonoisotopicMassCalibrated	MassErrorInPPM	MonoMZ	IntensityRep	FitScore	IScore	FailureType	ErrorDescription
         //QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18	24702	LLKEEGYIADYAVADEAKPELEITLK	C133H213N29O44	3	8624	8596	8659	0	0.42916	-0.009395	3	1	2920.49120	2920.50018	13.96	974.50434	7529645	0.0193	0.0000
         }
-
-
-
 
         [Category("MustPass")]
         [Test]
@@ -208,7 +196,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             //QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18	24702	LLKEEGYIADYAVADEAKPELEITLK	C133H213N29O44	3	8624	8596	8659	0	0.42916	-0.009395	3	1	2920.49120	2920.50018	13.96	974.50434	7529645	0.0193	0.0000
         }
 
-
         public void TargetedWorkflowUsingMsgfInputsTest1()
         {
             var executorParameters = new BasicTargetedWorkflowExecutorParameters
@@ -236,11 +223,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             workflowParameters.SaveParametersToXML(
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\IQConsoleDemo\IqWorkflowParameters.xml");
 
-
             var workflow = new BasicTargetedWorkflow(workflowParameters);
-
-
-
 
             var testDatasetPath =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\SIPPER_standard_testing\Yellow_C13_070_23Mar10_Griffin_10-01-28.raw";
@@ -251,7 +234,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             executor.Execute();
         }
-
 
         [Test]
         public void ExecutorTest2()
@@ -265,8 +247,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             TargetedWorkflowExecutor executor = new BasicTargetedWorkflowExecutor(executorParameters, testDatasetPath);
             executor.Execute();
-
-
         }
 
         [Test]
@@ -278,19 +258,13 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             var testDatasetPath =
                 @"\\protoapps\DataPkgs\Public\2012\601_Sipper_paper_data_processing_and_analysis\RawData\Yellow_C13_070_23Mar10_Griffin_10-01-28.raw";
 
-
             var executorParameters = new BasicTargetedWorkflowExecutorParameters();
             executorParameters.LoadParameters(executorParamFile);
             executorParameters.TargetType = Globals.TargetType.LcmsFeature;
 
             TargetedWorkflowExecutor executor = new BasicTargetedWorkflowExecutor(executorParameters, testDatasetPath);
             executor.Execute();
-
-
         }
-
-
-
 
         [Ignore("Local only")]
         [Test]
@@ -326,7 +300,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             // var expectedResultsFilename = @"QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_results.txt";
 
-
             var result = executor.TargetedWorkflow.Result;
 
             Console.WriteLine("theor monomass= \t" + result.Target.MonoIsotopicMass);
@@ -355,9 +328,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             var executorParameters = new BasicTargetedWorkflowExecutorParameters();
             executorParameters.LoadParameters(executorParameterFile);
 
-
-
-
             var resultsFolderLocation = executorParameters.OutputDirectoryBase+ "\\Results";
             var testDatasetPath = baseFolder + @"\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
             var testDatasetName = "QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18";
@@ -367,7 +337,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             {
                 File.Delete(expectedResultsFilename);
             }
-
 
             var rawFileInfo = new FileInfo(testDatasetPath);
 
@@ -379,7 +348,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
                 if (File.Exists(mzalignmentFile)) File.Delete(mzalignmentFile);
                 if (File.Exists(netAlignmentFile)) File.Delete(netAlignmentFile);
             }
-
 
 #pragma warning disable 618
             executorParameters.TargetedAlignmentIsPerformed = false;    //no targeted alignment
@@ -408,9 +376,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             //Assert.AreEqual(2920.53733m, (decimal)Math.Round(result1.MonoMassCalibrated, 5));
             //Assert.AreEqual(-1.83m, (decimal)Math.Round(result1.MassErrorInPPM, 2));
 
-
         }
-
 
         [Test]
         public void AlternateConstructor_targetedWorkflowNoAlignment()
@@ -442,7 +408,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         [Category("LongRunning")]
         public void targetedWorkflow_withTargetedAlignment_test()
         {
-
             var executorParameterFile = baseFolder + @"\Parameters\QCShew_OrbiStandard_workflowExecutorParameters.xml";
             var executorParameters = new BasicTargetedWorkflowExecutorParameters();
             executorParameters.LoadParameters(executorParameterFile);
@@ -457,7 +422,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
                 File.Delete(expectedResultsFilename);
             }
 
-
             var rawFileInfo = new FileInfo(testDatasetPath);
 
             if (rawFileInfo.DirectoryName != null)
@@ -467,7 +431,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
                 if (File.Exists(mzalignmentFile)) File.Delete(mzalignmentFile);
                 if (File.Exists(netAlignmentFile)) File.Delete(netAlignmentFile);
             }
-
 
             TargetedWorkflowExecutor executor = new BasicTargetedWorkflowExecutor(executorParameters, testDatasetPath);
             executor.Execute();
@@ -480,7 +443,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             Assert.AreEqual(10, repository.Results.Count);
 
             var result1 = repository.Results[0];
-
 
             Assert.AreEqual(24702, result1.TargetID);
             Assert.AreEqual(3, result1.ChargeState);
@@ -497,24 +459,17 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
         }
 
-
-
         [Test]
         [Category("LongRunning")]
         public void copyToLocalTest1()
         {
-
             var executorParameterFile =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\basicTargetedWorkflowExecutorParameters_CopyToLocalTestCase2.xml";
             var datasetPath = @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
             var testDatasetName = "QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18";
 
-
-
             var executorParameters = new BasicTargetedWorkflowExecutorParameters();
             executorParameters.LoadParameters(executorParameterFile);
-
-
 
             var expectedResultsFilename = Path.Combine(executorParameters.OutputDirectoryBase, "Results", testDatasetName + "_results.txt");
             if (File.Exists(expectedResultsFilename))
@@ -534,20 +489,14 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             var result1 = repository.Results[2];
 
-
             Assert.AreEqual(24702, result1.TargetID);
             Assert.AreEqual(3, result1.ChargeState);
             Assert.AreEqual(8112, result1.ScanLC);
-
-
-
 
             //Dataset	MassTagID	ChargeState	Scan	ScanStart	ScanEnd	NET	NumChromPeaksWithinTol	NumQualityChromPeaksWithinTol	MonoisotopicMass	MonoMZ	IntensityRep	FitScore	IScore	FailureType
 
             //QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18	24702	3	8119	8112	8124	0.4172	2	1	2920.53082	974.51755	1379489	0.1136	0.0000
 
         }
-
-
     }
 }

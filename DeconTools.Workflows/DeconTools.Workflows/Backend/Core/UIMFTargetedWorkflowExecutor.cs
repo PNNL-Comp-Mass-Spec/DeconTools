@@ -43,7 +43,6 @@ namespace DeconTools.Workflows.Backend.Core
                         "Cannot initialize workflow. TargetedAlignment is requested but TargetedAlignmentWorkflowParameter file is not found. Check path for the 'TargetedAlignmentWorkflowParameterFile' ");
                 }
 
-
                 TargetedAlignmentWorkflowParameters = new TargetedAlignerWorkflowParameters();
                 TargetedAlignmentWorkflowParameters.LoadParameters(ExecutorParameters.TargetedAlignmentWorkflowParameterFile);
             }

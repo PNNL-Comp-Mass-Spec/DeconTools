@@ -25,7 +25,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             var run = RunUtilities.CreateAndLoadPeaks(testFile, peakTestFile);
 
-
             var mtc = new TargetCollection();
             var mtimporter = new MassTagFromTextFileImporter(massTagFile);
             mtc = mtimporter.Import();
@@ -48,9 +47,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             Assert.AreEqual(10622, (int)workflow.ChromPeakSelected.XValue);
             Console.WriteLine("ChromPeak scan value = " + workflow.ChromPeakSelected.XValue);
-
-
         }
-
     }
 }

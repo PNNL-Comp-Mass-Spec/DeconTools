@@ -11,7 +11,6 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
 {
     public class IqLoggerUnitTests
     {
-
         [Test]
         public void IqLoggerUnitTest1()
         {
@@ -93,6 +92,5 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
             const int ExpectedLineCount = 33;
             Assert.AreEqual(ExpectedLineCount, numLogs, "Log file has {0} entries; expecting {1}", numLogs, ExpectedLineCount);
         }
-
     }
 }

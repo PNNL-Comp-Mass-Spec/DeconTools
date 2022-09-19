@@ -17,7 +17,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
     [TestFixture]
     public class SipperWorkflowTests
     {
-
         [Test]
         public void exportSipperWorkflowParametersTest1()
         {
@@ -26,15 +25,11 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             var parameters = new SipperTargetedWorkflowParameters();
 
             parameters.SaveParametersToXML(exportedParametersFile);
-
-
         }
-
 
         [Test]
         public void loadLCMSFeatures_and_massTags()
         {
-
             var lcmsfeaturesFile =
                 @"C:\Users\d3x720\Documents\PNNL\My_DataAnalysis\2012\C12C13YellowStone\2011_02_20_SIPPER_workflow_standards\Yellow_C13_070_23Mar10_Griffin_10-01-28_LCMSFeatures.txt";
 
@@ -44,7 +39,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             var lcmsTargetCollection = importer.Import();
 
-
             // load MassTags
             var massTagFile1 =
                 @"C:\Users\d3x720\Documents\PNNL\My_DataAnalysis\2012\C12C13YellowStone\2011_02_20_SIPPER_workflow_standards\Yellow_C13_070_23Mar10_Griffin_10-01-28_MassTags.txt";
@@ -52,18 +46,12 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             var massTagImporter = new MassTagFromTextFileImporter(massTagFile1);
             var massTagCollection = massTagImporter.Import();
 
-
             var masstagIDlist = (from n in massTagCollection.TargetList select n.ID).ToList();
-
 
             // Update LCMSFeatures using MassTag info
 
-
-
-
             foreach (LcmsFeatureTarget target in lcmsTargetCollection.TargetList)
             {
-
                 if (masstagIDlist.Contains(target.ID))
                 {
                     var mt = massTagCollection.TargetList.Where(p => p.ID == target.FeatureToMassTagID).First();
@@ -72,9 +60,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
                 }
                 else
                 {
-
                 }
-
             }
 
             int[] testMassTags = { 344540889, 344540889, 344972415, 354881152, 355157363, 355162540, 355315129 };
@@ -83,15 +69,11 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
                                               where testMassTags.Contains(((LcmsFeatureTarget)n).FeatureToMassTagID)
                                               select n).ToList();
 
-
             foreach (LcmsFeatureTarget filteredLcmsFeatureTarget in filteredLcmsFeatureTargets)
             {
                 Console.WriteLine(filteredLcmsFeatureTarget);
             }
-
-
         }
-
 
         [Test]
         public void executeWorkflowTest1()
@@ -105,7 +87,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             var run = RunUtilities.CreateAndLoadPeaks(testFile, peaksFile);
 
-
             var lcmsfeaturesFile =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\SIPPER_standard_testing\Yellow_C13_070_23Mar10_Griffin_10-01-28_LCMSFeatures.txt";
 
@@ -115,7 +96,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             var lcmsTargetCollection = importer.Import();
 
-
             // load MassTags
             var massTagFile1 =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\SIPPER_standard_testing\Yellow_C13_070_23Mar10_Griffin_10-01-28_MassTags.txt";
@@ -123,9 +103,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             var massTagImporter = new MassTagFromTextFileImporter(massTagFile1);
             var massTagCollection = massTagImporter.Import();
 
-
             var masstagIDlist = (from n in massTagCollection.TargetList select n.ID).ToList();
-
 
             // Update LCMSFeatures using MassTag info
 
@@ -152,14 +130,12 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             //enriched
             //testMassTags = new int[] { 355116553, 355129038, 355160150, 355162540, 355163371 };
 
-
             //testMassTags = new int[] { 355008295 };
 
             //co-elution peptides
             //testMassTags = new int[] {355034154, 355033668, 355154211, 355035781};
 
             //testMassTags = new int[] { 355033668 };
-
 
             //testMassTags = new int[]{355157492};
 
@@ -169,10 +145,8 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
                                               where testMassTags.Contains(((LcmsFeatureTarget)n).FeatureToMassTagID)
                                               select n).ToList();
 
-
             foreach (LcmsFeatureTarget target in filteredLcmsFeatureTargets)
             {
-
                 if (masstagIDlist.Contains(target.FeatureToMassTagID))
                 {
                     var mt = massTagCollection.TargetList.Where(p => p.ID == target.FeatureToMassTagID).First();
@@ -184,17 +158,12 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
                     //get target's code + empirical formula based on averagine model
 
                 }
-
             }
-
-
-
 
             TargetedWorkflowParameters parameters = new BasicTargetedWorkflowParameters();
             parameters.ChromPeakSelectorMode = Globals.PeakSelectorMode.ClosestToTarget;
 
             var workflow = new SipperTargetedWorkflow(run, parameters);
-
 
             var outputFolder = @"C:\data\temp\SipperOutput";
 
@@ -202,7 +171,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             {
                 Directory.CreateDirectory(outputFolder);
             }
-
 
             var stopwatch = new Stopwatch();
             stopwatch.Start();
@@ -213,8 +181,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
                 workflow.Execute();
 
                 OutputMassSpectrum(outputFolder, workflow.MassSpectrumXYData, target, workflow.Result as SipperLcmsTargetedResult);
-
-
             }
             stopwatch.Stop();
 
@@ -222,16 +188,11 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             {
                 var result = (SipperLcmsTargetedResult)targetedResultBase.Value;
 
-
-
                 Console.WriteLine(result + "\t" +   result.Target.IsotopicProfile.Peaklist.Count);
             }
 
             Console.WriteLine("Total workflow time (ms) = " + stopwatch.ElapsedMilliseconds);
             Console.WriteLine("Time per target (ms) = " + stopwatch.ElapsedMilliseconds/(double)filteredLcmsFeatureTargets.Count);
-
-
-
         }
 
         private void OutputMassSpectrum(string outputFolder, XYData massSpectrumXYData, TargetBase target, SipperLcmsTargetedResult sipperLcmsTargetedResult)
@@ -246,19 +207,16 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
                 massSpectrumXYData.Yvalues = new double[] { 0, 1, 2, 3, 4, 5 };
             }
 
-
             msGraphGenerator.GenerateGraph(massSpectrumXYData.Xvalues, massSpectrumXYData.Yvalues, target.MZ - 2,
                                            target.MZ + 6);
 
             var annotation = "fractionC13= " + sipperLcmsTargetedResult.PercentCarbonsLabeled.ToString("0.000") + "\n" +
                                 "populationFraction= " + sipperLcmsTargetedResult.PercentPeptideLabeled.ToString("0.000");
 
-
             msGraphGenerator.AddAnnotationRelativeAxis(annotation, 0.45, 0.05);
 
             var outputFilename = Path.Combine(outputFolder, target.ID + "_MS.png");
             msGraphGenerator.SaveGraph(outputFilename);
-
         }
     }
 }

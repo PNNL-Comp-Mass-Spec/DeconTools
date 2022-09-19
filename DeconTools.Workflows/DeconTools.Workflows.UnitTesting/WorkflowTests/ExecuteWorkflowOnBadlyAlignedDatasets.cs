@@ -22,18 +22,15 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             var massTagFile = @"\\protoapps\UserData\Slysz\Data\QCShew_MassiveTargeted\MassTags\QCShew_Formic_MassTags_Bin10_first10.txt";
             var workflowParameterFile = @"\\protoapps\UserData\Slysz\Data\QCShew_MassiveTargeted\WorkflowParameterFiles\UnlabeledTargeted_WorkflowParameters_noSum.xml";
 
-
             var run = RunUtilities.CreateAndLoadPeaks(datasetFile, datasetFile.Replace(".RAW", "_peaks.txt"));
             RunUtilities.AlignRunUsingAlignmentInfoInFiles(run);
 
             Assert.IsTrue(run.MassIsAligned);
             Assert.IsTrue(run.NETIsAligned);
 
-
             var parameters=new BasicTargetedWorkflowParameters();
             parameters.LoadParameters(workflowParameterFile);
             var workflow = new BasicTargetedWorkflow(parameters);
-
 
             workflow.Run = run;
 
@@ -50,7 +47,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             var repo = new TargetedResultRepository();
             repo.AddResult(workflow.Result);
 
-           
             Console.WriteLine("theor mono mass = " + mt1.MonoIsotopicMass);
             Console.WriteLine("theorMZ = " + mt1.MZ);
             Console.WriteLine("theorNET = " + mt1.NormalizedElutionTime);
@@ -63,10 +59,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             Console.WriteLine("MassErrorBeforeAlignment = " + (mt1.MZ - repo.Results[0].MonoMZ) / mt1.MZ * 1e6);
             Console.WriteLine("MassErrorAfterAlignment = " + repo.Results[0].MassErrorBeforeCalibration);
-
-
         }
-
 
         [Test]
         public void check_calibrated_masses_test1()
@@ -116,6 +109,5 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             Console.WriteLine("MassErrorBeforeAlignment = " + (mt1.MZ - repo.Results[0].MonoMZ) / mt1.MZ * 1e6);
             Console.WriteLine("MassErrorAfterAlignment = " + repo.Results[0].MassErrorBeforeCalibration);
         }
-
     }
 }

@@ -18,7 +18,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             var targetedAlignmentParameterFile = @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\N14N15_standard_testing\Parameters\TargetedAlignmentWorkflowParameters1.xml";
             var exportedExecutorParametersFilePath = @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\N14N15_standard_testing\Parameters\ExecutorParameters1.xml";
 
-
             var executorParameters = new BasicTargetedWorkflowExecutorParameters
             {
                 CopyRawFileLocal = false,
@@ -32,7 +31,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
                 WorkflowParameterFile = workflowFilePath
             };
             executorParameters.SaveParametersToXML(exportedExecutorParametersFilePath);
-
         }
 
         [Test]
@@ -49,9 +47,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             var executor = new BasicTargetedWorkflowExecutor(executorParameters, testfile);
             executor.Execute();
-
         }
-
 
         [Test]
         [Category("LongRunning")]
@@ -75,12 +71,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             {
                 Console.WriteLine(chromPeak.XValue + "\t" + chromPeak.Height + "\t" + chromPeak.Width);
             }
-
         }
-
-
-
-
-
     }
 }

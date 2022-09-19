@@ -62,7 +62,6 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
             var tempMaxScanWithinTol = (int)run.NetAlignmentInfo.GetScanForNet(target.ElutionTimeTheor + Parameters.ChromNETTolerance);
             var tempCenterTol = (int) run.NetAlignmentInfo.GetScanForNet(target.ElutionTimeTheor);
 
-
             Console.WriteLine("SmartPeakSelector --> NETTolerance= " + Parameters.ChromNETTolerance + ";  chromMinCenterMax= " +
                               tempMinScanWithinTol + "\t" + tempCenterTol + "" +
                               "\t" + tempMaxScanWithinTol);

@@ -16,7 +16,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
     [TestFixture]
     public class SipperExecutorTests
     {
-
         [Test]
         public void ExecuteSipper()
         {
@@ -28,18 +27,14 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             parameters.CopyRawFileLocal = false;
             //parameters.LocalDirectoryPathForCopiedRawDataset = @"D:\data\temp";
 
-
             var testDataset =
                 @"\\protoapps\DataPkgs\Public\2012\601_Sipper_paper_data_processing_and_analysis\RawData\Yellow_C13_070_23Mar10_Griffin_10-01-28.raw";
-
 
             var outputParameterFile = Path.Combine(Path.GetDirectoryName(paramFile),
                                          Path.GetFileNameWithoutExtension(paramFile) + " - copy.xml");
             parameters.SaveParametersToXML(outputParameterFile);
 
-
             var executor = new SipperWorkflowExecutor(parameters, testDataset);
-
 
             var targetsOfInterest = new int[]{5555};
 
@@ -50,8 +45,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             var workflow = executor.TargetedWorkflow as SipperTargetedWorkflow;
 
-
-
             var result = workflow.Result as SipperLcmsTargetedResult;
 
             Assert.IsNotNull(result);
@@ -59,7 +52,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             Assert.IsNotNull(result.ChromCorrelationData.CorrelationDataItems);
 
             Assert.IsTrue(result.ChromCorrelationData.CorrelationDataItems.Count > 0);
-
 
             //foreach (var dataItem in result.ChromCorrelationData.CorrelationDataItems)
             //{
@@ -70,10 +62,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             {
                 Console.WriteLine(fitScoreDataItem.Key + "\t" + fitScoreDataItem.Value);
             }
-
-
         }
-
 
         [Test]
         public void ExecuteSipperUsingStandardExecutorClass1()
@@ -86,23 +75,16 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             parameters.CopyRawFileLocal = false;
             //parameters.LocalDirectoryPathForCopiedRawDataset = @"D:\data\temp";
 
-
-
             var testDataset =
                 @"\\protoapps\DataPkgs\Public\2012\601_Sipper_paper_data_processing_and_analysis\RawData\Yellow_C13_070_23Mar10_Griffin_10-01-28.raw";
-
 
             var outputParameterFile = Path.Combine(Path.GetDirectoryName(paramFile),
                                          Path.GetFileNameWithoutExtension(paramFile) + " - copy.xml");
             parameters.SaveParametersToXML(outputParameterFile);
 
-
             parameters.TargetType = Globals.TargetType.LcmsFeature;
 
-
-
             var executor = new BasicTargetedWorkflowExecutor(parameters, testDataset);
-
 
             var targetsOfInterest = new int[] { 5555 };
 
@@ -127,9 +109,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             workflow.WorkflowParameters.SaveParametersToXML(
                 @"\\protoapps\DataPkgs\Public\2012\601_Sipper_paper_data_processing_and_analysis\Parameters\SipperTargetedWorkflowParameters_Sum5 - copy.xml");
 
-
-
-
             var result = workflow.Result as SipperLcmsTargetedResult;
 
             Assert.IsNotNull(result);
@@ -137,7 +116,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             Assert.IsNotNull(result.ChromCorrelationData.CorrelationDataItems);
 
             Assert.IsTrue(result.ChromCorrelationData.CorrelationDataItems.Count > 0);
-
 
             //foreach (var dataItem in result.ChromCorrelationData.CorrelationDataItems)
             //{
@@ -149,7 +127,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             //    Console.WriteLine(fitScoreDataItem.Key + "\t" + fitScoreDataItem.Value);
             //}
 
-
         }
 
         [Test]
@@ -158,22 +135,17 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             var paramFile =
                 @"\\protoapps\DataPkgs\Public\2013\788_Sipper_C13_Analysis_Hot_Lake_SNC_Ana_preliminary\Parameters\ExecutorParameters1.xml";
 
-
             var parameters = new BasicTargetedWorkflowExecutorParameters();
             parameters.LoadParameters(paramFile);
             parameters.CopyRawFileLocal = false;
             parameters.LocalDirectoryPathForCopiedRawDataset = @"D:\Data\Sipper\HLP_Ana";
 
-
             var testDataset =
                 @"D:\Data\Sipper\HLP_Ana\HLP_Ana_SIP_02_19APR13_Frodo_12-12-04.raw";
-
 
             var outputParameterFile = Path.Combine(Path.GetDirectoryName(paramFile),
                                          Path.GetFileNameWithoutExtension(paramFile) + " - copy.xml");
             parameters.SaveParametersToXML(outputParameterFile);
-
-
 
             var executor = new BasicTargetedWorkflowExecutor(parameters, testDataset);
             executor.Targets.TargetList = executor.Targets.TargetList.Take(10).ToList();
@@ -189,7 +161,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             Assert.IsTrue(result.ChromCorrelationData.CorrelationDataItems.Count > 0);
 
-
             //foreach (var dataItem in result.ChromCorrelationData.CorrelationDataItems)
             //{
             //    Console.WriteLine(dataItem.CorrelationRSquaredVal);
@@ -200,9 +171,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             //    Console.WriteLine(fitScoreDataItem.Key + "\t" + fitScoreDataItem.Value);
             //}
 
-
         }
-
 
         [Test]
         public void loadLCMSFeaturesNotIdentifiedAndProcess()
@@ -231,7 +200,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             executor.Execute();
         }
 
-
         [Test]
         public void loadLCMSFeaturesNotIdentifiedAndProcess2()
         {
@@ -259,12 +227,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             executor.Execute();
         }
 
-
-
-
-
-
-
         [Test]
         public void loadPreviousResultsAndReProcess()
         {
@@ -286,15 +248,11 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             var executor = new SipperWorkflowExecutor(parameters, testDataset);
 
-
             Assert.IsTrue(executor.ExecutorParameters.WorkflowType ==
                           Globals.TargetedWorkflowTypes.SipperWorkflowExecutor1);
 
             executor.Execute();
         }
-
-
-
 
         [Test]
         public void tempUpdateLCMSFeaturesWithEmpiricalFormulaTest1()
@@ -305,12 +263,10 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             var massTagFileName =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\SIPPER_standard_testing\Yellow_C13_070_23Mar10_Griffin_10-01-28_MassTags.txt";
 
-
             var importer =
               new LcmsTargetFromFeaturesFileImporter(testLCMSFile1);
 
             var features = importer.Import();
-
 
             var mtImporter = new MassTagFromTextFileImporter(massTagFileName);
             var massTags = mtImporter.Import();
@@ -324,11 +280,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
                                        into grp
                                        select grp.First()).ToList();
 
-
             var massTagIDList = features.TargetList.Select(p => (long)((LcmsFeatureTarget)p).FeatureToMassTagID).ToList();
-
-
-
 
             var outputLCMSFeaturesFile =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\SIPPER_standard_testing\Yellow_C13_070_23Mar10_Griffin_10-01-28_withEmpFormulas_LCMSFeatures.txt";
@@ -355,13 +307,8 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
                     stringBuilder.Append(targetBase.EmpiricalFormula);
                     writer.WriteLine(stringBuilder.ToString());
                 }
-
             }
-
-
-
         }
-
 
         private void UpdateTargetsUsingMassTagInfo(List<long> massTagIDList, TargetCollection features, TargetCollection massTags)
         {
@@ -392,10 +339,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             }
         }
 
-
-
-
-
         [Test]
         public void test2()
         {
@@ -410,16 +353,11 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             var executor = new SipperWorkflowExecutor(parameters, testDataset);
 
-
             Assert.IsTrue(executor.ExecutorParameters.WorkflowType ==
                           Globals.TargetedWorkflowTypes.SipperWorkflowExecutor1);
 
             executor.Execute();
         }
-
-
-
-
 
         [Test]
         public void dbTest1()
@@ -435,9 +373,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             var path=   utilities.GetDatasetPath(datasetNames[0]);
 
             Console.WriteLine(path);
-
         }
-
 
         [Test]
         public void ExecuteSipper_FindAssociatedTargetsFile()
@@ -459,22 +395,16 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             parameters.TargetsBaseFolder =
                 @"\\protoapps\DataPkgs\Public\2012\601_Sipper_paper_data_processing_and_analysis\Targets";
 
-
             var testDataset =
                 @"\\protoapps\DataPkgs\Public\2012\601_Sipper_paper_data_processing_and_analysis\RawData\Yellow_C13_070_23Mar10_Griffin_10-01-28.raw";
-
 
             var outputParameterFile = Path.Combine(Path.GetDirectoryName(paramFile),
                                          Path.GetFileNameWithoutExtension(paramFile) + " - copy.xml");
             parameters.SaveParametersToXML(outputParameterFile);
 
-
             var executor = new SipperWorkflowExecutor(parameters, testDataset);
             executor.Execute();
-
-
         }
-
 
         [Test]
         public void ExecuteSipper_UsingSpecifiedTargets()
@@ -498,10 +428,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             var executor = new SipperWorkflowExecutor(parameters, testDataset);
             executor.Execute();
-
-
         }
-
 
         [Test]
         public void ExecuteSipper_UsingTargetsWithEmpiricalFormulaOnly()
@@ -520,14 +447,11 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             parameters.TargetsFilePath =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\SIPPER_standard_testing\Targets\Yellow_C13_070_23Mar10_Griffin_10-01-28_10practice_targets_empFormula_noMonoMass.txt";
 
-
             var testDataset =
                @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\SIPPER_standard_testing\Yellow_C13_070_23Mar10_Griffin_10-01-28.raw";
 
             var executor = new SipperWorkflowExecutor(parameters, testDataset);
             executor.Execute();
-
-
         }
 
         [Test]
@@ -541,23 +465,15 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             parameters.LocalDirectoryPathForCopiedRawDataset = @"D:\data\temp";
 
-
             var testDataset =
                 @"\\protoapps\DataPkgs\Public\2012\601_Sipper_paper_data_processing_and_analysis\RawData\Yellow_C13_070_23Mar10_Griffin_10-01-28.raw";
-
 
             var outputParameterFile = Path.Combine(Path.GetDirectoryName(paramFile),
                                          Path.GetFileNameWithoutExtension(paramFile) + " - copy.xml");
             parameters.SaveParametersToXML(outputParameterFile);
 
-
             var executor = new SipperWorkflowExecutor(parameters, testDataset);
             executor.Execute();
-
-
         }
-
-
-
     }
 }

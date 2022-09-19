@@ -15,7 +15,6 @@ namespace DeconTools.Workflows.UnitTesting.ChromCorrelatorTests
     [TestFixture]
     public class O16O18ChromCorrelatorTests
     {
-
         [Test]
         public void ChromCorrelatorTest1()
         {
@@ -36,14 +35,12 @@ namespace DeconTools.Workflows.UnitTesting.ChromCorrelatorTests
             iqTarget.Code = "GAAQNIIPASTGAAK";
             iqTarget.ID = 1093;
             iqTarget.ChargeState = 0;
-            
+
             var iqTargetList = new List<IqTarget>();
             iqTargetList.Add(iqTarget);
 
             var utilities = new IqTargetUtilities();
             utilities.CreateChildTargets(iqTargetList);
-
-            
 
             workflowAssigner.AssignWorkflowToParent(workflow, iqTargetList);
             workflowAssigner.AssignWorkflowToChildren(workflow, iqTargetList);
@@ -55,8 +52,6 @@ namespace DeconTools.Workflows.UnitTesting.ChromCorrelatorTests
                 target.TheorIsotopicProfile = theorFeatureGenerator.GenerateTheorProfile(target.EmpiricalFormula, target.ChargeState);
             }
 
-
-
             foreach (var childTarget in iqTarget.ChildTargets())
             {
                 var result = childTarget.CreateResult();
@@ -65,23 +60,7 @@ namespace DeconTools.Workflows.UnitTesting.ChromCorrelatorTests
 
                 var corrDataItem1 = corrData.CorrelationDataItems.First();
                 Console.WriteLine("z= \t"+  childTarget.ChargeState + "\tCorrelationData (slope,intercept,rsquared)= \t" +  corrDataItem1);
-
             }
-
-           
-
-            
-
-          
-
-            
-
-            
-
-
-
-
         }
-
     }
 }

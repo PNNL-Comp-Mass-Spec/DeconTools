@@ -16,13 +16,10 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             if (File.Exists(exportedParametersFile)) File.Delete(exportedParametersFile);
 
-
             var parameters = new BasicTargetedWorkflowParameters();
             parameters.SaveParametersToXML(exportedParametersFile);
 
             Assert.That(File.Exists(exportedParametersFile), "Parameter file doesn't exist: " + exportedParametersFile);
-
-
         }
 
         [Test]
@@ -35,7 +32,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             Assert.AreEqual("O16O18_TARGETED_RESULT", parameters.ResultType.ToString());
         }
-
 
         [Test]
         public void importParametersTest2()
@@ -59,8 +55,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             Assert.IsTrue(wp is BasicTargetedWorkflowParameters);
 
             wp.LoadParameters(importedParametersFile);
-
         }
-
     }
 }

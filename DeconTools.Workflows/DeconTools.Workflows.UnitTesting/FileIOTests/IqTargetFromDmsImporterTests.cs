@@ -39,15 +39,12 @@ namespace DeconTools.Workflows.UnitTesting.FileIOTests
                                      into grp
                                      select grp.OrderByDescending(p => ((IqTargetDms)p).PmtQualityScore).First()).ToList();    //take the one with the highest pmtQualityScore 
 
-
             var targetsFilename =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\O16O18_standard_testing\" + db + "_targets.txt";
 
             var pmtQualScoreFiltered = (from n in duplicatesRemoved where ((IqTargetDms) n).PmtQualityScore > 0 select n).ToList();
 
             importer.SaveIqTargetsToFile(targetsFilename, pmtQualScoreFiltered);
-
         }
-
     }
 }

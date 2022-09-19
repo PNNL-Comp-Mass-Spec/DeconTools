@@ -14,16 +14,14 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
     [TestFixture]
     public class BasicTargetedWorkflowTests
     {
-
         [Test]
         public void constructor_noRun_test1()
         {
             TargetedWorkflowParameters parameters = new BasicTargetedWorkflowParameters();
             var workflow = new BasicTargetedWorkflow(parameters);
-            
+
             //workflow.Execute();
         }
-
 
         [Test]
         public void parameterFileTest1()
@@ -50,8 +48,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             parameters.SaveParametersToXML(exportedParameterFilename);
         }
 
-
-
         [Test]
         public void parameterFileImportTest1()
         {
@@ -66,8 +62,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             Assert.AreEqual(parameters.ChromGenToleranceUnit, Globals.ToleranceUnit.MZ);
             Assert.AreEqual(0.01, parameters.ChromGenTolerance);
         }
-
-
 
         [Category("MustPass")]
         [Test]
@@ -94,7 +88,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             parameters.ChromPeakDetectorPeakBR = 1;
             parameters.ChromPeakDetectorSigNoise = 1;
 
-
             var workflow = new BasicTargetedWorkflow(run, parameters);
             workflow.Execute();
 
@@ -108,7 +101,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
                                   chromPeak.Width.ToString("0.0"));
             }
 
-            
             Assert.AreEqual(3, workflow.ChromPeaksDetected.Count);
 
             Assert.IsNotNull(workflow.ChromPeakSelected, "No chrom peak was selected");
@@ -116,20 +108,17 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             //TestUtilities.DisplayXYValues(workflow.MassSpectrumXYData);
             //TestUtilities.DisplayXYValues(workflow.ChromatogramXYData);
-          
 
             var result = run.ResultCollection.GetTargetedResult(run.CurrentMassTag) as MassTagResult;
 
             if (result.FailedResult)
             {
                 Console.WriteLine(result.ErrorDescription);
-            }            
+            }
 
             Assert.IsFalse(result.FailedResult);
 
-
            // result.DisplayToConsole();
-
 
             Assert.IsNotNull(result.IsotopicProfile);
             Assert.IsNotNull(result.ScanSet);
@@ -144,10 +133,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             {
                 Console.WriteLine(dataItem);
             }
-
-
         }
-
 
         [Test]
         public void InvestigateIQFailures()
@@ -162,7 +148,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             var testFile =
                 @"\\protoapps\DataPkgs\Public\2013\743_Mycobacterium_tuberculosis_Cys_and_Ser_ABP\IQ_Analysis\Testing\LNA_A_Expo_Sample_SC_9_LNA_ExpA_Expo_Stat_SeattleBioMed_15Feb13_Cougar_12-12-35.raw";
             var run = new RunFactory().CreateRun(testFile);
-
 
             var iqparameterFile =
                 @"\\protoapps\DataPkgs\Public\2013\743_Mycobacterium_tuberculosis_Cys_and_Ser_ABP\IQ_Analysis\Testing\IQWorkflowParameters1.xml";
@@ -195,8 +180,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             TestUtilities.DisplayXYValues(executor.TargetedWorkflow.ChromatogramXYData);
         }
-
-
 
         [Test]
         public void findSingleModifiedMassTagTest1()
@@ -237,9 +220,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             {
                 Console.WriteLine(dataItem);
             }
-
         }
-
 
         [Test]
         public void findSingleMassTag_checkAlignmentData_test1()
@@ -256,14 +237,13 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             var testMassTagID = 24800;
             run.CurrentMassTag = (from n in mtc.TargetList where n.ID == testMassTagID && n.ChargeState == 2 select n).First();
 
-
             TargetedWorkflowParameters parameters = new BasicTargetedWorkflowParameters();
             var workflow = new BasicTargetedWorkflow(run, parameters);
             workflow.Execute();
 
             var result = run.ResultCollection.GetTargetedResult(run.CurrentMassTag) as MassTagResult;
             Assert.AreEqual(false, result.FailedResult);
-            
+
             result.DisplayToConsole();
 
             Assert.IsNotNull(result.IsotopicProfile);
@@ -272,7 +252,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             Assert.AreEqual(2, result.IsotopicProfile.ChargeState);
             Assert.AreEqual(718.41m, (decimal)Math.Round(result.IsotopicProfile.GetMZ(), 2));
             Assert.AreEqual(5947m, (decimal)Math.Round(result.ChromPeakSelected.XValue));
-
 
             Assert.AreEqual(5.91, (decimal)(Math.Round(result.GetMassErrorAfterAlignmentInPPM(),2)));
             Assert.AreEqual(0.0001585m, (decimal)(Math.Round(result.GetNETAlignmentError(), 7)));
@@ -285,12 +264,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
         }
 
-  
-
-
-
-   
-
         [Test]
         public void cannotFindMassTag_test1()
         {
@@ -299,9 +272,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             var peaksTestFile = DeconTools.UnitTesting2.FileRefs.PeakDataFiles.OrbitrapPeakFile_scans5500_6500;
             var massTagFile = @"\\protoapps\UserData\Slysz\Data\MassTags\QCShew_Formic_MassTags_Bin10_all.txt";
 
-
             var run = RunUtilities.CreateAndAlignRun(testFile, peaksTestFile);
-
 
             var mtc = new TargetCollection();
             var mtimporter = new MassTagFromTextFileImporter(massTagFile);
@@ -310,25 +281,19 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             var testMassTagID = 26523;
             run.CurrentMassTag = (from n in mtc.TargetList where n.ID == testMassTagID && n.ChargeState == 1 select n).First();
 
-
             TargetedWorkflowParameters parameters = new BasicTargetedWorkflowParameters();
             var workflow = new BasicTargetedWorkflow(run, parameters);
             workflow.Execute();
 
             var result = run.ResultCollection.GetTargetedResult(run.CurrentMassTag) as MassTagResult;
-           
+
             Assert.IsNull(result.IsotopicProfile);
             Assert.IsNull(result.ScanSet);
             Assert.IsNull(result.ChromPeakSelected);
 
             Assert.IsTrue(result.FailedResult);
             Assert.AreEqual(DeconTools.Backend.Globals.TargetedResultFailureType.ChrompeakNotFoundWithinTolerances, result.FailureType);
-
-          
         }
-
-
-
 
         [Test]
         public void findSingleMassTag_alternateQCShew()
@@ -337,9 +302,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             var peaksTestFile = @"D:\Data\Orbitrap\QC_Shew_08_04-pt1-3_15Apr09_Sphinx_09-02-16_peaks.txt";
             var massTagFile = @"D:\Data\Orbitrap\QC_Shew_08_04-pt1-3_15Apr09_Sphinx_09-02-16_peakMatchedFeatures.txt";
 
-
             var run = RunUtilities.CreateAndLoadPeaks(testFile, peaksTestFile);
-
 
             var mtc = new TargetCollection();
             var mtimporter = new MassTagFromTextFileImporter(massTagFile);
@@ -347,7 +310,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             var testMassTagID = 24709;
             run.CurrentMassTag = (from n in mtc.TargetList where n.ID == testMassTagID && n.ChargeState == 4 select n).First();
-
 
             TargetedWorkflowParameters parameters = new BasicTargetedWorkflowParameters();
             parameters.ChromNETTolerance = 0.2;
@@ -365,17 +327,13 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             Assert.IsNotNull(result.ChromPeakSelected);
             Assert.AreEqual(4, result.IsotopicProfile.ChargeState);
 
-
-            
            // Assert.AreEqual(610.81m, (decimal)Math.Round(result.IsotopicProfile.GetMZ(), 2));
             //Assert.AreEqual(6483, (decimal)Math.Round(result.ChromPeakSelected.XValue));
-
 
             double maxIntensity = result.IsotopicProfile.Peaklist.Max(p => p.Height);
 
             for (var i = 0; i < result.IsotopicProfile.Peaklist.Count; i++)
             {
-                
                 double correctedRatio=0;
                 if (i<result.ChromCorrelationData.CorrelationDataItems.Count)
                 {
@@ -391,11 +349,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
                 var observedRelIntensity = result.IsotopicProfile.Peaklist[i].Height/maxIntensity;
 
                 Console.WriteLine(i + "\t" + observedRelIntensity + "\t" + correctedRatio);
-
-
             }
-
         }
-
     }
 }

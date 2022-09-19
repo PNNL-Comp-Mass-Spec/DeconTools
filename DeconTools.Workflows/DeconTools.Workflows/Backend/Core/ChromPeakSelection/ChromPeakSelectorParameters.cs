@@ -5,7 +5,6 @@ namespace DeconTools.Workflows.Backend.Core.ChromPeakSelection
     {
         SUMMINGMODE_STATIC,     // mode in which the number of scans summed is always the same
         SUMMINGMODE_DYNAMIC    // mode in which the number of scans summed is variable; depends on chromatograph peak dimensions
-
     }
 
     public class ChromPeakSelectorParameters

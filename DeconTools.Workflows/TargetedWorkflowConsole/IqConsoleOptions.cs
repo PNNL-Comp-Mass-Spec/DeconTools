@@ -154,7 +154,6 @@ namespace IQ.Console
 
             if (OutputGraphs)
                 System.Console.WriteLine("Generating .png images of mass spectra for all the results. See folder 'OutputGraphs' ");
-
         }
 
         public bool ValidateArgs()
@@ -170,7 +169,6 @@ namespace IQ.Console
                 ConsoleMsgUtils.ShowWarning("Either define a workflow executor parameter file with -w or define a Targets file with -t");
                 return false;
             }
-
 
             return true;
         }

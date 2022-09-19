@@ -12,13 +12,11 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         [Test]
         public void steepGradientAtEndDatasetTest1()
         {
-
             var datasetFile =
                 @"\\protoapps\UserData\Slysz\DeconTools_TestFiles\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18.RAW";
 
             var massTagFile = @"\\protoapps\UserData\Slysz\Data\QCShew_MassiveTargeted\MassTags\QCShew_Formic_MassTags_for_alignment.txt";
             var workflowParameterFile = @"D:\Data\Orbitrap\Issue0725_badAlignment\TargetedAlignmentWorkflowParameters1 - Copy.xml";
-
 
             var run = RunUtilities.CreateAndLoadPeaks(datasetFile, datasetFile.Replace(".RAW", "_peaks.txt"));
 
@@ -30,13 +28,11 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             Console.WriteLine(parameters.ToStringWithDetails());
 
-
             var aligner = new TargetedAlignerWorkflow(run, parameters);
             aligner.SetMassTags(massTagFile);
             aligner.outputToConsole = true;
             aligner.Execute();
         }
-
 
         [Test]
         public void standardQCShewDatasetTest1()
@@ -56,14 +52,11 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             Console.WriteLine(parameters.ToStringWithDetails());
 
-
             var aligner = new TargetedAlignerWorkflow(run, parameters);
             aligner.outputToConsole = true;
             aligner.SetMassTags(massTagFile);
             aligner.Execute();
-
         }
-
 
         [Test]
         public void problemVladDatasetTest1()
@@ -85,16 +78,11 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             Console.WriteLine(parameters.ToStringWithDetails());
 
-
             var aligner = new TargetedAlignerWorkflow(run, parameters);
             aligner.outputToConsole = true;
             aligner.SetMassTags(massTagFile);
             aligner.Execute();
-
         }
-
-
-
 
         [Test]
         public void highMassError_DatasetTest1()
@@ -113,13 +101,10 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             Console.WriteLine(parameters.ToStringWithDetails());
 
-
             var aligner = new TargetedAlignerWorkflow(run, parameters);
             aligner.outputToConsole = true;
             aligner.SetMassTags(massTagFile);
             aligner.Execute();
-
         }
-
     }
 }

@@ -14,10 +14,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
     [TestFixture]
     public class TargetedWorkflow_problemCases
     {
-
-
-
-
         [Test]
         public void Test1()
         {
@@ -30,7 +26,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             var mtc = new TargetCollection();
             mtc = mtimporter.Import();
 
-
             var run = new RunFactory().CreateRun(rawdataFile);
             //RunUtilities.AlignRunUsingAlignmentInfoInFiles(run);
 
@@ -38,7 +33,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             var peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(expectedPeaksFilename, null);
             peakImporter.ImportPeaks(run.ResultCollection.MSPeakResultList);
-
 
             var testMassTagID = 3513677;
             var massTagChargeState = 2;
@@ -52,15 +46,11 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             workflow.Execute();
 
-
-
             workflow.Result.DisplayToConsole();
-
 
             RunUtilities.AlignRunUsingAlignmentInfoInFiles(run);
             workflow.Execute();
             workflow.Result.DisplayToConsole();
-
         }
 
         [Test]
@@ -75,7 +65,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             var mtc = new TargetCollection();
             mtc = mtimporter.Import();
 
-
             var run = new RunFactory().CreateRun(rawdataFile);
             //RunUtilities.AlignRunUsingAlignmentInfoInFiles(run);
 
@@ -83,7 +72,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             var peakImporter = new DeconTools.Backend.Data.PeakImporterFromText(expectedPeaksFilename, null);
             peakImporter.ImportPeaks(run.ResultCollection.MSPeakResultList);
-
 
             var testMassTagID = 25517;
             var massTagChargeState = 4;
@@ -102,17 +90,11 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             Console.WriteLine("NumQualityChromPeaksWithinTol = " + workflow.Result.NumQualityChromPeaks);
 
             workflow.Result.DisplayToConsole();
-
-
         }
-
-
 
         [Test]
         public void issue0705_completelyFailedAlignment_multialignErrors()
         {
-
-
             var executorParameterFile = @"\\protoapps\UserData\Slysz\Data\Redmine_Issues\Issue0705_failedAlignment\workflowExecutorParameters.xml";
             var datasetPath = @"\\proto-3\LTQ_Orb_3\2010_1\QC_Shew_10_01-pt5-4_12Feb10_Doc_09-12-26\QC_Shew_10_01-pt5-4_12Feb10_Doc_09-12-26.raw";
 
@@ -123,11 +105,9 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
              executor.Execute();
         }
 
-
         [Test]
         public void issue0725_targetedAlignmentProblems()
         {
-
             var executorParameterFile = @"D:\Data\Orbitrap\Issue0725_badAlignment\Issue0725_executorWorkflow.xml";
             var datasetPath = @"D:\Data\Orbitrap\Issue0725_badAlignment\QC_Shew_10_03-2_100min_06May10_Tiger_10-04-08.RAW";
 
@@ -136,10 +116,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             TargetedWorkflowExecutor executor = new BasicTargetedWorkflowExecutor(executorParameters, datasetPath);
             executor.Execute();
-
-
         }
-
-
     }
 }

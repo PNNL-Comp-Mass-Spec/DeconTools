@@ -8,10 +8,8 @@ namespace IQ.ConsoleManager
 {
     public class Program
     {
-
         public static void Main(string[] args)
         {
-
             if (args == null || args.Length == 0)
             {
                 ReportSyntax();
@@ -23,7 +21,7 @@ namespace IQ.ConsoleManager
             {
                 string parameterFile = args[1];
                 string fileContainingDatasetNames = args[0];
-                
+
                 using (StreamReader reader = new StreamReader(fileContainingDatasetNames))
                 {
                     int datasetCounter = 0;
@@ -56,12 +54,10 @@ namespace IQ.ConsoleManager
                             }
                         }
 
-                        
                         if (!File.Exists(currentDatasetPath))
                         {
                             Console.WriteLine("Dataset not found! Dataset path = " + currentDatasetPath);
                         }
-
 
                         ProcessStartInfo processStartInfo = new ProcessStartInfo();
                         //processStartInfo.UseShellExecute = false;
@@ -82,7 +78,6 @@ namespace IQ.ConsoleManager
 
                         Console.WriteLine("Argument line= " + argString);
 
-
                         try
                         {
                             Console.WriteLine("Working on dataset " + datasetCounter + "\t" + currentDatasetPath);
@@ -94,19 +89,14 @@ namespace IQ.ConsoleManager
                             Console.WriteLine("!!!!!!!!!!!!  Dataset FAILED. See log file for details. Error:");
                             Console.WriteLine(ex.Message);
                             Console.WriteLine(ex.StackTrace);
-
                         }
-
                     }
-
                 }
-
             }
             else
             {
                 ReportSyntax();
             }
-
         }
 
         private static string GetTargetFile(string[] args)

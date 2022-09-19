@@ -10,7 +10,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         [Test]
         public void Test1()
         {
-
             var outputFile = Path.Combine(FileRefs.OutputFolderPath, "SipperExecutorParameters1.xml");
 
             var parameters = new SipperWorkflowExecutorParameters
@@ -29,8 +28,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             };
 
             parameters.SaveParametersToXML(outputFile);
-
         }
-
     }
 }

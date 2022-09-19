@@ -49,7 +49,6 @@ namespace DeconTools.Backend.Parameters
         public int NumLCScansToSum { get; set; }
         public int NumImsScansToSum { get; set; }
 
-
         public bool UseImsScanRange { get; set; }
         public int MinImsScan { get; set; }
         public int MaxImsScan { get; set; }

@@ -26,17 +26,13 @@ namespace DeconTools.Workflows.UnitTesting.FileIOTests.TargetedResultFileIOTests
 
             if (File.Exists(exportedResultFile)) File.Delete(exportedResultFile);
 
-
             var run = RunUtilities.CreateAndAlignRun(testFile, peaksTestFile);
-
 
             var mtc = new TargetCollection();
             var mtimporter = new MassTagFromTextFileImporter(massTagFile);
             mtc = mtimporter.Import();
 
-            
             var selectedMassTags = mtc.TargetList.OrderBy(p => p.ID).Take(10).ToList();
-            
 
             TargetedWorkflowParameters parameters = new BasicTargetedWorkflowParameters();
             var workflow = new BasicTargetedWorkflow(run, parameters);
@@ -49,27 +45,18 @@ namespace DeconTools.Workflows.UnitTesting.FileIOTests.TargetedResultFileIOTests
 
             var repo = new TargetedResultRepository();
             repo.AddResults(run.ResultCollection.GetMassTagResults());
-            
-
 
             var exporter = new UnlabeledTargetedResultToTextExporter(exportedResultFile);
             exporter.ExportResults(repo.Results);
-            
-
-
-
-
         }
 
         [Test]
         public void importerTest1()
         {
-           
             var importedResultFile = Path.Combine(FileRefs.OutputFolderPath, "UnlabeledTargetedResultsExporterOutput1.txt");
 
             var importer = new UnlabeledTargetedResultFromTextImporter(importedResultFile);
             var repo = importer.Import();
-
 
             Assert.IsNotNull(repo);
             Assert.IsTrue(repo.Results.Count > 0);
@@ -89,8 +76,6 @@ namespace DeconTools.Workflows.UnitTesting.FileIOTests.TargetedResultFileIOTests
             Assert.AreEqual(8247913, (decimal)testResult1.Intensity);
             Assert.AreEqual(0.0119, (decimal)testResult1.FitScore);
             Assert.AreEqual(0, (decimal)testResult1.IScore);
-
-
         }
     }
 }

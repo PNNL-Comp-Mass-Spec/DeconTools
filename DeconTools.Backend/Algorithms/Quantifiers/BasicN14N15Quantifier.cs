@@ -10,7 +10,6 @@ namespace DeconTools.Backend.Algorithms.Quantifiers
     {
         ISO1_OVER_ISO2,
         ISO2_OVER_ISO1
-
     }
 
     public class BasicN14N15Quantifier : N14N15Quantifier

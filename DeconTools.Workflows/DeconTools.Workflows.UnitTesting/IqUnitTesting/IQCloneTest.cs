@@ -96,7 +96,6 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
     //        Assert.AreEqual(sampleTargetChildrenRoot[3].ChargeState, clonedTargetChildrenRoot[3].ChargeState);
     //        Console.WriteLine("--Success" + Environment.NewLine);
 
-
     //        //not set up yet
     //        if (sampleTarget.TheorIsotopicProfile != null)
     //        {
@@ -153,7 +152,7 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
     //        Console.WriteLine("We selected " + sampleTarget.EmpiricalFormula + Environment.NewLine);
 
     //        //construct target fro target
-            
+
     //        IqTargetBasic clonedTarget = new IqTargetBasic(sampleTarget);
 
     //        //unit test
@@ -201,7 +200,6 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
     //        //Assert.AreEqual(sampleTargetChildrenRoot[2].ChargeState, clonedTargetChildrenRoot[2].ChargeState);
     //        //Assert.AreEqual(sampleTargetChildrenRoot[3].ChargeState, clonedTargetChildrenRoot[3].ChargeState);
     //        //Console.WriteLine("--Success" + Environment.NewLine);
-
 
     //        //not set up yet
     //        if (sampleTarget.TheorIsotopicProfile != null)

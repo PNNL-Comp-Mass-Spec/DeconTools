@@ -9,7 +9,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 {
     public class LcmsTargetedWorkflowExecutorTests
     {
-
         [Test]
         public void executeWorkflow1()
         {
@@ -27,7 +26,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
                 File.Delete(expectedResultsFilename);
             }
 
-
             TargetedWorkflowExecutor executor = new LcmsFeatureTargetedWorkflowExecutor(executorParameters, testDatasetPath);
             executor.Execute();
 
@@ -44,9 +42,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             Assert.AreEqual(2, result1.ChargeState);
             Assert.AreEqual(6512, result1.ScanLC);
             Assert.AreEqual(1543.82565m, (decimal)Math.Round(result1.MonoMass, 5));
-          
         }
-
 
         [Test]
         public void executeWorkflow2()
@@ -56,16 +52,12 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             WorkflowExecutorBaseParameters executorParameters = new LcmsFeatureTargetedWorkflowExecutorParameters();
             executorParameters.LoadParameters(executorParameterFile);
-            
+
             var testDatasetPath = FileRefs.SipperRawDataFile;
-           
+
             TargetedWorkflowExecutor executor = new LcmsFeatureTargetedWorkflowExecutor(executorParameters, testDatasetPath);
             executor.Execute();
-
-          
-
         }
-
 
         [Test]
         public void executeWorkflow3()
@@ -80,12 +72,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             TargetedWorkflowExecutor executor = new LcmsFeatureTargetedWorkflowExecutor(executorParameters, testDatasetPath);
             executor.Execute();
-
-
-
         }
-
-
-
     }
 }

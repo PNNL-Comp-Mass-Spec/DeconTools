@@ -23,15 +23,12 @@ namespace DeconTools.Workflows.UnitTesting.FileIOTests.TargetedResultFileIOTests
         {
             var testFile = FileRefs.SipperRawDataFile;
 
-
             var exportedResultFile = Path.Combine(FileRefs.OutputFolderPath, "ExportedSipperResults1.txt");
-
 
             var peaksFile =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\SIPPER_standard_testing\Yellow_C13_070_23Mar10_Griffin_10-01-28_peaks.txt";
 
             var run = RunUtilities.CreateAndLoadPeaks(testFile, peaksFile);
-
 
             var lcmsfeaturesFile =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\SIPPER_standard_testing\Yellow_C13_070_23Mar10_Griffin_10-01-28_LCMSFeatures.txt";
@@ -41,7 +38,6 @@ namespace DeconTools.Workflows.UnitTesting.FileIOTests.TargetedResultFileIOTests
                 new LcmsTargetFromFeaturesFileImporter(lcmsfeaturesFile);
 
             var lcmsTargetCollection = importer.Import();
-
 
             // load MassTags
             var massTagFile1 =
@@ -53,32 +49,23 @@ namespace DeconTools.Workflows.UnitTesting.FileIOTests.TargetedResultFileIOTests
             //enriched
             var testMassTags = new int[] { 355116553, 355129038, 355160150, 355162540, 355163371 };
 
-
             var filteredLcmsFeatureTargets = (from n in lcmsTargetCollection.TargetList
                                               where testMassTags.Contains(((LcmsFeatureTarget)n).FeatureToMassTagID)
                                               select n).ToList();
 
-
             TargetCollection.UpdateTargetsWithMassTagInfo(filteredLcmsFeatureTargets, massTagCollection.TargetList);
-
 
             TargetedWorkflowParameters parameters = new BasicTargetedWorkflowParameters();
             parameters.ChromPeakSelectorMode = Globals.PeakSelectorMode.ClosestToTarget;
 
             var workflow = new SipperTargetedWorkflow(run, parameters);
 
-
             foreach (var target in filteredLcmsFeatureTargets)
             {
                 run.CurrentMassTag = target;
 
                 workflow.Execute();
-
-
             }
-
-
-
 
             var results = run.ResultCollection.GetMassTagResults();
 
@@ -87,12 +74,6 @@ namespace DeconTools.Workflows.UnitTesting.FileIOTests.TargetedResultFileIOTests
 
             var exporter = new SipperResultToLcmsFeatureExporter(exportedResultFile);
             exporter.ExportResults(repo.Results);
-
-
-
         }
-
-
-
     }
 }

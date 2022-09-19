@@ -57,7 +57,6 @@ namespace DeconTools.Backend.Data
             {
                 results = deserializer.GetNextSetOfResults();
                 exportSQLiteUIMFIsosResults(results);
-
             } while (results != null);
 
             sqLiteWriter.CloseDB(fileName);

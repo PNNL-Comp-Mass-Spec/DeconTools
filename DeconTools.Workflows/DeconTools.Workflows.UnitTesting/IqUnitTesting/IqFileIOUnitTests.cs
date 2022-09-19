@@ -91,7 +91,6 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
             }
         }
 
-
         [Test]
         public void ImportIqTargetsFromMsgfTest1()
         {
@@ -102,7 +101,6 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
             Assert.IsNotNull(targets);
             Assert.IsTrue(targets.Any());
 
-
             var utilities = new IqTargetUtilities();
 
             foreach (var iqTarget in targets)
@@ -110,16 +108,12 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
                 utilities.UpdateTargetMissingInfo(iqTarget, false);
             }
 
-
             Assert.IsTrue(targets.Count > 10);
             foreach (var iqTarget in targets.Take(10))
             {
                 Console.WriteLine(iqTarget.ToString() + "\t"+ iqTarget.ScanLC + "\t" +  iqTarget.QualityScore);
             }
         }
-
-
-
 
         [Test]
         public void ImportUnlabeledIqTargetsFromResultsFileTest1()
@@ -161,10 +155,5 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
                 }
             }
         }
-
-
-
-
-
     }
 }

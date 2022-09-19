@@ -12,7 +12,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
     [TestFixture]
     public class O16O18WorkflowTests
     {
-
         [Category("MustPass")]
         [Test]
         public void testVladsData()
@@ -26,7 +25,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             var peakTestFile = testFile.Replace(".RAW", "_peaks.txt");
 
             var run = RunUtilities.CreateAndAlignRun(testFile, peakTestFile);
-
 
             var mtc = new TargetCollection();
             var mtimporter = new MassTagFromTextFileImporter(massTagFile);
@@ -50,15 +48,11 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             Assert.IsTrue(workflow.Success);
             Assert.IsFalse(result.FailedResult);
 
-
             result.DisplayToConsole();
 
             Console.WriteLine("Correlation between 016 and O18(double label)= " + result.ChromCorrO16O18DoubleLabel);
 
             Assert.IsTrue(result.ChromCorrO16O18DoubleLabel > 0);
-
-
-
 
             Console.WriteLine("theor monomass= \t" + result.Target.MonoIsotopicMass);
             Console.WriteLine("monomass= \t" + result.IsotopicProfile.MonoIsotopicMass);
@@ -66,17 +60,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             Console.WriteLine("ppmError before= \t" + result.MassErrorBeforeAlignment);
 
             Console.WriteLine("ppmError after= \t" + result.MassErrorAfterAlignment);
-
-           
-
-
         }
-
-
-
-
-
-
 
         [Test]
         public void findSingleMassTag_test1()
@@ -88,7 +72,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             var peakTestFile = testFile.Replace(".RAW", "_peaks.txt");
 
             var run = RunUtilities.CreateAndLoadPeaks(testFile, peakTestFile);
-
 
             var mtc = new TargetCollection();
             var mtimporter = new MassTagFromTextFileImporter(massTagFile);
@@ -104,7 +87,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             var workflow = new O16O18Workflow(run, parameters);
             workflow.Execute();
 
-
             var result = run.ResultCollection.GetTargetedResult(run.CurrentMassTag);
 
             Assert.IsNotNull(result);
@@ -115,8 +97,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             Assert.IsNotNull(result.ChromPeakSelected);
             Assert.AreEqual(2, result.IsotopicProfile.ChargeState);
             Assert.AreEqual(6865, result.ScanSet.PrimaryScanNumber);
-
-
         }
 
         [Test]
@@ -133,7 +113,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             var run = RunUtilities.CreateAndLoadPeaks(testFile, peakTestFile);
 
-
             var mtc = new TargetCollection();
             var mtimporter = new MassTagFromTextFileImporter(massTagFile);
             mtc = mtimporter.Import();
@@ -146,7 +125,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             parameters.MSToleranceInPPM = 10;
             parameters.ChromGeneratorMode = DeconTools.Backend.Globals.ChromatogramGeneratorMode.O16O18_THREE_MONOPEAKS;
             parameters.ChromPeakDetectorPeakBR = 1;
-
 
             var workflow = new O16O18Workflow(run, parameters);
             workflow.Execute();
@@ -168,8 +146,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             workflow = new O16O18Workflow(run, parameters);
             workflow.Execute();
 
-           
-
             result = run.ResultCollection.GetTargetedResult(run.CurrentMassTag);
 
             Console.WriteLine("MonoChromMode PeaksWithinTol = " + result.NumChromPeaksWithinTolerance);
@@ -183,7 +159,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             //}
 
             result.DisplayToConsole();
-
         }
     }
 }

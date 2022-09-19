@@ -13,17 +13,14 @@ using DeconTools.Workflows.Backend.Core;
 using DeconTools.Workflows.Backend.Utilities;
 using PRISM;
 
-
 namespace IQ.Console
 {
     class Program
     {
-
         static int Main(string[] args)
         {
             try
             {
-
                 var asmName = typeof(Program).GetTypeInfo().Assembly.GetName();
                 var exeName = Path.GetFileName(Assembly.GetExecutingAssembly().Location);
                 var version = IqConsoleOptions.GetAppVersion();
@@ -74,7 +71,6 @@ namespace IQ.Console
                     System.Console.WriteLine("Reading dataset names from " + inputFile);
                     using (var reader = new StreamReader(inputFile))
                     {
-
                         while (!reader.EndOfStream)
                         {
                             var datasetName = reader.ReadLine();
@@ -104,7 +100,6 @@ namespace IQ.Console
                 IqLogger.FlushPendingMessages();
 
                 return 0;
-
             }
             catch (Exception ex)
             {
@@ -113,12 +108,10 @@ namespace IQ.Console
                 IqLogger.FlushPendingMessages();
                 return -1;
             }
-
         }
 
         private static BasicTargetedWorkflowExecutorParameters GetExecutorParameters(IqConsoleOptions options)
         {
-
             var executorParameters = new BasicTargetedWorkflowExecutorParameters
             {
                 TargetsFilePath = options.TargetsFile,
@@ -179,7 +172,6 @@ namespace IQ.Console
                 executorParameters.IsMassAlignmentPerformed = GetParameter(parameterList, "IsMassAlignmentPerformed", executorParameters.IsMassAlignmentPerformed);
                 executorParameters.IsNetAlignmentPerformed = GetParameter(parameterList, "IsNetAlignmentPerformed", executorParameters.IsNetAlignmentPerformed);
                 executorParameters.ReferenceTargetsFilePath = GetParameter(parameterList, "ReferenceTargetFile", executorParameters.ReferenceTargetsFilePath);
-
             }
             return executorParameters;
         }
@@ -195,7 +187,6 @@ namespace IQ.Console
                 return boolValue;
 
             return valueIfMissing;
-
         }
 
         private static string GetParameter(IDictionary<string, string> parameterList, string parameterName, string valueIfMissing)
@@ -252,7 +243,6 @@ namespace IQ.Console
                 }
                 else
                 {
-
                     var datasetPathHasSepChar = datasetNameOrPath.Contains(Path.PathSeparator.ToString());
 
                     if (datasetPathHasSepChar)
@@ -266,7 +256,6 @@ namespace IQ.Console
                     {
                         IqLogger.LogWarning("Trying to grab .raw file from DMS, but no temporary working directory was declared. Use option -f");
                         return false;
-
                     }
 
                     if (string.IsNullOrEmpty(options.OutputDirectory))
@@ -336,7 +325,6 @@ namespace IQ.Console
 
                         if (iqTarget.ElutionTimeTheor > 0.7 || iqTarget.ElutionTimeTheor < 0.15)
                         {
-
                             //TODO: remove the hard-coded value
                             workflowParameters.ChromNETTolerance = 0.1;
                         }
@@ -377,8 +365,6 @@ namespace IQ.Console
                 IqLogger.LogError("Error processing dataset " + datasetNameToShow, ex);
                 return false;
             }
-
         }
-
     }
 }

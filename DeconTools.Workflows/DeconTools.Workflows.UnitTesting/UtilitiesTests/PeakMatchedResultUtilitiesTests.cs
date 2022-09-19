@@ -27,7 +27,6 @@ namespace DeconTools.Workflows.UnitTesting.UtilitiesTests
             Assert.IsTrue(importedResults.Count > 0);
             Assert.AreEqual(4184, importedResults.Count);
 
-
             var mtImporter = new MassTagFromSqlDbImporter(dbname,dbserver,importedResults.Select(p=>(long)p.MatchedMassTagID).Distinct().ToList());
             var targetCollection=  mtImporter.Import();
 
@@ -38,9 +37,6 @@ namespace DeconTools.Workflows.UnitTesting.UtilitiesTests
             }
 
             Console.WriteLine(sb.ToString());
-
-
         }
-
     }
 }

@@ -15,7 +15,6 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
 {
     public class TopDownIqTesting
     {
-
         //Test runs full datasets through the entire Top Down IQ process.
         //Gain knowledge about cutoffs and other metrics etc.
         [Test]
@@ -26,8 +25,6 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
             var resultsFolder = @"\\protoapps\UserData\Fujimoto\TopDownTesting\Charles_Data\Results";
 
             //Backend.Utilities.SipperDataDump.DataDumpSetup(@"\\protoapps\UserData\Fujimoto\TopDownTesting\Charles_Data\Results\detailed_results.txt");
-
-
 
             WorkflowExecutorBaseParameters executorBaseParameters = new BasicTargetedWorkflowExecutorParameters();
             executorBaseParameters.ChromGenSourceDataPeakBR = 3;
@@ -71,7 +68,6 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
             Console.WriteLine("Runtime: " + runtime);
         }
 
-
         [Test]
         public void Get3DElutionAndExportToFileTest1()
         {
@@ -83,7 +79,6 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
 
             var outputFile = @"\\protoapps\UserData\Fujimoto\TopDownPaperData\FINAL_DATA\_004\3D_PLOT\3DelutionProfile.txt";
 
-
             Assert.IsNotNull(run);
             Assert.IsTrue(run.ResultCollection.MSPeakResultList.Count > 0);
 
@@ -94,14 +89,10 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
             double minMZ = 700;
             double maxMZ = 1700;
 
-
             extractor.Get3DElutionProfileFromPeakLevelData(run, minScan, maxScan, minMZ, maxMZ, out var scans, out var mzBinVals, out var intensities);
 
             var intensities2D = extractor.GetIntensitiesAs2DArray();
             extractor.OutputElutionProfileToFile(outputFile);
-
         }
-
-
     }
 }

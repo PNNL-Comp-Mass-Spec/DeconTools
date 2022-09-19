@@ -13,6 +13,5 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
         public void Test1()
         {
         }
-
     }
 }

@@ -11,12 +11,10 @@
     //        bool fileExists = File.Exists(sourceFileName);
     //        Check.Require(fileExists, string.Format("{0} failed. File does not exist.", this.Name));
 
-
     //        this.FileName = sourceFileName;
     //        this.m_delimiter = '\t';
 
     //    }
-
 
     //    public override List<DeconTools.Backend.DTO.MSPeakResult> Import()
     //    {
@@ -63,7 +61,6 @@
     //            }
     //            sr.Close();
 
-
     //        }
 
     //    }
@@ -74,7 +71,6 @@
 
     //        var mz = ParseDoubleField(LookupData(processedData, "mz"));
     //        MSPeak msPeak = new MSPeak(mz);
-
 
     //    }
 

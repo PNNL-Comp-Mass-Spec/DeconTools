@@ -9,7 +9,6 @@ namespace DeconTools.Backend.FileIO
         const string TABLE_NAME = "T_MSFeatures";
         List<Field> m_fieldList;
 
-
         #region Constructors
         public MSFeatureToSQLiteExporterUIMF(string fileName)
         {
@@ -32,7 +31,6 @@ namespace DeconTools.Backend.FileIO
 
         #region Private Methods
         #endregion
-
 
         protected override void AddResults(System.Data.Common.DbParameterCollection dbParameters, IsosResult result)
         {
@@ -81,7 +79,6 @@ namespace DeconTools.Backend.FileIO
                 new Field("flag", "INTEGER"),
                 new Field("interference_score", "float")
             };
-
 
             return fieldList;
         }

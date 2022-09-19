@@ -23,8 +23,6 @@ namespace DeconTools.Workflows.UnitTesting.FileIOTests
             {
                 Console.WriteLine(iqTarget.ID + "\t" + iqTarget.ScanLC + "\t" + iqTarget.MassError);
             }
-
         }
-
     }
 }

@@ -17,13 +17,11 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
     [TestFixture]
     public class IqMassAndNetAlignerWorkflowTests
     {
-
         [Test]
         public void AlignUsingMsgfOutputFullProcessingTest1()
         {
             var targetsFileName =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Unlabelled\AlignmentInfo\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_msgfdb_fht.txt";
-
 
             var massTagFilename =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Unlabelled\Targets\QCShew_ProdTest_Formic_P823_PMT3.txt";
@@ -47,9 +45,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
 
             if (!File.Exists(exportedAlignmentResultsFile)) File.Delete(exportedAlignmentResultsFile);
 
-
-
-
             IqTargetImporter massTagImporter = new BasicIqTargetImporter(massTagFilename);
             var massTagRefs = massTagImporter.Import();
 
@@ -65,7 +60,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
 
             massAndNetAligner.ExportResults(exportedAlignmentResultsFile);
 
-
             foreach (var iqResult in massAndNetAligner.Results)
             {
                 var childresults = iqResult.ChildResults();
@@ -73,11 +67,8 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
                 {
                     if (childresult.ObservedIsotopicProfile == null) continue;
 
-
-
                     sb.Append(childresult.Target.ID);
                     sb.Append("\t");
-
 
                     if (childresult.ObservedIsotopicProfile == null)
                     {
@@ -105,10 +96,8 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
                         sb.Append(Environment.NewLine);
                     }
                 }
-
-
             }
-            
+
             var averageMassError = usefulResults.Average(p => p.MassErrorBefore);
 
             var stdev = MathUtils.GetStDev(usefulResults.Select(p => p.MassErrorBefore).ToList());
@@ -121,19 +110,15 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
             Console.WriteLine("----------- mass alignment ------------");
             TestUtilities.DisplayXYValues(massAndNetAligner.MassAlignmentInfo.ScanAndPpmShiftVals);
 
-
             Console.WriteLine("------------NET alignment --------------");
             DisplayNetAlignmentInfo(massAndNetAligner.NetAlignmentInfo);
-
         }
-
 
         [Test]
         public void AlignUsingMsgfOutputFullProcessingTest2()
         {
             var targetsFileName =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Unlabelled\AlignmentInfo\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_msgfdb_fht.txt";
-
 
             var massTagFilename =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Unlabelled\Targets\QCShew_ProdTest_Formic_P823_PMT3.txt";
@@ -155,27 +140,22 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
             IqTargetImporter massTagImporter = new BasicIqTargetImporter(massTagFilename);
             var massTagRefs = massTagImporter.Import();
 
-
             var exportedAlignmentResultsFile =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Unlabelled\AlignmentInfo\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_iqAlignmentResults.txt";
 
             if (!File.Exists(exportedAlignmentResultsFile)) File.Delete(exportedAlignmentResultsFile);
 
-
             massAndNetAligner.SetMassTagReferences(massTagRefs);
 
             //massAligner.Targets = massAligner.Targets.Take(1).ToList();
 
-            
             massAndNetAligner.ExecuteAlignment();
 
             var sb = new StringBuilder();
 
             var usefulResults = new List<IqResult>();
 
-           
             massAndNetAligner.ExportResults(exportedAlignmentResultsFile);
-
 
             foreach (var iqResult in massAndNetAligner.Results)
             {
@@ -184,11 +164,8 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
                 {
                     if (childresult.ObservedIsotopicProfile == null) continue;
 
-
-
                     sb.Append(childresult.Target.ID);
                     sb.Append("\t");
-
 
                     if (childresult.ObservedIsotopicProfile == null)
                     {
@@ -216,8 +193,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
                         sb.Append(Environment.NewLine);
                     }
                 }
-
-
             }
 
             var averageMassError = usefulResults.Average(p => p.MassErrorBefore);
@@ -232,13 +207,9 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
             Console.WriteLine("----------- mass alignment ------------");
             TestUtilities.DisplayXYValues(massAndNetAligner.MassAlignmentInfo.ScanAndPpmShiftVals);
 
-
             Console.WriteLine("------------NET alignment --------------");
             DisplayNetAlignmentInfo(massAndNetAligner.NetAlignmentInfo);
-
         }
-
-
 
         [Test]
         public void AlignUsingPreviouslyProcessedOutputTest1()
@@ -248,7 +219,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
 
             var previouslyProcessedResultsFile =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\Unlabelled\AlignmentInfo\QC_Shew_08_04-pt5-2_11Jan09_Sphinx_08-11-18_iqAlignmentResults.txt";
-
 
             WorkflowExecutorBaseParameters parameters = new BasicTargetedWorkflowExecutorParameters();
             var run = new RunFactory().CreateRun(rawFile);
@@ -269,7 +239,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
             var targetsFileName =
                 @"\\proto-7\VOrbi05\2013_2\mhp_plat_test_1_14April13_Frodo_12-12-04\MSG201305011339_Auto939903\mhp_plat_test_1_14April13_Frodo_12-12-04_msgfdb_fht.txt";
 
-
             var massTagFilename =
                 @"\\protoapps\DataPkgs\Public\2013\795_Iq_analysis_of_mouse_O16O18\Targets\MT_Mouse_MHP_O18_Set1_P890_targets.txt";
 
@@ -281,7 +250,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
             var run = new RunFactory().CreateRun(rawFile);
 
             var massAndNetAligner = new IqMassAndNetAligner(parameters, run);
-
 
             massAndNetAligner.LoadAndInitializeTargets();
 
@@ -305,11 +273,8 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
                 {
                     if (childresult.ObservedIsotopicProfile == null) continue;
 
-
-
                     sb.Append(childresult.Target.ID);
                     sb.Append("\t");
-
 
                     if (childresult.ObservedIsotopicProfile == null)
                     {
@@ -337,15 +302,12 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
                         sb.Append(Environment.NewLine);
                     }
                 }
-
-                
             }
-
 
             var averageMassError = usefulResults.Average(p => p.MassErrorBefore);
 
             var stdev = MathUtils.GetStDev(usefulResults.Select(p => p.MassErrorBefore).ToList());
-            
+
             //Console.WriteLine(sb.ToString());
 
             Console.WriteLine("avg mass error= " + averageMassError);
@@ -353,7 +315,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
 
             Console.WriteLine("----------- mass alignment ------------");
             TestUtilities.DisplayXYValues(massAndNetAligner.MassAlignmentInfo.ScanAndPpmShiftVals);
-
 
             Console.WriteLine("------------NET alignment --------------");
 
@@ -371,7 +332,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
             Console.WriteLine(stringBuilder.ToString());
         }
 
-
         [Test]
         public void JoinTargetsTest1()
         {
@@ -382,8 +342,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
                 @"\\protoapps\DataPkgs\Public\2013\795_Iq_analysis_of_mouse_O16O18\Targets\MT_Mouse_MHP_O18_Set1_P890_targets.txt";
 
             var rawFile = @"D:\Data\O16O18\Vlad_Mouse\mhp_plat_test_1_14April13_Frodo_12-12-04.raw";
-
-
 
             IqTargetImporter massTagImporter = new BasicIqTargetImporter(massTagFilename);
             var massTagRefs = massTagImporter.Import().OrderBy(p=>p.Code).ToList();
@@ -406,13 +364,10 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
                                         MSGFTarget = target
                                     }).ToList();
 
-
             foreach (var thing in query)
             {
                 thing.MSGFTarget.ID = thing.MassTag.ID;
                 thing.MSGFTarget.ElutionTimeTheor = thing.MassTag.ElutionTimeTheor;
-
-                
             }
 
             var targets = query.Select(p => p.MSGFTarget).ToList();
@@ -420,9 +375,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
           var testNETAfter = massAndNetAligner.Targets.First().ElutionTimeTheor;
             Console.WriteLine("NET before= " + testNET);
             Console.WriteLine("NET before= " + testNETAfter);
-
         }
-
 
         [Test]
         public void TempTest1()
@@ -439,21 +392,13 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
 
             Console.WriteLine(monomass + "\t" + mztheo);
 
-
             var formula = EmpiricalFormulaUtilities.ParseEmpiricalFormulaString("H(3) C(2) N O");
 
             var revisedFormula = EmpiricalFormulaUtilities.GetEmpiricalFormulaFromElementTable(formula);
 
-
             var iodoMass = EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(revisedFormula);
 
             Console.WriteLine("iodomass= " + iodoMass);
-
-           
-
-
         }
-
-
     }
 }

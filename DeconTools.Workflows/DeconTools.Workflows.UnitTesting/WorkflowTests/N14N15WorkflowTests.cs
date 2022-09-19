@@ -19,9 +19,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
         private string bruker9t_peaksfile1 =
             @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\N14N15_standard_testing\RawData\RSPH_PtoA_L_28_rep1_28Feb08_Raptor_08-01-01\RSPH_PtoA_L_28_rep1_28Feb08_Raptor_08-01-01_scans1450_1800_peaks.txt";
 
-
-
-
         [Test]
         public void exportParametersTest1()
         {
@@ -32,13 +29,8 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             var parameters = new N14N15Workflow2Parameters();
 
-
-
             parameters.SaveParametersToXML(exportedParametersFile);
-
-
         }
-
 
         [Test]
         public void importParametersTest1()
@@ -49,11 +41,8 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
 
             Assert.AreEqual("N14N15Targeted1", wp.WorkflowType.ToString());
             Assert.IsTrue(wp is N14N15Workflow2Parameters);
-
         }
 
-
-        
         [Test]
         public void WorkflowTest1()
         {
@@ -66,10 +55,8 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             var targetsFile =
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\N14N15_standard_testing\Targets\POnly_MassTagsMatchingInHalfOfDatasets_Filtered0.45-0.47NET_first18.txt";
 
-
             var importer = new MassTagFromTextFileImporter(targetsFile);
             var targetCollection = importer.Import();
-
 
             run.CurrentMassTag = targetCollection.TargetList.FirstOrDefault(p => p.ChargeState == 1);
 
@@ -82,7 +69,6 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             parameters.NumMSScansToSum = 5;
             parameters.SaveParametersToXML(
                 @"\\protoapps\UserData\Slysz\Standard_Testing\Targeted_FeatureFinding\N14N15_standard_testing\Parameters\N14N15WorkflowParameters1_test.xml");
-
 
             Console.WriteLine(parameters.ToStringWithDetails());
 
@@ -128,6 +114,5 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             */
 
         }
-
     }
 }

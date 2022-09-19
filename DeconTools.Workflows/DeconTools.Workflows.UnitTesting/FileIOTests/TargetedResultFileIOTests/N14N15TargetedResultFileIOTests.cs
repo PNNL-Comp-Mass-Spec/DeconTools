@@ -51,7 +51,6 @@ namespace DeconTools.Workflows.UnitTesting.FileIOTests.TargetedResultFileIOTests
             //RSPH_PtoA_NL_14_rep3_8Jan08_Raptor_07-11-01	PToA_NL	180	2	27926	1	287	283	292	286	282	291	0.1390	0.1388	1	1	808.43894	816.41637	809.44622	817.42364	2185831	956636	0.062	0.102	0.000	0.000	1.103	1.210	0.425580533942721	0
         }
 
-
         [Test]
         public void ImporterTest2_newerFormat()
         {
@@ -91,14 +90,9 @@ namespace DeconTools.Workflows.UnitTesting.FileIOTests.TargetedResultFileIOTests
             Assert.AreEqual(1.089195, (decimal)testResult1.RatioContributionN15);
             Assert.AreEqual(0.02444267m, (decimal)testResult1.Ratio);
 
-
             //Dataset	TargetID	EmpiricalFormula	ChargeState	Scan	ScanStart	ScanEnd	NumMSSummed	NET	NETError	NumChromPeaksWithinTol	NumQualityChromPeaksWithinTol	MonoisotopicMass	MonoisotopicMassCalibrated	MassErrorInPPM	MonoMZ	IntensityRep	FitScore	IScore	FailureType	ErrorDescription	ScanN15	ScanN15Start	ScanN15End	NETN15	ChromPeaksWithinTolN15	NumQualityChromPeaksWithinTolN15	MonoisotopicMassN15	MonoisotopicMassCalibratedN15	MonoMZN15	IntensityN15	FitScoreN15	IScoreN15	RatioContribN14	RatioContribN15	Ratio
             //RSPH_Ponly_15_A_8May12_Earth_12-03-11	27926	C37H60N8O12	2	3741	3737	3756	5	0.14264	-0.004085	3	1	808.43666	808.43665	-4.47	405.2256	1.53E+07	0.0025	0			3730	3717	3736	0.1420909	2	2	816.4183415	816.4129617	409.2164473	339199	0.6038309	0.9496943	1.008051	1.089195	0.02444267
 
-
-
         }
-
-
     }
 }

@@ -28,7 +28,6 @@ namespace DeconTools.Workflows.UnitTesting
             aligner.SetMassTags(massTagFile);
 
             aligner.Execute();
-
         }
 
         [Test]
@@ -57,14 +56,6 @@ namespace DeconTools.Workflows.UnitTesting
 
             Assert.IsNotNull(run.AlignmentInfo);
             Assert.AreEqual(-4.2m, (decimal)(Math.Round(run.AlignmentInfo.GetPPMShiftFromMZ(600.0f), 1)));
-
         }
-
-
-       
-
-
-
-
     }
 }

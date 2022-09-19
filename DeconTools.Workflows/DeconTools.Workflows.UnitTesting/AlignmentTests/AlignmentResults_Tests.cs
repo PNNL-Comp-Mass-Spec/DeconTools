@@ -43,7 +43,6 @@ namespace DeconTools.Workflows.UnitTesting
         [Test]
         public void outputAlignmentHeatmapData_Test1()
         {
-           
             var sb=new StringBuilder();
 
             foreach (var scan in aligner.Result.ScanLCValues)
@@ -53,20 +52,17 @@ namespace DeconTools.Workflows.UnitTesting
             }
 
             sb.Append(Environment.NewLine);
-         
+
             foreach (var netval in aligner.Result.NETValues)
             {
                 sb.Append(netval);
                 sb.Append(Environment.NewLine);
-                
             }
             sb.Append(Environment.NewLine);
             Console.WriteLine(sb.ToString());
 
             Console.WriteLine(displayHeatMapData(aligner.Result));
-
         }
-
 
         [Test]
         public void outputMassErrorData()
@@ -85,7 +81,6 @@ namespace DeconTools.Workflows.UnitTesting
             }
 
             Console.WriteLine(sb.ToString());
-
         }
 
         [Test]
@@ -106,22 +101,14 @@ namespace DeconTools.Workflows.UnitTesting
             }
 
             Console.WriteLine(sb.ToString());
-
         }
-
-     
-
 
         [Test]
         public void getStatsOnVariablity()
         {
-
             Console.WriteLine("MassMean = " + aligner.Result.MassAverage + " +/- " + aligner.Result.MassStDev);
             Console.WriteLine("NETMean = " + aligner.Result.NETAverage + " +/- " + aligner.Result.NETStDev);
-
-
         }
-
 
         [Test]
         public void getMassErrorHistogramTest1()
@@ -134,17 +121,13 @@ namespace DeconTools.Workflows.UnitTesting
                 {
                     sb.Append(aligner.Result.massHistogramData[i,k]);
                     sb.Append("\t");
-                    
                 }
                 sb.Append(Environment.NewLine);
-                
             }
 
             Console.WriteLine("MassErrorHistogramData:");
             Console.WriteLine(sb.ToString());
         }
-
-
 
         [Test]
         public void getNETErrorHistogramTest1()
@@ -157,17 +140,13 @@ namespace DeconTools.Workflows.UnitTesting
                 {
                     sb.Append(aligner.Result.NETHistogramData[i, k]);
                     sb.Append("\t");
-
                 }
                 sb.Append(Environment.NewLine);
-
             }
 
             Console.WriteLine("NET_ErrorHistogramData:");
             Console.WriteLine(sb.ToString());
         }
-
-       
 
         private string displayHeatMapData(AlignmentResult alignmentResult)
         {
@@ -181,14 +160,8 @@ namespace DeconTools.Workflows.UnitTesting
                     sb.Append("\t");
                 }
                 sb.Append(Environment.NewLine);
-
-                
-
-
-
             }
             return sb.ToString();
         }
-
     }
 }

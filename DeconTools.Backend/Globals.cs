@@ -88,7 +88,6 @@ namespace DeconTools.Backend
             /// Experimental deconvoluter; not recommended for use
             /// </summary>
             Rapid
-
         }
 
         public enum ExporterType
@@ -111,7 +110,6 @@ namespace DeconTools.Backend
         {
             Std_four_parameter_mode,
             List_of_MT_IDs_Mode
-
         }
 
         public enum ResultType
@@ -141,7 +139,6 @@ namespace DeconTools.Backend
             standard,
             uimf_standard,
             uimf_saturation_workflow,
-
         }
 
         public enum IsotopicProfileType
@@ -198,7 +195,6 @@ namespace DeconTools.Backend
             NormalizedElutionTime,
             ElutionTimeInSeconds,
             ScanNum
-
         }
 
         /// <summary>

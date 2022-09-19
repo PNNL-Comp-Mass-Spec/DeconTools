@@ -118,7 +118,7 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
                     //so in the assert comparison we have to use the positive mass value
 
             var empiricalFormula = parser.GetEmpiricalFormulaFromSequence(ptmMass);
-        
+
             Console.WriteLine("This is my emperical formula:" + empiricalFormula + ":");
 
             var returnedMass = EmpiricalFormulaUtilities.GetMonoisotopicMassFromEmpiricalFormula(empiricalFormula);
@@ -126,7 +126,6 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
             Console.WriteLine(empiricalFormula);
             Console.WriteLine(returnedMass);
             Assert.AreEqual(absPtmDouble, returnedMass, .0001);
-
         }
 
         //Test case: this is to test the accuracy of the averagine atomic formula conversion with very large PTMs
@@ -170,6 +169,5 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
             Assert.AreEqual(trueMass, differenceMass, .1);
             Assert.AreEqual(trueMass, proteformMass, .1);
         }
-
     }
 }

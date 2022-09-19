@@ -43,7 +43,6 @@ namespace DeconTools.Backend.FileIO
                 new Field("frame_pressure_smoothed", "FLOAT")
             };
 
-
             return fieldList;
         }
 
@@ -61,8 +60,6 @@ namespace DeconTools.Backend.FileIO
             dbParameters[9].Value = ((UimfScanResult)result).FramePressureSmoothed;
         }
         #endregion
-
-
 
     }
 }

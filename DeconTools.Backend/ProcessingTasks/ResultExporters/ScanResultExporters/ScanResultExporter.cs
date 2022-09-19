@@ -26,8 +26,6 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
                 _indexOfLastScanResultWritten = currentScanResultIndex;
             }
 
-
-
             //// check if results exceed Trigger value or is the last Scan
             //bool isLastScan;
             //if (resultList.Run is UIMFRun)
@@ -60,7 +58,6 @@ namespace DeconTools.Backend.ProcessingTasks.ResultExporters.ScanResultExporters
         }
 
         #endregion
-
 
     }
 }
