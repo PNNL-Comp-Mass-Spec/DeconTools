@@ -212,8 +212,7 @@ namespace DeconTools.Workflows.Backend.FileIO
                 return defaultVal;
             }
 
-            int result;
-            if (Int32.TryParse(rowValueString, out result))
+            if (Int32.TryParse(rowValueString, out var result))
             {
                 return result;
             }
@@ -230,8 +229,7 @@ namespace DeconTools.Workflows.Backend.FileIO
                 return defaultVal;
             }
 
-            long result;
-            if (Int64.TryParse(rowValueString, out result))
+            if (Int64.TryParse(rowValueString, out var result))
             {
                 return result;
             }
@@ -248,8 +246,7 @@ namespace DeconTools.Workflows.Backend.FileIO
                 return defaultVal;
             }
 
-            float result;
-            if (float.TryParse(rowValueString, out result))
+            if (float.TryParse(rowValueString, out var result))
             {
                 return result;
             }
@@ -266,8 +263,7 @@ namespace DeconTools.Workflows.Backend.FileIO
                 return defaultVal;
             }
 
-            double result;
-            if (double.TryParse(rowValueString, out result))
+            if (double.TryParse(rowValueString, out var result))
             {
                 return result;
             }
@@ -284,8 +280,7 @@ namespace DeconTools.Workflows.Backend.FileIO
                 return defaultVal;
             }
 
-            short result;
-            if (Int16.TryParse(rowValueString, out result))
+            if (Int16.TryParse(rowValueString, out var result))
             {
                 return result;
             }

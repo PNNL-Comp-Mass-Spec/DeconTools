@@ -94,12 +94,8 @@ namespace DeconTools.Workflows.UnitTesting.IqUnitTesting
             double minMZ = 700;
             double maxMZ = 1700;
 
-            int[] scans;
-            float[] intensities;
-            double[] mzBinVals;
 
-
-            extractor.Get3DElutionProfileFromPeakLevelData(run, minScan, maxScan, minMZ, maxMZ, out scans, out mzBinVals, out intensities);
+            extractor.Get3DElutionProfileFromPeakLevelData(run, minScan, maxScan, minMZ, maxMZ, out var scans, out var mzBinVals, out var intensities);
 
             var intensities2D = extractor.GetIntensitiesAs2DArray();
             extractor.OutputElutionProfileToFile(outputFile);
