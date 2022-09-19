@@ -137,11 +137,11 @@ namespace DeconTools.Workflows.Backend.Core
                     if (childStateIqResult.ObservedIsotopicProfile != null)
                     {
                         var observedIsoList = childStateIqResult.ObservedIsotopicProfile.Peaklist.Cast<Peak>().Take(4).ToList();    //first 4 peaks excludes the O18 double label peak (fifth peak)
-                        var theorPeakList = iqTarget.TheorIsotopicProfile.Peaklist.Select(p => (Peak)p).Take(4).ToList();
+                        var theorPeakList = iqTarget.TheorIsotopicProfile.Peaklist.Cast<Peak>().Take(4).ToList();
                         childStateIqResult.FitScore = PeakFitter.GetFit(theorPeakList, observedIsoList, 0.05, WorkflowParameters.MSToleranceInPPM);
 
                         var o18Iso = childStateIqResult.ConvertO16ProfileToO18(iqTarget.TheorIsotopicProfile, 4);
-                        theorPeakList = o18Iso.Peaklist.Select(p => (Peak)p).ToList();
+                        theorPeakList = o18Iso.Peaklist.Cast<Peak>().ToList();
                         observedIsoList = childStateIqResult.ObservedIsotopicProfile.Peaklist.Cast<Peak>().Skip(4).ToList();    //skips the first 4 peaks and thus includes the O18 double label isotopic profile
                         childStateIqResult.FitScoreO18Profile = PeakFitter.GetFit(theorPeakList, observedIsoList, 0.05, WorkflowParameters.MSToleranceInPPM);
 

@@ -72,12 +72,12 @@ namespace DeconTools.Workflows.Backend.Core
             {
                 //Get fit score O16 profile
                 var observedIsoList = result.ObservedIsotopicProfile.Peaklist.Cast<Peak>().Take(4).ToList();    //first 4 peaks excludes the O18 double label peak (fifth peak)
-                var theoreticalPeakList = target.TheorIsotopicProfile.Peaklist.Select(p => (Peak)p).Take(4).ToList();
+                var theoreticalPeakList = target.TheorIsotopicProfile.Peaklist.Cast<Peak>().Take(4).ToList();
                 result.FitScore = PeakFitter.GetFit(theoreticalPeakList, observedIsoList, 0.05, WorkflowParameters.MSToleranceInPPM);
 
                 // fit score O18 profile
                 var o18Iso = ((O16O18IqResult)result).ConvertO16ProfileToO18(target.TheorIsotopicProfile, 4);
-                theoreticalPeakList = o18Iso.Peaklist.Select(p => (Peak)p).ToList();
+                theoreticalPeakList = o18Iso.Peaklist.Cast<Peak>().ToList();
                 observedIsoList = result.ObservedIsotopicProfile.Peaklist.Cast<Peak>().Skip(4).ToList();    //skips the first 4 peaks and thus includes the O18 double label isotopic profile
                 ((O16O18IqResult) result).FitScoreO18Profile = PeakFitter.GetFit(theoreticalPeakList, observedIsoList, 0.05, WorkflowParameters.MSToleranceInPPM);
 

@@ -98,7 +98,7 @@ namespace DeconTools.Workflows.Backend.Core
                 //Get fit score
                 var observedIsoList = result.ObservedIsotopicProfile.Peaklist.Cast<Peak>().ToList();
                 var minIntensityForScore = 0.05;
-                var fitScore = PeakFitter.GetFit(target.TheorIsotopicProfile.Peaklist.Select(p => (Peak)p).ToList(), observedIsoList, minIntensityForScore, WorkflowParameters.MSToleranceInPPM);
+                var fitScore = PeakFitter.GetFit(target.TheorIsotopicProfile.Peaklist.Cast<Peak>().ToList(), observedIsoList, minIntensityForScore, WorkflowParameters.MSToleranceInPPM);
 
                 //get i_score
                 var iScore = InterferenceScorer.GetInterferenceScore(result.ObservedIsotopicProfile, msPeakList);
