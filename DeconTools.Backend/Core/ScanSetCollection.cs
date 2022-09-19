@@ -59,16 +59,16 @@ namespace DeconTools.Backend.Core
                     }
                 }
 
-                if (firstMS1Scan == -1)   // Never found a single MS1 scan in the whole dataset
+                if (firstMS1Scan == -1)
                 {
+                    // Never found a single MS1 scan in the whole dataset
+                    return;
                 }
-                else
-                {
-                    var scanSetFactory = new ScanSetFactory();
-                    var scanSet = scanSetFactory.CreateScanSet(run, firstMS1Scan, minScan, maxScan);
 
-                    ScanSetList.Add(scanSet);
-                }
+                var scanSetFactory = new ScanSetFactory();
+                var scanSet = scanSetFactory.CreateScanSet(run, firstMS1Scan, minScan, maxScan);
+
+                ScanSetList.Add(scanSet);
             }
             else
             {
@@ -374,14 +374,10 @@ namespace DeconTools.Backend.Core
 
             if (ascending)
             {
-                scan = GetNextMSScanSet(run, ++primaryNum, true);
-            }
-            else
-            {
-                scan = GetNextMSScanSet(run, --primaryNum, false);
+                return GetNextMSScanSet(run, ++primaryNum, true);
             }
 
-            return scan;
+            return GetNextMSScanSet(run, --primaryNum, false);
         }
 
         public int GetLastScanSet()
