@@ -57,7 +57,7 @@ namespace DeconTools.Workflows.UnitTesting
 
                 foreach (var result in repo.Results)
                 {
-                    var mt = mtc.TargetList.Where(p => p.ID == result.TargetID).Where(p => p.ChargeState == result.ChargeState).First();
+                    var mt = mtc.TargetList.Where(p => p.ID == result.TargetID).First(p => p.ChargeState == result.ChargeState);
                     var theorMZ = mt.MZ;
                     var obsMZ = result.MonoMZ;
                     double scan = result.ScanLC;
@@ -65,7 +65,7 @@ namespace DeconTools.Workflows.UnitTesting
                     var ppmErrorBefore = (theorMZ - obsMZ) / theorMZ * 1e6;
                     var ppmErrorAfter = (theorMZ - alignedMZ) / theorMZ * 1e6;
 
-                    sb.Append(result.TargetID + "\t" + result.ScanLC + "\t" + theorMZ.ToString("0.00000") + "\t" + obsMZ.ToString("0.00000") + "\t" + alignedMZ.ToString("0.00000") + "\t" + ppmErrorBefore.ToString("0.0") + "\t" + ppmErrorAfter.ToString("0.0"));
+                    sb.Append(result.TargetID).Append('\t').Append(result.ScanLC).Append('\t').Append(theorMZ.ToString("0.00000")).Append('\t').Append(obsMZ.ToString("0.00000")).Append('\t').Append(alignedMZ.ToString("0.00000")).Append('\t').Append(ppmErrorBefore.ToString("0.0")).Append('\t').Append(ppmErrorAfter.ToString("0.0"));
                     sb.Append(Environment.NewLine);
 
                     ppmErrorsAfter.Add(ppmErrorAfter);
@@ -127,7 +127,7 @@ namespace DeconTools.Workflows.UnitTesting
 
                 foreach (var result in repo.Results)
                 {
-                    var mt = mtc.TargetList.Where(p => p.ID == result.TargetID).Where(p => p.ChargeState == result.ChargeState).First();
+                    var mt = mtc.TargetList.Where(p => p.ID == result.TargetID).First(p => p.ChargeState == result.ChargeState);
                     var theorMZ = mt.MZ;
                     var obsMZ = result.MonoMZ;
                     double scan = result.ScanLC;
@@ -135,7 +135,7 @@ namespace DeconTools.Workflows.UnitTesting
                     var ppmErrorBefore = (theorMZ - obsMZ) / theorMZ * 1e6;
                     var ppmErrorAfter = (theorMZ - alignedMZ) / theorMZ * 1e6;
 
-                    sb.Append(result.TargetID + "\t" + result.ScanLC + "\t" + theorMZ.ToString("0.00000") + "\t" + obsMZ.ToString("0.00000") + "\t" + alignedMZ.ToString("0.00000") + "\t" + ppmErrorBefore.ToString("0.0") + "\t" + ppmErrorAfter.ToString("0.0"));
+                    sb.Append(result.TargetID).Append('\t').Append(result.ScanLC).Append('\t').Append(theorMZ.ToString("0.00000")).Append('\t').Append(obsMZ.ToString("0.00000")).Append('\t').Append(alignedMZ.ToString("0.00000")).Append('\t').Append(ppmErrorBefore.ToString("0.0")).Append('\t').Append(ppmErrorAfter.ToString("0.0"));
                     sb.Append(Environment.NewLine);
 
                     ppmErrorsAfter.Add(ppmErrorAfter);
@@ -196,7 +196,7 @@ namespace DeconTools.Workflows.UnitTesting
 
                 foreach (var result in repo.Results)
                 {
-                    var mt = mtc.TargetList.Where(p => p.ID == result.TargetID).Where(p => p.ChargeState == result.ChargeState).First();
+                    var mt = mtc.TargetList.Where(p => p.ID == result.TargetID).First(p => p.ChargeState == result.ChargeState);
                     var theorMZ = mt.MZ;
                     var obsMZ = result.MonoMZ;
                     double scan = result.ScanLC;
@@ -204,7 +204,7 @@ namespace DeconTools.Workflows.UnitTesting
                     var ppmErrorBefore = (theorMZ - obsMZ) / theorMZ * 1e6;
                     var ppmErrorAfter = (theorMZ - alignedMZ) / theorMZ * 1e6;
 
-                    sb.Append(result.TargetID + "\t" + result.ScanLC + "\t" + theorMZ.ToString("0.00000") + "\t" + obsMZ.ToString("0.00000") + "\t" + alignedMZ.ToString("0.00000") + "\t" + ppmErrorBefore.ToString("0.0") + "\t" + ppmErrorAfter.ToString("0.0"));
+                    sb.Append(result.TargetID).Append('\t').Append(result.ScanLC).Append('\t').Append(theorMZ.ToString("0.00000")).Append('\t').Append(obsMZ.ToString("0.00000")).Append('\t').Append(alignedMZ.ToString("0.00000")).Append('\t').Append(ppmErrorBefore.ToString("0.0")).Append('\t').Append(ppmErrorAfter.ToString("0.0"));
                     sb.Append(Environment.NewLine);
 
                     ppmErrorsAfter.Add(ppmErrorAfter);
@@ -266,7 +266,7 @@ namespace DeconTools.Workflows.UnitTesting
 
                 foreach (var result in repo.Results)
                 {
-                    var mt = mtc.TargetList.Where(p => p.ID == result.TargetID).Where(p => p.ChargeState == result.ChargeState).First();
+                    var mt = mtc.TargetList.Where(p => p.ID == result.TargetID).First(p => p.ChargeState == result.ChargeState);
                     var theorMZ = mt.MZ;
                     var obsMZ = result.MonoMZ;
                     double scan = result.ScanLC;
@@ -274,7 +274,7 @@ namespace DeconTools.Workflows.UnitTesting
                     var ppmErrorBefore = (theorMZ - obsMZ) / theorMZ * 1e6;
                     var ppmErrorAfter = (theorMZ - alignedMZ) / theorMZ * 1e6;
 
-                    sb.Append(result.TargetID + "\t" + result.ScanLC + "\t" + theorMZ.ToString("0.00000") + "\t" + obsMZ.ToString("0.00000") + "\t" + alignedMZ.ToString("0.00000") + "\t" + ppmErrorBefore.ToString("0.0") + "\t" + ppmErrorAfter.ToString("0.0"));
+                    sb.Append(result.TargetID).Append('\t').Append(result.ScanLC).Append('\t').Append(theorMZ.ToString("0.00000")).Append('\t').Append(obsMZ.ToString("0.00000")).Append('\t').Append(alignedMZ.ToString("0.00000")).Append('\t').Append(ppmErrorBefore.ToString("0.0")).Append('\t').Append(ppmErrorAfter.ToString("0.0"));
                     sb.Append(Environment.NewLine);
 
                     ppmErrorsAfter.Add(ppmErrorAfter);
@@ -324,7 +324,7 @@ namespace DeconTools.Workflows.UnitTesting
                 sumSquaredDiffs += ((item - average) * (item - average));
             }
 
-            var stdev = Math.Sqrt((sumSquaredDiffs / (vals.Count - 1)));
+            var stdev = Math.Sqrt(sumSquaredDiffs / (vals.Count - 1));
             return stdev;
         }
 
@@ -371,7 +371,7 @@ namespace DeconTools.Workflows.UnitTesting
 
                 foreach (var result in repo.Results)
                 {
-                    var mt = mtc.TargetList.Where(p => p.ID == result.TargetID).Where(p => p.ChargeState == result.ChargeState).First();
+                    var mt = mtc.TargetList.Where(p => p.ID == result.TargetID).First(p => p.ChargeState == result.ChargeState);
                     var theorMZ = mt.MZ;
                     var obsMZ = result.MonoMZ;
                     double scan = result.ScanLC;
@@ -382,7 +382,7 @@ namespace DeconTools.Workflows.UnitTesting
                     double obsNET = result.NET;
                     var alignedNET = run.NetAlignmentInfo.GetNETValueForScan((int) scan);
 
-                    sb.Append(result.TargetID + "\t" + result.ScanLC + "\t" + theorMZ.ToString("0.00000") + "\t" + obsMZ.ToString("0.00000") + "\t" + alignedMZ.ToString("0.00000") + "\t" + ppmErrorBefore.ToString("0.0") + "\t" + ppmErrorAfter.ToString("0.0") + "\t" + theorNET.ToString("0.0000") + "\t" + obsNET.ToString("0.0000") + "\t" + alignedNET.ToString("0.0000"));
+                    sb.Append(result.TargetID).Append('\t').Append(result.ScanLC).Append('\t').Append(theorMZ.ToString("0.00000")).Append('\t').Append(obsMZ.ToString("0.00000")).Append('\t').Append(alignedMZ.ToString("0.00000")).Append('\t').Append(ppmErrorBefore.ToString("0.0")).Append('\t').Append(ppmErrorAfter.ToString("0.0")).Append('\t').Append(theorNET.ToString("0.0000")).Append('\t').Append(obsNET.ToString("0.0000")).Append('\t').Append(alignedNET.ToString("0.0000"));
 
                     //sb.Append(result.MassTagID + "\t" + result.ScanLC + "\t" + theo
                     sb.Append(Environment.NewLine);

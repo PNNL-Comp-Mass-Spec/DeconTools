@@ -326,7 +326,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests.IQWorkflowTests
             var stringBuilder = new StringBuilder();
             foreach (var pair in netAlignmentInfo.ScanToNETAlignmentData)
             {
-                stringBuilder.Append(pair.Key + "\t" + pair.Value + Environment.NewLine);
+                stringBuilder.Append(pair.Key).Append('\t').Append(pair.Value).Append(Environment.NewLine);
             }
 
             Console.WriteLine(stringBuilder.ToString());

@@ -107,7 +107,8 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.MercuryIso
             }
         }
 
-        private void DisplayFrequencyDataToConsole(double[] frequencyData)
+        // ReSharper disable once UnusedMember.Local
+        private void DisplayFrequencyDataToConsole(IReadOnlyList<double> frequencyData)
         {
             var sb = new StringBuilder();
 
@@ -294,9 +295,7 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.MercuryIso
 
         private void SwapValuesInArray(ref double[] data, long i, long j)
         {
-            var tempVal = data[j];
-            data[j] = data[i];
-            data[i] = tempVal;
+            (data[j], data[i]) = (data[i], data[j]);
         }
 
         private void CalculateFrequencies(int numPoints, int chargeState, ref double[] frequencyData)

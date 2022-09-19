@@ -15,7 +15,7 @@ namespace DeconTools.Workflows.Backend.Core
             MsLevel = msLevel;
         }
 
-        public int NominalMass { get; private set; }
+        public int NominalMass { get; }
 
         public override string GetEmpiricalFormulaFromTargetCode()
         {

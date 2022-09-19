@@ -54,7 +54,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             {
                 if (masstagIDlist.Contains(target.ID))
                 {
-                    var mt = massTagCollection.TargetList.Where(p => p.ID == target.FeatureToMassTagID).First();
+                    var mt = massTagCollection.TargetList.First(p => p.ID == target.FeatureToMassTagID);
                     target.Code = mt.Code;
                     target.EmpiricalFormula = mt.EmpiricalFormula;
                 }
@@ -149,7 +149,7 @@ namespace DeconTools.Workflows.UnitTesting.WorkflowTests
             {
                 if (masstagIDlist.Contains(target.FeatureToMassTagID))
                 {
-                    var mt = massTagCollection.TargetList.Where(p => p.ID == target.FeatureToMassTagID).First();
+                    var mt = massTagCollection.TargetList.First(p => p.ID == target.FeatureToMassTagID);
                     target.Code = mt.Code;
                     target.EmpiricalFormula = mt.EmpiricalFormula;
                 }

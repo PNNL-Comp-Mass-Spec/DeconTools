@@ -33,7 +33,7 @@ namespace DeconTools.Workflows.UnitTesting.UtilitiesTests
             var sb=new StringBuilder();
             foreach (var target in targetCollection.TargetList )
             {
-                sb.Append(target.ID + "\t" + target.Code + "\t" + target.EmpiricalFormula + "\n");
+                sb.Append(target.ID).Append('\t').Append(target.Code).Append('\t').Append(target.EmpiricalFormula).Append('\n');
             }
 
             Console.WriteLine(sb.ToString());

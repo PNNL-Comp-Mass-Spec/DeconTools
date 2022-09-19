@@ -69,7 +69,7 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
             run.XYData = xyData;
             // run.XYData.Display();
 
-            run.CurrentMassTag = massTagColl.TargetList.Where(p => p.ID == 635428).First();
+            run.CurrentMassTag = massTagColl.TargetList.First(p => p.ID == 635428);
 
             Console.WriteLine("------MT = " + run.CurrentMassTag.ToString());
 
@@ -139,7 +139,7 @@ namespace DeconTools.UnitTesting2.TargetedProcessing_Tests
             run.XYData.Yvalues = xyData.Yvalues;
             // run.XYData.Display();
 
-            run.CurrentMassTag = massTagColl.TargetList.Where(p => p.ID == 635428).First();
+            run.CurrentMassTag = massTagColl.TargetList.First(p => p.ID == 635428);
 
             Console.WriteLine("------MT = " + run.CurrentMassTag.ToString());
 
