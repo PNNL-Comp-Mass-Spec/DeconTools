@@ -72,14 +72,14 @@ namespace DeconTools.Workflows.Backend.Core
             {
                 //Get fit score O16 profile
                 var observedIsoList = result.ObservedIsotopicProfile.Peaklist.Cast<Peak>().Take(4).ToList();    //first 4 peaks excludes the O18 double label peak (fifth peak)
-                var theorPeakList = target.TheorIsotopicProfile.Peaklist.Select(p => (Peak)p).Take(4).ToList();
-                result.FitScore = PeakFitter.GetFit(theorPeakList, observedIsoList, 0.05, WorkflowParameters.MSToleranceInPPM);
+                var theoreticalPeakList = target.TheorIsotopicProfile.Peaklist.Select(p => (Peak)p).Take(4).ToList();
+                result.FitScore = PeakFitter.GetFit(theoreticalPeakList, observedIsoList, 0.05, WorkflowParameters.MSToleranceInPPM);
 
                 // fit score O18 profile
                 var o18Iso = ((O16O18IqResult)result).ConvertO16ProfileToO18(target.TheorIsotopicProfile, 4);
-                theorPeakList = o18Iso.Peaklist.Select(p => (Peak)p).ToList();
+                theoreticalPeakList = o18Iso.Peaklist.Select(p => (Peak)p).ToList();
                 observedIsoList = result.ObservedIsotopicProfile.Peaklist.Cast<Peak>().Skip(4).ToList();    //skips the first 4 peaks and thus includes the O18 double label isotopic profile
-                ((O16O18IqResult) result).FitScoreO18Profile = PeakFitter.GetFit(theorPeakList, observedIsoList, 0.05, WorkflowParameters.MSToleranceInPPM);
+                ((O16O18IqResult) result).FitScoreO18Profile = PeakFitter.GetFit(theoreticalPeakList, observedIsoList, 0.05, WorkflowParameters.MSToleranceInPPM);
 
                 //get i_score (1 is the worst possible score)
                 var iScore = InterferenceScorer.GetInterferenceScore(result.ObservedIsotopicProfile, msPeakList);
