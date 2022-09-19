@@ -130,6 +130,7 @@
     <Compile Include="Data\ViperMassCalibrationDataItem.cs" />
     <Compile Include="FileIO\LcmsTargetToTextExporter.cs" />
     <Compile Include="FileIO\ViperMassCalibrationLoader.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\ThrashV1\ChargeDetermination\AutoCorrelationChargeDetermination.cs" />
     <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\ThrashV1\ElementalFormulas\AtomicCount.cs" />
     <Compile Include="ProcessingTasks\Deconvoluters\HornDeconvolutor\ThrashV1\ElementalFormulas\Averagine.cs" />
