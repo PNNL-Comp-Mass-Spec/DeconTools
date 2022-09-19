@@ -327,9 +327,7 @@ namespace DeconTools.Workflows.Backend.Core
             targetForUpdate.ScanLC = sourceTarget.ScanLC;
             targetForUpdate.QualityScore = sourceTarget.QualityScore;
 
-            targetForUpdate.TheorIsotopicProfile = sourceTarget.TheorIsotopicProfile == null
-                             ? null
-                             : sourceTarget.TheorIsotopicProfile.CloneIsotopicProfile();
+            targetForUpdate.TheorIsotopicProfile = sourceTarget.TheorIsotopicProfile?.CloneIsotopicProfile();
 
             if (updateWorkflow)
             {
