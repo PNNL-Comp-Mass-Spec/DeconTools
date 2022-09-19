@@ -164,7 +164,7 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
             }
             for (var i = 0; i < IonProbabilities.Length; i++)
             {
-                IonProbabilities[i] = IonProbabilities[i] / max;
+                IonProbabilities[i] /= max;
             }
 
             var isoCluster = new IsotopicProfile();

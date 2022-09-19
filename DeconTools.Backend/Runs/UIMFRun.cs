@@ -432,7 +432,7 @@ namespace DeconTools.Backend.Runs
 
             if (Math.Abs(framePressure) > float.Epsilon)
             {
-                driftTime = driftTime * (FramePressureStandard / framePressure);  // correction
+                driftTime *= (FramePressureStandard / framePressure);  // correction
             }
 
             return driftTime;

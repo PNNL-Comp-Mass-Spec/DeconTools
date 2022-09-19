@@ -345,7 +345,7 @@ namespace DeconTools.Backend
 
             for (var i = 0; i < Yvalues.Length; i++)
             {
-                Yvalues[i] = Yvalues[i] / maxVal;
+                Yvalues[i] /= maxVal;
             }
         }
 
@@ -357,7 +357,7 @@ namespace DeconTools.Backend
         {
             for (var i = 0; i < Xvalues.Length; i++)
             {
-                Xvalues[i] = Xvalues[i] + offset;
+                Xvalues[i] += offset;
             }
         }
 

@@ -82,7 +82,7 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
             _theorLabeledProfiles.Clear();
             FitScoreData.Clear();
 
-            for (var labelAmount = MinLabelAmount; labelAmount < MaxLabelAmount; labelAmount = labelAmount + StepAmountForIterator)
+            for (var labelAmount = MinLabelAmount; labelAmount < MaxLabelAmount; labelAmount += StepAmountForIterator)
             {
                 var theorIso = _isoCreator.CreateIsotopicProfileFromEmpiricalFormula(target.EmpiricalFormula,
                                                                                      _elementLabeled, _lightIsotope,

@@ -342,7 +342,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                     && TheoreticalDistMzs[maxIndex + 1] < x2 + 2.0 / IsotopeDistribution.PointsPerAmu)
                 {
                     var d = (y2 - y1) * (x3 - x2); //[gord] slope?  what is this?...  Denominator... see below
-                    d = d - (y3 - y2) * (x2 - x1); //
+                    d -= (y3 - y2) * (x2 - x1); //
 
                     if (d.Equals(0))
                         mzValue = x2;
@@ -838,9 +838,9 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                     break;
                 }
             }
-            startMz = startMz + delta;
+            startMz += delta;
             // TODO: verify/check; make an O18 mode flag that keeps this as added; regular mode no change/subtract/what?
-            stopMz = stopMz + delta; // TODO: Test and check changing this to "stop_mz + delta / 2
+            stopMz += delta; // TODO: Test and check changing this to "stop_mz + delta / 2
             if (debug)
             {
                 Console.WriteLine("\t Start MZ for deletion =" + startMz + " Stop MZ for deletion = " + stopMz);

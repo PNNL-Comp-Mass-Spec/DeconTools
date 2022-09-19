@@ -273,7 +273,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                 {
                     terms[j] = b[j, 0];
                     yFit += b[j, 0] * xPow;
-                    xPow = xPow * x[i];
+                    xPow *= x[i];
                 }
                 outA[0, i] = yFit;
                 outA[1, i] = y[i] - yFit;

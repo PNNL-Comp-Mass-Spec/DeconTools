@@ -39,7 +39,7 @@ namespace DeconTools.UnitTesting2.Utilities
 
             for (var i = 0; i < theorXYData.Xvalues.Length; i++)
             {
-                theorXYData.Yvalues[i] = theorXYData.Yvalues[i] * obsMaxY;
+                theorXYData.Yvalues[i] *= obsMaxY;
             }
 
             offsetDistribution(theorXYData, mt23140708.IsotopicProfile, n14Profile);
@@ -83,12 +83,12 @@ namespace DeconTools.UnitTesting2.Utilities
 
             for (var i = 0; i < theorXYData.Xvalues.Length; i++)
             {
-                theorXYData.Xvalues[i] = theorXYData.Xvalues[i] + offset;
+                theorXYData.Xvalues[i] += offset;
             }
 
             foreach (var peak in theorIsotopicProfile.Peaklist)
             {
-                peak.XValue = peak.XValue + offset;
+                peak.XValue += offset;
             }
         }
     }

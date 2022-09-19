@@ -33,7 +33,7 @@ namespace DeconTools.Backend.Utilities
             {
                 if (baseElementTable.ContainsKey(item.Key))
                 {
-                    baseElementTable[item.Key] = baseElementTable[item.Key] + item.Value;
+                    baseElementTable[item.Key] += item.Value;
                 }
                 else
                 {
@@ -52,7 +52,7 @@ namespace DeconTools.Backend.Utilities
             {
                 if (baseElementTable.ContainsKey(item.Key))
                 {
-                    baseElementTable[item.Key] = baseElementTable[item.Key] - item.Value;
+                    baseElementTable[item.Key] -= item.Value;
                 }
                 else
                 {

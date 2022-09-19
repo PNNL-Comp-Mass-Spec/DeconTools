@@ -130,23 +130,23 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             for (var i = 0; i < 50; i++)
             {
                 var lastE = currentE;
-                vo = vo + e;
+                vo += e;
                 currentE = LorentzianLS(mzs, intensities, a, fwhm, vo, leftStart, leftStop);
                 if (currentE > lastE)
                     break;
             }
 
-            vo = vo - e;
+            vo -= e;
             currentE = LorentzianLS(mzs, intensities, a, fwhm, vo, leftStart, leftStop);
             for (var i = 0; i < 50; i++)
             {
                 var lastE = currentE;
-                vo = vo - e;
+                vo -= e;
                 currentE = LorentzianLS(mzs, intensities, a, fwhm, vo, leftStart, leftStop);
                 if (currentE > lastE)
                     break;
             }
-            vo = vo + e;
+            vo += e;
             return vo;
         }
 
@@ -170,7 +170,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                 var u = 2 / fwhm * (mzs[index] - vo);
                 double y1 = (int)(a / (1 + u * u));
                 var y2 = intensities[index];
-                rmsError = rmsError + (y1 - y2) * (y1 - y2);
+                rmsError += (y1 - y2) * (y1 - y2);
             }
             return rmsError;
         }

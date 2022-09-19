@@ -156,7 +156,7 @@ namespace DeconTools.Backend.Utilities
 
             for (var i = 0; i < Data.Xvalues.Length; i++)
             {
-                Data.Xvalues[i] = Data.Xvalues[i] + offset;
+                Data.Xvalues[i] += offset;
             }
         }
     }

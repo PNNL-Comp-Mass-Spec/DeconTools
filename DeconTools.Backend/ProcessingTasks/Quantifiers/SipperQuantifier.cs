@@ -574,7 +574,7 @@ namespace DeconTools.Backend.ProcessingTasks.Quantifiers
             //re-normalize.
             for (var i = 0; i < labelDistributionVals.Count; i++)
             {
-                labelDistributionVals[i] = labelDistributionVals[i] / sumVals;
+                labelDistributionVals[i] /= sumVals;
             }
 
             return labelDistributionVals.ToList();

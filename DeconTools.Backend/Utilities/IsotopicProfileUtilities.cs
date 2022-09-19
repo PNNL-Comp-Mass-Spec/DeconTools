@@ -130,7 +130,7 @@ namespace DeconTools.Backend.Utilities
 
             foreach (var peak in iso2.Peaklist)
             {
-                peak.XValue = peak.XValue + offset;
+                peak.XValue += offset;
             }
         }
 

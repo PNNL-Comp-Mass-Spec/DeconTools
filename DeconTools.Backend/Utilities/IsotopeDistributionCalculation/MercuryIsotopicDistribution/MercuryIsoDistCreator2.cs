@@ -151,8 +151,8 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.MercuryIso
                         var index1 = 2 * j - 1;
                         var index2 = 2 * j;
 
-                        frequencyData[index1] = frequencyData[index1] * apodizationVal;
-                        frequencyData[index2] = frequencyData[index2] * apodizationVal;
+                        frequencyData[index1] *= apodizationVal;
+                        frequencyData[index2] *= apodizationVal;
                         // Console.WriteLine(frequencyData[index1] + "\t"+frequencyData[index2]);
                     }
 
@@ -174,8 +174,8 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.MercuryIso
                         var index1 = 2 * j - 1;
                         var index2 = 2 * j;
 
-                        frequencyData[index1] = frequencyData[index1] * apodizationVal;
-                        frequencyData[index2] = frequencyData[index2] * apodizationVal;
+                        frequencyData[index1] *= apodizationVal;
+                        frequencyData[index2] *= apodizationVal;
                     }
 
                     break;
@@ -193,7 +193,7 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation.MercuryIso
             double c1 = 0.5, c2, hir, h1i, h2r, h2i;
             double wpr, wpi, wi, wr, theta, wtemp;
 
-            n = n / 2;
+            n /= 2;
             theta = 3.141592653589793 / (double)n;
             if (isign == 1)
             {

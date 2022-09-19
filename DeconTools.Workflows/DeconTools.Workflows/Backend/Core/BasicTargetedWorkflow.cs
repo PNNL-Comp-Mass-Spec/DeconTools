@@ -30,7 +30,7 @@ namespace DeconTools.Workflows.Backend.Core
             {
                if (Run.IsMsAbundanceReportedAsAverage)
                {
-                   Result.IntensityAggregate = Result.IntensityAggregate * Result.NumMSScansSummed;
+                    Result.IntensityAggregate *= Result.NumMSScansSummed;
                }
             }
         }

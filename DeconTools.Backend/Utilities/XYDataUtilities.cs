@@ -32,7 +32,7 @@ namespace DeconTools.Backend.Utilities
 
             for (var i = 0; i < normalized.Yvalues.Length; i++)
             {
-                normalized.Yvalues[i] = normalized.Yvalues[i] / maxYValue;
+                normalized.Yvalues[i] /= maxYValue;
             }
 
             return normalized;
@@ -57,7 +57,7 @@ namespace DeconTools.Backend.Utilities
                 var currentXVal = subtracted.Xvalues[i];
 
                 var indexOfClosest = MathUtils.GetClosest(xyData2.Xvalues, currentXVal, tolerance);
-                subtracted.Yvalues[i] = subtracted.Yvalues[i] - xyData2.Yvalues[indexOfClosest];
+                subtracted.Yvalues[i] -= xyData2.Yvalues[indexOfClosest];
             }
             return subtracted;
         }

@@ -114,7 +114,7 @@ namespace DeconTools.Workflows.Backend.Core
 
             foreach (var peak in profile.Peaklist)
             {
-                peak.XValue = peak.XValue - mzDifference;
+                peak.XValue -= mzDifference;
             }
         }
     }

@@ -595,7 +595,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor
 
             foreach (var theorMSPeak in theorIso.Peaklist)
             {
-                theorMSPeak.XValue = theorMSPeak.XValue + bestOffsetForTheorProfile;
+                theorMSPeak.XValue += bestOffsetForTheorProfile;
             }
 
             theorIso.MonoPeakMZ = theorIso.getMonoPeak().XValue;

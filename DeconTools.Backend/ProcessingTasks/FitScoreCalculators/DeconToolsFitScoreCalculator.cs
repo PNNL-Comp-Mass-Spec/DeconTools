@@ -89,12 +89,12 @@ namespace DeconTools.Backend.ProcessingTasks.FitScoreCalculators
 
             for (var i = 0; i < theorXYData.Xvalues.Length; i++)
             {
-                theorXYData.Xvalues[i] = theorXYData.Xvalues[i] + offset;
+                theorXYData.Xvalues[i] += offset;
             }
 
             foreach (var peak in theorIsotopicProfile.Peaklist)
             {
-                peak.XValue = peak.XValue + offset;
+                peak.XValue += offset;
             }
         }
     }

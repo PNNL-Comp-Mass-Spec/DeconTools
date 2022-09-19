@@ -107,7 +107,7 @@ namespace DeconTools.Workflows.Backend.Core
                 while (extendDown)
                 {
                     var extend = new IqChargeStateTarget(childWorkflow);
-                    charge = charge - 1;
+                    charge -= 1;
                     extend.ChargeState = charge;
                     parentTarget.AddTarget(extend);
                     extend.RefineTarget();
@@ -123,7 +123,7 @@ namespace DeconTools.Workflows.Backend.Core
                 while (extendUp)
                 {
                     var extend = new IqChargeStateTarget(childWorkflow);
-                    charge = charge + 1;
+                    charge += 1;
                     extend.ChargeState = charge;
                     parentTarget.AddTarget(extend);
                     extend.RefineTarget();

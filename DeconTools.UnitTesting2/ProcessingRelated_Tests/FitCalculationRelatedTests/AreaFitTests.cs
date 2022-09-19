@@ -226,7 +226,7 @@ namespace DeconTools.UnitTesting2.ProcessingRelated_Tests.FitCalculationRelatedT
             sb.Append(fitval);
             sb.Append("\n");
 
-            for (var fwhm = 0.001; fwhm < 0.050; fwhm = fwhm + 0.0005)
+            for (var fwhm = 0.001; fwhm < 0.050; fwhm += 0.0005)
             {
                 distCreator = new MercuryDistributionCreator();
                 resolution = result1.IsotopicProfile.GetMZofMostAbundantPeak() / fwhm;

@@ -50,7 +50,7 @@ namespace DeconTools.Backend.Utilities.IsotopeDistributionCalculation
 
             for (var i = 0; i < xydata.Yvalues.Length; i++)
             {
-                xydata.Yvalues[i] = xydata.Yvalues[i] * peakHeight;
+                xydata.Yvalues[i] *= peakHeight;
             }
             return xydata;
         }

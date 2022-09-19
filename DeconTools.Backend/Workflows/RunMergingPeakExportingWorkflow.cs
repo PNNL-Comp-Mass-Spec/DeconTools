@@ -160,7 +160,7 @@ namespace DeconTools.Backend.Workflows
 
             foreach (var peak in Run.ResultCollection.MSPeakResultList)
             {
-                peak.Scan_num = peak.Scan_num + Run.ScanSetCollection.ScanSetList.Count * _datasetCounter;
+                peak.Scan_num += Run.ScanSetCollection.ScanSetList.Count * _datasetCounter;
             }
 
             _peaksProcessedInLastDataset += Run.ResultCollection.MSPeakResultList.Count;
