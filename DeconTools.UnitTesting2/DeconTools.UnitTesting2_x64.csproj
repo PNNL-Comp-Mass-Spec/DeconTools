@@ -159,6 +159,18 @@
       <Version>2.7.0</Version>
     </PackageReference>
     <PackageReference Include="System.Data.SQLite.Core" Version="1.0.111" />
+    <PackageReference Include="ThermoFisher.CommonCore.BackgroundSubtraction">
+      <Version>5.0.0.88</Version>
+    </PackageReference>
+    <PackageReference Include="ThermoFisher.CommonCore.Data">
+      <Version>5.0.0.88</Version>
+    </PackageReference>
+    <PackageReference Include="ThermoFisher.CommonCore.MassPrecisionEstimator">
+      <Version>5.0.0.88</Version>
+    </PackageReference>
+    <PackageReference Include="ThermoFisher.CommonCore.RawFileReader">
+      <Version>5.0.0.88</Version>
+    </PackageReference>
     <PackageReference Include="ThermoRawFileReader">
       <Version>4.1.42</Version>
     </PackageReference>
