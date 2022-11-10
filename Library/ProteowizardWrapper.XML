@@ -4,13 +4,128 @@
         <name>ProteowizardWrapper</name>
     </assembly>
     <members>
+        <member name="M:pwiz.ProteowizardWrapper.Common.Chemistry.IonMobilityValue.IsExpectedValueOrdering(pwiz.ProteowizardWrapper.Common.Chemistry.IonMobilityValue,pwiz.ProteowizardWrapper.Common.Chemistry.IonMobilityValue)">
+            <summary>
+            With drift time, we expect value to go up with each bin. With TIMS we expect it to go down.
+            </summary>
+        </member>
+        <member name="M:pwiz.ProteowizardWrapper.Common.Chemistry.IonMobilityValue.Merge(pwiz.ProteowizardWrapper.Common.Chemistry.IonMobilityValue)">
+            <summary>
+            Merge non-empty parts of other into a copy of this
+            </summary>
+        </member>
+        <member name="T:pwiz.ProteowizardWrapper.Common.Chemistry.SignedMz">
+            <summary>
+            We need a way to distinguish chromatograms for negative ion modes from those for positive.
+            The idea of m/z is inherently "positive", in the sense of sorting etc, so we carry around
+            the m/z value, and a sign flag, and when we sort it's by sign then by (normally positive) m/z.
+            The m/z value *could* be negative as a result of an arithmetic operator, that has a special
+            meaning for comparisons but doesn't happen in normal use.
+            There's a lot of operator magic here to minimize code changes where we used to implement mz
+            values as simple doubles.
+            </summary>
+        </member>
+        <member name="P:pwiz.ProteowizardWrapper.Common.Chemistry.SignedMz.Value">
+            <summary>
+            Returns the mz value, which is normally a positive number even for negative ion mode
+            (Check the IsNegative flag to know the ion mode, or use RawValue for a value that is negative if ion is negative)
+            </summary>
+        </member>
+        <member name="P:pwiz.ProteowizardWrapper.Common.Chemistry.SignedMz.RawValue">
+            <summary>
+            For serialization etc - returns a negative number if IsNegative is true
+            </summary>
+        </member>
+        <member name="M:pwiz.ProteowizardWrapper.Common.Chemistry.SignedMz.op_Subtraction(pwiz.ProteowizardWrapper.Common.Chemistry.SignedMz,System.Double)">
+            <summary>
+            Subtracts from the positive value of a <see cref="T:pwiz.ProteowizardWrapper.Common.Chemistry.SignedMz"/> always producing
+            a new <see cref="T:pwiz.ProteowizardWrapper.Common.Chemistry.SignedMz"/> of the same sign with the absolute value of the difference.
+            </summary>
+        </member>
+        <member name="M:pwiz.ProteowizardWrapper.Common.Chemistry.SignedMz.op_Subtraction(pwiz.ProteowizardWrapper.Common.Chemistry.SignedMz,pwiz.ProteowizardWrapper.Common.Chemistry.SignedMz)">
+            <summary>
+            Subtracts the positive value of a <see cref="T:pwiz.ProteowizardWrapper.Common.Chemistry.SignedMz"/> from another <see cref="T:pwiz.ProteowizardWrapper.Common.Chemistry.SignedMz"/>
+            always producing  a new <see cref="T:pwiz.ProteowizardWrapper.Common.Chemistry.SignedMz"/> of the same sign as the two operands with
+            the absolute value of the difference as its value.
+            </summary>
+        </member>
+        <member name="T:pwiz.ProteowizardWrapper.Common.Collections.CollectionUtil">
+            <summary>
+            Helper methods for dealing with Collections.
+            </summary>
+        </member>
+        <member name="M:pwiz.ProteowizardWrapper.Common.Collections.CollectionUtil.BinarySearch``1(System.Collections.Generic.IList{``0},System.Func{``0,System.Int32},System.Boolean)">
+            <summary>
+            Performs a binary search in a list of items.  The list is assumed to be sorted with respect to
+            <paramref name="compareFunc" /> such that those items for which compareFunc returns a negative
+            number appear earlier in the list than those items for which compareFunc returns 0, which appear
+            earlier than the items for which compareFunc returns a positive number.
+            The return value is the index of the first or last (depending on <paramref name="firstIndex"/>) item
+            for which compareFunc returns 0.  If no item was found, then the return value is the one's complement
+            of the index of the first item in the list for which compareFunc returns a positive number.
+            </summary>
+        </member>
+        <member name="M:pwiz.ProteowizardWrapper.Common.Collections.CollectionUtil.CompareColumnValues(System.Object,System.Object)">
+            <summary>
+            Compare two values that might not necessarily implement IComparable.
+            If either of the values implements IComparable, it is assumed that both
+            values implement IComparable.
+            If the values do not implement IComparable, then they are compared as strings.
+            </summary>
+        </member>
+        <member name="T:pwiz.ProteowizardWrapper.Common.Collections.ImmutableList">
+            <summary>
+            Factory methods for constructing <see cref="T:pwiz.ProteowizardWrapper.Common.Collections.ImmutableList`1"/>.
+            </summary>
+        </member>
+        <member name="M:pwiz.ProteowizardWrapper.Common.Collections.ImmutableList.ValueOf``1(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            Returns an <see cref="T:pwiz.ProteowizardWrapper.Common.Collections.ImmutableList`1"/> containing the passed
+            in items, or null if <paramref name="values"/> is null.
+            </summary>
+        </member>
+        <member name="M:pwiz.ProteowizardWrapper.Common.Collections.ImmutableList.ValueOfOrEmpty``1(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            Behaves like <see cref="M:pwiz.ProteowizardWrapper.Common.Collections.ImmutableList.ValueOf``1(System.Collections.Generic.IEnumerable{``0})"/>, but returns an empty ImmutableList
+            if <see paramref="values"/> is null.
+            </summary>
+        </member>
+        <member name="T:pwiz.ProteowizardWrapper.Common.Collections.ImmutableList`1">
+            <summary>
+            Read only list of elements.
+            This class differs from <see cref="T:System.Collections.ObjectModel.ReadOnlyCollection`1" />
+            which is only a read-only wrapper around a potentially modifiable collection.  ImmutableList
+            guarantees that its contents cannot be modified by anyone.
+            ImmutableList also overrides Equals and GetHashCode to provide list contents equality
+            semantics.
+            Instances of ImmutableList cannot be constructed directly, instead use the factory methods in
+            <see cref="T:pwiz.ProteowizardWrapper.Common.Collections.ImmutableList"/> which check whether the passed in collection is already
+            an ImmutableList, and makes a copy of the collection as appropriate.
+            </summary>
+        </member>
+        <member name="M:pwiz.ProteowizardWrapper.Common.Collections.ImmutableList`1.#ctor">
+            <summary>
+            Private constructor to disallow any other implementations of this class.
+            </summary>
+        </member>
+        <member name="T:pwiz.ProteowizardWrapper.CVParamUtilities.CVIDs">
+            <summary>
+            CVIDs used by the unit tests
+            </summary>
+        </member>
         <member name="T:pwiz.ProteowizardWrapper.DependencyLoader">
             <summary>
             ProteoWizard Dependency Loader
             </summary>
-            <remarks>This class provides a custom AssemblyResolver to find an installation of ProteoWizard, specified in ProteoWizardReaderImplementation.
+            <remarks>
+            <para>
+            This class provides a custom AssemblyResolver to find an installation of ProteoWizard, specified in ProteoWizardReaderImplementation.
+            </para>
+            <para>
             This class is a wrapper around ProteoWizardReaderImplementation to encapsulate the usage of the custom AssemblyResolver, which must be
-            added to the AppDomain.CurrentDomain.AssemblyResolve event before the class is instantiated.</remarks>
+            added to the AppDomain.CurrentDomain.AssemblyResolve event before the class is instantiated.
+            </para>
+            </remarks>
         </member>
         <member name="M:pwiz.ProteowizardWrapper.DependencyLoader.AddAssemblyResolver">
             <summary>
@@ -30,11 +145,10 @@
         </member>
         <member name="M:pwiz.ProteowizardWrapper.DependencyLoader.ProteoWizardAssemblyResolver(System.Object,System.ResolveEventArgs)">
             <summary>
-            On a missing DLL event, searches a path specified by FindPwizPath for the ProteoWizard dlls, and loads them
+            On a missing DLL event, searches a path specified by FindPwizPath for the ProteoWizard DLLs, and loads them
             </summary>
             <param name="sender"></param>
             <param name="args"></param>
-            <returns></returns>
         </member>
         <member name="F:pwiz.ProteowizardWrapper.DependencyLoader.TargetDllName">
             <summary>
@@ -44,7 +158,7 @@
         <member name="F:pwiz.ProteowizardWrapper.DependencyLoader.PwizPath">
             <summary>
             The path to the most recent 64-bit ProteoWizard install
-            If this is not null/empty, we can usually make a safe assumption that the ProteoWizard dlls are available.
+            If this is not null/empty, we can usually make a safe assumption that the ProteoWizard DLLs are available.
             </summary>
         </member>
         <member name="M:pwiz.ProteowizardWrapper.DependencyLoader.FindPwizPath">
@@ -52,7 +166,6 @@
             Finds the path to the most recent 64-bit ProteoWizard install
             PwizPath is populated from this, but only causes a single search.
             </summary>
-            <returns></returns>
             <remarks>Paths searched, in order:
             "%ProteoWizard%" or "%ProteoWizard%_x86" environment variable data,
             "C:\DMS_Programs\ProteoWizard" or "C:\DMS_Programs\ProteoWizard_x86",
@@ -63,18 +176,26 @@
             Checks to make sure the path to ProteoWizard files is set. If not, throws an exception.
             </summary>
             <remarks>This function should generally only be called inside of a conditional statement to prevent the
-            exception from being thrown when the ProteoWizard dlls will not be needed.</remarks>
+            exception from being thrown when the ProteoWizard DLLs will not be needed.</remarks>
         </member>
         <member name="T:pwiz.ProteowizardWrapper.MsDataFileImpl">
             <summary>
+            <para>
             This is our wrapper class for ProteoWizard's MSData file reader interface.
-            
-            Performance measurements can be made here, see notes below on enabling that.   
-            
+            </para>
+            <para>
+            Performance measurements can be made here, see notes below on enabling that.
+            </para>
+            <para>
             When performance measurement is enabled, the GetLog() method can be called
             after read operations have been completed. This returns a handy CSV-formatted
             report on file read performance.
+            </para>
             </summary>
+            <remarks>
+            This class has been customized by PNNL
+            The original copy is at https://github.com/ProteoWizard/pwiz/tree/master/pwiz_tools/Shared/ProteowizardWrapper
+            </remarks>
         </member>
         <member name="M:pwiz.ProteowizardWrapper.MsDataFileImpl.#cctor">
             <summary>
@@ -86,28 +207,25 @@
             <summary>
             Get the list of CVParams for the specified chromatogram
             </summary>
-            <param name="chromIndex"></param>
-            <returns></returns>
             <remarks>Use of this method requires the calling project to reference pwiz_bindings_cli.dll</remarks>
+            <param name="chromIndex"></param>
         </member>
         <member name="M:pwiz.ProteowizardWrapper.MsDataFileImpl.GetChromatogramObject(System.Int32)">
             <summary>
             Get the ProteoWizard native chromatogram object for the specified spectrum
             </summary>
-            <param name="chromIndex"></param>
-            <returns></returns>
             <remarks>Use of this method requires the calling project to reference pwiz_bindings_cli.dll</remarks>
+            <param name="chromIndex"></param>
         </member>
         <member name="M:pwiz.ProteowizardWrapper.MsDataFileImpl.GetSpectrumCVParams(System.Int32)">
             <summary>
             Get the list of CVParams for the specified spectrum
             </summary>
-            <param name="scanIndex"></param>
-            <returns></returns>
             <remarks>
             Use of this method requires the calling project to reference pwiz_bindings_cli.dll
             Alternatively, use <see cref="M:pwiz.ProteowizardWrapper.MsDataFileImpl.GetSpectrumCVParamData(System.Int32)"/>
             </remarks>
+            <param name="scanIndex"></param>
         </member>
         <member name="M:pwiz.ProteowizardWrapper.MsDataFileImpl.GetSpectrumCVParamData(System.Int32)">
             <summary>
@@ -120,17 +238,16 @@
             <summary>
             Get a container describing the scan (or scans) associated with the given spectrum
             </summary>
+            <remarks>Useful for obtaining the filter string, scan start time, ion injection time, etc.</remarks>
             <param name="scanIndex"></param>
             <returns>Scan info container</returns>
-            <remarks>Useful for obtaining the filter string, scan start time, ion injection time, etc.</remarks>
         </member>
         <member name="M:pwiz.ProteowizardWrapper.MsDataFileImpl.GetSpectrumObject(System.Int32)">
             <summary>
             Get the ProteoWizard native spectrum object for the specified spectrum.
             </summary>
-            <param name="scanIndex"></param>
-            <returns></returns>
             <remarks>Use of this method requires the calling project to reference pwiz_bindings_cli.dll</remarks>
+            <param name="scanIndex"></param>
         </member>
         <member name="F:pwiz.ProteowizardWrapper.MsDataFileImpl.Filters">
             <summary>
@@ -163,7 +280,27 @@
             Force the reload of the spectrum list, reapplying any specified filters.
             </summary>
         </member>
-        <member name="M:pwiz.ProteowizardWrapper.MsDataFileImpl.#ctor(System.String,System.Int32,pwiz.ProteowizardWrapper.LockMassParameters,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean)">
+        <member name="M:pwiz.ProteowizardWrapper.MsDataFileImpl.ReadIds(System.String)">
+            <summary>
+            Returns the file id of the specified file (as an array, which typically only has one item)
+            </summary>
+            <param name="path"></param>
+        </member>
+        <member name="M:pwiz.ProteowizardWrapper.MsDataFileImpl.IsNegativeChargeIdNullable(System.String)">
+            <summary>
+            Return false if id starts with "+ "
+            Return true  if id starts with "- "
+            Otherwise, return null
+            </summary>
+            <param name="id"></param>
+        </member>
+        <member name="M:pwiz.ProteowizardWrapper.MsDataFileImpl.IsSingleIonCurrentId(System.String)">
+            <summary>
+            Return true if the id starts with "SRM SIC" or "SIM SIC"
+            </summary>
+            <param name="id"></param>
+        </member>
+        <member name="M:pwiz.ProteowizardWrapper.MsDataFileImpl.#ctor(System.String,System.Int32,pwiz.ProteowizardWrapper.LockMassParameters,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Int32,System.Boolean,System.Boolean)">
             <summary>
             Constructor
             </summary>
@@ -175,11 +312,78 @@
             <param name="acceptZeroLengthSpectra">Whether to accept zero-length spectra, default true</param>
             <param name="requireVendorCentroidedMS1">True to return centroided MS1 spectra</param>
             <param name="requireVendorCentroidedMS2">True to return centroided MS2 spectra</param>
+            <param name="ignoreZeroIntensityPoints"></param>
+            <param name="preferOnlyMsLevel"></param>
+            <param name="combineIonMobilitySpectra">When true, ask for IMS data in 3-array format (not guaranteed)</param>
+            <param name="trimNativeId"></param>
+        </member>
+        <member name="M:pwiz.ProteowizardWrapper.MsDataFileImpl.InitializeReader(System.String,pwiz.CLI.msdata.MSData,System.Int32,pwiz.CLI.msdata.ReaderConfig)">
+            <summary>
+            Initialize the reader
+            </summary>
+            <param name="path"></param>
+            <param name="msDataFile"></param>
+            <param name="sampleIndex"></param>
+            <param name="config"></param>
+        </member>
+        <member name="M:pwiz.ProteowizardWrapper.MsDataFileImpl.EnableCaching(System.Nullable{System.Int32})">
+            <summary>
+            Call this method to enable caching recently read spectra
+            </summary>
+            <param name="cacheSize"></param>
+        </member>
+        <member name="M:pwiz.ProteowizardWrapper.MsDataFileImpl.DisableCaching">
+            <summary>
+            Disable the spectrum data caching
+            </summary>
+        </member>
+        <member name="P:pwiz.ProteowizardWrapper.MsDataFileImpl.RunId">
+            <summary>
+            The Run ID
+            </summary>
+        </member>
+        <member name="P:pwiz.ProteowizardWrapper.MsDataFileImpl.RunStartTime">
+            <summary>
+            The run start time
+            </summary>
+        </member>
+        <member name="P:pwiz.ProteowizardWrapper.MsDataFileImpl.ConfigInfo">
+            <summary>
+            Data and Instrument Configuration information
+            </summary>
+        </member>
+        <member name="M:pwiz.ProteowizardWrapper.MsDataFileImpl.IsProcessedBy(System.String)">
+            <summary>
+            Check if the file has be processed by the specified software
+            </summary>
+            <param name="softwareName"></param>
+        </member>
+        <member name="M:pwiz.ProteowizardWrapper.MsDataFileImpl.IsWatersLockmassSpectrum(pwiz.ProteowizardWrapper.MsDataSpectrum)">
+            <summary>
+            If the spectrum is a Waters Lockmass spectrum
+            </summary>
+            <param name="s"></param>
         </member>
         <member name="M:pwiz.ProteowizardWrapper.MsDataFileImpl.GetInstrumentConfigInfoList">
             <summary>
             Record any instrument info found in the file, along with any Waters lockmass info we have
             </summary>
+        </member>
+        <member name="M:pwiz.ProteowizardWrapper.MsDataFileImpl.GetSampleId">
+            <summary>
+            Gets the value of the MS_sample_name CV param of first sample in the MSData object, or null if there is no sample information.
+            </summary>
+        </member>
+        <member name="M:pwiz.ProteowizardWrapper.MsDataFileImpl.GetChromatogram(System.Int32,System.String@,System.Single[]@,System.Single[]@,System.Boolean)">
+            <summary>
+            Get the data for the specified chromatogram
+            </summary>
+            <param name="chromIndex">Chromatogram index (0-based)</param>
+            <param name="id">Output: chromatogram description</param>
+            <param name="timeArray">Output: time values (in minutes)</param>
+            <param name="intensityArray">Output: Intensity values</param>
+            <param name="onlyMs1OrFunction1"></param>
+            <exception cref="T:System.IO.InvalidDataException"></exception>
         </member>
         <member name="M:pwiz.ProteowizardWrapper.MsDataFileImpl.GetScanTimes">
             <summary>
@@ -187,26 +391,41 @@
             Returns null if there are no chromatograms in the file.
             </summary>
         </member>
-        <member name="M:pwiz.ProteowizardWrapper.MsDataFileImpl.GetScanTimesAndMsLevels(System.Double[]@,System.Byte[]@)">
+        <member name="M:pwiz.ProteowizardWrapper.MsDataFileImpl.GetScanTimesAndMsLevels(System.Double[]@,System.Byte[]@,System.Action{System.Int32,System.Int32},System.Boolean)">
             <summary>
             Walks the spectrum list, and fills in the retention time and MS level of each scan.
             Some data files do not have any chromatograms in them, so GetScanTimes
             cannot be used.
             </summary>
-            <param name="times">Output: scan times (in minutes)</param>
-            <param name="msLevels">Output: MS Levels (1 for MS1, 2 for MS/MS, etc.)</param>
             <remarks>See also the overloaded version that accepts a CancellationToken</remarks>
+            <param name="times">Output: scan times (in seconds)</param>
+            <param name="msLevels">Output: MS Levels (1 for MS1, 2 for MS/MS, etc.)</param>
+            <param name="progressDelegate">
+            Delegate method for reporting progress while iterating over the spectra;
+            The first value is spectra processed; the second value is total spectra
+            </param>
+            <param name="useAlternateMethod">
+            When false, use the default method for retrieving spectrum info; this could lead to an exception if the spectrum is empty (has no ions)
+            When true, use an alternate method to retrieve the spectrum info (DetailLevel.InstantMetadata)
+            </param>
         </member>
-        <member name="M:pwiz.ProteowizardWrapper.MsDataFileImpl.GetScanTimesAndMsLevels(System.Threading.CancellationToken,System.Double[]@,System.Byte[]@)">
+        <member name="M:pwiz.ProteowizardWrapper.MsDataFileImpl.GetScanTimesAndMsLevels(System.Threading.CancellationToken,System.Double[]@,System.Byte[]@,System.Action{System.Int32,System.Int32},System.Boolean)">
             <summary>
             Walks the spectrum list, and fills in the retention time and MS level of each scan.
             Some data files do not have any chromatograms in them, so GetScanTimes
             cannot be used.
             </summary>
             <param name="cancellationToken">Cancellation token</param>
-            <param name="times">Output: scan times (in minutes)</param>
+            <param name="times">Output: scan times (in seconds)</param>
             <param name="msLevels">Output: MS Levels (1 for MS1, 2 for MS/MS, etc.)</param>
-            <remarks>See also the overloaded version that accepts a CancellationToken</remarks>
+            <param name="progressDelegate">
+            Delegate method for reporting progress while iterating over the spectra;
+            The first value is spectra processed; the second value is total spectra
+            </param>
+            <param name="useAlternateMethod">
+            When false, use the default method for retrieving spectrum info; this could lead to an exception if the spectrum is empty (has no ions)
+            When true, use an alternate method to retrieve the spectrum info (DetailLevel.InstantMetadata)
+            </param>
         </member>
         <member name="M:pwiz.ProteowizardWrapper.MsDataFileImpl.GetSpectrum(System.Int32,System.Double[]@,System.Double[]@)">
             <summary>
@@ -220,40 +439,50 @@
             <summary>
             Returns an MsDataSpectrum object representing the spectrum requested.
             </summary>
-            <param name="spectrumIndex"></param>
-            <param name="getBinaryData"></param>
-            <returns></returns>
             <remarks>
             If you need direct access to CVParams, and are using MSDataFileReader, try using "GetSpectrumObject" instead.
             </remarks>
+            <param name="spectrumIndex"></param>
+            <param name="getBinaryData"></param>
         </member>
         <member name="F:pwiz.ProteowizardWrapper.MsDataFileImpl._lastRetrievedSpectrumIndex">
             <summary>
             The last read spectrum index
             </summary>
+            <remarks>PNNL specific</remarks>
         </member>
         <member name="F:pwiz.ProteowizardWrapper.MsDataFileImpl._sequentialDuplicateSpectrumReadCount">
             <summary>
             How many times a single spectrum has been read twice in a row
             </summary>
+            <remarks>PNNL specific</remarks>
         </member>
         <member name="F:pwiz.ProteowizardWrapper.MsDataFileImpl.DuplicateSpectrumReadThreshold">
             <summary>
             The maximum number of time a single spectrum can be read twice in a row before we enable a cache for sanity.
             </summary>
+            <remarks>PNNL specific</remarks>
         </member>
         <member name="M:pwiz.ProteowizardWrapper.MsDataFileImpl.GetPwizSpectrum(System.Int32,System.Boolean)">
             <summary>
             Read the native ProteoWizard spectrum, using caching if enabled, and enabling a 1-spectrum cache if the number of sequential duplicate reads passes a certain threshold.
             </summary>
+            <remarks>PNNL specific</remarks>
             <param name="spectrumIndex"></param>
             <param name="getBinaryData"></param>
-            <returns></returns>
         </member>
         <member name="M:pwiz.ProteowizardWrapper.MsDataFileImpl.GetSpectrumIdList">
             <summary>
             Get SpectrumIDs for all spectra in the run
             </summary>
+            <remarks>
+            Example NativeIDs:
+            Thermo .Raw file:      controllerType=0 controllerNumber=1 scan=1
+            Bruker .d directory:   scan=1
+            Waters .raw directory: function=1 process=0 scan=1
+            Waters .raw IMS:       merged=1 function=1 block=1
+            UIMF file:             frame=1 scan=0 frameType=1
+            </remarks>
             <returns>List of NativeIds</returns>
         </member>
         <member name="M:pwiz.ProteowizardWrapper.MsDataFileImpl.GetThermoNativeId(System.Int32)">
@@ -261,7 +490,6 @@
             Return the typical NativeId for a scan number in a thermo .raw file
             </summary>
             <param name="scanNumber"></param>
-            <returns></returns>
         </member>
         <member name="M:pwiz.ProteowizardWrapper.MsDataFileImpl.GetUimfFrameScanPairToIndexMapping">
             <summary>
@@ -273,17 +501,44 @@
             <summary>
             Return a mapping from scan number to spectrumIndex
             </summary>
-            <returns>Dictionary where keys are scan number and values are the spectrumIndex for each scan</returns>
             <remarks>
-            Works for Thermo .raw files, Bruker .D folders, Bruker/Agilent .yep files, Agilent MassHunter data, Waters .raw folders, and Shimadzu data
+            Works for Thermo .raw files, Bruker .D directories, Bruker/Agilent .yep files, Agilent MassHunter data, Waters .raw directories, and Shimadzu data
             For UIMF files use <see cref="M:pwiz.ProteowizardWrapper.MsDataFileImpl.GetUimfFrameScanPairToIndexMapping"/></remarks>
+            <returns>Dictionary where keys are scan number and values are the spectrumIndex for each scan</returns>
+        </member>
+        <member name="F:pwiz.ProteowizardWrapper.MsDataFileImpl._lastScanIndex">
+            <summary>
+            Highly probable that we'll look at the same scan several times for different metadata
+            </summary>
         </member>
         <member name="M:pwiz.ProteowizardWrapper.MsDataFileImpl.GetPrecursorActivationList(pwiz.CLI.msdata.Precursor)">
             <summary>
             Construct a list of precursor activation types used (user-friendly abbreviations)
             </summary>
             <param name="precursor"></param>
-            <returns></returns>
+        </member>
+        <member name="M:pwiz.ProteowizardWrapper.MsDataFileImpl.GetPrecursors(System.Int32,System.Int32)">
+            <summary>
+            Get the precursor ion (or ions) for the spectrum at the given index
+            </summary>
+            <remarks>MS1 spectra will always return an empty list</remarks>
+            <param name="scanIndex"></param>
+            <param name="level"></param>
+        </member>
+        <member name="P:pwiz.ProteowizardWrapper.MsDataFileImpl.FilePath">
+            <summary>
+            Path to the file provided to the constructor for this class
+            </summary>
+        </member>
+        <member name="P:pwiz.ProteowizardWrapper.MsDataFileImpl.SampleIndex">
+            <summary>
+            Sample index, typically 0
+            </summary>
+        </member>
+        <member name="M:pwiz.ProteowizardWrapper.MsDataFileImpl.IsValidFile(System.String)">
+            <summary>
+            Returns true if the file can be successfully opened
+            </summary>
         </member>
         <member name="T:pwiz.ProteowizardWrapper.LockMassParameters">
             <summary>
@@ -329,7 +584,6 @@
             <summary>
             Summary of CVParam - name and value
             </summary>
-            <returns></returns>
         </member>
         <member name="T:pwiz.ProteowizardWrapper.SpectrumScanData">
             <summary>
@@ -381,25 +635,230 @@
             Constructor
             </summary>
         </member>
-        <member name="T:pwiz.ProteowizardWrapper.SignedMz">
+        <member name="T:pwiz.ProteowizardWrapper.MsPrecursor">
             <summary>
-            We need a way to distinguish chromatograms for negative ion modes from those for positive.
-            The idea of m/z is inherently "positive", in the sense of sorting etc, so we carry around 
-            the m/z value, and a sign flag, and when we sort it's by sign then by (normally positive) m/z.  
-            The m/z value *could* be negative as a result of an arithmetic operator, that has a special
-            meaning for comparisons but doesn't happen in normal use.
-            There's a lot of operator magic here to minimize code changes where we used to implement mz 
-            values as simple doubles.
+            Information about a precursor ion or isolation window
             </summary>
         </member>
-        <member name="P:pwiz.ProteowizardWrapper.SignedMz.RawValue">
+        <member name="P:pwiz.ProteowizardWrapper.MsPrecursor.PrecursorMz">
             <summary>
-            For serialization etc - returns a negative number if IsNegative is true 
+            Precursor m/z
+            </summary>
+        </member>
+        <member name="P:pwiz.ProteowizardWrapper.MsPrecursor.ChargeState">
+            <summary>
+            Charge state
+            </summary>
+            <remarks>Null if unknown</remarks>
+        </member>
+        <member name="P:pwiz.ProteowizardWrapper.MsPrecursor.PrecursorDriftTimeMsec">
+            <summary>
+            Drift time, in msec
+            </summary>
+            <remarks>Null if unknown</remarks>
+        </member>
+        <member name="P:pwiz.ProteowizardWrapper.MsPrecursor.PrecursorCollisionEnergy">
+            <summary>
+            Collision energy
+            </summary>
+            <remarks>Null if unknown</remarks>
+        </member>
+        <member name="P:pwiz.ProteowizardWrapper.MsPrecursor.IsolationWindowTargetMz">
+            <summary>
+            Central m/z of the isolation window for MS/MS spectra
+            </summary>
+            <remarks>Null if unknown or not applicable</remarks>
+        </member>
+        <member name="P:pwiz.ProteowizardWrapper.MsPrecursor.IsolationWindowUpper">
+            <summary>
+            Add this to IsolationWindowTargetMz to get window upper bound
+            </summary>
+        </member>
+        <member name="P:pwiz.ProteowizardWrapper.MsPrecursor.IsolationWindowLower">
+            <summary>
+            Subtract this from IsolationWindowTargetMz to get window lower bound
             </summary>
         </member>
         <member name="P:pwiz.ProteowizardWrapper.MsPrecursor.ActivationTypes">
             <summary>
             Activation types, like cid, etc, hcd, etc.
+            </summary>
+        </member>
+        <member name="P:pwiz.ProteowizardWrapper.MsPrecursor.IsolationMz">
+            <summary>
+            Returns IsolationWindowTargetMz if not null, otherwise PrecursorMz
+            </summary>
+        </member>
+        <member name="P:pwiz.ProteowizardWrapper.MsPrecursor.IsolationWidth">
+            <summary>
+            Returns the isolation width if <see cref="P:pwiz.ProteowizardWrapper.MsPrecursor.IsolationWindowUpper"/> and <see cref="P:pwiz.ProteowizardWrapper.MsPrecursor.IsolationWindowLower"/> have values and are not equal
+            Otherwise, returns null
+            </summary>
+        </member>
+        <member name="T:pwiz.ProteowizardWrapper.MsDataSpectrum">
+            <summary>
+            Information about a mass spectrum
+            </summary>
+        </member>
+        <member name="P:pwiz.ProteowizardWrapper.MsDataSpectrum.Id">
+            <summary>
+            Spectrum Id
+            </summary>
+            <remarks>
+            Example IDs of the first spectrum in an instrument file (which has Index = 0)
+            Thermo .Raw file:      0.1.1
+            Bruker .d directory:   1
+            Waters .raw directory: 1.0.1
+            Waters .raw IMS:       1.1.1
+            UIMF file:             1.0.1
+            </remarks>
+        </member>
+        <member name="P:pwiz.ProteowizardWrapper.MsDataSpectrum.NativeId">
+            <summary>
+            Spectrum Native Id
+            </summary>
+        </member>
+        <member name="P:pwiz.ProteowizardWrapper.MsDataSpectrum.Level">
+            <summary>
+            1 if MS, 2 if MS/MS, etc.
+            </summary>
+        </member>
+        <member name="P:pwiz.ProteowizardWrapper.MsDataSpectrum.Index">
+            <summary>
+            Index into parent file, if any
+            </summary>
+            <remarks>
+            The first spectrum has Index = 0
+            </remarks>
+        </member>
+        <member name="P:pwiz.ProteowizardWrapper.MsDataSpectrum.RetentionTime">
+            <summary>
+            Retention time, aka elution time
+            </summary>
+        </member>
+        <member name="P:pwiz.ProteowizardWrapper.MsDataSpectrum.DriftTimeMsec">
+            <summary>
+            Ion mobility drift time, in msec
+            </summary>
+        </member>
+        <member name="P:pwiz.ProteowizardWrapper.MsDataSpectrum.IonMobility">
+            <summary>
+            For non-combined-mode IMS
+            </summary>
+        </member>
+        <member name="P:pwiz.ProteowizardWrapper.MsDataSpectrum.IonMobilityMeasurementRangeLow">
+            <summary>
+            Minimum of the range of ion mobilities that were scanned (for zero vs missing value determination)
+            </summary>
+        </member>
+        <member name="P:pwiz.ProteowizardWrapper.MsDataSpectrum.IonMobilityMeasurementRangeHigh">
+            <summary>
+            Maximum of the range of ion mobilities that were scanned (for zero vs missing value determination)
+            </summary>
+        </member>
+        <member name="M:pwiz.ProteowizardWrapper.MsDataSpectrum.GetPrecursorsByMsLevel(System.Int32)">
+            <summary>
+            Get the precursors for spectra at the given level
+            </summary>
+            <param name="level"></param>
+            <returns>List of precursor values</returns>
+        </member>
+        <member name="P:pwiz.ProteowizardWrapper.MsDataSpectrum.PrecursorsByMsLevel">
+            <summary>
+            <para>
+            Tracks precursors, by MS Level
+            </para>
+            <para>
+            MS1 spectra are at PrecursorsByMsLevel[0]
+            MS2 spectra are at PrecursorsByMsLevel[1]
+            </para>
+            </summary>
+            <remarks>
+            The precursor of an MS1 spectrum is the central m/z value of the entire mass spectrum
+            </remarks>
+        </member>
+        <member name="P:pwiz.ProteowizardWrapper.MsDataSpectrum.Precursors">
+            <summary>
+            List of precursors for this spectrum
+            </summary>
+            <remarks>
+            The precursor of an MS1 spectrum is the central m/z value of the entire mass spectrum
+            </remarks>
+        </member>
+        <member name="P:pwiz.ProteowizardWrapper.MsDataSpectrum.Centroided">
+            <summary>
+            True if the m/z values have been centroided (peak-picked)
+            </summary>
+        </member>
+        <member name="P:pwiz.ProteowizardWrapper.MsDataSpectrum.NegativeCharge">
+            <summary>
+            True if negative ion mode
+            </summary>
+        </member>
+        <member name="P:pwiz.ProteowizardWrapper.MsDataSpectrum.Mzs">
+            <summary>
+            List of m/z values
+            </summary>
+        </member>
+        <member name="P:pwiz.ProteowizardWrapper.MsDataSpectrum.Intensities">
+            <summary>
+            List of intensity values
+            </summary>
+        </member>
+        <member name="P:pwiz.ProteowizardWrapper.MsDataSpectrum.IonMobilities">
+            <summary>
+            For combined-mode IMS (may be null)
+            </summary>
+        </member>
+        <member name="P:pwiz.ProteowizardWrapper.MsDataSpectrum.MinIonMobility">
+            <summary>
+            Minimum ion mobility, or null if not applicable
+            </summary>
+        </member>
+        <member name="P:pwiz.ProteowizardWrapper.MsDataSpectrum.MaxIonMobility">
+            <summary>
+            Maximum ion mobility, or null if not applicable
+            </summary>
+        </member>
+        <member name="P:pwiz.ProteowizardWrapper.MsDataSpectrum.WindowGroup">
+            <summary>
+            For Bruker diaPASEF
+            </summary>
+        </member>
+        <member name="P:pwiz.ProteowizardWrapper.MsDataSpectrum.BinaryDataLoaded">
+            <summary>
+            True if the spectrum includes binary data
+            </summary>
+            <remarks>PNNL Specific</remarks>
+        </member>
+        <member name="P:pwiz.ProteowizardWrapper.MsDataSpectrum.ScanDescription">
+            <summary>
+            Scan description
+            </summary>
+            <remarks>Null for Thermo .raw files</remarks>
+        </member>
+        <member name="M:pwiz.ProteowizardWrapper.MsDataSpectrum.WatersFunctionNumberFromId(System.String,System.Boolean)">
+            <summary>
+            For a Waters dataset, determine the function number from the spectrum Id
+            </summary>
+            <remarks>
+            Throws an exception if the id is not in the form 1.1.1
+            </remarks>
+            <param name="id">Spectrum Id, in dotted format</param>
+            <param name="isCombinedIonMobility">
+            If false, assume the first integer in Id is the function number
+            Otherwise, assumes the second integer is the function number
+            </param>
+            <returns>Function number</returns>
+        </member>
+        <member name="P:pwiz.ProteowizardWrapper.MsDataSpectrum.WatersFunctionNumber">
+            <summary>
+            For a Waters dataset, determine the function number from the spectrum Id, assuming the file does not include combined ion mobility values
+            </summary>
+        </member>
+        <member name="M:pwiz.ProteowizardWrapper.MsDataSpectrum.ToString">
+            <summary>
+            Description of the spectrum, for debugging purposes
             </summary>
         </member>
         <member name="T:pwiz.ProteowizardWrapper.MsDataScanCache">
@@ -424,74 +883,53 @@
             </summary>
             <remarks>This code is executed prior to the instance constructor</remarks>
         </member>
-        <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.GetChromatogramCVParams(System.Int32)">
+        <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.PREFIX_PRECURSOR">
             <summary>
-            Get the list of CVParams for the specified chromatogram (requires reference to pwiz_bindings_cli; set "copy local" to false.)
+            Constant that corresponds to "SIM SIC "
             </summary>
-            <param name="chromIndex"></param>
-            <returns></returns>
+        </member>
+        <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.PREFIX_SINGLE">
+            <summary>
+            Constant that corresponds to "SRM SIC "
+            </summary>
+        </member>
+        <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.PREFIX_TOTAL">
+            <summary>
+            Constant that corresponds to "SRM TIC "
+            </summary>
+        </member>
+        <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.CwtCentroiding">
+            <summary>
+            Constant indicating to use the Continuous Wavelet Transform peak picker
+            </summary>
             <remarks>
-            Use of this method requires the calling project to reference pwiz_bindings_cli.dll
-            Set "Copy Local" to false to avoid breaking the DLL resolver
-            You must also call <see cref="M:pwiz.ProteowizardWrapper.DependencyLoader.AddAssemblyResolver"/> in any function that calls a function that uses this function.
+            This is high-quality peak picking, but may be slow with some high-res data.
             </remarks>
         </member>
-        <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.GetChromatogramObject(System.Int32)">
+        <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.VendorCentroiding">
             <summary>
-            Get the ProteoWizard native chromatogram object for the specified spectrum (requires reference to pwiz_bindings_cli; set "copy local" to false.)
+            Constant indicating to use the centroiding/peak picking algorithm that the vendor libraries provide, if available.
+            Otherwise uses a low-quality centroiding algorithm.
             </summary>
-            <param name="chromIndex"></param>
-            <returns></returns>
-            <remarks>
-            Use of this method requires the calling project to reference pwiz_bindings_cli.dll
-            Set "Copy Local" to false to avoid breaking the DLL resolver
-            You must also call <see cref="M:pwiz.ProteowizardWrapper.DependencyLoader.AddAssemblyResolver"/> in any function that calls a function that uses this function.
-            </remarks>
         </member>
-        <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.GetSpectrumCVParams(System.Int32)">
+        <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.ChromatogramCount">
             <summary>
-            Get the list of CVParams for the specified spectrum (requires reference to pwiz_bindings_cli; set "copy local" to false.)
+            Number of chromatograms
             </summary>
-            <param name="scanIndex"></param>
-            <returns></returns>
-            <remarks>
-            Use of this method requires the calling project to reference pwiz_bindings_cli.dll
-            Set "Copy Local" to false to avoid breaking the DLL resolver
-            You must also call <see cref="M:pwiz.ProteowizardWrapper.DependencyLoader.AddAssemblyResolver"/> in any function that calls a function that uses this function.
-            Alternatively, use <see cref="M:pwiz.ProteowizardWrapper.MSDataFileReader.GetSpectrumCVParamData(System.Int32)"/>
-            </remarks>
+            <remarks>See also <see cref="P:pwiz.ProteowizardWrapper.MSDataFileReader.SpectrumCount"/></remarks>
         </member>
-        <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.GetSpectrumCVParamData(System.Int32)">
+        <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.ConfigInfo">
             <summary>
-            Get the list of CVParams for the specified spectrum (requires reference to pwiz_bindings_cli; set "copy local" to false.)
+            Data and Instrument Configuration information
             </summary>
-            <param name="scanIndex"></param>
-            <returns>List of CVParamData structs</returns>
-            <remarks>
-            Use of this method requires the calling project to reference pwiz_bindings_cli.dll
-            Set "Copy Local" to false to avoid breaking the DLL resolver
-            You must also call <see cref="M:pwiz.ProteowizardWrapper.DependencyLoader.AddAssemblyResolver"/> in any function that calls a function that uses this function.
-            </remarks>
         </member>
-        <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.GetSpectrumScanInfo(System.Int32)">
+        <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.FilePath">
             <summary>
-            Get a container describing the scan (or scans) associated with the given spectrum
+            The file path of the currently loaded file
             </summary>
-            <param name="scanIndex"></param>
-            <returns>Scan info container</returns>
-            <remarks>Useful for obtaining the filter string, scan start time, ion injection time, etc.</remarks>
-        </member>
-        <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.GetSpectrumObject(System.Int32)">
-            <summary>
-            Get the ProteoWizard native spectrum object for the specified spectrum. (requires reference to pwiz_bindings_cli; set "copy local" to false.)
-            </summary>
-            <param name="scanIndex"></param>
-            <returns></returns>
             <remarks>
-            Use of this method requires the calling project to reference pwiz_bindings_cli.dll
-            Set "Copy Local" to false to avoid breaking the DLL resolver
-            You must also call <see cref="M:pwiz.ProteowizardWrapper.DependencyLoader.AddAssemblyResolver"/> in any function that calls a function that uses this function.
-            Alternatively, use <see cref="M:pwiz.ProteowizardWrapper.MSDataFileReader.GetSpectrumScanInfo(System.Int32)"/> or the GetSpectrum method that returns an <see cref="T:pwiz.ProteowizardWrapper.MsDataSpectrum"/> object
+            This is the path provided by the calling class when <see cref="T:pwiz.ProteowizardWrapper.MsDataFileImpl"/> was instantiated
+            It is thus not necessarily a full path
             </remarks>
         </member>
         <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.Filters">
@@ -500,125 +938,19 @@
             </summary>
             <remarks>If the filter count is greater than 0, the default handling of the spectrumList using the optional constructor parameters is disabled.</remarks>
         </member>
-        <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.VendorCentroiding">
+        <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.HasChromatogramData">
             <summary>
-            Uses the centroiding/peak picking algorithm that the vendor libraries provide, if available; otherwise uses a low-quality centroiding algorithm.
+            Check if the file contains chromatogram data
             </summary>
         </member>
-        <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.CwtCentroiding">
+        <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.HasDriftTimeSpectra">
             <summary>
-            Continuous Wavelet Transform peak picker - high-quality peak picking, may be slow with some high-res data.
+            Check if the file has drift time spectra
             </summary>
         </member>
-        <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.UseVendorCentroiding">
+        <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.HasSrmSpectra">
             <summary>
-            Add/remove Vendor Centroiding to the filter list. Call <see cref="M:pwiz.ProteowizardWrapper.MSDataFileReader.RedoFilters"/> if calling this after reading any spectra.
-            </summary>
-        </member>
-        <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.UseCwtCentroiding">
-            <summary>
-            Add/remove CWT Centroiding to the filter list. Call <see cref="M:pwiz.ProteowizardWrapper.MSDataFileReader.RedoFilters"/> if calling this after reading any spectra.
-            </summary>
-        </member>
-        <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.RedoFilters">
-            <summary>
-            Force the reload of the spectrum list, reapplying any specified filters.
-            </summary>
-        </member>
-        <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.ReadIds(System.String)">
-            <summary>
-            Returns the file id of the specified file
-            </summary>
-            <param name="path"></param>
-            <returns></returns>
-        </member>
-        <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.PREFIX_TOTAL">
-            <summary>
-            Constant that corresponds to "SRM TIC "
-            </summary>
-        </member>
-        <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.PREFIX_SINGLE">
-            <summary>
-            Constant that corresponds to "SRM SIC "
-            </summary>
-        </member>
-        <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.PREFIX_PRECURSOR">
-            <summary>
-            Constant that corresponds to "SIM SIC "
-            </summary>
-        </member>
-        <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.IsNegativeChargeIdNullable(System.String)">
-            <summary>
-            If the specified id is negative charge
-            </summary>
-            <param name="id"></param>
-            <returns></returns>
-        </member>
-        <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.IsSingleIonCurrentId(System.String)">
-            <summary>
-            If the specified id is Single Ion
-            </summary>
-            <param name="id"></param>
-            <returns></returns>
-        </member>
-        <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.#ctor(System.String,System.Int32,pwiz.ProteowizardWrapper.LockMassParameters,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Int32)">
-            <summary>
-            Constructor
-            </summary>
-            <param name="path">Data file path</param>
-            <param name="sampleIndex">Sample index to select within the data file, typically 0</param>
-            <param name="lockmassParameters">Lock mass parameters (used for Waters datasets)</param>
-            <param name="simAsSpectra">Whether to treat SIM data as spectra, default true</param>
-            <param name="srmAsSpectra">Whether to treat SRM data as spectra, default true</param>
-            <param name="acceptZeroLengthSpectra">Whether to accept zero-length spectra, default true</param>
-            <param name="requireVendorCentroidedMS1">True to return centroided MS1 spectra</param>
-            <param name="requireVendorCentroidedMS2">True to return centroided MS2 spectra</param>
-            <param name="spectrumCacheSize">Positive number to cache recent spectra in memory to reduce disk I/O; defaults to 3</param>
-            <remarks>This differs from the ProteoWizard version of this code by defaulting to treating SIM and SRM data as spectra.</remarks>
-        </member>
-        <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.EnableCaching(System.Nullable{System.Int32})">
-            <summary>
-            Enable spectrum data caching. May result in faster reading
-            </summary>
-            <param name="cacheSize"></param>
-        </member>
-        <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.DisableCaching">
-            <summary>
-            Disable the spectrum data caching (NOTE: May result in slower reading)
-            </summary>
-        </member>
-        <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.RunId">
-            <summary>
-            The Run ID
-            </summary>
-        </member>
-        <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.RunStartTime">
-            <summary>
-            The run start time
-            </summary>
-        </member>
-        <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.ConfigInfo">
-            <summary>
-            Data and Instrument Configuration information
-            </summary>
-        </member>
-        <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.IsProcessedBy(System.String)">
-            <summary>
-            Check if the file has be processed by the specified software
-            </summary>
-            <param name="softwareName"></param>
-            <returns></returns>
-        </member>
-        <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.IsWatersLockmassSpectrum(pwiz.ProteowizardWrapper.MsDataSpectrum)">
-            <summary>
-            If the spectrum is a Waters Lockmass spectrum
-            </summary>
-            <param name="s"></param>
-            <returns></returns>
-        </member>
-        <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.GetInstrumentConfigInfoList">
-            <summary>
-            Record any instrument info found in the file, along with any Waters lockmass info we have
+            Check if the file has SRR Spectra
             </summary>
         </member>
         <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.IsABFile">
@@ -626,19 +958,24 @@
             If the file is an AB Sciex file
             </summary>
         </member>
-        <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.IsMzWiffXml">
-            <summary>
-            If the file is a MzWiff file
-            </summary>
-        </member>
         <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.IsAgilentFile">
             <summary>
             If the file is an Agilent file
             </summary>
         </member>
+        <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.IsMzWiffXml">
+            <summary>
+            If the file is a MzWiff file
+            </summary>
+        </member>
+        <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.IsShimadzuFile">
+            <summary>
+            If the file is a Shimadzu file
+            </summary>
+        </member>
         <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.IsThermoFile">
             <summary>
-            If the file is a Thermo/Finnigan .raw file
+            If the file is a Thermo .raw file
             </summary>
         </member>
         <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.IsWatersFile">
@@ -651,15 +988,94 @@
             If the file is a candidate for Waters Lockmass Correction
             </summary>
         </member>
-        <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.IsShimadzuFile">
+        <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.RunId">
             <summary>
-            If the file is a Shimadzu file
+            The Run ID
             </summary>
         </member>
-        <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.ChromatogramCount">
+        <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.RunStartTime">
             <summary>
-            Number of chromatograms
+            The run start time
             </summary>
+        </member>
+        <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.SpectrumCount">
+            <summary>
+            Get the spectrum count
+            </summary>
+            <remarks>See also <see cref="P:pwiz.ProteowizardWrapper.MSDataFileReader.ChromatogramCount"/></remarks>
+        </member>
+        <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.UseCwtCentroiding">
+            <summary>
+            When true, add CWT Centroiding to the filter list
+            </summary>
+            <remarks>
+            Call <see cref="M:pwiz.ProteowizardWrapper.MSDataFileReader.RedoFilters"/> if calling this after reading any spectra
+            </remarks>
+        </member>
+        <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.UseVendorCentroiding">
+            <summary>
+            When true, add Vendor Centroiding to the filter list
+            </summary>
+            <remarks>
+            Call <see cref="M:pwiz.ProteowizardWrapper.MSDataFileReader.RedoFilters"/> if calling this after reading any spectra
+            </remarks>
+        </member>
+        <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.#ctor(System.String,System.Int32,pwiz.ProteowizardWrapper.LockMassParameters,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Int32)">
+            <summary>
+            Constructor
+            </summary>
+            <remarks>
+            This class differs from <see cref="T:pwiz.ProteowizardWrapper.MsDataFileImpl"/> by defaulting to treating SIM and SRM data as spectra
+            In addition, spectrum caching is auto-enabled
+            </remarks>
+            <param name="path">Data file path</param>
+            <param name="sampleIndex">Sample index to select within the data file, typically 0</param>
+            <param name="lockmassParameters">Lock mass parameters (used for Waters datasets)</param>
+            <param name="simAsSpectra">Whether to treat SIM data as spectra, default true</param>
+            <param name="srmAsSpectra">Whether to treat SRM data as spectra, default true</param>
+            <param name="acceptZeroLengthSpectra">Whether to accept zero-length spectra, default true</param>
+            <param name="requireVendorCentroidedMS1">True to return centroided MS1 spectra</param>
+            <param name="requireVendorCentroidedMS2">True to return centroided MS2 spectra</param>
+            <param name="spectrumCacheSize">
+            <para>
+            Number of recent spectra to cache in memory to reduce disk I/O; defaults to 3
+            </para>
+            <para>
+            Spectrum caching is always enabled, even if this is 0 or negative; to disable caching, call method <see cref="M:pwiz.ProteowizardWrapper.MSDataFileReader.DisableCaching"/>
+            </para>
+            </param>
+        </member>
+        <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.DisableCaching">
+            <summary>
+            Disable the spectrum data caching (NOTE: May result in slower reading)
+            </summary>
+        </member>
+        <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.EnableCaching(System.Nullable{System.Int32})">
+            <summary>
+            Enable spectrum data caching. May result in faster reading
+            </summary>
+            <remarks>Spectrum caching is auto-enabled when this class is instantiated</remarks>
+            <param name="cacheSize"></param>
+        </member>
+        <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.GetChromatogram(System.Int32,System.String@,System.Single[]@,System.Single[]@)">
+            <summary>
+            Get the data for the specified chromatogram
+            </summary>
+            <param name="chromIndex">Chromatogram index (0-based)</param>
+            <param name="id">Output: chromatogram description</param>
+            <param name="timeArray">Output: time values (in minutes)</param>
+            <param name="intensityArray">Output: Intensity values</param>
+        </member>
+        <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.GetChromatogramCVParams(System.Int32)">
+            <summary>
+            Get the list of CVParams for the specified chromatogram (requires reference to pwiz_bindings_cli; set "copy local" to false.)
+            </summary>
+            <remarks>
+            Use of this method requires the calling project to reference pwiz_bindings_cli.dll
+            Set "Copy Local" to false to avoid breaking the DLL resolver
+            You must also call <see cref="M:pwiz.ProteowizardWrapper.DependencyLoader.AddAssemblyResolver"/> in any function that calls a function that uses this function.
+            </remarks>
+            <param name="chromIndex"></param>
         </member>
         <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.GetChromatogramId(System.Int32,System.Int32@)">
             <summary>
@@ -667,16 +1083,86 @@
             </summary>
             <param name="index"></param>
             <param name="indexId"></param>
-            <returns></returns>
         </member>
-        <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.GetChromatogram(System.Int32,System.String@,System.Single[]@,System.Single[]@)">
+        <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.GetChromatogramObject(System.Int32)">
             <summary>
-            Get the data for the specified chromatogram
+            Get the ProteoWizard native chromatogram object for the specified spectrum (requires reference to pwiz_bindings_cli; set "copy local" to false.)
             </summary>
+            <remarks>
+            Use of this method requires the calling project to reference pwiz_bindings_cli.dll
+            Set "Copy Local" to false to avoid breaking the DLL resolver
+            You must also call <see cref="M:pwiz.ProteowizardWrapper.DependencyLoader.AddAssemblyResolver"/> in any function that calls a function that uses this function.
+            </remarks>
             <param name="chromIndex"></param>
-            <param name="id"></param>
-            <param name="timeArray"></param>
-            <param name="intensityArray"></param>
+        </member>
+        <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.GetDriftTimeMsec(System.Int32)">
+            <summary>
+            Get the drift time (in msec) of the specified spectrum
+            </summary>
+            <param name="spectrumIndex"></param>
+        </member>
+        <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.GetInstantTimeAndPrecursors(System.Int32)">
+            <summary>
+            Get the time and precursors for the specified spectrum
+            </summary>
+            <param name="spectrumIndex"></param>
+        </member>
+        <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.GetInstrumentConfigInfoList">
+            <summary>
+            Get any instrument info found in the file, along with any Waters lockmass info we have
+            </summary>
+        </member>
+        <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.GetInstrumentSerialNumber">
+            <summary>
+            Get the instrument serial number
+            </summary>
+        </member>
+        <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.GetMsLevel(System.Int32)">
+            <summary>
+            Get the MS Level of the specified spectrum
+            </summary>
+            <param name="spectrumIndex"></param>
+        </member>
+        <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.GetPrecursors(System.Int32)">
+            <summary>
+            Get the precursors for the specified spectrum
+            </summary>
+            <param name="spectrumIndex"></param>
+        </member>
+        <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.GetScanDescription(System.Int32)">
+            <summary>
+            Obtain a description of the specified spectrum
+            </summary>
+            <remarks>Comes from optional parameter "scan description", which is undefined for Thermo .raw files</remarks>
+            <param name="spectrumIndex"></param>
+        </member>
+        <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.GetScanFilterText(System.Int32)">
+            <summary>
+            Lookup the scan filter text, which is most commonly used by Thermo .raw files
+            </summary>
+            <remarks>
+            Example values:
+            FTMS + p NSI Full ms [300.00-1650.00]
+            ITMS + c NSI d Full ms2 876.39@cid35.00 [230.00-1765.00]
+            FTMS - p NSI SIM ms [330.00-380.00]
+            + c NSI Q3MS [400.000-1400.000]
+            </remarks>
+            <param name="spectrumIndex"></param>
+        </member>
+        <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.GetScanMetadata(System.Int32,System.Double@,System.Double@,System.String@,System.Double@,System.Double@)">
+            <summary>
+            Lookup various values tracked by CVParams for the given spectrum
+            </summary>
+            <remarks>
+            If a spectrum has more than one scan, only returns the metadata for the first one
+            </remarks>
+            <param name="spectrumIndex">Spectrum index</param>
+            <param name="scanStartTime">Output: acquisition time at scan start (in minutes)</param>
+            <param name="ionInjectionTime">Output: ion injection time</param>
+            <param name="filterText">Output: filter text (most commonly used by Thermo .raw files, e.g. )</param>
+            <param name="lowMass">Output: lowest m/z</param>
+            <param name="highMass">Output: highest m/z</param>
+            <returns>True if the spectrum was found and has at least one scan, otherwise false</returns>
         </member>
         <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.GetScanTimes">
             <summary>
@@ -684,50 +1170,61 @@
             Returns null if there are no chromatograms in the file.
             </summary>
         </member>
-        <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.GetTotalIonCurrent">
-            <summary>
-            Get an array containing the total ion current for all scans
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.GetScanTimesAndMsLevels(System.Double[]@,System.Byte[]@)">
+        <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.GetScanTimesAndMsLevels(System.Double[]@,System.Byte[]@,System.Action{System.Int32,System.Int32},System.Boolean)">
             <summary>
             Walks the spectrum list, and fills in the retention time and MS level of each scan.
             Some data files do not have any chromatograms in them, so GetScanTimes
             cannot be used.
             </summary>
+            <remarks>See also the overloaded version that accepts a CancellationToken</remarks>
             <param name="times">Output: scan times (in minutes)</param>
             <param name="msLevels">Output: MS Levels (1 for MS1, 2 for MS/MS, etc.)</param>
-            <remarks>See also the overloaded version that accepts a CancellationToken</remarks>
+            <param name="progressDelegate">
+            Delegate method for reporting progress while iterating over the spectra;
+            The first value is spectra processed; the second value is total spectra
+            </param>
+            <param name="useAlternateMethod">
+            When false, use the default method for retrieving spectrum info; this could lead to an exception if the spectrum is empty (has no ions)
+            When true, use an alternate method to retrieve the spectrum info (DetailLevel.InstantMetadata)
+            </param>
         </member>
-        <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.GetScanTimesAndMsLevels(System.Threading.CancellationToken,System.Double[]@,System.Byte[]@)">
+        <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.GetScanTimesAndMsLevels(System.Threading.CancellationToken,System.Double[]@,System.Byte[]@,System.Action{System.Int32,System.Int32},System.Boolean)">
             <summary>
             Walks the spectrum list, and fills in the retention time and MS level of each scan.
             Some data files do not have any chromatograms in them, so GetScanTimes
             cannot be used.
             </summary>
             <param name="cancellationToken">Cancellation token</param>
-            <param name="times">Output: scan times (in minutes)</param>
+            <param name="times">Output: scan times (in seconds)</param>
             <param name="msLevels">Output: MS Levels (1 for MS1, 2 for MS/MS, etc.)</param>
-            <remarks>See also the overloaded version that accepts a CancellationToken</remarks>
+            <param name="progressDelegate">
+            Delegate method for reporting progress while iterating over the spectra;
+            The first value is spectra processed; the second value is total spectra
+            </param>
+            <param name="useAlternateMethod">
+            When false, use the default method for retrieving spectrum info; this could lead to an exception if the spectrum is empty (has no ions)
+            When true, use an alternate method to retrieve the spectrum info (DetailLevel.InstantMetadata)
+            </param>
         </member>
-        <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.SpectrumCount">
+        <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.GetScanToIndexMapping">
             <summary>
-            Get the spectrum count
+            Return a mapping from scan number to spectrumIndex
             </summary>
+            <remarks>
+            Works for Thermo .raw files, Bruker .D directories, Bruker/Agilent .yep files, Agilent MassHunter data, Waters .raw directories, and Shimadzu data
+            For UIMF files use <see cref="M:pwiz.ProteowizardWrapper.MSDataFileReader.GetUimfFrameScanPairToIndexMapping"/></remarks>
+            <returns>Dictionary where keys are scan number and values are the spectrumIndex for each scan</returns>
         </member>
-        <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.GetSpectrumCount">
+        <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.GetSpectrum(System.Int32,System.Boolean)">
             <summary>
-            Get the spectrum count
+            Returns an MsDataSpectrum object representing the spectrum requested.
             </summary>
-            <returns></returns>
-        </member>
-        <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.GetSpectrumIndex(System.String)">
-            <summary>
-            Get the spectrum index of the specified NativeID
-            </summary>
-            <param name="id"></param>
-            <returns></returns>
+            <remarks>
+            If you need direct access to CVParams, and are using MSDataFileReader, try using <see cref="M:pwiz.ProteowizardWrapper.MSDataFileReader.GetSpectrumObject(System.Int32)"/> instead.
+            Alternatively, use <see cref="M:pwiz.ProteowizardWrapper.MSDataFileReader.GetSpectrumScanInfo(System.Int32)"/>
+            </remarks>
+            <param name="spectrumIndex"></param>
+            <param name="getBinaryData"></param>
         </member>
         <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.GetSpectrum(System.Int32,System.Double[]@,System.Double[]@)">
             <summary>
@@ -737,17 +1234,40 @@
             <param name="mzArray"></param>
             <param name="intensityArray"></param>
         </member>
-        <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.GetSpectrum(System.Int32,System.Boolean)">
+        <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.GetSpectrumCount">
             <summary>
-            Returns an MsDataSpectrum object representing the spectrum requested.
+            Get the spectrum count
+            </summary>
+        </member>
+        <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.GetSpectrumCVParamData(System.Int32)">
+            <summary>
+            Get the list of CVParams for the specified spectrum (requires reference to pwiz_bindings_cli; set "copy local" to false.)
+            </summary>
+            <remarks>
+            Use of this method requires the calling project to reference pwiz_bindings_cli.dll
+            Set "Copy Local" to false to avoid breaking the DLL resolver
+            You must also call <see cref="M:pwiz.ProteowizardWrapper.DependencyLoader.AddAssemblyResolver"/> in any function that calls a function that uses this function.
+            </remarks>
+            <param name="spectrumIndex"></param>
+            <returns>List of CVParamData structs</returns>
+        </member>
+        <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.GetSpectrumCVParams(System.Int32)">
+            <summary>
+            Get the list of CVParams for the specified spectrum (requires reference to pwiz_bindings_cli; set "copy local" to false.)
+            </summary>
+            <remarks>
+            Use of this method requires the calling project to reference pwiz_bindings_cli.dll
+            Set "Copy Local" to false to avoid breaking the DLL resolver
+            You must also call <see cref="M:pwiz.ProteowizardWrapper.DependencyLoader.AddAssemblyResolver"/> in any function that calls a function that uses this function.
+            Alternatively, use <see cref="M:pwiz.ProteowizardWrapper.MSDataFileReader.GetSpectrumCVParamData(System.Int32)"/>
+            </remarks>
+            <param name="spectrumIndex"></param>
+        </member>
+        <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.GetSpectrumId(System.Int32)">
+            <summary>
+            Get the NativeID of the specified spectrum
             </summary>
             <param name="spectrumIndex"></param>
-            <param name="getBinaryData"></param>
-            <returns></returns>
-            <remarks>
-            If you need direct access to CVParams, and are using MSDataFileReader, try using <see cref="M:pwiz.ProteowizardWrapper.MSDataFileReader.GetSpectrumObject(System.Int32)"/> instead.
-            Alternatively, use <see cref="M:pwiz.ProteowizardWrapper.MSDataFileReader.GetSpectrumScanInfo(System.Int32)"/>
-            </remarks>
         </member>
         <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.GetSpectrumIdList">
             <summary>
@@ -755,12 +1275,54 @@
             </summary>
             <returns>List of NativeIds</returns>
         </member>
+        <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.GetSpectrumIndex(System.String)">
+            <summary>
+            Get the spectrum index of the specified NativeID
+            </summary>
+            <param name="id"></param>
+        </member>
+        <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.GetSpectrumObject(System.Int32)">
+            <summary>
+            Get the ProteoWizard native spectrum object for the specified spectrum. (requires reference to pwiz_bindings_cli; set "copy local" to false.)
+            </summary>
+            <remarks>
+            Use of this method requires the calling project to reference pwiz_bindings_cli.dll
+            Set "Copy Local" to false to avoid breaking the DLL resolver
+            You must also call <see cref="M:pwiz.ProteowizardWrapper.DependencyLoader.AddAssemblyResolver"/> in any function that calls a function that uses this function.
+            Alternatively, use <see cref="M:pwiz.ProteowizardWrapper.MSDataFileReader.GetSpectrumScanInfo(System.Int32)"/> or the GetSpectrum method that returns an <see cref="T:pwiz.ProteowizardWrapper.MsDataSpectrum"/> object
+            </remarks>
+            <param name="spectrumIndex"></param>
+        </member>
+        <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.GetSpectrumScanInfo(System.Int32)">
+            <summary>
+            Get a container describing the scan (or scans) associated with the given spectrum
+            </summary>
+            <remarks>Useful for obtaining the filter string, scan start time, ion injection time, etc.</remarks>
+            <param name="spectrumIndex"></param>
+            <returns>Scan info container</returns>
+        </member>
+        <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.GetSrmSpectrum(System.Int32)">
+            <summary>
+            Get the specified SRM spectrum. Returns null if the specified spectrum is not SRM
+            </summary>
+            <param name="spectrumIndex"></param>
+        </member>
+        <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.GetStartTime(System.Int32)">
+            <summary>
+            Get the start time of the specified spectrum
+            </summary>
+            <param name="spectrumIndex"></param>
+        </member>
         <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.GetThermoNativeId(System.Int32)">
             <summary>
             Return the typical NativeId for a scan number in a thermo .raw file
             </summary>
             <param name="scanNumber"></param>
-            <returns></returns>
+        </member>
+        <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.GetTotalIonCurrent">
+            <summary>
+            Get an array containing the total ion current for all scans
+            </summary>
         </member>
         <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.GetUimfFrameScanPairToIndexMapping">
             <summary>
@@ -768,92 +1330,71 @@
             </summary>
             <returns>Dictionary where keys are KeyValuePairs of Frame,Scan and values are the spectrumIndex for each scan</returns>
         </member>
-        <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.GetScanToIndexMapping">
-            <summary>
-            Return a mapping from scan number to spectrumIndex
-            </summary>
-            <returns>Dictionary where keys are scan number and values are the spectrumIndex for each scan</returns>
-            <remarks>
-            Works for Thermo .raw files, Bruker .D folders, Bruker/Agilent .yep files, Agilent MassHunter data, Waters .raw folders, and Shimadzu data
-            For UIMF files use <see cref="M:pwiz.ProteowizardWrapper.MSDataFileReader.GetUimfFrameScanPairToIndexMapping"/></remarks>
-        </member>
-        <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.HasSrmSpectra">
-            <summary>
-            Check if the file has SRR Spectra
-            </summary>
-        </member>
-        <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.HasDriftTimeSpectra">
-            <summary>
-            Check if the file has drift time spectra
-            </summary>
-        </member>
-        <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.HasChromatogramData">
-            <summary>
-            Check if the file contains chromatogram data
-            </summary>
-        </member>
-        <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.GetSrmSpectrum(System.Int32)">
-            <summary>
-            Get the specified SRM spectrum. Returns null if the specified spectrum is not SRM
-            </summary>
-            <param name="scanIndex"></param>
-            <returns></returns>
-        </member>
-        <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.GetSpectrumId(System.Int32)">
-            <summary>
-            Get the NativeID of the specified scan
-            </summary>
-            <param name="scanIndex"></param>
-            <returns></returns>
-        </member>
         <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.IsCentroided(System.Int32)">
             <summary>
-            Check is the specified scan is centroided
+            Check is the specified spectrum is centroided
             </summary>
-            <param name="scanIndex"></param>
-            <returns></returns>
+            <param name="spectrumIndex"></param>
+        </member>
+        <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.IsNegativeChargeIdNullable(System.String)">
+            <summary>
+            If the specified id is negative charge
+            </summary>
+            <param name="id"></param>
+        </member>
+        <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.IsProcessedBy(System.String)">
+            <summary>
+            Check if the file has be processed by the specified software
+            </summary>
+            <param name="softwareName"></param>
+        </member>
+        <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.IsSingleIonCurrentId(System.String)">
+            <summary>
+            If the specified id is Single Ion
+            </summary>
+            <param name="id"></param>
         </member>
         <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.IsSrmSpectrum(System.Int32)">
             <summary>
-            Check if the specified scan is SRM
+            Check if the specified spectrum is SRM
             </summary>
-            <param name="scanIndex"></param>
-            <returns></returns>
+            <param name="spectrumIndex"></param>
         </member>
-        <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.GetMsLevel(System.Int32)">
+        <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.IsWatersLockmassSpectrum(pwiz.ProteowizardWrapper.MsDataSpectrum)">
             <summary>
-            Get the MS Level of the specified scan
+            If the spectrum is a Waters Lockmass spectrum
             </summary>
-            <param name="scanIndex"></param>
-            <returns></returns>
+            <param name="s"></param>
         </member>
-        <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.GetDriftTimeMsec(System.Int32)">
+        <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.ReadIds(System.String)">
             <summary>
-            Get the drift time (in msec) of the specified scan
+            Returns the file id of the specified file (as an array, which typically only has one item)
             </summary>
-            <param name="scanIndex"></param>
-            <returns></returns>
+            <param name="path"></param>
         </member>
-        <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.GetStartTime(System.Int32)">
+        <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.RedoFilters">
             <summary>
-            Get the start time of the specified scan
+            Force the reload of the spectrum list, reapplying any specified filters.
             </summary>
-            <param name="scanIndex"></param>
-            <returns></returns>
         </member>
-        <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.GetInstantTimeAndPrecursors(System.Int32)">
+        <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.TryGetCVParam(pwiz.CLI.data.CVParamList,pwiz.CLI.cv.CVID,pwiz.CLI.data.CVParam@)">
             <summary>
-            Get the time and precursors for the specified scan
+            Look for the specified CVParam in cvParams
             </summary>
-            <param name="scanIndex"></param>
-            <returns></returns>
+            <param name="cvParams">List of CVParams</param>
+            <param name="cvidToFind">CVID to find</param>
+            <param name="paramMatch">Matching parameter, or null if no match</param>
+            <returns>True on success, false if not found</returns>
         </member>
-        <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.GetPrecursors(System.Int32)">
+        <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.TryGetCVParamDouble(pwiz.CLI.data.CVParamList,pwiz.CLI.cv.CVID,System.Double@,System.Double)">
             <summary>
-            Get the precursors for the specified scan
+            Look for the specified CVParam in cvParams
             </summary>
-            <param name="scanIndex"></param>
-            <returns></returns>
+            <param name="cvParams">List of CVParams</param>
+            <param name="cvidToFind">CVID to find</param>
+            <param name="value">Value of the matching param, or valueIfMissing if no match</param>
+            <param name="valueIfMissing">Value to assign to the value argument if the parameter is not found, or if the parameter's value is not numeric</param>
+            <returns>True on success, false if not found or not numeric</returns>
         </member>
         <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.Write(System.String)">
             <summary>
@@ -863,13 +1404,9 @@
         </member>
         <member name="M:pwiz.ProteowizardWrapper.MSDataFileReader.Dispose">
             <summary>
-            Cleanup the objects; Chains to cleanup all held unmanaged objects
+            Cleanup the objects
             </summary>
-        </member>
-        <member name="P:pwiz.ProteowizardWrapper.MSDataFileReader.FilePath">
-            <summary>
-            The filepath of the currently loaded file
-            </summary>
+            <remarks>Chains to cleanup all held unmanaged objects</remarks>
         </member>
     </members>
 </doc>
