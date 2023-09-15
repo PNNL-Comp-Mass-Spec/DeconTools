@@ -78,9 +78,10 @@ namespace DeconTools.Backend.Runs
                     run = new UIMFRun(fullFileName);
                     break;
 
-                case ".db":                            //might want to remove this later
-                    run = new UIMFRun(fullFileName);
-                    break;
+                // Deprecated in September 2023
+                // case ".db":
+                //     run = new UIMFRun(fullFileName);
+                //     break;
 
                 case ".d":
                     run = new AgilentDRun(fullFileName);
