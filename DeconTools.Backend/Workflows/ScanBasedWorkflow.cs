@@ -109,6 +109,7 @@ namespace DeconTools.Backend.Workflows
 
             try
             {
+                Console.WriteLine("Loading parameter file");
                 newParameters = new DeconToolsParameters();
                 newParameters.LoadFromOldDeconToolsParameterFile(parameterFile);
             }
@@ -342,6 +343,8 @@ namespace DeconTools.Backend.Workflows
 
             try
             {
+                Console.WriteLine("Starting processing");
+
                 IterateOverScans();
             }
             catch (Exception ex)

@@ -96,7 +96,7 @@ namespace DeconTools.Backend.Runs
                     throw new ApplicationException("File type - " + extension + " -  is not supported in DeconTools");
             }
 
-            Check.Require(run != null, "Run failed to be initialized. Run object is empty. I'm guessing the datafile either 1) corrupt or 2) not supported by the installed instrument manufacturer's dlls, or 3) not supported by DeconTools");
+            Check.Require(run != null, "Run failed to be initialized. Run object is empty. I'm guessing the datafile either 1) corrupt or 2) not supported by the installed instrument manufacturer's DLLs, or 3) not supported by DeconTools");
             return run;
         }
 
