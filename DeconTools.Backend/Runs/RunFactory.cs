@@ -70,11 +70,7 @@ namespace DeconTools.Backend.Runs
                     run = new MSScanFromTextFileRun(fullFileName);
                     break;
                 case ".mzxml":
-                    run = new MzRun(fullFileName);
-                    break;
                 case ".mz5":
-                    run = new MzRun(fullFileName);
-                    break;
                 case ".mzml":
                     run = new MzRun(fullFileName);
                     break;
