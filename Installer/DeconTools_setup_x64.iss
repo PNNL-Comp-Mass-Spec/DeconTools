@@ -46,11 +46,11 @@ Source: Library\x64\MultiAlignEngine.dll                                        
 Source: Library\PNNLOmics.dll                                                             ; DestDir: {app}
 Source: Library\PNNLOmicsElementData.xml                                                  ; DestDir: {app}
 Source: Library\ProteowizardWrapper.dll                                                   ; DestDir: {app}
-Source: Library\ThermoRawFileReader.dll                                                   ; DestDir: {app}
-Source: Library\ThermoFisher.CommonCore.MassPrecisionEstimator.dll                        ; DestDir: {app}
-Source: Library\ThermoFisher.CommonCore.RawFileReader.dll                                 ; DestDir: {app}
-Source: Library\ThermoFisher.CommonCore.BackgroundSubtraction.dll                         ; DestDir: {app}
-Source: Library\ThermoFisher.CommonCore.Data.dll                                          ; DestDir: {app}
+Source: DeconConsole\bin\x64\Release\ThermoRawFileReader.dll                              ; DestDir: {app}
+Source: DeconConsole\bin\x64\Release\ThermoFisher.CommonCore.MassPrecisionEstimator.dll   ; DestDir: {app}
+Source: DeconConsole\bin\x64\Release\ThermoFisher.CommonCore.RawFileReader.dll            ; DestDir: {app}
+Source: DeconConsole\bin\x64\Release\ThermoFisher.CommonCore.BackgroundSubtraction.dll    ; DestDir: {app}
+Source: DeconConsole\bin\x64\Release\ThermoFisher.CommonCore.Data.dll                     ; DestDir: {app}
 Source: Library\RawFileReaderLicense.doc                                                  ; DestDir: {app}
 
 Source: Library\Agilent_D\agtsampleinforw.dll                                             ; DestDir: {app}
