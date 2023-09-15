@@ -37,8 +37,6 @@ namespace DeconTools.Backend.Runs
             }
 #endif
 
-            var fileNameWithoutPathOrExtension = Path.GetFileNameWithoutExtension(fullFileName).ToLower();
-
             var dirInfo = new DirectoryInfo(fullFileName);
             var isFolder = dirInfo.Exists;
 
