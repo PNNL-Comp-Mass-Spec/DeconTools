@@ -1,136 +1,142 @@
 DeconTools DeconConsole / AutoProcessor Revision History
 
-Version 1.1.7787; April 27, 2021 mem
+Version 1.1.8658; September 15, 2023 mem
+	- Update to .NET 4.8
+	- Update to ProteowizardWrapper v2.0.8512
+	  - The previous version could not properly read .mzXML or .mzML files created by recent releases of MSConvert.exe
+	- Update various NuGet packages
+
+Version 1.1.7787; April 27, 2021     mem
 	- Always treat a period as a decimal point when parsing numbers
 
-Version 1.1.7675; January 5, 2021 mem
+Version 1.1.7675; January 5, 2021    mem
 	- Add support for .UIMF files where the first frame has a frame number greater than 1
 
-Version 1.1.7370; March 6, 2020 mem
+Version 1.1.7370; March 6, 2020      mem
 	- Update to .NET 4.7.2
 	- In DeconConsole, show the processing rate (scans/minute) and the the actual number of scans processed
 	- Update the old GUI to read Thermo .Raw files using ThermoRawFileReader
 
-Version 1.1.7101; June 11, 2019 mem
+Version 1.1.7101; June 11, 2019      mem
 	- Use MathNet.Numerics.Statistics methods to compute average, median, standard deviation, and linear regression
 
-Version 1.1.6946; January 7, 2019 mem
+Version 1.1.6946; January 7, 2019    mem
 	- New version of ThermoRawFileReader.dll that uses ThermoFisher.CommonCore.RawFileReader.dll
 
-Version 1.1.6633; February 28, 2018 mem
+Version 1.1.6633; February 28, 2018  mem
 	- Use FileLogger in PRISM.dll instead of log4net
 	- Update TargetedWorkflowConsole to use CommandLineParser in Prism.dll
 	- Add option AppendTargetsFileNameToResultFile to TargetedWorkflowConsole
 
-Version 1.1.6492; October 10, 2017 mem
+Version 1.1.6492; October 10, 2017   mem
 	- Additional scan number logic fixes for UIMF files
 
-Version 1.1.6491; October 9, 2017 mem
+Version 1.1.6491; October 9, 2017    mem
 	- Fix bug determining the number of scans per frame
 	- Obtain log4net from NuGet
 
-Version 1.1.6395; July 5, 2017 bcg
+Version 1.1.6395; July 5, 2017       bcg
 	- Update the ProteowizardWrapper and fix the usages of the DependencyLoader
 	- Fix the 64-bit installer directory
 	- Remove some obsolete classes
 	- Pull some DLLs from NuGet instead of local copies
 
-Version 1.1.6347; May 18, 2017 bcg
+Version 1.1.6347; May 18, 2017       bcg
 	- Disable the IMS per-frame timeout if there are 10 or fewer frames
 
-Version 1.1.6321; April 22, 2017 mem
+Version 1.1.6321; April 22, 2017     mem
 	- Updated to .NET 4.6.2
 	- Updated UIMFLibrary, obtained from NuGet
 	  - See https://www.nuget.org/packages/UIMFLibrary
 	- Still using System.Data.SQLite v1.0.97, but obtaining from NuGet
 
-Version 1.1.6262; February 22, 2017 mem
+Version 1.1.6262; February 22, 2017  mem
 	- Replace PRISM.dll with ShFolderBrowser.dll
 	- Remove references to obsolete file format .yafms
 
-Version 1.1.6261; February 21, 2017 bcg
+Version 1.1.6261; February 21, 2017  bcg
 	- Add support/translation from the old IMS parameter files.
 
-Version 1.1.6148; October 31, 2016  mem
+Version 1.1.6148; October 31, 2016   mem
 	- Update app.config files to map SQLite versions to 1.0.97
 
-Version 1.1.6053; July 28, 2016     mem
+Version 1.1.6053; July 28, 2016      mem
 	- The Miscellaneous section of the parameter file now has 3 new parameters for specifying runtime limits
 		MaxMinutesPerScan,  default   4 minutes
 		MaxMinutesPerFrame, default  20 minutes
 		MaxHoursPerDataset, default 400 hours
 
-Version 1.1.5990; May 26, 2016      mem
+Version 1.1.5990; May 26, 2016       mem
 	- Remove dependency on DeconEngineV2.dll, since the code has been ported from C++ to C# and the results validated to match
 		- See the files with namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.ThrashV1
 		- HornDeconvolutor in namespace DeconTools.Backend.ProcessingTasks uses the new C#-based ThrashV1
 		- Specifying <DeconvolutionType>ThrashV1</DeconvolutionType> in the DeconTools parameter file will use the new C#-based ThrashV1
 	- Note that ThrashDeconvolutorV2 was a previous attempt to port the C++ code to C#, but the results from ThrashDeconvolutorV2 do not match the C++ results
 
-Version 1.0.5945; April 11, 2016    mem
+Version 1.0.5945; April 11, 2016     mem
 	- Remove reference to pwiz_bindings_cli.dll since the presence of that file can interfere with ProteowizardWrapper searching for ProteoWizard DLLs
 
-Version 1.0.5940; April 6, 2016     mem
+Version 1.0.5940; April 6, 2016      mem
 	- Update to UIMFLibrary.dll v3.0.5940
 
-Version 1.0.5935; April 1, 2016     mem
+Version 1.0.5935; April 1, 2016      mem
 	- Update to ProteowizardWrapper v1.0.5934
 	- Update to System.Data.SQLite v1.0.97
 	- Now compiling as v4.5.1 (for compatibility with ProteoWizard)
 
-Version 1.0.5799; November 17, 2015	bcg
+Version 1.0.5799; November 17, 2015  bcg
 	- Updated ProteoWizard Wrapper DLL
 	- Throw an exception when ProteoWizard is needed and it's not available.
 
-Version 1.0.5795; November 13, 2015	bcg
+Version 1.0.5795; November 13, 2015  bcg
 	- Updated multiple DLLs
 	- Modified use of ProteowizardWrapper, to dynamically find (at runtime) the 32-bit ProteoWizard install
 	- Change the installer from a Visual Studio installer msi to an InnoSetup executable
 
-Version 1.0.5753; October 2, 2015	mem
+Version 1.0.5753; October 2, 2015    mem
 	- Fixed bug in ZeroFiller that led to a divide-by-zero overflow when adjacent data points had the same mass value
 
-Version 1.0.5700; August 10, 2015	mem
+Version 1.0.5700; August 10, 2015    mem
 	- Add additional exception handling
 	- Now using a period for decimal points, even if the system's language settings are configured to use a comma
 
-Version 1.0.5674; July 15, 2015	mem
+Version 1.0.5674; July 15, 2015      mem
 	- Added DblToString() for formatting double values as strings, limiting the number of decimal places shown
 
-Version 1.0.5518; February 9, 2015	mem
+Version 1.0.5518; February 9, 2015   mem
 	- Moved acqus and apexAcquisition.method file reading into BrukerDataReader.DLL
 	- BrukerCalibrationData now inherits from BrukerDataReader.GlobalParameters
 	- BrukerV3Run.GetMassSpectrum now uses the mass range used during data acquisition to define the range of data to return
 	- Fixed file paths in unit tests
 	- Updated ProteoWizard DLLs
 
-Version 1.0.5513; February 4, 2015	mem
+Version 1.0.5513; February 4, 2015   mem
 	- Created 64-bit version of DeconConsole.exe and DeconTools.Backend.dll
 	  - Does not depend on DeconEngineV2.dll, and thus does not support ThrashV1
 
-Version 1.0.5504; January 26, 2015	mem
+Version 1.0.5504; January 26, 2015   mem
 	- New version of the UIMFLibrary that uses less memory when caching spectra
 
-Version 1.0.5480; January 2, 2015	mem
+Version 1.0.5480; January 2, 2015    mem
 	- Added HandleProcessCorruptedStateExceptionsAttribute to GetMassSpectrum in XCaliburRun2 in an attempt to catch COM errors due to corrupt spectra
 	- New version of ThermoRawFileReader
 
-Version 1.0.5326; August 1, 2014	mem
+Version 1.0.5326; August 1, 2014     mem
 	- DeconConsole no longer references SetConsoleMode in kernel32.dll
 
-Version 1.0.5325; July 31, 2014	mem
+Version 1.0.5325; July 31, 2014      mem
 	- Removed dependency on DeconEngine.dll, which required Visual C++ from .NET 1.1 (MSVCP71.dll)
 	  - DeconEngine.dll was included to support the Rapid deconvolution method, which we no longer use
 
-Version 1.0.5291; June 27, 2014	mem
+Version 1.0.5291; June 27, 2014      mem
 	- Fixed bug in DeconToolsZeroFiller that dropped the final data point when zero filling
 	- Updated UIMFLibrary.dll
 	- Updated System.Data.SQLite.dll
 
-Version 1.0.5280; June 16, 2014	mem
+Version 1.0.5280; June 16, 2014      mem
 	- Updated DeconEngineV2.dll
 
-Version 1.0.5044; Oct 23, 2013	mem
+Version 1.0.5044; Oct 23, 2013       mem
 	- Now validating that the _peaks.txt file has usable data
 	- Now sorting data returned by msfileReader.GetMassListFromScanNum if not sorted by m/z
 	- Fixed bug in FWHM calculator
