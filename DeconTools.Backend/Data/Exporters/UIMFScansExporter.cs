@@ -34,7 +34,7 @@ namespace DeconTools.Backend.Data
 
             if (!string.Equals(PNNLOmics.Utilities.StringUtilities.DblToString(3.14159, 4, false, 0.001, false), DblToString(3.14159, 4)))
             {
-                Console.WriteLine("Note: using a period for the decimal point for because the result files are CSV files");
+                Console.WriteLine("Note: using a period for the decimal point because the result files are CSV files");
             }
 
             sw.WriteLine(headerLine);
