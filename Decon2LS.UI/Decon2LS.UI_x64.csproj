@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
@@ -360,7 +360,7 @@
       <Version>5.0.0</Version>
     </PackageReference>
     <PackageReference Include="PRISM-Library">
-      <Version>2.8.12</Version>
+      <Version>2.8.17</Version>
     </PackageReference>
     <PackageReference Include="System.Data.SQLite.Core">
       <Version>1.0.111</Version>
@@ -378,7 +378,7 @@
       <Version>5.0.0.88</Version>
     </PackageReference>
     <PackageReference Include="ThermoRawFileReader">
-      <Version>4.1.65</Version>
+      <Version>4.2.23</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
