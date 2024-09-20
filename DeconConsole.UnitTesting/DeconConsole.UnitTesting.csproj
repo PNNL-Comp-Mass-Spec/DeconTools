@@ -61,6 +61,9 @@
     <PackageReference Include="NUnit">
       <Version>3.13.3</Version>
     </PackageReference>
+    <PackageReference Include="System.Data.SQLite.Core">
+      <Version>1.0.118</Version>
+    </PackageReference>
     <PackageReference Include="ThermoRawFileReader">
       <Version>4.2.32</Version>
     </PackageReference>
