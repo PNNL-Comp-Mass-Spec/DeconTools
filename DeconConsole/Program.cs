@@ -8,7 +8,7 @@ namespace DeconConsole
     {
         // Ignore Spelling: Slysz, Jaitly
 
-        public const string PROGRAM_DATE = "February 6, 2024";
+        public const string PROGRAM_DATE = "September 19, 2024";
 
         public static int Main(string[] args)
         {
@@ -186,7 +186,7 @@ namespace DeconConsole
             Console.WriteLine("Incorporates previous code written by Gordon Anderson and Deep Jaitly");
             Console.WriteLine("Version: " + GetAppVersion());
             Console.WriteLine("Contact info: matthew.monroe@pnnl.gov or proteomics@pnnl.gov");
-            Console.WriteLine("Website: https://github.com/PNNL-Comp-Mass-Spec/ or https://panomics.pnnl.gov/ or https://www.pnnl.gov/integrative-omics");
+            Console.WriteLine("Website: https://github.com/PNNL-Comp-Mass-Spec/ or https://www.pnnl.gov/integrative-omics");
             Console.WriteLine();
 
             System.Threading.Thread.Sleep(1000);
