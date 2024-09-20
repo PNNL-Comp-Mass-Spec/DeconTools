@@ -156,14 +156,14 @@
       <Version>3.13.3</Version>
     </PackageReference>
     <PackageReference Include="PRISM-Library">
-      <Version>2.8.17</Version>
+      <Version>2.8.36</Version>
     </PackageReference>
-    <PackageReference Include="System.Data.SQLite.Core" Version="1.0.111" />
+    <PackageReference Include="System.Data.SQLite.Core" Version="1.0.118" />
     <PackageReference Include="ThermoRawFileReader">
-      <Version>4.2.23</Version>
+      <Version>4.2.32</Version>
     </PackageReference>
     <PackageReference Include="UIMFLibrary">
-      <Version>3.8.26</Version>
+      <Version>3.8.29</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
