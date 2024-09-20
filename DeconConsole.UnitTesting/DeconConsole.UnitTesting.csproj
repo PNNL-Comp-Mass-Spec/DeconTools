@@ -51,9 +51,6 @@
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="ThermoRawFileReader">
-      <HintPath>..\Library\ThermoRawFileReader.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class1.cs" />
@@ -63,6 +60,9 @@
   <ItemGroup>
     <PackageReference Include="NUnit">
       <Version>3.13.3</Version>
+    </PackageReference>
+    <PackageReference Include="ThermoRawFileReader">
+      <Version>4.2.32</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
