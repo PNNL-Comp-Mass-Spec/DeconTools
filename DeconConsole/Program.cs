@@ -6,9 +6,9 @@ namespace DeconConsole
 {
     public static class Program
     {
-        // Ignore Spelling: Slysz, Jaitly
+        // Ignore Spelling: Decon, Slysz, Jaitly
 
-        public const string PROGRAM_DATE = "September 19, 2024";
+        public const string PROGRAM_DATE = "October 30, 2024";
 
         public static int Main(string[] args)
         {
