@@ -19,7 +19,6 @@ Source: DeconConsole\bin\x64\Release\BaseCommon.dll                             
 Source: DeconConsole\bin\x64\Release\BaseDataAccess.dll                                   ; DestDir: {app}
 Source: DeconConsole\bin\x64\Release\BaseError.dll                                        ; DestDir: {app}
 Source: DeconConsole\bin\x64\Release\MassSpecDataReader.dll                               ; DestDir: {app}
-Source: DeconConsole\bin\x64\Release\SQLite.Interop.dll                                   ; DestDir: {app}
 
 Source: DeconTools.Backend\bin\x64\Release\DeconTools.Backend.dll                         ; DestDir: {app}
 Source: DeconTools.Backend\bin\x64\Release\MathNet.Numerics.dll                           ; DestDir: {app}
