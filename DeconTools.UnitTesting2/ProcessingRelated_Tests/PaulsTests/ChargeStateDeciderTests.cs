@@ -288,7 +288,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             peakDetector.Execute(run.ResultCollection);
 
             //run.PeakList = run.PeakList.Where(p => p.XValue > 634 && p.XValue < 642).ToList();
-            //run.DeconToolsPeakList = run.DeconToolsPeakList.Where(p => p.mdbl_mz > 634 && p.mdbl_mz < 642).ToArray();
+            //run.DeconToolsPeakList = run.DeconToolsPeakList.Where(p => p.Mz > 634 && p.Mz < 642).ToArray();
 
             run.CurrentScanSet.BackgroundIntensity = peakDetector.BackgroundIntensity;
 
@@ -502,7 +502,7 @@ namespace DeconTools.UnitTesting.ProcessingTasksTests
             peakDetector.Execute(run.ResultCollection);
 
             //run.PeakList = run.PeakList.Where(p => p.XValue > 634 && p.XValue < 642).ToList();
-            //run.DeconToolsPeakList = run.DeconToolsPeakList.Where(p => p.mdbl_mz > 634 && p.mdbl_mz < 642).ToArray();
+            //run.DeconToolsPeakList = run.DeconToolsPeakList.Where(p => p.Mz > 634 && p.Mz < 642).ToArray();
 
             run.CurrentScanSet.BackgroundIntensity = peakDetector.BackgroundIntensity;
 

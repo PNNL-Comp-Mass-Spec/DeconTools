@@ -111,7 +111,7 @@ namespace Decon2LS
                 else
                     mctlDTASettings.ConsiderCharge = false;
                 mctlDTASettings.CCMass = dtaParameters.CCMass;
-                mctlDTASettings.WindowSize = dtaParameters.WindowSizetoCheck;
+                mctlDTASettings.WindowSize = dtaParameters.WindowSizeToCheck;
             }
             catch (Exception ex)
             {
@@ -336,7 +336,7 @@ namespace Decon2LS
                 dtaParameters.MinScan = mctlDTASettings.MinimumScanToConsider;
                 dtaParameters.CCMass = mctlDTASettings.CCMass;
                 dtaParameters.OutputType = mctlDTASettings.OutputType;
-                dtaParameters.WindowSizetoCheck = mctlDTASettings.WindowSize;
+                dtaParameters.WindowSizeToCheck = mctlDTASettings.WindowSize;
             }
             catch (Exception ex)
             {

@@ -431,14 +431,14 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             }
 
             //Get theoretical distribution using Mercury algorithm
-            double peakMass = (peak.mdbl_mz - ChargeCarrierMass) * cs;
-            double resolution = peak.mdbl_mz / peak.mdbl_FWHM;
+            double peakMass = (peak.Mz - ChargeCarrierMass) * cs;
+            double resolution = peak.Mz / peak.FWHM;
             GetIsotopeDistribution(peakMass, cs, resolution, out TheoreticalDistMzs,
                 out TheoreticalDistIntensities,
                 deleteIntensityThreshold, debug);
 
-            double theorMostAbundantPeakMz = IsotopeDistribution.mdbl_max_peak_mz;
-            double delta = peak.mdbl_mz - theorMostAbundantPeakMz;
+            double theorMostAbundantPeakMz = IsotopeDistribution.Max_Peak_Mz;
+            double delta = peak.Mz - theorMostAbundantPeakMz;
             double spacingScore = 0;
             double signalToNoiseScore = 0;
             double ratioScore = 0;
@@ -451,24 +451,24 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                 double theorLeftPeakMz = 0;
                 double theorLeftPeakIntensity = 0;
                 PeakProcessing.Peak leftPeak;
-                peakData.FindPeak(peak.mdbl_mz - dd - peak.mdbl_FWHM, peak.mdbl_mz - dd + peak.mdbl_FWHM, out leftPeak);
+                peakData.FindPeak(peak.Mz - dd - peak.FWHM, peak.Mz - dd + peak.FWHM, out leftPeak);
                 //PeakProcessing.FindPeak
                 IsotopeDistribution.FindPeak(theorMostAbundantPeakMz - dd - 0.2 / cs,
                     theorMostAbundantPeakMz - dd + 0.2 / cs, out theorLeftPeakMz, out theorLeftPeakIntensity);
 
-                if (leftPeak.mdbl_mz > 0) //if there is an experimental peak...
+                if (leftPeak.Mz > 0) //if there is an experimental peak...
                 {
                     //get spacing score
                     spacingScore = spacingWeight * 1;
 
                     //get S/N score
-                    if (leftPeak.mdbl_SN > signalToNoiseThresh)
+                    if (leftPeak.SignalToNoise > signalToNoiseThresh)
                     {
                         signalToNoiseScore = signalToNoiseWeight * 1;
                     }
 
                     //get Ratio score
-                    double leftPeakRatio = leftPeak.mdbl_intensity / peak.mdbl_intensity;
+                    double leftPeakRatio = leftPeak.Intensity / peak.Intensity;
                     double theorLeftPeakRatio = theorLeftPeakIntensity / 1;
                     //TODO: need to check if this most abundant theor peak's intensity is 1
                 }
@@ -599,7 +599,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             var bestFit = fit;
             var bestFitCountBasis = pointsUsed;
             var bestDelta = delta;
-            //double maxY = peak.mdbl_intensity;
+            //double maxY = peak.Intensity;
 
             var fitCountBasis = 0;
 
@@ -632,7 +632,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                         out fitCountBasis, debug);
                     if (debug)
                     {
-                        //System.Console.WriteLine(" isotopes. Fit =" + fit + " Charge = " + cs + " Intensity = " + nxt_peak.mdbl_intensity + " delta = " + delta);
+                        //System.Console.WriteLine(" isotopes. Fit =" + fit + " Charge = " + cs + " Intensity = " + nxt_peak.Intensity + " delta = " + delta);
                         Console.WriteLine("LEFT\t" + nextPeak.PeakIndex + "\t" + nextPeak.Mz + "\t" +
                                           nextPeak.Intensity + "\t" + nextPeak.SignalToNoiseDbl + "\t" + nextPeak.FWHM +
                                           "\t" + fit + "\t" + delta);
@@ -652,9 +652,9 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                 // 26th February 2007 Deep Jaitly
                 /*if (fit <= bestFit)
                 {
-                    if (nextPeak.mdbl_intensity > peak.mdbl_intensity)
-                        peak.mdbl_intensity = nextPeak.mdbl_intensity;
-                    maxY = peak.mdbl_intensity;
+                    if (nextPeak.Intensity > peak.Intensity)
+                        peak.Intensity = nextPeak.Intensity;
+                    maxY = peak.Intensity;
                     bestFit = fit;
                     bestDelta = delta;
                 }*/
@@ -665,7 +665,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                     {
                         peak.Intensity = nextPeak.Intensity;
                     }
-                    //maxY = peak.mdbl_intensity;
+                    //maxY = peak.Intensity;
                     bestFit = fit;
                     bestFitCountBasis = fitCountBasis;
                     bestDelta = delta;
@@ -710,10 +710,10 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
 
                     fit = FitScore(peakData, chargeState, currentPeakCopy, delta, minTheoreticalIntensityForScore,
                         out fitCountBasis, debug);
-                    //fit = FitScore(pk_data, cs, nxt_peak.mdbl_intensity, delta);
+                    //fit = FitScore(pk_data, cs, nxt_peak.Intensity, delta);
                     if (debug)
                     {
-                        //System.Console.WriteLine(" isotopes. Fit =" + fit + " Charge = " + chargeState + " Intensity = " + nextPeak.mdbl_intensity + " delta = " + delta);
+                        //System.Console.WriteLine(" isotopes. Fit =" + fit + " Charge = " + chargeState + " Intensity = " + nextpeak.Intensity + " delta = " + delta);
                         Console.WriteLine("RIGHT\t" + nextPeak.PeakIndex + "\t" + nextPeak.Mz + "\t" +
                                           nextPeak.Intensity + "\t" + nextPeak.SignalToNoiseDbl + "\t" + nextPeak.FWHM +
                                           "\t" + fit + "\t" + delta);
@@ -732,9 +732,9 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
 
                 /*if (fit <= bestFit)
                 {
-                if (nextPeak.mdbl_intensity > peak.mdbl_intensity)
-                peak.mdbl_intensity = nextPeak.mdbl_intensity;
-                MaxY = peak.mdbl_intensity;
+                if (nextpeak.Intensity > peak.Intensity)
+                peak.Intensity = nextpeak.Intensity;
+                MaxY = peak.Intensity;
                 bestFit = fit;
                 bestDelta = delta;
                 }*/
@@ -745,7 +745,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
                     {
                         peak.Intensity = nextPeak.Intensity;
                     }
-                    //maxY = peak.mdbl_intensity;
+                    //maxY = peak.Intensity;
                     bestFit = fit;
                     bestFitCountBasis = fitCountBasis;
                     bestDelta = delta;
@@ -765,7 +765,7 @@ namespace DeconTools.Backend.ProcessingTasks.Deconvoluters.HornDeconvolutor.Thra
             }
 
             //double theorIntensityCutoff = 30; //
-            //double peakWidth = peak.mdbl_FWHM;
+            //double peakWidth = peak.FWHM;
             if (debug)
             {
                 Console.WriteLine("Std delta = \t" + bestDelta);

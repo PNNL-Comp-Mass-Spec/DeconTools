@@ -650,7 +650,7 @@ namespace Decon2LS
                     return;
                 }
 
-                var peakHeight = mobj_peaks[minDistancePeakIndex].mdbl_intensity;
+                var peakHeight = mobj_peaks[minDistancePeakIndex].Intensity;
                 // now we have found the peak we want to scale relative to.
                 var theoreticalMZs = new float[points.Length];
                 var theoreticalIntensities = new float[points.Length];
@@ -722,14 +722,14 @@ namespace Decon2LS
                     return;
                 }
 
-                mMercuryIsotopeDistribution.Resolution = mzForResolution / mobj_peaks[minDistancePeakIndex].mdbl_FWHM;
+                mMercuryIsotopeDistribution.Resolution = mzForResolution / mobj_peaks[minDistancePeakIndex].FWHM;
                 var points =
                     this.mMercuryIsotopeDistribution.CalculateDistribution(
                     molecularFormula.ToElementTable());
 
                 var diffMZ = mostAbundantMZ - mMercuryIsotopeDistribution.MostAbundantMZ;
 
-                var peakHeight = mobj_peaks[minDistancePeakIndex].mdbl_intensity;
+                var peakHeight = mobj_peaks[minDistancePeakIndex].Intensity;
                 points = this.mMercuryIsotopeDistribution.CalculateDistribution(molecularFormula.ToElementTable());
 
                 // now we have found the peak we want to scale relative to.
@@ -996,8 +996,8 @@ namespace Decon2LS
             for (var pkNum = 0; pkNum < mobj_peaks.Length; pkNum++)
             {
                 peakMzs[pkNum] = (float)mobj_peaks[pkNum].Mz;
-                peakIntensities[pkNum] = (float)mobj_peaks[pkNum].mdbl_intensity;
-                peakFWHMs[pkNum] = (float)mobj_peaks[pkNum].mdbl_FWHM;
+                peakIntensities[pkNum] = (float)mobj_peaks[pkNum].Intensity;
+                peakFWHMs[pkNum] = (float)mobj_peaks[pkNum].FWHM;
             }
 
             mctl_spectra.AddPeaks(peakMzs, peakIntensities, peakFWHMs);
@@ -1010,9 +1010,9 @@ namespace Decon2LS
                 var item = mlistView_peaks.Items.Add(Convert.ToString(pkNum + 1));
                 item.Tag = pkNum;
                 item.SubItems.Add(Convert.ToString(mobj_peaks[pkNum].Mz));
-                item.SubItems.Add(Convert.ToString(mobj_peaks[pkNum].mdbl_intensity));
-                item.SubItems.Add(Convert.ToString(mobj_peaks[pkNum].mdbl_FWHM));
-                item.SubItems.Add(Convert.ToString(mobj_peaks[pkNum].mdbl_SN));
+                item.SubItems.Add(Convert.ToString(mobj_peaks[pkNum].Intensity));
+                item.SubItems.Add(Convert.ToString(mobj_peaks[pkNum].FWHM));
+                item.SubItems.Add(Convert.ToString(mobj_peaks[pkNum].SignalToNoise));
             }
             mlistView_peaks.ResumeLayout(true);
             tabControl1.SelectedIndex = 2;

@@ -474,7 +474,7 @@ namespace DeconTools.Backend.ProcessingTasks
             peak.XValue = monoPeak.mdbl_mz;
             peak.Width = (float)monoPeak.mdbl_FWHM;
             peak.SignalToNoise = (float)monoPeak.mdbl_SN;
-            peak.Height = (int)monoPeak.mdbl_intensity;
+            peak.Height = (int)monopeak.Intensity;
 
             return peak;
         }
@@ -510,7 +510,7 @@ namespace DeconTools.Backend.ProcessingTasks
                 peak.mint_peak_index = i;
                 peak.mint_data_index = peaklist[i].DataIndex;
                 peak.mdbl_mz = peaklist[i].XValue;
-                peak.mdbl_intensity = peaklist[i].Height;
+                peak.Intensity = peaklist[i].Height;
                 peak.mdbl_SN = 100;
                 peak.mdbl_FWHM = peaklist[i].Width;
 
