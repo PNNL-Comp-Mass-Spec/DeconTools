@@ -1273,7 +1273,7 @@ namespace Decon2LS
                         mobj_proc_runner.DTAGenerationParameters = mobj_dta_parameters;
                         mobj_proc_runner.FileName = fileName;
                         mobj_proc_runner.FileType = menm_current_file_type;
-                        mobj_proc_runner.CreateDTAFile();
+                        mobj_proc_runner.CreateDTAFile("Decon2LS.UI_x64");
                         break;
                     default:
                         break;
