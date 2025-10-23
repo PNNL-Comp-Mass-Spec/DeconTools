@@ -8,7 +8,7 @@ pause
 @echo on
 
 call Distribute_Files_Work.bat C:\DMS_Programs\DeconTools
-call Distribute_Files_Work.bat \\pnl\projects\OmicsSW\DMS_Programs\AnalysisToolManagerDistribution\DeconTools
+call Distribute_Files_Work.bat \\Proto-3\DMS_Programs_Dist\AnalysisToolManagerDistribution\DeconTools
 call Distribute_Files_Work.bat \\floyd\software\DeconTools\CurrentVersion\Exe
 
 @echo off
